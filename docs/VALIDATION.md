@@ -1,5 +1,9 @@
 # Validation record
 
+## Original app icon — 2026-10-16
+
+The icon-only follow-up adds original open-book artwork, ten iPad renditions and ten macOS renditions. Every slot has the expected pixel dimensions; iPad PNGs are opaque and macOS PNGs retain transparent outer padding. Both target asset settings select their correct icon set. The signed iPad Release build **0.1.0 (2026101602)** passes compilation, signature verification and `CFBundleIcons`/compiled-asset checks; the macOS catalog separately compiles to `AppIconMac.icns` and `Assets.car`. The full macOS app was not rebuilt for this artwork-only change. The normal iPad app was updated in place. Functional notebook/reader code is unchanged from the focused QA below. The source artwork, native-size renders and [reproduction script](../scripts/generate-app-icons.swift) are included in the public repository; signing receipts remain local.
+
 ## Finger drawing and normal local iPad Release — 2026-10-16
 
 The focused final Simulator flow passes **1 test, 0 failures in 56.659 seconds**, using the production shell and views with a separate synthetic store. A real single-finger gesture renders and saves ink; zoom preserves the original; character-card attachment, typing, creation context, note order and exact reopen all pass. Mounted UIKit acceptance also checks finger/Pencil drawing policy, two-finger pan ownership, restored scrolling/pinch and saved ink reconstruction. Actual finger-ink and reopened-note screenshots were inspected. Earlier harness/environment nonpasses are retained in the [current evidence](finger-local-release-evidence.json). Physical Pencil/palm and two-finger feel are not inferred from Simulator input.

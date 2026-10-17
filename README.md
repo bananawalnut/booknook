@@ -1,3 +1,5 @@
+<img src="assets/branding/booknook-icon.png" alt="Book Nook app icon" width="96" height="96">
+
 # Book Nook
 
 A native reading notebook for macOS and iPad, backed by open Rust, Swift and WASM SDKs. Place the notebook on either side of the book to suit your writing hand. Both stay visible side by side; drag the divider to adjust their widths.

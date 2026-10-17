@@ -13,6 +13,8 @@ settings:
   HEADER_SEARCH_PATHS: $(SRCROOT)/Generated
   OTHER_LDFLAGS: ["$(BOOKNOOK_RUST_LIBRARY)", -lsqlite3, -lc++, -framework, Security]
   INFOPLIST_KEY_CFBundleDisplayName: Book Nook
+  MARKETING_VERSION: 0.1.0
+  CURRENT_PROJECT_VERSION: 2026101602
   INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.books
   INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
   INFOPLIST_KEY_UILaunchScreen_Generation: YES
@@ -27,11 +29,14 @@ targets:
       - ../../sdk/swift/Sources/CastaliaNative
       - path: Resources
         buildPhase: resources
+      - path: Assets.xcassets
+        buildPhase: resources
       - path: ../../ontology
         type: folder
         buildPhase: resources
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: org.booknook.desktop
+      ASSETCATALOG_COMPILER_APPICON_NAME: AppIconMac
       BOOKNOOK_RUST_LIBRARY: $(SRCROOT)/../../target/release/libbooknook_native.a
   BookNookPad:
     type: application
@@ -43,11 +48,14 @@ targets:
       - ../../sdk/swift/Sources/CastaliaNative
       - path: Resources
         buildPhase: resources
+      - path: Assets.xcassets
+        buildPhase: resources
       - path: ../../ontology
         type: folder
         buildPhase: resources
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: org.booknook.ipad
+      ASSETCATALOG_COMPILER_APPICON_NAME: AppIconPad
       TARGETED_DEVICE_FAMILY: '2'
       SUPPORTS_MACCATALYST: NO
       BOOKNOOK_RUST_LIBRARY[sdk=iphonesimulator*]: $(SRCROOT)/../../target/aarch64-apple-ios-sim/release/libbooknook_native.a

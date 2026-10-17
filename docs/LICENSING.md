@@ -6,6 +6,7 @@
 | `apps/apple/BookNook/**`, `apps/apple/Resources/**`, `services/library-companion/**`, `services/castalia-issuer/**` reference implementation | MPL-2.0 |
 | `services/optional-audible-adapter/**` optional Audible account process | AGPL-3.0-only; separately installed upstream dependency and notices |
 | Original ontology, fixtures, build scripts and documentation | MIT OR Apache-2.0 |
+| Original `assets/branding/**` artwork and `apps/apple/Assets.xcassets/**` renditions | MIT OR Apache-2.0 |
 
 Local Rust, JavaScript and Swift package scripts include both SDK license texts and a copy of this inventory boundary document. Package-local synthetic test fixtures and license files are generated from their canonical workspace copies by `scripts/sync-package-resources.py`; CI checks that they agree. The npm package contains compiled facade code plus WASM. The Swift package contains generated UniFFI bindings, the linked Rust XCFramework and original MIT OR Apache-2.0 `BookNookServices`/`CastaliaNative` Swift facades; the MPL application consumes these same source files. Downstream binary notices must cover the actual linked dependency closures as well as the new dual-licensed SDK code. The generic Castalia custody extraction introduces no new third-party dependency. A locally passing package/consumer test does not replace that distribution notice review.
 
