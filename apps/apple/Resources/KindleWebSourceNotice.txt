@@ -1,0 +1,33 @@
+Book Nook Kindle US web catalog connector — source acknowledgement
+
+The independently implemented metadata-only connector follows public endpoint,
+login URL and response-model evidence in natikgadzhi/swift-kindle, commit
+63be4d46c53afadf3b57280139e326f8b3d98cde (2026-04-12):
+https://github.com/natikgadzhi/swift-kindle/tree/63be4d46c53afadf3b57280139e326f8b3d98cde
+
+No upstream executable or Swift package is linked. The following notice is
+retained for the reproduced login URL and adapted protocol/model structure.
+Book Nook's new source files are MPL-2.0. The underlying Apple frameworks are
+system dependencies. This notice is not a claim that Amazon supports this API.
+
+MIT License
+
+Copyright (c) 2024 Natik Gadzhi
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

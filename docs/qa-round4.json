@@ -1,0 +1,313 @@
+{
+  "schema": "booknook.qa-round.v1",
+  "round": 4,
+  "status": "partial",
+  "provenance": {
+    "created_at_utc": "2026-10-12T19:53:07.722237+00:00",
+    "based_on": "docs/build-inputs.json",
+    "build_provenance_sha256": "305cfe1e2e5200f3e63f2c3d1c0693035831095671ff8763c9fb9c2d24895531",
+    "bundle_id": "org.booknook.qa.round4",
+    "keychain_service": "org.booknook.qa.round4.castalia",
+    "data_directory": "<local-workspace>/work/round4-qa/desk",
+    "sources": {
+      "AudioMatchReview.swift": {
+        "original_sha256": "241ffb8bc6f3f03ff1f413282be243109a1ea90e6d44c98b2e8f52d0a05237ae",
+        "staged_sha256": "241ffb8bc6f3f03ff1f413282be243109a1ea90e6d44c98b2e8f52d0a05237ae"
+      },
+      "BookNookApp.swift": {
+        "original_sha256": "9f39645d1250f537784bf2922b08fe736f018ff35c608a6b141ccee2e647611b",
+        "staged_sha256": "9f39645d1250f537784bf2922b08fe736f018ff35c608a6b141ccee2e647611b"
+      },
+      "CastaliaAuthorization.swift": {
+        "original_sha256": "346b822c6bb271d13fc6dc2e303f83d6d19221a2982ee169af9a4958715ebe40",
+        "staged_sha256": "346b822c6bb271d13fc6dc2e303f83d6d19221a2982ee169af9a4958715ebe40"
+      },
+      "CharacterHistory.swift": {
+        "original_sha256": "c5c41b98aa0393f1b481ad740d0e7097cd52bf33387031956cb923202eed8ef2",
+        "staged_sha256": "c5c41b98aa0393f1b481ad740d0e7097cd52bf33387031956cb923202eed8ef2"
+      },
+      "CharacterHistoryFields.swift": {
+        "original_sha256": "b003b6de6567c61bb7816e18e9ed1463664abaee2c891bb30af942aff452fd57",
+        "staged_sha256": "b003b6de6567c61bb7816e18e9ed1463664abaee2c891bb30af942aff452fd57"
+      },
+      "CharacterSharing.swift": {
+        "original_sha256": "32a9a40b4391c5c0c954ce9ab4d635a360fd84111f1be2fc9af86ee1ac82da2c",
+        "staged_sha256": "32a9a40b4391c5c0c954ce9ab4d635a360fd84111f1be2fc9af86ee1ac82da2c"
+      },
+      "CompanionContracts.swift": {
+        "original_sha256": "b1d19b014ac8236626b728ea547d9119edcd746847478e3d6eb7ae3311e44deb",
+        "staged_sha256": "b1d19b014ac8236626b728ea547d9119edcd746847478e3d6eb7ae3311e44deb"
+      },
+      "ConnectionSave.swift": {
+        "original_sha256": "80084cd4806d578aaccd0c4d223bc9ea53b8c1416b018cafe00592158e74bea2",
+        "staged_sha256": "80084cd4806d578aaccd0c4d223bc9ea53b8c1416b018cafe00592158e74bea2"
+      },
+      "ConnectionSetup.swift": {
+        "original_sha256": "a86261cfe3b65b333dfd96358c809e0eabf8ad475736aff47cdb483a741be8cf",
+        "staged_sha256": "a86261cfe3b65b333dfd96358c809e0eabf8ad475736aff47cdb483a741be8cf"
+      },
+      "ConnectorFailure.swift": {
+        "original_sha256": "da41a4bb7624f685d9788647c281a7aef226134a12bd907f446db2bda0e54d97",
+        "staged_sha256": "da41a4bb7624f685d9788647c281a7aef226134a12bd907f446db2bda0e54d97"
+      },
+      "DraftCommitState.swift": {
+        "original_sha256": "f3b94993aa6de9969973ad47d8db1e81cf4f17b3000e643ec6b76a92d980199d",
+        "staged_sha256": "f3b94993aa6de9969973ad47d8db1e81cf4f17b3000e643ec6b76a92d980199d"
+      },
+      "LibraryCommunity.swift": {
+        "original_sha256": "5216bbf4fe44ac31a2fc6362d7898db9082499546c70c1206e40bef64dae01c2",
+        "staged_sha256": "5216bbf4fe44ac31a2fc6362d7898db9082499546c70c1206e40bef64dae01c2"
+      },
+      "LibraryCompanion.swift": {
+        "original_sha256": "8603749ed6749325e63d43d85071f78a54e49c276306bb84b629678b0d9a0cf0",
+        "staged_sha256": "8603749ed6749325e63d43d85071f78a54e49c276306bb84b629678b0d9a0cf0"
+      },
+      "Models.swift": {
+        "original_sha256": "5d2b499df274e3c6a5661a0745a031ff82927ed08ed0465af9fc2b806091da17",
+        "staged_sha256": "4224a520c7079c715e6b99d089af05a497112cddb990ae24296312ef987b3c9d"
+      },
+      "NativeNotebookEditor.swift": {
+        "original_sha256": "e9ee806d865521620bca3b31010ac2730b7240b2d86f2db2374f088e10670abd",
+        "staged_sha256": "e9ee806d865521620bca3b31010ac2730b7240b2d86f2db2374f088e10670abd"
+      },
+      "NotebookHistory.swift": {
+        "original_sha256": "151a26dbf04aabd882069bc33dcd83e6834662c8a752706c2472e452aaf2866c",
+        "staged_sha256": "151a26dbf04aabd882069bc33dcd83e6834662c8a752706c2472e452aaf2866c"
+      },
+      "NotebookView.swift": {
+        "original_sha256": "1e8adaaaca7458964682a91883c67fbd796334af2ff7b907d7b905de34a4d86f",
+        "staged_sha256": "1e8adaaaca7458964682a91883c67fbd796334af2ff7b907d7b905de34a4d86f"
+      },
+      "ReaderActions.swift": {
+        "original_sha256": "15c96a743d5dbdec1d7a06ef79feadb68ce16d05378c7c82caaf6acd9268455a",
+        "staged_sha256": "15c96a743d5dbdec1d7a06ef79feadb68ce16d05378c7c82caaf6acd9268455a"
+      },
+      "ReaderGeometry.swift": {
+        "original_sha256": "7d8d671d012e9bfa76e6231c39d10fa54340470e4fe4a0ddbee967627c0d0c77",
+        "staged_sha256": "7d8d671d012e9bfa76e6231c39d10fa54340470e4fe4a0ddbee967627c0d0c77"
+      },
+      "ReaderInk.swift": {
+        "original_sha256": "38aa4d8ccebe1fc8061a2c23d37f1f5efcdce3dd59bae005fbf250b2a6d3d050",
+        "staged_sha256": "38aa4d8ccebe1fc8061a2c23d37f1f5efcdce3dd59bae005fbf250b2a6d3d050"
+      },
+      "ReaderPDF.swift": {
+        "original_sha256": "1ff74b4a1d074e4fdb2fa563cf83daad2ad16315627c7fd87130e5d23ef23a43",
+        "staged_sha256": "1ff74b4a1d074e4fdb2fa563cf83daad2ad16315627c7fd87130e5d23ef23a43"
+      },
+      "ReaderView.swift": {
+        "original_sha256": "080041dd9d9d429ed6057741ade242b3d9171d228e19af4a2e577a0ac034ba41",
+        "staged_sha256": "080041dd9d9d429ed6057741ade242b3d9171d228e19af4a2e577a0ac034ba41"
+      },
+      "ReaderWebBridge.swift": {
+        "original_sha256": "e124799439d81e4971edf4f91037bd46c9de5ea247e01555f8a697c513845608",
+        "staged_sha256": "e124799439d81e4971edf4f91037bd46c9de5ea247e01555f8a697c513845608"
+      },
+      "ReadingSessionControl.swift": {
+        "original_sha256": "9c25c6fdee8cef3fca153b61a50c049e90afa1e58eeaa188365b4689e44f408e",
+        "staged_sha256": "9c25c6fdee8cef3fca153b61a50c049e90afa1e58eeaa188365b4689e44f408e"
+      },
+      "RecoveryImport.swift": {
+        "original_sha256": "27916bb7dda95e9151707a73c1e22a239b819e0ff6623efdd18a61b39f1bf8f2",
+        "staged_sha256": "27916bb7dda95e9151707a73c1e22a239b819e0ff6623efdd18a61b39f1bf8f2"
+      },
+      "SecureStorage.swift": {
+        "original_sha256": "0e90391950fd7d89fde1244fb9099e83b634e3a1f891a3ececb64cb372dae2d6",
+        "staged_sha256": "de210beae0d3f9623361437854918b4e0cf3c67bc123e987bb8190de3092e29e"
+      },
+      "SocialCommunity.swift": {
+        "original_sha256": "a4eabbc85fe494391463abe89f9282d88f9599e3f4a9d8ac5584f539a57ef172",
+        "staged_sha256": "a4eabbc85fe494391463abe89f9282d88f9599e3f4a9d8ac5584f539a57ef172"
+      },
+      "SocialModels.swift": {
+        "original_sha256": "c3f658f88e5e89082c50e91508c968dafefddfe6835021e2be2e5864f28b556d",
+        "staged_sha256": "c3f658f88e5e89082c50e91508c968dafefddfe6835021e2be2e5864f28b556d"
+      },
+      "SyncRecovery.swift": {
+        "original_sha256": "1be7d76c86b2f8301776ca099da1aa7141694f24d5cb0b55ce5197496365127f",
+        "staged_sha256": "1be7d76c86b2f8301776ca099da1aa7141694f24d5cb0b55ce5197496365127f"
+      },
+      "UserFacingError.swift": {
+        "original_sha256": "848d80c51e8e23d91ea134348e2e0d890f6b03acaad65a0d2e7ccc8ce8eda0f0",
+        "staged_sha256": "848d80c51e8e23d91ea134348e2e0d890f6b03acaad65a0d2e7ccc8ce8eda0f0"
+      }
+    },
+    "overrides": {
+      "Models.swift": {
+        "reason": "Force all QA desk persistence to a fresh task-private path regardless of launch environment.",
+        "original": "        if let override = ProcessInfo.processInfo.environment[\"BOOKNOOK_DATA_DIR\"] { root = URL(fileURLWithPath: override) }\n        else { root = try FileManager.default.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(\"BookNook\", isDirectory: true) }",
+        "replacement": "        root = URL(fileURLWithPath: \"<local-workspace>/work/round4-qa/desk\")"
+      },
+      "SecureStorage.swift": {
+        "reason": "Prevent QA access to production Keychain service.",
+        "original": "let service = \"org.booknook.castalia\"",
+        "replacement": "let service = \"org.booknook.qa.round4.castalia\""
+      }
+    },
+    "rust_library_sha256": "62e4d573b7a0be94e489b35604b3d789568a0cc5421431b453d5bf68d81eb9bd",
+    "app_path": "<local-workspace>/work/round4-qa/BookNookRound4QA.app",
+    "status": "compiled and statically verified; not launched",
+    "verified_at_utc": "2026-10-12T19:54:35.846472+00:00",
+    "architecture": "arm64",
+    "dynamic_dependencies": [
+      "/System/Library/Frameworks/Security.framework/Versions/A/Security",
+      "/usr/lib/libsqlite3.dylib",
+      "/usr/lib/libc++.1.dylib",
+      "/usr/lib/libSystem.B.dylib",
+      "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
+      "/System/Library/Frameworks/CFNetwork.framework/Versions/A/CFNetwork",
+      "/System/Library/Frameworks/Combine.framework/Versions/A/Combine",
+      "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+      "/System/Library/Frameworks/CoreGraphics.framework/Versions/A/CoreGraphics",
+      "/System/Library/Frameworks/CryptoKit.framework/Versions/A/CryptoKit",
+      "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+      "/System/Library/Frameworks/PDFKit.framework/Versions/A/PDFKit",
+      "/System/Library/Frameworks/SwiftUI.framework/Versions/A/SwiftUI",
+      "/System/Library/Frameworks/WebKit.framework/Versions/A/WebKit",
+      "/usr/lib/libobjc.A.dylib",
+      "/usr/lib/swift/libswiftCore.dylib",
+      "/usr/lib/swift/libswiftCoreFoundation.dylib",
+      "/usr/lib/swift/libswiftCoreImage.dylib",
+      "/usr/lib/swift/libswiftDarwin.dylib",
+      "/usr/lib/swift/libswiftDispatch.dylib",
+      "/usr/lib/swift/libswiftIOKit.dylib",
+      "/usr/lib/swift/libswiftMetal.dylib",
+      "/usr/lib/swift/libswiftOSLog.dylib",
+      "/usr/lib/swift/libswiftObjectiveC.dylib",
+      "/usr/lib/swift/libswiftQuartzCore.dylib",
+      "/usr/lib/swift/libswiftSpatial.dylib",
+      "/usr/lib/swift/libswiftUniformTypeIdentifiers.dylib",
+      "/usr/lib/swift/libswiftXPC.dylib",
+      "/usr/lib/swift/libswift_Concurrency.dylib",
+      "/usr/lib/swift/libswiftos.dylib",
+      "/usr/lib/swift/libswiftsimd.dylib"
+    ],
+    "app_files": {
+      "Contents/Info.plist": {
+        "sha256": "36c97df6a79dbe6434a31fdbda9e36aa70acea3668c89b8a1462a8dc99110f98",
+        "bytes": 1584
+      },
+      "Contents/MacOS/BookNookRound4QA": {
+        "sha256": "40d13fe029615e5c8287b865931081e364d79d98cc5831103ee27f074d979046",
+        "bytes": 34179472
+      },
+      "Contents/PkgInfo": {
+        "sha256": "82502191c9484b04d685374f9879a0066069c49b8acae7a04b01d38d07e8eca0",
+        "bytes": 8
+      },
+      "Contents/Resources/ontology/discovery.json": {
+        "sha256": "feef676907e865b9b8fe8f83c39ca9e3aee95870280954f2d40136830323b44b",
+        "bytes": 265
+      },
+      "Contents/Resources/ontology/v0.1.0/audio-candidates.schema.json": {
+        "sha256": "5ba273aec5beb7edf0a4d601678d6fa3f42eb1e40bf3e52be95d0575d5bd54f8",
+        "bytes": 1418
+      },
+      "Contents/Resources/ontology/v0.1.0/audio-observation.schema.json": {
+        "sha256": "486049e1d07d6cb06957a821562f7c02de9951930d99ac62e05d7ac383fd5360",
+        "bytes": 2304
+      },
+      "Contents/Resources/ontology/v0.1.0/authority-policy.schema.json": {
+        "sha256": "71b67f479c3d4610ba4af084a6b4c3e003f9a45a5b60ff6abf2799d6f8addbea",
+        "bytes": 1607
+      },
+      "Contents/Resources/ontology/v0.1.0/castalia-mapping.json": {
+        "sha256": "bd70758ca0592b9221a04bc4fd5ef1baf6a77b193d76ddea631d661b827f0d12",
+        "bytes": 1494
+      },
+      "Contents/Resources/ontology/v0.1.0/command.schema.json": {
+        "sha256": "7a9f856f34f9784827976f78acdacd66db230ac769f1370460ee598c9dcd1210",
+        "bytes": 25500
+      },
+      "Contents/Resources/ontology/v0.1.0/conformance.json": {
+        "sha256": "94f1443d84dfd6d6f675ded2d40c666b1b9b1d2b3e72268bbb5194558cd50fab",
+        "bytes": 77135
+      },
+      "Contents/Resources/ontology/v0.1.0/connections.schema.json": {
+        "sha256": "cc1488ecf4f4932bb109dc319b6a68fba306416c401f0d8e904faafe6229a4f2",
+        "bytes": 1719
+      },
+      "Contents/Resources/ontology/v0.1.0/context.jsonld": {
+        "sha256": "9107ae8da77dbe8d7c379e944f3c99e112126bf84af14286caa87644e95572d8",
+        "bytes": 915
+      },
+      "Contents/Resources/ontology/v0.1.0/identity.schema.json": {
+        "sha256": "68866e8630125d88aeb39964cbb6e5034a5701eb2cc05799b757eea4b33c5c49",
+        "bytes": 1486
+      },
+      "Contents/Resources/ontology/v0.1.0/manifest.json": {
+        "sha256": "e160cd9655e407b2b175055a83da3b8a3cb036585ea57c7830090d19a80264ac",
+        "bytes": 2505
+      },
+      "Contents/Resources/ontology/v0.1.0/ontology.jsonld": {
+        "sha256": "a4515dd1b8a6290237cc1bfadf854fc6c670cfed094dd93eefc4ed8830eb8315",
+        "bytes": 3221
+      },
+      "Contents/Resources/ontology/v0.1.0/publication.schema.json": {
+        "sha256": "aaf2e5df78513831a52c3082f529cce0549f46c5c6d94f53ee63617a82aa8e26",
+        "bytes": 14257
+      },
+      "Contents/Resources/ontology/v0.1.0/social-action.schema.json": {
+        "sha256": "8b05a74af7d176eb6248a9892a9fa156a4596c6056b5bd3d9dff2ec042229601",
+        "bytes": 13034
+      },
+      "Contents/Resources/ontology/v0.1.0/social-event.schema.json": {
+        "sha256": "f92f3d962a5e1378c01b52e7cee488b0f653647271ae3e2bad3a469c3e4630c3",
+        "bytes": 14230
+      },
+      "Contents/Resources/ontology/v0.1.0/social-local.schema.json": {
+        "sha256": "5a199d0bae2771381305f8c0b9a1fe12e3cf2b044df16fcfbd9aacbf67bd7fe8",
+        "bytes": 16650
+      },
+      "Contents/Resources/ontology/v0.1.0/social.schema.json": {
+        "sha256": "f09fb3b50bb8cfdfc0cd24db18f12578a005500cb52a45df4eb5d79b8dda4405",
+        "bytes": 19923
+      },
+      "Contents/Resources/ontology/v0.1.0/state.schema.json": {
+        "sha256": "8ade0b9a3b59ee25fba55b81ed869a5c72a7573fe5cfe3a2b50457f424dea7b2",
+        "bytes": 27704
+      },
+      "Contents/Resources/reader-geometry.js": {
+        "sha256": "bb648f42b1fb6893ee10833559756e9016ee5ec7423442643cb62cab34345c81",
+        "bytes": 2180
+      },
+      "Contents/Resources/reader.js": {
+        "sha256": "7f3ed376edd2561c39a13bba77257f6d8302eb08b3f1ba22c204286123a40acf",
+        "bytes": 10465
+      }
+    },
+    "build_script_sha256": "04cadbc3dd89c73dd542370983809f414d5ad983fd1ccef193dd315ad9d8834f",
+    "default_preferences_isolation": "UserDefaults.standard uses unique bundle identifier org.booknook.qa.round4; no production defaults copied.",
+    "fixture_status": "Fresh empty task-only directory; root creates synthetic test library through UI.",
+    "physical_ipad_inventory": "Read-only devicectl listed two iPhones (one available paired, one unavailable); no physical iPad listed. No pair/install/launch action."
+  },
+  "live_observations": {
+    "schema": "booknook.qa-observations.v1",
+    "recorded_at_utc": "2026-10-12T20:00:44.645401+00:00",
+    "round": 4,
+    "status": "partial; input stopped for shared-machine interference",
+    "qa_provenance_sha256": "83ac36ad3517e999cfce7d7131fee589c8b0e29a0193c2ab7a170f8e8d3f1fe1",
+    "surface": "macOS CUA; Book Nook Round 4 QA; org.booknook.qa.round4",
+    "confirmed": [
+      "Current isolated app launched and empty desk rendered",
+      "Created two books named The Quiet Window with authors First Writer and Second Writer",
+      "Second creation selected Second Writer while sidebar retained both distinct entries",
+      "Start reading session changed to Finish reading session and displayed explicit persists-across-close guidance",
+      "Notebook AX text exactly matched First thought stays in order. followed by Share: caf\u00e9, \u96e8, \ud83c\udf3f. and Private: do not include this sentence.; 15 words",
+      "Native EPUB file picker opened"
+    ],
+    "not_proven": [
+      "Undo/redo transitions were not separately observed and are not claimed",
+      "File picker navigation became unreliable with unrelated path changes; no EPUB imported",
+      "Session reopen, character sharing, reviews, lists, setup, backup/recovery and current file-picker workflows remain pending",
+      "No real account, signing, relay publication, physical iPad input or live credential was exercised"
+    ],
+    "blocker": "Unrelated text appeared in the QA file picker between controlled actions. Stopped keyboard input and asked user whether another session is using the Mac. No assumption that this is a Book Nook defect."
+  },
+  "storage_verification": "{\n  \"observed_at_utc\": \"2026-10-12T20:01:01.181141+00:00\",\n  \"scope\": \"Read-only inspection of isolated synthetic round-4 desk; no application/UI interaction or replay/recovery. No reopen or undo/redo claim.\",\n  \"database_open_mode\": \"ro; PRAGMA query_only=ON; consistent read transaction\",\n  \"revision\": 6,\n  \"state_sha256\": \"8fd8a79211e3c4006c0ab839a94f0fcca414ed6b0ea345b3d2b8d1a9ef32d52d\",\n  \"books\": [\n    {\n      \"id\": \"aa5ee9e31b32c4614ccf719f0b54ca2d\",\n      \"title\": \"The Quiet Window\",\n      \"authors\": [\n        \"First Writer\"\n      ]\n    },\n    {\n      \"id\": \"070b145b73b14c4716f9fa61c457cc48\",\n      \"title\": \"The Quiet Window\",\n      \"authors\": [\n        \"Second Writer\"\n      ]\n    }\n  ],\n  \"second_writer_notebook\": {\n    \"id\": \"7a4d716a35abceb500c44d326c4764c1\",\n    \"pass_id\": \"764229a493794de280d2e5c0994e3e9d\",\n    \"text\": \"First thought stays in order.\\nShare: caf\u00e9, \u96e8, \ud83c\udf3f.\\nPrivate: do not include this sentence.\",\n    \"whitespace_word_count\": 15,\n    \"text_sha256\": \"6529c04b21fe90e4c79b909e96b7779b46015478c09bd932ee49fff77a91cf6a\"\n  },\n  \"active_session\": {\n    \"id\": \"f1bea1b4226f99d67a4d78ed6f2ceacf\",\n    \"pass_id\": \"764229a493794de280d2e5c0994e3e9d\",\n    \"started_at\": 1791835096,\n    \"ended_at\": null\n  },\n  \"asset_count\": 0,\n  \"pending_edit_count\": 0,\n  \"checks\": \"Passed: distinct book identities, exact 15-word Unicode notebook for Second Writer, one open session for that reading pass, no attached assets, no pending journal intents.\"\n}\n",
+  "publication_redaction": {
+    "scope": "Local filesystem paths and Apple developer-team identity replaced with placeholders.",
+    "original_receipt_retained_locally": true,
+    "original_sha256": "446c230d3c5d61b0d7a4aefac61586be00e9d27ed8ec209b78306d63951c9db6",
+    "note": "Historical artifact hashes describe the original validation inputs, not this redacted documentation copy."
+  }
+}

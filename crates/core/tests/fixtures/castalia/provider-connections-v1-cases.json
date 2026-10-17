@@ -1,0 +1,712 @@
+{
+  "schema": "castalia.contract-fixtures.v1",
+  "contract": "castalia.provider-connection.v1",
+  "cases": [
+    {
+      "name": "canonical example",
+      "valid": true,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "local catalog without credentials",
+      "valid": true,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "available",
+        "credential": null
+      }
+    },
+    {
+      "name": "wallet custody does not promise export",
+      "valid": true,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "wallet.fixture-01",
+          "storage": "wallet_managed",
+          "portability": "provider_defined"
+        }
+      }
+    },
+    {
+      "name": "device-bound credential",
+      "valid": true,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "device_bound"
+        }
+      }
+    },
+    {
+      "name": "unavailable",
+      "valid": true,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "unavailable",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "reauthorization required",
+      "valid": true,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "reauthorization_required",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "empty capabilities",
+      "valid": true,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [],
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "UTF8 label boundary",
+      "valid": true,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "ID boundary",
+      "valid": true,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "capabilities boundary",
+      "valid": true,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "source.cap0",
+          "source.cap1",
+          "source.cap2",
+          "source.cap3",
+          "source.cap4",
+          "source.cap5",
+          "source.cap6",
+          "source.cap7",
+          "source.cap8",
+          "source.cap9",
+          "source.cap10",
+          "source.cap11",
+          "source.cap12",
+          "source.cap13",
+          "source.cap14",
+          "source.cap15",
+          "source.cap16",
+          "source.cap17",
+          "source.cap18",
+          "source.cap19",
+          "source.cap20",
+          "source.cap21",
+          "source.cap22",
+          "source.cap23",
+          "source.cap24",
+          "source.cap25",
+          "source.cap26",
+          "source.cap27",
+          "source.cap28",
+          "source.cap29",
+          "source.cap30",
+          "source.cap31",
+          "source.cap32",
+          "source.cap33",
+          "source.cap34",
+          "source.cap35",
+          "source.cap36",
+          "source.cap37",
+          "source.cap38",
+          "source.cap39",
+          "source.cap40",
+          "source.cap41",
+          "source.cap42",
+          "source.cap43",
+          "source.cap44",
+          "source.cap45",
+          "source.cap46",
+          "source.cap47",
+          "source.cap48",
+          "source.cap49",
+          "source.cap50",
+          "source.cap51",
+          "source.cap52",
+          "source.cap53",
+          "source.cap54",
+          "source.cap55",
+          "source.cap56",
+          "source.cap57",
+          "source.cap58",
+          "source.cap59",
+          "source.cap60",
+          "source.cap61",
+          "source.cap62",
+          "source.cap63"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "future version",
+      "valid": false,
+      "value": {
+        "schema": "castalia.provider-connection.v2",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "unexpected secret",
+      "valid": false,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        },
+        "token": "synthetic-non-secret"
+      }
+    },
+    {
+      "name": "unexpected credential secret",
+      "valid": false,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required",
+          "token": "synthetic-non-secret"
+        }
+      }
+    },
+    {
+      "name": "storage type",
+      "valid": false,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": 1,
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "unsupported portability",
+      "valid": false,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "portable"
+        }
+      }
+    },
+    {
+      "name": "URL credential reference",
+      "valid": false,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "https://credential.example/",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "path credential reference",
+      "valid": false,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "/private/credential",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "provider case",
+      "valid": false,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "Amazon.Audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "capability case",
+      "valid": false,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "Audible.positions"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "duplicate capability",
+      "valid": false,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "audible.positions",
+          "audible.positions"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "capabilities overflow",
+      "valid": false,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "source.cap0",
+          "source.cap1",
+          "source.cap2",
+          "source.cap3",
+          "source.cap4",
+          "source.cap5",
+          "source.cap6",
+          "source.cap7",
+          "source.cap8",
+          "source.cap9",
+          "source.cap10",
+          "source.cap11",
+          "source.cap12",
+          "source.cap13",
+          "source.cap14",
+          "source.cap15",
+          "source.cap16",
+          "source.cap17",
+          "source.cap18",
+          "source.cap19",
+          "source.cap20",
+          "source.cap21",
+          "source.cap22",
+          "source.cap23",
+          "source.cap24",
+          "source.cap25",
+          "source.cap26",
+          "source.cap27",
+          "source.cap28",
+          "source.cap29",
+          "source.cap30",
+          "source.cap31",
+          "source.cap32",
+          "source.cap33",
+          "source.cap34",
+          "source.cap35",
+          "source.cap36",
+          "source.cap37",
+          "source.cap38",
+          "source.cap39",
+          "source.cap40",
+          "source.cap41",
+          "source.cap42",
+          "source.cap43",
+          "source.cap44",
+          "source.cap45",
+          "source.cap46",
+          "source.cap47",
+          "source.cap48",
+          "source.cap49",
+          "source.cap50",
+          "source.cap51",
+          "source.cap52",
+          "source.cap53",
+          "source.cap54",
+          "source.cap55",
+          "source.cap56",
+          "source.cap57",
+          "source.cap58",
+          "source.cap59",
+          "source.cap60",
+          "source.cap61",
+          "source.cap62",
+          "source.cap63",
+          "source.cap64"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "null capability",
+      "valid": false,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          null
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "capabilities type",
+      "valid": false,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": "audible.positions",
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "ID overflow",
+      "valid": false,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "empty ID",
+      "valid": false,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "UTF8 label overflow",
+      "valid": false,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "empty label",
+      "valid": false,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "bidi label",
+      "valid": false,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible\u202e",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "control label",
+      "valid": false,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible\n",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "available",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "unsupported state",
+      "valid": false,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "authorized",
+        "credential": {
+          "reference": "credential.fixture-01",
+          "storage": "secure_local",
+          "portability": "reauthorization_required"
+        }
+      }
+    },
+    {
+      "name": "missing nullable credential",
+      "valid": false,
+      "value": {
+        "schema": "castalia.provider-connection.v1",
+        "connection_id": "local.audible.fixture-01",
+        "provider_id": "amazon.audible",
+        "display_name": "Audible on this companion",
+        "capabilities": [
+          "audible.positions"
+        ],
+        "status": "available"
+      }
+    }
+  ]
+}

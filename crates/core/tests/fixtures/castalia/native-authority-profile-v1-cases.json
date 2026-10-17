@@ -1,0 +1,711 @@
+{
+  "schema": "castalia.contract-fixtures.v1",
+  "contract": "castalia.native-authority-profile.v1",
+  "cases": [
+    {
+      "name": "canonical example",
+      "valid": true,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/request-credential"
+      }
+    },
+    {
+      "name": "IPv4 loopback",
+      "valid": true,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "http://127.0.0.1:8765/v1/credential"
+      }
+    },
+    {
+      "name": "IPv6 loopback",
+      "valid": true,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "http://[::1]:8765/v1/credential"
+      }
+    },
+    {
+      "name": "localhost",
+      "valid": true,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "http://localhost:8765/v1/credential"
+      }
+    },
+    {
+      "name": "canonical origin",
+      "valid": true,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/"
+      }
+    },
+    {
+      "name": "UTF8 label boundary",
+      "valid": true,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/request-credential"
+      }
+    },
+    {
+      "name": "ASCII label boundary",
+      "valid": true,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/request-credential"
+      }
+    },
+    {
+      "name": "future version",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v2",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/request-credential"
+      }
+    },
+    {
+      "name": "holder is independent",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/request-credential",
+        "holder_public_key": "3333333333333333333333333333333333333333333333333333333333333333"
+      }
+    },
+    {
+      "name": "implicit trust forbidden",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/request-credential",
+        "trusted": true
+      }
+    },
+    {
+      "name": "extra public key",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/request-credential",
+        "public_key": "1111111111111111111111111111111111111111111111111111111111111111"
+      }
+    },
+    {
+      "name": "browser caller",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "browser",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/request-credential"
+      }
+    },
+    {
+      "name": "invented native caller",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "native",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/request-credential"
+      }
+    },
+    {
+      "name": "extra caller field",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app",
+          "origin": "https://app.example/"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/request-credential"
+      }
+    },
+    {
+      "name": "ASCII label overflow",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/request-credential"
+      }
+    },
+    {
+      "name": "leading ASCII space",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": " issuer",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/request-credential"
+      }
+    },
+    {
+      "name": "trailing ASCII space",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "app "
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/request-credential"
+      }
+    },
+    {
+      "name": "empty audience",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/request-credential"
+      }
+    },
+    {
+      "name": "nonASCII caller",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "native-\ud83d\udcd6"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/request-credential"
+      }
+    },
+    {
+      "name": "uppercase key",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "ABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABAB",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/request-credential"
+      }
+    },
+    {
+      "name": "short digest",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "22222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/request-credential"
+      }
+    },
+    {
+      "name": "UTF8 label overflow",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6\ud83d\udcd6",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/request-credential"
+      }
+    },
+    {
+      "name": "bidi label",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Issuer\u2066",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/request-credential"
+      }
+    },
+    {
+      "name": "control label",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Issuer\u007f",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/request-credential"
+      }
+    },
+    {
+      "name": "nonlocal cleartext",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "http://issuer.example/v1/credential"
+      }
+    },
+    {
+      "name": "noncanonical origin",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example"
+      }
+    },
+    {
+      "name": "userinfo",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://user:pass@issuer.example/v1/credential"
+      }
+    },
+    {
+      "name": "query",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/credential?token=synthetic"
+      }
+    },
+    {
+      "name": "bare query",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/credential?"
+      }
+    },
+    {
+      "name": "fragment",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/credential#part"
+      }
+    },
+    {
+      "name": "bare fragment",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/v1/credential#"
+      }
+    },
+    {
+      "name": "wildcard host",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://*.example/v1/credential"
+      }
+    },
+    {
+      "name": "trailing-dot host",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example./v1/credential"
+      }
+    },
+    {
+      "name": "port zero",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example:0/v1/credential"
+      }
+    },
+    {
+      "name": "short loopback",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "http://127.1/v1/credential"
+      }
+    },
+    {
+      "name": "integer loopback",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "http://2130706433/v1/credential"
+      }
+    },
+    {
+      "name": "default port normalization",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example:443/v1/credential"
+      }
+    },
+    {
+      "name": "endpoint overflow",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "credential_endpoint": "https://issuer.example/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "name": "missing policy",
+      "valid": false,
+      "value": {
+        "schema": "castalia.native-authority-profile.v1",
+        "display_name": "Independent fixture authority",
+        "issuer": "independent-fixture",
+        "key_id": "fixture-key-1",
+        "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+        "audience": "example-native-app",
+        "caller": {
+          "kind": "terminal",
+          "id": "example-native-app"
+        },
+        "credential_endpoint": "https://issuer.example/v1/request-credential"
+      }
+    }
+  ]
+}

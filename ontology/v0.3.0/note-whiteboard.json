@@ -1,0 +1,2698 @@
+{
+  "schema": "booknook.conformance.v1",
+  "ontology_version": "0.3.0",
+  "description": "Synthetic note origins, legacy compatibility, text/whiteboard faces and bounded absolute logical worlds. Runtime validation is authoritative for cross-record context and geometry.",
+  "cases": [
+    {
+      "id": "legacy-v1-still-readable",
+      "contract": "state",
+      "valid": true,
+      "input": {
+        "schema": "booknook.archive.v1",
+        "ontology_version": "0.1.0",
+        "revision": 4,
+        "local_reader": "conformance-reader",
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "title": "An Original Conformance Book",
+            "authors": [
+              "Book Nook test author"
+            ],
+            "subjects": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "sources": [],
+            "shelf": "currently-reading",
+            "rating": null,
+            "review": "",
+            "reading_dates": [],
+            "edited_fields": [],
+            "provenance": []
+          }
+        },
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "identifiers": [],
+            "language": null,
+            "assets": []
+          }
+        },
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "reader": "conformance-reader",
+            "started_at": 100,
+            "finished_at": null
+          }
+        },
+        "sessions": {
+          "conformance-session": {
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101,
+            "ended_at": 104
+          }
+        },
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA==",
+                "styles": []
+              }
+            ],
+            "revisions": [
+              {
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "at": 101,
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-place": {
+            "id": "conformance-place",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "id": "conformance-theme",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "theme",
+            "name": "Original theme"
+          },
+          "conformance-event": {
+            "id": "conformance-event",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-concept": {
+            "id": "conformance-concept",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "concept",
+            "name": "Original concept"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "versions": [
+              {
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "parents": [],
+                "reader": "conformance-reader",
+                "at": 102,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "",
+                  "traits": [],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [],
+                  "passages": []
+                }
+              },
+              {
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "reader": "conformance-reader",
+                "at": 103,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "First impression",
+                  "traits": [
+                    "curious"
+                  ],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "passages": []
+                }
+              }
+            ]
+          }
+        },
+        "annotations": {},
+        "positions": {},
+        "lists": {},
+        "groups": {},
+        "friendship_requests": [],
+        "blocked": [],
+        "activity": {},
+        "drafts": {}
+      }
+    },
+    {
+      "id": "legacy-v2-still-readable",
+      "contract": "state",
+      "valid": true,
+      "input": {
+        "schema": "booknook.archive.v2",
+        "ontology_version": "0.2.0",
+        "revision": 4,
+        "local_reader": "conformance-reader",
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "title": "An Original Conformance Book",
+            "authors": [
+              "Book Nook test author"
+            ],
+            "subjects": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "sources": [],
+            "shelf": "currently-reading",
+            "rating": null,
+            "review": "",
+            "reading_dates": [],
+            "edited_fields": [],
+            "provenance": []
+          }
+        },
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "identifiers": [],
+            "language": null,
+            "assets": []
+          }
+        },
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "reader": "conformance-reader",
+            "started_at": 100,
+            "finished_at": null
+          }
+        },
+        "sessions": {
+          "conformance-session": {
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101,
+            "ended_at": 104
+          }
+        },
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA==",
+                "styles": [],
+                "ink": {
+                  "schema": "booknook.notebook-ink.v1",
+                  "versions": [
+                    {
+                      "id": "ink-first",
+                      "parents": [],
+                      "reader": "conformance-reader",
+                      "at": 110,
+                      "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                      "positions": [],
+                      "position_observations": [],
+                      "canvas_width": 768,
+                      "canvas_height": 960,
+                      "strokes": [
+                        {
+                          "color": "#102030",
+                          "width": 2,
+                          "points": [
+                            {
+                              "x": 10,
+                              "y": 10,
+                              "pressure": 0.5,
+                              "time": 0
+                            },
+                            {
+                              "x": 30,
+                              "y": 25,
+                              "pressure": 0.7,
+                              "time": 0.2
+                            }
+                          ]
+                        }
+                      ],
+                      "native_drawing": "c3ludGhldGljLW5hdGl2ZS1kYXRh"
+                    }
+                  ],
+                  "transcriptions": [
+                    {
+                      "id": "transcription-one",
+                      "ink_version_id": "ink-first",
+                      "reader": "conformance-reader",
+                      "at": 111,
+                      "text": "A synthetic handwritten thought.",
+                      "method": "manual"
+                    }
+                  ]
+                }
+              }
+            ],
+            "revisions": [
+              {
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "at": 101,
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-place": {
+            "id": "conformance-place",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "id": "conformance-theme",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "theme",
+            "name": "Original theme"
+          },
+          "conformance-event": {
+            "id": "conformance-event",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-concept": {
+            "id": "conformance-concept",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "concept",
+            "name": "Original concept"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "versions": [
+              {
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "parents": [],
+                "reader": "conformance-reader",
+                "at": 102,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "",
+                  "traits": [],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [],
+                  "passages": []
+                }
+              },
+              {
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "reader": "conformance-reader",
+                "at": 103,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "First impression",
+                  "traits": [
+                    "curious"
+                  ],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "passages": []
+                }
+              }
+            ]
+          }
+        },
+        "annotations": {},
+        "positions": {},
+        "lists": {},
+        "groups": {},
+        "friendship_requests": [],
+        "blocked": [],
+        "activity": {},
+        "drafts": {}
+      }
+    },
+    {
+      "id": "whiteboard-with-original-history",
+      "contract": "state",
+      "valid": true,
+      "input": {
+        "schema": "booknook.archive.v3",
+        "ontology_version": "0.3.0",
+        "revision": 4,
+        "local_reader": "conformance-reader",
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "title": "An Original Conformance Book",
+            "authors": [
+              "Book Nook test author"
+            ],
+            "subjects": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "sources": [],
+            "shelf": "currently-reading",
+            "rating": null,
+            "review": "",
+            "reading_dates": [],
+            "edited_fields": [],
+            "provenance": []
+          }
+        },
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "identifiers": [],
+            "language": null,
+            "assets": []
+          }
+        },
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "reader": "conformance-reader",
+            "started_at": 100,
+            "finished_at": null
+          }
+        },
+        "sessions": {
+          "conformance-session": {
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101,
+            "ended_at": 104
+          }
+        },
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA==",
+                "styles": [],
+                "ink": {
+                  "schema": "booknook.notebook-ink.v1",
+                  "versions": [
+                    {
+                      "id": "ink-first",
+                      "parents": [],
+                      "reader": "conformance-reader",
+                      "at": 110,
+                      "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                      "positions": [],
+                      "position_observations": [],
+                      "canvas_width": 32000,
+                      "canvas_height": 40000,
+                      "strokes": [
+                        {
+                          "color": "#102030",
+                          "width": 2,
+                          "points": [
+                            {
+                              "x": 10,
+                              "y": 10,
+                              "pressure": 0.5,
+                              "time": 0
+                            },
+                            {
+                              "x": 30,
+                              "y": 25,
+                              "pressure": 0.7,
+                              "time": 0.2
+                            }
+                          ]
+                        }
+                      ],
+                      "native_drawing": "c3ludGhldGljLW5hdGl2ZS1kYXRh",
+                      "canvas_space": {
+                        "kind": "whiteboard",
+                        "origin_x": -10000,
+                        "origin_y": -20000
+                      }
+                    }
+                  ],
+                  "transcriptions": [
+                    {
+                      "id": "transcription-one",
+                      "ink_version_id": "ink-first",
+                      "reader": "conformance-reader",
+                      "at": 111,
+                      "text": "A synthetic handwritten thought.",
+                      "method": "manual"
+                    }
+                  ]
+                },
+                "note": {
+                  "schema": "booknook.note.v1",
+                  "face": "whiteboard",
+                  "created": {
+                    "source": "history_fallback",
+                    "at": 101,
+                    "reader": "conformance-reader",
+                    "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                    "positions": [],
+                    "position_observations": []
+                  }
+                }
+              }
+            ],
+            "revisions": [
+              {
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "at": 101,
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-place": {
+            "id": "conformance-place",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "id": "conformance-theme",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "theme",
+            "name": "Original theme"
+          },
+          "conformance-event": {
+            "id": "conformance-event",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-concept": {
+            "id": "conformance-concept",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "concept",
+            "name": "Original concept"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "versions": [
+              {
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "parents": [],
+                "reader": "conformance-reader",
+                "at": 102,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "",
+                  "traits": [],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [],
+                  "passages": []
+                }
+              },
+              {
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "reader": "conformance-reader",
+                "at": 103,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "First impression",
+                  "traits": [
+                    "curious"
+                  ],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "passages": []
+                }
+              }
+            ]
+          }
+        },
+        "annotations": {},
+        "positions": {},
+        "lists": {},
+        "groups": {},
+        "friendship_requests": [],
+        "blocked": [],
+        "activity": {},
+        "drafts": {}
+      }
+    },
+    {
+      "id": "note-cannot-downgrade",
+      "contract": "state",
+      "valid": false,
+      "input": {
+        "schema": "booknook.archive.v2",
+        "ontology_version": "0.2.0",
+        "revision": 4,
+        "local_reader": "conformance-reader",
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "title": "An Original Conformance Book",
+            "authors": [
+              "Book Nook test author"
+            ],
+            "subjects": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "sources": [],
+            "shelf": "currently-reading",
+            "rating": null,
+            "review": "",
+            "reading_dates": [],
+            "edited_fields": [],
+            "provenance": []
+          }
+        },
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "identifiers": [],
+            "language": null,
+            "assets": []
+          }
+        },
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "reader": "conformance-reader",
+            "started_at": 100,
+            "finished_at": null
+          }
+        },
+        "sessions": {
+          "conformance-session": {
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101,
+            "ended_at": 104
+          }
+        },
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA==",
+                "styles": [],
+                "ink": {
+                  "schema": "booknook.notebook-ink.v1",
+                  "versions": [
+                    {
+                      "id": "ink-first",
+                      "parents": [],
+                      "reader": "conformance-reader",
+                      "at": 110,
+                      "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                      "positions": [],
+                      "position_observations": [],
+                      "canvas_width": 32000,
+                      "canvas_height": 40000,
+                      "strokes": [
+                        {
+                          "color": "#102030",
+                          "width": 2,
+                          "points": [
+                            {
+                              "x": 10,
+                              "y": 10,
+                              "pressure": 0.5,
+                              "time": 0
+                            },
+                            {
+                              "x": 30,
+                              "y": 25,
+                              "pressure": 0.7,
+                              "time": 0.2
+                            }
+                          ]
+                        }
+                      ],
+                      "native_drawing": "c3ludGhldGljLW5hdGl2ZS1kYXRh",
+                      "canvas_space": {
+                        "kind": "whiteboard",
+                        "origin_x": -10000,
+                        "origin_y": -20000
+                      }
+                    }
+                  ],
+                  "transcriptions": [
+                    {
+                      "id": "transcription-one",
+                      "ink_version_id": "ink-first",
+                      "reader": "conformance-reader",
+                      "at": 111,
+                      "text": "A synthetic handwritten thought.",
+                      "method": "manual"
+                    }
+                  ]
+                },
+                "note": {
+                  "schema": "booknook.note.v1",
+                  "face": "whiteboard",
+                  "created": {
+                    "source": "history_fallback",
+                    "at": 101,
+                    "reader": "conformance-reader",
+                    "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                    "positions": [],
+                    "position_observations": []
+                  }
+                }
+              }
+            ],
+            "revisions": [
+              {
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "at": 101,
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-place": {
+            "id": "conformance-place",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "id": "conformance-theme",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "theme",
+            "name": "Original theme"
+          },
+          "conformance-event": {
+            "id": "conformance-event",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-concept": {
+            "id": "conformance-concept",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "concept",
+            "name": "Original concept"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "versions": [
+              {
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "parents": [],
+                "reader": "conformance-reader",
+                "at": 102,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "",
+                  "traits": [],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [],
+                  "passages": []
+                }
+              },
+              {
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "reader": "conformance-reader",
+                "at": 103,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "First impression",
+                  "traits": [
+                    "curious"
+                  ],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "passages": []
+                }
+              }
+            ]
+          }
+        },
+        "annotations": {},
+        "positions": {},
+        "lists": {},
+        "groups": {},
+        "friendship_requests": [],
+        "blocked": [],
+        "activity": {},
+        "drafts": {}
+      }
+    },
+    {
+      "id": "whiteboard-over-world-edge",
+      "contract": "state",
+      "valid": false,
+      "input": {
+        "schema": "booknook.archive.v3",
+        "ontology_version": "0.3.0",
+        "revision": 4,
+        "local_reader": "conformance-reader",
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "title": "An Original Conformance Book",
+            "authors": [
+              "Book Nook test author"
+            ],
+            "subjects": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "sources": [],
+            "shelf": "currently-reading",
+            "rating": null,
+            "review": "",
+            "reading_dates": [],
+            "edited_fields": [],
+            "provenance": []
+          }
+        },
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "identifiers": [],
+            "language": null,
+            "assets": []
+          }
+        },
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "reader": "conformance-reader",
+            "started_at": 100,
+            "finished_at": null
+          }
+        },
+        "sessions": {
+          "conformance-session": {
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101,
+            "ended_at": 104
+          }
+        },
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA==",
+                "styles": [],
+                "ink": {
+                  "schema": "booknook.notebook-ink.v1",
+                  "versions": [
+                    {
+                      "id": "ink-first",
+                      "parents": [],
+                      "reader": "conformance-reader",
+                      "at": 110,
+                      "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                      "positions": [],
+                      "position_observations": [],
+                      "canvas_width": 32000,
+                      "canvas_height": 40000,
+                      "strokes": [
+                        {
+                          "color": "#102030",
+                          "width": 2,
+                          "points": [
+                            {
+                              "x": 10,
+                              "y": 10,
+                              "pressure": 0.5,
+                              "time": 0
+                            },
+                            {
+                              "x": 30,
+                              "y": 25,
+                              "pressure": 0.7,
+                              "time": 0.2
+                            }
+                          ]
+                        }
+                      ],
+                      "native_drawing": "c3ludGhldGljLW5hdGl2ZS1kYXRh",
+                      "canvas_space": {
+                        "kind": "whiteboard",
+                        "origin_x": 999999,
+                        "origin_y": -20000
+                      }
+                    }
+                  ],
+                  "transcriptions": [
+                    {
+                      "id": "transcription-one",
+                      "ink_version_id": "ink-first",
+                      "reader": "conformance-reader",
+                      "at": 111,
+                      "text": "A synthetic handwritten thought.",
+                      "method": "manual"
+                    }
+                  ]
+                },
+                "note": {
+                  "schema": "booknook.note.v1",
+                  "face": "whiteboard",
+                  "created": {
+                    "source": "history_fallback",
+                    "at": 101,
+                    "reader": "conformance-reader",
+                    "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                    "positions": [],
+                    "position_observations": []
+                  }
+                }
+              }
+            ],
+            "revisions": [
+              {
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "at": 101,
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-place": {
+            "id": "conformance-place",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "id": "conformance-theme",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "theme",
+            "name": "Original theme"
+          },
+          "conformance-event": {
+            "id": "conformance-event",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-concept": {
+            "id": "conformance-concept",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "concept",
+            "name": "Original concept"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "versions": [
+              {
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "parents": [],
+                "reader": "conformance-reader",
+                "at": 102,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "",
+                  "traits": [],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [],
+                  "passages": []
+                }
+              },
+              {
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "reader": "conformance-reader",
+                "at": 103,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "First impression",
+                  "traits": [
+                    "curious"
+                  ],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "passages": []
+                }
+              }
+            ]
+          }
+        },
+        "annotations": {},
+        "positions": {},
+        "lists": {},
+        "groups": {},
+        "friendship_requests": [],
+        "blocked": [],
+        "activity": {},
+        "drafts": {}
+      }
+    },
+    {
+      "id": "whiteboard-over-size-limit",
+      "contract": "state",
+      "valid": false,
+      "input": {
+        "schema": "booknook.archive.v3",
+        "ontology_version": "0.3.0",
+        "revision": 4,
+        "local_reader": "conformance-reader",
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "title": "An Original Conformance Book",
+            "authors": [
+              "Book Nook test author"
+            ],
+            "subjects": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "sources": [],
+            "shelf": "currently-reading",
+            "rating": null,
+            "review": "",
+            "reading_dates": [],
+            "edited_fields": [],
+            "provenance": []
+          }
+        },
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "identifiers": [],
+            "language": null,
+            "assets": []
+          }
+        },
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "reader": "conformance-reader",
+            "started_at": 100,
+            "finished_at": null
+          }
+        },
+        "sessions": {
+          "conformance-session": {
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101,
+            "ended_at": 104
+          }
+        },
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA==",
+                "styles": [],
+                "ink": {
+                  "schema": "booknook.notebook-ink.v1",
+                  "versions": [
+                    {
+                      "id": "ink-first",
+                      "parents": [],
+                      "reader": "conformance-reader",
+                      "at": 110,
+                      "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                      "positions": [],
+                      "position_observations": [],
+                      "canvas_width": 2000001,
+                      "canvas_height": 40000,
+                      "strokes": [
+                        {
+                          "color": "#102030",
+                          "width": 2,
+                          "points": [
+                            {
+                              "x": 10,
+                              "y": 10,
+                              "pressure": 0.5,
+                              "time": 0
+                            },
+                            {
+                              "x": 30,
+                              "y": 25,
+                              "pressure": 0.7,
+                              "time": 0.2
+                            }
+                          ]
+                        }
+                      ],
+                      "native_drawing": "c3ludGhldGljLW5hdGl2ZS1kYXRh",
+                      "canvas_space": {
+                        "kind": "whiteboard",
+                        "origin_x": -10000,
+                        "origin_y": -20000
+                      }
+                    }
+                  ],
+                  "transcriptions": [
+                    {
+                      "id": "transcription-one",
+                      "ink_version_id": "ink-first",
+                      "reader": "conformance-reader",
+                      "at": 111,
+                      "text": "A synthetic handwritten thought.",
+                      "method": "manual"
+                    }
+                  ]
+                },
+                "note": {
+                  "schema": "booknook.note.v1",
+                  "face": "whiteboard",
+                  "created": {
+                    "source": "history_fallback",
+                    "at": 101,
+                    "reader": "conformance-reader",
+                    "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                    "positions": [],
+                    "position_observations": []
+                  }
+                }
+              }
+            ],
+            "revisions": [
+              {
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "at": 101,
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-place": {
+            "id": "conformance-place",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "id": "conformance-theme",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "theme",
+            "name": "Original theme"
+          },
+          "conformance-event": {
+            "id": "conformance-event",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-concept": {
+            "id": "conformance-concept",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "concept",
+            "name": "Original concept"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "versions": [
+              {
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "parents": [],
+                "reader": "conformance-reader",
+                "at": 102,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "",
+                  "traits": [],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [],
+                  "passages": []
+                }
+              },
+              {
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "reader": "conformance-reader",
+                "at": 103,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "First impression",
+                  "traits": [
+                    "curious"
+                  ],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "passages": []
+                }
+              }
+            ]
+          }
+        },
+        "annotations": {},
+        "positions": {},
+        "lists": {},
+        "groups": {},
+        "friendship_requests": [],
+        "blocked": [],
+        "activity": {},
+        "drafts": {}
+      }
+    },
+    {
+      "id": "unknown-origin-cannot-invent-date",
+      "contract": "state",
+      "valid": false,
+      "input": {
+        "schema": "booknook.archive.v3",
+        "ontology_version": "0.3.0",
+        "revision": 4,
+        "local_reader": "conformance-reader",
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "title": "An Original Conformance Book",
+            "authors": [
+              "Book Nook test author"
+            ],
+            "subjects": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "sources": [],
+            "shelf": "currently-reading",
+            "rating": null,
+            "review": "",
+            "reading_dates": [],
+            "edited_fields": [],
+            "provenance": []
+          }
+        },
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "identifiers": [],
+            "language": null,
+            "assets": []
+          }
+        },
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "reader": "conformance-reader",
+            "started_at": 100,
+            "finished_at": null
+          }
+        },
+        "sessions": {
+          "conformance-session": {
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101,
+            "ended_at": 104
+          }
+        },
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA==",
+                "styles": [],
+                "ink": {
+                  "schema": "booknook.notebook-ink.v1",
+                  "versions": [
+                    {
+                      "id": "ink-first",
+                      "parents": [],
+                      "reader": "conformance-reader",
+                      "at": 110,
+                      "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                      "positions": [],
+                      "position_observations": [],
+                      "canvas_width": 32000,
+                      "canvas_height": 40000,
+                      "strokes": [
+                        {
+                          "color": "#102030",
+                          "width": 2,
+                          "points": [
+                            {
+                              "x": 10,
+                              "y": 10,
+                              "pressure": 0.5,
+                              "time": 0
+                            },
+                            {
+                              "x": 30,
+                              "y": 25,
+                              "pressure": 0.7,
+                              "time": 0.2
+                            }
+                          ]
+                        }
+                      ],
+                      "native_drawing": "c3ludGhldGljLW5hdGl2ZS1kYXRh",
+                      "canvas_space": {
+                        "kind": "whiteboard",
+                        "origin_x": -10000,
+                        "origin_y": -20000
+                      }
+                    }
+                  ],
+                  "transcriptions": [
+                    {
+                      "id": "transcription-one",
+                      "ink_version_id": "ink-first",
+                      "reader": "conformance-reader",
+                      "at": 111,
+                      "text": "A synthetic handwritten thought.",
+                      "method": "manual"
+                    }
+                  ]
+                },
+                "note": {
+                  "schema": "booknook.note.v1",
+                  "face": "whiteboard",
+                  "created": {
+                    "source": "unknown",
+                    "at": 101,
+                    "reader": "conformance-reader",
+                    "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                    "positions": [],
+                    "position_observations": []
+                  }
+                }
+              }
+            ],
+            "revisions": [
+              {
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "at": 101,
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-place": {
+            "id": "conformance-place",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "id": "conformance-theme",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "theme",
+            "name": "Original theme"
+          },
+          "conformance-event": {
+            "id": "conformance-event",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-concept": {
+            "id": "conformance-concept",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "concept",
+            "name": "Original concept"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "versions": [
+              {
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "parents": [],
+                "reader": "conformance-reader",
+                "at": 102,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "",
+                  "traits": [],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [],
+                  "passages": []
+                }
+              },
+              {
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "reader": "conformance-reader",
+                "at": 103,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "First impression",
+                  "traits": [
+                    "curious"
+                  ],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "passages": []
+                }
+              }
+            ]
+          }
+        },
+        "annotations": {},
+        "positions": {},
+        "lists": {},
+        "groups": {},
+        "friendship_requests": [],
+        "blocked": [],
+        "activity": {},
+        "drafts": {}
+      }
+    },
+    {
+      "id": "origin-wrong-pass",
+      "contract": "state",
+      "valid": false,
+      "input": {
+        "schema": "booknook.archive.v3",
+        "ontology_version": "0.3.0",
+        "revision": 4,
+        "local_reader": "conformance-reader",
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "title": "An Original Conformance Book",
+            "authors": [
+              "Book Nook test author"
+            ],
+            "subjects": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "sources": [],
+            "shelf": "currently-reading",
+            "rating": null,
+            "review": "",
+            "reading_dates": [],
+            "edited_fields": [],
+            "provenance": []
+          }
+        },
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "identifiers": [],
+            "language": null,
+            "assets": []
+          }
+        },
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "reader": "conformance-reader",
+            "started_at": 100,
+            "finished_at": null
+          }
+        },
+        "sessions": {
+          "conformance-session": {
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101,
+            "ended_at": 104
+          }
+        },
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA==",
+                "styles": [],
+                "ink": {
+                  "schema": "booknook.notebook-ink.v1",
+                  "versions": [
+                    {
+                      "id": "ink-first",
+                      "parents": [],
+                      "reader": "conformance-reader",
+                      "at": 110,
+                      "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                      "positions": [],
+                      "position_observations": [],
+                      "canvas_width": 32000,
+                      "canvas_height": 40000,
+                      "strokes": [
+                        {
+                          "color": "#102030",
+                          "width": 2,
+                          "points": [
+                            {
+                              "x": 10,
+                              "y": 10,
+                              "pressure": 0.5,
+                              "time": 0
+                            },
+                            {
+                              "x": 30,
+                              "y": 25,
+                              "pressure": 0.7,
+                              "time": 0.2
+                            }
+                          ]
+                        }
+                      ],
+                      "native_drawing": "c3ludGhldGljLW5hdGl2ZS1kYXRh",
+                      "canvas_space": {
+                        "kind": "whiteboard",
+                        "origin_x": -10000,
+                        "origin_y": -20000
+                      }
+                    }
+                  ],
+                  "transcriptions": [
+                    {
+                      "id": "transcription-one",
+                      "ink_version_id": "ink-first",
+                      "reader": "conformance-reader",
+                      "at": 111,
+                      "text": "A synthetic handwritten thought.",
+                      "method": "manual"
+                    }
+                  ]
+                },
+                "note": {
+                  "schema": "booknook.note.v1",
+                  "face": "whiteboard",
+                  "created": {
+                    "source": "history_fallback",
+                    "at": 101,
+                    "reader": "conformance-reader",
+                    "pass_id": "wrong",
+                    "positions": [],
+                    "position_observations": []
+                  }
+                }
+              }
+            ],
+            "revisions": [
+              {
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "at": 101,
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-place": {
+            "id": "conformance-place",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "id": "conformance-theme",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "theme",
+            "name": "Original theme"
+          },
+          "conformance-event": {
+            "id": "conformance-event",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-concept": {
+            "id": "conformance-concept",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "concept",
+            "name": "Original concept"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "versions": [
+              {
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "parents": [],
+                "reader": "conformance-reader",
+                "at": 102,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "",
+                  "traits": [],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [],
+                  "passages": []
+                }
+              },
+              {
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "reader": "conformance-reader",
+                "at": 103,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "First impression",
+                  "traits": [
+                    "curious"
+                  ],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "passages": []
+                }
+              }
+            ]
+          }
+        },
+        "annotations": {},
+        "positions": {},
+        "lists": {},
+        "groups": {},
+        "friendship_requests": [],
+        "blocked": [],
+        "activity": {},
+        "drafts": {}
+      }
+    },
+    {
+      "id": "unknown-note-field",
+      "contract": "state",
+      "valid": false,
+      "input": {
+        "schema": "booknook.archive.v3",
+        "ontology_version": "0.3.0",
+        "revision": 4,
+        "local_reader": "conformance-reader",
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "title": "An Original Conformance Book",
+            "authors": [
+              "Book Nook test author"
+            ],
+            "subjects": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "sources": [],
+            "shelf": "currently-reading",
+            "rating": null,
+            "review": "",
+            "reading_dates": [],
+            "edited_fields": [],
+            "provenance": []
+          }
+        },
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "identifiers": [],
+            "language": null,
+            "assets": []
+          }
+        },
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "reader": "conformance-reader",
+            "started_at": 100,
+            "finished_at": null
+          }
+        },
+        "sessions": {
+          "conformance-session": {
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101,
+            "ended_at": 104
+          }
+        },
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA==",
+                "styles": [],
+                "ink": {
+                  "schema": "booknook.notebook-ink.v1",
+                  "versions": [
+                    {
+                      "id": "ink-first",
+                      "parents": [],
+                      "reader": "conformance-reader",
+                      "at": 110,
+                      "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                      "positions": [],
+                      "position_observations": [],
+                      "canvas_width": 32000,
+                      "canvas_height": 40000,
+                      "strokes": [
+                        {
+                          "color": "#102030",
+                          "width": 2,
+                          "points": [
+                            {
+                              "x": 10,
+                              "y": 10,
+                              "pressure": 0.5,
+                              "time": 0
+                            },
+                            {
+                              "x": 30,
+                              "y": 25,
+                              "pressure": 0.7,
+                              "time": 0.2
+                            }
+                          ]
+                        }
+                      ],
+                      "native_drawing": "c3ludGhldGljLW5hdGl2ZS1kYXRh",
+                      "canvas_space": {
+                        "kind": "whiteboard",
+                        "origin_x": -10000,
+                        "origin_y": -20000
+                      }
+                    }
+                  ],
+                  "transcriptions": [
+                    {
+                      "id": "transcription-one",
+                      "ink_version_id": "ink-first",
+                      "reader": "conformance-reader",
+                      "at": 111,
+                      "text": "A synthetic handwritten thought.",
+                      "method": "manual"
+                    }
+                  ]
+                },
+                "note": {
+                  "schema": "booknook.note.v1",
+                  "face": "whiteboard",
+                  "created": {
+                    "source": "history_fallback",
+                    "at": 101,
+                    "reader": "conformance-reader",
+                    "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                    "positions": [],
+                    "position_observations": []
+                  },
+                  "secret": "not-permitted"
+                }
+              }
+            ],
+            "revisions": [
+              {
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "at": 101,
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-place": {
+            "id": "conformance-place",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "id": "conformance-theme",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "theme",
+            "name": "Original theme"
+          },
+          "conformance-event": {
+            "id": "conformance-event",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-concept": {
+            "id": "conformance-concept",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "concept",
+            "name": "Original concept"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "versions": [
+              {
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "parents": [],
+                "reader": "conformance-reader",
+                "at": 102,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "",
+                  "traits": [],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [],
+                  "passages": []
+                }
+              },
+              {
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "reader": "conformance-reader",
+                "at": 103,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "First impression",
+                  "traits": [
+                    "curious"
+                  ],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "passages": []
+                }
+              }
+            ]
+          }
+        },
+        "annotations": {},
+        "positions": {},
+        "lists": {},
+        "groups": {},
+        "friendship_requests": [],
+        "blocked": [],
+        "activity": {},
+        "drafts": {}
+      }
+    },
+    {
+      "id": "unknown-canvas-kind",
+      "contract": "state",
+      "valid": false,
+      "input": {
+        "schema": "booknook.archive.v3",
+        "ontology_version": "0.3.0",
+        "revision": 4,
+        "local_reader": "conformance-reader",
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "title": "An Original Conformance Book",
+            "authors": [
+              "Book Nook test author"
+            ],
+            "subjects": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "sources": [],
+            "shelf": "currently-reading",
+            "rating": null,
+            "review": "",
+            "reading_dates": [],
+            "edited_fields": [],
+            "provenance": []
+          }
+        },
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "identifiers": [],
+            "language": null,
+            "assets": []
+          }
+        },
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "reader": "conformance-reader",
+            "started_at": 100,
+            "finished_at": null
+          }
+        },
+        "sessions": {
+          "conformance-session": {
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101,
+            "ended_at": 104
+          }
+        },
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA==",
+                "styles": [],
+                "ink": {
+                  "schema": "booknook.notebook-ink.v1",
+                  "versions": [
+                    {
+                      "id": "ink-first",
+                      "parents": [],
+                      "reader": "conformance-reader",
+                      "at": 110,
+                      "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                      "positions": [],
+                      "position_observations": [],
+                      "canvas_width": 32000,
+                      "canvas_height": 40000,
+                      "strokes": [
+                        {
+                          "color": "#102030",
+                          "width": 2,
+                          "points": [
+                            {
+                              "x": 10,
+                              "y": 10,
+                              "pressure": 0.5,
+                              "time": 0
+                            },
+                            {
+                              "x": 30,
+                              "y": 25,
+                              "pressure": 0.7,
+                              "time": 0.2
+                            }
+                          ]
+                        }
+                      ],
+                      "native_drawing": "c3ludGhldGljLW5hdGl2ZS1kYXRh",
+                      "canvas_space": {
+                        "kind": "infinite",
+                        "origin_x": -10000,
+                        "origin_y": -20000
+                      }
+                    }
+                  ],
+                  "transcriptions": [
+                    {
+                      "id": "transcription-one",
+                      "ink_version_id": "ink-first",
+                      "reader": "conformance-reader",
+                      "at": 111,
+                      "text": "A synthetic handwritten thought.",
+                      "method": "manual"
+                    }
+                  ]
+                },
+                "note": {
+                  "schema": "booknook.note.v1",
+                  "face": "whiteboard",
+                  "created": {
+                    "source": "history_fallback",
+                    "at": 101,
+                    "reader": "conformance-reader",
+                    "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                    "positions": [],
+                    "position_observations": []
+                  }
+                }
+              }
+            ],
+            "revisions": [
+              {
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "at": 101,
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-place": {
+            "id": "conformance-place",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "id": "conformance-theme",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "theme",
+            "name": "Original theme"
+          },
+          "conformance-event": {
+            "id": "conformance-event",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-concept": {
+            "id": "conformance-concept",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "concept",
+            "name": "Original concept"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "versions": [
+              {
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "parents": [],
+                "reader": "conformance-reader",
+                "at": 102,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "",
+                  "traits": [],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [],
+                  "passages": []
+                }
+              },
+              {
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "reader": "conformance-reader",
+                "at": 103,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "First impression",
+                  "traits": [
+                    "curious"
+                  ],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "passages": []
+                }
+              }
+            ]
+          }
+        },
+        "annotations": {},
+        "positions": {},
+        "lists": {},
+        "groups": {},
+        "friendship_requests": [],
+        "blocked": [],
+        "activity": {},
+        "drafts": {}
+      }
+    },
+    {
+      "id": "flip-preserves-history",
+      "contract": "command",
+      "valid": true,
+      "state": {
+        "schema": "booknook.archive.v3",
+        "ontology_version": "0.3.0",
+        "revision": 4,
+        "local_reader": "conformance-reader",
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "title": "An Original Conformance Book",
+            "authors": [
+              "Book Nook test author"
+            ],
+            "subjects": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "sources": [],
+            "shelf": "currently-reading",
+            "rating": null,
+            "review": "",
+            "reading_dates": [],
+            "edited_fields": [],
+            "provenance": []
+          }
+        },
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "identifiers": [],
+            "language": null,
+            "assets": []
+          }
+        },
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "reader": "conformance-reader",
+            "started_at": 100,
+            "finished_at": null
+          }
+        },
+        "sessions": {
+          "conformance-session": {
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101,
+            "ended_at": 104
+          }
+        },
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA==",
+                "styles": [],
+                "ink": {
+                  "schema": "booknook.notebook-ink.v1",
+                  "versions": [
+                    {
+                      "id": "ink-first",
+                      "parents": [],
+                      "reader": "conformance-reader",
+                      "at": 110,
+                      "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                      "positions": [],
+                      "position_observations": [],
+                      "canvas_width": 32000,
+                      "canvas_height": 40000,
+                      "strokes": [
+                        {
+                          "color": "#102030",
+                          "width": 2,
+                          "points": [
+                            {
+                              "x": 10,
+                              "y": 10,
+                              "pressure": 0.5,
+                              "time": 0
+                            },
+                            {
+                              "x": 30,
+                              "y": 25,
+                              "pressure": 0.7,
+                              "time": 0.2
+                            }
+                          ]
+                        }
+                      ],
+                      "native_drawing": "c3ludGhldGljLW5hdGl2ZS1kYXRh",
+                      "canvas_space": {
+                        "kind": "whiteboard",
+                        "origin_x": -10000,
+                        "origin_y": -20000
+                      }
+                    }
+                  ],
+                  "transcriptions": [
+                    {
+                      "id": "transcription-one",
+                      "ink_version_id": "ink-first",
+                      "reader": "conformance-reader",
+                      "at": 111,
+                      "text": "A synthetic handwritten thought.",
+                      "method": "manual"
+                    }
+                  ]
+                },
+                "note": {
+                  "schema": "booknook.note.v1",
+                  "face": "whiteboard",
+                  "created": {
+                    "source": "history_fallback",
+                    "at": 101,
+                    "reader": "conformance-reader",
+                    "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                    "positions": [],
+                    "position_observations": []
+                  }
+                }
+              }
+            ],
+            "revisions": [
+              {
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "at": 101,
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-place": {
+            "id": "conformance-place",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "id": "conformance-theme",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "theme",
+            "name": "Original theme"
+          },
+          "conformance-event": {
+            "id": "conformance-event",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-concept": {
+            "id": "conformance-concept",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "concept",
+            "name": "Original concept"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "versions": [
+              {
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "parents": [],
+                "reader": "conformance-reader",
+                "at": 102,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "",
+                  "traits": [],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [],
+                  "passages": []
+                }
+              },
+              {
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "reader": "conformance-reader",
+                "at": 103,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "First impression",
+                  "traits": [
+                    "curious"
+                  ],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "passages": []
+                }
+              }
+            ]
+          }
+        },
+        "annotations": {},
+        "positions": {},
+        "lists": {},
+        "groups": {},
+        "friendship_requests": [],
+        "blocked": [],
+        "activity": {},
+        "drafts": {}
+      },
+      "input": {
+        "op": "set_note_face",
+        "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+        "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+        "face": "text",
+        "at": 200
+      }
+    },
+    {
+      "id": "modern-edit-keeps-legacy-fallback",
+      "contract": "command",
+      "valid": true,
+      "state": {
+        "schema": "booknook.archive.v1",
+        "ontology_version": "0.1.0",
+        "revision": 4,
+        "local_reader": "conformance-reader",
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "title": "An Original Conformance Book",
+            "authors": [
+              "Book Nook test author"
+            ],
+            "subjects": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "sources": [],
+            "shelf": "currently-reading",
+            "rating": null,
+            "review": "",
+            "reading_dates": [],
+            "edited_fields": [],
+            "provenance": []
+          }
+        },
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "identifiers": [],
+            "language": null,
+            "assets": []
+          }
+        },
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "reader": "conformance-reader",
+            "started_at": 100,
+            "finished_at": null
+          }
+        },
+        "sessions": {
+          "conformance-session": {
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101,
+            "ended_at": 104
+          }
+        },
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA==",
+                "styles": []
+              }
+            ],
+            "revisions": [
+              {
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "at": 101,
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-place": {
+            "id": "conformance-place",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "id": "conformance-theme",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "theme",
+            "name": "Original theme"
+          },
+          "conformance-event": {
+            "id": "conformance-event",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-concept": {
+            "id": "conformance-concept",
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "kind": "concept",
+            "name": "Original concept"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "versions": [
+              {
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "parents": [],
+                "reader": "conformance-reader",
+                "at": 102,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "",
+                  "traits": [],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [],
+                  "passages": []
+                }
+              },
+              {
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "reader": "conformance-reader",
+                "at": 103,
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "interpretation": {
+                  "description": "First impression",
+                  "traits": [
+                    "curious"
+                  ],
+                  "relationships": [],
+                  "observations": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "passages": []
+                }
+              }
+            ]
+          }
+        },
+        "annotations": {},
+        "positions": {},
+        "lists": {},
+        "groups": {},
+        "friendship_requests": [],
+        "blocked": [],
+        "activity": {},
+        "drafts": {}
+      },
+      "input": {
+        "op": "merge_block_update",
+        "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+        "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+        "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA==",
+        "at": 200,
+        "capture_context": {
+          "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+          "positions": [],
+          "position_observations": []
+        },
+        "note_creation": {
+          "at": 190,
+          "capture_context": {
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "positions": [],
+            "position_observations": []
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "schema": "booknook.ontology-manifest.v1",
+  "version": "0.1.0",
+  "namespace": "urn:booknook:ontology:",
+  "castalia": {
+    "version": "0.6.0",
+    "canonical_base_url": "https://zenith-research.ca/ontology/v0.6.0",
+    "bundle_digest": "11d670a57b2052b4de00509559d081b524bf953c6da2544a25f33976857f8f4f"
+  },
+  "artifacts": [
+    {
+      "path": "audio-candidates.schema.json",
+      "sha256": "5ba273aec5beb7edf0a4d601678d6fa3f42eb1e40bf3e52be95d0575d5bd54f8"
+    },
+    {
+      "path": "audio-observation.schema.json",
+      "sha256": "486049e1d07d6cb06957a821562f7c02de9951930d99ac62e05d7ac383fd5360"
+    },
+    {
+      "path": "authority-policy.schema.json",
+      "sha256": "71b67f479c3d4610ba4af084a6b4c3e003f9a45a5b60ff6abf2799d6f8addbea"
+    },
+    {
+      "path": "castalia-mapping.json",
+      "sha256": "bd70758ca0592b9221a04bc4fd5ef1baf6a77b193d76ddea631d661b827f0d12"
+    },
+    {
+      "path": "castalia-native-authority-profile.schema.json",
+      "sha256": "5bcb39d232865fa4a7de200625e3ec02e21799d99eab544ab4bab9f8fc5fd9e4"
+    },
+    {
+      "path": "castalia-provider-connection.schema.json",
+      "sha256": "ff3eec75a34c70a0a08b497f5448072446f7892db8d2b81b52a8341498f3f5e1"
+    },
+    {
+      "path": "command.schema.json",
+      "sha256": "5f2e61345b7692c53f67e8d8b67d6fce7078c1bfba3cfe341851dd02686d516e"
+    },
+    {
+      "path": "conformance.json",
+      "sha256": "94f1443d84dfd6d6f675ded2d40c666b1b9b1d2b3e72268bbb5194558cd50fab"
+    },
+    {
+      "path": "connections.schema.json",
+      "sha256": "682e23e140b7b6ae1997de357e38bc7c5297e98137fcb1fd7c78a01f6289c424"
+    },
+    {
+      "path": "context.jsonld",
+      "sha256": "9107ae8da77dbe8d7c379e944f3c99e112126bf84af14286caa87644e95572d8"
+    },
+    {
+      "path": "identity.schema.json",
+      "sha256": "68866e8630125d88aeb39964cbb6e5034a5701eb2cc05799b757eea4b33c5c49"
+    },
+    {
+      "path": "ontology.jsonld",
+      "sha256": "a4515dd1b8a6290237cc1bfadf854fc6c670cfed094dd93eefc4ed8830eb8315"
+    },
+    {
+      "path": "publication.schema.json",
+      "sha256": "aaf2e5df78513831a52c3082f529cce0549f46c5c6d94f53ee63617a82aa8e26"
+    },
+    {
+      "path": "social-action.schema.json",
+      "sha256": "8b05a74af7d176eb6248a9892a9fa156a4596c6056b5bd3d9dff2ec042229601"
+    },
+    {
+      "path": "social-event.schema.json",
+      "sha256": "f92f3d962a5e1378c01b52e7cee488b0f653647271ae3e2bad3a469c3e4630c3"
+    },
+    {
+      "path": "social-local.schema.json",
+      "sha256": "5a199d0bae2771381305f8c0b9a1fe12e3cf2b044df16fcfbd9aacbf67bd7fe8"
+    },
+    {
+      "path": "social.schema.json",
+      "sha256": "f09fb3b50bb8cfdfc0cd24db18f12578a005500cb52a45df4eb5d79b8dda4405"
+    },
+    {
+      "path": "state.schema.json",
+      "sha256": "752ce61a0ecdf2517aca64484967c2c9180c6c9edacd73f0ba6f25dfc92be72f"
+    }
+  ]
+}

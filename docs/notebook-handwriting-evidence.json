@@ -1,0 +1,113 @@
+{
+  "schema": "booknook.notebook-handwriting-evidence.v1",
+  "recorded_at_utc": "2026-10-15T22:46:54.521533+00:00",
+  "release_ready": false,
+  "implemented": [
+    "Explicit Type/Write mode; original handwriting displayed alongside separate prose and reviewed transcripts",
+    "Remembered notebook-left/right preference using stable wide-layout view identities and compact pane switch",
+    "Pencil-only canvas; finger scrolling between strokes; notebook ancestors pause during Pencil contact while reader remains independent",
+    "Fixed logical canvas with immutable versions, original PencilKit data and portable strokes; source-linked reviewed on-device/manual transcript records",
+    "Desk-retained ordered autosave queue, stable retry IDs, failure/retry disclosure, drain before navigation/export/background",
+    "Archive v2 promotion for ink, legacy typed v1 support, immutable version union and visible branches in Rust/native/WASM"
+  ],
+  "confirmed": {
+    "rust_workspace": {
+      "passed": 135,
+      "failed": 0,
+      "ignored": 3
+    },
+    "extracted_rust_packages": {
+      "passed": 135,
+      "failed": 0,
+      "ignored": 3
+    },
+    "native_builds": [
+      "macOS arm64",
+      "iPad Simulator arm64",
+      "unsigned iPad device arm64"
+    ],
+    "sdk_archives": 6,
+    "native_app_archives": 3,
+    "geometry": "Fixed logical coordinates and left/right pane frame tests passed",
+    "swift_linked_workflow": "Actual Swift controllers, UniFFI and SQLite: failed ink save/ordered retry, incoming branch during erasure, same bytes with explicit different parent, capture/drain, exact-source transcript and unchanged prose, reopen and empty-desk portable restore",
+    "recognition": "Actual on-device Vision returned NOTE for synthetic paths; reviewed Unicode edit/save/reopen passed. Human handwriting accuracy remains unqualified.",
+    "ontology_http_artifacts": 38
+  },
+  "independent_review_repairs": [
+    "Canvas parents come from the actually displayed snapshot, not an unseen incoming model update",
+    "An erasure with an explicit parent cannot be dropped as an empty-page no-op",
+    "Identical drawing bytes with an explicitly different parent cannot be silently deduplicated",
+    "Native canvas accessibility instructions distinguish Write and read-only modes"
+  ],
+  "qa": {
+    "build": "Development-signed current QA build installed;3bounded physical UI runs passed",
+    "installed": true,
+    "new_ui_tests_run": true,
+    "evidence": {
+      "workspace_file": "outputs/booknook/docs/physical-notebook-handwriting-evidence.json",
+      "sha256": "0f0c00134b32444d63552dce49e1b7400f710e7701f974f64dc66ef9fc336cb6",
+      "bytes": 22187
+    }
+  },
+  "limits": [
+    "Physical Pencil contact, palm rejection, ink Undo/Redo, simultaneous gestures, compact pane switching and broad accessibility remain unqualified; bounded side-swap/rotation/finger-scroll/history/reopen checks passed.",
+    "Recognition uses on-device Vision revision3 over a bounded raster; synthetic NOTE recognized, no user-handwriting accuracy qualification.",
+    "Portable fallback retains coordinates/color/width/pressure/timing but cannot reproduce all PencilKit brush texture/opacity; original native bytes are retained",
+    "Pending strokes remain in the desk process until SQLite acknowledges the operation; unsaved forced-termination recovery is not claimed",
+    "Essential live Kindle/Audible/Castalia, remote social delivery and production distribution gates remain open"
+  ],
+  "evidence": {
+    "delivery-receipt.json": {
+      "workspace_file": "work/reader-context-recovery-2026-10-15/baseline/frozen-receipts/work/notebook-handwriting-2026-10-15/delivery-receipt.json",
+      "sha256": "4a169a6ca74ac0e726dccb914703a231e64e0d91f5991fb27d059169ee1806e8",
+      "bytes": 4393
+    },
+    "sdk-focused-receipt.json": {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/sdk-focused-receipt.json",
+      "sha256": "f20f307602140ece831957442cdb9ed4e742dc5c9cdd6e1dcad61a7d6e2876a6",
+      "bytes": 1341
+    },
+    "workspace-check-receipt.json": {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/workspace-check-receipt.json",
+      "sha256": "3ab8d54d0e9fdc982f16a1b98e6f153d9cf0bf6bb3a9684fda77f9c2d92fac9d",
+      "bytes": 769
+    },
+    "native-build-receipt.json": {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/native-build-receipt.json",
+      "sha256": "0405fd6b1c8e18b8a53444568b59c83557296b6062eee9373845541cc6096e1d",
+      "bytes": 12398
+    },
+    "reading-ui-receipt.json": {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/reading-ui-receipt.json",
+      "sha256": "5866230c6ebb93d2b6caf48a4e84c1927d4f71d9f2e8855c2a9181aa1a682ee7",
+      "bytes": 1321
+    },
+    "swift-workflows.log": {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/swift-workflows.log",
+      "sha256": "008dcc48be13aa7dc3abd0264bca327e55357aebc6062ebe3f51d2b21057746f",
+      "bytes": 5758
+    },
+    "qa-build-receipt.json": {
+      "workspace_file": "work/reader-context-recovery-2026-10-15/baseline/frozen-receipts/work/notebook-handwriting-2026-10-15/qa-build-receipt.json",
+      "sha256": "c3aa5796195ff9c996c4d79b953f7ace3c57c1befe945896604c46ffb19cd3d4",
+      "bytes": 33768
+    },
+    "static-ontology-receipt.json": {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/static-ontology-receipt.json",
+      "sha256": "f7780c454cbc3489235eae52e5c13d65aa98032734fe529975365185e182fe22",
+      "bytes": 4502
+    },
+    "physical-notebook-handwriting-evidence.json": {
+      "workspace_file": "outputs/booknook/docs/physical-notebook-handwriting-evidence.json",
+      "sha256": "0f0c00134b32444d63552dce49e1b7400f710e7701f974f64dc66ef9fc336cb6",
+      "bytes": 22187
+    }
+  },
+  "build_provenance": {
+    "workspace_file": "work/reader-context-recovery-2026-10-15/baseline/outputs/booknook/docs/build-inputs.json",
+    "sha256": "abedf86676f1f4e9680b1f3f3c2fd085078d3dad38be5adec5437aeba16a7489",
+    "bytes": 56722
+  },
+  "decisions": "DECISIONS.md#decision-log",
+  "guide": "NOTEBOOK-HANDWRITING.md"
+}

@@ -1,0 +1,91 @@
+{
+  "schema": "booknook.remote-read-transport-evidence.v1",
+  "observed_at_utc": "2026-10-12T20:10:59+00:00",
+  "command": "bash scripts/probe-public-relay.sh --read-only-public-relay wss://relay.damus.io",
+  "primary_relay_documentation": "https://github.com/damus-io/notepush#installation",
+  "observations": {
+    "connected": true,
+    "duration_ms": 243,
+    "inbound_message_kinds": {
+      "EOSE": 1
+    },
+    "outbound_message_kinds": {
+      "CLOSE": 1,
+      "REQ": 1
+    },
+    "outcome": "fetch_returned",
+    "passed": true,
+    "query": {
+      "#t": [
+        "booknook"
+      ],
+      "kinds": [
+        30078
+      ],
+      "limit": 500,
+      "since": 1791835859,
+      "until": 1791835859
+    },
+    "relay": "wss://relay.damus.io",
+    "returned_event_count": 0,
+    "schema": "booknook.read-only-relay-probe.v1",
+    "scope": "Remote default TLS/WebSocket handshake plus read-only REQ/EOSE only; no publication, identity, consent, private delivery or whole-social qualification.",
+    "sdk_error_count": 0,
+    "signer": "none",
+    "started_at_unix": 1791835859,
+    "transport": "SocialRelayTransport::connect / DefaultWebsocketTransport"
+  },
+  "dependency_version_checksum_differences": [],
+  "opt_in_missing_exit_code": 2,
+  "sdk_archive_hash_mismatches": [],
+  "files": {
+    "<local-workspace>/outputs/booknook/tests/relay-read-probe/src/main.rs": {
+      "sha256": "8f53115ffe11871921d06946a324b6136fe9a5a35374bf1f3279ccc9df85f3f5",
+      "bytes": 6482
+    },
+    "<local-workspace>/outputs/booknook/tests/relay-read-probe/Cargo.toml": {
+      "sha256": "15c84f24d4b0269980f5dfacf50144a0a19dc003e4611df8f0fb0c8a33dd4d0a",
+      "bytes": 398
+    },
+    "<local-workspace>/outputs/booknook/tests/relay-read-probe/Cargo.lock": {
+      "sha256": "c328a93d757a25b42b64c8d88617357d413dc47eb23e60ebf2472c6f7d3fc17b",
+      "bytes": 59740
+    },
+    "<local-workspace>/outputs/booknook/scripts/probe-public-relay.sh": {
+      "sha256": "029025ab74ed71a43972852c3194073047b21ac94bd7c1c1972647aefecc3dbf",
+      "bytes": 675
+    },
+    "<local-workspace>/outputs/booknook/docs/LOCAL-RELAY-VALIDATION.md": {
+      "sha256": "49996b04d24bc6f552bb8e8e477fc323ae81c453d8294c4bc2da9cc6fd85c03a",
+      "bytes": 6259
+    },
+    "<local-workspace>/work/nostr-read-probe-delivered-result.json": {
+      "sha256": "377f8fb560accead60113f875384ca8632abe25c361aef7c5480c44c83db5bd5",
+      "bytes": 652
+    },
+    "<local-workspace>/work/nostr-read-probe-delivered-build.log": {
+      "sha256": "be122c1da2571084c31441fa93bf2970544a6aa05f050c1a97c54e4b22eb2388",
+      "bytes": 227
+    },
+    "<local-workspace>/outputs/booknook/crates/connectors/src/nostr_transport.rs": {
+      "sha256": "dee445627f430265bb233e0f506255024744066236c24a35e153dd902c0b7536",
+      "bytes": 17113
+    },
+    "<local-workspace>/outputs/booknook/Cargo.lock": {
+      "sha256": "ed0a6eee579b417b5ead60aa1deb317833fa35caf437d3e70cca396a8b938032",
+      "bytes": 80106
+    },
+    "<local-workspace>/outputs/booknook/target/debug/booknook-read-only-relay-probe": {
+      "sha256": "db719d145840fe75bbedd1651d326bc52eb9194d995a5e7fb5936da392760ec0",
+      "bytes": 15501952
+    }
+  },
+  "prior_scratch_probe_note": "Initial scratch run connected but its local trace parser missed frame types and correctly reported failed. Parser fixed before passing runs; no protocol-completion claim uses the initial attempt.",
+  "scope": "Default TLS/WebSocket and public REQ/EOSE/CLOSE only. No signer, identity, AUTH, EVENT, publish, trust override, raw records or user configuration.",
+  "publication_redaction": {
+    "scope": "Local filesystem paths and Apple developer-team identity replaced with placeholders.",
+    "original_receipt_retained_locally": true,
+    "original_sha256": "957bb6f732c203d4aa4f42e7ff340ad4842abcb606cfc6eae924b4585a052363",
+    "note": "Historical artifact hashes describe the original validation inputs, not this redacted documentation copy."
+  }
+}

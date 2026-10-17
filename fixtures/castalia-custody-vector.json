@@ -1,0 +1,26 @@
+{
+  "source": "castalia-wallet-core MIT ff8de6d, published custody v1 interoperability vector; synthetic RFC8032 key only",
+  "container": {
+    "schema": "castalia.wallet-custody.v1",
+    "keySuite": "Ed25519",
+    "publicKey": "d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a",
+    "createdAt": 1700000000123,
+    "kdf": {
+      "name": "Argon2id",
+      "version": 19,
+      "salt": "AAECAwQFBgcICQoLDA0ODw",
+      "memoryKiB": 65536,
+      "iterations": 3,
+      "parallelism": 1,
+      "derivedKeyBytes": 32
+    },
+    "aead": {
+      "name": "AES-256-GCM",
+      "nonce": "EBESExQVFhcYGRob",
+      "tagBits": 128
+    },
+    "ciphertext": "3fCNXye1EearUlXHXodNL4M6gNUUQpHWPrwnPJ9ZXowCXh4x6OmxtC0SkQZ-qVLgY_mTaOetnknkxAivv1VSdP2aggQZCHq8aapLKT9k-82Y8wXeo56gWDL0iqUM31neDQtYcYcknYprVEu28K7zroate3U3rrkDnt9-4NHi5ZV7jScibHTGvjjdP1UAhn6gz7rRyciA15ENXcoDi9t8Y14I8CTx44jhb0VyY9LpJ-gXwqGzfkpxpP8COBFMeeZastfE9Cp0o1VV2JZSzrCA3mclQYwBKAxYfebW1dTo5Gj5k6CGrmExkiz-krcsKG2m"
+  },
+  "passphrase": "Correct Horse Caf\u00e9 \ud83d\udf01",
+  "public_key": "d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a"
+}

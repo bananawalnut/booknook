@@ -1,0 +1,97 @@
+{
+  "schema": "booknook.finger-local-release-evidence.v1",
+  "date": "2026-10-16",
+  "scope": "Finger drawing on note whiteboards and canonical local Release installation; broader production MVP gates remain open",
+  "decision_ids": [
+    "D102",
+    "D103"
+  ],
+  "source_inputs": {
+    "path": "work/finger-release-2026-10-16/Evidence/source-inputs.json",
+    "sha256": "6f79b76019a505d7cdf552126de53af11a7fe1291e6fee89044d81243f8661ee"
+  },
+  "qa": {
+    "environment": "iPad Pro 13-inch (M4), iOS 18.6 Simulator; isolated synthetic store, production RootView and app views",
+    "tests": 1,
+    "failures": 0,
+    "duration_seconds": 56.659,
+    "result_bundle": "work/finger-release-2026-10-16/Evidence/FinalFingerQAReopen.xcresult",
+    "log": "work/finger-release-2026-10-16/final-finger-qa-reopen.log",
+    "coverage": [
+      "Mounted UIKit/TextKit/PencilKit framework acceptance with gesture policy/ownership, native undo and positive/negative viewport pixels",
+      "Warm palette and separate note faces",
+      "Actual single-finger XCTest drag renders and persists a third stroke through normal PencilKit callbacks",
+      "Zoom does not change original ink versions or hashes",
+      "Margin character-card attachment",
+      "Add note and actual keyboard input",
+      "Exact note order, creation context, text, character attachment and native ink hashes after termination/relaunch"
+    ],
+    "two_finger_pan": "Gesture ownership and two-touch recognizer configuration asserted; physical two-finger feel is not qualified",
+    "reviewed_screenshots": [
+      "evidence/finger-canvas-simulator.png",
+      "evidence/finger-notes-reopened-simulator.png"
+    ]
+  },
+  "local_release": {
+    "bundle_id": "org.booknook.ipad",
+    "display_name": "Book Nook",
+    "version": "0.1.0",
+    "build": "2026101601",
+    "executable": "BookNookPad",
+    "profile_name": "iOS Team Provisioning Profile: org.booknook.ipad",
+    "profile_expiration": "2026-10-24T01:48:21Z",
+    "team": [
+      "<local-apple-team>"
+    ],
+    "application_id": "<local-apple-team>.org.booknook.ipad",
+    "development_signed": true,
+    "device_allowed": true,
+    "executable_sha256": "4582cc4ac43058ac4cbecb15cb360e5368c4c2e0e589f1b83fe819c45c47db6e",
+    "signature_verified": true,
+    "installed": true,
+    "launched": true,
+    "installation_verification": "work/finger-release-2026-10-16/Evidence/normal-app-installed.json",
+    "launch_receipt": "work/finger-release-2026-10-16/Evidence/normal-app-launch.json",
+    "qa_app_retained_receipt": "work/finger-release-2026-10-16/Evidence/qa-app-retained.json",
+    "fixture_seeding": false,
+    "qa_data_exported_or_migrated": false,
+    "orientation_commands": false,
+    "physical_input_test_performed": false,
+    "artifact_directory": "outputs/booknook-apps/ipad-local-release-20261016",
+    "app_store_or_testflight_distribution": false
+  },
+  "retained_nonpasses": [
+    {
+      "path": "work/finger-release-2026-10-16/Evidence/FinalFingerQA.xcresult",
+      "reason": "QA checked WebKit colors before its stylesheet loaded; corrected test readiness ordering, no product change."
+    },
+    {
+      "path": "work/finger-release-2026-10-16/final-finger-qa-ready.log",
+      "reason": "Unescalated invocation could not access CoreSimulator; no test executed."
+    },
+    {
+      "path": "work/finger-release-2026-10-16/Evidence/FinalFingerQAComplete.xcresult",
+      "reason": "Finger drawing and card steps passed; Add-note snapshot still contained two notes after an external-app foreground interruption. Added app activation and explicit completion wait; final flow passed without a product change."
+    },
+    {
+      "path": "work/finger-release-2026-10-16/production-release-build.log",
+      "reason": "Canonical bundle had no development profile. Xcode generated the profile with automatic provisioning and the Release build passed."
+    },
+    {
+      "path": "work/finger-release-2026-10-16/Evidence/generated-cache-cleanup.json",
+      "reason": "Installation succeeded, but host disk space prevented writing its initial JSON receipt. Removed only this run\u2019s generated compiler caches; fresh installed-bundle metadata and launch receipts both succeeded."
+    }
+  ],
+  "remaining_qualification": [
+    "Physical Pencil/palm and broader keyboard/IME/VoiceOver acceptance",
+    "Live Kindle/Audible and operational Castalia authority qualification",
+    "Remote encrypted social/multi-device qualification and public distribution"
+  ],
+  "full_production_mvp_release_qualified": false,
+  "publication_redaction": {
+    "scope": "Local filesystem paths and Apple developer-team identity replaced with placeholders.",
+    "original_receipt_retained_locally": true,
+    "original_sha256": "751cca118c5f4f2af29040d72e6403db68cce20dbbe734c78b9bba75d5074a7d",
+    "note": "Historical artifact hashes describe the original validation inputs, not this redacted documentation copy."
+  }
+}

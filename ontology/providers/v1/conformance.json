@@ -1,0 +1,156 @@
+{
+  "schema": "booknook.provider-fixtures.v1",
+  "registry": {
+    "schema": "booknook.provider-registry.v1",
+    "providers": [
+      {
+        "id": "example.library",
+        "source_namespace": "example.library",
+        "capabilities": [
+          "catalog",
+          "content",
+          "positions",
+          "identity",
+          "recommendations"
+        ],
+        "available": true,
+        "reason": null,
+        "connection": null
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "catalog",
+      "valid": true,
+      "now": 1000,
+      "request": {
+        "schema": "booknook.provider-request.v1",
+        "request_id": "fixture-catalog",
+        "generation": 1,
+        "provider_id": "example.library",
+        "descriptor_digest": "b9ab0bd500bad6f170cb9b2440b9e68be6e43b6cc42272a3c42269650b0561a6",
+        "connection_id": null,
+        "operation": {
+          "kind": "catalog",
+          "source_id": "selected-library"
+        }
+      },
+      "response_json": "{\"schema\":\"booknook.provider-response.v1\",\"request_id\":\"fixture-catalog\",\"generation\":1,\"provider_id\":\"example.library\",\"connection_id\":null,\"result\":{\"kind\":\"catalog\",\"catalog\":{\"format\":\"normalized\",\"entries\":[{\"source_id\":\"book-1\",\"title\":\"Café beside the sea\",\"authors\":[\"Synthetic Writer\"],\"subjects\":[\"nature\"],\"edition_identifiers\":[{\"provider\":\"isbn\",\"id\":\"9780000000000\"}],\"language\":\"en\"}]}}}",
+      "content_base64": ""
+    },
+    {
+      "name": "source-position",
+      "valid": true,
+      "now": 1000,
+      "request": {
+        "schema": "booknook.provider-request.v1",
+        "request_id": "fixture-source-position",
+        "generation": 1,
+        "provider_id": "example.library",
+        "descriptor_digest": "b9ab0bd500bad6f170cb9b2440b9e68be6e43b6cc42272a3c42269650b0561a6",
+        "connection_id": null,
+        "operation": {
+          "kind": "source_positions",
+          "source_ids": [
+            "book-1"
+          ]
+        }
+      },
+      "response_json": "{\"schema\":\"booknook.provider-response.v1\",\"request_id\":\"fixture-source-position\",\"generation\":1,\"provider_id\":\"example.library\",\"connection_id\":null,\"result\":{\"kind\":\"source_positions\",\"observations\":[{\"source_id\":\"book-1\",\"value\":\"chapter:iv/location:42\",\"observed_at\":990}]}}",
+      "content_base64": ""
+    },
+    {
+      "name": "directory",
+      "valid": true,
+      "now": 1000,
+      "request": {
+        "schema": "booknook.provider-request.v1",
+        "request_id": "fixture-directory",
+        "generation": 1,
+        "provider_id": "example.library",
+        "descriptor_digest": "b9ab0bd500bad6f170cb9b2440b9e68be6e43b6cc42272a3c42269650b0561a6",
+        "connection_id": null,
+        "operation": {
+          "kind": "identity",
+          "entity_iri": "did:example:reader"
+        }
+      },
+      "response_json": "{\"schema\":\"booknook.provider-response.v1\",\"request_id\":\"fixture-directory\",\"generation\":1,\"provider_id\":\"example.library\",\"connection_id\":null,\"result\":{\"kind\":\"identity\",\"reference\":{\"entity_iri\":\"did:example:reader\",\"kind\":\"Actor\",\"display_name\":\"Synthetic Reader\"}}}",
+      "content_base64": ""
+    },
+    {
+      "name": "recommendations",
+      "valid": true,
+      "now": 1000,
+      "request": {
+        "schema": "booknook.provider-request.v1",
+        "request_id": "fixture-recommendations",
+        "generation": 1,
+        "provider_id": "example.library",
+        "descriptor_digest": "b9ab0bd500bad6f170cb9b2440b9e68be6e43b6cc42272a3c42269650b0561a6",
+        "connection_id": null,
+        "operation": {
+          "kind": "recommendations",
+          "input": {
+            "candidates": [
+              {
+                "book_id": "book-2",
+                "title": "A second book",
+                "subjects": [
+                  "nature"
+                ]
+              }
+            ],
+            "preferred_subjects": [
+              "nature"
+            ],
+            "shared_ratings": [],
+            "friends": [],
+            "excluded": []
+          }
+        }
+      },
+      "response_json": "{\"schema\":\"booknook.provider-response.v1\",\"request_id\":\"fixture-recommendations\",\"generation\":1,\"provider_id\":\"example.library\",\"connection_id\":null,\"result\":{\"kind\":\"recommendations\",\"recommendations\":[{\"book_id\":\"book-2\",\"score\":2,\"reasons\":[\"Matches your interest in nature\"]}]}}",
+      "content_base64": ""
+    },
+    {
+      "name": "duplicate-response-key",
+      "valid": false,
+      "now": 1000,
+      "request": {
+        "schema": "booknook.provider-request.v1",
+        "request_id": "fixture-catalog",
+        "generation": 1,
+        "provider_id": "example.library",
+        "descriptor_digest": "b9ab0bd500bad6f170cb9b2440b9e68be6e43b6cc42272a3c42269650b0561a6",
+        "connection_id": null,
+        "operation": {
+          "kind": "catalog",
+          "source_id": "selected-library"
+        }
+      },
+      "response_json": "{\"schema\":\"booknook.provider-response.v1\",\"request_id\":\"fixture-catalog\",\"generation\":1,\"generation\":1,\"provider_id\":\"example.library\",\"connection_id\":null,\"result\":{\"kind\":\"catalog\",\"catalog\":{\"format\":\"normalized\",\"entries\":[{\"source_id\":\"book-1\",\"title\":\"Café beside the sea\",\"authors\":[\"Synthetic Writer\"],\"subjects\":[\"nature\"],\"edition_identifiers\":[{\"provider\":\"isbn\",\"id\":\"9780000000000\"}],\"language\":\"en\"}]}}}",
+      "content_base64": ""
+    },
+    {
+      "name": "missing-nullable-connection",
+      "valid": false,
+      "now": 1000,
+      "request": {
+        "schema": "booknook.provider-request.v1",
+        "request_id": "fixture-catalog",
+        "generation": 1,
+        "provider_id": "example.library",
+        "descriptor_digest": "b9ab0bd500bad6f170cb9b2440b9e68be6e43b6cc42272a3c42269650b0561a6",
+        "connection_id": null,
+        "operation": {
+          "kind": "catalog",
+          "source_id": "selected-library"
+        }
+      },
+      "response_json": "{\"schema\":\"booknook.provider-response.v1\",\"request_id\":\"fixture-catalog\",\"generation\":1,\"provider_id\":\"example.library\",\"result\":{\"kind\":\"catalog\",\"catalog\":{\"format\":\"normalized\",\"entries\":[{\"source_id\":\"book-1\",\"title\":\"Café beside the sea\",\"authors\":[\"Synthetic Writer\"],\"subjects\":[\"nature\"],\"edition_identifiers\":[{\"provider\":\"isbn\",\"id\":\"9780000000000\"}],\"language\":\"en\"}]}}}",
+      "content_base64": ""
+    }
+  ]
+}

@@ -1,0 +1,277 @@
+{
+  "$defs": {
+    "CatalogCandidate": {
+      "additionalProperties": false,
+      "properties": {
+        "book_id": {
+          "type": "string"
+        },
+        "subjects": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "book_id",
+        "title",
+        "subjects"
+      ],
+      "type": "object"
+    },
+    "RecommendationInput": {
+      "additionalProperties": false,
+      "description": "This type intentionally has no notebook, annotation or card fields.",
+      "properties": {
+        "candidates": {
+          "items": {
+            "$ref": "#/$defs/CatalogCandidate"
+          },
+          "type": "array"
+        },
+        "excluded": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "friends": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "preferred_subjects": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "shared_ratings": {
+          "items": {
+            "$ref": "#/$defs/SharedRating"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "candidates",
+        "preferred_subjects",
+        "shared_ratings",
+        "friends",
+        "excluded"
+      ],
+      "type": "object"
+    },
+    "SharedRating": {
+      "additionalProperties": false,
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "book_id": {
+          "type": "string"
+        },
+        "stars": {
+          "format": "uint8",
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "actor",
+        "book_id",
+        "stars"
+      ],
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "catalog",
+          "type": "string"
+        },
+        "source_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "source_id"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "content",
+          "type": "string"
+        },
+        "media_type": {
+          "type": "string"
+        },
+        "source_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "source_id",
+        "media_type"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "positions",
+          "type": "string"
+        },
+        "source_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "source_ids"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "source_positions",
+          "type": "string"
+        },
+        "source_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "source_ids"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "entity_iri": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "identity",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "entity_iri"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "input": {
+          "$ref": "#/$defs/RecommendationInput"
+        },
+        "kind": {
+          "const": "recommendations",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "input"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "event": true,
+        "kind": {
+          "const": "social_publish",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "event"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "authors": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "before": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "kind": {
+          "const": "social_fetch",
+          "type": "string"
+        },
+        "limit": {
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "recipient": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "since": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "authors",
+        "recipient",
+        "since",
+        "before",
+        "limit"
+      ],
+      "type": "object"
+    }
+  ],
+  "title": "ProviderOperation",
+  "$id": "urn:booknook:schema:provider-operation:v1"
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "booknook.source-inventory.v1",
+  "component": "native Kindle US metadata web connector",
+  "new_source_license": "MPL-2.0",
+  "linked_external_packages": [],
+  "system_frameworks": [
+    "Foundation",
+    "SwiftUI",
+    "WebKit",
+    "Combine"
+  ],
+  "upstream_reference": {
+    "repository": "https://github.com/natikgadzhi/swift-kindle",
+    "commit": "63be4d46c53afadf3b57280139e326f8b3d98cde",
+    "license": "MIT",
+    "use": "login URL and metadata endpoint/response model evidence; no upstream package linked",
+    "notice": "apps/apple/Resources/KindleWebSourceNotice.txt"
+  },
+  "excluded_alternatives": [
+    {
+      "repository": "https://github.com/mkb79/kindle",
+      "commit": "98c06a7073082cb0516a9359952cd1c4e9a26cdb",
+      "license": "AGPL-3.0",
+      "included": false
+    },
+    {
+      "repository": "https://github.com/Xetera/kindle-api",
+      "commit": "dc34acf607783aa3a64a9c52ff72bfdbaefcd12b",
+      "license": "MIT",
+      "included": false
+    }
+  ],
+  "qualification": "Synthetic local acceptance only; live Amazon account compatibility and coverage unqualified"
+}

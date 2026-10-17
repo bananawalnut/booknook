@@ -1,0 +1,19 @@
+{
+  "schema": "booknook.portable-contract-manifest.v1",
+  "version": "1",
+  "namespace": "urn:booknook:schema:",
+  "artifacts": [
+    {
+      "path": "conformance.json",
+      "sha256": "bf0dbee52bf6d4a76e0bc40daf659befed2e9c02c7e5ffe60a17aef1ec7a4b81"
+    },
+    {
+      "path": "portable-export.schema.json",
+      "sha256": "c23adacf6dee4607605b8e14e606a056bf0990f2b8456ab0bb7b63cf8b954c93"
+    },
+    {
+      "path": "social-archive.schema.json",
+      "sha256": "bb16e721071c2717a42f4dbe62a0c45914ed7b86a26aaa5495c8867c2f00116a"
+    }
+  ]
+}

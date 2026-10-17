@@ -1,0 +1,191 @@
+{
+  "schema": "booknook.final-plan-audit-evidence.v1",
+  "recorded_at_utc": "2026-10-16T03:27:30.676897+00:00",
+  "status": "Integrated development build and packages verified; production release qualification incomplete.",
+  "build_provenance": {
+    "workspace_file": "outputs/booknook/docs/build-inputs.json",
+    "sha256": "fa1171b27263ebc1dc535aae045b075622127e45209f43e3d2e26a3ef737bf23",
+    "bytes": 75074
+  },
+  "receipts": {
+    "portable_envelope": {
+      "workspace_file": "work/final-plan-audit-2026-10-15/portable-envelope-receipt.json",
+      "sha256": "1a7e4d273fe5d33f83dad769a4ef49a5cc2ed711876fb7c0753d1d04253ae5c7",
+      "bytes": 18673
+    },
+    "notebook_storage": {
+      "workspace_file": "work/final-plan-audit-2026-10-15/notebook-storage/receipt.json",
+      "sha256": "5751b2b10fc573c637b91f5ef42e4ddafa16739718d39af0793aa6fc02909dff",
+      "bytes": 8762
+    },
+    "ink_recovery": {
+      "workspace_file": "work/final-plan-audit-2026-10-15/ink-recovery/receipt.json",
+      "sha256": "fde47c4c90aa5792c6c58e16e234e32cce23d0282969d57ea916287e58c9d9cd",
+      "bytes": 4989
+    },
+    "uikit_editing": {
+      "workspace_file": "work/final-plan-audit-2026-10-15/uikit-notebook/Evidence/receipt.json",
+      "sha256": "d0a949800ae4fb82d7041af9eaffb5443ddaeab13739528bdd4110f08f66b551",
+      "bytes": 7288
+    },
+    "uikit_and_simulator_journal": {
+      "workspace_file": "work/final-plan-audit-2026-10-15/uikit-notebook-journal/Evidence/receipt.json",
+      "sha256": "0797e824183a5142a1159368635d35acab28c0a3e5acac1b4cd05e27b1ae88b5",
+      "bytes": 8010
+    },
+    "current_social_trust": {
+      "workspace_file": "work/social-send-currenttrust-2026-10-15/receipt.json",
+      "sha256": "a9f9d81b3e3d5b6504bb52b889567c3fe32e22af8555f5524d720ac7282b5bc5",
+      "bytes": 4902
+    },
+    "portable_workspace_checks": {
+      "workspace_file": "work/final-plan-audit-2026-10-15/portable-checks-receipt.json",
+      "sha256": "9cb7490258d34bad9a93d1e51b70b228c596c0fe0ab4d40d6d6d38611502051a",
+      "bytes": 29955
+    },
+    "native_libraries": {
+      "workspace_file": "work/final-plan-audit-2026-10-15/native-build-receipt.json",
+      "sha256": "00e49bd02966eaeb2d725417ffc4e82e8483a79a844922fe60b439624608e8d0",
+      "bytes": 14303
+    },
+    "static_ontology_http": {
+      "workspace_file": "work/final-plan-audit-2026-10-15/ontology-host-final-receipt.json",
+      "sha256": "39c2d3309251f766acb741303d71eb3759091aa26c4b70ee2b3210eb9e4230a6",
+      "bytes": 9029
+    },
+    "issued_ontology_immutability": {
+      "workspace_file": "work/final-plan-audit-2026-10-15/immutable-domain-releases.json",
+      "sha256": "f4bec48c8097311028e8c3c4f0498546f14f0bf1c64de7217a9d3a465fc08fbe",
+      "bytes": 4780
+    },
+    "license_inventory_initial": {
+      "workspace_file": "work/final-plan-audit-2026-10-15/license-inventory-receipt.json",
+      "sha256": "881cb6607805c635025ae1291fa8d72b18acdd64bd66c1779207b7464db6fcb5",
+      "bytes": 8177
+    },
+    "local_wasm_toolchain": {
+      "workspace_file": "work/final-plan-audit-2026-10-15/toolchain/receipt.json",
+      "sha256": "2bf7c0112c5b8ffd33f622f909bd63d7922ee8ebc80b23ffa4b0d759a7ea53f9",
+      "bytes": 436
+    },
+    "baseline": {
+      "workspace_file": "work/final-plan-audit-2026-10-15/baseline-receipt.json",
+      "sha256": "2acecc52a7e5d675aebb5c8d8aba1eb1c73ce047fcc9883a9687963e70605f6b",
+      "bytes": 3632
+    }
+  },
+  "checks": {
+    "rust": {
+      "passed": 167,
+      "failed": 0,
+      "ignored": 3,
+      "suites": 43
+    },
+    "resource_mirrors": 42,
+    "static_http_manifests": 4,
+    "static_http_artifacts": 47,
+    "rust_license_inventory_packages": 328
+  },
+  "packages": {
+    "sdk": {
+      "booknook-connectors-0.1.0.crate": {
+        "sha256": "78f3c49eaf470b9b4566d215d4d19e8cad9578d3b99f9d069bcbaaf9637f21c0",
+        "bytes": 55763
+      },
+      "booknook-core-0.1.0.crate": {
+        "sha256": "ca978d4432b413513226abe586b73236d13108dea018e128d1b6a35336fbb3fd",
+        "bytes": 131014
+      },
+      "booknook-native-0.1.0.crate": {
+        "sha256": "26771937b500e3856976f0e20d6adff5778c7e7003b3587f49650652c2d3373a",
+        "bytes": 134285
+      },
+      "booknook-sdk-0.1.0.tgz": {
+        "sha256": "f2f805d879f593528618ae3b019af7c6c71661f634ff10468808227245205e9a",
+        "bytes": 4251035
+      },
+      "booknook-swift-sdk-0.1.0.tar.gz": {
+        "sha256": "b8cbce05dffe25ed639457c0bdcc7271d89c688b6df28013ccb6af7a850fe1ca",
+        "bytes": 130791211
+      },
+      "booknook-wasm-0.1.0.crate": {
+        "sha256": "676bff182fd8aa1d0365b9d142955ce0146f7022d1a7a5aa48c6334375573304",
+        "bytes": 34828
+      }
+    },
+    "native_app_verification": {
+      "workspace_file": "outputs/booknook-apps/VERIFICATION.json",
+      "sha256": "cf2137f250f351191d088943696295b0b8240eb413e1f0cdda439032c33a1c02",
+      "bytes": 83179
+    },
+    "native_apps": {
+      "mac": {
+        "archive": "booknook-mac-arm64-development-0.1.0.tar.gz",
+        "archive_bytes": 13394755,
+        "archive_sha256": "eaf25ea7c5d84a59e94c06e4c436841830fe108978739ec9927928c9e1e9fa78"
+      },
+      "ipad-sim": {
+        "archive": "booknook-ipad-sim-arm64-development-0.1.0.tar.gz",
+        "archive_bytes": 13425483,
+        "archive_sha256": "6eb18ebbec7d954cebabcc9ac7b0a5663653b482685bc04fddecb9af0c85bcb9"
+      },
+      "ipad-device": {
+        "archive": "booknook-ipad-device-arm64-development-0.1.0.tar.gz",
+        "archive_bytes": 13145922,
+        "archive_sha256": "80aab1b3e65c49b87329cf990420047b5040699f55a786c4a602178e70dd7fdd"
+      }
+    }
+  },
+  "physical_ipad_update": {
+    "display_name": "BookNook iPad QA",
+    "bundle_identifier": "org.booknook.qa.ipad20261015",
+    "scope": "Development-signed latest production-source entry point installed over the existing QA app and launched. Existing container and secure-storage namespace retained; no fixture reset, store export, input test or device-orientation command.",
+    "receipts": {
+      "inputs.json": {
+        "workspace_file": "work/final-plan-audit-2026-10-15/ipad-qa/inputs.json",
+        "sha256": "1e68fe69a1b2a1d2f28fdd9d9eeec57f33948128cae9b0457db7c0efd7a87a12",
+        "bytes": 14374
+      },
+      "build-receipt.json": {
+        "workspace_file": "work/final-plan-audit-2026-10-15/ipad-qa/build-receipt.json",
+        "sha256": "1173307fb77ba33126f1db268cacbb38c176feb089e4c2b34a442bec5bcad1dc",
+        "bytes": 625
+      },
+      "install.json": {
+        "workspace_file": "work/final-plan-audit-2026-10-15/ipad-qa/install.json",
+        "sha256": "645a5e2e313c8cad36cd9519ce4ea1a3ccfd0aee81527aee60b5a10ce5bd02e5",
+        "bytes": 1107
+      },
+      "launch.json": {
+        "workspace_file": "work/final-plan-audit-2026-10-15/ipad-qa/launch.json",
+        "sha256": "7eacda9ddfbc342ec856621d02987b7f2f7891d3a87059cee73c043a55993e6e",
+        "bytes": 1292
+      }
+    }
+  },
+  "focused_uikit_acceptance": {
+    "tests": 1,
+    "failures": 0,
+    "duration_seconds": 6.243,
+    "actual_delegate_callbacks": 7,
+    "fallback_callbacks": 0,
+    "long_document_utf16_units": 118800,
+    "journal_roundtrip_bytes": 206,
+    "scope": "Actual UIKit/TextKit/PencilKit and Simulator filesystem journal APIs with synthetic data. Three forced layout passes took about 1.12 seconds; this is an integrity and bounds check, not a responsiveness or physical-pencil qualification."
+  },
+  "preserved_nonpasses": {
+    "initial_extracted_rust_package_sandbox_denial": {
+      "workspace_file": "work/final-plan-audit-2026-10-15/package-rust-sandbox-denied.execution.json",
+      "sha256": "5a771f9756ec319ec829f4e36e986f6e6430e4f88d8b15a46c9108c2f5728998",
+      "bytes": 443
+    },
+    "scope": "Localhost socket creation denied in sandbox; unchanged package tests passed with local socket access. Earlier framework/toolchain nonpasses remain in their linked receipts."
+  },
+  "limitations": [
+    "Real Kindle/Audible source accounts and position accuracy remain unqualified.",
+    "Production Castalia authority, consent and physical custody remain unqualified.",
+    "Working Pencil, palm behavior, hardware keyboard/IME, VoiceOver and prolonged interaction remain open.",
+    "Remote encrypted Nostr delivery and real multi-device qualification remain open.",
+    "Public registries, ontology hosting, distribution signing/notarization and app-store deployment are not complete."
+  ]
+}

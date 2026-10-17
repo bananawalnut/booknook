@@ -1,0 +1,228 @@
+{
+  "@context": {
+    "bn": "urn:booknook:ontology:",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "oa": "http://www.w3.org/ns/oa#"
+  },
+  "@id": "urn:booknook:ontology:release:0.3.0",
+  "@type": "owl:Ontology",
+  "owl:versionInfo": "0.3.0",
+  "owl:imports": {
+    "@id": "https://zenith-research.ca/ontology/v0.6.0/ontology.jsonld"
+  },
+  "@graph": [
+    {
+      "@id": "bn:Book",
+      "@type": "owl:Class",
+      "rdfs:comment": "A literary work, independent of provider and edition."
+    },
+    {
+      "@id": "bn:Edition",
+      "@type": "owl:Class",
+      "rdfs:comment": "A particular expression or publication of a book."
+    },
+    {
+      "@id": "bn:ContentAsset",
+      "@type": "owl:Class",
+      "rdfs:comment": "Accessible content bytes with media type and checksum; catalog ownership does not imply access."
+    },
+    {
+      "@id": "bn:ReadingPass",
+      "@type": "owl:Class"
+    },
+    {
+      "@id": "bn:ReadingSession",
+      "@type": "owl:Class"
+    },
+    {
+      "@id": "bn:ProgressObservation",
+      "@type": "owl:Class",
+      "rdfs:comment": "A timestamped source-specific observation, never a cross-edition percentage mapping."
+    },
+    {
+      "@id": "bn:Notebook",
+      "@type": "owl:Class"
+    },
+    {
+      "@id": "bn:Block",
+      "@type": "owl:Class"
+    },
+    {
+      "@id": "bn:NotebookRevision",
+      "@type": "owl:Class"
+    },
+    {
+      "@id": "bn:LiteraryEntity",
+      "@type": "owl:Class"
+    },
+    {
+      "@id": "bn:Character",
+      "@type": "owl:Class",
+      "rdfs:subClassOf": {
+        "@id": "bn:LiteraryEntity"
+      }
+    },
+    {
+      "@id": "bn:Place",
+      "@type": "owl:Class",
+      "rdfs:subClassOf": {
+        "@id": "bn:LiteraryEntity"
+      }
+    },
+    {
+      "@id": "bn:Theme",
+      "@type": "owl:Class",
+      "rdfs:subClassOf": {
+        "@id": "bn:LiteraryEntity"
+      }
+    },
+    {
+      "@id": "bn:Event",
+      "@type": "owl:Class",
+      "rdfs:subClassOf": {
+        "@id": "bn:LiteraryEntity"
+      }
+    },
+    {
+      "@id": "bn:Concept",
+      "@type": "owl:Class",
+      "rdfs:subClassOf": {
+        "@id": "bn:LiteraryEntity"
+      }
+    },
+    {
+      "@id": "bn:CharacterCard",
+      "@type": "owl:Class"
+    },
+    {
+      "@id": "bn:CharacterInterpretation",
+      "@type": "owl:Class",
+      "rdfs:comment": "An immutable saved reader interpretation with parent versions, pass, time and supporting locations."
+    },
+    {
+      "@id": "bn:Annotation",
+      "@type": "owl:Class",
+      "rdfs:subClassOf": {
+        "@id": "oa:Annotation"
+      }
+    },
+    {
+      "@id": "bn:TextAnchor",
+      "@type": "owl:Class",
+      "rdfs:comment": "Edition/resource plus exact/prefix/suffix corresponding to oa:TextQuoteSelector; native offsets are UTF-16."
+    },
+    {
+      "@id": "bn:InkStroke",
+      "@type": "owl:Class"
+    },
+    {
+      "@id": "bn:Review",
+      "@type": "owl:Class"
+    },
+    {
+      "@id": "bn:Rating",
+      "@type": "owl:Class"
+    },
+    {
+      "@id": "bn:ReadingList",
+      "@type": "owl:Class"
+    },
+    {
+      "@id": "bn:ReadingGroup",
+      "@type": "owl:Class"
+    },
+    {
+      "@id": "bn:Activity",
+      "@type": "owl:Class"
+    },
+    {
+      "@id": "bn:attachedToBlock",
+      "@type": "owl:ObjectProperty",
+      "rdfs:domain": {
+        "@id": "bn:CharacterCard"
+      },
+      "rdfs:range": {
+        "@id": "bn:Block"
+      }
+    },
+    {
+      "@id": "bn:describesCharacter",
+      "@type": "owl:ObjectProperty",
+      "rdfs:domain": {
+        "@id": "bn:CharacterCard"
+      },
+      "rdfs:range": {
+        "@id": "bn:Character"
+      }
+    },
+    {
+      "@id": "bn:derivedFromVersion",
+      "@type": "owl:ObjectProperty"
+    },
+    {
+      "@id": "bn:readingPass",
+      "@type": "owl:ObjectProperty",
+      "rdfs:range": {
+        "@id": "bn:ReadingPass"
+      }
+    },
+    {
+      "@id": "bn:attributedReader",
+      "@type": "owl:ObjectProperty",
+      "rdfs:comment": "Descriptive attribution only; confers no operational authority."
+    },
+    {
+      "@id": "bn:NotebookInk",
+      "@type": "owl:Class",
+      "rdfs:comment": "A logical canvas attached to a stable notebook block; either a legacy fixed page or an expandable bounded whiteboard with absolute world coordinates."
+    },
+    {
+      "@id": "bn:NotebookInkVersion",
+      "@type": "owl:Class",
+      "rdfs:comment": "An immutable full drawing snapshot with explicit parents, portable strokes, optional native drawing, reader, time and reading-pass position context. Concurrent heads remain independently recoverable."
+    },
+    {
+      "@id": "bn:NotebookTranscription",
+      "@type": "owl:Class",
+      "rdfs:comment": "An immutable optional transcription of one exact ink version. Neither transcription nor later erasure deletes the source drawing."
+    },
+    {
+      "@id": "bn:inkVersion",
+      "@type": "owl:ObjectProperty",
+      "rdfs:range": {
+        "@id": "bn:NotebookInkVersion"
+      }
+    },
+    {
+      "@id": "bn:transcribesInkVersion",
+      "@type": "owl:ObjectProperty",
+      "rdfs:domain": {
+        "@id": "bn:NotebookTranscription"
+      },
+      "rdfs:range": {
+        "@id": "bn:NotebookInkVersion"
+      }
+    },
+    {
+      "@id": "bn:NoteMetadata",
+      "@type": "owl:Class",
+      "rdfs:comment": "The stable block’s current text or whiteboard face and immutable creation provenance; face changes do not reorder notes or modify prose/ink."
+    },
+    {
+      "@id": "bn:NoteOrigin",
+      "@type": "owl:Class",
+      "rdfs:comment": "Recorded first meaningful input or explicit Add note; legacy surviving history is marked fallback, and unavailable dates remain unknown. Blank unopened intent has pending origin."
+    },
+    {
+      "@id": "bn:CapturedReadingContext",
+      "@type": "owl:Class",
+      "rdfs:comment": "A retained reading-pass snapshot with source positions and observations at input capture, not delayed persistence."
+    },
+    {
+      "@id": "bn:CanvasSpace",
+      "@type": "owl:Class",
+      "rdfs:comment": "Expandable whiteboard world rectangle within ±1,000,000 logical units. Panning and growing do not transform portable points or original native drawing."
+    }
+  ]
+}

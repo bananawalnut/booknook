@@ -1,0 +1,15 @@
+{
+  "schema": "castalia.provider-connection.v1",
+  "connection_id": "local.audible.fixture-01",
+  "provider_id": "amazon.audible",
+  "display_name": "Audible on this companion",
+  "capabilities": [
+    "audible.positions"
+  ],
+  "status": "available",
+  "credential": {
+    "reference": "credential.fixture-01",
+    "storage": "secure_local",
+    "portability": "reauthorization_required"
+  }
+}

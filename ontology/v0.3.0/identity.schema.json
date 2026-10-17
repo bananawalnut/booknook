@@ -1,0 +1,70 @@
+{
+  "$defs": {
+    "DirectoryKind": {
+      "enum": [
+        "Entity",
+        "Person",
+        "Agent",
+        "Organization",
+        "Actor"
+      ],
+      "type": "string"
+    },
+    "DirectoryReference": {
+      "additionalProperties": false,
+      "properties": {
+        "display_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "entity_iri": {
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/DirectoryKind"
+        }
+      },
+      "required": [
+        "entity_iri",
+        "kind"
+      ],
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "A source's descriptive assertion, retained with provenance. Wallet possession and actual\npermission continue through the independent Castalia presentation verifier.",
+  "properties": {
+    "castalia_holder": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "directory": {
+      "$ref": "#/$defs/DirectoryReference"
+    },
+    "evidence_source": {
+      "type": "string"
+    },
+    "local_reader": {
+      "type": "string"
+    },
+    "observed_at": {
+      "format": "uint64",
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "local_reader",
+    "directory",
+    "evidence_source",
+    "observed_at"
+  ],
+  "title": "AttributionLink",
+  "type": "object",
+  "$id": "urn:booknook:schema:0.3.0:identity"
+}

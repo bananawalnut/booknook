@@ -1,0 +1,68 @@
+{
+  "$defs": {
+    "AudioEditionCandidate": {
+      "additionalProperties": false,
+      "properties": {
+        "authors": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "book_id": {
+          "type": "string"
+        },
+        "confidence": {
+          "$ref": "#/$defs/MatchConfidence"
+        },
+        "edition_id": {
+          "type": "string"
+        },
+        "edition_label": {
+          "type": "string"
+        },
+        "reasons": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "title": {
+          "type": "string"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "book_id",
+        "edition_id",
+        "edition_label",
+        "title",
+        "authors",
+        "confidence",
+        "reasons",
+        "warnings"
+      ],
+      "type": "object"
+    },
+    "MatchConfidence": {
+      "enum": [
+        "identifier",
+        "title_and_author",
+        "title_only"
+      ],
+      "type": "string"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "items": {
+    "$ref": "#/$defs/AudioEditionCandidate"
+  },
+  "title": "Array_of_AudioEditionCandidate",
+  "type": "array",
+  "$id": "urn:booknook:schema:0.2.0:audio-candidates"
+}

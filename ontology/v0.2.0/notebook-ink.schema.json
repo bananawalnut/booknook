@@ -1,0 +1,472 @@
+{
+  "$defs": {
+    "Alignment": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "const": "unmatched",
+              "type": "string"
+            }
+          },
+          "required": [
+            "status"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "edition_id": {
+              "type": "string"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "status": {
+              "const": "candidate",
+              "type": "string"
+            }
+          },
+          "required": [
+            "status",
+            "edition_id",
+            "reason"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "edition_id": {
+              "type": "string"
+            },
+            "evidence": {
+              "type": "string"
+            },
+            "status": {
+              "const": "confirmed",
+              "type": "string"
+            }
+          },
+          "required": [
+            "status",
+            "edition_id",
+            "evidence"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "AudioMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "authors": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "ebook_identifiers": {
+          "description": "Explicit ebook identifiers reported by the source, with their namespaces.\nThe audiobook ASIN is not implicitly a Kindle ASIN or an ebook ISBN.",
+          "items": {
+            "$ref": "#/$defs/SourceRef"
+          },
+          "type": "array"
+        },
+        "language": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "title": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "InkPoint": {
+      "additionalProperties": false,
+      "properties": {
+        "pressure": {
+          "format": "double",
+          "type": "number"
+        },
+        "time": {
+          "format": "double",
+          "type": "number"
+        },
+        "x": {
+          "format": "double",
+          "type": "number"
+        },
+        "y": {
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "pressure",
+        "time"
+      ],
+      "type": "object"
+    },
+    "Location": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "edition_id": {
+              "type": "string"
+            },
+            "kind": {
+              "const": "text",
+              "type": "string"
+            },
+            "prefix": {
+              "type": "string"
+            },
+            "quote": {
+              "type": "string"
+            },
+            "resource": {
+              "type": "string"
+            },
+            "suffix": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "edition_id",
+            "resource",
+            "quote",
+            "prefix",
+            "suffix"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "chapter": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "kind": {
+              "const": "audio",
+              "type": "string"
+            },
+            "milliseconds": {
+              "format": "uint64",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "provider": {
+              "type": "string"
+            },
+            "source_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "provider",
+            "source_id",
+            "milliseconds"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "provider",
+              "type": "string"
+            },
+            "provider": {
+              "type": "string"
+            },
+            "source_id": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "provider",
+            "source_id",
+            "value"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "edition_id": {
+              "type": "string"
+            },
+            "kind": {
+              "const": "page",
+              "type": "string"
+            },
+            "page": {
+              "format": "uint32",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "kind",
+            "edition_id",
+            "page"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "NotebookInkVersion": {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "canvas_height": {
+          "format": "double",
+          "type": "number"
+        },
+        "canvas_width": {
+          "format": "double",
+          "type": "number"
+        },
+        "id": {
+          "type": "string"
+        },
+        "native_drawing": {
+          "description": "Optional base64 native drawing. Portable strokes remain alongside native data.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "parents": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "pass_id": {
+          "type": "string"
+        },
+        "position_observations": {
+          "items": {
+            "$ref": "#/$defs/ProgressObservation"
+          },
+          "type": "array"
+        },
+        "positions": {
+          "items": {
+            "$ref": "#/$defs/Location"
+          },
+          "type": "array"
+        },
+        "reader": {
+          "type": "string"
+        },
+        "strokes": {
+          "items": {
+            "$ref": "#/$defs/Stroke"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "parents",
+        "reader",
+        "at",
+        "pass_id",
+        "positions",
+        "position_observations",
+        "canvas_width",
+        "canvas_height",
+        "strokes"
+      ],
+      "type": "object"
+    },
+    "NotebookTranscription": {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "id": {
+          "type": "string"
+        },
+        "ink_version_id": {
+          "type": "string"
+        },
+        "method": {
+          "$ref": "#/$defs/TranscriptionMethod"
+        },
+        "reader": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "ink_version_id",
+        "reader",
+        "at",
+        "text",
+        "method"
+      ],
+      "type": "object"
+    },
+    "ProgressObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "alignment": {
+          "$ref": "#/$defs/Alignment"
+        },
+        "audio_metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AudioMetadata"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "location": {
+          "$ref": "#/$defs/Location"
+        },
+        "observed_at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "pass_id": {
+          "type": "string"
+        },
+        "provider_connection_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "received_at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "pass_id",
+        "location",
+        "observed_at",
+        "received_at",
+        "alignment"
+      ],
+      "type": "object"
+    },
+    "SourceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "provider",
+        "id"
+      ],
+      "type": "object"
+    },
+    "Stroke": {
+      "additionalProperties": false,
+      "properties": {
+        "color": {
+          "type": "string"
+        },
+        "points": {
+          "items": {
+            "$ref": "#/$defs/InkPoint"
+          },
+          "type": "array"
+        },
+        "width": {
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "required": [
+        "points",
+        "color",
+        "width"
+      ],
+      "type": "object"
+    },
+    "TranscriptionMethod": {
+      "enum": [
+        "manual",
+        "on_device"
+      ],
+      "type": "string"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "A fixed logical canvas belonging to its containing stable notebook block.",
+  "properties": {
+    "schema": {
+      "type": "string"
+    },
+    "transcriptions": {
+      "items": {
+        "$ref": "#/$defs/NotebookTranscription"
+      },
+      "type": "array"
+    },
+    "versions": {
+      "items": {
+        "$ref": "#/$defs/NotebookInkVersion"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema",
+    "versions",
+    "transcriptions"
+  ],
+  "title": "NotebookInk",
+  "type": "object",
+  "$id": "urn:booknook:schema:0.2.0:notebook-ink"
+}

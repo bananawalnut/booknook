@@ -1,0 +1,25 @@
+{
+  "schema": "booknook.castalia-mapping.v1",
+  "upstream": "https://zenith-research.ca/ontology/v0.6.0",
+  "upstream_bundle_digest": "11d670a57b2052b4de00509559d081b524bf953c6da2544a25f33976857f8f4f",
+  "directory_namespace": "https://zenith-research.ca/ontology/terms/",
+  "preserved_classes": {
+    "Entity": "Opaque directory entity reference; no runtime identity or authority inferred.",
+    "Person": "Human directory entity, subclass of Entity.",
+    "Agent": "Automated directory entity, subclass of Entity.",
+    "Organization": "Collective directory entity, subclass of Entity.",
+    "Actor": "Compatibility alias equivalent to Entity; do not reinterpret as an authorization principal."
+  },
+  "separations": {
+    "literary_character": "Book Nook Character has no subclass or equivalence relation to Rolodex Person.",
+    "attribution": "A local reader ID, Rolodex Entity reference and Castalia holder key are distinct identifiers. Linking requires explicit evidence.",
+    "authority": "Credential presentation v2 plus independent issuer pins and current application permission are required.",
+    "transport": "Nostr public keys are explicitly bound to a Castalia holder through an authorized nostr.bind action."
+  },
+  "signing_contracts": {
+    "request": "castalia.credential-presentation-request.v2",
+    "credential": "castalia.request-credential.v1",
+    "presentation": "castalia.credential-presentation.v2",
+    "application_request": "booknook.authorized-action.v1"
+  }
+}

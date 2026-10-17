@@ -1,0 +1,87 @@
+{
+  "$defs": {
+    "Caller": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "id"
+      ],
+      "type": "object"
+    },
+    "TrustPin": {
+      "additionalProperties": false,
+      "properties": {
+        "audience": {
+          "type": "string"
+        },
+        "callers": {
+          "items": {
+            "$ref": "#/$defs/Caller"
+          },
+          "type": "array"
+        },
+        "issuer": {
+          "type": "string"
+        },
+        "key_id": {
+          "type": "string"
+        },
+        "public_key": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "issuer",
+        "key_id",
+        "public_key",
+        "audience",
+        "callers"
+      ],
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "action": {
+      "type": "string"
+    },
+    "actor": {
+      "type": "string"
+    },
+    "audience": {
+      "type": "string"
+    },
+    "expected_caller": {
+      "$ref": "#/$defs/Caller"
+    },
+    "pins": {
+      "items": {
+        "$ref": "#/$defs/TrustPin"
+      },
+      "type": "array"
+    },
+    "policy_digest": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "pins",
+    "expected_caller",
+    "audience",
+    "actor",
+    "action",
+    "policy_digest"
+  ],
+  "title": "AuthorityPolicy",
+  "type": "object",
+  "$id": "urn:booknook:schema:0.3.0:authority-policy"
+}

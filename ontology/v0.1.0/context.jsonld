@@ -1,0 +1,24 @@
+{
+  "@context": {
+    "bn": "urn:booknook:ontology:",
+    "zn": "https://zenith-research.ca/ontology/terms/",
+    "oa": "http://www.w3.org/ns/oa#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "Entity": "zn:Entity",
+    "Person": "zn:Person",
+    "Agent": "zn:Agent",
+    "Organization": "zn:Organization",
+    "Actor": "zn:Actor",
+    "Book": "bn:Book",
+    "Edition": "bn:Edition",
+    "Character": "bn:Character",
+    "CharacterInterpretation": "bn:CharacterInterpretation",
+    "Annotation": "bn:Annotation",
+    "reader": {"@id": "bn:attributedReader", "@type": "@id"},
+    "character_id": {"@id": "bn:describesCharacter", "@type": "@id"},
+    "pass_id": {"@id": "bn:readingPass", "@type": "@id"},
+    "block_id": {"@id": "bn:attachedToBlock", "@type": "@id"},
+    "parents": {"@id": "bn:derivedFromVersion", "@type": "@id", "@container": "@set"}
+  }
+}

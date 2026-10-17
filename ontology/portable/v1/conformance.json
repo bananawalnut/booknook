@@ -1,0 +1,406 @@
+{
+  "schema": "booknook.portable-export.v1",
+  "state": {
+    "schema": "booknook.archive.v2",
+    "ontology_version": "0.2.0",
+    "revision": 1,
+    "local_reader": "85632fc1edfb72ec510f7f9fd8034f5f",
+    "books": {
+      "822dd3e37c7f7185c5e7b81a75697797": {
+        "id": "822dd3e37c7f7185c5e7b81a75697797",
+        "title": "Portable café 日本語 🌿",
+        "authors": [
+          "Synthetic writer"
+        ],
+        "subjects": [],
+        "edition_ids": [
+          "599d47aee264ecea2ce6e4cab3dad681",
+          "822dd3e37c7f7185c5e7b81a75697797:content:a501456714abf223b58c319eae5d639bfe1903e05264da18e7c1def4cadd1ab6",
+          "822dd3e37c7f7185c5e7b81a75697797:content:54725981e65c4cb6635d6e2faa8ac15070c84f169b66d21aa669a8ceedca939c"
+        ],
+        "sources": [],
+        "shelf": "currently-reading",
+        "rating": null,
+        "review": "",
+        "reading_dates": [],
+        "edited_fields": [],
+        "provenance": []
+      }
+    },
+    "editions": {
+      "599d47aee264ecea2ce6e4cab3dad681": {
+        "id": "599d47aee264ecea2ce6e4cab3dad681",
+        "book_id": "822dd3e37c7f7185c5e7b81a75697797",
+        "identifiers": [],
+        "language": null,
+        "assets": []
+      },
+      "822dd3e37c7f7185c5e7b81a75697797:content:54725981e65c4cb6635d6e2faa8ac15070c84f169b66d21aa669a8ceedca939c": {
+        "id": "822dd3e37c7f7185c5e7b81a75697797:content:54725981e65c4cb6635d6e2faa8ac15070c84f169b66d21aa669a8ceedca939c",
+        "book_id": "822dd3e37c7f7185c5e7b81a75697797",
+        "identifiers": [],
+        "language": null,
+        "assets": [
+          {
+            "id": "54725981e65c4cb6635d6e2faa8ac15070c84f169b66d21aa669a8ceedca939c",
+            "media_type": "application/pdf",
+            "storage_key": "54725981e65c4cb6635d6e2faa8ac15070c84f169b66d21aa669a8ceedca939c",
+            "sha256": "54725981e65c4cb6635d6e2faa8ac15070c84f169b66d21aa669a8ceedca939c",
+            "spine": [
+              "book.pdf"
+            ]
+          }
+        ]
+      },
+      "822dd3e37c7f7185c5e7b81a75697797:content:a501456714abf223b58c319eae5d639bfe1903e05264da18e7c1def4cadd1ab6": {
+        "id": "822dd3e37c7f7185c5e7b81a75697797:content:a501456714abf223b58c319eae5d639bfe1903e05264da18e7c1def4cadd1ab6",
+        "book_id": "822dd3e37c7f7185c5e7b81a75697797",
+        "identifiers": [],
+        "language": null,
+        "assets": [
+          {
+            "id": "a501456714abf223b58c319eae5d639bfe1903e05264da18e7c1def4cadd1ab6",
+            "media_type": "application/epub+zip",
+            "storage_key": "a501456714abf223b58c319eae5d639bfe1903e05264da18e7c1def4cadd1ab6",
+            "sha256": "a501456714abf223b58c319eae5d639bfe1903e05264da18e7c1def4cadd1ab6",
+            "spine": [
+              "OPS/chapter.xhtml"
+            ]
+          }
+        ]
+      }
+    },
+    "passes": {
+      "6fbf6a6618eb434554cce47fd62f4538": {
+        "id": "6fbf6a6618eb434554cce47fd62f4538",
+        "book_id": "822dd3e37c7f7185c5e7b81a75697797",
+        "reader": "85632fc1edfb72ec510f7f9fd8034f5f",
+        "started_at": 100,
+        "finished_at": null
+      }
+    },
+    "sessions": {},
+    "notebooks": {
+      "8cb01fbb0e65be5753efb557aca9c310": {
+        "id": "8cb01fbb0e65be5753efb557aca9c310",
+        "book_id": "822dd3e37c7f7185c5e7b81a75697797",
+        "pass_id": "6fbf6a6618eb434554cce47fd62f4538",
+        "blocks": [
+          {
+            "id": "fb88868db3b44c9ddc51baf04856091c",
+            "kind": "paragraph",
+            "text": "Ink stays. Café 日本語 🌿",
+            "update": "AgLg8OC2CgAEAQdjb250ZW50A0lua4Tg8OC2CgIcIHN0YXlzLiBDYWbDqSDml6XmnKzoqp4g8J+MvwbNzuK8CQBG4PDgtgoABGJvbGQEdHJ1ZcbNzuK8CQDg8OC2CgAGaXRhbGljBWZhbHNlxs3O4rwJAeDw4LYKAAl1bmRlcmxpbmUFZmFsc2XG4PDgtgoC4PDgtgoDBGJvbGQEbnVsbMbNzuK8CQPg8OC2CgMJdW5kZXJsaW5lBG51bGzGzc7ivAkE4PDgtgoDBml0YWxpYwRudWxsAA==",
+            "styles": [
+              {
+                "start_utf16": 0,
+                "length_utf16": 3,
+                "bold": true,
+                "italic": false,
+                "underline": false
+              }
+            ],
+            "ink": {
+              "schema": "booknook.notebook-ink.v1",
+              "versions": [
+                {
+                  "id": "ink-first",
+                  "parents": [],
+                  "reader": "85632fc1edfb72ec510f7f9fd8034f5f",
+                  "at": 102,
+                  "pass_id": "6fbf6a6618eb434554cce47fd62f4538",
+                  "positions": [],
+                  "position_observations": [],
+                  "canvas_width": 768.0,
+                  "canvas_height": 960.0,
+                  "strokes": [
+                    {
+                      "points": [
+                        {
+                          "x": 1.5,
+                          "y": 2.0,
+                          "pressure": 0.5,
+                          "time": 0.0
+                        },
+                        {
+                          "x": 9.5,
+                          "y": 5.0,
+                          "pressure": 0.8,
+                          "time": 0.2
+                        }
+                      ],
+                      "color": "#315b48",
+                      "width": 2.0
+                    }
+                  ],
+                  "native_drawing": "U3ludGhldGljIG9wYXF1ZSBpbms="
+                },
+                {
+                  "id": "ink-erased",
+                  "parents": [
+                    "ink-first"
+                  ],
+                  "reader": "85632fc1edfb72ec510f7f9fd8034f5f",
+                  "at": 103,
+                  "pass_id": "6fbf6a6618eb434554cce47fd62f4538",
+                  "positions": [],
+                  "position_observations": [],
+                  "canvas_width": 768.0,
+                  "canvas_height": 960.0,
+                  "strokes": [],
+                  "native_drawing": "U3ludGhldGljIG9wYXF1ZSBpbms="
+                },
+                {
+                  "id": "ink-branch",
+                  "parents": [
+                    "ink-first"
+                  ],
+                  "reader": "85632fc1edfb72ec510f7f9fd8034f5f",
+                  "at": 104,
+                  "pass_id": "6fbf6a6618eb434554cce47fd62f4538",
+                  "positions": [],
+                  "position_observations": [],
+                  "canvas_width": 768.0,
+                  "canvas_height": 960.0,
+                  "strokes": [],
+                  "native_drawing": "U3ludGhldGljIG9wYXF1ZSBpbms="
+                }
+              ],
+              "transcriptions": [
+                {
+                  "id": "transcript-first",
+                  "ink_version_id": "ink-first",
+                  "reader": "85632fc1edfb72ec510f7f9fd8034f5f",
+                  "at": 105,
+                  "text": "Reviewed café 日本語 🌿",
+                  "method": "manual"
+                }
+              ]
+            }
+          }
+        ],
+        "revisions": [
+          {
+            "id": "a4b975e143fdd612549b0af20476b91e",
+            "block_id": "fb88868db3b44c9ddc51baf04856091c",
+            "reader": "85632fc1edfb72ec510f7f9fd8034f5f",
+            "at": 101,
+            "update": "AgLg8OC2CgAEAQdjb250ZW50A0lua4Tg8OC2CgIcIHN0YXlzLiBDYWbDqSDml6XmnKzoqp4g8J+MvwbNzuK8CQBG4PDgtgoABGJvbGQEdHJ1ZcbNzuK8CQDg8OC2CgAGaXRhbGljBWZhbHNlxs3O4rwJAeDw4LYKAAl1bmRlcmxpbmUFZmFsc2XG4PDgtgoC4PDgtgoDBGJvbGQEbnVsbMbNzuK8CQPg8OC2CgMJdW5kZXJsaW5lBG51bGzGzc7ivAkE4PDgtgoDBml0YWxpYwRudWxsAA=="
+          }
+        ]
+      }
+    },
+    "entities": {
+      "77bf4c08843fc1bcca7bfdab12f1a8dd": {
+        "id": "77bf4c08843fc1bcca7bfdab12f1a8dd",
+        "book_id": "822dd3e37c7f7185c5e7b81a75697797",
+        "kind": "character",
+        "name": "Mara"
+      }
+    },
+    "cards": {
+      "e6576a327ba24c7eef4ef56a433bcc0a": {
+        "id": "e6576a327ba24c7eef4ef56a433bcc0a",
+        "character_id": "77bf4c08843fc1bcca7bfdab12f1a8dd",
+        "notebook_id": "8cb01fbb0e65be5753efb557aca9c310",
+        "block_id": "fb88868db3b44c9ddc51baf04856091c",
+        "versions": [
+          {
+            "id": "4ab503a78b49a8051239dfb6d3c08334",
+            "parents": [],
+            "reader": "85632fc1edfb72ec510f7f9fd8034f5f",
+            "at": 106,
+            "pass_id": "6fbf6a6618eb434554cce47fd62f4538",
+            "positions": [],
+            "interpretation": {
+              "description": "",
+              "traits": [],
+              "relationships": [],
+              "observations": [],
+              "questions": [],
+              "passages": []
+            }
+          },
+          {
+            "id": "ba046f89c2000c02cf4284196c275393",
+            "parents": [
+              "4ab503a78b49a8051239dfb6d3c08334"
+            ],
+            "reader": "85632fc1edfb72ec510f7f9fd8034f5f",
+            "at": 107,
+            "pass_id": "6fbf6a6618eb434554cce47fd62f4538",
+            "positions": [],
+            "interpretation": {
+              "description": "Chapter 12 reassessment",
+              "traits": [],
+              "relationships": [],
+              "observations": [],
+              "questions": [],
+              "passages": []
+            }
+          }
+        ]
+      }
+    },
+    "annotations": {},
+    "positions": {},
+    "lists": {},
+    "groups": {},
+    "friendship_requests": [],
+    "blocked": [],
+    "activity": {},
+    "drafts": {}
+  },
+  "assets": {
+    "54725981e65c4cb6635d6e2faa8ac15070c84f169b66d21aa669a8ceedca939c": "JVBERi0xLjQKMSAwIG9iago8PCAvVHlwZSAvQ2F0YWxvZyAvUGFnZXMgMiAwIFIgPj4KZW5kb2JqCjIgMCBvYmoKPDwgL1R5cGUgL1BhZ2VzIC9Db3VudCAwIC9LaWRzIFtdID4+CmVuZG9iagp0cmFpbGVyCjw8IC9Sb290IDEgMCBSID4+CiUlRU9GCg==",
+    "a501456714abf223b58c319eae5d639bfe1903e05264da18e7c1def4cadd1ab6": "UEsDBBQAAAAIAAAAIQBvYassFgAAABQAAAAIAAAAbWltZXR5cGVLLCjIyUxOLMnMz9NPLShN0q7KLAAAUEsDBBQAAAAIAAAAIQD0+FAzPgAAAFUAAAAWAAAATUVUQS1JTkYvY29udGFpbmVyLnhtbLNJzs8rSczMSy2ysynKzy9Jy8xJLUYwFdJKc3J0CxJLMmyV/AOC9QsSk7MT01P18gvSlPTtbPSRtOgjTAIAUEsDBBQAAAAIAAAAIQDyW3DkawAAAJUAAAAPAAAAT1BTL3BhY2thZ2Uub3BmRc5BDsMgDETRqyBvq4QLAHexwBSrmFjEi/T2VZJWXf/R0wTF/MInpSA4uNJuKbCROC4RtkHg2qQaITdUo7kezaSDEyqMi72VIqBq54zG2/BXfhzSwafg/+SuPOiWJ1XH5UJP/9x9q/99+QBQSwMEFAAAAAgAAAAhAII6F7p5AAAAhgAAABEAAABPUFMvY2hhcHRlci54aHRtbLPJKMnNUajIzckrtlXKKCkpsNLXLy8v1ys31ssvStc3tLS01K8AqVGys8lITUyxsynJLMlJtXPLrCgpLUq10YdwbfQhkkn5KZV2NgV2/kWZ6Zl5iTkKyYlph1cqPJu+9NmcNS9WzVP4ML9nv41+gZ2NPkSpPshsOwBQSwECFAMUAAAACAAAACEAb2GrLBYAAAAUAAAACAAAAAAAAAAAAAAApIEAAAAAbWltZXR5cGVQSwECFAMUAAAACAAAACEA9PhQMz4AAABVAAAAFgAAAAAAAAAAAAAApIE8AAAATUVUQS1JTkYvY29udGFpbmVyLnhtbFBLAQIUAxQAAAAIAAAAIQDyW3DkawAAAJUAAAAPAAAAAAAAAAAAAACkga4AAABPUFMvcGFja2FnZS5vcGZQSwECFAMUAAAACAAAACEAgjoXunkAAACGAAAAEQAAAAAAAAAAAAAApIFGAQAAT1BTL2NoYXB0ZXIueGh0bWxQSwUGAAAAAAQABAD2AAAA7gEAAAAA"
+  },
+  "social": {
+    "binding_history": [
+      {
+        "document": {
+          "approved_at": 100,
+          "binding": {
+            "castalia_holder": "8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394",
+            "nostr_public_key": "531fe6068134503d2723133227c867ac8fa6c83c537e9a44c3c5bdbdcb1fe337",
+            "schema": "booknook.nostr-binding.v1",
+            "valid_from": 100,
+            "valid_until": 1000,
+            "version": 1
+          },
+          "presentation_json": "{\"audience\":\"booknook-test\",\"caller\":{\"id\":\"synthetic-booknook-test\",\"kind\":\"terminal\"},\"credential_digest_sha256\":\"52fb88bf8cd6e6ee606a1e2683b52e8f03a6ac1dc89c13feda5332bb1101ed8b\",\"disclosure_digest_sha256\":\"e352382f38e869d77804f591e1a2d38603fa0a35bfa8c7aca262d73f72ddeb12\",\"expires_at\":160,\"holder_public_key\":\"8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394\",\"issued_at\":100,\"issuer\":\"synthetic-issuer\",\"key_id\":\"test\",\"nonce\":\"02b9f0173e061333371a49f55c7dc8c1\",\"request_digest_sha256\":\"a0857885135d404a4c2b1bfb395006df1a8e21913f8c4c9ec8fc0f6e409e84d6\",\"schema\":\"castalia.credential-presentation.v2\",\"signature\":\"af56fe9d4d6d8ca0161890d26b63f44f6e55ea8ceaee68c69d20e2b9a308cf5022da4e9bd46e1fa6be114f08520d2d2b2d7120f37f1538a5010260eab9906f00\"}",
+          "request_json": "{\"credential\":{\"claims\":{\"audience\":\"booknook-test\",\"caller\":{\"id\":\"synthetic-booknook-test\",\"kind\":\"terminal\"},\"disclosure_digest_sha256\":\"e352382f38e869d77804f591e1a2d38603fa0a35bfa8c7aca262d73f72ddeb12\",\"expires_at\":219,\"holder_public_key\":\"8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394\",\"issued_at\":99,\"issuer\":\"synthetic-issuer\",\"key_id\":\"test\",\"nonce\":\"02b9f0173e061333371a49f55c7dc8c1\",\"policy_digest_sha256\":\"585be8baf92682c15da67e8c328a4eb8ddc8eec2f5555311539adc31c18e458c\",\"request_digest_sha256\":\"a0857885135d404a4c2b1bfb395006df1a8e21913f8c4c9ec8fc0f6e409e84d6\",\"schema\":\"castalia.request-credential.v1\"},\"signature\":\"911689c10082f02c17032fd1621123678924b3c2250f3cd16b4ac4ba15c3edcdb3ea155ef92f9f7028c6893d93b40786ea073dc9930f613ea2b5cb1e36749005\"},\"disclosure\":{\"statements\":[\"Synthetic test data only\"],\"title\":\"Publish reviewed selection\"},\"request_bytes_base64\":\"eyJhY3Rpb24iOiJub3N0ci5iaW5kIiwiYWN0b3IiOiI4MTM5NzcwZWE4N2QxNzVmNTZhMzU0NjZjMzRjN2VjY2NiOGQ4YTkxYjRlZTM3YTI1ZGY2MGY1YjhmYzliMzk0IiwiaWRlbXBvdGVuY3lfa2V5IjoiMDJiOWYwMTczZTA2MTMzMzM3MWE0OWY1NWM3ZGM4YzE1ZWYwZDc4OGUxYzdiODAyMTg1ZDA0NDRiZDYyOWVmNyIsInBheWxvYWRfZGlnZXN0IjoiMDJiOWYwMTczZTA2MTMzMzM3MWE0OWY1NWM3ZGM4YzE1ZWYwZDc4OGUxYzdiODAyMTg1ZDA0NDRiZDYyOWVmNyIsInJlc291cmNlX3ZlcnNpb24iOjEsInNjaGVtYSI6ImJvb2tub29rLmF1dGhvcml6ZWQtYWN0aW9uLnYxIn0=\",\"schema\":\"castalia.credential-presentation-request.v2\"}",
+          "schema": "booknook.transport-identity.v1"
+        },
+        "retired_at": null
+      }
+    ],
+    "bindings": [
+      {
+        "document": {
+          "approved_at": 100,
+          "binding": {
+            "castalia_holder": "8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394",
+            "nostr_public_key": "531fe6068134503d2723133227c867ac8fa6c83c537e9a44c3c5bdbdcb1fe337",
+            "schema": "booknook.nostr-binding.v1",
+            "valid_from": 100,
+            "valid_until": 1000,
+            "version": 1
+          },
+          "presentation_json": "{\"audience\":\"booknook-test\",\"caller\":{\"id\":\"synthetic-booknook-test\",\"kind\":\"terminal\"},\"credential_digest_sha256\":\"52fb88bf8cd6e6ee606a1e2683b52e8f03a6ac1dc89c13feda5332bb1101ed8b\",\"disclosure_digest_sha256\":\"e352382f38e869d77804f591e1a2d38603fa0a35bfa8c7aca262d73f72ddeb12\",\"expires_at\":160,\"holder_public_key\":\"8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394\",\"issued_at\":100,\"issuer\":\"synthetic-issuer\",\"key_id\":\"test\",\"nonce\":\"02b9f0173e061333371a49f55c7dc8c1\",\"request_digest_sha256\":\"a0857885135d404a4c2b1bfb395006df1a8e21913f8c4c9ec8fc0f6e409e84d6\",\"schema\":\"castalia.credential-presentation.v2\",\"signature\":\"af56fe9d4d6d8ca0161890d26b63f44f6e55ea8ceaee68c69d20e2b9a308cf5022da4e9bd46e1fa6be114f08520d2d2b2d7120f37f1538a5010260eab9906f00\"}",
+          "request_json": "{\"credential\":{\"claims\":{\"audience\":\"booknook-test\",\"caller\":{\"id\":\"synthetic-booknook-test\",\"kind\":\"terminal\"},\"disclosure_digest_sha256\":\"e352382f38e869d77804f591e1a2d38603fa0a35bfa8c7aca262d73f72ddeb12\",\"expires_at\":219,\"holder_public_key\":\"8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394\",\"issued_at\":99,\"issuer\":\"synthetic-issuer\",\"key_id\":\"test\",\"nonce\":\"02b9f0173e061333371a49f55c7dc8c1\",\"policy_digest_sha256\":\"585be8baf92682c15da67e8c328a4eb8ddc8eec2f5555311539adc31c18e458c\",\"request_digest_sha256\":\"a0857885135d404a4c2b1bfb395006df1a8e21913f8c4c9ec8fc0f6e409e84d6\",\"schema\":\"castalia.request-credential.v1\"},\"signature\":\"911689c10082f02c17032fd1621123678924b3c2250f3cd16b4ac4ba15c3edcdb3ea155ef92f9f7028c6893d93b40786ea073dc9930f613ea2b5cb1e36749005\"},\"disclosure\":{\"statements\":[\"Synthetic test data only\"],\"title\":\"Publish reviewed selection\"},\"request_bytes_base64\":\"eyJhY3Rpb24iOiJub3N0ci5iaW5kIiwiYWN0b3IiOiI4MTM5NzcwZWE4N2QxNzVmNTZhMzU0NjZjMzRjN2VjY2NiOGQ4YTkxYjRlZTM3YTI1ZGY2MGY1YjhmYzliMzk0IiwiaWRlbXBvdGVuY3lfa2V5IjoiMDJiOWYwMTczZTA2MTMzMzM3MWE0OWY1NWM3ZGM4YzE1ZWYwZDc4OGUxYzdiODAyMTg1ZDA0NDRiZDYyOWVmNyIsInBheWxvYWRfZGlnZXN0IjoiMDJiOWYwMTczZTA2MTMzMzM3MWE0OWY1NWM3ZGM4YzE1ZWYwZDc4OGUxYzdiODAyMTg1ZDA0NDRiZDYyOWVmNyIsInJlc291cmNlX3ZlcnNpb24iOjEsInNjaGVtYSI6ImJvb2tub29rLmF1dGhvcml6ZWQtYWN0aW9uLnYxIn0=\",\"schema\":\"castalia.credential-presentation-request.v2\"}",
+          "schema": "booknook.transport-identity.v1"
+        },
+        "minimum_version": 1
+      }
+    ],
+    "pending": [
+      {
+        "event_json": "\n{\"id\":\"0d6b30a3de9853ab5b8d62f78e2c98a7e7fb151e4d1b6d6eb6b8bdeb26eb9912\",\"pubkey\":\"531fe6068134503d2723133227c867ac8fa6c83c537e9a44c3c5bdbdcb1fe337\",\"created_at\":201,\"kind\":30078,\"tags\":[],\"content\":\"Synthetic unresolved relay data\",\"sig\":\"bcdc0b63cf9770305727dbb0f27ed56272a34ac7b11a215b45983f8d718d60aca77917244594e90da0b0bbe440bff5bd0812bbfcbdfbaa834ef431e99d125202\"}\n",
+        "id": "0d6b30a3de9853ab5b8d62f78e2c98a7e7fb151e4d1b6d6eb6b8bdeb26eb9912",
+        "reason": "Waiting for a synthetic parent"
+      }
+    ],
+    "schema": "booknook.social-archive.v1",
+    "state": {
+      "blocked": [
+        "ed4928c628d1c2c6eae90338905995612959273a5c63f93636c14614ac8737d1"
+      ],
+      "drafts": {},
+      "friendship_intents": {},
+      "groups": {},
+      "hidden": [],
+      "invitations": {},
+      "join_requests": {},
+      "lists": {
+        "8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394:fixture-list": {
+          "books": [
+            {
+              "author": "Synthetic writer",
+              "id": "isbn:fixture",
+              "title": "Portable café 日本語 🌿"
+            }
+          ],
+          "deleted": false,
+          "description": "Synthetic shared records",
+          "id": "8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394:fixture-list",
+          "name": "Portable reading list",
+          "owner": "8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394",
+          "version": 1
+        }
+      },
+      "outbox": {
+        "dfd1bc9dce7be9b5448cc8385b01c864": {
+          "acknowledged": {},
+          "publication": {
+            "approved_at": 200,
+            "event": {
+              "action": {
+                "books": [
+                  {
+                    "author": "Synthetic writer",
+                    "id": "isbn:fixture",
+                    "title": "Portable café 日本語 🌿"
+                  }
+                ],
+                "description": "Synthetic shared records",
+                "id": "8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394:fixture-list",
+                "name": "Portable reading list",
+                "op": "create_list"
+              },
+              "actor": "8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394",
+              "at": 200,
+              "delivery": {
+                "kind": "public"
+              },
+              "id": "dfd1bc9dce7be9b5448cc8385b01c864",
+              "resource_version": 0,
+              "schema": "booknook.social-event.v1"
+            },
+            "presentation_json": "{\"audience\":\"booknook-test\",\"caller\":{\"id\":\"synthetic-booknook-test\",\"kind\":\"terminal\"},\"credential_digest_sha256\":\"f554e0323511729e5898e00989488cb7640391d75b5547cd0326dcdd8d7f5e2e\",\"disclosure_digest_sha256\":\"e352382f38e869d77804f591e1a2d38603fa0a35bfa8c7aca262d73f72ddeb12\",\"expires_at\":260,\"holder_public_key\":\"8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394\",\"issued_at\":200,\"issuer\":\"synthetic-issuer\",\"key_id\":\"test\",\"nonce\":\"d8fdd53eb20de7e982f3f26e3f51cc1c\",\"request_digest_sha256\":\"7a72158e5b4b3dccebf0d5524de84c6593b14aa8711112f8fde1263a104ffba6\",\"schema\":\"castalia.credential-presentation.v2\",\"signature\":\"736b0807a1228e0285b3f5b896d15d606c84670cbdbc90878aa6fb2bf8ea696dbf5175d75854d79a4ac9a975fdbd43794d3cd92f710bd1c3ad39a4e075341a08\"}",
+            "request_json": "{\"credential\":{\"claims\":{\"audience\":\"booknook-test\",\"caller\":{\"id\":\"synthetic-booknook-test\",\"kind\":\"terminal\"},\"disclosure_digest_sha256\":\"e352382f38e869d77804f591e1a2d38603fa0a35bfa8c7aca262d73f72ddeb12\",\"expires_at\":319,\"holder_public_key\":\"8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394\",\"issued_at\":199,\"issuer\":\"synthetic-issuer\",\"key_id\":\"test\",\"nonce\":\"d8fdd53eb20de7e982f3f26e3f51cc1c\",\"policy_digest_sha256\":\"585be8baf92682c15da67e8c328a4eb8ddc8eec2f5555311539adc31c18e458c\",\"request_digest_sha256\":\"7a72158e5b4b3dccebf0d5524de84c6593b14aa8711112f8fde1263a104ffba6\",\"schema\":\"castalia.request-credential.v1\"},\"signature\":\"c1cffcec82a3a6d7344c79810c807abf04b739bd89197aacf28d3c8eb0140db7a1572ecc9ffc741a439b6bc0967e175665f8e785c402293d3ce3fc0d5ce8610f\"},\"disclosure\":{\"statements\":[\"Synthetic test data only\"],\"title\":\"Publish reviewed selection\"},\"request_bytes_base64\":\"eyJhY3Rpb24iOiJzb2NpYWwuZXhlY3V0ZSIsImFjdG9yIjoiODEzOTc3MGVhODdkMTc1ZjU2YTM1NDY2YzM0YzdlY2NjYjhkOGE5MWI0ZWUzN2EyNWRmNjBmNWI4ZmM5YjM5NCIsImlkZW1wb3RlbmN5X2tleSI6ImQ4ZmRkNTNlYjIwZGU3ZTk4MmYzZjI2ZTNmNTFjYzFjN2U3ZGEyMzk3NDA2ZTA2YWM0YTQ5ODFhYjMwYTNiNTciLCJwYXlsb2FkX2RpZ2VzdCI6ImQ4ZmRkNTNlYjIwZGU3ZTk4MmYzZjI2ZTNmNTFjYzFjN2U3ZGEyMzk3NDA2ZTA2YWM0YTQ5ODFhYjMwYTNiNTciLCJyZXNvdXJjZV92ZXJzaW9uIjowLCJzY2hlbWEiOiJib29rbm9vay5hdXRob3JpemVkLWFjdGlvbi52MSJ9\",\"schema\":\"castalia.credential-presentation-request.v2\"}",
+            "schema": "booknook.approved-publication.v1"
+          }
+        }
+      },
+      "preferred_subjects": [],
+      "publications": {
+        "dfd1bc9dce7be9b5448cc8385b01c864": {
+          "approved_at": 200,
+          "event": {
+            "action": {
+              "books": [
+                {
+                  "author": "Synthetic writer",
+                  "id": "isbn:fixture",
+                  "title": "Portable café 日本語 🌿"
+                }
+              ],
+              "description": "Synthetic shared records",
+              "id": "8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394:fixture-list",
+              "name": "Portable reading list",
+              "op": "create_list"
+            },
+            "actor": "8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394",
+            "at": 200,
+            "delivery": {
+              "kind": "public"
+            },
+            "id": "dfd1bc9dce7be9b5448cc8385b01c864",
+            "resource_version": 0,
+            "schema": "booknook.social-event.v1"
+          },
+          "presentation_json": "{\"audience\":\"booknook-test\",\"caller\":{\"id\":\"synthetic-booknook-test\",\"kind\":\"terminal\"},\"credential_digest_sha256\":\"f554e0323511729e5898e00989488cb7640391d75b5547cd0326dcdd8d7f5e2e\",\"disclosure_digest_sha256\":\"e352382f38e869d77804f591e1a2d38603fa0a35bfa8c7aca262d73f72ddeb12\",\"expires_at\":260,\"holder_public_key\":\"8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394\",\"issued_at\":200,\"issuer\":\"synthetic-issuer\",\"key_id\":\"test\",\"nonce\":\"d8fdd53eb20de7e982f3f26e3f51cc1c\",\"request_digest_sha256\":\"7a72158e5b4b3dccebf0d5524de84c6593b14aa8711112f8fde1263a104ffba6\",\"schema\":\"castalia.credential-presentation.v2\",\"signature\":\"736b0807a1228e0285b3f5b896d15d606c84670cbdbc90878aa6fb2bf8ea696dbf5175d75854d79a4ac9a975fdbd43794d3cd92f710bd1c3ad39a4e075341a08\"}",
+          "request_json": "{\"credential\":{\"claims\":{\"audience\":\"booknook-test\",\"caller\":{\"id\":\"synthetic-booknook-test\",\"kind\":\"terminal\"},\"disclosure_digest_sha256\":\"e352382f38e869d77804f591e1a2d38603fa0a35bfa8c7aca262d73f72ddeb12\",\"expires_at\":319,\"holder_public_key\":\"8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394\",\"issued_at\":199,\"issuer\":\"synthetic-issuer\",\"key_id\":\"test\",\"nonce\":\"d8fdd53eb20de7e982f3f26e3f51cc1c\",\"policy_digest_sha256\":\"585be8baf92682c15da67e8c328a4eb8ddc8eec2f5555311539adc31c18e458c\",\"request_digest_sha256\":\"7a72158e5b4b3dccebf0d5524de84c6593b14aa8711112f8fde1263a104ffba6\",\"schema\":\"castalia.request-credential.v1\"},\"signature\":\"c1cffcec82a3a6d7344c79810c807abf04b739bd89197aacf28d3c8eb0140db7a1572ecc9ffc741a439b6bc0967e175665f8e785c402293d3ce3fc0d5ce8610f\"},\"disclosure\":{\"statements\":[\"Synthetic test data only\"],\"title\":\"Publish reviewed selection\"},\"request_bytes_base64\":\"eyJhY3Rpb24iOiJzb2NpYWwuZXhlY3V0ZSIsImFjdG9yIjoiODEzOTc3MGVhODdkMTc1ZjU2YTM1NDY2YzM0YzdlY2NjYjhkOGE5MWI0ZWUzN2EyNWRmNjBmNWI4ZmM5YjM5NCIsImlkZW1wb3RlbmN5X2tleSI6ImQ4ZmRkNTNlYjIwZGU3ZTk4MmYzZjI2ZTNmNTFjYzFjN2U3ZGEyMzk3NDA2ZTA2YWM0YTQ5ODFhYjMwYTNiNTciLCJwYXlsb2FkX2RpZ2VzdCI6ImQ4ZmRkNTNlYjIwZGU3ZTk4MmYzZjI2ZTNmNTFjYzFjN2U3ZGEyMzk3NDA2ZTA2YWM0YTQ5ODFhYjMwYTNiNTciLCJyZXNvdXJjZV92ZXJzaW9uIjowLCJzY2hlbWEiOiJib29rbm9vay5hdXRob3JpemVkLWFjdGlvbi52MSJ9\",\"schema\":\"castalia.credential-presentation-request.v2\"}",
+          "schema": "booknook.approved-publication.v1"
+        }
+      },
+      "replay": {
+        "8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394:d8fdd53eb20de7e982f3f26e3f51cc1c": "d8fdd53eb20de7e982f3f26e3f51cc1c7e7da2397406e06ac4a4981ab30a3b57"
+      },
+      "retracted": [],
+      "revision": 2,
+      "schema": "booknook.social-state.v1"
+    }
+  }
+}

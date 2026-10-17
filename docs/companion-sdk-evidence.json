@@ -1,0 +1,108 @@
+{
+  "schema": "booknook.companion-sdk-completion.v1",
+  "recorded_at_utc": "2026-10-15T20:45:12.698717+00:00",
+  "changes": [
+    "Explicit Audible marketplace selection for Rust SDK hosts",
+    "Authenticated strict shared provider-connection discovery",
+    "Original audible_positions API and request preserved"
+  ],
+  "source_files": {
+    "crates/connectors/src/amazon.rs": "9be06c6c6c25018d78de153544925329af05d059444a1448e93465a38a31006b",
+    "crates/connectors/tests/companion_client.rs": "cf2f176b526132859c224767c6d5e62c0071b3f2190333648feba64d143db075",
+    "crates/connectors/README.md": "fa5924c77f7793448cf7e114809d6d2c2278c5c75a3efbc5693108f1194a3495",
+    "docs/SDK.md": "06659a27c0c895a5f1151a525173678c12d5acd21a303abf7e1145c2b42f17a1"
+  },
+  "connector_tests": 19,
+  "new_loopback_http_tests": 6,
+  "rust": {
+    "passed": 129,
+    "failed": 0,
+    "ignored": 3
+  },
+  "checks": [
+    "All five marketplace bodies/routes and exact legacy US-default body",
+    "Bearer header, rejected invalid input before network IO, refused redirects",
+    "Shared strict schemas, required nullable credential, raw duplicate keys and unique connection IDs",
+    "Advertised and streamed response limits, denied access and bounded error messages",
+    "Original source time, freshness, ASIN and edition alignment checks"
+  ],
+  "independent_review": "Completed; no unresolved material finding. Reviewer refinements exercised in final tests.",
+  "build_provenance": {
+    "file": "evidence/companion-sdk-build-inputs-2026-10-15.json",
+    "sha256": "5522d29f06fcfd20b48345c2c4ed98b4a0d4d4f1f1bb2216e3f77e14601fce1f"
+  },
+  "native_targets": "macOS, iPad Simulator and unsigned iPad device builds passed",
+  "packages": "Current extracted Rust packages and rebuilt three-slice Swift SDK consumer passed; unchanged installed-tested npm archive retained byte-for-byte",
+  "unchanged_contracts": "Native Swift UI, portable/core/WASM contracts and existing v2 signing",
+  "simulator_attempt": {
+    "file": "simulator-setup-attempt.json",
+    "sha256": "8ba28175c8f137d711d1c2081a9410848c31b5583440eb740cb53e3e3d68909b",
+    "status": "Stopped before launch or input; not an interactive acceptance pass"
+  },
+  "live_accounts_used": false,
+  "remote_publication": false,
+  "release_ready": false,
+  "remaining_gates": [
+    "Grounded Kindle live catalog producer and real selected-source qualification",
+    "Real Audible account/position qualification",
+    "Trusted operational Castalia issuer and real custody qualification",
+    "Interactive native setup review and physical iPad input",
+    "Distribution signing and authorized publication destinations"
+  ],
+  "logs": [
+    {
+      "label": "Companion SDK completion: workspace-check",
+      "workspace_file": "work/companion-sdk-completion/workspace-check.log",
+      "sha256": "7b5ae09b0d97523b07f4c4e521db70a01af9aea5c2466b60a16071b684ff3782",
+      "bytes": 19519
+    },
+    {
+      "label": "Companion SDK completion: mac-build",
+      "workspace_file": "work/companion-sdk-completion/mac-build.log",
+      "sha256": "56fa22e36eac40e6e23d02d3110b0987e618106827493f631634339a2f5bd3a4",
+      "bytes": 59751
+    },
+    {
+      "label": "Companion SDK completion: ipad-sim-build",
+      "workspace_file": "work/companion-sdk-completion/ipad-sim-build.log",
+      "sha256": "a8436331e7b66f0ae47f215b786700c167cbf562c650ff238c581a1d4fe14e98",
+      "bytes": 61489
+    },
+    {
+      "label": "Companion SDK completion: ipad-device-build",
+      "workspace_file": "work/companion-sdk-completion/ipad-device-build.log",
+      "sha256": "0f53aa8a30501631e4939ab10aed2ad186c2c01005b4be351037deaa6e61a126",
+      "bytes": 60757
+    },
+    {
+      "label": "Companion SDK completion: package-rust",
+      "workspace_file": "work/companion-sdk-completion/package-rust.log",
+      "sha256": "429966e0edeb7160b8bf910b621a59e09f54b88c74e2d85438e1626992393e05",
+      "bytes": 20821
+    },
+    {
+      "label": "Companion SDK completion: package-swift",
+      "workspace_file": "work/companion-sdk-completion/package-swift.log",
+      "sha256": "ee350303e4a10cdda6ff255cb5429fe721f64b918e9dfb0ccbfcfbf16e5c0d61",
+      "bytes": 1057
+    },
+    {
+      "label": "Companion SDK completion: stage-sdk",
+      "workspace_file": "work/companion-sdk-completion/stage-sdk.log",
+      "sha256": "5db4366119701094bac89b0118869df3606e2188bd2412eeb758f3d3acc6a2d6",
+      "bytes": 126
+    },
+    {
+      "label": "Companion SDK completion: connector-tests",
+      "workspace_file": "work/companion-sdk-completion/connector-tests.log",
+      "sha256": "efb2c60420a82239c97779b98e9edd15a34accf79ba9c5023f711b975d81952f",
+      "bytes": 2919
+    },
+    {
+      "label": "Companion SDK completion: connector-clippy",
+      "workspace_file": "work/companion-sdk-completion/connector-clippy.log",
+      "sha256": "3d6ecf493f337ba29fb41c5ae60165ae910022fde51cbc3accfe2165235da379",
+      "bytes": 881
+    }
+  ]
+}

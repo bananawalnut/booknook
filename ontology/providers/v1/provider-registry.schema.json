@@ -1,0 +1,185 @@
+{
+  "$defs": {
+    "ConnectionStatus": {
+      "enum": [
+        "available",
+        "reauthorization_required",
+        "unavailable"
+      ],
+      "type": "string"
+    },
+    "CredentialPortability": {
+      "enum": [
+        "device_bound",
+        "reauthorization_required",
+        "provider_defined"
+      ],
+      "type": "string"
+    },
+    "CredentialReference": {
+      "additionalProperties": false,
+      "properties": {
+        "portability": {
+          "$ref": "#/$defs/CredentialPortability"
+        },
+        "reference": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string"
+        },
+        "storage": {
+          "$ref": "#/$defs/CredentialStorage"
+        }
+      },
+      "required": [
+        "reference",
+        "storage",
+        "portability"
+      ],
+      "type": "object"
+    },
+    "CredentialStorage": {
+      "enum": [
+        "secure_local",
+        "wallet_managed"
+      ],
+      "type": "string"
+    },
+    "ProviderConnection": {
+      "additionalProperties": false,
+      "properties": {
+        "capabilities": {
+          "items": {
+            "pattern": "^[a-z0-9][a-z0-9._:-]{0,127}$",
+            "type": "string"
+          },
+          "maxItems": 64,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "connection_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string"
+        },
+        "credential": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CredentialReference"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "display_name": {
+          "maxLength": 160,
+          "minLength": 1,
+          "pattern": "^[^\\u0000-\\u001f\\u007f-\\u009f\\u061c\\u200e\\u200f\\u202a-\\u202e\\u2066-\\u2069]+$",
+          "type": "string"
+        },
+        "provider_id": {
+          "pattern": "^[a-z0-9][a-z0-9._:-]{0,127}$",
+          "type": "string"
+        },
+        "schema": {
+          "$ref": "#/$defs/ProviderConnectionSchema"
+        },
+        "status": {
+          "$ref": "#/$defs/ConnectionStatus"
+        }
+      },
+      "required": [
+        "schema",
+        "connection_id",
+        "provider_id",
+        "display_name",
+        "capabilities",
+        "status",
+        "credential"
+      ],
+      "type": "object"
+    },
+    "ProviderConnectionSchema": {
+      "enum": [
+        "castalia.provider-connection.v1"
+      ],
+      "type": "string"
+    },
+    "RuntimeCapability": {
+      "enum": [
+        "catalog",
+        "content",
+        "positions",
+        "identity",
+        "recommendations",
+        "social_transport"
+      ],
+      "type": "string"
+    },
+    "RuntimeProviderDescriptor": {
+      "additionalProperties": false,
+      "properties": {
+        "available": {
+          "type": "boolean"
+        },
+        "capabilities": {
+          "items": {
+            "$ref": "#/$defs/RuntimeCapability"
+          },
+          "type": "array"
+        },
+        "connection": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ProviderConnection"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_namespace": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "source_namespace",
+        "capabilities",
+        "available",
+        "reason",
+        "connection"
+      ],
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "providers": {
+      "items": {
+        "$ref": "#/$defs/RuntimeProviderDescriptor"
+      },
+      "type": "array"
+    },
+    "schema": {
+      "const": "booknook.provider-registry.v1",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema",
+    "providers"
+  ],
+  "title": "ProviderRegistry",
+  "type": "object",
+  "$id": "urn:booknook:schema:provider-registry:v1"
+}

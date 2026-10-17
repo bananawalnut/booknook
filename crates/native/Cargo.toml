@@ -1,0 +1,43 @@
+[package]
+name = "booknook-native"
+description = "Book Nook native SQLite, content, custody and synchronization SDK with UniFFI bindings"
+readme = "README.md"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[features]
+bindgen = ["uniffi/cli"]
+
+[dependencies]
+async-trait = "0.1"
+booknook-connectors = { path = "../connectors", version = "0.1.0" }
+nostr-sdk = "0.44"
+tokio = { version = "1", features = ["rt-multi-thread", "time", "sync"] }
+booknook-core.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+base64.workspace = true
+sha2.workspace = true
+hex.workspace = true
+rusqlite = { version = "0.40", features = ["bundled"] }
+uniffi = "0.32"
+zip = { version = "4", default-features = false, features = ["deflate"] }
+roxmltree = "0.20"
+aes-gcm = "0.10"
+argon2 = "0.5"
+blake3 = "1"
+unicode-normalization = "0.1"
+zeroize = { version = "1", features = ["derive"] }
+ed25519-dalek = { version = "2.2", features = ["pkcs8", "zeroize"] }
+getrandom = "0.2"
+libc = "0.2"
+
+[[bin]]
+name = "uniffi-bindgen"
+path = "src/bin/bindgen.rs"
+required-features = ["bindgen"]

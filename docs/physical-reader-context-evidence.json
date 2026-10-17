@@ -1,0 +1,269 @@
+{
+  "schema": "booknook.physical-reader-context.v1",
+  "recorded_at_utc": "2026-10-15T23:59:23.669653+00:00",
+  "release_ready": false,
+  "device": "iPad Air 13-inch (M2), iPadOS 18.1.1 (22B91)",
+  "successful_bounded_test_runs": 1,
+  "test": {
+    "name": "test33ReaderContextAcrossCompactPanes",
+    "attempt": "v6",
+    "status": "passed",
+    "duration_seconds": 40.779,
+    "log": {
+      "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-reader-context-v6.log",
+      "sha256": "0cb4fff8d8adc3bcaf6917af0427f0af52532015efeaedc823fbb0b23d964f74",
+      "bytes": 20263
+    },
+    "result_bundle": "work/ipad-acceptance-2026-10-15/Results/reader-context-20261015-v6.xcresult",
+    "test_source": {
+      "workspace_file": "work/reader-context-recovery-2026-10-15/device-sixth-attempt/preserved-inputs/qa/Tests/IPadAcceptanceTests.swift",
+      "sha256": "ad6b148d4b6fe3e07eb26fd8604879d91de9384c0190d3a088d7c2cb663a1207",
+      "bytes": 39583
+    },
+    "qa_entry_point": {
+      "workspace_file": "work/reader-context-recovery-2026-10-15/device-sixth-attempt/preserved-inputs/qa/QAApp.swift",
+      "sha256": "64e13d7bfbe12d48c359e4fc52023e149663cb49993c0710a86df699e0ac5bdc",
+      "bytes": 10364
+    },
+    "qa_build_log": {
+      "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-final-build-v6.log",
+      "sha256": "e4e33e30b98a3e520bee09e91e76932effed364a0cbf61fe2b856256562680cc",
+      "bytes": 109882
+    }
+  },
+  "verified_inputs": {
+    "workspace_file": "work/reader-context-recovery-2026-10-15/device-sixth-attempt/input-verification.json",
+    "sha256": "83910258362696f5420e93b97af64c5ff7e2c973f2bcdd78cf77eeb7a1d2281a",
+    "bytes": 68241
+  },
+  "build_provenance": {
+    "workspace_file": "work/provider-custody-completion/baseline/outputs/booknook/docs/build-inputs.json",
+    "sha256": "5d54eaf241d3aba4f97c4adf994d15d580fd59a7d667784fe7da8cb4b07060b5",
+    "bytes": 59126
+  },
+  "bounded_scenario": [
+    "Before opening its persistent desk, actual PencilKit synthetic in-memory preflight checks initial hidden/read-only mounts preserve original stored ink and do not create an erasure; changed active-tool drawing captured exactly once on hide with original version and parent retained. This is framework lifecycle evidence, not hardware Pencil input.",
+    "Exercise unchanged production ReadingDeskView inside a QA-only explicit 740/940-point width wrapper, with an original synthetic EPUB and the existing isolated QA desk. No user library or account source is opened.",
+    "Final strict assertions find no THE BOOK label and zero native WebViews in the hidden reader XCTest snapshot; the hidden notebook label is absent while Book is selected.",
+    "Set reading text to 21 points, enable markup mode, change chapter, switch Notebook/Book and widen the desk: chapter, font preference, and reader markup mode remain.",
+    "Focus the actual native text editor, then narrow with Book selected. The captured native editing-end notification reports Notebook unfocused; the reader chapter/markup state remains.",
+    "Open the EPUB/PDF file picker and cancel: no reader error is displayed and the selected book remains usable.",
+    "Terminate and reopen the isolated app: font preference and saved chapter recover in the UI with no reader error. The test finally reopens the full QA app outside the width harness."
+  ],
+  "accessibility_scope": {
+    "independent_hidden_swiftui_control_exists": true,
+    "diagnostic": {
+      "workspace_file": "work/reader-context-recovery-2026-10-15/device-sixth-attempt/attachments/C26215D3-4483-4F0B-97B2-B2E300AF78E3.txt",
+      "sha256": "ca2235ac79b47860bb9381f7488e7ae3503199432b2e242a7ee6fe144a379e29",
+      "bytes": 47
+    },
+    "conclusion": "The final reader/native-control XCTest snapshot exclusion and focus checks passed. The independent opacity-zero plus accessibilityHidden control was still found by XCTest, so earlier query failures do not establish a VoiceOver defect and this run does not qualify VoiceOver navigation."
+  },
+  "orientation": {
+    "test33_forced_orientation_changes": false,
+    "statement": "This bounded test uses explicit workspace widths, not device rotation. Before it, an earlier runner portrait reset did not restore the user\u2019s original gravity-driven orientation; the user subsequently restored orientation. No claim of automatic orientation restoration is made.",
+    "prior_portrait_reset_log": {
+      "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-portrait-restore.log",
+      "sha256": "778787c0419e6a859aa2f83c9ae63da060940c1c9aceaa72f37a0f1d679ce02a",
+      "bytes": 2941
+    }
+  },
+  "attachments": [
+    {
+      "name": "test-end-accessibility_0_1470F698-66B7-464C-9DE9-176596B867C9.txt",
+      "file": {
+        "workspace_file": "work/reader-context-recovery-2026-10-15/device-sixth-attempt/attachments/E800857B-E0BD-4C16-94E1-0812891A3612.txt",
+        "sha256": "47fac36f3ebc23060f50265daf1cc0e73d809744738051bc749637ef8fc26cc8",
+        "bytes": 24266
+      }
+    },
+    {
+      "name": "test-end-screen_0_65846E46-7C74-42FB-83D5-407A1BC9726A.png",
+      "file": {
+        "workspace_file": "work/reader-context-recovery-2026-10-15/device-sixth-attempt/attachments/CF905A4F-22A4-43BB-A2A4-DCA48411844D.png",
+        "sha256": "60f2a2e14d81341c12b700be662cd6eb68135ce87b6e6054ff1cad9ad9a2577d",
+        "bytes": 607383
+      }
+    },
+    {
+      "name": "test-end_0_C3BC9500-4D65-461A-9868-D02A895FCD90.png",
+      "file": {
+        "workspace_file": "work/reader-context-recovery-2026-10-15/device-sixth-attempt/attachments/7A233FA7-2D05-4935-9FE8-D57FE834398D.png",
+        "sha256": "8986deb98f8fe24991c9534fdf84e7db135c137a8ec4241045901b63b2bda6d7",
+        "bytes": 566037
+      }
+    },
+    {
+      "name": "33-reader-preferences-recovered-accessibility_0_5A898630-880E-4D12-A98A-7D68C19FB400.txt",
+      "file": {
+        "workspace_file": "work/reader-context-recovery-2026-10-15/device-sixth-attempt/attachments/5E78A271-8B6E-4133-8DEF-3DECAB5EDC19.txt",
+        "sha256": "0313ceb5df23e17c86e9e2839d20e7d444842d1a7b8e8d68aa8ccbfd4b40add0",
+        "bytes": 9437
+      }
+    },
+    {
+      "name": "33-reader-preferences-recovered-screen_0_60299CB8-C7FE-4E4B-9D04-55464620FE89.png",
+      "file": {
+        "workspace_file": "work/reader-context-recovery-2026-10-15/device-sixth-attempt/attachments/C5BFD2A7-1823-4FD1-800F-04FBAABD8509.png",
+        "sha256": "8ec7db459b33aea3ca2400bb7f1bbb10bc29eb536489443740876ff6d0b052fe",
+        "bytes": 452803
+      }
+    },
+    {
+      "name": "33-reader-preferences-recovered_0_76C6E716-0861-41DF-8C65-E247C3DD2EC7.png",
+      "file": {
+        "workspace_file": "work/reader-context-recovery-2026-10-15/device-sixth-attempt/attachments/E161EC43-8BE5-458C-90C9-C311C9D64E66.png",
+        "sha256": "708051bb6077587a400c10c2be43b840dbb3c80171c992ccaabeec1887b09c31",
+        "bytes": 447171
+      }
+    },
+    {
+      "name": "33-compact-reader-after-cancel-accessibility_0_F576766E-93C5-4B1D-A4DF-FA32E5420F81.txt",
+      "file": {
+        "workspace_file": "work/reader-context-recovery-2026-10-15/device-sixth-attempt/attachments/136E3A79-F11B-4E3F-8080-2FA5C324AA03.txt",
+        "sha256": "94db6c04792599f4c751005752b113019d99ebac58f17d4dadd04b0aad54deed",
+        "bytes": 10286
+      }
+    },
+    {
+      "name": "33-compact-reader-after-cancel-screen_0_6DD9AEB7-2165-4A3A-8DF3-9C1031F613E7.png",
+      "file": {
+        "workspace_file": "work/reader-context-recovery-2026-10-15/device-sixth-attempt/attachments/CC299E10-28AD-4C58-A296-D5C81DD323FD.png",
+        "sha256": "63f583d65c8c5fd90443252213feb0ec713387c9427ae9877f4dc53d7d857f74",
+        "bytes": 453216
+      }
+    },
+    {
+      "name": "33-compact-reader-after-cancel_0_F3841AE7-E2CE-4BB6-B1BA-FF74A14DE05B.png",
+      "file": {
+        "workspace_file": "work/reader-context-recovery-2026-10-15/device-sixth-attempt/attachments/4DB1112E-D63E-4705-82E3-C5A03AF2AA4E.png",
+        "sha256": "6e41703828ec921a22344b108f9051e800dfd412d58f039818d4558e406a6b9e",
+        "bytes": 447715
+      }
+    },
+    {
+      "name": "33-compact-reader-before-switch-accessibility_0_73B3F4CE-7457-4ACE-A990-49B7CA945EF5.txt",
+      "file": {
+        "workspace_file": "work/reader-context-recovery-2026-10-15/device-sixth-attempt/attachments/5DA8A031-A35D-468B-9B30-08B5AF04C993.txt",
+        "sha256": "4021a6718165c7ad67bd35e87686791f27fd7924e834bdeb826b9035e8e86120",
+        "bytes": 10003
+      }
+    },
+    {
+      "name": "33-compact-reader-before-switch-screen_0_CF88DD64-C2D4-4602-A3C4-19417E0E8E8A.png",
+      "file": {
+        "workspace_file": "work/reader-context-recovery-2026-10-15/device-sixth-attempt/attachments/1B9FF262-BB9E-4340-A314-66228A616586.png",
+        "sha256": "c390f41675f1cc6ab4bfcf4471e91a8306e683d9903746981bd5eed538b0b363",
+        "bytes": 453214
+      }
+    },
+    {
+      "name": "33-compact-reader-before-switch_0_0768876A-3268-41EC-ADF1-DD57CBB5D300.png",
+      "file": {
+        "workspace_file": "work/reader-context-recovery-2026-10-15/device-sixth-attempt/attachments/D0623E92-DFE2-48D4-BC1C-9E18217686C8.png",
+        "sha256": "a34c3b1da7ce4b57f1369db980b823f06c740ffca9c63bec016db538a392a35f",
+        "bytes": 447623
+      }
+    },
+    {
+      "name": "hidden-control-diagnostic_0_31878B74-1652-4D7B-94B9-691E5A0F90D6.txt",
+      "file": {
+        "workspace_file": "work/reader-context-recovery-2026-10-15/device-sixth-attempt/attachments/C26215D3-4483-4F0B-97B2-B2E300AF78E3.txt",
+        "sha256": "ca2235ac79b47860bb9381f7488e7ae3503199432b2e242a7ee6fe144a379e29",
+        "bytes": 47
+      }
+    }
+  ],
+  "attachment_manifest": {
+    "workspace_file": "work/reader-context-recovery-2026-10-15/device-sixth-attempt/attachments/manifest.json",
+    "sha256": "c3c9b100576dcef2757a2c8155326dc8e50e6a5eecffedbb3e4ee77930d9483a",
+    "bytes": 5838
+  },
+  "nonpasses_retained": [
+    {
+      "attempt": "v1",
+      "log": {
+        "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-reader-context.log",
+        "sha256": "d06c5c3acf9eefc25e688a7ac8ffbddf1ce0cd798026422c7d6940b9c12efd98",
+        "bytes": 12153
+      },
+      "explanation": "Initial synthetic PencilKit preflight compared renderer reserialization against original input bytes. It failed before model.open(), with preparation error. Test was corrected to compare rendered stroke geometry and separately require exact stored nativeDrawing bytes; production initialization guard was retained."
+    },
+    {
+      "attempt": "v2",
+      "log": {
+        "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-reader-context-v2.log",
+        "sha256": "af3cfe1a863195fc6ba41f96aeb4f8ef1934f8b5d955387518b6cad7ece33861",
+        "bytes": 4570
+      },
+      "explanation": "Native preflight passed; strict hidden-reader XCTest existence assertion failed with the SwiftUI-only pane wrapper."
+    },
+    {
+      "attempt": "v3",
+      "log": {
+        "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-reader-context-v3.log",
+        "sha256": "0f4cd151611602a935656ea6601ba6fd90c6ea1f5f51267679c3d31755a28c12",
+        "bytes": 5028
+      },
+      "explanation": "Strict hidden-reader XCTest existence assertion still failed after accessibility-container adjustment."
+    },
+    {
+      "attempt": "v4",
+      "log": {
+        "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-reader-context-v4.log",
+        "sha256": "36091d5e61c1c08d91c8288cd99c9dd446c8649a418d9be33d350b1ad5497e42",
+        "bytes": 5028
+      },
+      "explanation": "Strict hidden-reader XCTest existence assertion still failed after additional SwiftUI hiding adjustment."
+    },
+    {
+      "attempt": "v4-explicitly-installed",
+      "log": {
+        "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-reader-context-v4-installed.log",
+        "sha256": "8226da850bd62c0ee14d4d0339df2ad448c0ff1a33f5b952fe4e643433580b7c",
+        "bytes": 5058
+      },
+      "explanation": "The current QA product was explicitly installed successfully; the same strict hidden-reader XCTest assertion still failed."
+    },
+    {
+      "attempt": "v5",
+      "log": {
+        "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-reader-context-v5.log",
+        "sha256": "31abc49b8bfd7b2170e466ee23f74e88e18e87016e831f3455db6e07e25ffcb6",
+        "bytes": 5028
+      },
+      "explanation": "Strict hidden-reader XCTest assertion still failed with the initial retained hosting implementation. Final production uses a plain UIKit visibility-owning ancestor with one retained child hosting controller."
+    }
+  ],
+  "explicit_install": {
+    "outcome": "success",
+    "json": {
+      "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-explicit-install.json",
+      "sha256": "da4d2c302e511f59c2f69e46d2ca0f6c8cfafa7e45d1bdd3cc33d0e494c60101",
+      "bytes": 1055
+    },
+    "log": {
+      "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-explicit-install.log",
+      "sha256": "654b0f4153e9da1997e399e9c0a194791413f1f0f94ee431b27dc7449507f48a",
+      "bytes": 717
+    },
+    "note": "A provisioning-provider warning preceded successful installation. The subsequent v4-installed test failed; installation itself did not fail."
+  },
+  "read_only_diagnostic_nonpass": {
+    "test": "test90CaptureCurrentStateOnly",
+    "log": {
+      "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-ax-inspection.log",
+      "sha256": "7105540132d4bf0c9d5025c0d538905faba6dbe732a3b78a7cd8ac75c001f363",
+      "bytes": 3200
+    },
+    "explanation": "AUT was not running foreground, so the precondition failed; not a passed inspection and no application launch was attempted by this test."
+  },
+  "limits": [
+    "No physical Apple Pencil was available: pressure/contact/palm rejection, hardware stroke capture and stroke alignment under reflow/rotation remain unqualified.",
+    "Automatic approval review rejected the requested copy of the QA application store; it was not retried. No fresh device database/export inspection was performed. Current persistence evidence is UI reopen, not a byte-level database comparison.",
+    "The earlier historical exact ink/transcription store evidence remains historical and does not verify this final run.",
+    "No live Amazon/Audible/Castalia account, issuer authorization, social publication, distribution signing or deployment was qualified.",
+    "Process-memory pending reader captures survive view teardown and failed saves while the app stays open; this is not forced-termination durability for uncommitted ink."
+  ],
+  "evidence_scope": "Historical reader-context baseline before provider/custody extraction. Exact original evidence and delivered artifacts are preserved; no new physical-device claim."
+}

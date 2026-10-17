@@ -1,0 +1,111 @@
+{
+  "$defs": {
+    "AudioMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "authors": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "ebook_identifiers": {
+          "description": "Explicit ebook identifiers reported by the source, with their namespaces.\nThe audiobook ASIN is not implicitly a Kindle ASIN or an ebook ISBN.",
+          "items": {
+            "$ref": "#/$defs/SourceRef"
+          },
+          "type": "array"
+        },
+        "language": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "title": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "SourceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "provider",
+        "id"
+      ],
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "alignment": {
+      "type": "string"
+    },
+    "asin": {
+      "type": "string"
+    },
+    "duration_milliseconds": {
+      "format": "uint64",
+      "minimum": 0,
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "edition_identifier": {
+      "description": "Legacy opaque identifier retained without guessing its namespace.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "fetched_at": {
+      "format": "uint64",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "metadata": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/AudioMetadata"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "position_milliseconds": {
+      "format": "uint64",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "source_updated_at": {
+      "format": "uint64",
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "asin",
+    "position_milliseconds",
+    "source_updated_at",
+    "fetched_at",
+    "alignment"
+  ],
+  "title": "AudioObservation",
+  "type": "object",
+  "$id": "urn:booknook:schema:0.3.0:audio-observation"
+}

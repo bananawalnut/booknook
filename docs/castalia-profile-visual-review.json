@@ -1,0 +1,17 @@
+{
+  "status": "incomplete_visual_evidence",
+  "passed_full_native_visual_review": false,
+  "findings": [
+    "NSHostingView bitmap captures render native controls but omit SwiftUI text/layers while the window stays unshown.",
+    "SwiftUI ImageRenderer captures the production title/footer at both widths, but omits the native-backed scroll area, so profile content readability cannot be assessed.",
+    "No visible/key window, application activation, foreground change, keyboard/pointer input, network request, or secret access occurred."
+  ],
+  "scope": "Actual production CastaliaProfileReview, public synthetic authority fixture, initial unapproved state at 620x800 and 375x812 points. Source hashes matched before and after compilation/rendering.",
+  "recommendation": "Use the regular native app with authorized foreground interaction or an isolated UI session for complete visual acceptance; do not count these captures as a completed UI round.",
+  "images": {
+    "profile-375.png": "736090fb98e3b1beffa735fbfdc9d534a7392eed5e4c010530b90aea7c817e08",
+    "profile-375-swiftui-renderer.png": "305d824c5bcb7fcf879960022af7796aac90a0bafefda4e43977c8c56aa22cd0",
+    "profile-620-swiftui-renderer.png": "adc3c40635eaa4114d09932c56e5977c319dabaa268995dfc09c71cac8f90008",
+    "profile-620.png": "852692e2f1ebee39926da6204e4814f5e83ebbece05704338b61429c99a8434d"
+  }
+}

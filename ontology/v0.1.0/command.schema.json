@@ -1,0 +1,1307 @@
+{
+  "$defs": {
+    "Alignment": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "const": "unmatched",
+              "type": "string"
+            }
+          },
+          "required": [
+            "status"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "edition_id": {
+              "type": "string"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "status": {
+              "const": "candidate",
+              "type": "string"
+            }
+          },
+          "required": [
+            "status",
+            "edition_id",
+            "reason"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "edition_id": {
+              "type": "string"
+            },
+            "evidence": {
+              "type": "string"
+            },
+            "status": {
+              "const": "confirmed",
+              "type": "string"
+            }
+          },
+          "required": [
+            "status",
+            "edition_id",
+            "evidence"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Annotation": {
+      "additionalProperties": false,
+      "properties": {
+        "anchor": {
+          "$ref": "#/$defs/Location"
+        },
+        "id": {
+          "type": "string"
+        },
+        "ink_geometry": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/InkGeometry"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "layout_fingerprint": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "native_drawing": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "original_context": {
+          "type": "string"
+        },
+        "pass_id": {
+          "type": "string"
+        },
+        "strokes": {
+          "items": {
+            "$ref": "#/$defs/Stroke"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "pass_id",
+        "anchor",
+        "original_context",
+        "strokes"
+      ],
+      "type": "object"
+    },
+    "AudioMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "authors": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "ebook_identifiers": {
+          "description": "Explicit ebook identifiers reported by the source, with their namespaces.\nThe audiobook ASIN is not implicitly a Kindle ASIN or an ebook ISBN.",
+          "items": {
+            "$ref": "#/$defs/SourceRef"
+          },
+          "type": "array"
+        },
+        "language": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "title": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "CharacterInterpretation": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "observations": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "passages": {
+          "items": {
+            "$ref": "#/$defs/Location"
+          },
+          "type": "array"
+        },
+        "questions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "relationships": {
+          "items": {
+            "$ref": "#/$defs/Relationship"
+          },
+          "type": "array"
+        },
+        "traits": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "description",
+        "traits",
+        "relationships",
+        "observations",
+        "questions",
+        "passages"
+      ],
+      "type": "object"
+    },
+    "InkGeometry": {
+      "additionalProperties": false,
+      "properties": {
+        "content_fingerprint": {
+          "type": "string"
+        },
+        "height": {
+          "format": "double",
+          "type": "number"
+        },
+        "origin_x": {
+          "format": "double",
+          "type": "number"
+        },
+        "origin_y": {
+          "format": "double",
+          "type": "number"
+        },
+        "page": {
+          "format": "uint32",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "resource": {
+          "type": "string"
+        },
+        "space": {
+          "$ref": "#/$defs/InkSpace"
+        },
+        "text_prefix": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "text_quote": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "text_rects": {
+          "items": {
+            "$ref": "#/$defs/InkRect"
+          },
+          "type": "array"
+        },
+        "text_suffix": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "width": {
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "required": [
+        "space",
+        "resource",
+        "content_fingerprint",
+        "width",
+        "height",
+        "origin_x",
+        "origin_y",
+        "text_rects"
+      ],
+      "type": "object"
+    },
+    "InkPoint": {
+      "additionalProperties": false,
+      "properties": {
+        "pressure": {
+          "format": "double",
+          "type": "number"
+        },
+        "time": {
+          "format": "double",
+          "type": "number"
+        },
+        "x": {
+          "format": "double",
+          "type": "number"
+        },
+        "y": {
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "pressure",
+        "time"
+      ],
+      "type": "object"
+    },
+    "InkRect": {
+      "additionalProperties": false,
+      "properties": {
+        "height": {
+          "format": "double",
+          "type": "number"
+        },
+        "width": {
+          "format": "double",
+          "type": "number"
+        },
+        "x": {
+          "format": "double",
+          "type": "number"
+        },
+        "y": {
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height"
+      ],
+      "type": "object"
+    },
+    "InkSpace": {
+      "enum": [
+        "epub_document",
+        "pdf_page"
+      ],
+      "type": "string"
+    },
+    "InlineStyle": {
+      "additionalProperties": false,
+      "properties": {
+        "bold": {
+          "type": "boolean"
+        },
+        "italic": {
+          "type": "boolean"
+        },
+        "length_utf16": {
+          "format": "uint32",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "start_utf16": {
+          "format": "uint32",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "underline": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "start_utf16",
+        "length_utf16",
+        "bold",
+        "italic",
+        "underline"
+      ],
+      "type": "object"
+    },
+    "LiteraryKind": {
+      "enum": [
+        "character",
+        "place",
+        "theme",
+        "event",
+        "concept"
+      ],
+      "type": "string"
+    },
+    "Location": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "edition_id": {
+              "type": "string"
+            },
+            "kind": {
+              "const": "text",
+              "type": "string"
+            },
+            "prefix": {
+              "type": "string"
+            },
+            "quote": {
+              "type": "string"
+            },
+            "resource": {
+              "type": "string"
+            },
+            "suffix": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "edition_id",
+            "resource",
+            "quote",
+            "prefix",
+            "suffix"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "chapter": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "kind": {
+              "const": "audio",
+              "type": "string"
+            },
+            "milliseconds": {
+              "format": "uint64",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "provider": {
+              "type": "string"
+            },
+            "source_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "provider",
+            "source_id",
+            "milliseconds"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "provider",
+              "type": "string"
+            },
+            "provider": {
+              "type": "string"
+            },
+            "source_id": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "provider",
+            "source_id",
+            "value"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "edition_id": {
+              "type": "string"
+            },
+            "kind": {
+              "const": "page",
+              "type": "string"
+            },
+            "page": {
+              "format": "uint32",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "kind",
+            "edition_id",
+            "page"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "ProgressObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "alignment": {
+          "$ref": "#/$defs/Alignment"
+        },
+        "audio_metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AudioMetadata"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "location": {
+          "$ref": "#/$defs/Location"
+        },
+        "observed_at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "pass_id": {
+          "type": "string"
+        },
+        "provider_connection_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "received_at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "pass_id",
+        "location",
+        "observed_at",
+        "received_at",
+        "alignment"
+      ],
+      "type": "object"
+    },
+    "Relationship": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "target",
+        "description"
+      ],
+      "type": "object"
+    },
+    "SourceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "provider",
+        "id"
+      ],
+      "type": "object"
+    },
+    "Stroke": {
+      "additionalProperties": false,
+      "properties": {
+        "color": {
+          "type": "string"
+        },
+        "points": {
+          "items": {
+            "$ref": "#/$defs/InkPoint"
+          },
+          "type": "array"
+        },
+        "width": {
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "required": [
+        "points",
+        "color",
+        "width"
+      ],
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "csv": {
+          "type": "string"
+        },
+        "op": {
+          "const": "import_goodreads",
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "csv",
+        "at"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "json": {
+          "type": "string"
+        },
+        "op": {
+          "const": "import_kindle",
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "json",
+        "at"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "json": {
+          "type": "string"
+        },
+        "op": {
+          "const": "import_kindle_from_connection",
+          "type": "string"
+        },
+        "provider_connection_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "json",
+        "at",
+        "provider_connection_id"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "author": {
+          "type": "string"
+        },
+        "op": {
+          "const": "add_book",
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "title",
+        "author",
+        "at"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "book_id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "update_book",
+          "type": "string"
+        },
+        "rating": {
+          "format": "uint8",
+          "maximum": 255,
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "review": {
+          "type": "string"
+        },
+        "shelf": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "book_id",
+        "title",
+        "shelf",
+        "review"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "book_id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "set_book_subjects",
+          "type": "string"
+        },
+        "subjects": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "op",
+        "book_id",
+        "subjects"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "book_id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "open_notebook",
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "book_id",
+        "at"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "book_id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "start_pass",
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "book_id",
+        "at"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "op": {
+          "const": "start_session",
+          "type": "string"
+        },
+        "pass_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "pass_id",
+        "at"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "op": {
+          "const": "end_session",
+          "type": "string"
+        },
+        "session_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "session_id",
+        "at"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "book_id": {
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/LiteraryKind"
+        },
+        "name": {
+          "type": "string"
+        },
+        "op": {
+          "const": "create_literary_entity",
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "book_id",
+        "kind",
+        "name"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "notebook_id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "add_block",
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "notebook_id",
+        "at"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "base_update": {
+          "type": "string"
+        },
+        "block_id": {
+          "type": "string"
+        },
+        "notebook_id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "edit_block",
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "notebook_id",
+        "block_id",
+        "text",
+        "base_update",
+        "at"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "block_id": {
+          "type": "string"
+        },
+        "notebook_id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "merge_block_update",
+          "type": "string"
+        },
+        "update": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "notebook_id",
+        "block_id",
+        "update",
+        "at"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "base_update": {
+          "type": "string"
+        },
+        "block_id": {
+          "type": "string"
+        },
+        "notebook_id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "edit_rich_block",
+          "type": "string"
+        },
+        "styles": {
+          "items": {
+            "$ref": "#/$defs/InlineStyle"
+          },
+          "type": "array"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "notebook_id",
+        "block_id",
+        "text",
+        "base_update",
+        "styles",
+        "at"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "block_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "notebook_id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "add_character",
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "notebook_id",
+        "block_id",
+        "name",
+        "at"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "block_id": {
+          "type": "string"
+        },
+        "character_id": {
+          "type": "string"
+        },
+        "notebook_id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "attach_character",
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "notebook_id",
+        "block_id",
+        "character_id",
+        "at"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "card_id": {
+          "type": "string"
+        },
+        "interpretation": {
+          "$ref": "#/$defs/CharacterInterpretation"
+        },
+        "op": {
+          "const": "save_card",
+          "type": "string"
+        },
+        "parents": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "positions": {
+          "items": {
+            "$ref": "#/$defs/Location"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "op",
+        "card_id",
+        "parents",
+        "interpretation",
+        "positions",
+        "at"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "annotation": {
+          "$ref": "#/$defs/Annotation"
+        },
+        "op": {
+          "const": "save_annotation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "annotation"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "observation": {
+          "$ref": "#/$defs/ProgressObservation"
+        },
+        "op": {
+          "const": "observe_position",
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "observation"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "book_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "expected_version": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "op": {
+          "const": "save_list",
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "title",
+        "book_ids"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "op": {
+          "const": "create_group",
+          "type": "string"
+        },
+        "private": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "op",
+        "name",
+        "private"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "actor": {
+          "type": "string"
+        },
+        "op": {
+          "const": "block_actor",
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "actor"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "body": {
+          "type": "string"
+        },
+        "book_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "kind": {
+          "type": "string"
+        },
+        "op": {
+          "const": "prepare_share",
+          "type": "string"
+        },
+        "spoiler": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "op",
+        "kind",
+        "body",
+        "spoiler",
+        "at"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "card_id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "prepare_character_share",
+          "type": "string"
+        },
+        "version_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "card_id",
+        "version_id",
+        "at"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "remove_draft",
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "id"
+      ],
+      "type": "object"
+    }
+  ],
+  "title": "Command",
+  "$id": "urn:booknook:schema:0.1.0:command"
+}

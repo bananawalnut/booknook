@@ -1,0 +1,35 @@
+{
+  "schema": "booknook.ontology-discovery.v1",
+  "current": "0.3.0",
+  "releases": [
+    {
+      "version": "0.1.0",
+      "manifest": "v0.1.0/manifest.json"
+    },
+    {
+      "version": "0.2.0",
+      "manifest": "v0.2.0/manifest.json"
+    },
+    {
+      "version": "0.3.0",
+      "manifest": "v0.3.0/manifest.json"
+    }
+  ],
+  "hosting": "Resolve relative paths against the configured static ontology base URL. No runtime service is required.",
+  "provider_contracts": [
+    {
+      "version": "1",
+      "manifest": "providers/v1/manifest.json"
+    }
+  ],
+  "portable_contracts": [
+    {
+      "version": "1",
+      "manifest": "portable/v1/manifest.json"
+    },
+    {
+      "version": "2",
+      "manifest": "portable/v2/manifest.json"
+    }
+  ]
+}

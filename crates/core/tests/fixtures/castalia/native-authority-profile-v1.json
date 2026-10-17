@@ -1,0 +1,14 @@
+{
+  "schema": "castalia.native-authority-profile.v1",
+  "display_name": "Independent fixture authority",
+  "issuer": "independent-fixture",
+  "key_id": "fixture-key-1",
+  "issuer_public_key": "1111111111111111111111111111111111111111111111111111111111111111",
+  "audience": "example-native-app",
+  "caller": {
+    "kind": "terminal",
+    "id": "example-native-app"
+  },
+  "policy_digest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+  "credential_endpoint": "https://issuer.example/v1/request-credential"
+}

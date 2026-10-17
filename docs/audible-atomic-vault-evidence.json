@@ -1,0 +1,93 @@
+{
+  "schema": "booknook.optional-audible-atomic-vault-evidence.v1",
+  "scope": "Pinned macOS replacement; no Amazon accounts, account calls, network, production Keychain namespaces or UI. Actual OS mutation only one generated synthetic QA namespace; cleanup verified.",
+  "tests": 23,
+  "files": [
+    {
+      "path": "services/optional-audible-adapter/booknook_audible.py",
+      "sha256": "6b89e4a5a9e55178c434c39309a23823affe11003b3430237f7fa80abd3a78f2",
+      "bytes": 22299
+    },
+    {
+      "path": "services/optional-audible-adapter/README.md",
+      "sha256": "26b572c993d511cbe5796134ab28801a480e8673da80400d3102b264f94d7734",
+      "bytes": 10112
+    },
+    {
+      "path": "tests/amazon_adapter/test_atomic_vault.py",
+      "sha256": "82b1057d808f8772a8a8d30650739fefd7fb322b3af2643621fcd29e142e153a",
+      "bytes": 6786
+    },
+    {
+      "path": "tests/amazon_adapter/keychain_acceptance.py",
+      "sha256": "0a19d73f71694e07a5609b38795bd26ee1845a7db49b964b51755179a2637244",
+      "bytes": 7640
+    },
+    {
+      "path": "amazon-adapter/atomic-vault-tests.log",
+      "sha256": "d0057ea2e294f82555849ef2a16c1f7cd2043feb7a9f0572e2ed69abdbceabd9",
+      "bytes": 4132
+    },
+    {
+      "path": "amazon-adapter/keyring-before-loss.json",
+      "sha256": "ba36977736b2bda035b9a287c71c5602e0c2131e63e87c9be017985c7811b156",
+      "bytes": 266
+    },
+    {
+      "path": "amazon-adapter/reproduce_pinned_replacement_loss.py",
+      "sha256": "d2af47a35bba38ad724dad76ea5ebdfd56d3b22905e8bf911753cd8396288422",
+      "bytes": 1273
+    },
+    {
+      "path": "amazon-adapter/keychain-opt-in-guard.log",
+      "sha256": "6e42796c1fdddc7ec9f37f9217f5a3e3e54b125f9691224e87ca5b7173bebfb9",
+      "bytes": 244
+    },
+    {
+      "path": "amazon-adapter/atomic-keychain-acceptance/result.json",
+      "sha256": "2961fa4eed892a5a25240816289c06ca099cb606bec0f08c63d8a8664c798a8c",
+      "bytes": 809
+    },
+    {
+      "path": "amazon-adapter/atomic-keychain-acceptance/worker.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "amazon-adapter/atomic-keychain-acceptance/worker.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  ],
+  "actual_keychain_result": {
+    "schema": "booknook.optional-audible-keychain-acceptance.v1",
+    "namespace": "qa-atomic-328f949a-9c83-4243-a5b7-c98d76c0b1c5",
+    "account": "synthetic-0034f856-02ff-4517-aa92-0f5bcc612104",
+    "steps": [
+      "process_ui_disabled",
+      "initial_missing",
+      "owned_create_begin",
+      "create_read_exact",
+      "existing_json_and_namespace_readable",
+      "atomic_update_read_exact",
+      "disconnect_empty_state_compatible",
+      "owned_item_removed_absence_verified"
+    ],
+    "result": "passed",
+    "record_kind": "synthetic opaque JSON only; no account credentials",
+    "source_sha256": "6b89e4a5a9e55178c434c39309a23823affe11003b3430237f7fa80abd3a78f2",
+    "harness_sha256": "0a19d73f71694e07a5609b38795bd26ee1845a7db49b964b51755179a2637244",
+    "process_interaction_restored": true,
+    "lifecycle_exit_code": 0
+  },
+  "before_fix_failure": {
+    "scope": "Memory-only native-mutation interception; no real Keychain, account, UI or network calls",
+    "pinned_keyring": "25.6.0",
+    "calls": [
+      "delete_existing",
+      "replacement_add_failed"
+    ],
+    "resulting_error_type": "PasswordSetError",
+    "previous_record_preserved": false
+  }
+}

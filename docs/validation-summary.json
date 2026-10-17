@@ -1,0 +1,1709 @@
+{
+  "schema": "booknook.validation-summary.v1",
+  "date": "2026-10-15",
+  "recorded_at_utc": "2026-10-16T03:27:30.676897+00:00",
+  "rust_tests_passed": 167,
+  "rust_tests_failed": 0,
+  "rust_tests_ignored": 3,
+  "rust_ignored_explanation": [
+    "Crash writer helper explicitly invoked by two passing SIGKILL parent tests",
+    "Independent relay opt-in separately passed against a real local relay executable",
+    "Reference issuer HTTP opt-in separately passed with actual loopback sockets"
+  ],
+  "rust_fmt": "passed",
+  "clippy": "passed with -D warnings",
+  "generated_contracts": "passed",
+  "package_resource_freshness": "passed: 42 mirrored resources in all three package workflows",
+  "native_wasm_parity": "Passed legacy typed v1, immutable ink/erasure history, exact-source transcripts, idempotent retry, reused-ID rejection, branch union, native SQLite export/reopen, and existing portable/social plus70 Castalia fixtures; current actual native/WASM recommendation and approved encrypted packet prepare/seal/open parity passed with forged/stale/replay/trust rejection coverage. Current public provider catalog/opaque positions/content/source validation, stale generation, cancellation, concurrent edit and CAS cases pass; second-application Castalia verification agrees with ten negative cases. Final full native portable envelope also passes native\u2192WASM\u2192native including EPUB/PDF assets, rich text, stable character histories, branched ink, transcripts and signed social records; malformed imports are rejected atomically. Original embedded JSON and raw full-u64 values are preserved. Structural validation does not grant identity trust or permission.",
+  "typescript_strict": "passed",
+  "typed_sdk_storage": "passed including ink failed-CAS/retry/reopen and separately preserved transcription",
+  "companion_tests_passed": 23,
+  "optional_audible_adapter_tests_passed": 24,
+  "optional_audible_evidence": "Pinned upstream serialization/signing/client with intercepted synthetic HTTP plus seven atomic macOS vault regressions. A separate actual macOS synthetic Keychain round trip passed with exact cleanup. Real account and prompt qualification remain open.",
+  "reference_issuer_tests_passed": 6,
+  "reference_issuer_evidence": "Actual loopback HTTP, native custody approval and receiver with explicit synthetic keys/grants",
+  "independent_local_relay_tests_passed": 1,
+  "independent_relay_evidence": "Actual ACK/fetch/NIP-44/outage/reopen/restart plus three native SQLite desks through private invitation/admission/discussion/removal, duplicate refresh and reopened stale retry denial against pinned nostr-rs-relay. Injected loopback WS transport; remote read-only TLS is separately qualified.",
+  "native_reader_suites_passed": 8,
+  "wkwebview_assertions_passed": 16,
+  "recovery_setup_suites_passed": 2,
+  "full_app_workflow_suite": "Final production sources passed actual Swift/UniFFI/SQLite workflows, including durable ink checkpoint recovery, failed-save retry, unresolved reader capture, cancellation and late-result guards. Final UIKit acceptance is independently recorded; no physical Pencil qualification.",
+  "forced_termination": "Two existing Rust prose SIGKILL tests plus final actual app ink-journal subprocess SIGKILL/recovery acceptance passed. Acknowledged native/portable bytes, context, parent dependencies and retry IDs survive reopen, failed saves, explicit unplaced finalization and export.",
+  "ontology_conformance_vectors": 20,
+  "wasm_native_state_command_vectors": 13,
+  "static_ontology_artifact_hashes_checked_over_http": 47,
+  "native_builds": {
+    "mac": "passed final frozen sources",
+    "ipad_simulator": "passed final frozen sources",
+    "ipad_device": "passed final frozen sources, unsigned distribution bundle; separately signed QA variant installed/launched"
+  },
+  "native_ui": {
+    "macos": "Historical before the quiet writing desk replacement: Earlier interactive evidence retained. Fresh isolated then-current-source app launched and AX/screenshot inspected on 2026-10-14: seeded notebook/card/EPUB render together; read-only SQLite preserves text/history. No pointer/keyboard input; shared-Mac interference question remains unresolved and round4 remains partial.",
+    "ipad_simulator": "Historical before the quiet writing desk replacement: Earlier completion-audit build installed, launched and portrait render inspected on iPad Pro 13-inch M5, iOS 26.4; screenshot predates Kindle import changes. No touch/Pencil/keyboard claim.",
+    "physical_ipad": "Historical before the quiet writing desk replacement: Development-signed isolated app: synthetic public-profile review/cancel/apply/reopen, exact notebook recovery, Community picker cancellation, reader controls and character history passed. Saved manual physical-keyboard note independently verified. Controlled device-targeted Undo/Redo/reopen passed with final production editor; empty-font consistency and docked-keyboard caret visibility repaired and verified. Earlier manual word-selection behavior, Pencil, broader keyboard/IME, VoiceOver and extended sessions remain unqualified.",
+    "handwriting": "Historical before the quiet writing desk replacement: Historical frozen handwriting build: side swap, finger scrolling, history, rotation, preferences and synthetic recognition/review/reopen passed. Then-current reader-context build: compact/wide controls, hidden-input release, state retention and UI reopen passed. Actual Pencil, human handwriting accuracy, VoiceOver and prolonged sessions remain unqualified.",
+    "reader_context": "Historical before the quiet writing desk replacement: Then-current isolated iPad QA test33 v6 passed in 40.779 seconds: compact/wide reader state, 21-point font, chapter and markup mode, hidden reader snapshot exclusion, hidden TextKit focus release, import cancellation and chapter/font reopen. No device orientation setter and no new private-store export. The independent hidden SwiftUI control remained in XCTest, so this is not a VoiceOver traversal qualification.",
+    "quiet_writing_desk": "Final isolated iOS18.6 Simulator: 1 case/0 failures/46.922s. Resizable simultaneous panes, side swap, no segmented modes, finger scroll, actual Unicode save/reopen and five exact scale-1 viewport measurements passed. Root reviewed final reopened/portrait-shaped screenshots. Synthetic PencilKit routing/strokes only; no physical Pencil/keyboard, VoiceOver or rotation qualification.",
+    "latest_focused_uikit": {
+      "tests": 1,
+      "failures": 0,
+      "duration_seconds": 6.243,
+      "actual_delegate_callbacks": 7,
+      "fallback_callbacks": 0,
+      "long_document_utf16_units": 118800,
+      "journal_roundtrip_bytes": 206,
+      "scope": "Actual UIKit/TextKit/PencilKit and Simulator filesystem journal APIs with synthetic data. Three forced layout passes took about 1.12 seconds; this is an integrity and bounds check, not a responsiveness or physical-pencil qualification."
+    },
+    "latest_physical_install": {
+      "display_name": "BookNook iPad QA",
+      "bundle_identifier": "org.booknook.qa.ipad20261015",
+      "scope": "Development-signed latest production-source entry point installed over the existing QA app and launched. Existing container and secure-storage namespace retained; no fixture reset, store export, input test or device-orientation command.",
+      "receipts": {
+        "inputs.json": {
+          "workspace_file": "work/final-plan-audit-2026-10-15/ipad-qa/inputs.json",
+          "sha256": "1e68fe69a1b2a1d2f28fdd9d9eeec57f33948128cae9b0457db7c0efd7a87a12",
+          "bytes": 14374
+        },
+        "build-receipt.json": {
+          "workspace_file": "work/final-plan-audit-2026-10-15/ipad-qa/build-receipt.json",
+          "sha256": "1173307fb77ba33126f1db268cacbb38c176feb089e4c2b34a442bec5bcad1dc",
+          "bytes": 625
+        },
+        "install.json": {
+          "workspace_file": "work/final-plan-audit-2026-10-15/ipad-qa/install.json",
+          "sha256": "645a5e2e313c8cad36cd9519ce4ea1a3ccfd0aee81527aee60b5a10ce5bd02e5",
+          "bytes": 1107
+        },
+        "launch.json": {
+          "workspace_file": "work/final-plan-audit-2026-10-15/ipad-qa/launch.json",
+          "sha256": "7eacda9ddfbc342ec856621d02987b7f2f7891d3a87059cee73c043a55993e6e",
+          "bytes": 1292
+        }
+      }
+    }
+  },
+  "sdk_packages": {
+    "rust": "All four extracted final archives verified: 167 passed, 0 failed, 3 intentional ignores. Includes synthetic localhost acceptance; initial sandbox socket denial preserved.",
+    "javascript": "Installed final archive CommonJS/ESM, browser/Node WASM and declaration consumers passed, including provider routing and complete portable envelope validation/roundtrip.",
+    "swift": "Final extracted three-slice package passed persistence, alternate source providers, separate Castalia custody and standalone injectable notebook storage using real foreign callbacks, durable file/SQLite reopen and CAS/conflict/error cases.",
+    "archives": {
+      "booknook-connectors-0.1.0.crate": {
+        "sha256": "78f3c49eaf470b9b4566d215d4d19e8cad9578d3b99f9d069bcbaaf9637f21c0",
+        "bytes": 55763
+      },
+      "booknook-core-0.1.0.crate": {
+        "sha256": "ca978d4432b413513226abe586b73236d13108dea018e128d1b6a35336fbb3fd",
+        "bytes": 131014
+      },
+      "booknook-native-0.1.0.crate": {
+        "sha256": "26771937b500e3856976f0e20d6adff5778c7e7003b3587f49650652c2d3373a",
+        "bytes": 134285
+      },
+      "booknook-sdk-0.1.0.tgz": {
+        "sha256": "f2f805d879f593528618ae3b019af7c6c71661f634ff10468808227245205e9a",
+        "bytes": 4251035
+      },
+      "booknook-swift-sdk-0.1.0.tar.gz": {
+        "sha256": "b8cbce05dffe25ed639457c0bdcc7271d89c688b6df28013ccb6af7a850fe1ca",
+        "bytes": 130791211
+      },
+      "booknook-wasm-0.1.0.crate": {
+        "sha256": "676bff182fd8aa1d0365b9d142955ce0146f7022d1a7a5aa48c6334375573304",
+        "bytes": 34828
+      }
+    }
+  },
+  "rust_dependency_packages": 328,
+  "optional_audible_dependency_packages": 21,
+  "ux_review_rounds": 3,
+  "latest_ui_interaction": "Final isolated UIKit/Simulator journal acceptance:1test0fail6.243s. Latest physical iPad operation installed/launched the updated QA app without input tests, data reset or orientation commands.",
+  "release_ready": false,
+  "external_gates": [
+    "Qualify selected Kindle metadata cache/export and experimental US ephemeral-web sign-in/catalog coverage against a real reader-selected account. No live Amazon account request was made during synthetic connector acceptance.",
+    "Real Audible browser/MFA/registration/renewal/deregister, secure-storage prompts and source-position accuracy",
+    "Production Castalia issuer provisioning, native consent and physical custody",
+    "Physical iPad Pencil/rotation/scroll/zoom/reflow, hardware keyboard/IME, VoiceOver and prolonged editing",
+    "Remote Nostr publication acknowledgment, encrypted delivery, real identity and physical multi-device acceptance",
+    "Distribution signing/notarization, public registry/static hosting/store deployment"
+  ],
+  "limitations": "See DELIVERY.md, PLAN-ACCEPTANCE.md and VALIDATION.md",
+  "build_provenance": {
+    "file": "build-inputs.json",
+    "sha256": "fa1171b27263ebc1dc535aae045b075622127e45209f43e3d2e26a3ef737bf23",
+    "source_resource_inputs": 233,
+    "workflow_test_inputs": 52,
+    "additional_inputs": 38
+  },
+  "logs": [
+    {
+      "label": "Workspace formatting, tests, Clippy and generated resources",
+      "workspace_file": "work/completion-final-check.log",
+      "sha256": "2a9f96ffbc7d9c4fad3d68ecc67c42f9fb6413523f6dfdfb6105efb0a45b641b",
+      "bytes": 16554
+    },
+    {
+      "label": "Final native/WASM and published-conformance parity",
+      "workspace_file": "work/character-sharing-sdk.log",
+      "sha256": "a689cc24f3949bad44ad47a0073607e5f17d11acc62536dd2ffe4bc4ff5a522c",
+      "bytes": 1681
+    },
+    {
+      "label": "Actual Apple framework reader/editor checks",
+      "workspace_file": "work/completion-audit-reading.log",
+      "sha256": "608e1053e73ec320186b89115c1ecc2f5d705c3334f906f2f14372c89a78f92f",
+      "bytes": 1667
+    },
+    {
+      "label": "Recovery/setup workflows",
+      "workspace_file": "work/completion-final-recovery.log",
+      "sha256": "33fc4664be8271f4e6f0d2a0122ee783afef5eac09584242d9b0244e5b86e1eb",
+      "bytes": 557
+    },
+    {
+      "label": "Full application workflows",
+      "workspace_file": "work/completion-final-ui-workflows.log",
+      "sha256": "94178c6779aa854f768e8f49a48356452b368695d2552f3083878743cdf1c0ff",
+      "bytes": 300
+    },
+    {
+      "label": "Extracted Rust source-package consumers",
+      "workspace_file": "work/completion-final-package-rust.log",
+      "sha256": "7a68e7f1de907b185aeae55340cd4b42f41bea1e0e8a5166863616b28ae7121e",
+      "bytes": 18082
+    },
+    {
+      "label": "Installed npm SDK consumers",
+      "workspace_file": "work/completion-final-package-typescript.log",
+      "sha256": "37ab9f4559ce8041d66931f95e421539505562baad1d9416de904e88b4d28ab5",
+      "bytes": 548
+    },
+    {
+      "label": "Extracted Swift SDK consumer",
+      "workspace_file": "work/completion-final-package-swift.log",
+      "sha256": "19c70d86f2c10c6206d56bf8aafbb3578be9e60f22d62d8e426ee7eef692ad33",
+      "bytes": 1057
+    },
+    {
+      "label": "Actual local reference-issuer HTTP acceptance",
+      "workspace_file": "work/reference-issuer-http-tests.log",
+      "sha256": "b8fc9bd2a2370a49dc5321e5837307ce2d62a29408d6ef5ba7bd28cbc0566e48",
+      "bytes": 702
+    },
+    {
+      "label": "Independent local relay acceptance",
+      "workspace_file": "work/relay-qualification/acceptance.log",
+      "sha256": "d8b462fb4a9eefc8b114426b3494b22ea571e7827f2c8146ddd37decae44bf09",
+      "bytes": 724
+    },
+    {
+      "label": "Actual optional static ontology HTTP host",
+      "workspace_file": "work/ontology-host-validation.log",
+      "sha256": "589d17c36a957b023def224feff5821283a2382c442a5d108793086a46e43283",
+      "bytes": 112
+    },
+    {
+      "label": "Optional Audible upstream serialization checks",
+      "workspace_file": "work/amazon-adapter/final-adapter-tests.log",
+      "sha256": "1d8c69067f3170f7d89bcbb5cf8fddc4f0c9eea202d3019904ab2b46214da823",
+      "bytes": 2972
+    },
+    {
+      "label": "Companion HTTP and process acceptance",
+      "workspace_file": "work/amazon-adapter/final-companion-tests.log",
+      "sha256": "1b918416598a28e9ceaa86fef6a63312df9865ec08d1c1628faccca6bfece445",
+      "bytes": 1108
+    },
+    {
+      "label": "Final macOS builds",
+      "workspace_file": "work/completion-final-mac.log",
+      "sha256": "b760ccf2813c6c4c5cd539e2c188cc58047f2d4314aeb4247c22fe9147023d1f",
+      "bytes": 125014
+    },
+    {
+      "label": "Final iPad Simulator builds",
+      "workspace_file": "work/completion-final-ipad-sim.log",
+      "sha256": "4a7be7991d4912cdaf2bde885a2cd1cc0348c67e07b6a5f42da118e51867da8a",
+      "bytes": 134357
+    },
+    {
+      "label": "Final unsigned iPad device builds",
+      "workspace_file": "work/completion-final-ipad-device.log",
+      "sha256": "b79757be521679a0a21538538292a8fbf755aec846cada686df84b408e222375",
+      "bytes": 81087
+    },
+    {
+      "label": "Native app archive extraction/platform/dependency verification",
+      "workspace_file": "work/completion-final-package-apps.log",
+      "sha256": "ce8ae8044afc835e371ce4b4d3ff00c10c7880c3328d9573da95a985ba5f8442",
+      "bytes": 409
+    },
+    {
+      "label": "Documentation-only SDK archive member equality and link check",
+      "workspace_file": "work/completion-package-documentation.log",
+      "sha256": "f36349a28246eb9a6a5cc37f6924fd570b87777db32cf644dd7e13aab7e4dfcb",
+      "bytes": 677
+    },
+    {
+      "label": "Latest companion HTTP, subprocess, SQLite and failure-recovery acceptance",
+      "workspace_file": "work/kindle-audit/companion-tests.log",
+      "sha256": "fd9b130f170d61e79fa8e0a223de2317c85a779f3f2d507cbb98a8516bdffeb8",
+      "bytes": 3543
+    },
+    {
+      "label": "Latest native import guards and recovery/setup workflows",
+      "workspace_file": "work/kindle-native-guards.log",
+      "sha256": "8396bf1800dccb784eb218f751fb4901d45e8318d488a14bf5e5d504fc118d34",
+      "bytes": 847
+    },
+    {
+      "label": "Latest full application workflows and raw-upload transport rejection",
+      "workspace_file": "work/kindle-native-workflows.log",
+      "sha256": "14b67028eabc5bd89dff35f1695847064162ba7694f16b4ad6516b8f966fe646",
+      "bytes": 437
+    },
+    {
+      "label": "Latest macOS build",
+      "workspace_file": "work/kindle-mac-build.log",
+      "sha256": "279cbcd74319490f66cd5f75945dd5a794f4f82d641346547a4032e51056a322",
+      "bytes": 134312
+    },
+    {
+      "label": "Latest iPad Simulator build",
+      "workspace_file": "work/kindle-ipad-sim-build.log",
+      "sha256": "3480a4cea146e23446f0882725a00d4fc712779aa36d3b6c05762494438fb2fd",
+      "bytes": 141666
+    },
+    {
+      "label": "Latest unsigned iPad device build",
+      "workspace_file": "work/kindle-ipad-device-build.log",
+      "sha256": "5aa86472b15b950a4911ada64e3b52e53e5a810a4bba242a2936185596ef9684",
+      "bytes": 139639
+    },
+    {
+      "label": "Latest native archive extraction/platform/dependency verification",
+      "workspace_file": "work/kindle-package-apps.log",
+      "sha256": "271a91506d14bfcb6a50e6adddc37f8249ecb6d68aad48af40727a70974d7744",
+      "bytes": 409
+    },
+    {
+      "label": "Unchanged SDK resource freshness",
+      "workspace_file": "work/kindle-package-resources.log",
+      "sha256": "f3a58fcc979c6dbd101bcb15830b8851394227c3b788d9e7632309abb4815ff9",
+      "bytes": 39
+    },
+    {
+      "label": "Independent Kindle snapshot code acceptance",
+      "workspace_file": "work/kindle-audit/integration-review-tests.log",
+      "sha256": "78787be9e9fb7b69dbc610706f83b6a8c385f12a548613fdcdc6093206eabc3d",
+      "bytes": 2141
+    },
+    {
+      "label": "Independent final unavailable/stalled-provider regressions",
+      "workspace_file": "work/kindle-audit/integration-review-fallback.log",
+      "sha256": "c3d68e795e15b1273fb05499b93f523354fdc168070cb40c272feb13e8b2cb90",
+      "bytes": 490
+    },
+    {
+      "label": "Round4 current native application workflows",
+      "workspace_file": "work/round4-native-workflows.log",
+      "sha256": "14b67028eabc5bd89dff35f1695847064162ba7694f16b4ad6516b8f966fe646",
+      "bytes": 437
+    },
+    {
+      "label": "Round4 macOS build",
+      "workspace_file": "work/round4-mac-build.log",
+      "sha256": "7eaa5141fd970d5b9217cc6d7abdb4a9410a97bd22515e3c0ee3ae593866c102",
+      "bytes": 41509
+    },
+    {
+      "label": "Round4 iPad Simulator build",
+      "workspace_file": "work/round4-ipad-sim-build.log",
+      "sha256": "0d59046ddb81008db1713090a713518bc705f9d262b5d37c97d7b36131ecd5d6",
+      "bytes": 43852
+    },
+    {
+      "label": "Round4 unsigned iPad device build",
+      "workspace_file": "work/round4-ipad-device-build.log",
+      "sha256": "22daa9e1138b273c58d65c17ed1a936d95c741b277e381842519b738f2cf1281",
+      "bytes": 43167
+    },
+    {
+      "label": "Round4 native archive extraction/platform/dependency verification",
+      "workspace_file": "work/round4-package-apps.log",
+      "sha256": "886e1aa514a19928698b5a9446e37787df109642e8797b5e7063835163ade174",
+      "bytes": 409
+    },
+    {
+      "label": "Independent read-only storage check of live synthetic QA edits",
+      "workspace_file": "work/round4-qa/round4-state-verification.log",
+      "sha256": "6efe698a035f829ebd9f51108d4072daa183e9d6e90ed308af6a7bd61f41024f",
+      "bytes": 1476
+    },
+    {
+      "label": "Delivered opt-in default TLS read-only relay receipt",
+      "workspace_file": "work/nostr-read-probe-delivered-evidence.json",
+      "sha256": "957bb6f732c203d4aa4f42e7ff340ad4842abcb606cfc6eae924b4585a052363",
+      "bytes": 4121
+    },
+    {
+      "label": "Delivered opt-in default TLS read-only relay result",
+      "workspace_file": "work/nostr-read-probe-delivered-result.json",
+      "sha256": "377f8fb560accead60113f875384ca8632abe25c361aef7c5480c44c83db5bd5",
+      "bytes": 652
+    },
+    {
+      "label": "Delivered opt-in relay build",
+      "workspace_file": "work/nostr-read-probe-delivered-build.log",
+      "sha256": "be122c1da2571084c31441fa93bf2970544a6aa05f050c1a97c54e4b22eb2388",
+      "bytes": 227
+    },
+    {
+      "label": "Delivered opt-in actual macOS Keychain manifest",
+      "workspace_file": "work/opt-in-keychain-acceptance/manifest.json",
+      "sha256": "258b61bd290e30514b91e16a86fcdbc74d51fdf258be4cff383a7d481ca32a20",
+      "bytes": 4056
+    },
+    {
+      "label": "Actual macOS Keychain lifecycle result",
+      "workspace_file": "work/opt-in-keychain-acceptance/result.json",
+      "sha256": "b90b660f6a47b71da7d54f5fcdd5752bced9913bd0f203da22faeffd364a2126",
+      "bytes": 1126
+    },
+    {
+      "label": "Actual macOS Keychain lifecycle execution",
+      "workspace_file": "work/opt-in-keychain-acceptance/lifecycle.execution.json",
+      "sha256": "19dc14afb1c5610fc7cc70edda9827afe577292dda8c03315b49644ab82a07f9",
+      "bytes": 96
+    },
+    {
+      "label": "Actual macOS Keychain build diagnostics",
+      "workspace_file": "work/opt-in-keychain-acceptance/build.stderr.log",
+      "sha256": "c7f95555c9d465566091355474a4a551b052633eb674d0415bcb4cdb8077f7e9",
+      "bytes": 3163
+    },
+    {
+      "label": "Workspace check",
+      "workspace_file": "work/resume3/workspace-check.log",
+      "sha256": "865cc5effc8305ff9e6a5cff70511c477957a517cc46034513da190995198af6",
+      "bytes": 16815
+    },
+    {
+      "label": "Sdk parity",
+      "workspace_file": "work/resume3/sdk-parity.log",
+      "sha256": "4a17ae3d75c4591ecb9f1f8818e124da3fb01b0151f7966d7eb891c9afed300b",
+      "bytes": 1249
+    },
+    {
+      "label": "Mac build",
+      "workspace_file": "work/resume3/mac-build.log",
+      "sha256": "161f92c233d7cc584c7cc53e100893871a6676a522d9118f5caa656ccfb2b329",
+      "bytes": 69309
+    },
+    {
+      "label": "Native workflows",
+      "workspace_file": "work/resume3/native-workflows.log",
+      "sha256": "b97ec1d4136cb1bd5ad4cb2985f352578299bd53bdc7a1a28f57fcd419bbec0f",
+      "bytes": 723
+    },
+    {
+      "label": "Ipad sim build",
+      "workspace_file": "work/resume3/ipad-sim-build.log",
+      "sha256": "bcd4342d7d508f286a1b3f619284f6a1647e0f49b419ce05d820675c31e9d0a1",
+      "bytes": 71365
+    },
+    {
+      "label": "Ipad device build",
+      "workspace_file": "work/resume3/ipad-device-build.log",
+      "sha256": "eb84eb3a269d1013a9ab9d2c33c062589408f46d907278f4c97a17c1cba76163",
+      "bytes": 70483
+    },
+    {
+      "label": "Package rust",
+      "workspace_file": "work/resume3/package-rust.log",
+      "sha256": "10c607b4dc42375c11759ce89dd2fe9e288f9a7350aae54ea9e0ace8f5b0e402",
+      "bytes": 18625
+    },
+    {
+      "label": "Package typescript",
+      "workspace_file": "work/resume3/package-typescript.log",
+      "sha256": "bcf8fc42fb5ce58d388ff90ef74a47a6645ce8fa9d94f906390b71348c1f6062",
+      "bytes": 548
+    },
+    {
+      "label": "Package swift",
+      "workspace_file": "work/resume3/package-swift.log",
+      "sha256": "5cdceb359c38ec10599fbabfbab9f6adc20c00815ef9f8727b0501010b4dc29d",
+      "bytes": 1039
+    },
+    {
+      "label": "Stage sdk",
+      "workspace_file": "work/resume3/stage-sdk.log",
+      "sha256": "5db4366119701094bac89b0118869df3606e2188bd2412eeb758f3d3acc6a2d6",
+      "bytes": 126
+    },
+    {
+      "label": "Package apps",
+      "workspace_file": "work/resume3/package-apps.log",
+      "sha256": "1ea61de3f29b239ea87d0ecacd418ae42f7e7232d528274cc8e30a93155fc45c",
+      "bytes": 409
+    },
+    {
+      "label": "Earlier SwiftPM outer sandbox restriction; later reviewed execution passed",
+      "workspace_file": "work/resume3/package-swift-sandbox-failure.log",
+      "sha256": "8b6590536d0f1ba1dcf2a0de7bb8b1acf8620ae6ea9a08183be56822283bf880",
+      "bytes": 5329
+    },
+    {
+      "label": "Real three-native-desk relay final acceptance",
+      "workspace_file": "work/relay-qualification/private-journey-final.log",
+      "sha256": "b3f035004c9ed0f55749cfd15eba85c0bf7dea96fdb262496d896465f126347f",
+      "bytes": 819
+    },
+    {
+      "label": "Deterministic core replay regressions",
+      "workspace_file": "work/relay-qualification/causal-replay-core.log",
+      "sha256": "11970a5c18f1b1690157f332401bccea4310eb72c636b74fdff175d670dcd762",
+      "bytes": 649
+    },
+    {
+      "label": "Native reopened social audit regression",
+      "workspace_file": "work/relay-qualification/causal-replay-native.log",
+      "sha256": "338775a23e8f5cc5ee42fd7b1b7e7f9bf02c8c3beb51240162646f68d4219a47",
+      "bytes": 997
+    },
+    {
+      "label": "Optional adapter 23 tests including atomic replacement",
+      "workspace_file": "work/amazon-adapter/atomic-vault-tests.log",
+      "sha256": "d0057ea2e294f82555849ef2a16c1f7cd2043feb7a9f0572e2ed69abdbceabd9",
+      "bytes": 4132
+    },
+    {
+      "label": "Actual optional adapter synthetic macOS Keychain",
+      "workspace_file": "work/amazon-adapter/atomic-keychain-acceptance/result.json",
+      "sha256": "2961fa4eed892a5a25240816289c06ca099cb606bec0f08c63d8a8664c798a8c",
+      "bytes": 809
+    },
+    {
+      "label": "Catalog workflow negative control",
+      "workspace_file": "work/catalog-import-negative-control/result.log",
+      "sha256": "cbcd1e0b1058079156678bb6f0feb5c20c347c987c8e365fd0618ae82197aeba",
+      "bytes": 145
+    },
+    {
+      "label": "Delivered long-edit final manifest",
+      "workspace_file": "work/long-edit-delivered-final/manifest.json",
+      "sha256": "1d2e1972af4c9d7a388e8e596bf271d10e2f9e25025df58cc746223bb5feee00",
+      "bytes": 16583
+    },
+    {
+      "label": "Delivered long-edit raw results",
+      "workspace_file": "work/long-edit-delivered-final/result.json",
+      "sha256": "63c4c05c856ce67e4c96b53e2f2d25ece5a194b896028a0143a9604c1058e275",
+      "bytes": 27931
+    },
+    {
+      "label": "Delivered long-edit execution",
+      "workspace_file": "work/long-edit-delivered-final/execution.log",
+      "sha256": "11e3d5d68cddc2aa5b3850474e4307ddeacecbf60e2646c11068218584b4d6bc",
+      "bytes": 880
+    },
+    {
+      "label": "Delivered long-edit final SQLite observation",
+      "workspace_file": "work/long-edit-delivered-final/storage-observation.json",
+      "sha256": "0f623666918d9070f907bb9212735412ae615ff6fa0811f0a171b0b0fa2266d2",
+      "bytes": 262
+    },
+    {
+      "label": "Delivered long-edit fresh-directory rejection",
+      "workspace_file": "work/long-edit-fresh-directory-check.json",
+      "sha256": "f2f47766c5c2d03fcd0b1c181151774a124ec293a683185f31364654491dcfcb",
+      "bytes": 232
+    },
+    {
+      "label": "Current isolated QA app build provenance",
+      "workspace_file": "work/qa-2026-10-14/provenance.json",
+      "sha256": "f777865001e244bcf5c8731ca71eb9ec7b15c9850a9a8ead51b622abb064d913",
+      "bytes": 21258
+    },
+    {
+      "label": "Current isolated QA startup configuration",
+      "workspace_file": "work/qa-2026-10-14/startup-safety.json",
+      "sha256": "1ee503645d074443811837ba1b61db04831b2345c1893970d3989554d84986db",
+      "bytes": 1140
+    },
+    {
+      "label": "Current isolated QA postlaunch read-only storage check",
+      "workspace_file": "work/qa-2026-10-14/postlaunch-readonly.json",
+      "sha256": "51442dea200afb60a4cfcf20cb5e3615d04bfeb78c15c74fe40c368939fa5c91",
+      "bytes": 2997
+    },
+    {
+      "label": "Castalia update: workspace-check",
+      "workspace_file": "work/castalia-connections/workspace-check.log",
+      "sha256": "433363e2bbb01e5b998a7e1e345e1c27379f4632187a79d096a88ff517da9a24",
+      "bytes": 18570
+    },
+    {
+      "label": "Castalia update: sdk-parity",
+      "workspace_file": "work/castalia-connections/sdk-parity.log",
+      "sha256": "3226defba12d7fc3ecfe506437f98df56621e6f0a6b180f35fbb87b98ae3c498",
+      "bytes": 6794
+    },
+    {
+      "label": "Castalia update: mac-build",
+      "workspace_file": "work/castalia-connections/mac-build.log",
+      "sha256": "8c8c5ce142c654acf98678e6c12affbc941e79ef91462f59ae9863cb2d753fb4",
+      "bytes": 66309
+    },
+    {
+      "label": "Castalia update: native-workflows",
+      "workspace_file": "work/castalia-connections/native-workflows.log",
+      "sha256": "767af03dca218eb5eb7d686b6929bf5aa51e0a3ee604f7107d295866ba91badd",
+      "bytes": 5467
+    },
+    {
+      "label": "Castalia update: recovery-workflows",
+      "workspace_file": "work/castalia-connections/recovery-workflows.log",
+      "sha256": "0d7ab8d195fddba37975b2ef52009359c18f5f7f0db5251d215d1fe4c4dd48bf",
+      "bytes": 1037
+    },
+    {
+      "label": "Castalia update: issuer-http",
+      "workspace_file": "work/castalia-connections/issuer-http.log",
+      "sha256": "8c572d1cf447c05e73cd9cbc1b95dd127f03cca913b4ce26ddf8e723c467e88b",
+      "bytes": 1624
+    },
+    {
+      "label": "Castalia update: ipad-sim-build",
+      "workspace_file": "work/castalia-connections/ipad-sim-build.log",
+      "sha256": "bdde54ede06805e57b95493f63f9743cbe642a882510cc001256b7ab2dec069c",
+      "bytes": 68914
+    },
+    {
+      "label": "Castalia update: ipad-device-build",
+      "workspace_file": "work/castalia-connections/ipad-device-build.log",
+      "sha256": "4a70995bc4f3eed2be571820c4f6bc22146005c04c615f4e424531df4d93fab1",
+      "bytes": 67134
+    },
+    {
+      "label": "Castalia update: package-rust",
+      "workspace_file": "work/castalia-connections/package-rust.log",
+      "sha256": "752d2a42a7ecfbe5089b6b624405f80d11614265cdbc30700cefd1cc11a2fd3e",
+      "bytes": 19501
+    },
+    {
+      "label": "Castalia update: package-typescript",
+      "workspace_file": "work/castalia-connections/package-typescript.log",
+      "sha256": "4e28f65e1e9fab2918efec7bfd0e7e6f61198e1e96839547a91ae7aafcd574bb",
+      "bytes": 548
+    },
+    {
+      "label": "Castalia update: package-swift",
+      "workspace_file": "work/castalia-connections/package-swift.log",
+      "sha256": "9c0a279bf33527b50c08acd77ccc1c8a18ed45524a05d9f6e0669f89b29fe04c",
+      "bytes": 1057
+    },
+    {
+      "label": "Castalia update: stage-sdk",
+      "workspace_file": "work/castalia-connections/stage-sdk.log",
+      "sha256": "5db4366119701094bac89b0118869df3606e2188bd2412eeb758f3d3acc6a2d6",
+      "bytes": 126
+    },
+    {
+      "label": "Castalia update: companion-tests",
+      "workspace_file": "work/castalia-connections/companion-tests.log",
+      "sha256": "85e1e7c806588f20cf9a701f6994f760069cd247c06c9a5c52cc2c6a19ade02f",
+      "bytes": 4246
+    },
+    {
+      "label": "Castalia update: audible-tests",
+      "workspace_file": "work/castalia-connections/audible-tests.log",
+      "sha256": "51db326ce1e8b249c20eaed914b9d5534e9cccb3e92a0c134e16335426eee379",
+      "bytes": 4325
+    },
+    {
+      "label": "Companion SDK completion: workspace-check",
+      "workspace_file": "work/companion-sdk-completion/workspace-check.log",
+      "sha256": "7b5ae09b0d97523b07f4c4e521db70a01af9aea5c2466b60a16071b684ff3782",
+      "bytes": 19519
+    },
+    {
+      "label": "Companion SDK completion: mac-build",
+      "workspace_file": "work/companion-sdk-completion/mac-build.log",
+      "sha256": "56fa22e36eac40e6e23d02d3110b0987e618106827493f631634339a2f5bd3a4",
+      "bytes": 59751
+    },
+    {
+      "label": "Companion SDK completion: ipad-sim-build",
+      "workspace_file": "work/companion-sdk-completion/ipad-sim-build.log",
+      "sha256": "a8436331e7b66f0ae47f215b786700c167cbf562c650ff238c581a1d4fe14e98",
+      "bytes": 61489
+    },
+    {
+      "label": "Companion SDK completion: ipad-device-build",
+      "workspace_file": "work/companion-sdk-completion/ipad-device-build.log",
+      "sha256": "0f53aa8a30501631e4939ab10aed2ad186c2c01005b4be351037deaa6e61a126",
+      "bytes": 60757
+    },
+    {
+      "label": "Companion SDK completion: package-rust",
+      "workspace_file": "work/companion-sdk-completion/package-rust.log",
+      "sha256": "429966e0edeb7160b8bf910b621a59e09f54b88c74e2d85438e1626992393e05",
+      "bytes": 20821
+    },
+    {
+      "label": "Companion SDK completion: package-swift",
+      "workspace_file": "work/companion-sdk-completion/package-swift.log",
+      "sha256": "ee350303e4a10cdda6ff255cb5429fe721f64b918e9dfb0ccbfcfbf16e5c0d61",
+      "bytes": 1057
+    },
+    {
+      "label": "Companion SDK completion: stage-sdk",
+      "workspace_file": "work/companion-sdk-completion/stage-sdk.log",
+      "sha256": "5db4366119701094bac89b0118869df3606e2188bd2412eeb758f3d3acc6a2d6",
+      "bytes": 126
+    },
+    {
+      "label": "Companion SDK completion: connector-tests",
+      "workspace_file": "work/companion-sdk-completion/connector-tests.log",
+      "sha256": "efb2c60420a82239c97779b98e9edd15a34accf79ba9c5023f711b975d81952f",
+      "bytes": 2919
+    },
+    {
+      "label": "Companion SDK completion: connector-clippy",
+      "workspace_file": "work/companion-sdk-completion/connector-clippy.log",
+      "sha256": "3d6ecf493f337ba29fb41c5ae60165ae910022fde51cbc3accfe2165235da379",
+      "bytes": 881
+    },
+    {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/production-builds/ui-workflows.log",
+      "sha256": "767af03dca218eb5eb7d686b6929bf5aa51e0a3ee604f7107d295866ba91badd",
+      "bytes": 5467,
+      "label": "Physical update: ui-workflows"
+    },
+    {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/production-builds/mac-build.log",
+      "sha256": "2d03c8f13798bcb1df04d9b57588ea38641de57792df20e212cfe96e0555da1d",
+      "bytes": 43467,
+      "label": "Physical update: mac-build"
+    },
+    {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/production-builds/ipad-sim-build.log",
+      "sha256": "cd7168b6ef0f6e5c3c2e21c06bd89a46ef6c6b8cb90501ae7d446ae4b2479a02",
+      "bytes": 45700,
+      "label": "Physical update: ipad-sim-build"
+    },
+    {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/production-builds/ipad-device-build.log",
+      "sha256": "b230fc484d866137be8194490cd70ab59131a611f8553126a8116c68aa633659",
+      "bytes": 45015,
+      "label": "Physical update: ipad-device-build"
+    },
+    {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/production-builds/package-apps.log",
+      "sha256": "e679b11a2166f089e2818b0aae686bbbcde1a2f24629ae5d399368799167a6de",
+      "bytes": 409,
+      "label": "Physical update: package-apps"
+    },
+    {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/physical-reader-controls.log",
+      "sha256": "a7d7c92a2b113141d6ab822aed57f5265ba36f82ce11ae2a16e260af67f39b52",
+      "bytes": 14423,
+      "label": "Physical iPad reader controls"
+    },
+    {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/physical-profile-cancel-apply.log",
+      "sha256": "84dbfadcf67bae78ba450ed5dce38aedae8e02bc5f2613ed61d491ee6680013d",
+      "bytes": 23630,
+      "label": "Physical iPad synthetic profile review/cancel/apply/reopen"
+    },
+    {
+      "workspace_file": "work/reader-navigation-status/after-framework.log",
+      "sha256": "ce6053c253f0b95fd885c32686e0b0377a0d5549d34f84e302b790e92483fce1",
+      "bytes": 403,
+      "label": "Real WKWebView navigation status regression"
+    },
+    {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/production-keyboard-final-builds/ui-workflows.log",
+      "sha256": "767af03dca218eb5eb7d686b6929bf5aa51e0a3ee604f7107d295866ba91badd",
+      "bytes": 5467,
+      "label": "Final keyboard repair: ui-workflows"
+    },
+    {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/production-keyboard-final-builds/mac-build.log",
+      "sha256": "94222cfa2522c7e843b43d662b95e75694694b6636acff759981c19e9f3e6f21",
+      "bytes": 34532,
+      "label": "Final keyboard repair: mac-build"
+    },
+    {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/production-keyboard-final-builds/ipad-sim-build.log",
+      "sha256": "66c95cac6c840a83b7d7c78ec06c5f88aa97355c941fb3a0fc1a20b55057db25",
+      "bytes": 45719,
+      "label": "Final keyboard repair: ipad-sim-build"
+    },
+    {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/production-keyboard-final-builds/ipad-device-build.log",
+      "sha256": "c544c9a395b90995d44ad5fb3127f7721cc6eaf403800cfd7d60df479faead80",
+      "bytes": 45035,
+      "label": "Final keyboard repair: ipad-device-build"
+    },
+    {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/production-keyboard-final-builds/package-apps.log",
+      "sha256": "671e6284835cb2cfa596dbb98b7e2137d96f7ac0b6c6d87264e424e2160b5bf2",
+      "bytes": 409,
+      "label": "Final keyboard repair: package-apps"
+    },
+    {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/physical-keyboard-font-stable-query.log",
+      "sha256": "8689af39bdccf99bd3dd1b1c93a456cb288d35b0ca0cdad3a7b0585cecb40a70",
+      "bytes": 18125,
+      "label": "Final keyboard acceptance: test26KeyboardUndoRedoStableInputMode"
+    },
+    {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/physical-keyboard-final.log",
+      "sha256": "1e860bf5d7631eee95c3dba36dabe5d047b5a5bc3add4eb88788de802342c80c",
+      "bytes": 18808,
+      "label": "Final keyboard acceptance: test26KeyboardUndoRedoStableInputMode"
+    },
+    {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/keyboard-visibility-evidence.json",
+      "sha256": "e939455b63741aff533cc71bf74de26b86d8f92b9847fb2972e1c515c48f4983",
+      "bytes": 4989,
+      "label": "Physical keyboard visibility measured regression"
+    },
+    {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/keyboard-final-evidence.json",
+      "sha256": "b9368a53ca6ad2a1fe9f178a4571b3a636a5162b7535ce5d7d213132525f7ccc",
+      "bytes": 3260,
+      "label": "Final exact production iPad editing/recovery"
+    },
+    {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/workspace-check.log",
+      "sha256": "6c148303d80d1d56e609ab1ba31ce29b60f9089a9ab78155f6d06b27ef20be2c",
+      "bytes": 20190,
+      "label": "Notebook handwriting: workspace-check.log"
+    },
+    {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/sdk-focused.log",
+      "sha256": "fef97a8faaa724316a69e18d2ef93f2d55d0f776bcb008ddb6efea93c823e4aa",
+      "bytes": 7632,
+      "label": "Notebook handwriting: sdk-focused.log"
+    },
+    {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/swift-workflows.log",
+      "sha256": "008dcc48be13aa7dc3abd0264bca327e55357aebc6062ebe3f51d2b21057746f",
+      "bytes": 5758,
+      "label": "Notebook handwriting: swift-workflows.log"
+    },
+    {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/geometry.log",
+      "sha256": "62d6c0b9ebdb34172e4a70f05b18f8f4aec4e950489dad48d78b6c03f265f096",
+      "bytes": 148,
+      "label": "Notebook handwriting: geometry.log"
+    },
+    {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/ios-typecheck.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "label": "Notebook handwriting: ios-typecheck.log"
+    },
+    {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/mac-build.log",
+      "sha256": "6b5fea8741ec48a5ab5978a2848bc48bdcce2ae1167d5fe734dded75af127b26",
+      "bytes": 76270,
+      "label": "Notebook handwriting: mac-build.log"
+    },
+    {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/ipad-sim-build.log",
+      "sha256": "523ab6baaf30cfcef99d36f7897afda49098723afea77a265a16823afb208adb",
+      "bytes": 80625,
+      "label": "Notebook handwriting: ipad-sim-build.log"
+    },
+    {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/ipad-device-build.log",
+      "sha256": "a2342730c3b45aa5df943ebe7fb8d72e7066e108e6c8eb461b5d792615b4bf00",
+      "bytes": 79647,
+      "label": "Notebook handwriting: ipad-device-build.log"
+    },
+    {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/package-rust.log",
+      "sha256": "dc36dffdc2e0b2b246ca92fd4fbbd3c44b79da50d5332444a783ee22ae88e9be",
+      "bytes": 21695,
+      "label": "Notebook handwriting: package-rust.log"
+    },
+    {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/package-typescript.log",
+      "sha256": "6266af9ceaeddfa2582b85b821c17e5ec065132a7c3c0a6af6cfe1337a8d0a8f",
+      "bytes": 548,
+      "label": "Notebook handwriting: package-typescript.log"
+    },
+    {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/package-swift.log",
+      "sha256": "6e6b71b177071b3522aa36675196468f9d0a14bb504169e60a513768bfe61813",
+      "bytes": 1039,
+      "label": "Notebook handwriting: package-swift.log"
+    },
+    {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/qa-build.log",
+      "sha256": "d2ac13b72592d7886554e38dc91ce95cc0f72077d8de403724ac6eac2bc90c8d",
+      "bytes": 118141,
+      "label": "Notebook handwriting: qa-build.log"
+    },
+    {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/static-ontology.log",
+      "sha256": "f9539ae6afb224c96a8633651d11fb86acde6c440684b8f67391a0a58d0803fb",
+      "bytes": 311,
+      "label": "Notebook handwriting: static-ontology.log"
+    },
+    {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/device-no-input.log",
+      "sha256": "88471afafaa8edeaa84165da4e93b68deb1a233da8d8cfb984ebe57ecf20280f",
+      "bytes": 4241,
+      "label": "Physical notebook handwriting: device-no-input.log"
+    },
+    {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/device-controls-v3.log",
+      "sha256": "e93989f59223abbcded0b8da15b27e7b0a23a3daa3351ac052981bd5ee89857f",
+      "bytes": 19601,
+      "label": "Physical notebook handwriting: device-controls-v3.log"
+    },
+    {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/device-transcription-v4.log",
+      "sha256": "14360136cd5089812c4e1f0d7c3a72974d910efcbb5ebae26bbc148556b8d9ef",
+      "bytes": 18782,
+      "label": "Physical notebook handwriting: device-transcription-v4.log"
+    },
+    {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/device-controls.log",
+      "sha256": "1357d1fc62852899327c77f660a97f96abb4616dfa1bf1e4d1f9937983c97886",
+      "bytes": 12529,
+      "label": "Physical notebook handwriting: device-controls.log"
+    },
+    {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/device-controls-v2.log",
+      "sha256": "a042302702522aee000ff8b0f66cde6742b6ae72b9e95781f38c92ddfaeb995a",
+      "bytes": 12132,
+      "label": "Physical notebook handwriting: device-controls-v2.log"
+    },
+    {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/device-transcription.log",
+      "sha256": "a782ba847b960eabc50678d42fb23ba15e0432478b4377939e4a4e44f5365991",
+      "bytes": 10278,
+      "label": "Physical notebook handwriting: device-transcription.log"
+    },
+    {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/device-transcription-v2.log",
+      "sha256": "b14e06aa388dd6db594db5cb7f15dd2652c25346cb36e6bd03dcc1e7c5b34707",
+      "bytes": 26482,
+      "label": "Physical notebook handwriting: device-transcription-v2.log"
+    },
+    {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/device-transcription-v3.log",
+      "sha256": "21695ae6a5ae41a07cd78f879f448922f2eed46af64fc9deb8c20a58ece08d21",
+      "bytes": 12389,
+      "label": "Physical notebook handwriting: device-transcription-v3.log"
+    },
+    {
+      "workspace_file": "work/notebook-handwriting-2026-10-15/device-transcription-v4-build.log",
+      "sha256": "b1cf3e37bdd337a5f14b4f2459b3437b9798e9fe5d60676feb3ece22ebbd978e",
+      "bytes": 39514,
+      "label": "Physical notebook handwriting: device-transcription-v4-build.log"
+    },
+    {
+      "label": "Reader-context increment: workspace-check.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/workspace-check.log",
+      "sha256": "d51c42ab44ab759b02921694b379aa5fabde75c9ecd3d8f4e4ebc89e794ddece",
+      "bytes": 21567
+    },
+    {
+      "label": "Reader-context increment: workflows-framework-final.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/workflows-framework-final.log",
+      "sha256": "0d7b4e1a9c66d03bb28be96dc29b2b76aa6853c7443f001412aacb47e7496ee6",
+      "bytes": 6694
+    },
+    {
+      "label": "Reader-context increment: reader-acceptance-receipt.json",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/reader-acceptance-receipt.json",
+      "sha256": "2f09db3846e087329f2db1f7bcb024227d0d460b9f02426e09c427e350f495d4",
+      "bytes": 8057
+    },
+    {
+      "label": "Reader-context increment: hidden-notebook-focus/acceptance.json",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/hidden-notebook-focus/acceptance.json",
+      "sha256": "8eb9c582586b82b8de6a358a26aa64d3de87bd04ade20673e92ceb657fc8959e",
+      "bytes": 5052
+    },
+    {
+      "label": "Reader-context increment: hidden-notebook-focus/native-regression.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/hidden-notebook-focus/native-regression.log",
+      "sha256": "355f8343657caa7466b3a0f5c8c866243685078b48632f121be2bc4e8e1ed913",
+      "bytes": 1196
+    },
+    {
+      "label": "Reader-context increment: hidden-notebook-focus/negative-control.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/hidden-notebook-focus/negative-control.log",
+      "sha256": "071b41ee98213ac619484ec8b3553e06ddad476d4330e268b51b3060497af741",
+      "bytes": 105
+    },
+    {
+      "label": "Reader-context increment: kindle-web-acceptance.json",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/kindle-web-acceptance.json",
+      "sha256": "89718078728efcf107b3c94a6dd44e2718c16b8a8695e0fdacb30fc8bad33d18",
+      "bytes": 22258
+    },
+    {
+      "label": "Reader-context increment: portable-services-receipt.json",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/portable-services-receipt.json",
+      "sha256": "a3168c85d84959be7ada9a044f92a0f1fa8a7c77bc3135fcebad6955872bc4a6",
+      "bytes": 6710
+    },
+    {
+      "label": "Reader-context increment: sdk-portable-services.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/sdk-portable-services.log",
+      "sha256": "3f5feec9b5c1fdce515da154bf3a3af20cc4a77b35f36e7e3b3499d274c5bfda",
+      "bytes": 8849
+    },
+    {
+      "label": "Reader-context increment: native-portable-sync.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/native-portable-sync.log",
+      "sha256": "740251ee557bb5a07fcf16a453672f6a021d982c4dce857e1b51628858a78861",
+      "bytes": 1082
+    },
+    {
+      "label": "Reader-context increment: sdk-final/receipt.json",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/sdk-final/receipt.json",
+      "sha256": "6b6a1308c81d26aeb0f03391984098d6c578274a94b0ce7a6b1ccdbb392be9da",
+      "bytes": 13542
+    },
+    {
+      "label": "Reader-context increment: sdk-final/package-rust.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/sdk-final/package-rust.log",
+      "sha256": "913a58df016d30cef0599d020e86fcbcfd5d008dfc401fbc226c6ae5a4e7568e",
+      "bytes": 21582
+    },
+    {
+      "label": "Reader-context increment: sdk-final/package-typescript.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/sdk-final/package-typescript.log",
+      "sha256": "5008691c9bea728adeb3c5d2919fc24f861e30a6bb056bfb9b23acce5b5d174f",
+      "bytes": 548
+    },
+    {
+      "label": "Reader-context increment: sdk-final/package-swift.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/sdk-final/package-swift.log",
+      "sha256": "ad771d2b54c2b2396b7af02a36932dd33b93e1500bae220b0284d7a83cd0fa35",
+      "bytes": 1039
+    },
+    {
+      "label": "Reader-context increment: sdk-final/installed-portable-services.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/sdk-final/installed-portable-services.log",
+      "sha256": "360e5f946c9a58a5eab171b76ffc7a65a5086fa49443e4238e169c0f58f6fc67",
+      "bytes": 1602
+    },
+    {
+      "label": "Reader-context increment: mac-build.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/mac-build.log",
+      "sha256": "89c6736165ddbf3c16b245dbcac89c57cf3fe6a42b2690f9e45182b12a6b3051",
+      "bytes": 43256
+    },
+    {
+      "label": "Reader-context increment: ipad-sim-build.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-sim-build.log",
+      "sha256": "274325263899d0617b52b228fbd02ff5fc97ae94b6400d810b7342d18d69f482",
+      "bytes": 46090
+    },
+    {
+      "label": "Reader-context increment: ipad-device-build.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-device-build.log",
+      "sha256": "67aabcdf348a92f636ee201df0f4cfb92389f10ab58e21bf439302cc8e4410bc",
+      "bytes": 45293
+    },
+    {
+      "label": "Reader-context increment: package-apps-final.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/package-apps-final.log",
+      "sha256": "0578104e316860835bd82b98d23fa3423ca372b58fef3b38724cb19838916f6e",
+      "bytes": 409
+    },
+    {
+      "label": "Reader-context increment: ipad-reader-context.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-reader-context.log",
+      "sha256": "d06c5c3acf9eefc25e688a7ac8ffbddf1ce0cd798026422c7d6940b9c12efd98",
+      "bytes": 12153
+    },
+    {
+      "label": "Reader-context increment: ipad-reader-context-v2.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-reader-context-v2.log",
+      "sha256": "af3cfe1a863195fc6ba41f96aeb4f8ef1934f8b5d955387518b6cad7ece33861",
+      "bytes": 4570
+    },
+    {
+      "label": "Reader-context increment: ipad-reader-context-v3.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-reader-context-v3.log",
+      "sha256": "0f4cd151611602a935656ea6601ba6fd90c6ea1f5f51267679c3d31755a28c12",
+      "bytes": 5028
+    },
+    {
+      "label": "Reader-context increment: ipad-reader-context-v4.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-reader-context-v4.log",
+      "sha256": "36091d5e61c1c08d91c8288cd99c9dd446c8649a418d9be33d350b1ad5497e42",
+      "bytes": 5028
+    },
+    {
+      "label": "Reader-context increment: ipad-reader-context-v4-installed.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-reader-context-v4-installed.log",
+      "sha256": "8226da850bd62c0ee14d4d0339df2ad448c0ff1a33f5b952fe4e643433580b7c",
+      "bytes": 5058
+    },
+    {
+      "label": "Reader-context increment: ipad-reader-context-v5.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-reader-context-v5.log",
+      "sha256": "31abc49b8bfd7b2170e466ee23f74e88e18e87016e831f3455db6e07e25ffcb6",
+      "bytes": 5028
+    },
+    {
+      "label": "Reader-context increment: ipad-reader-context-v6.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-reader-context-v6.log",
+      "sha256": "0cb4fff8d8adc3bcaf6917af0427f0af52532015efeaedc823fbb0b23d964f74",
+      "bytes": 20263
+    },
+    {
+      "label": "Reader-context increment: ipad-final-build-v6.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-final-build-v6.log",
+      "sha256": "e4e33e30b98a3e520bee09e91e76932effed364a0cbf61fe2b856256562680cc",
+      "bytes": 109882
+    },
+    {
+      "label": "Reader-context increment: ipad-ax-inspection.log",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-ax-inspection.log",
+      "sha256": "7105540132d4bf0c9d5025c0d538905faba6dbe732a3b78a7cd8ac75c001f363",
+      "bytes": 3200
+    },
+    {
+      "label": "Reader-context increment: historical-snapshot-receipt.json",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/historical-snapshot-receipt.json",
+      "sha256": "33f06b0f42691e1974830ed39e097a5414e631bd3d9e7a8089978949e41e477a",
+      "bytes": 1586
+    },
+    {
+      "label": "Reader-context increment: qa-execution-inputs.json",
+      "workspace_file": "work/reader-context-recovery-2026-10-15/qa-execution-inputs.json",
+      "sha256": "1d814855ca9491f83501feed6fdb687f2d565c8d92acc77ec6b61b37b2791f5f",
+      "bytes": 35543
+    },
+    {
+      "label": "Provider/custody and quiet desk checkpoint: workspace-check.log",
+      "workspace_file": "work/provider-custody-completion/workspace-check.log",
+      "sha256": "490f009766257d65c58fb3dfadd44b354714ad336bcfbc4c2a8f602178ada2ad",
+      "bytes": 22632
+    },
+    {
+      "label": "Provider/custody and quiet desk checkpoint: sdk-generic-position.log",
+      "workspace_file": "work/provider-custody-completion/sdk-generic-position.log",
+      "sha256": "16eb842eb15b0c63aa8a0195743d4a43413de3161f7882c2a967f059393ad121",
+      "bytes": 10057
+    },
+    {
+      "label": "Provider/custody and quiet desk checkpoint: generic-verification-parity.log",
+      "workspace_file": "work/provider-custody-completion/generic-verification-parity.log",
+      "sha256": "0b6d478f90c6ba1bb86f578059ee61ab66a6bed4d191fe005c05847e587d2da2",
+      "bytes": 708
+    },
+    {
+      "label": "Provider/custody and quiet desk checkpoint: ui-workflows-corrected.log",
+      "workspace_file": "work/provider-custody-completion/ui-workflows-corrected.log",
+      "sha256": "45d714d87a0d27076af69f4c2c4478fd9890270047cd269d66cf262d7891712c",
+      "bytes": 2722
+    },
+    {
+      "label": "Provider/custody and quiet desk checkpoint: recovery-facade-tests.log",
+      "workspace_file": "work/provider-custody-completion/recovery-facade-tests.log",
+      "sha256": "0d7ab8d195fddba37975b2ef52009359c18f5f7f0db5251d215d1fe4c4dd48bf",
+      "bytes": 1037
+    },
+    {
+      "label": "Provider/custody and quiet desk checkpoint: notebook-source-checks.json",
+      "workspace_file": "work/quiet-writing-desk-2026-10-15/notebook-source-checks.json",
+      "sha256": "b80f1d625b6e9329e6493336e8701b04f3ab66b82abbf874fc0e100dce35c292",
+      "bytes": 4753
+    },
+    {
+      "label": "Provider/custody and quiet desk checkpoint: ios-typecheck-sdk-path-nonpass.log",
+      "workspace_file": "work/quiet-writing-desk-2026-10-15/ios-typecheck-sdk-path-nonpass.log",
+      "sha256": "1f53370887b695dd66f820ae5dd60a6434ee80cdfc8e3828e807e923e54232c5",
+      "bytes": 570
+    },
+    {
+      "label": "Quiet desk final headless reader evidence: reading-tests.log",
+      "workspace_file": "work/quiet-writing-desk-2026-10-15/reading-tests.log",
+      "sha256": "21be36d83c584d9590ce818d041001b3d43d3fbf2d7719df7fea564c1ef564e0",
+      "bytes": 2330
+    },
+    {
+      "label": "Quiet desk final headless reader evidence: reading-test-count-nonpass.log",
+      "workspace_file": "work/quiet-writing-desk-2026-10-15/reading-test-count-nonpass.log",
+      "sha256": "112506e2c50994455a69e44e55def443dab375365b67273d586fb90d63433edf",
+      "bytes": 424
+    },
+    {
+      "label": "Quiet desk final linked Swift/native model workflows",
+      "workspace_file": "work/quiet-writing-desk-2026-10-15/ui-workflows.log",
+      "sha256": "45d714d87a0d27076af69f4c2c4478fd9890270047cd269d66cf262d7891712c",
+      "bytes": 2722
+    },
+    {
+      "label": "Final provider/custody and quiet desk delivery: apps-final-verification.log",
+      "workspace_file": "work/provider-custody-completion/apps-final-verification.log",
+      "sha256": "4c63d45066ed58392a7a4dc69808f028637c93be83c511264d8998abfe0601b5",
+      "bytes": 137
+    },
+    {
+      "label": "Historical before viewport repair: mac-build.execution.json",
+      "workspace_file": "work/provider-custody-completion/pre-viewport-fix/mac-build.execution.json",
+      "sha256": "a5edb8d1cbab1b5f7eb2df5875a0334ff8f6420973778ac8368c21a5235ba595",
+      "bytes": 716
+    },
+    {
+      "label": "Historical before viewport repair: ipad-sim-build.execution.json",
+      "workspace_file": "work/provider-custody-completion/pre-viewport-fix/ipad-sim-build.execution.json",
+      "sha256": "37eae6f905589a7e5dc5100db89b683fcee1b225731ac930a3ca53429e554b63",
+      "bytes": 743
+    },
+    {
+      "label": "Historical before viewport repair: ipad-device-build.execution.json",
+      "workspace_file": "work/provider-custody-completion/pre-viewport-fix/ipad-device-build.execution.json",
+      "sha256": "a4c39d707ab066aab88d2bf0cfabeed5354dcfff368944644f4fee6fafd960c4",
+      "bytes": 732
+    },
+    {
+      "label": "Final provider/custody and quiet desk delivery: package-rust.execution.json",
+      "workspace_file": "work/provider-custody-completion/package-rust.execution.json",
+      "sha256": "22cfcc8a73624cc9d611d23a2c5b9d34428f0caf3fa33f0aff058b005db9e8fd",
+      "bytes": 442
+    },
+    {
+      "label": "Final provider/custody and quiet desk delivery: package-rust.log",
+      "workspace_file": "work/provider-custody-completion/package-rust.log",
+      "sha256": "806be187bd6414e507bd642fecf9efc0ed39be95ee6989c4b38d70c3ad05ad33",
+      "bytes": 31141
+    },
+    {
+      "label": "Final provider/custody and quiet desk delivery: package-typescript.log",
+      "workspace_file": "work/provider-custody-completion/package-typescript.log",
+      "sha256": "738a1872c1c1aed46c5b1200b54ae3c87bc816379951d5ba90ad7037b3b8729b",
+      "bytes": 3804
+    },
+    {
+      "label": "Final provider/custody and quiet desk delivery: package-typescript.execution.json",
+      "workspace_file": "work/provider-custody-completion/package-typescript.execution.json",
+      "sha256": "b9fd38a16cc90cb32c4f151536ade137214fe8bd9c4640ad996aee1d714a2fd5",
+      "bytes": 453
+    },
+    {
+      "label": "Final provider/custody and quiet desk delivery: package-swift.log",
+      "workspace_file": "work/provider-custody-completion/package-swift.log",
+      "sha256": "0b07b58c5d63168315371c093e051ebb0195fd1f4209a04af7f6b4a2109d5d56",
+      "bytes": 2678
+    },
+    {
+      "label": "Final provider/custody and quiet desk delivery: package-swift.execution.json",
+      "workspace_file": "work/provider-custody-completion/package-swift.execution.json",
+      "sha256": "0467d34981713f19e2f5ed03179b743afeef3942963d93fdd8f9a266b1e667ed",
+      "bytes": 462
+    },
+    {
+      "label": "Final provider/custody and quiet desk delivery: stage-sdk.execution.json",
+      "workspace_file": "work/provider-custody-completion/stage-sdk.execution.json",
+      "sha256": "2099405086cd017fed634a5d3d4c693db8b36f661f6c0e719157a54944f9b2ca",
+      "bytes": 450
+    },
+    {
+      "label": "Final provider/custody and quiet desk delivery: packages-verification.log",
+      "workspace_file": "work/provider-custody-completion/packages-verification.log",
+      "sha256": "0445bbc4fb4805c7cd09058b56851bc2df7fe9e2fd405fe286009564072c483d",
+      "bytes": 180
+    },
+    {
+      "label": "Historical before viewport repair: app-packaging.log",
+      "workspace_file": "work/provider-custody-completion/pre-viewport-fix/app-packaging.log",
+      "sha256": "d118e1254316d6b20010da6ccb515ecb5f7a74cebd862c4e70db4c3459539dd8",
+      "bytes": 409
+    },
+    {
+      "label": "Reader viewport repair preserves tested SDK inputs and archives",
+      "workspace_file": "work/provider-custody-completion/viewport-package-reuse.json",
+      "sha256": "d5e859eb2dcafc483d6463d1e7534e00051dc79be87b32116cbc3ad6d17ef035",
+      "bytes": 1374
+    },
+    {
+      "label": "Final repaired quiet desk acceptance: apps-viewport-verification.log",
+      "workspace_file": "work/provider-custody-completion/apps-viewport-verification.log",
+      "sha256": "4c63d45066ed58392a7a4dc69808f028637c93be83c511264d8998abfe0601b5",
+      "bytes": 137
+    },
+    {
+      "label": "Final repaired quiet desk acceptance: mac-build.execution.json",
+      "workspace_file": "work/provider-custody-completion/mac-build.execution.json",
+      "sha256": "0947d2c90a07dd31d147483c8e9d9d274b5c2ffc93925ff7a7013be48546197c",
+      "bytes": 715
+    },
+    {
+      "label": "Final repaired quiet desk acceptance: ipad-sim-build.execution.json",
+      "workspace_file": "work/provider-custody-completion/ipad-sim-build.execution.json",
+      "sha256": "cf745400971ce9b071724bd4f9789ef00d8911e1394161f216fbf1174cd5e4a5",
+      "bytes": 742
+    },
+    {
+      "label": "Final repaired quiet desk acceptance: ipad-device-build.execution.json",
+      "workspace_file": "work/provider-custody-completion/ipad-device-build.execution.json",
+      "sha256": "2aec0ee2bfd4d6e81b66c705fbecca6b99d94e1010d66edfb0502eae4820a4e8",
+      "bytes": 731
+    },
+    {
+      "label": "Final repaired quiet desk acceptance: app-packaging.log",
+      "workspace_file": "work/provider-custody-completion/app-packaging.log",
+      "sha256": "cbce2fad6231d1cbeaa52ebcf6c75b6f87253cf9a759cb5b255f9b2759f181d2",
+      "bytes": 409
+    },
+    {
+      "label": "Final repaired quiet desk acceptance: viewport-reader-bridge.log",
+      "workspace_file": "work/quiet-writing-desk-2026-10-15/viewport-reader-bridge.log",
+      "sha256": "923caacd4058a2965d0a1da6d6d15325b5baea0686df0a3d96fb9861c3f3acc4",
+      "bytes": 569
+    },
+    {
+      "label": "Final repaired quiet desk acceptance: acceptance-receipt.json",
+      "workspace_file": "work/quiet-writing-desk-2026-10-15/Evidence/acceptance-receipt.json",
+      "sha256": "7e051a5cc509ddf3e2ab9ac92208a022caf1920851070366c66b632f21207147",
+      "bytes": 20514
+    },
+    {
+      "label": "Final repaired quiet desk acceptance: viewport-final-test.log",
+      "workspace_file": "work/quiet-writing-desk-2026-10-15/Evidence/viewport-final-test.log",
+      "sha256": "78d9937d115d464000990df3b276d039def5b27964b056b7cfa3d44e1d9c71c8",
+      "bytes": 27447
+    },
+    {
+      "label": "Final plan audit: workspace-check",
+      "workspace_file": "work/final-plan-audit-2026-10-15/workspace-check.log",
+      "sha256": "aaf747d35920efea7e0137a2b932d2ad966fe173e742db0de140c69ab2521784",
+      "bytes": 25633
+    },
+    {
+      "label": "Final plan audit: sdk-check",
+      "workspace_file": "work/final-plan-audit-2026-10-15/sdk-check.log",
+      "sha256": "19dbf66d9dbb8041898f3d9edbb381d05e539fe0ef48d922884262852d670f04",
+      "bytes": 9551
+    },
+    {
+      "label": "Final plan audit: mac-build",
+      "workspace_file": "work/final-plan-audit-2026-10-15/mac-build.log",
+      "sha256": "5e161480164f3cd3cbb1ba14f240f22b7c9750fbf6eeef07001326d3cfae190d",
+      "bytes": 102155
+    },
+    {
+      "label": "Final plan audit: ipad-sim-build",
+      "workspace_file": "work/final-plan-audit-2026-10-15/ipad-sim-build.log",
+      "sha256": "f86bc5b56e20147581305523ecaf297828a800af4f0596de40d4e57f547a7fd7",
+      "bytes": 104472
+    },
+    {
+      "label": "Final plan audit: ipad-device-build",
+      "workspace_file": "work/final-plan-audit-2026-10-15/ipad-device-build.log",
+      "sha256": "fe173f6d9883807f1bd121a7145ca48f4ff9f077a0ed7e5d90fca1d0d0bbb210",
+      "bytes": 103810
+    },
+    {
+      "label": "Final plan audit: package-rust",
+      "workspace_file": "work/final-plan-audit-2026-10-15/package-rust.log",
+      "sha256": "27b4616decbbf4efcd81b345bbf552da6bebb3a2e611777d6f09b76379ddaba1",
+      "bytes": 25589
+    },
+    {
+      "label": "Final plan audit: package-typescript",
+      "workspace_file": "work/final-plan-audit-2026-10-15/package-typescript.log",
+      "sha256": "2c457e7639e26c0c80dcf1bd10fa9b386f41a23d69eda606a21df6f4dd7162a5",
+      "bytes": 1178
+    },
+    {
+      "label": "Final plan audit: package-swift",
+      "workspace_file": "work/final-plan-audit-2026-10-15/package-swift.log",
+      "sha256": "ecf7612debdeb793afab87c2e336c58d6ef78fd178701361cc04f364f2e9cd4e",
+      "bytes": 2985
+    },
+    {
+      "label": "Final plan audit: stage-sdk",
+      "workspace_file": "work/final-plan-audit-2026-10-15/stage-sdk.log",
+      "sha256": "5db4366119701094bac89b0118869df3606e2188bd2412eeb758f3d3acc6a2d6",
+      "bytes": 126
+    },
+    {
+      "label": "Final plan audit: package-apps",
+      "workspace_file": "work/final-plan-audit-2026-10-15/package-apps.log",
+      "sha256": "b6f029edca8f012d51b096ba62da12d1c7a45e36f6d4acbfb47e1bda7eb7acde",
+      "bytes": 409
+    }
+  ],
+  "native_app_archives": {
+    "count": 3,
+    "files_per_bundle": {
+      "mac": 60,
+      "ipad-sim": 60,
+      "ipad-device": 60
+    },
+    "mach_o_binaries_per_bundle": {
+      "mac": 3,
+      "ipad-sim": 3,
+      "ipad-device": 3
+    },
+    "verification": "Final three builds independently extracted: exact bytes, architecture/platform/dependencies and complete offline ontology inventory checked.",
+    "production_signing": false,
+    "verification_sha256": "cf2137f250f351191d088943696295b0b8240eb413e1f0cdda439032c33a1c02"
+  },
+  "kindle_import_evidence": "Independent Apple Foundation archive; real synthetic SQLite WAL/backup, loopback HTTP, CLI export, source-selection persistence and unavailable-provider recovery. No actual Kindle cache/account qualification. Current experimental US native web connector passed bounded parsing, atomic import/cancel/reopen, independent ephemeral WebKit stores and deadline checks against synthetic responses; no live account qualification.",
+  "native_import_guards": "Passed byte classification, literal loopback/proxy settings, bounded cancellable background reads, BOM UTF-16/32 XML and actual API/transport rejection before requests or credential access.",
+  "kindle_companion_inputs": {
+    "services/library-companion/booknook_companion.py": "02838a2b8a184e56d4c84bdfa8d39071aefcc0b8a8775b12371af32ac0716713",
+    "tests/companion/test_companion.py": "81d62ec8a7a186ce1d2d3a8a6ec5f3dec8b225c58362a80e79d9cd3c4d1f1ca0",
+    "tests/companion/test_kindle_snapshot.py": "e45634e79b8e9eb76bc918d8319e19d52b233b9d414e1d27c02515139b1f8e46",
+    "tests/companion/fixtures/kindle-metadata.binary.plist": "508be1b9ceefae1b32ceb53400d93ba28f4abf4130e5cdf9e41deba81c309815",
+    "tests/companion/fixtures/generate-kindle-metadata.swift": "c8ab92643fb27bb8fa169b425fc30ed7fde34fe8b531ee4926c9ecc8af3f2018"
+  },
+  "kindle_independent_review": "No unresolved blocking code findings. Independent 11 snapshot tests and two final provider-availability regressions passed; no new UX round, real cache/account or UI qualification.",
+  "ux_review_round4": {
+    "status": "partial",
+    "evidence": "qa-round4.json",
+    "sha256": "446c230d3c5d61b0d7a4aefac61586be00e9d27ed8ec209b78306d63951c9db6",
+    "observed": "Current-source isolated app: duplicate-title creation and correct selection, exact Unicode note, started session; read-only SQLite confirms storage",
+    "pending": "Physical Pencil, broader keyboard/IME, VoiceOver, prolonged sessions and broader social/setup/recovery use remain open. Current bounded Simulator acceptance covers the replacement quiet desk; historical physical compact/Write-mode evidence does not. Fourth round remains partial; no fifth round claimed.",
+    "post_observation_fix": "Physical iPad importer/reader, empty-editor font and nested-scroll caret visibility repairs verified; controlled Undo/Redo/recovery passed with final production editor. No real account/custody qualification."
+  },
+  "remote_default_tls_read_only": {
+    "tests_passed": 1,
+    "evidence": "remote-relay-read-evidence.json",
+    "sha256": "957bb6f732c203d4aa4f42e7ff340ad4842abcb606cfc6eae924b4585a052363",
+    "scope": "Actual default TLS transport with one REQ, EOSE and CLOSE; no signer, EVENT, AUTH or certificate override. Zero returned events and SDK errors. Remote publishing, encrypted delivery and physical multi-device acceptance remain open."
+  },
+  "macos_keychain_storage": {
+    "tests_passed": 1,
+    "evidence": "keychain-acceptance-evidence.json",
+    "sha256": "6b8ff44de3fc8d87f53ac5c4f1a4307a6204f16950306c740b313682ac723d5d",
+    "scope": "Actual missing/create/read-exact/update/read-exact/remove/read-missing/idempotent-remove with one newly generated synthetic service/account. Process interaction disabled and restored, exact item cleanup verified. Not real custody, app prompts or physical iPad qualification."
+  },
+  "latest_repairs": {
+    "catalog_import": {
+      "evidence": "catalog-import-evidence.json",
+      "sha256": "e79d1c26a904fd8e2b776af589afbbc06c97b7371eb68848c8a27949f26f9399"
+    },
+    "audible_atomic_vault": {
+      "evidence": "audible-atomic-vault-evidence.json",
+      "sha256": "96cb8d262fe46de9ed0c5cf0bd12524286ea4875f2b099f0ee631135293ecf34"
+    },
+    "private_group_replay": {
+      "evidence": "private-group-replay-evidence.json",
+      "sha256": "c801a74ec5d93e276c0d6bf9f2aa0d9a346dd9dc8fdc0c10352526913fb3c981"
+    },
+    "castalia_connections": {
+      "evidence": "castalia-connections-evidence.json",
+      "sha256": "b0b713aa30a4a23e76ebae5b13042ff43ba804e3ee58b5e07cd4c6ae49ee7381"
+    },
+    "companion_sdk": {
+      "evidence": "companion-sdk-evidence.json",
+      "sha256": "886eb0d8bef9f47db003bc0819ac4c3fe7ed2e3a553273c7086beb1b70027c9c"
+    },
+    "physical_ipad": {
+      "evidence": "physical-ipad-evidence.json",
+      "sha256": "9df3c4444e13e96d4023e40277fdf692d663a67aa4ba6edf943bdaccb9813058"
+    },
+    "notebook_handwriting": {
+      "evidence": "notebook-handwriting-evidence.json",
+      "sha256": "95547d4867846616942249f0de2bfb5c192c6fe242cfc8668501c8a7df771b6a"
+    },
+    "reader_context": {
+      "evidence": "reader-context-evidence.json",
+      "sha256": "3bfc92842758386e1598f9763e4acba6f98f00e286c120cad38ce3e94c5bde22"
+    },
+    "quiet_writing_desk": {
+      "evidence": "quiet-writing-desk-evidence.json",
+      "sha256": "5e1ef3efb2ee30040a8dbd66fb4516232e834ec8d723bf552d467a056d13916b"
+    }
+  },
+  "production_build_date": "2026-10-15",
+  "acceptance_update": "Final 167Rust/0fail/3ignored; three native apps and six independently consumed SDK packages pass. Complete portable envelope, standalone storage, current social authorization, durable pending-ink recovery and cancellation are implemented and checked. Latest QA app installed/launched on physical iPad. Production release remains unqualified.",
+  "read_only_ui_inspection": {
+    "evidence": "qa-inspection-2026-10-14.json",
+    "sha256": "8324b17a822a94bcaa20ac9d7207fc67243c5cc6a7d8ecba8fbf2a6e55eeb430",
+    "input_actions": 0,
+    "completes_ux_round": false
+  },
+  "long_document_autosave": {
+    "status": "passed",
+    "evidence": "long-edit-evidence.json",
+    "sha256": "674f15a948826881ac946b37d360f3952ee6299a05f54113280049eacfe6e182",
+    "edits": 120,
+    "independent_cadence_ms": 50,
+    "initial_utf16_units": 117638,
+    "final_history_versions": 24,
+    "native_callback_fallback": false,
+    "pending_edits": 0,
+    "production_changes": false,
+    "timing_guarantee": false,
+    "scope": "Actual headless TextKit delegate \u2192 DeskModel \u2192 release Rust SQLite journal; exact text/styles/history through flush/reopen. Visible SwiftUI layout, physical input and prolonged sessions remain unqualified."
+  },
+  "physical_ipad": {
+    "evidence": "physical-ipad-evidence.json",
+    "sha256": "9df3c4444e13e96d4023e40277fdf692d663a67aa4ba6edf943bdaccb9813058",
+    "successful_bounded_test_runs": 15,
+    "full_acceptance_complete": false,
+    "scope": "Historical pre-handwriting: 15 bounded successful runs. Historical handwriting: three bounded successful runs. Historical reader-context: one bounded v6 pass plus retained nonpasses; evidence records each distinct build. Full acceptance remains incomplete. None qualifies the replacement quiet writing desk."
+  },
+  "wkwebview_navigation_regression": "Real framework negative-control failure followed by pass for rejected programmatic navigation without misleading external-link status; intentional link rejection and existing containment checks retained.",
+  "notebook_ink_conformance_vectors": 15,
+  "notebook_handwriting": {
+    "evidence": "notebook-handwriting-evidence.json",
+    "sha256": "95547d4867846616942249f0de2bfb5c192c6fe242cfc8668501c8a7df771b6a",
+    "physical_execution": true,
+    "physical_evidence": "physical-notebook-handwriting-evidence.json",
+    "physical_evidence_sha256": "0f0c00134b32444d63552dce49e1b7400f710e7701f974f64dc66ef9fc336cb6",
+    "scope": "Historical frozen handwriting source/build only; neither reader-context nor current quiet desk behavior is inferred from it."
+  },
+  "implementation_gaps": [],
+  "reader_context": {
+    "evidence": "reader-context-evidence.json",
+    "sha256": "3bfc92842758386e1598f9763e4acba6f98f00e286c120cad38ce3e94c5bde22"
+  },
+  "physical_reader_context": {
+    "evidence": "physical-reader-context-evidence.json",
+    "sha256": "38f45f786c77fbf9d56f9d520c476ea316f48d2a4faf2f30ad127ca7456df12f"
+  },
+  "historical_increments": {
+    "reader_context_2026_10_15": {
+      "rust_tests_passed": 138,
+      "native_builds": {
+        "mac": "passed final source",
+        "ipad_simulator": "passed final source",
+        "ipad_device": "passed final source, unsigned"
+      },
+      "sdk_packages": {
+        "rust": "All four extracted current archives tested: 138 passed, 0 failed, 3 intentional ignored; actual synthetic loopback checks included.",
+        "javascript": "Installed current archive CJS/ESM/browser/Node WASM/declarations passed, including recommendations and approved encrypted packet preparation/sealing/opening.",
+        "swift": "Current extracted three-slice XCFramework package compiled and ran independent native persistence/reopen consumer.",
+        "archives": {
+          "booknook-connectors-0.1.0.crate": {
+            "sha256": "f00767037388c24b895d66bd2fd56901a5dece93a1177b53313b959f5ca9378a",
+            "bytes": 54828
+          },
+          "booknook-core-0.1.0.crate": {
+            "sha256": "173c02a61ae60a86fb10e3945cc2f2f61101f291da00a165b378e109fccf7cc7",
+            "bytes": 109944
+          },
+          "booknook-native-0.1.0.crate": {
+            "sha256": "af23e18a5e045d378c19ffdaf423462f465da286c369118cc9dd5089cf09b683",
+            "bytes": 111823
+          },
+          "booknook-sdk-0.1.0.tgz": {
+            "sha256": "e970f0dd29f246d7edc5752411e3fb4a350a2683402e6854a665f6018d2bd88b",
+            "bytes": 1649835
+          },
+          "booknook-swift-sdk-0.1.0.tar.gz": {
+            "sha256": "1ca0408270c16685ce32333e861a9890299009aeed9be0db334b2fcf93d79e3e",
+            "bytes": 125678385
+          },
+          "booknook-wasm-0.1.0.crate": {
+            "sha256": "6108e4f08ef3e8eca6fc0d563447e689d6f47c0af3d99f66c80b17c925f2c402",
+            "bytes": 30786
+          }
+        }
+      },
+      "native_app_archives": {
+        "count": 3,
+        "files_per_bundle": 49,
+        "mach_o_binaries_per_bundle": 3,
+        "verification": "All three current builds archived and extracted; 49 files per bundle, three Mach-O binaries, exact bytes/platform/dependency checks passed.",
+        "production_signing": false,
+        "verification_sha256": "f4fe0c7866a2e3514ce68c225949aba4f69b5071acee71637b98be317c7e2f4c",
+        "verification_workspace_file": "work/provider-custody-completion/baseline/outputs/booknook-apps/VERIFICATION.json"
+      },
+      "build_provenance": {
+        "workspace_file": "work/provider-custody-completion/baseline/outputs/booknook/docs/build-inputs.json",
+        "sha256": "5d54eaf241d3aba4f97c4adf994d15d580fd59a7d667784fe7da8cb4b07060b5"
+      },
+      "acceptance_update": "Reader-context increment: 138 Rust tests; current native/WASM services; six extracted SDK archives; three Apple builds and verified app archives; bounded physical test33 v6 passed. Earlier reader/focus headless receipts retain their original source hashes. Physical Pencil, live account/issuer qualification and release distribution remain open; provider composition and standalone custody implementation continue.",
+      "native_ui": {
+        "macos": "Earlier interactive evidence retained. Fresh isolated current-source app launched and AX/screenshot inspected on 2026-10-14: seeded notebook/card/EPUB render together; read-only SQLite preserves text/history. No pointer/keyboard input; shared-Mac interference question remains unresolved and round4 remains partial.",
+        "ipad_simulator": "Earlier completion-audit build installed, launched and portrait render inspected on iPad Pro 13-inch M5, iOS 26.4; screenshot predates Kindle import changes. No touch/Pencil/keyboard claim.",
+        "physical_ipad": "Development-signed isolated app: synthetic public-profile review/cancel/apply/reopen, exact notebook recovery, Community picker cancellation, reader controls and character history passed. Saved manual physical-keyboard note independently verified. Controlled device-targeted Undo/Redo/reopen passed with final production editor; empty-font consistency and docked-keyboard caret visibility repaired and verified. Earlier manual word-selection behavior, Pencil, broader keyboard/IME, VoiceOver and extended sessions remain unqualified.",
+        "handwriting": "Historical frozen handwriting build: side swap, finger scrolling, history, rotation, preferences and synthetic recognition/review/reopen passed. Current reader-context build: compact/wide controls, hidden-input release, state retention and UI reopen passed. Actual Pencil, human handwriting accuracy, VoiceOver and prolonged sessions remain unqualified.",
+        "reader_context": "Current isolated iPad QA test33 v6 passed in 40.779 seconds: compact/wide reader state, 21-point font, chapter and markup mode, hidden reader snapshot exclusion, hidden TextKit focus release, import cancellation and chapter/font reopen. No device orientation setter and no new private-store export. The independent hidden SwiftUI control remained in XCTest, so this is not a VoiceOver traversal qualification."
+      },
+      "latest_ui_interaction": "Bounded physical iPad compact/wide reader-context test33 v6; production UI inspected in captured screenshots, no orientation changes, no Mac input, no account or publication action.",
+      "production_build_date": "2026-10-15",
+      "scope": "Frozen reader-context baseline, before provider/custody composition and the replacement quiet writing desk; not current UI or package qualification."
+    },
+    "quiet_desk_before_reader_viewport_fix": {
+      "native_builds": {
+        "mac": "passed final captured quiet desk source",
+        "ipad_simulator": "passed final captured quiet desk source",
+        "ipad_device": "passed final captured quiet desk source, unsigned"
+      },
+      "native_app_archives": {
+        "count": 3,
+        "files_per_bundle": 56,
+        "mach_o_binaries_per_bundle": 3,
+        "verification": "All three current captured-source builds archived and independently extracted; 56 files per bundle, three Mach-O binaries and exact bytes/platform/dependency checks passed.",
+        "production_signing": false,
+        "verification_sha256": "2bf0ac038b1e4a8b79115435dff8012c3b0777d858cdd4ebdec44fec182a462d",
+        "verification_workspace_file": "work/provider-custody-completion/pre-viewport-fix/VERIFICATION.json"
+      },
+      "build_provenance": {
+        "workspace_file": "work/provider-custody-completion/pre-viewport-fix/build-inputs.json",
+        "sha256": "56911ca48daae41cb49b5475a8cf3eb65570611f4fdae2d96df9bf260aaf2e8c",
+        "source_resource_inputs": 219,
+        "workflow_test_inputs": 47,
+        "additional_sdk_custody_inputs": 18
+      },
+      "scope": "Verified frozen pre-viewport app builds/packages; subsequent reopened-reader visual defect requires app rebuild. Verified SDK inputs and archive bytes are unchanged by the reader-only repair."
+    },
+    "provider_custody_and_quiet_desk_baseline": {
+      "evidence": "evidence/pre-final-plan-validation-summary-2026-10-15.json",
+      "sha256": "b034936eb3c5cf533bb308d51c3db68c00e6f4af7dc262b064366f9badf54384",
+      "scope": "Complete pre-final-audit validation summary; its package/build claims refer to that preserved baseline, not the new artifacts."
+    }
+  },
+  "native_library_builds": {
+    "mac": "passed",
+    "ipad_simulator": "passed",
+    "ipad_device": "passed",
+    "scope": "Rust static libraries and regenerated Swift bindings; application builds separate."
+  },
+  "implementation_scope": "Final audit findings addressed within the native development build and open SDKs; independent receipts establish implementation and bounded acceptance, not real-account or hardware release qualification.",
+  "current_increment_pending": [],
+  "provider_custody": {
+    "status": "source_native_library_and_installed_package_checks_passed",
+    "provider_receipt": {
+      "workspace_file": "work/provider-custody-completion/provider-receipt.json",
+      "sha256": "facbbac06c1cdc35ba5315eaa4a722f7565c6b7ca160bab71f10f84326c6ced3",
+      "bytes": 6944
+    },
+    "custody_receipt": {
+      "workspace_file": "work/provider-custody-completion/custody-validation.json",
+      "sha256": "6e4ebe444401772a24aa0ff9b5ff0f1ad1fa1b8e168e08c7a759968f40401e5c",
+      "bytes": 7001
+    },
+    "swift_workflow_receipt": {
+      "workspace_file": "work/provider-custody-completion/swift-provider-workflow-evidence.json",
+      "sha256": "f225057afc2ce6d37948abe34c5253766a3bdef65c5439bcb678bc8a6ab81144",
+      "bytes": 7182
+    },
+    "native_build_receipt": {
+      "workspace_file": "work/provider-custody-completion/native-build-receipt.json",
+      "sha256": "dd84e9a0c2112ed8e162630837410214404e5f00c28b36c0489807ad66634711",
+      "bytes": 13681
+    },
+    "provider_fixture_cases": 6,
+    "historical_ontology_files_unchanged": 40,
+    "scope": "Historical provider/custody increment; final package claims and source hashes are recorded in final_plan_audit.",
+    "installed_custody_consumer": "passed standalone second-app custody without Desk/network/live Keychain; independently verified Rust receipt"
+  },
+  "quiet_writing_desk": {
+    "status": "passed_bounded_simulator_acceptance_and_verified_development_packages",
+    "source_checks": {
+      "workspace_file": "work/quiet-writing-desk-2026-10-15/notebook-source-checks.json",
+      "sha256": "b80f1d625b6e9329e6493336e8701b04f3ab66b82abbf874fc0e100dce35c292",
+      "bytes": 4753
+    },
+    "physical_execution": false,
+    "simulator_acceptance": {
+      "cases": 1,
+      "failures": 0,
+      "duration_seconds": 46.922,
+      "qa_frame_sizes": [
+        [
+          940,
+          850
+        ],
+        [
+          740,
+          1100
+        ]
+      ],
+      "screenshots": 7,
+      "accessibility_snapshots": 7,
+      "viewport_metric_stages": 5,
+      "source_mappings_verified": 112,
+      "product_hashes_verified": 100
+    },
+    "scope": "Historical bounded46.922s Simulator desk acceptance and then-current package evidence; final follow-up sources and focused UIKit acceptance are recorded in final_plan_audit.",
+    "headless_reader_suite": "passed, 16 final actual WKWebView assertions plus native TextKit/PDFKit/navigation and superseded callback checks",
+    "retained_nonpasses": [
+      "Incorrect initial iOS SDK path, corrected using actual installed SDK",
+      "Reader suite expected 13 assertions after two were added; retained nonpass then corrected passing rerun",
+      "Initial generic Simulator build selected x86_64 against arm64-only Rust; corrected before launch",
+      "Initial Simulator harness required one WKWebView accessibility node; corrected visible geometry assertions for nested same-bounds nodes",
+      "Earlier 37.921-second functional pass failed visual review; missing viewport scaled 980 CSS pixels to 367 native points. Final repaired run and five exact metric stages passed."
+    ],
+    "linked_model_workflows": {
+      "status": "passed",
+      "workspace_file": "work/quiet-writing-desk-2026-10-15/ui-workflows.log",
+      "sha256": "45d714d87a0d27076af69f4c2c4478fd9890270047cd269d66cf262d7891712c",
+      "bytes": 2722
+    },
+    "incoming_ink_geometry": "Final synthetic UIKit/PencilKit regression passes: incoming differently sized version during active stroke does not change displayed transform, local dimensions, parent or native bytes. Found by source review; no executed pre-fix negative control.",
+    "evidence": {
+      "evidence": "quiet-writing-desk-evidence.json",
+      "sha256": "5e1ef3efb2ee30040a8dbd66fb4516232e834ec8d723bf552d467a056d13916b"
+    },
+    "receipt": {
+      "workspace_file": "work/quiet-writing-desk-2026-10-15/Evidence/acceptance-receipt.json",
+      "sha256": "7e051a5cc509ddf3e2ab9ac92208a022caf1920851070366c66b632f21207147",
+      "bytes": 20514
+    },
+    "reader_viewport": {
+      "before_css_width": 980,
+      "before_native_width": 367,
+      "before_scale": 0.3745865523815155,
+      "after_font_css_px": 19,
+      "after_zoom": 1,
+      "after_width_tolerance_points": 1,
+      "after_zoom_tolerance": 0.01,
+      "stages": [
+        "initial",
+        "resize",
+        "swap",
+        "portrait-shaped frame",
+        "reopen"
+      ]
+    }
+  },
+  "native_reader_suite_scope": "One JavaScript and seven native Swift executables; final reader viewport regression separately repeated against the repaired source.",
+  "static_ontology_http_scope": "Current real loopback HTTP discovery followed all four manifests and compared all 47 artifacts; corrupt nested artifact rejected and private working-directory sentinel returned404. Forty previously issued domain ontology files remain byte-identical.",
+  "rust_dependency_inventory_scope": "Locked offline all-features Cargo metadata, including six bindgen CLI dependencies beyond the default feature closure; all license expressions present. Zig/LLVM is a separately identified local build tool, not shipped in packages.",
+  "final_plan_audit": {
+    "evidence": "final-plan-audit-evidence.json",
+    "sha256": "8cb26bc43b66d82c2bbe0e1f65266af35fe6137d0c84e56729ab3d6ef9a7f70a",
+    "release_ready": false
+  },
+  "root_fields_scope": "Preserved pre-note-board delivery baseline. Current separate-note/whiteboard source and iPad acceptance are recorded in note_boards.",
+  "note_boards": {
+    "evidence": "note-boards-evidence.json",
+    "sha256": "d7ce071c2173220769ad171610f550ccbcc0acea4d46a2d97af1800e915fef36",
+    "date": "2026-10-16",
+    "rust_passed": 177,
+    "rust_failed": 0,
+    "rust_ignored": 3,
+    "simulator_tests_passed": 1,
+    "simulator_duration_seconds": 41.116,
+    "physical_install_launch": "passed",
+    "distribution_archives_refreshed": false,
+    "release_ready": false
+  },
+  "finger_local_release": {
+    "evidence": "docs/finger-local-release-evidence.json",
+    "qa_tests": 1,
+    "qa_failures": 0,
+    "qa_seconds": 56.659,
+    "normal_ipad_app_installed_and_launched": true,
+    "version": "0.1.0",
+    "build": "2026101601",
+    "profile_expiration_utc": "2026-10-24T01:48:21Z",
+    "app_store_distribution": false
+  }
+}

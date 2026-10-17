@@ -1,0 +1,58 @@
+{
+  "schema": "booknook.private-group-replay-acceptance.v1",
+  "source_sha256": {
+    "crates/core/src/social_protocol.rs": "37b453212c544b68278aaccc16309115102da18b54735cc49e4088d38cdbc3e9",
+    "crates/core/tests/social_replay.rs": "697324e6669be01f33385c9bf2d1d0d3e37347b806476cf9b38e7771d67e275a",
+    "crates/native/src/social_bridge.rs": "ddba2782010c56e60f512acd3e7e887f3c08f9243139bb5f8de752b95d56104b",
+    "crates/native/src/social_relay_acceptance.rs": "45c3df684cddd8160658cc3785fb2123176deae1caca3f36516337e3ad08fd85"
+  },
+  "logs": {
+    "work/relay-qualification/private-journey-final.log": {
+      "sha256": "b3f035004c9ed0f55749cfd15eba85c0bf7dea96fdb262496d896465f126347f",
+      "bytes": 819
+    },
+    "work/relay-qualification/causal-replay-core.log": {
+      "sha256": "11970a5c18f1b1690157f332401bccea4310eb72c636b74fdff175d670dcd762",
+      "bytes": 649
+    },
+    "work/relay-qualification/causal-replay-native.log": {
+      "sha256": "338775a23e8f5cc5ee42fd7b1b7e7f9bf02c8c3beb51240162646f68d4219a47",
+      "bytes": 997
+    },
+    "work/relay-qualification/social-protocol-regressions.log": {
+      "sha256": "14ba1c2fa9510846b611377c779970dbebf48a7582fea994a3bf7dba08e93f94",
+      "bytes": 1467
+    },
+    "work/relay-qualification/causal-replay-clippy.log": {
+      "sha256": "20a2e02d6c9040c0835278ffda753c4701c23d6c19fa710c7ec3e1fadaaf45c8",
+      "bytes": 1090
+    },
+    "work/relay-qualification/private-journey-diagnostic.log": {
+      "sha256": "c2aba7dc3417fff67dcb330837e9b7b0adb72e5a751f36142679bb94fee0765f",
+      "bytes": 1271
+    },
+    "work/relay-qualification/join-convergence-before.log": {
+      "sha256": "daa05d3d18a4126eec6a1ab7139a149ad52155c758bea86082773269b35c81b6",
+      "bytes": 1747
+    }
+  },
+  "actual_relay": "Pinned independent nostr-rs-relay using cfg(test) loopback WebSocket transport; three independent native SQLite desks and synthetic Castalia identities",
+  "passed": [
+    "owner invitation to two readers, separate admission approvals, batch membership update",
+    "encrypted discussion delivered through Desk::exchange with exact addressed recipients",
+    "duplicate exchange leaves projections unchanged",
+    "removed reader excluded from subsequent discussions and unable to publish",
+    "queued old-epoch discussion retained but denied retry after SQLite reopen",
+    "equal-second approvals and adversarial IDs replay creation, invitations, admission and four-node reply chain before mutation",
+    "missing or cyclic dependencies remain unresolved; stale epochs and conflicting mutations remain rejected",
+    "repeated public join requests converge in opposite arrival orders"
+  ],
+  "new_regular_tests": 4,
+  "opt_in_relay_tests": 1,
+  "limits": [
+    "No remote relay publication, real identity or physical-device acceptance",
+    "Previously persisted noncanonical repeated-join projections may fail strict audit; no repair migration",
+    "Late older-epoch activity remains rejected; unresolved dependencies remain pending",
+    "No schema or ABI changes; receipt and audience verification remain required"
+  ]
+}

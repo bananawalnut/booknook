@@ -1,0 +1,377 @@
+{
+  "schema": "booknook.note-boards-evidence.v1",
+  "date": "2026-10-16",
+  "recorded_at_utc": "2026-10-17T01:30:57.723224+00:00",
+  "scope": "Current source, source SDK contracts, updated native iPad development installation and bounded isolated Simulator acceptance. Earlier distributable archives remain the preserved baseline.",
+  "checks": {
+    "rust_passed": 177,
+    "rust_failed": 0,
+    "rust_ignored": 3,
+    "fmt": "passed",
+    "clippy": "passed",
+    "source_sdk_parity": "passed all existing suites plus 12 new note/whiteboard vectors",
+    "resource_mirrors": 43,
+    "static_http_manifests": 6,
+    "static_http_artifacts": 73,
+    "immutable_issued_artifacts": 51
+  },
+  "source_and_native_libraries": {
+    "workspace_file": "work/warm-note-boards-2026-10-15/native-build-receipt.json",
+    "sha256": "5f96cf810f094b64267e5dbc917315cea2733b8a8ca6facfcf77040d5db834ee",
+    "bytes": 14494
+  },
+  "contracts": {
+    "workspace_file": "work/note-whiteboard-2026-10-15/contracts-receipt.json",
+    "sha256": "02c381b050acba8ea9c2a1d36cf2ebea4f2e606bdf1ed6b525ad85acaba04933",
+    "bytes": 75347
+  },
+  "model_capture_journal": {
+    "workspace_file": "work/note-whiteboard-2026-10-15/model-checks/receipt.json",
+    "sha256": "51005092c849024c0f0ae91647378ec22de959ac05bb7d6ab142b0ec5bde2407",
+    "bytes": 4569
+  },
+  "logs": {
+    "workspace-check.log": {
+      "workspace_file": "work/warm-note-boards-2026-10-15/workspace-check.log",
+      "sha256": "122ab181da728f9af51a04208f8239049ec2cd11e3812c152c6e3703329c3329",
+      "bytes": 25934
+    },
+    "model-workflows.log": {
+      "workspace_file": "work/warm-note-boards-2026-10-15/model-workflows.log",
+      "sha256": "6d3b79f305633175ac2095974d31e394a757b74e60aa9725acc191c3667348ce",
+      "bytes": 3445
+    },
+    "reader-tests.log": {
+      "workspace_file": "work/warm-note-boards-2026-10-15/reader-tests.log",
+      "sha256": "1a5447a7026925245c85ebed55d9007100ff365d5a116901bf2c1e63564c35e1",
+      "bytes": 2389
+    },
+    "qa-build-isolated-run.log": {
+      "workspace_file": "work/warm-note-boards-2026-10-15/qa-build-isolated-run.log",
+      "sha256": "adc61ae7e495b7ffff3ee6b69068387f24ca8a789babf6409ab18353efb26025",
+      "bytes": 70013
+    },
+    "qa-test-isolated-run.log": {
+      "workspace_file": "work/warm-note-boards-2026-10-15/qa-test-isolated-run.log",
+      "sha256": "2bc8291a316b905922190eeb76b4fba5cd90008a4b957fe40c058db64fdf4bed",
+      "bytes": 21103
+    },
+    "ipad-qa/build-renderer-fix.log": {
+      "workspace_file": "work/warm-note-boards-2026-10-15/ipad-qa/build-renderer-fix.log",
+      "sha256": "00a554c758711e6ac647efa22908f43f3f59ddaa3383b682895e3377c875e702",
+      "bytes": 87345
+    }
+  },
+  "physical_ipad": {
+    "display_name": "BookNook iPad QA",
+    "bundle_id": "org.booknook.qa.ipad20261015",
+    "scope": "Signed production-source app updated in place and launched. Existing container and isolated secure-storage namespace retained. No orientation command, reset or physical input test.",
+    "receipts": {
+      "inputs.json": {
+        "workspace_file": "work/warm-note-boards-2026-10-15/ipad-qa/inputs.json",
+        "sha256": "b6745f7f67c6a021cb081c694dd49c56ac4269f177c4cde814e51916ae1f7333",
+        "bytes": 17974
+      },
+      "install-renderer-fix.json": {
+        "workspace_file": "work/warm-note-boards-2026-10-15/ipad-qa/install-renderer-fix.json",
+        "sha256": "eb187ee9443831a9a1560e806ade664129935c48896353e72d04ce8ac3d862b8",
+        "bytes": 1120
+      },
+      "launch-renderer-fix.json": {
+        "workspace_file": "work/warm-note-boards-2026-10-15/ipad-qa/launch-renderer-fix.json",
+        "sha256": "25131133ecea75f35b7bed5b53edfefc57e163dcade0485cad93619503527d09",
+        "bytes": 1305
+      }
+    },
+    "current_production_input_hashes": {
+      "apps/apple/BookNook/NotebookInkRecognition.swift": "48333381dec1d539f2ac902820db598bf61e58f73edccf5f18a018c96cc88a52",
+      "apps/apple/BookNook/ReaderInkSession.swift": "c83c0667af9c77a5cd496dbd3c51b3683921c837d02dbcd51df0c7f1cb5a7e58",
+      "apps/apple/BookNook/NotebookTranscriptionDraft.swift": "b0da62b25eaaf442b5051119bb83199099ee3095025c13a290947d9a2d4a4635",
+      "apps/apple/BookNook/SocialModels.swift": "72da2e9327b852a103cd9a6cc89589c6f1000cc33bbc60a526ce692fac6bcbb7",
+      "apps/apple/BookNook/NotebookInkGeometry.swift": "e7640c6894c36feafd6ec8a86fcee06e0c76c370c6568924bdc7014e51a16578",
+      "apps/apple/BookNook/CharacterHistoryFields.swift": "b003b6de6567c61bb7816e18e9ed1463664abaee2c891bb30af942aff452fd57",
+      "apps/apple/BookNook/CastaliaProfileImport.swift": "3ceee493ac3e37cedd1c08051e5053d484d8ba4e7f9a2fb349725d86f6f5e16f",
+      "apps/apple/BookNook/DraftCommitState.swift": "f3b94993aa6de9969973ad47d8db1e81cf4f17b3000e643ec6b76a92d980199d",
+      "apps/apple/BookNook/LibraryCompanion.swift": "fc651b6bc9414aea41327c89ccb64d204f85d5160c19dcf4c964948f6b83a4f2",
+      "apps/apple/BookNook/RecoveryImport.swift": "5ea8dc4479c8bd5cd973287e2f4228d88d55ab2d998e270e0461264984487fd6",
+      "apps/apple/BookNook/CharacterSharing.swift": "32a9a40b4391c5c0c954ce9ab4d635a360fd84111f1be2fc9af86ee1ac82da2c",
+      "apps/apple/BookNook/NotebookNoteModel.swift": "5930917e70b0f36f90dfd0aa58de9070c17b484f8fadf6c25164d03a15176c76",
+      "apps/apple/BookNook/AppleProviderAdapters.swift": "87487f5589bbf6b8dae758e9c51aa4b30ec1e0d028cbc520b31a2503fb047de6",
+      "apps/apple/BookNook/CastaliaAuthorization.swift": "693db06237b4c9481756968301a68a6862ccd32ce506adef9a8c20480b2238d1",
+      "apps/apple/BookNook/KindleWebImport.swift": "fe876514b0f3a42b53d448a6891e942cd908512c30a79e1de9efd1b20a16959c",
+      "apps/apple/BookNook/NotebookWorkspaceLayout.swift": "a2e5460b4cbfa9554b08c34a5282313ae2820b9c2e93a5875c2fea1238626a90",
+      "apps/apple/BookNook/ReaderView.swift": "71fda11672019c8d0720f045048039a2e95d4839d8b19edcdd95725f3f13da1a",
+      "apps/apple/BookNook/KindleWebCatalog.swift": "b54642f21fc43a305874c485289244c20f10de5ebd95d0721a3e86fb163eee5a",
+      "apps/apple/BookNook/ReaderWebBridge.swift": "eee6b3b7fd75b981f6c5734bc7d06bae9f6d9948a13ee5bb7e4ca41012e6f60f",
+      "apps/apple/BookNook/SecureStorage.swift": "56a084b1bb6a91ce669bfa05b29ace31522f40365c39c12d1ea1b47d92ddf440",
+      "apps/apple/BookNook/NotebookWhiteboardGeometry.swift": "52098f8277013213326ddcab920027d11954886aa3110700381660145e6020a7",
+      "apps/apple/BookNook/UserFacingError.swift": "848d80c51e8e23d91ea134348e2e0d890f6b03acaad65a0d2e7ccc8ce8eda0f0",
+      "apps/apple/BookNook/NativeNotebookPage.swift": "a3ce0564e68199d024dae712baed44fb45619bd392e25612f873ddd6030a64c5",
+      "apps/apple/BookNook/ReadingDeskView.swift": "ae2c91c2cee7f0075012b01aea03bb681534651eb2093cab5f099c4c2328bdec",
+      "apps/apple/BookNook/NativeNotebookEditor.swift": "d1ac831dd25b4d201578630f9e4b92fb2efd4d73994e5fcfe25c830d1f7b45b0",
+      "apps/apple/BookNook/RetainedWorkspacePane.swift": "5dc63573cc91586b5dbf9ff68c8f0b33bb9e684ccb7155a61bd8e8d35e65ba5c",
+      "apps/apple/BookNook/InkJournal.swift": "dc281ac87e6c87996d6d1acb836ecc6a2160b3357e7bd720c3f7781b73641ea7",
+      "apps/apple/BookNook/ReadingSessionControl.swift": "9c25c6fdee8cef3fca153b61a50c049e90afa1e58eeaa188365b4689e44f408e",
+      "apps/apple/BookNook/BookNookApp.swift": "46772fccd879f63e861a3877738c17840a59e7e1f70e5b4d4de2c2d517535179",
+      "apps/apple/BookNook/ConnectorFailure.swift": "da41a4bb7624f685d9788647c281a7aef226134a12bd907f446db2bda0e54d97",
+      "apps/apple/BookNook/ReaderActions.swift": "843dfde8bc3a501b4272ffb01ad843e47715d45b194012fa264bb2875116d4d7",
+      "apps/apple/BookNook/Models.swift": "17232dcd63a5ecf254f5da4951a2abd6f47ba95efb5c38ad7c447850e6d64948",
+      "apps/apple/BookNook/ReaderPDF.swift": "e23ecb182b5690eccf91de2082a8dd4dfdcb3cfe1bf92052e3708196d686c081",
+      "apps/apple/BookNook/NotebookPane.swift": "fbf0ae0c0974d2e7a07f0367cc88a8a17c27ca2018e003e78f4a28038f778bf8",
+      "apps/apple/BookNook/NotebookHistory.swift": "151a26dbf04aabd882069bc33dcd83e6834662c8a752706c2472e452aaf2866c",
+      "apps/apple/BookNook/NotebookInk.swift": "92af51c2d5e067679cd3019f2b3c3b4020b9a006a27f12b8c1decc72cd096fc2",
+      "apps/apple/BookNook/ReaderInk.swift": "f839084d82d6cf44d1e2d955286d94bcad8c32125505933c6625c0703955850e",
+      "apps/apple/BookNook/CharacterHistory.swift": "c5c41b98aa0393f1b481ad740d0e7097cd52bf33387031956cb923202eed8ef2",
+      "apps/apple/BookNook/ConnectionSetup.swift": "3113483624831d2bb4d78e6f20a8557335cc2eb57b5006498c7e9977cd7ae546",
+      "apps/apple/BookNook/NotebookView.swift": "9611df8ff3b03af210b9666c28ff2438866713f6b231811c9ca038de77727ba0",
+      "apps/apple/BookNook/SocialCommunity.swift": "87069c0339a037d107bea8d7058cbba30b716cbbedfbe49bdaf21066b8cdee94",
+      "apps/apple/BookNook/ConnectionSave.swift": "81a2871f88dbbca9bfbcd258cce35510bd57a71079cfa16c4d8ffd37cc48cb8e",
+      "apps/apple/BookNook/CompanionContracts.swift": "b1d19b014ac8236626b728ea547d9119edcd746847478e3d6eb7ae3311e44deb",
+      "apps/apple/BookNook/CastaliaProfileReview.swift": "eab7311eada3a6751f94b31300ffde3ecf985b8f336f70ff26ea94ab71d1d9e0",
+      "apps/apple/BookNook/SyncRecovery.swift": "1be7d76c86b2f8301776ca099da1aa7141694f24d5cb0b55ce5197496365127f",
+      "apps/apple/BookNook/NotebookInkModel.swift": "18313a512185483afd1a3813cf932078e8b5ee9d9ee3e4e79be22176477e6d09",
+      "apps/apple/BookNook/ReaderGeometry.swift": "7d8d671d012e9bfa76e6231c39d10fa54340470e4fe4a0ddbee967627c0d0c77",
+      "apps/apple/BookNook/CastaliaProviderContracts.swift": "bbe3ecab8cd61a65b9bee15d272b165f27b32cf8e77c8025a593a53f359e18b7",
+      "apps/apple/BookNook/KindleWebSession.swift": "38546933f92903c268e539caad07fe3992934f5f32b8cf9941acee7848deda79",
+      "apps/apple/BookNook/LibraryCommunity.swift": "ec189484db14f1236f0583f22a40943388639fffec414f3ad8af8ac3a514dcf6",
+      "apps/apple/BookNook/ProviderRepository.swift": "becf796b60b16fa70de0367d1df636335a164a2ed279880502c37c744edb8f0d",
+      "apps/apple/BookNook/NotebookWhiteboard.swift": "b244882a15a9f19d77a36fe8e97cd037d77c0eabe880daee07762fd8ff5cfbf4",
+      "apps/apple/BookNook/CompanionCatalogImport.swift": "3406a84390589404c2d184f45f34e7da678c1ec9a18eaa5f1f59fa9403042cf8",
+      "apps/apple/BookNook/AudioMatchReview.swift": "973df0c04c0810086ee25d97acb2f64b8b00ce5e6478def200244657806760c0",
+      "sdk/swift/Sources/BookNookServices/BookNookProviderWire.swift": "81519681689d9a1531e596a3e2a8f560b0802c50ba99ee6ec99b1c758e2f7a0f",
+      "sdk/swift/Sources/BookNookServices/BookNookNotebook.swift": "2c740b4aa835ce9e0b972ea9c709f1f7ac12fffc820da0f85313bbb1e65f57ab",
+      "sdk/swift/Sources/BookNookServices/BookNookProvider.swift": "8b1038f1079a5a0f79022bc7d1c4a3986b06d6823a8b4472cbda855b90f3608a",
+      "sdk/swift/Sources/BookNookServices/BookNookServices.swift": "13bc8a77d7c27909e9854bd9208afbdab7421a8df2684d512b521f121083a13c",
+      "sdk/swift/Sources/CastaliaNative/CastaliaSession.swift": "cd7931cc21e8f24bd315faeb374b2e7ddf0996e59a81dc05669d7d685b350668",
+      "sdk/swift/Sources/CastaliaNative/CastaliaRecovery.swift": "0c1b34a5b6294c6ee0359134a6a5082806ca72b05101209aac713a44663f5dcb",
+      "sdk/swift/Sources/CastaliaNative/CastaliaContracts.swift": "ed86966e3762c9026d055cb307b2bc0028ed6b314e344b717828af78e293bf34",
+      "sdk/swift/Sources/CastaliaNative/CastaliaKeychainStorage.swift": "df4f75257c35014b3ef20a0589a5c29c70ed7b2ff1c3eb85b390d0dbb13cd416",
+      "apps/apple/Generated/booknook_nativeFFI.modulemap": "d832a0d192305ef1730df3247a38a0fb9d71239b6bd80769b584c72ff8aa073d",
+      "apps/apple/Generated/booknook_nativeFFI.h": "9d7cc42688a5ec3d4a51dc34d9a91c9105a0bf2b03f9caa39b224ca932dbe779",
+      "apps/apple/Generated/booknook_native.swift": "47eaad3eee0bba401755928b087f1377735d479e49c8caa6d2562b4cfecb661f",
+      "apps/apple/Resources/reader-geometry.js": "bb648f42b1fb6893ee10833559756e9016ee5ec7423442643cb62cab34345c81",
+      "apps/apple/Resources/KindleWebSourceNotice.txt": "54f27329d18a21269fb29b8e9a037ceef19d1d56ef812e429c5c1bfd388e5724",
+      "apps/apple/Resources/reader.js": "e1efadf3b75e57ecc2c96bf9d0a55c449e4070f858036596e9d937fa166853a4",
+      "ontology/discovery.json": "cd1a416d37db8b67ec5c864d56dc51dd4ee680882258017218f77fcb0d882a7c",
+      "ontology/v0.3.0/social.schema.json": "b102db0dce044d3fc0668a431a54d5b71c0c6117beac310608aa11aa72da57f5",
+      "ontology/v0.3.0/command.schema.json": "1c376f15fdfc5cfbb02693fba99b984f85689ae21a372d98d4a810c5a441eb62",
+      "ontology/v0.3.0/notebook-ink.json": "0c9d231dac51d49c5c6472674336315e2fca443231ed9bbd8a2ad8286e428d4d",
+      "ontology/v0.3.0/connections.schema.json": "1a58dddede62120938d12f1f4e4e7ac39c1068972f4f18bfe36a1a81ab88ea1a",
+      "ontology/v0.3.0/state.schema.json": "05d657d063393f1209cacbba7cd0c690d3aad81b15b110e896d0e811b869840f",
+      "ontology/v0.3.0/authority-policy.schema.json": "c8afdc48e1aab9fe70f7c8c63702a466f81ca5dae208d4ba26a70bfacb0662fe",
+      "ontology/v0.3.0/audio-observation.schema.json": "119a74fdbe49ba37583102ec13f5829c89e36272ebf617e61ead028fe889f502",
+      "ontology/v0.3.0/ontology.jsonld": "b3eb95e7952ec2c011f62c41ff76218988716d261e6ae6d5e346f78b6066e940",
+      "ontology/v0.3.0/castalia-mapping.json": "bd70758ca0592b9221a04bc4fd5ef1baf6a77b193d76ddea631d661b827f0d12",
+      "ontology/v0.3.0/castalia-native-authority-profile.schema.json": "5bcb39d232865fa4a7de200625e3ec02e21799d99eab544ab4bab9f8fc5fd9e4",
+      "ontology/v0.3.0/captured-reading-context.schema.json": "8aaac37460becace5cad5c0b48883a3bc0c18b1a80af5018050ebc280a0ef48d",
+      "ontology/v0.3.0/notebook-ink.schema.json": "0933306ed128338f70d63cbedb9d084a3cc8eaa69ecd42be5ed8f2012278e84b",
+      "ontology/v0.3.0/castalia-provider-connection.schema.json": "ff3eec75a34c70a0a08b497f5448072446f7892db8d2b81b52a8341498f3f5e1",
+      "ontology/v0.3.0/social-action.schema.json": "083b2141a584bab1310d99df41ad6d09763de392422e971ff806eaf011ae6cf7",
+      "ontology/v0.3.0/identity.schema.json": "15db0b8d944554c2062f06f335495276c58df091906617affbf8d24e63afb82e",
+      "ontology/v0.3.0/context.jsonld": "ad2f0867fbab077a74f51210b5e8309028bd6132309dd1d21d0c19b2618ae24e",
+      "ontology/v0.3.0/social-local.schema.json": "e2072a0f3cdc2b5a40473641a1626d5d5146d17b1822d710aaa11a8cd5f2ff07",
+      "ontology/v0.3.0/manifest.json": "49191c6f497cb57fab41d0dfce9fcceb7642ad4c937eaeef38f93321e0511059",
+      "ontology/v0.3.0/note.schema.json": "01af079c625764e231b9b537e596f5bedc7cb002d3d5fea7d7b4400602f73faa",
+      "ontology/v0.3.0/audio-candidates.schema.json": "53ba572f596b78b2c40c4ddee4bd8a207ded3f2fd0b02ec7c5c95c9fee47cec7",
+      "ontology/v0.3.0/social-event.schema.json": "b06b611f90f6380a698e98508ee3298e217f9c7616186a5a95348e3daf52a83c",
+      "ontology/v0.3.0/conformance.json": "2543e51e6f6aebddca2ffad6ae798c4bf42d869800e3249938910b33c2bbe6ec",
+      "ontology/v0.3.0/publication.schema.json": "e1083da0b0ef377440b006ff44d1f9f601222887a0c5b3e735603418c191bf30",
+      "ontology/v0.3.0/note-whiteboard.json": "362f4389bf2ab4aa1efa24d73af5163e8bacd33767b8c8b9954a77e03c736d3c",
+      "ontology/v0.1.0/social.schema.json": "f09fb3b50bb8cfdfc0cd24db18f12578a005500cb52a45df4eb5d79b8dda4405",
+      "ontology/v0.1.0/command.schema.json": "5f2e61345b7692c53f67e8d8b67d6fce7078c1bfba3cfe341851dd02686d516e",
+      "ontology/v0.1.0/connections.schema.json": "682e23e140b7b6ae1997de357e38bc7c5297e98137fcb1fd7c78a01f6289c424",
+      "ontology/v0.1.0/state.schema.json": "752ce61a0ecdf2517aca64484967c2c9180c6c9edacd73f0ba6f25dfc92be72f",
+      "ontology/v0.1.0/authority-policy.schema.json": "71b67f479c3d4610ba4af084a6b4c3e003f9a45a5b60ff6abf2799d6f8addbea",
+      "ontology/v0.1.0/audio-observation.schema.json": "486049e1d07d6cb06957a821562f7c02de9951930d99ac62e05d7ac383fd5360",
+      "ontology/v0.1.0/ontology.jsonld": "a4515dd1b8a6290237cc1bfadf854fc6c670cfed094dd93eefc4ed8830eb8315",
+      "ontology/v0.1.0/castalia-mapping.json": "bd70758ca0592b9221a04bc4fd5ef1baf6a77b193d76ddea631d661b827f0d12",
+      "ontology/v0.1.0/castalia-native-authority-profile.schema.json": "5bcb39d232865fa4a7de200625e3ec02e21799d99eab544ab4bab9f8fc5fd9e4",
+      "ontology/v0.1.0/castalia-provider-connection.schema.json": "ff3eec75a34c70a0a08b497f5448072446f7892db8d2b81b52a8341498f3f5e1",
+      "ontology/v0.1.0/social-action.schema.json": "8b05a74af7d176eb6248a9892a9fa156a4596c6056b5bd3d9dff2ec042229601",
+      "ontology/v0.1.0/identity.schema.json": "68866e8630125d88aeb39964cbb6e5034a5701eb2cc05799b757eea4b33c5c49",
+      "ontology/v0.1.0/context.jsonld": "9107ae8da77dbe8d7c379e944f3c99e112126bf84af14286caa87644e95572d8",
+      "ontology/v0.1.0/social-local.schema.json": "5a199d0bae2771381305f8c0b9a1fe12e3cf2b044df16fcfbd9aacbf67bd7fe8",
+      "ontology/v0.1.0/manifest.json": "1280c588363ecb240a8f439f835a336b84e1fc961b8f44ab264c3f34296812b4",
+      "ontology/v0.1.0/audio-candidates.schema.json": "5ba273aec5beb7edf0a4d601678d6fa3f42eb1e40bf3e52be95d0575d5bd54f8",
+      "ontology/v0.1.0/social-event.schema.json": "f92f3d962a5e1378c01b52e7cee488b0f653647271ae3e2bad3a469c3e4630c3",
+      "ontology/v0.1.0/conformance.json": "94f1443d84dfd6d6f675ded2d40c666b1b9b1d2b3e72268bbb5194558cd50fab",
+      "ontology/v0.1.0/publication.schema.json": "aaf2e5df78513831a52c3082f529cce0549f46c5c6d94f53ee63617a82aa8e26",
+      "ontology/v0.2.0/social.schema.json": "7c8dc6093af6a86c2422ee4fbc58b0855070d2bfce17deb3b90c2f6c27224618",
+      "ontology/v0.2.0/command.schema.json": "f5610dbbed05398c747f9fe00e39aa37a6fccb8421c72cdbd43eaf351cf2c000",
+      "ontology/v0.2.0/notebook-ink.json": "0c9d231dac51d49c5c6472674336315e2fca443231ed9bbd8a2ad8286e428d4d",
+      "ontology/v0.2.0/connections.schema.json": "836f9e1b9b49f3c1e1cfa627383e52c1411bfa987c85daece786818b46d5a6dd",
+      "ontology/v0.2.0/state.schema.json": "b4d1fca0d56534c6dce3a69168397012bfd0fef90beca877fc7538df9067ccc9",
+      "ontology/v0.2.0/authority-policy.schema.json": "dcf92eb6f727fb6934beedb02a850a401b107f9bee1e62b8c222b6acc56301fa",
+      "ontology/v0.2.0/audio-observation.schema.json": "af8b89353ca93af9d0e8f70cd5f8c9b1bde03a6c4b60ddcb87fc18b444821200",
+      "ontology/v0.2.0/ontology.jsonld": "213519597c331a211dfe07fbc16b4024bd46533d9915c4f9594915e7c1e91baa",
+      "ontology/v0.2.0/castalia-mapping.json": "bd70758ca0592b9221a04bc4fd5ef1baf6a77b193d76ddea631d661b827f0d12",
+      "ontology/v0.2.0/castalia-native-authority-profile.schema.json": "5bcb39d232865fa4a7de200625e3ec02e21799d99eab544ab4bab9f8fc5fd9e4",
+      "ontology/v0.2.0/notebook-ink.schema.json": "628dd22795fe1e8ec20274754dc978889c948de6dbc3ecea4728cf1f4fc2ac41",
+      "ontology/v0.2.0/castalia-provider-connection.schema.json": "ff3eec75a34c70a0a08b497f5448072446f7892db8d2b81b52a8341498f3f5e1",
+      "ontology/v0.2.0/social-action.schema.json": "61b19e7693fec5d32056f0dca2c96198b515473c9a3c3db4179b216932e7f034",
+      "ontology/v0.2.0/identity.schema.json": "cd53f9c9b81318957a3ecc74b051ede6a6080f29f41edf4518ba273b502d3ea5",
+      "ontology/v0.2.0/context.jsonld": "cf85dc951efec08a675f66ea42ad4de4d272692cda858d423b698711f8a6cd86",
+      "ontology/v0.2.0/social-local.schema.json": "346990b88779e8b9fcb7c0666b142d4c2b989a0dc1e505d2c8cbd79ce7c3a8f6",
+      "ontology/v0.2.0/manifest.json": "ad6e81bbafabfb4f8226b8af9a26aebf4ae1c6d686bbad53fba3d3b71bc4ea39",
+      "ontology/v0.2.0/audio-candidates.schema.json": "e6aa4dfa76a7e739deaa2c96cb6b0b12da12873fc3a82dbb63fd72a9f12f9aec",
+      "ontology/v0.2.0/social-event.schema.json": "abae795af3bde339539fb0382f29f5969fad3f28afaf7da884397215b57954c4",
+      "ontology/v0.2.0/conformance.json": "2543e51e6f6aebddca2ffad6ae798c4bf42d869800e3249938910b33c2bbe6ec",
+      "ontology/v0.2.0/publication.schema.json": "615f39dbfa708b3205bfac27fbec6611c4b2d045af64da5954b55cc6a8e87142",
+      "ontology/providers/v1/provider-execution.schema.json": "25deec8b99262eb589cf1b2162e6803de086da9bd824cbd3026e03c1dbe4f91d",
+      "ontology/providers/v1/provider-request.schema.json": "7065b0d5c2f21fc4bcb3b343522a74e00a36b540dbfee9c3d3771bdeacba0abd",
+      "ontology/providers/v1/provider-operation.schema.json": "6ce90396928fc2a5d2dc02bd56a0c561651a22b8ea98380c3551af768005b5b9",
+      "ontology/providers/v1/provider-registry.schema.json": "ff0caed30cf76396fa6dbf5f240faf508581bb339b25735d5f35def8a6026e3a",
+      "ontology/providers/v1/manifest.json": "1df9f744a1b5aea265078ea7dc33c76e55d64deff23c2aefc92fd4706caa5fb8",
+      "ontology/providers/v1/conformance.json": "1204634e9c959469c7b611903d5ee228d013e7cacd4b77e402f46d827abb8d25",
+      "ontology/providers/v1/provider-response.schema.json": "68ff7c975f123eecb794af718ed2517fd3dd8b1806f2a2513a65931b861ab249",
+      "ontology/portable/v1/social-archive.schema.json": "bb16e721071c2717a42f4dbe62a0c45914ed7b86a26aaa5495c8867c2f00116a",
+      "ontology/portable/v1/portable-export.schema.json": "c23adacf6dee4607605b8e14e606a056bf0990f2b8456ab0bb7b63cf8b954c93",
+      "ontology/portable/v1/manifest.json": "c9ae6fbf19e1dfe5dab30c7f70b15a238c9b7089eba4c7d1a8c0ec0662d77c1a",
+      "ontology/portable/v1/conformance.json": "bf0dbee52bf6d4a76e0bc40daf659befed2e9c02c7e5ffe60a17aef1ec7a4b81",
+      "ontology/portable/v2/social-archive.schema.json": "5593f4da9a676c54e32a07f4dad3982ac0c5b7393503a5088e69bfa4a04fd5db",
+      "ontology/portable/v2/portable-export.schema.json": "02d55f3cf1e53c64dd6e37e4225e1d7401cf6da26ffe2d492d4c0fc53eb443e0",
+      "ontology/portable/v2/manifest.json": "d63ded55dd4415c0dc2b3f4e3017d84206c66421b8e08492afb98fc212aab4de",
+      "ontology/portable/v2/conformance.json": "1ab9fde76efdd3a2ad2514a68ee413d2097125444dcdc9354673372ea16b7b38",
+      "target/aarch64-apple-ios/release/libbooknook_native.a": "436e6e74ed6c563c9b408ffd980315db00eab8d921b14f35cc82bea283a228a3"
+    }
+  },
+  "simulator_acceptance": {
+    "tests": 1,
+    "failures": 0,
+    "duration_seconds": 41.116,
+    "test_summary": {
+      "workspace_file": "work/warm-note-boards-2026-10-15/Evidence/final-summary.json",
+      "sha256": "190df06e05c68c5769da8d1b2a3874c5ef07abbd89563c38da470902de7d6d0c",
+      "bytes": 992
+    },
+    "scope": "Actual mounted UIKit/TextKit/PencilKit and SwiftUI on isolated synthetic per-run store. Separate notes, exact warm palette, text/board flips, original signed-world ink, finger pan, menu zoom, margin character card, third text note, exact order/context/native-hash reopen passed. Synthetic native strokes; no physical Pencil claim.",
+    "renderer_pixel_controls": {
+      "scope": "Mounted canvas.drawHierarchy only: blank control, positive baseline and negative-world ink passed. Root visually reviewed actual negative-world viewport and final board/reopened-note screenshots.",
+      "receipt": {
+        "workspace_file": "work/warm-note-boards-2026-10-15/Evidence/final-renderer-pixels/receipt.json",
+        "sha256": "b53e4b01588c79a7ba9b87ba65481360a961f14d6faddf88819e60721f9636f2",
+        "bytes": 567
+      }
+    },
+    "harness_files": {
+      "QAApp.swift": {
+        "workspace_file": "work/warm-note-boards-2026-10-15/QAApp.swift",
+        "sha256": "c680eb46bb1aacefacd57e98ab91060a6baaeec1c1e070a80de51237205c47b2",
+        "bytes": 9436
+      },
+      "Tests/NoteBoardsTests.swift": {
+        "workspace_file": "work/warm-note-boards-2026-10-15/Tests/NoteBoardsTests.swift",
+        "sha256": "9b38c75e68e30e686d1b8f95030e915fdc8ed5b61aa5cb0fe942737e789dd36d",
+        "bytes": 7422
+      },
+      "Evidence/source-inputs.json": {
+        "workspace_file": "work/warm-note-boards-2026-10-15/Evidence/source-inputs.json",
+        "sha256": "5a5584d6d07d293ee5217c645dd06899368f063b1c893f58f1874b21facedd3f",
+        "bytes": 75626
+      }
+    },
+    "screenshots": [
+      {
+        "name": "06-reopened-notes_0_334511D4-3CD5-4D5F-A151-7AD770205547.png",
+        "workspace_file": "work/warm-note-boards-2026-10-15/Evidence/final-attachments/4F732A51-853B-4B3D-8E3C-9D4BE8135C6E.png",
+        "sha256": "fa307bafaf09338f73686cb816c97fb8d864c7130f2d4b8d0d5ed0aa878f02bf",
+        "bytes": 388551
+      },
+      {
+        "name": "05-three-ordered-notes_0_D7B93B4D-D05E-436F-9DEF-BA83D9332A32.png",
+        "workspace_file": "work/warm-note-boards-2026-10-15/Evidence/final-attachments/DA375181-1921-4589-BD8B-FFB826B80E6A.png",
+        "sha256": "6b122bb30a60eeaef4041341f205a05f526432e760e655360f10e1e9eec46f0c",
+        "bytes": 385320
+      },
+      {
+        "name": "04-margin-character-card_0_3844D239-484C-4E6A-BB01-40AD8ED42F2D.png",
+        "workspace_file": "work/warm-note-boards-2026-10-15/Evidence/final-attachments/E9675661-2203-433D-9D04-D9B566B52264.png",
+        "sha256": "1772e511aab1ae61a97e5f32cad6513d0aeca868444e7945f5dfe43e7d5f0ed9",
+        "bytes": 366916
+      },
+      {
+        "name": "03-panned-and-zoomed-board_0_DE8B01F9-A8D2-4164-9700-57ECB9B0E87F.png",
+        "workspace_file": "work/warm-note-boards-2026-10-15/Evidence/final-attachments/B47D0A81-8D85-4ABE-9C4F-7FBCB13FA332.png",
+        "sha256": "eb6698055f5934b0d3dfe5a0813568a032ca15ffa1f3b130d5c0c44737961132",
+        "bytes": 346198
+      },
+      {
+        "name": "02b-negative-world-ink-visible_0_C43BE25C-9376-4FDB-A725-7FDDD57B1D28.png",
+        "workspace_file": "work/warm-note-boards-2026-10-15/Evidence/final-attachments/8CCB1F3C-3A97-4FF4-B07C-2C8CCC4DD47C.png",
+        "sha256": "af87c6171f0c800a5ca493f81561cb2d589c5be5520b08f9f05928f7d24c3afa",
+        "bytes": 339364
+      },
+      {
+        "name": "02-whiteboard-same-note_0_993C0AB7-AAAF-46D7-80A4-1B16B8BC4DC0.png",
+        "workspace_file": "work/warm-note-boards-2026-10-15/Evidence/final-attachments/AECF3D09-F728-4BBA-B343-F8BCB9043066.png",
+        "sha256": "defe12ac897f9038ef799cca67fff2d08849772e8ecd7703727550d3f11703a4",
+        "bytes": 339641
+      },
+      {
+        "name": "01b-flipped-board-geometry_0_EA39AF51-8033-47A5-A4E0-004F9DA81FD1.png",
+        "workspace_file": "work/warm-note-boards-2026-10-15/Evidence/final-attachments/CDD28C8A-F7B8-443E-B634-17382BDFEA47.png",
+        "sha256": "54c3777ff2a90062b621235d25c1c7b1e0d25bc21b51f8080d5aa87033e31d82",
+        "bytes": 331046
+      },
+      {
+        "name": "01-warm-distinct-text-notes_0_EA0125C5-0780-42C1-B6ED-979F9488CC77.png",
+        "workspace_file": "work/warm-note-boards-2026-10-15/Evidence/final-attachments/C88A9326-81F7-45BF-8C78-B3C41FDDC988.png",
+        "sha256": "1e7ea10664d89940340095b5e03cd122fda99124bf6fb1fc16b4bedb1946b939",
+        "bytes": 349165
+      }
+    ],
+    "accessibility_boundary": "Blank PKCanvasView reported hittable=false despite an onscreen 421\u00d7480 frame. Test verifies geometry and actual gestures; this is not VoiceOver qualification. SwiftUI inherited the outer note identifier, so controls are selected by the observed note ID and label."
+  },
+  "retained_nonpasses": {
+    "negative_world_rendering": "Initial viewport test reported 0 ink pixels; original signed data preserved. Fixed display-coordinate bridge repaired actual rendering.",
+    "first_device_build": "No-space-left failure preserved before successful unchanged-input rebuild.",
+    "harness": "Earlier role/identifier assumptions, blank-canvas hittable assumption, and an early runner bootstrap crash preserved separately.",
+    "files": {
+      "first-attempt-native-build-receipt.json": {
+        "workspace_file": "work/warm-note-boards-2026-10-15/first-attempt-native-build-receipt.json",
+        "sha256": "98a21b6591356bf69cacd7a25756495e213e930aceb3e4663066cd3eb424057e",
+        "bytes": 13234
+      },
+      "first-attempt-native-ipad-device-release.log": {
+        "workspace_file": "work/warm-note-boards-2026-10-15/first-attempt-native-ipad-device-release.log",
+        "sha256": "27939304d37382e90dfad368f62e52293ce6f5aa3974dbb621e81758c67cd3d2",
+        "bytes": 575
+      },
+      "qa-test.log": {
+        "workspace_file": "work/warm-note-boards-2026-10-15/qa-test.log",
+        "sha256": "0e9b1d6f4c461ef357c55f9c05d8718495e23cbdef7f0fe231b6e3195d7a0546",
+        "bytes": 20803
+      },
+      "qa-test-renderer-fix.log": {
+        "workspace_file": "work/warm-note-boards-2026-10-15/qa-test-renderer-fix.log",
+        "sha256": "2f0fb3c42cee57ee53f2c0a94447999807ca9e3a193a2da16988119f91da934d",
+        "bytes": 6513
+      },
+      "qa-test-final.log": {
+        "workspace_file": "work/warm-note-boards-2026-10-15/qa-test-final.log",
+        "sha256": "6bd50f1d0012ed9ec6f75fb2d26febc5959f1116a735651188541b9e48ca50b3",
+        "bytes": 6152
+      },
+      "qa-test-margin-lookup.log": {
+        "workspace_file": "work/warm-note-boards-2026-10-15/qa-test-margin-lookup.log",
+        "sha256": "37fa5aa376f2a3884b1b3223a20a7b2a2014b998f93c5e71dda068dc4784dda7",
+        "bytes": 1844
+      },
+      "qa-test-single-runner.log": {
+        "workspace_file": "work/warm-note-boards-2026-10-15/qa-test-single-runner.log",
+        "sha256": "47279994cafa8886ea8cf8fa4a55a4b35a71ac3d8dac7b2319ac69fe4aaed036",
+        "bytes": 6365
+      }
+    }
+  },
+  "distribution_archives_refreshed": false,
+  "public_endpoint_deployed": false,
+  "release_ready": false,
+  "remaining_qualification": [
+    "Working physical Pencil/palm/IME/VoiceOver and prolonged sessions",
+    "Real account and Castalia issuer/custody qualification",
+    "Remote/multi-device acceptance",
+    "Browser client for public interactive canvas",
+    "Refreshed distribution packages and production hosting/signing"
+  ]
+}

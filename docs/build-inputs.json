@@ -1,0 +1,1201 @@
+{
+  "schema": "booknook.build-inputs.v1",
+  "started_at_utc": "2026-10-16T03:16:26.519135+00:00",
+  "based_on": "c529a6be5947b386e9262059090e1516c97bbef52f7f7c469bbab5724ee31331",
+  "prior_build_provenance": "docs/evidence/pre-final-plan-build-inputs-2026-10-15.json",
+  "files": {
+    ".gitignore": "da35249993070a6b691adfb2171b58c7c1379eba086161d9e0cab0325f92d722",
+    "Cargo.lock": "01e5cf47849d18cbb0556028016c48593aab6ca1d9eec0f7aa80bd6da8de1e2f",
+    "Cargo.toml": "e15774bd2cfe29435ec9e51d8dacfea7872f3d7480910466e55cbcb3e4eeff4c",
+    "apps/apple/BookNook/AppleProviderAdapters.swift": "87487f5589bbf6b8dae758e9c51aa4b30ec1e0d028cbc520b31a2503fb047de6",
+    "apps/apple/BookNook/AudioMatchReview.swift": "973df0c04c0810086ee25d97acb2f64b8b00ce5e6478def200244657806760c0",
+    "apps/apple/BookNook/BookNookApp.swift": "e2e2f8ec331f85d1a508d5f695b0b0f61f5e69207d539c234e474aa8b45e6bcc",
+    "apps/apple/BookNook/CastaliaAuthorization.swift": "693db06237b4c9481756968301a68a6862ccd32ce506adef9a8c20480b2238d1",
+    "apps/apple/BookNook/CastaliaProfileImport.swift": "3ceee493ac3e37cedd1c08051e5053d484d8ba4e7f9a2fb349725d86f6f5e16f",
+    "apps/apple/BookNook/CastaliaProfileReview.swift": "eab7311eada3a6751f94b31300ffde3ecf985b8f336f70ff26ea94ab71d1d9e0",
+    "apps/apple/BookNook/CastaliaProviderContracts.swift": "bbe3ecab8cd61a65b9bee15d272b165f27b32cf8e77c8025a593a53f359e18b7",
+    "apps/apple/BookNook/CharacterHistory.swift": "c5c41b98aa0393f1b481ad740d0e7097cd52bf33387031956cb923202eed8ef2",
+    "apps/apple/BookNook/CharacterHistoryFields.swift": "b003b6de6567c61bb7816e18e9ed1463664abaee2c891bb30af942aff452fd57",
+    "apps/apple/BookNook/CharacterSharing.swift": "32a9a40b4391c5c0c954ce9ab4d635a360fd84111f1be2fc9af86ee1ac82da2c",
+    "apps/apple/BookNook/CompanionCatalogImport.swift": "3406a84390589404c2d184f45f34e7da678c1ec9a18eaa5f1f59fa9403042cf8",
+    "apps/apple/BookNook/CompanionContracts.swift": "b1d19b014ac8236626b728ea547d9119edcd746847478e3d6eb7ae3311e44deb",
+    "apps/apple/BookNook/ConnectionSave.swift": "81a2871f88dbbca9bfbcd258cce35510bd57a71079cfa16c4d8ffd37cc48cb8e",
+    "apps/apple/BookNook/ConnectionSetup.swift": "93238270598d2cd5c545dc557721aec52616d2a2ca3960b7f4edba40032026e8",
+    "apps/apple/BookNook/ConnectorFailure.swift": "da41a4bb7624f685d9788647c281a7aef226134a12bd907f446db2bda0e54d97",
+    "apps/apple/BookNook/DraftCommitState.swift": "f3b94993aa6de9969973ad47d8db1e81cf4f17b3000e643ec6b76a92d980199d",
+    "apps/apple/BookNook/InkJournal.swift": "dc281ac87e6c87996d6d1acb836ecc6a2160b3357e7bd720c3f7781b73641ea7",
+    "apps/apple/BookNook/KindleWebCatalog.swift": "b54642f21fc43a305874c485289244c20f10de5ebd95d0721a3e86fb163eee5a",
+    "apps/apple/BookNook/KindleWebImport.swift": "fe876514b0f3a42b53d448a6891e942cd908512c30a79e1de9efd1b20a16959c",
+    "apps/apple/BookNook/KindleWebSession.swift": "38546933f92903c268e539caad07fe3992934f5f32b8cf9941acee7848deda79",
+    "apps/apple/BookNook/LibraryCommunity.swift": "5216bbf4fe44ac31a2fc6362d7898db9082499546c70c1206e40bef64dae01c2",
+    "apps/apple/BookNook/LibraryCompanion.swift": "fc651b6bc9414aea41327c89ccb64d204f85d5160c19dcf4c964948f6b83a4f2",
+    "apps/apple/BookNook/Models.swift": "deffb8c15113c31c4f96755e04a12c1c06cdbbac1f8c28f665b1f9dc3ae80f19",
+    "apps/apple/BookNook/NativeNotebookEditor.swift": "6bec914d4ab110ae6c59bc10c87546e98f2c1af439cbd83cb34f019f57525da8",
+    "apps/apple/BookNook/NativeNotebookPage.swift": "a3ce0564e68199d024dae712baed44fb45619bd392e25612f873ddd6030a64c5",
+    "apps/apple/BookNook/NotebookHistory.swift": "151a26dbf04aabd882069bc33dcd83e6834662c8a752706c2472e452aaf2866c",
+    "apps/apple/BookNook/NotebookInk.swift": "46827ce8c80ed4fbd0fb643a1a22059b4a77c8323875bb6e754e9f40325bf1fe",
+    "apps/apple/BookNook/NotebookInkGeometry.swift": "e7640c6894c36feafd6ec8a86fcee06e0c76c370c6568924bdc7014e51a16578",
+    "apps/apple/BookNook/NotebookInkModel.swift": "d5b1d90e78d9922d623eda8ddaf6a76f46ace8267c9928a9de2d4f2304f31bcb",
+    "apps/apple/BookNook/NotebookInkRecognition.swift": "bd318536eb1369ec516353108947423f3bc663da02fbfe7fbc8478c21d74c45b",
+    "apps/apple/BookNook/NotebookPane.swift": "81a22d3df62a80ce234e48672c97c0271c7036f9fb4acb2f551db0cf3ce9682c",
+    "apps/apple/BookNook/NotebookTranscriptionDraft.swift": "b0da62b25eaaf442b5051119bb83199099ee3095025c13a290947d9a2d4a4635",
+    "apps/apple/BookNook/NotebookView.swift": "15230d182a790f8ea369fb783b34d7d2b321e94c26a572a3e83de044b98c3165",
+    "apps/apple/BookNook/NotebookWorkspaceLayout.swift": "a2e5460b4cbfa9554b08c34a5282313ae2820b9c2e93a5875c2fea1238626a90",
+    "apps/apple/BookNook/ProviderRepository.swift": "becf796b60b16fa70de0367d1df636335a164a2ed279880502c37c744edb8f0d",
+    "apps/apple/BookNook/ReaderActions.swift": "843dfde8bc3a501b4272ffb01ad843e47715d45b194012fa264bb2875116d4d7",
+    "apps/apple/BookNook/ReaderGeometry.swift": "7d8d671d012e9bfa76e6231c39d10fa54340470e4fe4a0ddbee967627c0d0c77",
+    "apps/apple/BookNook/ReaderInk.swift": "f839084d82d6cf44d1e2d955286d94bcad8c32125505933c6625c0703955850e",
+    "apps/apple/BookNook/ReaderInkSession.swift": "24f6e44047b9f127a0d2145fc386521497a40badd7eb7cb2471cbd2e5c54cb7a",
+    "apps/apple/BookNook/ReaderPDF.swift": "b5adcd5f837aea3f564fcac8889b7bac4e6b0d07de44cb3feec900b72a63449e",
+    "apps/apple/BookNook/ReaderView.swift": "ab23c5eabbb71478f0175ff4e93dacf6bac28549b12069f74c07fcebd6d1790f",
+    "apps/apple/BookNook/ReaderWebBridge.swift": "49ab662cec18830c897fe85a53d2e9af22838a573daa081e15cb584222c0b37d",
+    "apps/apple/BookNook/ReadingDeskView.swift": "ae2c91c2cee7f0075012b01aea03bb681534651eb2093cab5f099c4c2328bdec",
+    "apps/apple/BookNook/ReadingSessionControl.swift": "9c25c6fdee8cef3fca153b61a50c049e90afa1e58eeaa188365b4689e44f408e",
+    "apps/apple/BookNook/RecoveryImport.swift": "5ea8dc4479c8bd5cd973287e2f4228d88d55ab2d998e270e0461264984487fd6",
+    "apps/apple/BookNook/RetainedWorkspacePane.swift": "5dc63573cc91586b5dbf9ff68c8f0b33bb9e684ccb7155a61bd8e8d35e65ba5c",
+    "apps/apple/BookNook/SecureStorage.swift": "56a084b1bb6a91ce669bfa05b29ace31522f40365c39c12d1ea1b47d92ddf440",
+    "apps/apple/BookNook/SocialCommunity.swift": "3901d2b3570fbe32f2d7a3b233c7c2f1f66b45e37b11a5ed96cd50f8568a4f29",
+    "apps/apple/BookNook/SocialModels.swift": "72da2e9327b852a103cd9a6cc89589c6f1000cc33bbc60a526ce692fac6bcbb7",
+    "apps/apple/BookNook/SyncRecovery.swift": "1be7d76c86b2f8301776ca099da1aa7141694f24d5cb0b55ce5197496365127f",
+    "apps/apple/BookNook/UserFacingError.swift": "848d80c51e8e23d91ea134348e2e0d890f6b03acaad65a0d2e7ccc8ce8eda0f0",
+    "apps/apple/Resources/KindleWebSourceNotice.txt": "54f27329d18a21269fb29b8e9a037ceef19d1d56ef812e429c5c1bfd388e5724",
+    "apps/apple/Resources/reader-geometry.js": "bb648f42b1fb6893ee10833559756e9016ee5ec7423442643cb62cab34345c81",
+    "apps/apple/Resources/reader.js": "fbb441bdf0e648c54ebd15bf5b719739603c1fcc73664d413a213487d6c1a88b",
+    "apps/apple/project.yml": "d3afadada0258e5184c85ab5da04fac6700a960419bb787dccb1c332bffdbdc9",
+    "crates/connectors/Cargo.toml": "ff8ea65f3a0bf8a0e6ef215937f4677c1aebcc116af2a940fab71ecfefc7053e",
+    "crates/connectors/src/amazon.rs": "9be06c6c6c25018d78de153544925329af05d059444a1448e93465a38a31006b",
+    "crates/connectors/src/lib.rs": "4759fca0fc83c05c16728df7f65c04fc4c9a63ead8d9e01a41afab741973fd79",
+    "crates/connectors/src/nostr_transport.rs": "4001b2c3dfe9e02b93d1dfd6f1efded00c3bcbfa046753d6ba920892e10198e5",
+    "crates/connectors/tests/companion_client.rs": "cf2f176b526132859c224767c6d5e62c0071b3f2190333648feba64d143db075",
+    "crates/connectors/tests/exchange.rs": "b3842c1996ebfb90b0f7b22c990acd19d4d0ad176df69fddd6e79ed72f9cf44e",
+    "crates/connectors/tests/fixtures/receipts.rs": "b136f6978c3331c2d0f2f775d0aa8ce826a279f3d53c89f74907f0e970c5e2c5",
+    "crates/connectors/tests/fixtures/social_receipts.rs": "97a77f14f2e8af796799d2d781565fbc02d142956cf5eb67a6d93445aa0efe80",
+    "crates/connectors/tests/private_admission.rs": "217617e33f49c57fb4c43b49521d97aa3a194498b2f9fcf48137a5177b5914d5",
+    "crates/connectors/tests/social_transport.rs": "524c6a0224ea3ab07b42dea1f0e02f73d95a2ddf1155b55913089210051898f9",
+    "crates/core/Cargo.toml": "1dab41bcf0f27c95163b9d6659adf16ff244d07200399d0927621d15d7c1675f",
+    "crates/core/examples/contract-probe.rs": "17f77fa4a6a826e5c6edbe7e9ea983fe17f8f8fd2d592bf2366a157a7942c8be",
+    "crates/core/examples/schema.rs": "fe9cfc29890b48ef9409bc21aaefc765c1e96addd9d6664871216b5cb5ad8a2d",
+    "crates/core/src/anchors.rs": "6eee8c342ee0525b97ca7b7cf1fbf8f71c07f8fa81d6101a014ea4195f1ec16c",
+    "crates/core/src/audio.rs": "03f32cdd42d6f51654e000eaa12b9910ab36fa97df37e1c46bca84780f18ec54",
+    "crates/core/src/authority.rs": "e39d9b17e96cfb229f12bc1b0921a1b8ddd234bcb7e008350ba88560ebc2b763",
+    "crates/core/src/castalia_connections.rs": "69a52b3211f83f90e72e8e7aacdbadceec5a46dae5de5d8a54dc01fac37e0a58",
+    "crates/core/src/character_sharing.rs": "5c7582a43a7976f9b0b2a8add2f00af5b8c66fc2cd3c5506f1c85b1e24bc8cac",
+    "crates/core/src/history.rs": "35618a0eb3221c9dc4f25610daa8e3500c9c96a451518c7c257429b27439a867",
+    "crates/core/src/identity.rs": "0832fcbbd346020ba61ba0533a31848322da0609f75e1db1503aa98d56e0b376",
+    "crates/core/src/imports.rs": "bc124cb1a64e0703a98356a1959dd6c05f7e0fdf1da2b6800e5dfd4e0e2f7c2f",
+    "crates/core/src/lib.rs": "c5a0756cdb9b77935c3dea7760609741b83278c31e477778cbde5321d0fc16aa",
+    "crates/core/src/model.rs": "4ca107552c7c40216d684e3c6cfab9e70de291c95234db168e558972c520d9d7",
+    "crates/core/src/notebook.rs": "df7a19a049b5e584beb67fcc5eeefda5e513e86a222a4ea3c20bf9cf7b652672",
+    "crates/core/src/notebook_ink.rs": "54ac1f601ac5d452f2968d397c03d945f295ab6e9f7b0e3182f07549d253f6ab",
+    "crates/core/src/portable_archive.rs": "75cc96d0568f07cee823dd47c721677fb31c278f13f29544116975995967ead3",
+    "crates/core/src/provider_runtime.rs": "00f7d18e230b92dd0b79f1871ab82e90054f9aaecd7c87ff84802d8148dc674e",
+    "crates/core/src/providers.rs": "af62602d301a83be0d10c768e32acd759a247897c073491651087104c6fbffb4",
+    "crates/core/src/reconcile.rs": "b8075cac3aeb6efebf1653e9fdc2d6b3ed05053c08c77a43fa68f7affd8daea5",
+    "crates/core/src/settings.rs": "0d9544057e0e60c43684206caa25dc35e5057f632bc9bd441e51aebe2e7abe5b",
+    "crates/core/src/social.rs": "5212229f1b5c70fb78a2e6b5326bb4062e735545c5542f58da2f9613cc808f18",
+    "crates/core/src/social_protocol.rs": "2c7e106e4df96eb8e2dbb79fde81968809484dd93a65d78a0407274369c2cc9f",
+    "crates/core/src/sync.rs": "6c986569b1bcde334b15d4c2709d678ba2e1713332dacb723916f031280275dc",
+    "crates/core/src/validation.rs": "6303df4a9b9c644890b5f78a6566d5f8d160ffdd0c67377786b5d243c6aa4c0f",
+    "crates/core/tests/audio_matching.rs": "10e60d09a1d2252e35cc49e86eb5236fe4ea70f67abfd9673919fe75c4faead2",
+    "crates/core/tests/authority.rs": "41951816a3594f179958447b8a3f51864e759553adcbe2ffcd80c8b10c0e2eed",
+    "crates/core/tests/castalia_connections.rs": "e89d274f1a1e8536cb5bf1d45c1486f2be6a6019ff11f2e10eea3f9cd88997ab",
+    "crates/core/tests/character_sharing.rs": "ad6383c5c304a928c6f7b9340bf77dfc2722d524c5e9d4cecc85debb453d8703",
+    "crates/core/tests/conformance.rs": "4340c6999d99f72431e8ee65f57906071bc4747124d83d3420b038a391089f40",
+    "crates/core/tests/contracts.rs": "8dbe3b0ddcdc46819a907b6a58c8282173f9a59c0b50968a0f5b16e428f3f5d4",
+    "crates/core/tests/fixtures/castalia/native-authority-profile-v1-cases.json": "1d3895f024c01379acc556750a4ad5eb8fe5b1358765effd4776fb10f91c463e",
+    "crates/core/tests/fixtures/castalia/native-authority-profile-v1.json": "ebca72b01bd5aa769fd8bd1d5db325a20b5c414d668ae056d6f44197f88599e6",
+    "crates/core/tests/fixtures/castalia/provider-connections-v1-cases.json": "8352cddc6b693c9c9c02966ff91fe809e90b370e67265bbeee2d5b4f48cf65b1",
+    "crates/core/tests/fixtures/castalia/provider-connections-v1.json": "b350bea2d701dce361c652313c7f2bd345134689e6efa51448abe851069183b0",
+    "crates/core/tests/fixtures/receipts.rs": "b136f6978c3331c2d0f2f775d0aa8ce826a279f3d53c89f74907f0e970c5e2c5",
+    "crates/core/tests/fixtures/social_receipts.rs": "97a77f14f2e8af796799d2d781565fbc02d142956cf5eb67a6d93445aa0efe80",
+    "crates/core/tests/notebook_ink.rs": "759e0a8cc7c0c88e3cdeffb20ab1c2c204b77b6277c80b0ea5088c1fdfff503a",
+    "crates/core/tests/portable_archive.rs": "8749c45162bc159bb997530316c61afa71f8d72faf3a965054b3f2d417d5fb87",
+    "crates/core/tests/portable_services.rs": "74186935a876d07bf26c6083bea73932a94e3504475c4a0e030ab061ecdebcde",
+    "crates/core/tests/provider_runtime.rs": "8b239978216220008bb2ecbe7f6ab41bc4c8c8890d7cf4e8bd2b4b959a2422a4",
+    "crates/core/tests/providers.rs": "135ce64c0beb57fd8de9070c8044ac080ba919a47d6e08b831363b920eb538e7",
+    "crates/core/tests/reading_model.rs": "32e4666ec6f3007e8592cb637146e74ce6189dfcdb5a87133ca8b051762dd4fa",
+    "crates/core/tests/reconcile.rs": "d9dbe2a8e0b027cef379f94a616f09fbe4332f49d513ace2a8f17954d821906f",
+    "crates/core/tests/settings.rs": "a9bb3fe486250124e76723e11a64dc266be4be3eaca7d0e374506d699a43cb62",
+    "crates/core/tests/social_protocol.rs": "2b9dd1cdde43b15ad747ccbc160501b77b35a5ca7f3c819a1eb6e4d5b6052d8d",
+    "crates/core/tests/social_replay.rs": "697324e6669be01f33385c9bf2d1d0d3e37347b806476cf9b38e7771d67e275a",
+    "crates/native/Cargo.toml": "8cbcf90732f2f27ca857d504d5348149e13bd7f4f959bd398b623c458853f509",
+    "crates/native/examples/castalia-fixture.rs": "4b2c8908f0f9c595296611b43d6fe6a569a07d6728b367d98b5a65ea223e6b22",
+    "crates/native/examples/portable-fixture.rs": "ba9b97a125cf608b73f5a0972c12e048ea093446891492e94f0584af092b13f5",
+    "crates/native/src/audio_bridge.rs": "2e20cf01727149e23c159054dec69f25af50a993fdb27c2ba699df2b532aa2aa",
+    "crates/native/src/bin/bindgen.rs": "f7a2dd11fb370e9595bdfa6c32fc41a9b67a60bbab06ec711cb7a03eb873ffa6",
+    "crates/native/src/bin/booknook-issuer.rs": "eb7dfb3c14bf3d02c288c65361eddd92428bca63ebe59238bfc2d6626e35178c",
+    "crates/native/src/bin/booknook.rs": "42f9f07b144a4a9bd4ad9499ae6c7e7b70c54ebda355206b38eb6233cfc74468",
+    "crates/native/src/castalia_custody.rs": "16ac78dcd9ae3787a5de8a87c8ac6bbb79d0a078a30eb8b21185de78d3a7b02e",
+    "crates/native/src/connection_bridge.rs": "16884ae1d28d2f2cf1c3bb948b0de8bba156e9d68175de0098aeebb8e5cb65b6",
+    "crates/native/src/content.rs": "f94e9edc7516dd52d2e86bf7d2c69aeac81fc55b646a9bf389c75391120f89c7",
+    "crates/native/src/custody.rs": "6571ce0f5ff183ee1548750e8b31dd9ce3f33efe9bd89e5b5e9774e131c290b5",
+    "crates/native/src/edit_journal.rs": "a53d13c005d363b16b12e1a797434e2335d87d841cbf8a78a156df1e346fd35c",
+    "crates/native/src/lib.rs": "10dc334697228679fa4a2c69bc3b093d593b1d626c42a6febdb92eab1509bec8",
+    "crates/native/src/notebook_history.rs": "e7fa04866715ed522f6230cbe91c7d3c26bf57f0f6858d08c2dddb38822de2f1",
+    "crates/native/src/notebook_storage.rs": "1cc37878c5861084e26e463a265cbfe77206b9cc48e024f87c454e9ef31f6958",
+    "crates/native/src/portable.rs": "8ac2923d5aab08f268b1466194500a91aba751166e4df34638b3758d48c55b7f",
+    "crates/native/src/provider_bridge.rs": "b4a50391922a76b900254677a40677516ede2f442e78fdcb92b1fe015898e165",
+    "crates/native/src/reference_issuer.rs": "230746bffda2c39a9db32b5f68c2f9f2ca1b9119a69d2a1ff9ddad47f8fb8fde",
+    "crates/native/src/social_bridge.rs": "db7c75bb5fac46fe1e52d80480ecd80c7defae40ce3f22d7c6d637027d22778a",
+    "crates/native/src/social_relay_acceptance.rs": "78be15843663d72403795b6bc42be79e652852dc3807b21816d8619e0862a490",
+    "crates/native/src/store.rs": "8d82238401279da9509c008b9679ec7ef0143600313e02e16692fc15f949755e",
+    "crates/native/src/sync_bridge.rs": "3c272e004fea6cea3f72d5168021b521e690279ab3285c81be2f67ff092b1708",
+    "crates/native/src/sync_tests.rs": "ff71a92571bf55d39bc62b54ed5bb4d593411ac2ddccc4b885d95691df659f49",
+    "crates/native/tests/audio_matching.rs": "11e0f5d799dcbe4cfd2e1aa41278825465144ac827c265a2d74878464e18963b",
+    "crates/native/tests/castalia_connections.rs": "617252ae4d17c869293992b2243f858e2527a32f9e22f96e95a8b4f77f3b4a12",
+    "crates/native/tests/castalia_custody.rs": "1c28276f4f0740e7fef2dbd1c06967abdeac952470c7c3d63bee0b23d0a95d5d",
+    "crates/native/tests/crash_recovery.rs": "de54f6eda001a91f590d69a3528eac0a7ecb4ca0641b01cf139d0427a3f8c5b6",
+    "crates/native/tests/durability.rs": "37007d459838a8f7cef029926add120c7d83479a759180866a308e1cb74de3e9",
+    "crates/native/tests/fixtures/castalia-native-authority-profile-v1.json": "ebca72b01bd5aa769fd8bd1d5db325a20b5c414d668ae056d6f44197f88599e6",
+    "crates/native/tests/fixtures/generic_castalia.rs": "de6f856eaf47f479721a51e4bf6d2220b1cfed9be8a70cedda2b5aa952f4747f",
+    "crates/native/tests/fixtures/receipts.rs": "b136f6978c3331c2d0f2f775d0aa8ce826a279f3d53c89f74907f0e970c5e2c5",
+    "crates/native/tests/fixtures/social_receipts.rs": "97a77f14f2e8af796799d2d781565fbc02d142956cf5eb67a6d93445aa0efe80",
+    "crates/native/tests/notebook_ink.rs": "1ba68cacd7b61dddabc29734f9903a986a88302e37cd8926b69ea8fd8527a8c0",
+    "crates/native/tests/notebook_storage.rs": "95a8bd9fca9e513eb97e01fd89ef0679252e771bdb3a142c5bc6db66ddbdb02f",
+    "crates/native/tests/portable_reading.rs": "4ad49e2a43527819f94dfb48cd61b30b363a6f8ac1ab86c6fc64c9f5c113b055",
+    "crates/native/tests/provider_composition.rs": "4bb903b37405592d027cca3b62c47b4771922d1b40fba476f33b6acf5b52033e",
+    "crates/native/tests/provider_storage.rs": "940d75f389d15b4d6ce61d19d81c6ef314cbe2470584a7c5379e68f2ecdb8b72",
+    "crates/native/tests/recovery_validation.rs": "1c5904e5b7800c78a64eda18c70e3b5a0d23e197bff6f88bceb20e01795afec0",
+    "crates/native/tests/reference_issuer.rs": "81a10bdb8fe7929b0aab5bb0d017229eee03b6b5faec702a044cc36fad6c639b",
+    "crates/native/tests/social_persistence.rs": "c341880060235f4ca2b6f6313b5a08df1913c508f94c87331fa400f396b8b574",
+    "crates/wasm/Cargo.toml": "89d55dd3b0fb4adffc62565a4b243896173b115e1c1aaa78dfbba110c61a0a26",
+    "crates/wasm/src/castalia.rs": "f247d1b733c04b45a7fcf785891d95a9fa63449a593cce2fa5703981021c886f",
+    "crates/wasm/src/lib.rs": "78aa8db92cac2c156a30bafcd24cc9db895b85c2ce14f06e1343d02f7a9a5e19",
+    "crates/wasm/src/providers.rs": "48b6b107e12d9dbfbcfc255a2c18e79e8ff567e020111813a5853b3fc6aa6277",
+    "ontology/discovery.json": "38b095e6dc0107ef6c8ea5d39de8029935fd6d6b98dead4cb9a71b3eb25c8129",
+    "ontology/portable/v1/conformance.json": "bf0dbee52bf6d4a76e0bc40daf659befed2e9c02c7e5ffe60a17aef1ec7a4b81",
+    "ontology/portable/v1/manifest.json": "c9ae6fbf19e1dfe5dab30c7f70b15a238c9b7089eba4c7d1a8c0ec0662d77c1a",
+    "ontology/portable/v1/portable-export.schema.json": "c23adacf6dee4607605b8e14e606a056bf0990f2b8456ab0bb7b63cf8b954c93",
+    "ontology/portable/v1/social-archive.schema.json": "bb16e721071c2717a42f4dbe62a0c45914ed7b86a26aaa5495c8867c2f00116a",
+    "ontology/providers/v1/conformance.json": "1204634e9c959469c7b611903d5ee228d013e7cacd4b77e402f46d827abb8d25",
+    "ontology/providers/v1/manifest.json": "1df9f744a1b5aea265078ea7dc33c76e55d64deff23c2aefc92fd4706caa5fb8",
+    "ontology/providers/v1/provider-execution.schema.json": "25deec8b99262eb589cf1b2162e6803de086da9bd824cbd3026e03c1dbe4f91d",
+    "ontology/providers/v1/provider-operation.schema.json": "6ce90396928fc2a5d2dc02bd56a0c561651a22b8ea98380c3551af768005b5b9",
+    "ontology/providers/v1/provider-registry.schema.json": "ff0caed30cf76396fa6dbf5f240faf508581bb339b25735d5f35def8a6026e3a",
+    "ontology/providers/v1/provider-request.schema.json": "7065b0d5c2f21fc4bcb3b343522a74e00a36b540dbfee9c3d3771bdeacba0abd",
+    "ontology/providers/v1/provider-response.schema.json": "68ff7c975f123eecb794af718ed2517fd3dd8b1806f2a2513a65931b861ab249",
+    "ontology/v0.1.0/audio-candidates.schema.json": "5ba273aec5beb7edf0a4d601678d6fa3f42eb1e40bf3e52be95d0575d5bd54f8",
+    "ontology/v0.1.0/audio-observation.schema.json": "486049e1d07d6cb06957a821562f7c02de9951930d99ac62e05d7ac383fd5360",
+    "ontology/v0.1.0/authority-policy.schema.json": "71b67f479c3d4610ba4af084a6b4c3e003f9a45a5b60ff6abf2799d6f8addbea",
+    "ontology/v0.1.0/castalia-mapping.json": "bd70758ca0592b9221a04bc4fd5ef1baf6a77b193d76ddea631d661b827f0d12",
+    "ontology/v0.1.0/castalia-native-authority-profile.schema.json": "5bcb39d232865fa4a7de200625e3ec02e21799d99eab544ab4bab9f8fc5fd9e4",
+    "ontology/v0.1.0/castalia-provider-connection.schema.json": "ff3eec75a34c70a0a08b497f5448072446f7892db8d2b81b52a8341498f3f5e1",
+    "ontology/v0.1.0/command.schema.json": "5f2e61345b7692c53f67e8d8b67d6fce7078c1bfba3cfe341851dd02686d516e",
+    "ontology/v0.1.0/conformance.json": "94f1443d84dfd6d6f675ded2d40c666b1b9b1d2b3e72268bbb5194558cd50fab",
+    "ontology/v0.1.0/connections.schema.json": "682e23e140b7b6ae1997de357e38bc7c5297e98137fcb1fd7c78a01f6289c424",
+    "ontology/v0.1.0/context.jsonld": "9107ae8da77dbe8d7c379e944f3c99e112126bf84af14286caa87644e95572d8",
+    "ontology/v0.1.0/identity.schema.json": "68866e8630125d88aeb39964cbb6e5034a5701eb2cc05799b757eea4b33c5c49",
+    "ontology/v0.1.0/manifest.json": "1280c588363ecb240a8f439f835a336b84e1fc961b8f44ab264c3f34296812b4",
+    "ontology/v0.1.0/ontology.jsonld": "a4515dd1b8a6290237cc1bfadf854fc6c670cfed094dd93eefc4ed8830eb8315",
+    "ontology/v0.1.0/publication.schema.json": "aaf2e5df78513831a52c3082f529cce0549f46c5c6d94f53ee63617a82aa8e26",
+    "ontology/v0.1.0/social-action.schema.json": "8b05a74af7d176eb6248a9892a9fa156a4596c6056b5bd3d9dff2ec042229601",
+    "ontology/v0.1.0/social-event.schema.json": "f92f3d962a5e1378c01b52e7cee488b0f653647271ae3e2bad3a469c3e4630c3",
+    "ontology/v0.1.0/social-local.schema.json": "5a199d0bae2771381305f8c0b9a1fe12e3cf2b044df16fcfbd9aacbf67bd7fe8",
+    "ontology/v0.1.0/social.schema.json": "f09fb3b50bb8cfdfc0cd24db18f12578a005500cb52a45df4eb5d79b8dda4405",
+    "ontology/v0.1.0/state.schema.json": "752ce61a0ecdf2517aca64484967c2c9180c6c9edacd73f0ba6f25dfc92be72f",
+    "ontology/v0.2.0/audio-candidates.schema.json": "e6aa4dfa76a7e739deaa2c96cb6b0b12da12873fc3a82dbb63fd72a9f12f9aec",
+    "ontology/v0.2.0/audio-observation.schema.json": "af8b89353ca93af9d0e8f70cd5f8c9b1bde03a6c4b60ddcb87fc18b444821200",
+    "ontology/v0.2.0/authority-policy.schema.json": "dcf92eb6f727fb6934beedb02a850a401b107f9bee1e62b8c222b6acc56301fa",
+    "ontology/v0.2.0/castalia-mapping.json": "bd70758ca0592b9221a04bc4fd5ef1baf6a77b193d76ddea631d661b827f0d12",
+    "ontology/v0.2.0/castalia-native-authority-profile.schema.json": "5bcb39d232865fa4a7de200625e3ec02e21799d99eab544ab4bab9f8fc5fd9e4",
+    "ontology/v0.2.0/castalia-provider-connection.schema.json": "ff3eec75a34c70a0a08b497f5448072446f7892db8d2b81b52a8341498f3f5e1",
+    "ontology/v0.2.0/command.schema.json": "f5610dbbed05398c747f9fe00e39aa37a6fccb8421c72cdbd43eaf351cf2c000",
+    "ontology/v0.2.0/conformance.json": "2543e51e6f6aebddca2ffad6ae798c4bf42d869800e3249938910b33c2bbe6ec",
+    "ontology/v0.2.0/connections.schema.json": "836f9e1b9b49f3c1e1cfa627383e52c1411bfa987c85daece786818b46d5a6dd",
+    "ontology/v0.2.0/context.jsonld": "cf85dc951efec08a675f66ea42ad4de4d272692cda858d423b698711f8a6cd86",
+    "ontology/v0.2.0/identity.schema.json": "cd53f9c9b81318957a3ecc74b051ede6a6080f29f41edf4518ba273b502d3ea5",
+    "ontology/v0.2.0/manifest.json": "ad6e81bbafabfb4f8226b8af9a26aebf4ae1c6d686bbad53fba3d3b71bc4ea39",
+    "ontology/v0.2.0/notebook-ink.json": "0c9d231dac51d49c5c6472674336315e2fca443231ed9bbd8a2ad8286e428d4d",
+    "ontology/v0.2.0/notebook-ink.schema.json": "628dd22795fe1e8ec20274754dc978889c948de6dbc3ecea4728cf1f4fc2ac41",
+    "ontology/v0.2.0/ontology.jsonld": "213519597c331a211dfe07fbc16b4024bd46533d9915c4f9594915e7c1e91baa",
+    "ontology/v0.2.0/publication.schema.json": "615f39dbfa708b3205bfac27fbec6611c4b2d045af64da5954b55cc6a8e87142",
+    "ontology/v0.2.0/social-action.schema.json": "61b19e7693fec5d32056f0dca2c96198b515473c9a3c3db4179b216932e7f034",
+    "ontology/v0.2.0/social-event.schema.json": "abae795af3bde339539fb0382f29f5969fad3f28afaf7da884397215b57954c4",
+    "ontology/v0.2.0/social-local.schema.json": "346990b88779e8b9fcb7c0666b142d4c2b989a0dc1e505d2c8cbd79ce7c3a8f6",
+    "ontology/v0.2.0/social.schema.json": "7c8dc6093af6a86c2422ee4fbc58b0855070d2bfce17deb3b90c2f6c27224618",
+    "ontology/v0.2.0/state.schema.json": "b4d1fca0d56534c6dce3a69168397012bfd0fef90beca877fc7538df9067ccc9",
+    "scripts/sync-package-resources.py": "edab785778299eb1444f039a39638b94993d90e1da4f3b117706d7b34b90031c",
+    "sdk/swift/Package.swift": "bcd363e1c4a511c61d5cef836f2c84e6db11ffd2706f1bd75053c764e15ad89a",
+    "sdk/swift/Sources/BookNookServices/BookNookNotebook.swift": "2c740b4aa835ce9e0b972ea9c709f1f7ac12fffc820da0f85313bbb1e65f57ab",
+    "sdk/swift/Sources/BookNookServices/BookNookProvider.swift": "8b1038f1079a5a0f79022bc7d1c4a3986b06d6823a8b4472cbda855b90f3608a",
+    "sdk/swift/Sources/BookNookServices/BookNookProviderWire.swift": "81519681689d9a1531e596a3e2a8f560b0802c50ba99ee6ec99b1c758e2f7a0f",
+    "sdk/swift/Sources/BookNookServices/BookNookServices.swift": "13bc8a77d7c27909e9854bd9208afbdab7421a8df2684d512b521f121083a13c",
+    "sdk/swift/Sources/CastaliaNative/CastaliaContracts.swift": "ed86966e3762c9026d055cb307b2bc0028ed6b314e344b717828af78e293bf34",
+    "sdk/swift/Sources/CastaliaNative/CastaliaKeychainStorage.swift": "df4f75257c35014b3ef20a0589a5c29c70ed7b2ff1c3eb85b390d0dbb13cd416",
+    "sdk/swift/Sources/CastaliaNative/CastaliaRecovery.swift": "0c1b34a5b6294c6ee0359134a6a5082806ca72b05101209aac713a44663f5dcb",
+    "sdk/swift/Sources/CastaliaNative/CastaliaSession.swift": "cd7931cc21e8f24bd315faeb374b2e7ddf0996e59a81dc05669d7d685b350668",
+    "sdk/typescript/archive-types.ts": "e92947d6a23e9fb3171cab0f004308af92ff566235e33e800b816a117cb2ed8e",
+    "sdk/typescript/archives.ts": "737c0ed1dd3048d9b7ba07aa4f3d0120b575e52b5d98de3d66f67f73688d634e",
+    "sdk/typescript/castalia.ts": "c9b3dc8e344b90334bcbd7e9688eea38932570a8f810d80647421751fb58980a",
+    "sdk/typescript/contract-json.ts": "be83cbc7b588f9a151767830ec67b6804e19fe788a1ec295e490acd8d6b92340",
+    "sdk/typescript/index.ts": "cc82fcbbce242adc1cf863a6a3012a6ca7203587ff611defc70dc545484d3201",
+    "sdk/typescript/portable-services.ts": "cd69fcefe3d33c3c57469beb7107b5856745a0d7a75c52a7cefb59ae356f3fef",
+    "sdk/typescript/provider-types.ts": "be6d451eef282ef1db0b8a3cb4d0a54cbfaff5e28a1c1f503f0205795b71f513",
+    "sdk/typescript/providers.ts": "6b4d9d033b442e3a3833cfddc29a37d2fae1c254a3075632a75850f0d37f67f9",
+    "sdk/typescript/social-types.ts": "a4c5bacc1f89d7daffa15f12c82f297d27de7991fcc933b0fe3dca781b74fa55",
+    "sdk/typescript/types.ts": "73f5e2425f749ba40b2600c3218bd669ae8ee55dd275742f3ea9f45ac578752c",
+    "services/castalia-issuer/booknook_issuer.py": "6145670595ab567efb682337ca53162327d0cefe95426e801ca54078440ee807",
+    "services/library-companion/booknook_companion.py": "02838a2b8a184e56d4c84bdfa8d39071aefcc0b8a8775b12371af32ac0716713",
+    "services/optional-audible-adapter/booknook_audible.py": "8e7df91d9130d6a1524c78e843c64e25834d8751b3c7d9fdf9f19f22ecab6e94"
+  },
+  "test_inputs": {
+    "scripts/test-ui-workflows.sh": "816c9319bddeb3783d8fd28248c11c6871aa9d763e193d9d41e02b0f3eba14ba",
+    "tests/AutomaticNotebookEditingAcceptance.swift": "8b385b1ae943b7f550e0e3a2b09acf1db5637bbad95be6d6b0225a18f65ef2df",
+    "tests/AutomaticNotebookPageAcceptance.swift": "97b558e44d5ae29a12603e8d89570c8b64eb4dedd48ca2ba43d9e31304ae6654",
+    "tests/CastaliaProfileImportTests.swift": "149b79e8f4781524e9e9258a8d05a6510d1e6846539aa552c08234c043359e49",
+    "tests/CompanionCatalogImportTests.swift": "330929d9dced5bde5f4b511fd1feb37d6057b83eabde3b1e2e6152b1fe1037e5",
+    "tests/ConnectionSaveTests.swift": "907938b7b02c449665c06ec74fd62253b30d46196456730ab6e964eebd976014",
+    "tests/DeskWorkflowTests.swift": "f3a79f40bf411c83c1234f50068ec9f525826571f8eb23e5969f542f1261f71d",
+    "tests/InkRecoveryAcceptance.swift": "a892abe689e4c4cb70d6d0adc25b4f996241cbfb294287d1edda2f2a36356087",
+    "tests/KeychainAcceptance.swift": "983712f7aae169bae8aa36cbc423dba02d12100d02f3dbce1a53aedbaaabf652",
+    "tests/KindleWebTests.swift": "5c435945a10768e3f0f17e52d21cbe813a8ffe1ac6fdc0810f730d59cce4ee1d",
+    "tests/LongEditAcceptance.swift": "522d7406e6c235ec8ceb2a5ea476a7e99ab695b10f85ee51b01d8c010e202256",
+    "tests/NotebookCanvasVisibilityAcceptance.swift": "9c66eb58d27e7c1a2a6143517a20bea524847fe1b9f2411d2c7c528be1d1dd3d",
+    "tests/NotebookEditorTests.swift": "743f31fa78ecfeb89c62bd8c939d6074a8ad0e02cdf950fceff15860e72b374f",
+    "tests/NotebookInkAcceptance.swift": "b8bfc2eb6bc131271cd114f99d0f2d79fa344511c234d635a92d369996b37179",
+    "tests/NotebookInkGeometryTests.swift": "e195465d736966004f77e2a7efd101b0c329cf9a3cde7cdedbe5bbb6a7121158",
+    "tests/NotebookWorkflowTests.swift": "341a74071123e54bd18a4ad2e9377d1593549aeca9cd7e84cbc39e5a95ce1d2c",
+    "tests/PDFReaderTests.swift": "c0a3c2d5a31f729de98317465e1a749a45890dfbbbbdc8930bfa85c87b0855dd",
+    "tests/PackagedCastaliaSmoke.swift": "e5f150b65ecd4d9dfbbae8d28478be35d0699ceb21c007f619798f97f4654019",
+    "tests/PackagedNotebookSmoke.swift": "42c9e93329f84ae32a27b938ec296cf968b4f52b780c5a147398fac2def24ced",
+    "tests/PackagedProviderSmoke.swift": "39731e3cd99d3d7f57b09586f6402058ee33a2c8232cf260f70f9ae2e1aa2446",
+    "tests/PackagedSDKSmoke.cjs": "462ba6f6a6cae68250ea89ab23475215be24a61af69fa7fb4a1f5df53cc18b20",
+    "tests/PackagedSDKTypes.cts": "11e930aa531c529ad0a55d9717b7397f764be7c2ad738e4c7f6f1f34e81d0f71",
+    "tests/PackagedSDKTypes.mts": "69ea4c88f6f9ba71d93c2b3a9aebc22e919b28e1e9f444f1745bdefc48123ee4",
+    "tests/ProviderWorkflowTests.swift": "88c371a7e83d2c24f1a52946138ea6aa08c4f2ed8126f38ac5717fca8321587d",
+    "tests/ReaderBridgeTests.swift": "51215cadd3b45ab032642801974e518ef9b808a7ff7e07451d32aafcce1fa912",
+    "tests/ReaderContextAcceptance.swift": "5cfb0562a3eea351d36fddd6357b14382194d7b4e869ba9798d5948de98d780c",
+    "tests/ReaderInkAcceptance.swift": "56fbb5a34587ff1fd3d00b3c1d7f3fae1b5085b0eefb723fa34ae2272b994a82",
+    "tests/ReaderInkAnchorAcceptance.swift": "d313d5ef24bbd8968fe7f82c3a3f1d831defa6642f7040fa4d2629ee60c6df89",
+    "tests/ReaderNavigationTests.swift": "b74947d6fd2fb6f9e938f804c8cb125e5e0de1904b7a3dd768aeb1232b4def45",
+    "tests/ReaderTestSupport.swift": "3769ff4d73432eb78dc2c31e0431a733f3a8d2a6bf95d03236fb68518b1d9f32",
+    "tests/RecoveryImportTests.swift": "1057314c85cdc24794f76446fd747c25c538cedea823360dd2b1676e4eaa49e6",
+    "tests/amazon_adapter/keychain_acceptance.py": "0a19d73f71694e07a5609b38795bd26ee1845a7db49b964b51755179a2637244",
+    "tests/amazon_adapter/test_adapter.py": "fbeb0cabf5af99c2ff568b59661c1be107d0a7f5307546fdf3aa2fe2d2478bfe",
+    "tests/amazon_adapter/test_atomic_vault.py": "82b1057d808f8772a8a8d30650739fefd7fb322b3af2643621fcd29e142e153a",
+    "tests/castalia-generic-fixture.cjs": "90ba03979726fe19a1c331eae9aca4a2e7644cf801295a5e24b607664036513a",
+    "tests/castalia-generic-parity.cjs": "1273d0f4f20d73478a353c129bacf67ae5e5914f72d0c9d89090a3cfa8e0d904",
+    "tests/companion/fixtures/generate-kindle-metadata.swift": "c8ab92643fb27bb8fa169b425fc30ed7fde34fe8b531ee4926c9ecc8af3f2018",
+    "tests/companion/test_companion.py": "81d62ec8a7a186ce1d2d3a8a6ec5f3dec8b225c58362a80e79d9cd3c4d1f1ca0",
+    "tests/companion/test_kindle_snapshot.py": "e45634e79b8e9eb76bc918d8319e19d52b233b9d414e1d27c02515139b1f8e46",
+    "tests/fixtures/README.md": "2fdc5eedfd8bc0d6babf85919ae925bf5844502085fcecfb02666145131c3bfd",
+    "tests/fixtures/provider-sample.epub": "f1f54598f34360d2df0bcd38342d2466e83cd568a6b52585947d6f94d59907b4",
+    "tests/ontology-host.py": "17c91ff3149612051d3f31ada9988ad947b31fa631cb0f7ac678ef96ce65e977",
+    "tests/portable-archive-parity.cjs": "a6e147386051b9a5febb31d5d61c8348a40b9401882e607d38fe1df1f1914ba9",
+    "tests/portable-services-parity.cjs": "f44491aeaabb5b83a3843ecea781b47f343e20e8b75ccc6ed6264c109e3eb4ef",
+    "tests/provider-runtime.cjs": "692343d9dbad0fe49e04a52a7cf6fc3e95fb5fa7014121f9791f5f32ef8b1180",
+    "tests/provider-service-acceptance.cjs": "1bdd3e5260477f2a4a603fa65f38ca3b50b852ed12fb3b2cab5b8c7f746dcb43",
+    "tests/reader-coordinates.swift": "570bb123f98e0f9c0ff26fe511bb3a2909166120b145f48115bf9322475b290d",
+    "tests/reader-geometry.cjs": "62cf796fa3459d76d62c686b82679014e019bff5502a71725239e68df8b56548",
+    "tests/sdk-native.cjs": "733365320eee58da9a03d738f64496f954ef21d6758dcaf6b96ee8e32cce55cb",
+    "tests/sdk-storage.cjs": "0258f7127a336fb9a8816f20af769e0a8c0999ad906193eb4a1a2e9565324596",
+    "tests/test-conformance.cjs": "ea6db05f16ee28e5885e5c26304bb4c3c91b400420d88d99263eeb5ff857dd08",
+    "tests/wasm-parity.cjs": "8f29e879265c4e2554525250f24e1a0369148525c2b6275a7e03e7c6b6f067ff"
+  },
+  "extra_inputs": {
+    ".github/workflows/check.yml": "713ff015d1ea824124865299594fbde8fd84514726d67796c3454a10fe120c93",
+    "LICENSE-APACHE": "fabba0cb7d00a4b3211fdc13699223ab2d22f88678ccd608494cf2b332b903e9",
+    "LICENSE-MIT": "e4c16e07e31d3fdbba827f245f39f51ee0871898f1585653129bcbe3c63a7410",
+    "LICENSE-MPL-2.0": "66a3107d5ad6a058aab753eaac2047ccb2ed0e39465dd0fe5844da3e300d5172",
+    "apps/apple/BookNook.xcodeproj/project.pbxproj": "9664f94103c9dbfbb291ceeb816621aad14e315994825750c6567d6b0b812069",
+    "docs/LICENSING.md": "72d70ab7c60a69baf0aa83cfce1b92617ecea4da70b83217ffc163538c49e71c",
+    "docs/decisions/integrations.md": "69eecb3b24bafca34196394324b0e1d39c6cac4b9e1e1392b663f27ffb7da930",
+    "docs/dependency-licenses.csv": "4e5831328254f83a91ee592839be0404d55b44b39c814de5b7e226d0e623771f",
+    "scripts/build-apple.sh": "be7e4dfd277115dfbbe24fdee11b004c4ed57e175b9100e45ab61a0bc21e1bcf",
+    "scripts/build-wasm.sh": "7458a6c02de466b970be9059424164d89d80b614715616f06681adb7957204d0",
+    "scripts/check.sh": "2ab4297ff0221fd19957b4a89cfd5a021ecf5eb8e3f9e8817627fef70ad16fab",
+    "scripts/generate-contracts.py": "9b67b443acc8e1b1976f574bb2a6d6702f4c7f89eb0943f382dee78947375424",
+    "scripts/license-inventory.py": "8f8a3327bbec7b578641657bff0159e4da2faf2c7cc6cde179266bf84b1a4fae",
+    "scripts/ontology_artifacts.py": "cad79629b16d6dd35b85ec53d10542183cc7151c1f922fadb933893ecd040051",
+    "scripts/package-apple-apps.py": "8b77c2e9ad170645bed842e0ade355b7c0f49cb994445477df9a9a160f8bf95c",
+    "scripts/package-rust.sh": "38ce38ce4f299da7b48950e4b67d5b7edd9ad7760d5c96ebdb8e9305fe064fd0",
+    "scripts/package-swift.sh": "e1ed15094c5ef473b27ef27ad84857e20431e1f111a48e1c55dcbc3c712c5594",
+    "scripts/package-typescript.sh": "a419134e3781d9cd64fbad37741e94b1e413cddeae53e36952d735718cc02bf2",
+    "scripts/probe-public-relay.sh": "029025ab74ed71a43972852c3194073047b21ac94bd7c1c1972647aefecc3dbf",
+    "scripts/seed-preview.py": "179f7f3286c963b46111a32eb9e176262d4219c0653b62a02115105404e48fac",
+    "scripts/serve-ontology.py": "3db18fd0afdf6083f8567d48ee368ce252d1ce2a5b9e26d426ffa5d3296ebe9c",
+    "scripts/stage-sdk-deliverables.py": "c8803c1d33a16c8de94a5001ede443638067bd3cf91b02c1df4468f8906f0ef0",
+    "scripts/sync-package-resources.py": "edab785778299eb1444f039a39638b94993d90e1da4f3b117706d7b34b90031c",
+    "scripts/test-ink-recovery.py": "0f8020a5034a916a73b0fbc3b727b1bc44e4fa9530100e52b843d786f5114f9f",
+    "scripts/test-issuer.sh": "b29f7f17d4f435293f3b349e3bc64497747e1ee213f3d7586a8f8b13c883565a",
+    "scripts/test-keychain.py": "fa963572c5bdc38edaaee0d96e6aa2fb5a5c8fe021ed84f15a9eaece97acab1b",
+    "scripts/test-kindle-web.sh": "8bd39deebca2efb0e1edc52c104d30594cf53900ef85a01ebaccc20a77ad5901",
+    "scripts/test-local-relay.sh": "e9d5a77bf6c9964ed14bb575376f40f1759c75fa9e2292ee6adff62370993f0e",
+    "scripts/test-long-edit.py": "3f19e995c0f6c7a91be54e637f4f635b1743a8b3a992d387d9a197a3023ae083",
+    "scripts/test-reading.sh": "4ae0ba748358d25bcf56be2bda859f64cbfc32086fe8ff87c5a8843cdf9268b2",
+    "scripts/test-recovery.sh": "ba6e2c68d54a7c0b3660f679af8a8c60a0d075fdce791cea5505066988a95973",
+    "scripts/test-sdk.sh": "3b95abb3cecee53c80189dc7840dafe6ce90f1e7efc1f5c2c8185e9e7d59ad5d",
+    "scripts/test-ui-workflows.sh": "816c9319bddeb3783d8fd28248c11c6871aa9d763e193d9d41e02b0f3eba14ba",
+    "scripts/wasm-zig-ar.py": "e26211e58e4025a70f9d9d3d289208b07dfa89d7d891e440663eb1b92a635b38",
+    "scripts/wasm-zig-cc.py": "6cf8c3837ecf5f4cdbaf37677fb69156b95d7fbe4ac451348f659f99f36e1110",
+    "tests/CastaliaProfileImportTests.swift": "149b79e8f4781524e9e9258a8d05a6510d1e6846539aa552c08234c043359e49",
+    "tests/CompanionCatalogImportTests.swift": "330929d9dced5bde5f4b511fd1feb37d6057b83eabde3b1e2e6152b1fe1037e5",
+    "tests/DeskWorkflowTests.swift": "f3a79f40bf411c83c1234f50068ec9f525826571f8eb23e5969f542f1261f71d"
+  },
+  "artifacts": {
+    "apps/apple/Build/ipad-device/Build/Products/Debug-iphoneos/BookNookPad.app/BookNookPad": {
+      "sha256": "6ea2179dba6a769cff9ea74c6ea1ea38b679ca74ed7b5028ac34a3ea2efa0ba6",
+      "bytes": 72688
+    },
+    "apps/apple/Build/ipad-sim/Build/Products/Debug-iphonesimulator/BookNookPad.app/BookNookPad": {
+      "sha256": "f37943c91cb5561c418eb72b4f1c72bf67e90deb0c91a651bbf26a53fa59ba76",
+      "bytes": 40344
+    },
+    "apps/apple/Build/mac/Build/Products/Debug/BookNookMac.app/Contents/MacOS/BookNookMac": {
+      "sha256": "fd3d6317625f660253b610ba921fadf44b94751462b2590c6da679443e6edc57",
+      "bytes": 40344
+    },
+    "apps/apple/Generated/booknook_native.swift": {
+      "sha256": "47eaad3eee0bba401755928b087f1377735d479e49c8caa6d2562b4cfecb661f",
+      "bytes": 112810
+    },
+    "apps/apple/Generated/booknook_nativeFFI.h": {
+      "sha256": "9d7cc42688a5ec3d4a51dc34d9a91c9105a0bf2b03f9caa39b224ca932dbe779",
+      "bytes": 76466
+    },
+    "apps/apple/Generated/booknook_nativeFFI.modulemap": {
+      "sha256": "d832a0d192305ef1730df3247a38a0fb9d71239b6bd80769b584c72ff8aa073d",
+      "bytes": 146
+    },
+    "sdk/typescript/pkg/nodejs/booknook_wasm_bg.wasm": {
+      "sha256": "529b55e3cbccdff6a16f9bf9bc668c7be82b44da418ae239f221a764ebe4a465",
+      "bytes": 4856787
+    },
+    "sdk/typescript/pkg/web/booknook_wasm_bg.wasm": {
+      "sha256": "529b55e3cbccdff6a16f9bf9bc668c7be82b44da418ae239f221a764ebe4a465",
+      "bytes": 4856787
+    },
+    "target/aarch64-apple-ios-sim/release/libbooknook_native.a": {
+      "sha256": "fb9d6b16c6b1f70d27d53f192b6ec9dbc8f10f2583613d3679d5bf0e0ca01374",
+      "bytes": 133362392
+    },
+    "target/aarch64-apple-ios/release/libbooknook_native.a": {
+      "sha256": "cae6fdd1756f881b02ef3fd6bbbd852275334f155a09123c1d0807c517f1568c",
+      "bytes": 133402392
+    },
+    "target/release/libbooknook_native.a": {
+      "sha256": "8f77535a19f49ba35f2018f9f54333d300592efbf6bad2070f60b1995236dede",
+      "bytes": 133330352
+    },
+    "target/release/libbooknook_native.dylib": {
+      "sha256": "5cbe0ca90163152adcb58737f1bf88d80a8920bb98e24608cf9b38fd28906303",
+      "bytes": 14466144
+    }
+  },
+  "app_trees": {
+    "mac": {
+      "root": "apps/apple/Build/mac/Build/Products/Debug/BookNookMac.app",
+      "files": {
+        "Contents/Info.plist": {
+          "sha256": "f0b006b251ef95148ff66aaa81102fb345236da563a5f2ff00327844abb4adde",
+          "bytes": 1561
+        },
+        "Contents/MacOS/BookNookMac": {
+          "sha256": "fd3d6317625f660253b610ba921fadf44b94751462b2590c6da679443e6edc57",
+          "bytes": 40344
+        },
+        "Contents/MacOS/BookNookMac.debug.dylib": {
+          "sha256": "bff25ebdafd4b61d732287f11c1a19be30ae2e4a36cc4a46a5f67e399cd5249d",
+          "bytes": 41421096
+        },
+        "Contents/MacOS/__preview.dylib": {
+          "sha256": "f38f27eff5a3d5366b6169ab87bac5c542b7fab4f3ae667e561db84f33c53a9a",
+          "bytes": 16760
+        },
+        "Contents/PkgInfo": {
+          "sha256": "82502191c9484b04d685374f9879a0066069c49b8acae7a04b01d38d07e8eca0",
+          "bytes": 8
+        },
+        "Contents/Resources/KindleWebSourceNotice.txt": {
+          "sha256": "54f27329d18a21269fb29b8e9a037ceef19d1d56ef812e429c5c1bfd388e5724",
+          "bytes": 1747
+        },
+        "Contents/Resources/ontology/discovery.json": {
+          "sha256": "38b095e6dc0107ef6c8ea5d39de8029935fd6d6b98dead4cb9a71b3eb25c8129",
+          "bytes": 594
+        },
+        "Contents/Resources/ontology/portable/v1/conformance.json": {
+          "sha256": "bf0dbee52bf6d4a76e0bc40daf659befed2e9c02c7e5ffe60a17aef1ec7a4b81",
+          "bytes": 25343
+        },
+        "Contents/Resources/ontology/portable/v1/manifest.json": {
+          "sha256": "c9ae6fbf19e1dfe5dab30c7f70b15a238c9b7089eba4c7d1a8c0ec0662d77c1a",
+          "bytes": 546
+        },
+        "Contents/Resources/ontology/portable/v1/portable-export.schema.json": {
+          "sha256": "c23adacf6dee4607605b8e14e606a056bf0990f2b8456ab0bb7b63cf8b954c93",
+          "bytes": 56092
+        },
+        "Contents/Resources/ontology/portable/v1/social-archive.schema.json": {
+          "sha256": "bb16e721071c2717a42f4dbe62a0c45914ed7b86a26aaa5495c8867c2f00116a",
+          "bytes": 23687
+        },
+        "Contents/Resources/ontology/providers/v1/conformance.json": {
+          "sha256": "1204634e9c959469c7b611903d5ee228d013e7cacd4b77e402f46d827abb8d25",
+          "bytes": 6592
+        },
+        "Contents/Resources/ontology/providers/v1/manifest.json": {
+          "sha256": "1df9f744a1b5aea265078ea7dc33c76e55d64deff23c2aefc92fd4706caa5fb8",
+          "bytes": 981
+        },
+        "Contents/Resources/ontology/providers/v1/provider-execution.schema.json": {
+          "sha256": "25deec8b99262eb589cf1b2162e6803de086da9bd824cbd3026e03c1dbe4f91d",
+          "bytes": 18375
+        },
+        "Contents/Resources/ontology/providers/v1/provider-operation.schema.json": {
+          "sha256": "6ce90396928fc2a5d2dc02bd56a0c561651a22b8ea98380c3551af768005b5b9",
+          "bytes": 5552
+        },
+        "Contents/Resources/ontology/providers/v1/provider-registry.schema.json": {
+          "sha256": "ff0caed30cf76396fa6dbf5f240faf508581bb339b25735d5f35def8a6026e3a",
+          "bytes": 4132
+        },
+        "Contents/Resources/ontology/providers/v1/provider-request.schema.json": {
+          "sha256": "7065b0d5c2f21fc4bcb3b343522a74e00a36b540dbfee9c3d3771bdeacba0abd",
+          "bytes": 7023
+        },
+        "Contents/Resources/ontology/providers/v1/provider-response.schema.json": {
+          "sha256": "68ff7c975f123eecb794af718ed2517fd3dd8b1806f2a2513a65931b861ab249",
+          "bytes": 10781
+        },
+        "Contents/Resources/ontology/v0.1.0/audio-candidates.schema.json": {
+          "sha256": "5ba273aec5beb7edf0a4d601678d6fa3f42eb1e40bf3e52be95d0575d5bd54f8",
+          "bytes": 1418
+        },
+        "Contents/Resources/ontology/v0.1.0/audio-observation.schema.json": {
+          "sha256": "486049e1d07d6cb06957a821562f7c02de9951930d99ac62e05d7ac383fd5360",
+          "bytes": 2304
+        },
+        "Contents/Resources/ontology/v0.1.0/authority-policy.schema.json": {
+          "sha256": "71b67f479c3d4610ba4af084a6b4c3e003f9a45a5b60ff6abf2799d6f8addbea",
+          "bytes": 1607
+        },
+        "Contents/Resources/ontology/v0.1.0/castalia-mapping.json": {
+          "sha256": "bd70758ca0592b9221a04bc4fd5ef1baf6a77b193d76ddea631d661b827f0d12",
+          "bytes": 1494
+        },
+        "Contents/Resources/ontology/v0.1.0/castalia-native-authority-profile.schema.json": {
+          "sha256": "5bcb39d232865fa4a7de200625e3ec02e21799d99eab544ab4bab9f8fc5fd9e4",
+          "bytes": 2338
+        },
+        "Contents/Resources/ontology/v0.1.0/castalia-provider-connection.schema.json": {
+          "sha256": "ff3eec75a34c70a0a08b497f5448072446f7892db8d2b81b52a8341498f3f5e1",
+          "bytes": 2408
+        },
+        "Contents/Resources/ontology/v0.1.0/command.schema.json": {
+          "sha256": "5f2e61345b7692c53f67e8d8b67d6fce7078c1bfba3cfe341851dd02686d516e",
+          "bytes": 26174
+        },
+        "Contents/Resources/ontology/v0.1.0/conformance.json": {
+          "sha256": "94f1443d84dfd6d6f675ded2d40c666b1b9b1d2b3e72268bbb5194558cd50fab",
+          "bytes": 77135
+        },
+        "Contents/Resources/ontology/v0.1.0/connections.schema.json": {
+          "sha256": "682e23e140b7b6ae1997de357e38bc7c5297e98137fcb1fd7c78a01f6289c424",
+          "bytes": 4469
+        },
+        "Contents/Resources/ontology/v0.1.0/context.jsonld": {
+          "sha256": "9107ae8da77dbe8d7c379e944f3c99e112126bf84af14286caa87644e95572d8",
+          "bytes": 915
+        },
+        "Contents/Resources/ontology/v0.1.0/identity.schema.json": {
+          "sha256": "68866e8630125d88aeb39964cbb6e5034a5701eb2cc05799b757eea4b33c5c49",
+          "bytes": 1486
+        },
+        "Contents/Resources/ontology/v0.1.0/manifest.json": {
+          "sha256": "1280c588363ecb240a8f439f835a336b84e1fc961b8f44ab264c3f34296812b4",
+          "bytes": 2818
+        },
+        "Contents/Resources/ontology/v0.1.0/ontology.jsonld": {
+          "sha256": "a4515dd1b8a6290237cc1bfadf854fc6c670cfed094dd93eefc4ed8830eb8315",
+          "bytes": 3221
+        },
+        "Contents/Resources/ontology/v0.1.0/publication.schema.json": {
+          "sha256": "aaf2e5df78513831a52c3082f529cce0549f46c5c6d94f53ee63617a82aa8e26",
+          "bytes": 14257
+        },
+        "Contents/Resources/ontology/v0.1.0/social-action.schema.json": {
+          "sha256": "8b05a74af7d176eb6248a9892a9fa156a4596c6056b5bd3d9dff2ec042229601",
+          "bytes": 13034
+        },
+        "Contents/Resources/ontology/v0.1.0/social-event.schema.json": {
+          "sha256": "f92f3d962a5e1378c01b52e7cee488b0f653647271ae3e2bad3a469c3e4630c3",
+          "bytes": 14230
+        },
+        "Contents/Resources/ontology/v0.1.0/social-local.schema.json": {
+          "sha256": "5a199d0bae2771381305f8c0b9a1fe12e3cf2b044df16fcfbd9aacbf67bd7fe8",
+          "bytes": 16650
+        },
+        "Contents/Resources/ontology/v0.1.0/social.schema.json": {
+          "sha256": "f09fb3b50bb8cfdfc0cd24db18f12578a005500cb52a45df4eb5d79b8dda4405",
+          "bytes": 19923
+        },
+        "Contents/Resources/ontology/v0.1.0/state.schema.json": {
+          "sha256": "752ce61a0ecdf2517aca64484967c2c9180c6c9edacd73f0ba6f25dfc92be72f",
+          "bytes": 27944
+        },
+        "Contents/Resources/ontology/v0.2.0/audio-candidates.schema.json": {
+          "sha256": "e6aa4dfa76a7e739deaa2c96cb6b0b12da12873fc3a82dbb63fd72a9f12f9aec",
+          "bytes": 1418
+        },
+        "Contents/Resources/ontology/v0.2.0/audio-observation.schema.json": {
+          "sha256": "af8b89353ca93af9d0e8f70cd5f8c9b1bde03a6c4b60ddcb87fc18b444821200",
+          "bytes": 2304
+        },
+        "Contents/Resources/ontology/v0.2.0/authority-policy.schema.json": {
+          "sha256": "dcf92eb6f727fb6934beedb02a850a401b107f9bee1e62b8c222b6acc56301fa",
+          "bytes": 1607
+        },
+        "Contents/Resources/ontology/v0.2.0/castalia-mapping.json": {
+          "sha256": "bd70758ca0592b9221a04bc4fd5ef1baf6a77b193d76ddea631d661b827f0d12",
+          "bytes": 1494
+        },
+        "Contents/Resources/ontology/v0.2.0/castalia-native-authority-profile.schema.json": {
+          "sha256": "5bcb39d232865fa4a7de200625e3ec02e21799d99eab544ab4bab9f8fc5fd9e4",
+          "bytes": 2338
+        },
+        "Contents/Resources/ontology/v0.2.0/castalia-provider-connection.schema.json": {
+          "sha256": "ff3eec75a34c70a0a08b497f5448072446f7892db8d2b81b52a8341498f3f5e1",
+          "bytes": 2408
+        },
+        "Contents/Resources/ontology/v0.2.0/command.schema.json": {
+          "sha256": "f5610dbbed05398c747f9fe00e39aa37a6fccb8421c72cdbd43eaf351cf2c000",
+          "bytes": 28482
+        },
+        "Contents/Resources/ontology/v0.2.0/conformance.json": {
+          "sha256": "2543e51e6f6aebddca2ffad6ae798c4bf42d869800e3249938910b33c2bbe6ec",
+          "bytes": 77239
+        },
+        "Contents/Resources/ontology/v0.2.0/connections.schema.json": {
+          "sha256": "836f9e1b9b49f3c1e1cfa627383e52c1411bfa987c85daece786818b46d5a6dd",
+          "bytes": 4469
+        },
+        "Contents/Resources/ontology/v0.2.0/context.jsonld": {
+          "sha256": "cf85dc951efec08a675f66ea42ad4de4d272692cda858d423b698711f8a6cd86",
+          "bytes": 1249
+        },
+        "Contents/Resources/ontology/v0.2.0/identity.schema.json": {
+          "sha256": "cd53f9c9b81318957a3ecc74b051ede6a6080f29f41edf4518ba273b502d3ea5",
+          "bytes": 1486
+        },
+        "Contents/Resources/ontology/v0.2.0/manifest.json": {
+          "sha256": "ad6e81bbafabfb4f8226b8af9a26aebf4ae1c6d686bbad53fba3d3b71bc4ea39",
+          "bytes": 3087
+        },
+        "Contents/Resources/ontology/v0.2.0/notebook-ink.json": {
+          "sha256": "0c9d231dac51d49c5c6472674336315e2fca443231ed9bbd8a2ad8286e428d4d",
+          "bytes": 112517
+        },
+        "Contents/Resources/ontology/v0.2.0/notebook-ink.schema.json": {
+          "sha256": "628dd22795fe1e8ec20274754dc978889c948de6dbc3ecea4728cf1f4fc2ac41",
+          "bytes": 10229
+        },
+        "Contents/Resources/ontology/v0.2.0/ontology.jsonld": {
+          "sha256": "213519597c331a211dfe07fbc16b4024bd46533d9915c4f9594915e7c1e91baa",
+          "bytes": 5193
+        },
+        "Contents/Resources/ontology/v0.2.0/publication.schema.json": {
+          "sha256": "615f39dbfa708b3205bfac27fbec6611c4b2d045af64da5954b55cc6a8e87142",
+          "bytes": 14257
+        },
+        "Contents/Resources/ontology/v0.2.0/social-action.schema.json": {
+          "sha256": "61b19e7693fec5d32056f0dca2c96198b515473c9a3c3db4179b216932e7f034",
+          "bytes": 13034
+        },
+        "Contents/Resources/ontology/v0.2.0/social-event.schema.json": {
+          "sha256": "abae795af3bde339539fb0382f29f5969fad3f28afaf7da884397215b57954c4",
+          "bytes": 14230
+        },
+        "Contents/Resources/ontology/v0.2.0/social-local.schema.json": {
+          "sha256": "346990b88779e8b9fcb7c0666b142d4c2b989a0dc1e505d2c8cbd79ce7c3a8f6",
+          "bytes": 16650
+        },
+        "Contents/Resources/ontology/v0.2.0/social.schema.json": {
+          "sha256": "7c8dc6093af6a86c2422ee4fbc58b0855070d2bfce17deb3b90c2f6c27224618",
+          "bytes": 19923
+        },
+        "Contents/Resources/ontology/v0.2.0/state.schema.json": {
+          "sha256": "b4d1fca0d56534c6dce3a69168397012bfd0fef90beca877fc7538df9067ccc9",
+          "bytes": 31281
+        },
+        "Contents/Resources/reader-geometry.js": {
+          "sha256": "bb648f42b1fb6893ee10833559756e9016ee5ec7423442643cb62cab34345c81",
+          "bytes": 2180
+        },
+        "Contents/Resources/reader.js": {
+          "sha256": "fbb441bdf0e648c54ebd15bf5b719739603c1fcc73664d413a213487d6c1a88b",
+          "bytes": 11354
+        }
+      }
+    },
+    "ipad-sim": {
+      "root": "apps/apple/Build/ipad-sim/Build/Products/Debug-iphonesimulator/BookNookPad.app",
+      "files": {
+        "BookNookPad": {
+          "sha256": "f37943c91cb5561c418eb72b4f1c72bf67e90deb0c91a651bbf26a53fa59ba76",
+          "bytes": 40344
+        },
+        "BookNookPad.debug.dylib": {
+          "sha256": "1542a40233286d529293b2f1eeebcf767746af77d68a2fbc0860ec16a58ba97a",
+          "bytes": 41518776
+        },
+        "Info.plist": {
+          "sha256": "5e87b4c6252b8d31369e69c1d09291b3a0820b4c4ea1e9fe4125bfe86c2a3a94",
+          "bytes": 1158
+        },
+        "KindleWebSourceNotice.txt": {
+          "sha256": "54f27329d18a21269fb29b8e9a037ceef19d1d56ef812e429c5c1bfd388e5724",
+          "bytes": 1747
+        },
+        "PkgInfo": {
+          "sha256": "82502191c9484b04d685374f9879a0066069c49b8acae7a04b01d38d07e8eca0",
+          "bytes": 8
+        },
+        "__preview.dylib": {
+          "sha256": "346bd026edb0ba65d9a4735f82e0c81d0fa63114266d6fd9a2487cd136f195a6",
+          "bytes": 16760
+        },
+        "ontology/discovery.json": {
+          "sha256": "38b095e6dc0107ef6c8ea5d39de8029935fd6d6b98dead4cb9a71b3eb25c8129",
+          "bytes": 594
+        },
+        "ontology/portable/v1/conformance.json": {
+          "sha256": "bf0dbee52bf6d4a76e0bc40daf659befed2e9c02c7e5ffe60a17aef1ec7a4b81",
+          "bytes": 25343
+        },
+        "ontology/portable/v1/manifest.json": {
+          "sha256": "c9ae6fbf19e1dfe5dab30c7f70b15a238c9b7089eba4c7d1a8c0ec0662d77c1a",
+          "bytes": 546
+        },
+        "ontology/portable/v1/portable-export.schema.json": {
+          "sha256": "c23adacf6dee4607605b8e14e606a056bf0990f2b8456ab0bb7b63cf8b954c93",
+          "bytes": 56092
+        },
+        "ontology/portable/v1/social-archive.schema.json": {
+          "sha256": "bb16e721071c2717a42f4dbe62a0c45914ed7b86a26aaa5495c8867c2f00116a",
+          "bytes": 23687
+        },
+        "ontology/providers/v1/conformance.json": {
+          "sha256": "1204634e9c959469c7b611903d5ee228d013e7cacd4b77e402f46d827abb8d25",
+          "bytes": 6592
+        },
+        "ontology/providers/v1/manifest.json": {
+          "sha256": "1df9f744a1b5aea265078ea7dc33c76e55d64deff23c2aefc92fd4706caa5fb8",
+          "bytes": 981
+        },
+        "ontology/providers/v1/provider-execution.schema.json": {
+          "sha256": "25deec8b99262eb589cf1b2162e6803de086da9bd824cbd3026e03c1dbe4f91d",
+          "bytes": 18375
+        },
+        "ontology/providers/v1/provider-operation.schema.json": {
+          "sha256": "6ce90396928fc2a5d2dc02bd56a0c561651a22b8ea98380c3551af768005b5b9",
+          "bytes": 5552
+        },
+        "ontology/providers/v1/provider-registry.schema.json": {
+          "sha256": "ff0caed30cf76396fa6dbf5f240faf508581bb339b25735d5f35def8a6026e3a",
+          "bytes": 4132
+        },
+        "ontology/providers/v1/provider-request.schema.json": {
+          "sha256": "7065b0d5c2f21fc4bcb3b343522a74e00a36b540dbfee9c3d3771bdeacba0abd",
+          "bytes": 7023
+        },
+        "ontology/providers/v1/provider-response.schema.json": {
+          "sha256": "68ff7c975f123eecb794af718ed2517fd3dd8b1806f2a2513a65931b861ab249",
+          "bytes": 10781
+        },
+        "ontology/v0.1.0/audio-candidates.schema.json": {
+          "sha256": "5ba273aec5beb7edf0a4d601678d6fa3f42eb1e40bf3e52be95d0575d5bd54f8",
+          "bytes": 1418
+        },
+        "ontology/v0.1.0/audio-observation.schema.json": {
+          "sha256": "486049e1d07d6cb06957a821562f7c02de9951930d99ac62e05d7ac383fd5360",
+          "bytes": 2304
+        },
+        "ontology/v0.1.0/authority-policy.schema.json": {
+          "sha256": "71b67f479c3d4610ba4af084a6b4c3e003f9a45a5b60ff6abf2799d6f8addbea",
+          "bytes": 1607
+        },
+        "ontology/v0.1.0/castalia-mapping.json": {
+          "sha256": "bd70758ca0592b9221a04bc4fd5ef1baf6a77b193d76ddea631d661b827f0d12",
+          "bytes": 1494
+        },
+        "ontology/v0.1.0/castalia-native-authority-profile.schema.json": {
+          "sha256": "5bcb39d232865fa4a7de200625e3ec02e21799d99eab544ab4bab9f8fc5fd9e4",
+          "bytes": 2338
+        },
+        "ontology/v0.1.0/castalia-provider-connection.schema.json": {
+          "sha256": "ff3eec75a34c70a0a08b497f5448072446f7892db8d2b81b52a8341498f3f5e1",
+          "bytes": 2408
+        },
+        "ontology/v0.1.0/command.schema.json": {
+          "sha256": "5f2e61345b7692c53f67e8d8b67d6fce7078c1bfba3cfe341851dd02686d516e",
+          "bytes": 26174
+        },
+        "ontology/v0.1.0/conformance.json": {
+          "sha256": "94f1443d84dfd6d6f675ded2d40c666b1b9b1d2b3e72268bbb5194558cd50fab",
+          "bytes": 77135
+        },
+        "ontology/v0.1.0/connections.schema.json": {
+          "sha256": "682e23e140b7b6ae1997de357e38bc7c5297e98137fcb1fd7c78a01f6289c424",
+          "bytes": 4469
+        },
+        "ontology/v0.1.0/context.jsonld": {
+          "sha256": "9107ae8da77dbe8d7c379e944f3c99e112126bf84af14286caa87644e95572d8",
+          "bytes": 915
+        },
+        "ontology/v0.1.0/identity.schema.json": {
+          "sha256": "68866e8630125d88aeb39964cbb6e5034a5701eb2cc05799b757eea4b33c5c49",
+          "bytes": 1486
+        },
+        "ontology/v0.1.0/manifest.json": {
+          "sha256": "1280c588363ecb240a8f439f835a336b84e1fc961b8f44ab264c3f34296812b4",
+          "bytes": 2818
+        },
+        "ontology/v0.1.0/ontology.jsonld": {
+          "sha256": "a4515dd1b8a6290237cc1bfadf854fc6c670cfed094dd93eefc4ed8830eb8315",
+          "bytes": 3221
+        },
+        "ontology/v0.1.0/publication.schema.json": {
+          "sha256": "aaf2e5df78513831a52c3082f529cce0549f46c5c6d94f53ee63617a82aa8e26",
+          "bytes": 14257
+        },
+        "ontology/v0.1.0/social-action.schema.json": {
+          "sha256": "8b05a74af7d176eb6248a9892a9fa156a4596c6056b5bd3d9dff2ec042229601",
+          "bytes": 13034
+        },
+        "ontology/v0.1.0/social-event.schema.json": {
+          "sha256": "f92f3d962a5e1378c01b52e7cee488b0f653647271ae3e2bad3a469c3e4630c3",
+          "bytes": 14230
+        },
+        "ontology/v0.1.0/social-local.schema.json": {
+          "sha256": "5a199d0bae2771381305f8c0b9a1fe12e3cf2b044df16fcfbd9aacbf67bd7fe8",
+          "bytes": 16650
+        },
+        "ontology/v0.1.0/social.schema.json": {
+          "sha256": "f09fb3b50bb8cfdfc0cd24db18f12578a005500cb52a45df4eb5d79b8dda4405",
+          "bytes": 19923
+        },
+        "ontology/v0.1.0/state.schema.json": {
+          "sha256": "752ce61a0ecdf2517aca64484967c2c9180c6c9edacd73f0ba6f25dfc92be72f",
+          "bytes": 27944
+        },
+        "ontology/v0.2.0/audio-candidates.schema.json": {
+          "sha256": "e6aa4dfa76a7e739deaa2c96cb6b0b12da12873fc3a82dbb63fd72a9f12f9aec",
+          "bytes": 1418
+        },
+        "ontology/v0.2.0/audio-observation.schema.json": {
+          "sha256": "af8b89353ca93af9d0e8f70cd5f8c9b1bde03a6c4b60ddcb87fc18b444821200",
+          "bytes": 2304
+        },
+        "ontology/v0.2.0/authority-policy.schema.json": {
+          "sha256": "dcf92eb6f727fb6934beedb02a850a401b107f9bee1e62b8c222b6acc56301fa",
+          "bytes": 1607
+        },
+        "ontology/v0.2.0/castalia-mapping.json": {
+          "sha256": "bd70758ca0592b9221a04bc4fd5ef1baf6a77b193d76ddea631d661b827f0d12",
+          "bytes": 1494
+        },
+        "ontology/v0.2.0/castalia-native-authority-profile.schema.json": {
+          "sha256": "5bcb39d232865fa4a7de200625e3ec02e21799d99eab544ab4bab9f8fc5fd9e4",
+          "bytes": 2338
+        },
+        "ontology/v0.2.0/castalia-provider-connection.schema.json": {
+          "sha256": "ff3eec75a34c70a0a08b497f5448072446f7892db8d2b81b52a8341498f3f5e1",
+          "bytes": 2408
+        },
+        "ontology/v0.2.0/command.schema.json": {
+          "sha256": "f5610dbbed05398c747f9fe00e39aa37a6fccb8421c72cdbd43eaf351cf2c000",
+          "bytes": 28482
+        },
+        "ontology/v0.2.0/conformance.json": {
+          "sha256": "2543e51e6f6aebddca2ffad6ae798c4bf42d869800e3249938910b33c2bbe6ec",
+          "bytes": 77239
+        },
+        "ontology/v0.2.0/connections.schema.json": {
+          "sha256": "836f9e1b9b49f3c1e1cfa627383e52c1411bfa987c85daece786818b46d5a6dd",
+          "bytes": 4469
+        },
+        "ontology/v0.2.0/context.jsonld": {
+          "sha256": "cf85dc951efec08a675f66ea42ad4de4d272692cda858d423b698711f8a6cd86",
+          "bytes": 1249
+        },
+        "ontology/v0.2.0/identity.schema.json": {
+          "sha256": "cd53f9c9b81318957a3ecc74b051ede6a6080f29f41edf4518ba273b502d3ea5",
+          "bytes": 1486
+        },
+        "ontology/v0.2.0/manifest.json": {
+          "sha256": "ad6e81bbafabfb4f8226b8af9a26aebf4ae1c6d686bbad53fba3d3b71bc4ea39",
+          "bytes": 3087
+        },
+        "ontology/v0.2.0/notebook-ink.json": {
+          "sha256": "0c9d231dac51d49c5c6472674336315e2fca443231ed9bbd8a2ad8286e428d4d",
+          "bytes": 112517
+        },
+        "ontology/v0.2.0/notebook-ink.schema.json": {
+          "sha256": "628dd22795fe1e8ec20274754dc978889c948de6dbc3ecea4728cf1f4fc2ac41",
+          "bytes": 10229
+        },
+        "ontology/v0.2.0/ontology.jsonld": {
+          "sha256": "213519597c331a211dfe07fbc16b4024bd46533d9915c4f9594915e7c1e91baa",
+          "bytes": 5193
+        },
+        "ontology/v0.2.0/publication.schema.json": {
+          "sha256": "615f39dbfa708b3205bfac27fbec6611c4b2d045af64da5954b55cc6a8e87142",
+          "bytes": 14257
+        },
+        "ontology/v0.2.0/social-action.schema.json": {
+          "sha256": "61b19e7693fec5d32056f0dca2c96198b515473c9a3c3db4179b216932e7f034",
+          "bytes": 13034
+        },
+        "ontology/v0.2.0/social-event.schema.json": {
+          "sha256": "abae795af3bde339539fb0382f29f5969fad3f28afaf7da884397215b57954c4",
+          "bytes": 14230
+        },
+        "ontology/v0.2.0/social-local.schema.json": {
+          "sha256": "346990b88779e8b9fcb7c0666b142d4c2b989a0dc1e505d2c8cbd79ce7c3a8f6",
+          "bytes": 16650
+        },
+        "ontology/v0.2.0/social.schema.json": {
+          "sha256": "7c8dc6093af6a86c2422ee4fbc58b0855070d2bfce17deb3b90c2f6c27224618",
+          "bytes": 19923
+        },
+        "ontology/v0.2.0/state.schema.json": {
+          "sha256": "b4d1fca0d56534c6dce3a69168397012bfd0fef90beca877fc7538df9067ccc9",
+          "bytes": 31281
+        },
+        "reader-geometry.js": {
+          "sha256": "bb648f42b1fb6893ee10833559756e9016ee5ec7423442643cb62cab34345c81",
+          "bytes": 2180
+        },
+        "reader.js": {
+          "sha256": "fbb441bdf0e648c54ebd15bf5b719739603c1fcc73664d413a213487d6c1a88b",
+          "bytes": 11354
+        }
+      }
+    },
+    "ipad-device": {
+      "root": "apps/apple/Build/ipad-device/Build/Products/Debug-iphoneos/BookNookPad.app",
+      "files": {
+        "BookNookPad": {
+          "sha256": "6ea2179dba6a769cff9ea74c6ea1ea38b679ca74ed7b5028ac34a3ea2efa0ba6",
+          "bytes": 72688
+        },
+        "BookNookPad.debug.dylib": {
+          "sha256": "d16a22066faf3f38e3892501a28dcc7f6e8f801c6ebd68931606e65396a8aee8",
+          "bytes": 41325360
+        },
+        "Info.plist": {
+          "sha256": "ba87ad9134a72e334991d99505f68bbe8719b947124d103082035208aeacb387",
+          "bytes": 1178
+        },
+        "KindleWebSourceNotice.txt": {
+          "sha256": "54f27329d18a21269fb29b8e9a037ceef19d1d56ef812e429c5c1bfd388e5724",
+          "bytes": 1747
+        },
+        "PkgInfo": {
+          "sha256": "82502191c9484b04d685374f9879a0066069c49b8acae7a04b01d38d07e8eca0",
+          "bytes": 8
+        },
+        "__preview.dylib": {
+          "sha256": "2594acdc3c4586eaa7fb15500616b14f6cf86f13bd8ab7e13dbc5676b1b28d4c",
+          "bytes": 16456
+        },
+        "ontology/discovery.json": {
+          "sha256": "38b095e6dc0107ef6c8ea5d39de8029935fd6d6b98dead4cb9a71b3eb25c8129",
+          "bytes": 594
+        },
+        "ontology/portable/v1/conformance.json": {
+          "sha256": "bf0dbee52bf6d4a76e0bc40daf659befed2e9c02c7e5ffe60a17aef1ec7a4b81",
+          "bytes": 25343
+        },
+        "ontology/portable/v1/manifest.json": {
+          "sha256": "c9ae6fbf19e1dfe5dab30c7f70b15a238c9b7089eba4c7d1a8c0ec0662d77c1a",
+          "bytes": 546
+        },
+        "ontology/portable/v1/portable-export.schema.json": {
+          "sha256": "c23adacf6dee4607605b8e14e606a056bf0990f2b8456ab0bb7b63cf8b954c93",
+          "bytes": 56092
+        },
+        "ontology/portable/v1/social-archive.schema.json": {
+          "sha256": "bb16e721071c2717a42f4dbe62a0c45914ed7b86a26aaa5495c8867c2f00116a",
+          "bytes": 23687
+        },
+        "ontology/providers/v1/conformance.json": {
+          "sha256": "1204634e9c959469c7b611903d5ee228d013e7cacd4b77e402f46d827abb8d25",
+          "bytes": 6592
+        },
+        "ontology/providers/v1/manifest.json": {
+          "sha256": "1df9f744a1b5aea265078ea7dc33c76e55d64deff23c2aefc92fd4706caa5fb8",
+          "bytes": 981
+        },
+        "ontology/providers/v1/provider-execution.schema.json": {
+          "sha256": "25deec8b99262eb589cf1b2162e6803de086da9bd824cbd3026e03c1dbe4f91d",
+          "bytes": 18375
+        },
+        "ontology/providers/v1/provider-operation.schema.json": {
+          "sha256": "6ce90396928fc2a5d2dc02bd56a0c561651a22b8ea98380c3551af768005b5b9",
+          "bytes": 5552
+        },
+        "ontology/providers/v1/provider-registry.schema.json": {
+          "sha256": "ff0caed30cf76396fa6dbf5f240faf508581bb339b25735d5f35def8a6026e3a",
+          "bytes": 4132
+        },
+        "ontology/providers/v1/provider-request.schema.json": {
+          "sha256": "7065b0d5c2f21fc4bcb3b343522a74e00a36b540dbfee9c3d3771bdeacba0abd",
+          "bytes": 7023
+        },
+        "ontology/providers/v1/provider-response.schema.json": {
+          "sha256": "68ff7c975f123eecb794af718ed2517fd3dd8b1806f2a2513a65931b861ab249",
+          "bytes": 10781
+        },
+        "ontology/v0.1.0/audio-candidates.schema.json": {
+          "sha256": "5ba273aec5beb7edf0a4d601678d6fa3f42eb1e40bf3e52be95d0575d5bd54f8",
+          "bytes": 1418
+        },
+        "ontology/v0.1.0/audio-observation.schema.json": {
+          "sha256": "486049e1d07d6cb06957a821562f7c02de9951930d99ac62e05d7ac383fd5360",
+          "bytes": 2304
+        },
+        "ontology/v0.1.0/authority-policy.schema.json": {
+          "sha256": "71b67f479c3d4610ba4af084a6b4c3e003f9a45a5b60ff6abf2799d6f8addbea",
+          "bytes": 1607
+        },
+        "ontology/v0.1.0/castalia-mapping.json": {
+          "sha256": "bd70758ca0592b9221a04bc4fd5ef1baf6a77b193d76ddea631d661b827f0d12",
+          "bytes": 1494
+        },
+        "ontology/v0.1.0/castalia-native-authority-profile.schema.json": {
+          "sha256": "5bcb39d232865fa4a7de200625e3ec02e21799d99eab544ab4bab9f8fc5fd9e4",
+          "bytes": 2338
+        },
+        "ontology/v0.1.0/castalia-provider-connection.schema.json": {
+          "sha256": "ff3eec75a34c70a0a08b497f5448072446f7892db8d2b81b52a8341498f3f5e1",
+          "bytes": 2408
+        },
+        "ontology/v0.1.0/command.schema.json": {
+          "sha256": "5f2e61345b7692c53f67e8d8b67d6fce7078c1bfba3cfe341851dd02686d516e",
+          "bytes": 26174
+        },
+        "ontology/v0.1.0/conformance.json": {
+          "sha256": "94f1443d84dfd6d6f675ded2d40c666b1b9b1d2b3e72268bbb5194558cd50fab",
+          "bytes": 77135
+        },
+        "ontology/v0.1.0/connections.schema.json": {
+          "sha256": "682e23e140b7b6ae1997de357e38bc7c5297e98137fcb1fd7c78a01f6289c424",
+          "bytes": 4469
+        },
+        "ontology/v0.1.0/context.jsonld": {
+          "sha256": "9107ae8da77dbe8d7c379e944f3c99e112126bf84af14286caa87644e95572d8",
+          "bytes": 915
+        },
+        "ontology/v0.1.0/identity.schema.json": {
+          "sha256": "68866e8630125d88aeb39964cbb6e5034a5701eb2cc05799b757eea4b33c5c49",
+          "bytes": 1486
+        },
+        "ontology/v0.1.0/manifest.json": {
+          "sha256": "1280c588363ecb240a8f439f835a336b84e1fc961b8f44ab264c3f34296812b4",
+          "bytes": 2818
+        },
+        "ontology/v0.1.0/ontology.jsonld": {
+          "sha256": "a4515dd1b8a6290237cc1bfadf854fc6c670cfed094dd93eefc4ed8830eb8315",
+          "bytes": 3221
+        },
+        "ontology/v0.1.0/publication.schema.json": {
+          "sha256": "aaf2e5df78513831a52c3082f529cce0549f46c5c6d94f53ee63617a82aa8e26",
+          "bytes": 14257
+        },
+        "ontology/v0.1.0/social-action.schema.json": {
+          "sha256": "8b05a74af7d176eb6248a9892a9fa156a4596c6056b5bd3d9dff2ec042229601",
+          "bytes": 13034
+        },
+        "ontology/v0.1.0/social-event.schema.json": {
+          "sha256": "f92f3d962a5e1378c01b52e7cee488b0f653647271ae3e2bad3a469c3e4630c3",
+          "bytes": 14230
+        },
+        "ontology/v0.1.0/social-local.schema.json": {
+          "sha256": "5a199d0bae2771381305f8c0b9a1fe12e3cf2b044df16fcfbd9aacbf67bd7fe8",
+          "bytes": 16650
+        },
+        "ontology/v0.1.0/social.schema.json": {
+          "sha256": "f09fb3b50bb8cfdfc0cd24db18f12578a005500cb52a45df4eb5d79b8dda4405",
+          "bytes": 19923
+        },
+        "ontology/v0.1.0/state.schema.json": {
+          "sha256": "752ce61a0ecdf2517aca64484967c2c9180c6c9edacd73f0ba6f25dfc92be72f",
+          "bytes": 27944
+        },
+        "ontology/v0.2.0/audio-candidates.schema.json": {
+          "sha256": "e6aa4dfa76a7e739deaa2c96cb6b0b12da12873fc3a82dbb63fd72a9f12f9aec",
+          "bytes": 1418
+        },
+        "ontology/v0.2.0/audio-observation.schema.json": {
+          "sha256": "af8b89353ca93af9d0e8f70cd5f8c9b1bde03a6c4b60ddcb87fc18b444821200",
+          "bytes": 2304
+        },
+        "ontology/v0.2.0/authority-policy.schema.json": {
+          "sha256": "dcf92eb6f727fb6934beedb02a850a401b107f9bee1e62b8c222b6acc56301fa",
+          "bytes": 1607
+        },
+        "ontology/v0.2.0/castalia-mapping.json": {
+          "sha256": "bd70758ca0592b9221a04bc4fd5ef1baf6a77b193d76ddea631d661b827f0d12",
+          "bytes": 1494
+        },
+        "ontology/v0.2.0/castalia-native-authority-profile.schema.json": {
+          "sha256": "5bcb39d232865fa4a7de200625e3ec02e21799d99eab544ab4bab9f8fc5fd9e4",
+          "bytes": 2338
+        },
+        "ontology/v0.2.0/castalia-provider-connection.schema.json": {
+          "sha256": "ff3eec75a34c70a0a08b497f5448072446f7892db8d2b81b52a8341498f3f5e1",
+          "bytes": 2408
+        },
+        "ontology/v0.2.0/command.schema.json": {
+          "sha256": "f5610dbbed05398c747f9fe00e39aa37a6fccb8421c72cdbd43eaf351cf2c000",
+          "bytes": 28482
+        },
+        "ontology/v0.2.0/conformance.json": {
+          "sha256": "2543e51e6f6aebddca2ffad6ae798c4bf42d869800e3249938910b33c2bbe6ec",
+          "bytes": 77239
+        },
+        "ontology/v0.2.0/connections.schema.json": {
+          "sha256": "836f9e1b9b49f3c1e1cfa627383e52c1411bfa987c85daece786818b46d5a6dd",
+          "bytes": 4469
+        },
+        "ontology/v0.2.0/context.jsonld": {
+          "sha256": "cf85dc951efec08a675f66ea42ad4de4d272692cda858d423b698711f8a6cd86",
+          "bytes": 1249
+        },
+        "ontology/v0.2.0/identity.schema.json": {
+          "sha256": "cd53f9c9b81318957a3ecc74b051ede6a6080f29f41edf4518ba273b502d3ea5",
+          "bytes": 1486
+        },
+        "ontology/v0.2.0/manifest.json": {
+          "sha256": "ad6e81bbafabfb4f8226b8af9a26aebf4ae1c6d686bbad53fba3d3b71bc4ea39",
+          "bytes": 3087
+        },
+        "ontology/v0.2.0/notebook-ink.json": {
+          "sha256": "0c9d231dac51d49c5c6472674336315e2fca443231ed9bbd8a2ad8286e428d4d",
+          "bytes": 112517
+        },
+        "ontology/v0.2.0/notebook-ink.schema.json": {
+          "sha256": "628dd22795fe1e8ec20274754dc978889c948de6dbc3ecea4728cf1f4fc2ac41",
+          "bytes": 10229
+        },
+        "ontology/v0.2.0/ontology.jsonld": {
+          "sha256": "213519597c331a211dfe07fbc16b4024bd46533d9915c4f9594915e7c1e91baa",
+          "bytes": 5193
+        },
+        "ontology/v0.2.0/publication.schema.json": {
+          "sha256": "615f39dbfa708b3205bfac27fbec6611c4b2d045af64da5954b55cc6a8e87142",
+          "bytes": 14257
+        },
+        "ontology/v0.2.0/social-action.schema.json": {
+          "sha256": "61b19e7693fec5d32056f0dca2c96198b515473c9a3c3db4179b216932e7f034",
+          "bytes": 13034
+        },
+        "ontology/v0.2.0/social-event.schema.json": {
+          "sha256": "abae795af3bde339539fb0382f29f5969fad3f28afaf7da884397215b57954c4",
+          "bytes": 14230
+        },
+        "ontology/v0.2.0/social-local.schema.json": {
+          "sha256": "346990b88779e8b9fcb7c0666b142d4c2b989a0dc1e505d2c8cbd79ce7c3a8f6",
+          "bytes": 16650
+        },
+        "ontology/v0.2.0/social.schema.json": {
+          "sha256": "7c8dc6093af6a86c2422ee4fbc58b0855070d2bfce17deb3b90c2f6c27224618",
+          "bytes": 19923
+        },
+        "ontology/v0.2.0/state.schema.json": {
+          "sha256": "b4d1fca0d56534c6dce3a69168397012bfd0fef90beca877fc7538df9067ccc9",
+          "bytes": 31281
+        },
+        "reader-geometry.js": {
+          "sha256": "bb648f42b1fb6893ee10833559756e9016ee5ec7423442643cb62cab34345c81",
+          "bytes": 2180
+        },
+        "reader.js": {
+          "sha256": "fbb441bdf0e648c54ebd15bf5b719739603c1fcc73664d413a213487d6c1a88b",
+          "bytes": 11354
+        }
+      }
+    }
+  },
+  "sdk_archives": {
+    "booknook-connectors-0.1.0.crate": {
+      "sha256": "78f3c49eaf470b9b4566d215d4d19e8cad9578d3b99f9d069bcbaaf9637f21c0",
+      "bytes": 55763
+    },
+    "booknook-core-0.1.0.crate": {
+      "sha256": "ca978d4432b413513226abe586b73236d13108dea018e128d1b6a35336fbb3fd",
+      "bytes": 131014
+    },
+    "booknook-native-0.1.0.crate": {
+      "sha256": "26771937b500e3856976f0e20d6adff5778c7e7003b3587f49650652c2d3373a",
+      "bytes": 134285
+    },
+    "booknook-sdk-0.1.0.tgz": {
+      "sha256": "f2f805d879f593528618ae3b019af7c6c71661f634ff10468808227245205e9a",
+      "bytes": 4251035
+    },
+    "booknook-swift-sdk-0.1.0.tar.gz": {
+      "sha256": "b8cbce05dffe25ed639457c0bdcc7271d89c688b6df28013ccb6af7a850fe1ca",
+      "bytes": 130791211
+    },
+    "booknook-wasm-0.1.0.crate": {
+      "sha256": "676bff182fd8aa1d0365b9d142955ce0146f7022d1a7a5aa48c6334375573304",
+      "bytes": 34828
+    }
+  },
+  "changed_sources": [
+    "Cargo.lock",
+    "apps/apple/BookNook/InkJournal.swift",
+    "apps/apple/BookNook/Models.swift",
+    "apps/apple/BookNook/NativeNotebookPage.swift",
+    "apps/apple/BookNook/NotebookInk.swift",
+    "apps/apple/BookNook/NotebookInkModel.swift",
+    "apps/apple/BookNook/NotebookInkRecognition.swift",
+    "apps/apple/BookNook/NotebookPane.swift",
+    "apps/apple/BookNook/NotebookTranscriptionDraft.swift",
+    "apps/apple/BookNook/ReaderInkSession.swift",
+    "apps/apple/BookNook/ReadingDeskView.swift",
+    "crates/connectors/src/lib.rs",
+    "crates/connectors/src/nostr_transport.rs",
+    "crates/core/Cargo.toml",
+    "crates/core/examples/schema.rs",
+    "crates/core/src/lib.rs",
+    "crates/core/src/portable_archive.rs",
+    "crates/core/tests/portable_archive.rs",
+    "crates/native/examples/portable-fixture.rs",
+    "crates/native/src/lib.rs",
+    "crates/native/src/notebook_storage.rs",
+    "crates/native/src/social_bridge.rs",
+    "crates/native/src/social_relay_acceptance.rs",
+    "crates/native/tests/notebook_storage.rs",
+    "crates/wasm/src/lib.rs",
+    "ontology/discovery.json",
+    "ontology/portable/v1/conformance.json",
+    "ontology/portable/v1/manifest.json",
+    "ontology/portable/v1/portable-export.schema.json",
+    "ontology/portable/v1/social-archive.schema.json",
+    "scripts/sync-package-resources.py",
+    "sdk/swift/Sources/BookNookServices/BookNookNotebook.swift",
+    "sdk/typescript/archive-types.ts",
+    "sdk/typescript/archives.ts",
+    "sdk/typescript/index.ts"
+  ],
+  "changed_test_inputs": [
+    "scripts/test-ui-workflows.sh",
+    "tests/AutomaticNotebookEditingAcceptance.swift",
+    "tests/AutomaticNotebookPageAcceptance.swift",
+    "tests/DeskWorkflowTests.swift",
+    "tests/InkRecoveryAcceptance.swift",
+    "tests/PackagedNotebookSmoke.swift",
+    "tests/PackagedSDKSmoke.cjs",
+    "tests/PackagedSDKTypes.cts",
+    "tests/PackagedSDKTypes.mts",
+    "tests/ontology-host.py",
+    "tests/portable-archive-parity.cjs"
+  ],
+  "change": "Close final-plan audit findings: shared complete portable exports, public native/Swift notebook storage, fresh social authorization, pending-ink recovery and cancellable recognition, preserving the calm two-pane writing desk and all prior contracts.",
+  "verified_at_utc": "2026-10-16T03:26:50.941659+00:00",
+  "status": "Recorded inputs stayed unchanged through native/WASM contract checks, three Apple builds and extracted Rust/npm/Swift package verification. This build receipt does not establish physical Pencil accuracy, live account qualification, distribution signing, or publication. Physical UI results are recorded separately."
+}

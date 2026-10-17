@@ -1,0 +1,7 @@
+module booknook_nativeFFI {
+    header "booknook_nativeFFI.h"
+    export *
+    use "Darwin"
+    use "_Builtin_stdbool"
+    use "_Builtin_stdint"
+}

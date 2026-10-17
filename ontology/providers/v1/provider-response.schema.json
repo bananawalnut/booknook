@@ -1,0 +1,495 @@
+{
+  "$defs": {
+    "AudioMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "authors": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "ebook_identifiers": {
+          "description": "Explicit ebook identifiers reported by the source, with their namespaces.\nThe audiobook ASIN is not implicitly a Kindle ASIN or an ebook ISBN.",
+          "items": {
+            "$ref": "#/$defs/SourceRef"
+          },
+          "type": "array"
+        },
+        "language": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "title": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "AudioObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "alignment": {
+          "type": "string"
+        },
+        "asin": {
+          "type": "string"
+        },
+        "duration_milliseconds": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "edition_identifier": {
+          "description": "Legacy opaque identifier retained without guessing its namespace.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "fetched_at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AudioMetadata"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "position_milliseconds": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "source_updated_at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "asin",
+        "position_milliseconds",
+        "source_updated_at",
+        "fetched_at",
+        "alignment"
+      ],
+      "type": "object"
+    },
+    "CatalogInput": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "format": {
+              "const": "kindle",
+              "type": "string"
+            },
+            "json": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "format",
+            "json"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "csv": {
+              "type": "string"
+            },
+            "format": {
+              "const": "goodreads",
+              "type": "string"
+            }
+          },
+          "required": [
+            "format",
+            "csv"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "entries": {
+              "items": {
+                "$ref": "#/$defs/SourceCatalogEntry"
+              },
+              "type": "array"
+            },
+            "format": {
+              "const": "normalized",
+              "type": "string"
+            }
+          },
+          "required": [
+            "format",
+            "entries"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "DirectoryKind": {
+      "enum": [
+        "Entity",
+        "Person",
+        "Agent",
+        "Organization",
+        "Actor"
+      ],
+      "type": "string"
+    },
+    "DirectoryReference": {
+      "additionalProperties": false,
+      "properties": {
+        "display_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "entity_iri": {
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/DirectoryKind"
+        }
+      },
+      "required": [
+        "entity_iri",
+        "kind"
+      ],
+      "type": "object"
+    },
+    "ProviderResult": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "catalog": {
+              "$ref": "#/$defs/CatalogInput"
+            },
+            "kind": {
+              "const": "catalog",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "catalog"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "content",
+              "type": "string"
+            },
+            "media_type": {
+              "type": "string"
+            },
+            "sha256": {
+              "type": "string"
+            },
+            "source_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "source_id",
+            "media_type",
+            "sha256"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "positions",
+              "type": "string"
+            },
+            "observations": {
+              "items": {
+                "$ref": "#/$defs/AudioObservation"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "kind",
+            "observations"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "source_positions",
+              "type": "string"
+            },
+            "observations": {
+              "items": {
+                "$ref": "#/$defs/SourcePosition"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "kind",
+            "observations"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "identity",
+              "type": "string"
+            },
+            "reference": {
+              "$ref": "#/$defs/DirectoryReference"
+            }
+          },
+          "required": [
+            "kind",
+            "reference"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "recommendations",
+              "type": "string"
+            },
+            "recommendations": {
+              "items": {
+                "$ref": "#/$defs/Recommendation"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "kind",
+            "recommendations"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "event_id": {
+              "type": "string"
+            },
+            "kind": {
+              "const": "social_publish",
+              "type": "string"
+            },
+            "relays": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "kind",
+            "event_id",
+            "relays"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "events": {
+              "items": true,
+              "type": "array"
+            },
+            "kind": {
+              "const": "social_fetch",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "events"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Recommendation": {
+      "additionalProperties": false,
+      "properties": {
+        "book_id": {
+          "type": "string"
+        },
+        "reasons": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "score": {
+          "format": "uint32",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "book_id",
+        "score",
+        "reasons"
+      ],
+      "type": "object"
+    },
+    "SourceCatalogEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "authors": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "edition_identifiers": {
+          "items": {
+            "$ref": "#/$defs/SourceRef"
+          },
+          "type": "array"
+        },
+        "language": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_id": {
+          "type": "string"
+        },
+        "subjects": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_id",
+        "title",
+        "authors",
+        "subjects",
+        "edition_identifiers",
+        "language"
+      ],
+      "type": "object"
+    },
+    "SourcePosition": {
+      "additionalProperties": false,
+      "properties": {
+        "observed_at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "source_id": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_id",
+        "value",
+        "observed_at"
+      ],
+      "type": "object"
+    },
+    "SourceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "provider",
+        "id"
+      ],
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "connection_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "generation": {
+      "format": "uint64",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "provider_id": {
+      "type": "string"
+    },
+    "request_id": {
+      "type": "string"
+    },
+    "result": {
+      "$ref": "#/$defs/ProviderResult"
+    },
+    "schema": {
+      "const": "booknook.provider-response.v1",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema",
+    "request_id",
+    "generation",
+    "provider_id",
+    "connection_id",
+    "result"
+  ],
+  "title": "ProviderResponse",
+  "type": "object",
+  "$id": "urn:booknook:schema:provider-response:v1"
+}

@@ -1,0 +1,206 @@
+{
+  "$defs": {
+    "CastaliaSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "audience": {
+          "type": "string"
+        },
+        "credential_endpoint": {
+          "default": "",
+          "type": "string"
+        },
+        "holder_public_key": {
+          "type": "string"
+        },
+        "issuer": {
+          "type": "string"
+        },
+        "issuer_public_key": {
+          "type": "string"
+        },
+        "key_id": {
+          "type": "string"
+        },
+        "policy_digest": {
+          "default": "",
+          "type": "string"
+        },
+        "terminal_caller": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "issuer",
+        "key_id",
+        "issuer_public_key",
+        "audience",
+        "terminal_caller",
+        "holder_public_key"
+      ],
+      "type": "object"
+    },
+    "ConnectionStatus": {
+      "enum": [
+        "available",
+        "reauthorization_required",
+        "unavailable"
+      ],
+      "type": "string"
+    },
+    "CredentialPortability": {
+      "enum": [
+        "device_bound",
+        "reauthorization_required",
+        "provider_defined"
+      ],
+      "type": "string"
+    },
+    "CredentialReference": {
+      "additionalProperties": false,
+      "properties": {
+        "portability": {
+          "$ref": "#/$defs/CredentialPortability"
+        },
+        "reference": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string"
+        },
+        "storage": {
+          "$ref": "#/$defs/CredentialStorage"
+        }
+      },
+      "required": [
+        "reference",
+        "storage",
+        "portability"
+      ],
+      "type": "object"
+    },
+    "CredentialStorage": {
+      "enum": [
+        "secure_local",
+        "wallet_managed"
+      ],
+      "type": "string"
+    },
+    "ProviderConnection": {
+      "additionalProperties": false,
+      "properties": {
+        "capabilities": {
+          "items": {
+            "pattern": "^[a-z0-9][a-z0-9._:-]{0,127}$",
+            "type": "string"
+          },
+          "maxItems": 64,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "connection_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "type": "string"
+        },
+        "credential": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CredentialReference"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "display_name": {
+          "maxLength": 160,
+          "minLength": 1,
+          "pattern": "^[^\\u0000-\\u001f\\u007f-\\u009f\\u061c\\u200e\\u200f\\u202a-\\u202e\\u2066-\\u2069]+$",
+          "type": "string"
+        },
+        "provider_id": {
+          "pattern": "^[a-z0-9][a-z0-9._:-]{0,127}$",
+          "type": "string"
+        },
+        "schema": {
+          "$ref": "#/$defs/ProviderConnectionSchema"
+        },
+        "status": {
+          "$ref": "#/$defs/ConnectionStatus"
+        }
+      },
+      "required": [
+        "schema",
+        "connection_id",
+        "provider_id",
+        "display_name",
+        "capabilities",
+        "status",
+        "credential"
+      ],
+      "type": "object"
+    },
+    "ProviderConnectionSchema": {
+      "enum": [
+        "castalia.provider-connection.v1"
+      ],
+      "type": "string"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "audible_marketplace": {
+      "type": "string"
+    },
+    "audible_test_asin": {
+      "type": "string"
+    },
+    "castalia": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CastaliaSettings"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "castalia_profile_name": {
+      "default": null,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "nostr_public_key": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "nostr_relays": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "provider_connections": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ProviderConnection"
+      },
+      "type": "array"
+    },
+    "schema": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema",
+    "nostr_relays",
+    "audible_marketplace",
+    "audible_test_asin"
+  ],
+  "title": "ConnectionSettings",
+  "type": "object",
+  "$id": "urn:booknook:schema:0.1.0:connections"
+}

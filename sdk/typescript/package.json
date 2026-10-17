@@ -1,0 +1,36 @@
+{
+  "name": "@booknook/sdk",
+  "version": "0.1.0",
+  "description": "Book Nook portable reading, notebook and social SDK with browser and Node WebAssembly runtimes",
+  "license": "MIT OR Apache-2.0",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {"types": "./dist/esm/index.d.ts", "default": "./dist/esm/index.js"},
+      "require": {"types": "./dist/cjs/index.d.ts", "default": "./dist/cjs/index.js"}
+    },
+    "./wasm": {
+      "browser": {"types": "./pkg/web/booknook_wasm.d.ts", "default": "./pkg/web/booknook_wasm.js"},
+      "node": {"types": "./pkg/nodejs/booknook_wasm.d.ts", "default": "./pkg/nodejs/booknook_wasm.js"},
+      "default": "./pkg/web/booknook_wasm.js"
+    },
+    "./wasm/web": {"types": "./pkg/web/booknook_wasm.d.ts", "default": "./pkg/web/booknook_wasm.js"},
+    "./wasm/node": {"types": "./pkg/nodejs/booknook_wasm.d.ts", "default": "./pkg/nodejs/booknook_wasm.js"},
+    "./wasm/booknook_wasm_bg.wasm": "./pkg/web/booknook_wasm_bg.wasm",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist", "pkg/web", "pkg/nodejs", "README.md", "scripts/verify-package.mjs",
+    "LICENSE-MIT", "LICENSE-APACHE", "LICENSE-BOUNDARIES.md", "DEPENDENCY-LICENSES.csv", "INTEGRATION-DECISIONS.md"
+  ],
+  "scripts": {
+    "check": "tsc --noEmit --strict --target es2022 --module esnext --moduleResolution bundler index.ts",
+    "build": "node scripts/build.mjs",
+    "prepack": "node scripts/verify-package.mjs"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

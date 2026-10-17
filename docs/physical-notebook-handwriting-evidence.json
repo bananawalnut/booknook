@@ -1,0 +1,391 @@
+{
+  "schema": "booknook.physical-notebook-handwriting.v1",
+  "recorded_at_utc": "2026-10-15T22:46:54.521533+00:00",
+  "release_ready": false,
+  "device": "iPad Air13-inch(M2), iPadOS18.1.1(22B91)",
+  "successful_bounded_test_runs": 3,
+  "passes": [
+    {
+      "test": "test30HandwritingNoInput",
+      "log": {
+        "workspace_file": "work/notebook-handwriting-2026-10-15/device-no-input.log",
+        "sha256": "88471afafaa8edeaa84165da4e93b68deb1a233da8d8cfb984ebe57ecf20280f",
+        "bytes": 4241
+      },
+      "result_bundle": "work/ipad-acceptance-2026-10-15/Results/handwriting-no-input.xcresult"
+    },
+    {
+      "test": "test31HandwritingControlsAndSides",
+      "log": {
+        "workspace_file": "work/notebook-handwriting-2026-10-15/device-controls-v3.log",
+        "sha256": "e93989f59223abbcded0b8da15b27e7b0a23a3daa3351ac052981bd5ee89857f",
+        "bytes": 19601
+      },
+      "result_bundle": "work/ipad-acceptance-2026-10-15/Results/handwriting-controls-v3.xcresult"
+    },
+    {
+      "test": "test32HandwritingTranscriptionAndRecovery",
+      "log": {
+        "workspace_file": "work/notebook-handwriting-2026-10-15/device-transcription-v4.log",
+        "sha256": "14360136cd5089812c4e1f0d7c3a72974d910efcbb5ebae26bbc148556b8d9ef",
+        "bytes": 18782
+      },
+      "result_bundle": "work/ipad-acceptance-2026-10-15/Results/handwriting-transcription-v4.xcresult"
+    }
+  ],
+  "nonpasses": [
+    {
+      "log": {
+        "workspace_file": "work/notebook-handwriting-2026-10-15/device-controls.log",
+        "sha256": "1357d1fc62852899327c77f660a97f96abb4616dfa1bf1e4d1f9937983c97886",
+        "bytes": 12529
+      },
+      "explanation": "Offscreen Ink history was reported hittable; no notebook swipe occurred. Harness now checks visible bounds."
+    },
+    {
+      "log": {
+        "workspace_file": "work/notebook-handwriting-2026-10-15/device-controls-v2.log",
+        "sha256": "a042302702522aee000ff8b0f66cde6742b6ae72b9e95781f38c92ddfaeb995a",
+        "bytes": 12132
+      },
+      "explanation": "Harness expected chapter2 despite saved chapter2 reopening and advancing to3. Harness now starts from actual saved chapter."
+    },
+    {
+      "log": {
+        "workspace_file": "work/notebook-handwriting-2026-10-15/device-transcription.log",
+        "sha256": "a782ba847b960eabc50678d42fb23ba15e0432478b4377939e4a4e44f5365991",
+        "bytes": 10278
+      },
+      "explanation": "Synthetic recognition succeeded; initial draft replacement inserted before NOTE because selection was not established. No transcript saved."
+    },
+    {
+      "log": {
+        "workspace_file": "work/notebook-handwriting-2026-10-15/device-transcription-v2.log",
+        "sha256": "b14e06aa388dd6db594db5cb7f15dd2652c25346cb36e6bd03dcc1e7c5b34707",
+        "bytes": 26482
+      },
+      "explanation": "Synthetic recognition succeeded; partial-editor coordinate did not establish keyboard focus. No transcript saved. Final run reveals complete editor before focusing."
+    },
+    {
+      "log": {
+        "workspace_file": "work/notebook-handwriting-2026-10-15/device-transcription-v3.log",
+        "sha256": "21695ae6a5ae41a07cd78f879f448922f2eed46af64fc9deb8c20a58ece08d21",
+        "bytes": 12389
+      },
+      "explanation": "Full-editor visibility assertion used a4point inset at the flush content bottom. Capture and edge-tolerance check added; no transcript saved."
+    }
+  ],
+  "confirmed": [
+    "Type-mode original drawing rendered; Write mode exposes Pencil instructions without keyboard",
+    "Pen/Eraser controls selected; left/right panes swapped without canvas-size change",
+    "Reader chapter navigation leaves notebook position unchanged; actual finger swipe moves notebook while reader chapter stays fixed",
+    "Ink history shows Version2 and earlier version remains stored",
+    "Portrait13-inch retains2panes, landscape returns preferred side; Write/right preferences survive termination/relaunch",
+    "Actual on-device Vision recognizes synthetic NOTE paths; recognition disabled with nonempty draft",
+    "Reviewed Unicode transcript saves separately against exact version and reopens",
+    "Read-only store comparison preserves all preexisting objects, local tables and assets; both native/portable ink versions unchanged"
+  ],
+  "not_claimed": [
+    "Actual Pencil contact, drawing/erasing/inkUndoRedo, pressure/latency/palm rejection and simultaneous reader gestures",
+    "Human handwriting recognition accuracy or broad keyboard/IME/VoiceOver acceptance",
+    "Compact pane switch interaction: this13-inch portrait stayed wide",
+    "Unacknowledged-stroke durability under forced termination",
+    "Live account/custody/remote-social or production-distribution readiness"
+  ],
+  "qa": {
+    "workspace_file": "work/reader-context-recovery-2026-10-15/baseline/frozen-receipts/work/notebook-handwriting-2026-10-15/qa-execution-receipt.json",
+    "sha256": "f3c2fe1029f91499ccf65bb9b3b8a6bbb5bbbc33a963ac44fcaa1970dd60fd84",
+    "bytes": 18498
+  },
+  "store": {
+    "workspace_file": "work/notebook-handwriting-2026-10-15/device-store-receipt.json",
+    "sha256": "cd5ba0e4528e6349709ff30f9ddb13264cc19692e7e9015d001dd173a8b292b1",
+    "bytes": 8903
+  },
+  "attachments": {
+    "handwriting-no-input": [
+      {
+        "name": "30-handwriting-fixture-no-input-accessibility_0_DAC3499A-5886-4C80-86A3-E8B72D97427B.txt",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-no-input/D06E14F9-7A0D-4128-AAD1-363711ADDABD.txt",
+        "sha256": "218472b71e8a6f47878f0fd86068e5f2fc03cd1ac98e8fbdf8d9011bad55f204",
+        "bytes": 22054
+      },
+      {
+        "name": "30-handwriting-fixture-no-input-screen_0_F0698AF7-1448-4008-ADE5-EDB07216467A.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-no-input/9064FD6C-C0AB-466F-B778-C97181331497.png",
+        "sha256": "06da277b42da2391c069f46f8b8260a1b660c82d6a71f0a7fbdb8059b9d613e8",
+        "bytes": 590488
+      },
+      {
+        "name": "30-handwriting-fixture-no-input_0_A4181E90-5BBA-4713-B048-214B1B97BD3E.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-no-input/49263700-23ED-4816-A110-5181B890BF75.png",
+        "sha256": "8917aa4bfb22bb8d595ac0470c1fcca4a5e6f9238b7309d2da28403f7d44d037",
+        "bytes": 449389
+      }
+    ],
+    "handwriting-controls-v3": [
+      {
+        "name": "31-write-mode-and-side-after-reopen-accessibility_0_4E8D61B3-946F-439C-9FCF-B9F185A7DD1C.txt",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-controls-v3/EA50D1C2-0AC2-437E-B72D-0E7D35860082.txt",
+        "sha256": "c845c3dcc5b581149c6c98ee20f060c697d63b3bf2389eb789f288b887eb8ff1",
+        "bytes": 22629
+      },
+      {
+        "name": "31-write-mode-and-side-after-reopen-screen_0_785D915C-1CAD-4015-93ED-68089C92696F.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-controls-v3/7A6F5DD3-AFA9-4ABC-A93B-89E6C7AE8CFC.png",
+        "sha256": "3fa0055daeb86f9ab941a1e487fc2b88092ae2e24619bea5af19a6082a6353fe",
+        "bytes": 636484
+      },
+      {
+        "name": "31-write-mode-and-side-after-reopen_0_7AB6513A-693D-4932-848C-141328C46A04.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-controls-v3/DA652532-D0AB-4602-894E-EF4BF44E5675.png",
+        "sha256": "50c384cfc2f47210f4dd5d16a2ac3b7a35dbea14741ab714fe19a02ebd2f9ee5",
+        "bytes": 476033
+      },
+      {
+        "name": "31-landscape-side-preference-restored-accessibility_0_92A714F2-EC09-4CDA-B1DA-A62EF18DBEA8.txt",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-controls-v3/3992334E-9904-4BDB-83EE-7EB53E8CF638.txt",
+        "sha256": "ac2b0fe52ca08108026d4fdecfa155ea771b694ba2cca6e9622d2255b7869f70",
+        "bytes": 22625
+      },
+      {
+        "name": "31-landscape-side-preference-restored-screen_0_434257E8-9C27-45D7-85CC-75FE4E054C95.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-controls-v3/05685C82-CD99-42CD-B008-AE31D153B51C.png",
+        "sha256": "b8d9c8e5ab4d759d62da4fcc49023e82a60d71ba3f747c2363613e52afc6b252",
+        "bytes": 636386
+      },
+      {
+        "name": "31-landscape-side-preference-restored_0_BB3ED2FF-A8A7-4470-8205-E9E3D7A2255E.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-controls-v3/1308EBD0-D6BD-48D6-A047-2D157A246DD8.png",
+        "sha256": "8ee11dfe9a3c8fd9e21dbc9f9e0645b07c3cec2677d7abbb84fade05765d6308",
+        "bytes": 476429
+      },
+      {
+        "name": "31-portrait-retains-two-panes-accessibility_0_D6BB7BE7-411E-45A7-ABBE-31FB1B09CB77.txt",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-controls-v3/43AD407F-53F5-4A1C-B165-D1392D43BF66.txt",
+        "sha256": "ae051da3884a39a32153edd83df7c191008250576ff602fdb99d9da995066b84",
+        "bytes": 16457
+      },
+      {
+        "name": "31-portrait-retains-two-panes-screen_0_8E9B3B9A-13EA-4967-9CD7-DB234DF5E117.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-controls-v3/1831843A-35A9-4B47-BEF4-FA5BE1315B8D.png",
+        "sha256": "c5e4bc877b94fedd501689d32b7d544826076c67d465aa283977db668c4b4bc4",
+        "bytes": 549722
+      },
+      {
+        "name": "31-portrait-retains-two-panes_0_5609DE6F-B9A2-4612-94C9-81A9FC0044AC.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-controls-v3/158D6EBE-FFD0-4490-8FC7-150A5E85D753.png",
+        "sha256": "c5e4bc877b94fedd501689d32b7d544826076c67d465aa283977db668c4b4bc4",
+        "bytes": 549722
+      },
+      {
+        "name": "31-retained-ink-history-accessibility_0_8F9B7A8D-1DF8-4EE1-B0DE-867CFAC2E173.txt",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-controls-v3/F3E626A2-9CEF-4ADE-A8A4-3146B4E6B86D.txt",
+        "sha256": "4688817e3ba138c41276ecaf24c8ff44130a04a89b79eb1b60f906170ed004db",
+        "bytes": 25732
+      },
+      {
+        "name": "31-retained-ink-history-screen_0_87AD8695-8C11-4707-A9E3-BA74A6B7EDB4.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-controls-v3/F02ADB47-576F-4DF9-A46C-B699A8222018.png",
+        "sha256": "637303e398d9583d08ebb651edb5cc2be1da573d6b81bde96f1b715a498160eb",
+        "bytes": 732984
+      },
+      {
+        "name": "31-retained-ink-history_0_ACE4FE4B-6E2F-44B3-AF61-8648012C658F.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-controls-v3/3EADF9D3-C9E0-4FB1-8AF0-115F52CFFB77.png",
+        "sha256": "b2b4dbdd4f9dd5c6a13ae75a306a3f8d1b4921d1243ca59d1caa9a34fd7d5b3c",
+        "bytes": 556712
+      },
+      {
+        "name": "31-finger-scroll-notebook-reader-independent-accessibility_0_9811D71E-FDF9-4A56-A730-313F88017E30.txt",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-controls-v3/C89ABAC5-CFBF-405C-A7DE-E1FDBF5133CB.txt",
+        "sha256": "e0f8375e42f7804d369bfbf0cbe1959c5ca98de7b9f25d5db8f1219962607d37",
+        "bytes": 22614
+      },
+      {
+        "name": "31-finger-scroll-notebook-reader-independent-screen_0_AF15B377-8484-4053-BDA6-0E896BDAADCE.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-controls-v3/A6F415F0-0D53-4AD1-ACBC-D8FCC04F5635.png",
+        "sha256": "60aed2f9bbf2a9004876f2481be45b16feb8309d9652c2ab0a9b12f72ff3417d",
+        "bytes": 599990
+      },
+      {
+        "name": "31-finger-scroll-notebook-reader-independent_0_CC93F0D1-EF03-40E1-AC32-B575F8B7C924.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-controls-v3/620B346D-2769-41A0-B4AB-81B4D11D97B7.png",
+        "sha256": "709c517f2800e658d749d02acf1eb171b5fd0271a10e8f3077b335caeb264e0a",
+        "bytes": 438796
+      },
+      {
+        "name": "31-write-page-right-accessibility_0_0B515D9C-7E02-4DD6-8DF6-F6B6A445F7BD.txt",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-controls-v3/2EFFCB4F-A758-4C0A-8389-4144EE148E67.txt",
+        "sha256": "4ef62ef94187d34de6f9411c4e8d8ca6d3612566c8c141464dbfb94816b3e07f",
+        "bytes": 22638
+      },
+      {
+        "name": "31-write-page-right-screen_0_6E2D14F6-CD7F-4B9B-8760-A3288258F1F5.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-controls-v3/72C8579F-F860-40D9-8314-0B7CB67028CD.png",
+        "sha256": "d81038be7881b1a05bd436478b5d8efe38c18888476e3c0fc2eaabe67eebdd15",
+        "bytes": 624853
+      },
+      {
+        "name": "31-write-page-right_0_E7290ACD-9521-4973-B31F-67DAC0B97981.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-controls-v3/D49E54F0-81BF-4E86-B39A-8113A9133398.png",
+        "sha256": "06bc78088d3688060d214f957bac667f943f3f77b2fb5d68f53a3f8348725129",
+        "bytes": 463667
+      },
+      {
+        "name": "31-write-page-left-accessibility_0_DC40AFE7-3014-420A-990B-6B661634C058.txt",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-controls-v3/D3C0B9CE-DFDB-4DBD-8B43-8CE8D7500229.txt",
+        "sha256": "d02835b9c91b5b6940da6143dc29b135243443241e6a1dc29a6f0abac59d8933",
+        "bytes": 22635
+      },
+      {
+        "name": "31-write-page-left-screen_0_56F95E9B-AF1F-49C2-9379-C2C9632A7EBB.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-controls-v3/27428028-51C5-4BA8-BAC8-3A508711D9FB.png",
+        "sha256": "7fdd58f7c18a7877abd748370fa85d81185ee3b5ca3aab4fe760e3296b004e87",
+        "bytes": 625689
+      },
+      {
+        "name": "31-write-page-left_0_A1BA6571-0AE6-4A22-AF56-60D60A6A4B65.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-controls-v3/912E1BE7-EEEB-415D-9085-5354C9D5D961.png",
+        "sha256": "ca0be41d5dfb269e7fc28520718bb8ad157652f49894c8e57f656faf09e63f31",
+        "bytes": 503011
+      }
+    ],
+    "handwriting-transcription-v4": [
+      {
+        "name": "32-original-and-transcript-after-reopen-accessibility_0_039D6A39-CDEA-45BF-B89F-196CCB0C2E2F.txt",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-transcription-v4/51C9A7BE-FC1C-4AFA-869F-24963929F0BE.txt",
+        "sha256": "b79d53a11e97d4c258381678224869cfe0073d7dc6d68b19afbbd93d74b4125f",
+        "bytes": 23194
+      },
+      {
+        "name": "32-original-and-transcript-after-reopen-screen_0_76521EA0-5557-4635-B742-84D4EF26AE51.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-transcription-v4/81F78965-6ADF-4A9F-BC91-7C4ED9768285.png",
+        "sha256": "1fa70b7bd39e44578976dc0a6c7141cb7a8faa97e7f7c80a46da9b68aac1d19b",
+        "bytes": 633500
+      },
+      {
+        "name": "32-original-and-transcript-after-reopen_0_72B0B3AE-86E7-4889-861C-E8797942BE06.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-transcription-v4/C899B1E9-908E-4D69-9177-57BDB8F80237.png",
+        "sha256": "9f90a9d86b1565cd367e9d623dc99edccf6a186e5b5f562f080b613fa6f64704",
+        "bytes": 473613
+      },
+      {
+        "name": "32-reviewed-text-alongside-original-accessibility_0_279C176B-A24D-42E2-864D-6E90E6F0D3D8.txt",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-transcription-v4/11C92AFF-F5A5-4880-9AC5-EC96216A5271.txt",
+        "sha256": "6d9cfc9fc9bce2f6d58354a12bd0a824b3622e5e97c37e5d16968e5f7f992cf0",
+        "bytes": 23271
+      },
+      {
+        "name": "32-reviewed-text-alongside-original-screen_0_ED3AF1C9-2E75-44ED-A3AB-E1B0641AC72B.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-transcription-v4/5A5E2CAE-6645-45A7-B284-721975D93963.png",
+        "sha256": "7b0d1e00da876b76099ee4991246951a92764d853cd6a418a1dcfcdd5fc027ad",
+        "bytes": 627523
+      },
+      {
+        "name": "32-reviewed-text-alongside-original_0_25588C23-140A-4E0E-A090-3223FB456B86.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-transcription-v4/7CCD6025-3421-4544-B88A-D60207F89AD7.png",
+        "sha256": "646a74746989507413ce18e780dc433200aa23493b0fbf0daf8583e5336ac9e0",
+        "bytes": 467903
+      },
+      {
+        "name": "32-focused-transcript-selection-accessibility_0_5C2C3E0C-F624-41EE-BC7A-79F5210CD50A.txt",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-transcription-v4/AB7DECA8-F2E3-44A9-AFC4-53B33B7E44CB.txt",
+        "sha256": "43d92950f901fa730478ab6e975359a1b5494c983c04550c5c659699dce9ba7f",
+        "bytes": 31427
+      },
+      {
+        "name": "32-focused-transcript-selection-screen_0_9BC080D8-2BAE-4568-9384-D6FBB73EA6EE.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-transcription-v4/0ECF603A-2FFB-47FC-A12A-531150B19CDD.png",
+        "sha256": "72067a87bc98afdd9c4165b3ccd650c963c2dceb4635aadd39b04358e0e6d203",
+        "bytes": 451450
+      },
+      {
+        "name": "32-focused-transcript-selection_0_CBF3290C-CDB3-49F1-A5E8-D12CA5D38A38.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-transcription-v4/BF48FDF8-475B-49AF-BB6D-28D8C687E918.png",
+        "sha256": "1f18f0ce76fd98612dfa86ea7b620eef7c458eb89ea25afa0324fbd967691de8",
+        "bytes": 376438
+      },
+      {
+        "name": "32-focused-transcript-editor-accessibility_0_0EB14B8D-F973-45FB-A2FC-CAB3C5471630.txt",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-transcription-v4/D00CF764-E1C5-415A-94C5-6CFB97465127.txt",
+        "sha256": "7d44ad486d3ef9fae3d2b2da8c39546e67a6a1eb201c369d6165c245bdc5c4ff",
+        "bytes": 31610
+      },
+      {
+        "name": "32-focused-transcript-editor-screen_0_236F90EC-48E2-4661-9DB1-0A2B8265A141.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-transcription-v4/18AC89A5-0282-4183-87E0-61880914F9C4.png",
+        "sha256": "05100d648aa7bc40d4f481e4ffebf1e18ca786fe755aef96c365c1012e80efb8",
+        "bytes": 541179
+      },
+      {
+        "name": "32-focused-transcript-editor_0_1DAAA604-8448-496C-9935-B28485CEFB9E.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-transcription-v4/EBA73949-733F-4D27-8079-8FEB5B0F11D5.png",
+        "sha256": "ea1c8d78b31bd924b001b81ae1c71d75beb3960094429aabc693d87ab6a0d462",
+        "bytes": 399524
+      },
+      {
+        "name": "32-visible-transcript-editor-accessibility_0_7DF07C81-9FF0-4F86-93E4-9EB01DF88FD6.txt",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-transcription-v4/EB2BA920-C30A-40C1-B830-4B9BEDF9806C.txt",
+        "sha256": "10ca9f8b04c026dc0c8f048f6992ecd12ae4d4ae02eb779e9b4b6c12f4ef2bc7",
+        "bytes": 25510
+      },
+      {
+        "name": "32-visible-transcript-editor-screen_0_318A5B07-0D13-4861-95FE-52F62A264562.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-transcription-v4/F1F66753-DC62-4BAF-AC0F-BD678F804BE0.png",
+        "sha256": "e3e1681175b72209253e66586bd1814d9e160022af6ce7779d08221f8bd02b7a",
+        "bytes": 732216
+      },
+      {
+        "name": "32-visible-transcript-editor_0_796398DA-03AE-4FED-91CB-C6D5DEE6FCF4.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-transcription-v4/6E4A186C-EBBD-4CC5-A5F2-A3E5326A17AF.png",
+        "sha256": "8c0cf12c472bf0e97181c255f180edfbd4ee04475af9aecc25f37bb4fc5120d9",
+        "bytes": 553935
+      },
+      {
+        "name": "32-on-device-recognition-draft-accessibility_0_7CA575D7-7981-4754-BB51-780CA6385AA9.txt",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-transcription-v4/7D0318CD-A691-47DF-991A-B1852D22B09D.txt",
+        "sha256": "fe9865715fea619681d3202af30055390a6941b3bc42e4eb9e2b36993bde64f0",
+        "bytes": 25506
+      },
+      {
+        "name": "32-on-device-recognition-draft-screen_0_1A0696E9-1F63-4554-AC21-F8C3C596F395.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-transcription-v4/751EFF9F-F4BE-4D88-B4E4-6F0D68F1C0CE.png",
+        "sha256": "b2ff56d828eb6336525def2416c6dbb91f70015536b3b46732120810018d6035",
+        "bytes": 738484
+      },
+      {
+        "name": "32-on-device-recognition-draft_0_3585B9DE-2606-46BD-867B-F6B55765C96C.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-transcription-v4/D8956CA4-F8E5-4BF8-B215-CF8A5361C5B4.png",
+        "sha256": "3ceb9cec7345cf6a9986ecfbf50054a41dc5ed1f97b7f684ace1f125e0c66cd5",
+        "bytes": 559934
+      },
+      {
+        "name": "32-actual-vision-result_0_47C4B648-BAB1-44AF-ACD5-CE5B96B63A35.txt",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-transcription-v4/10DCA446-45F9-40E4-91E8-072533D1C14C.txt",
+        "sha256": "7a552636e3317c1d116f1c562c91b3ecff5ffcbb4dc5d1b6b77af7a2b9bef711",
+        "bytes": 4
+      },
+      {
+        "name": "32-exact-version-transcript-review-accessibility_0_A31138A4-A481-4F3D-B46F-BD8A4740BCDB.txt",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-transcription-v4/089FE830-B652-4C73-9024-C4E02793EC5B.txt",
+        "sha256": "1b47cd199d9b66f9835fee5dfd8d6e9aba7d94f3c09a381993fea8936147ab64",
+        "bytes": 25339
+      },
+      {
+        "name": "32-exact-version-transcript-review-screen_0_9C331001-58E3-4CA3-BD3B-F21D33B27577.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-transcription-v4/38607F9D-C73C-4F29-BADA-873D1A3920BE.png",
+        "sha256": "d236e058879904462e277065d6057cd6055abf29e34e5a051843b6c6e2109cc6",
+        "bytes": 724830
+      },
+      {
+        "name": "32-exact-version-transcript-review_0_30A1B3D0-6F73-4D75-B2A6-0ED6D2D49935.png",
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/handwriting-transcription-v4/6AF14554-2B9D-4C55-BB40-2B4498FEDFD4.png",
+        "sha256": "10c20a3ef9cc96b8cc5b0acd22011acbb3fae6cfeea5c35bd372a520b2318bd6",
+        "bytes": 545283
+      }
+    ]
+  },
+  "no_production_code_changes_during_physical_checks": true,
+  "host_mac_input": false
+}

@@ -1,0 +1,142 @@
+{
+  "schema": "booknook.keychain-acceptance-delivery.v1",
+  "manifest_sha256": "258b61bd290e30514b91e16a86fcdbc74d51fdf258be4cff383a7d481ca32a20",
+  "manifest": {
+    "schema": "booknook.keychain-acceptance.v1",
+    "service": "org.booknook.qa.keychain.9ec77480-a989-46cb-ba62-786ffedbe69f",
+    "account": "synthetic-c3c3fca5-e43a-4818-b858-c840540866d7",
+    "created_at": "2026-10-12T20:12:41.367976+00:00",
+    "system": {
+      "macos": "26.4.1",
+      "architecture": "arm64"
+    },
+    "value_classification": "synthetic opaque test bytes, not a validated custody envelope",
+    "source_override": "Only CustodySecureStorage.service literal; production source unchanged",
+    "harness_difference": "Standalone process sets SecKeychainSetUserInteractionAllowed(false), verifies it, and restores previous process state; deprecated API warnings expected",
+    "scope": "One newly-created UUID service/account, no enumeration, production access, trust/settings changes, or UI interaction",
+    "limitations": "Not app prompt/signing-denial behavior, complete Castalia custody, real accounts, or physical iPad qualification",
+    "sources": {
+      "apps/apple/BookNook/SecureStorage.swift": {
+        "source_sha256": "0e90391950fd7d89fde1244fb9099e83b634e3a1f891a3ececb64cb372dae2d6",
+        "staged_sha256": "67e7b7a3ce236703c0d328935323bfa554685469f3211685d4e139ccabc2d2e2"
+      },
+      "apps/apple/BookNook/RecoveryImport.swift": {
+        "source_sha256": "27916bb7dda95e9151707a73c1e22a239b819e0ff6623efdd18a61b39f1bf8f2",
+        "staged_sha256": "27916bb7dda95e9151707a73c1e22a239b819e0ff6623efdd18a61b39f1bf8f2"
+      }
+    },
+    "commands": [
+      [
+        "xcrun",
+        "swiftc",
+        "-parse-as-library",
+        "-swift-version",
+        "5",
+        "-target",
+        "arm64-apple-macos14.0",
+        "-module-cache-path",
+        "<local-workspace>/work/opt-in-keychain-acceptance/module-cache",
+        "<local-workspace>/work/opt-in-keychain-acceptance/RecoveryImport.swift",
+        "<local-workspace>/work/opt-in-keychain-acceptance/SecureStorage.swift",
+        "<local-workspace>/outputs/booknook/tests/KeychainAcceptance.swift",
+        "-framework",
+        "Security",
+        "-o",
+        "<local-workspace>/work/opt-in-keychain-acceptance/keychain-acceptance"
+      ],
+      [
+        "<local-workspace>/work/opt-in-keychain-acceptance/keychain-acceptance",
+        "lifecycle",
+        "synthetic-c3c3fca5-e43a-4818-b858-c840540866d7",
+        "<local-workspace>/work/opt-in-keychain-acceptance/result.json"
+      ]
+    ],
+    "result": "passed",
+    "harness_sha256": "983712f7aae169bae8aa36cbc423dba02d12100d02f3dbce1a53aedbaaabf652",
+    "runner_sha256": "fa963572c5bdc38edaaee0d96e6aa2fb5a5c8fe021ed84f15a9eaece97acab1b",
+    "binary_sha256": "16aabb53419643ae3b596d3ef788f03088a8b7d5a1d2cff10e572a7db1e2a1d3",
+    "cleanup": "exact test record removed; absence verified",
+    "source_unchanged_after_test": true,
+    "evidence_sha256": {
+      "RecoveryImport.swift": "27916bb7dda95e9151707a73c1e22a239b819e0ff6623efdd18a61b39f1bf8f2",
+      "SecureStorage.swift": "67e7b7a3ce236703c0d328935323bfa554685469f3211685d4e139ccabc2d2e2",
+      "build.execution.json": "8be67695f02c68a60c6221d5213915f1aea415c3a7a7d554d7e63627d5204660",
+      "build.stderr.log": "c7f95555c9d465566091355474a4a551b052633eb674d0415bcb4cdb8077f7e9",
+      "build.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "keychain-acceptance": "16aabb53419643ae3b596d3ef788f03088a8b7d5a1d2cff10e572a7db1e2a1d3",
+      "lifecycle.execution.json": "19dc14afb1c5610fc7cc70edda9827afe577292dda8c03315b49644ab82a07f9",
+      "lifecycle.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lifecycle.stdout.log": "6c4cf662f3b46a80864090c0b512154d804ea761552188e477a711ab5149df42",
+      "result.json": "b90b660f6a47b71da7d54f5fcdd5752bced9913bd0f203da22faeffd364a2126"
+    }
+  },
+  "result": {
+    "account": "synthetic-c3c3fca5-e43a-4818-b858-c840540866d7",
+    "cleanup": "exact test record removed; absence verified",
+    "interaction_restore_status": 0,
+    "mode": "lifecycle",
+    "result": "passed",
+    "service": "org.booknook.qa.keychain.9ec77480-a989-46cb-ba62-786ffedbe69f",
+    "steps": [
+      {
+        "status": 0,
+        "step": "optional_interaction_disabled"
+      },
+      {
+        "step": "initial_read_begin"
+      },
+      {
+        "step": "initial_read_missing"
+      },
+      {
+        "byte_count": 45,
+        "step": "create_begin"
+      },
+      {
+        "step": "create_succeeded"
+      },
+      {
+        "step": "read_created_bytes_exact"
+      },
+      {
+        "byte_count": 280,
+        "step": "update_begin"
+      },
+      {
+        "step": "update_succeeded"
+      },
+      {
+        "step": "read_updated_bytes_exact"
+      },
+      {
+        "step": "remove_begin"
+      },
+      {
+        "step": "remove_succeeded"
+      },
+      {
+        "step": "read_after_remove_missing"
+      },
+      {
+        "step": "second_remove_idempotent"
+      },
+      {
+        "step": "finished"
+      }
+    ],
+    "value_classification": "synthetic opaque test bytes"
+  },
+  "execution": {
+    "exit_code": 0,
+    "timed_out": false,
+    "timeout_seconds": 20,
+    "elapsed_seconds": 0.349
+  },
+  "scope": "Actual macOS adapter byte-preservation lifecycle with one new synthetic record and prompt-disabled process; no app prompting, real identity, full custody or physical iPad qualification.",
+  "publication_redaction": {
+    "scope": "Local filesystem paths and Apple developer-team identity replaced with placeholders.",
+    "original_receipt_retained_locally": true,
+    "original_sha256": "6b8ff44de3fc8d87f53ac5c4f1a4307a6204f16950306c740b313682ac723d5d",
+    "note": "Historical artifact hashes describe the original validation inputs, not this redacted documentation copy."
+  }
+}

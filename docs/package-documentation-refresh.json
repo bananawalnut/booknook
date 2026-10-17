@@ -1,0 +1,55 @@
+{
+  "schema": "booknook.package-documentation-refresh.v1",
+  "recorded_at_utc": "2026-10-12T20:38:02.488870+00:00",
+  "reason": "Current packages passed independent extracted/installed consumers. Package-local Markdown links were then checked without changing any archive bytes; no post-consumer documentation rewrite was needed.",
+  "archives": [
+    {
+      "archive": "booknook-connectors-0.1.0.crate",
+      "before_sha256": "40656f1c9a2a1f75b808b27c6c2aa59a854fefc9b351bb70b9b5fd2d76cf941f",
+      "after_sha256": "40656f1c9a2a1f75b808b27c6c2aa59a854fefc9b351bb70b9b5fd2d76cf941f",
+      "changed_documentation_members": [],
+      "unchanged_non_documentation_members": 17,
+      "package_local_links": "passed"
+    },
+    {
+      "archive": "booknook-core-0.1.0.crate",
+      "before_sha256": "e13868dc113ad001c46423a82f9ca2b9fd04af6f514bc14912e7cbcd18550cfd",
+      "after_sha256": "e13868dc113ad001c46423a82f9ca2b9fd04af6f514bc14912e7cbcd18550cfd",
+      "changed_documentation_members": [],
+      "unchanged_non_documentation_members": 42,
+      "package_local_links": "passed"
+    },
+    {
+      "archive": "booknook-native-0.1.0.crate",
+      "before_sha256": "dfd6a1f36cc3d719728d582463fde50a4d3399b9699c2130a298f20420458250",
+      "after_sha256": "dfd6a1f36cc3d719728d582463fde50a4d3399b9699c2130a298f20420458250",
+      "changed_documentation_members": [],
+      "unchanged_non_documentation_members": 37,
+      "package_local_links": "passed"
+    },
+    {
+      "archive": "booknook-sdk-0.1.0.tgz",
+      "before_sha256": "750540d48c7446b20d579e64bb9d75374226f775c2ee18cbdd1de3b7e21b7b0e",
+      "after_sha256": "750540d48c7446b20d579e64bb9d75374226f775c2ee18cbdd1de3b7e21b7b0e",
+      "changed_documentation_members": [],
+      "unchanged_non_documentation_members": 32,
+      "package_local_links": "passed"
+    },
+    {
+      "archive": "booknook-swift-sdk-0.1.0.tar.gz",
+      "before_sha256": "cf6e3a76a64cbcb4cee572286c0d21ec5e9c043faff3af59b7113fa5afc648bf",
+      "after_sha256": "cf6e3a76a64cbcb4cee572286c0d21ec5e9c043faff3af59b7113fa5afc648bf",
+      "changed_documentation_members": [],
+      "unchanged_non_documentation_members": 18,
+      "package_local_links": "passed"
+    },
+    {
+      "archive": "booknook-wasm-0.1.0.crate",
+      "before_sha256": "2acff846d5c59cedbbb53a17b2053c2106041209fc5ce8c31f09cbd6fa9e360a",
+      "after_sha256": "2acff846d5c59cedbbb53a17b2053c2106041209fc5ce8c31f09cbd6fa9e360a",
+      "changed_documentation_members": [],
+      "unchanged_non_documentation_members": 10,
+      "package_local_links": "passed"
+    }
+  ]
+}

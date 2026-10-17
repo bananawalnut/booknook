@@ -1,0 +1,187 @@
+{
+  "schema": "booknook.long-edit-evidence.v1",
+  "recorded_at_utc": "2026-10-15T05:43:15.657285+00:00",
+  "result": "passed",
+  "primary_run": {
+    "directory": "<local-workspace>/work/long-edit-delivered-final",
+    "command": [
+      "python3",
+      "scripts/test-long-edit.py",
+      "--output-dir",
+      "<local-workspace>/work/long-edit-delivered-final"
+    ],
+    "runner_result": {
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 12.512664542067796,
+      "timeout_seconds": 180
+    },
+    "build": {
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 22.35763854207471,
+      "timeout_seconds": 180
+    },
+    "manifest_sha256": "1d2e1972af4c9d7a388e8e596bf271d10e2f9e25025df58cc746223bb5feee00",
+    "probe_sha256": "38d452269a8f4e0b6df57c43ef94d281d8a6d7c834d8f7e1e944bd9b4178ac5a",
+    "raw_evidence_sha256": {
+      "build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "execution.log": "11e3d5d68cddc2aa5b3850474e4307ddeacecbf60e2646c11068218584b4d6bc",
+      "result.json": "63c4c05c856ce67e4c96b53e2f2d25ece5a194b896028a0143a9604c1058e275",
+      "storage-observation.json": "0f623666918d9070f907bb9212735412ae615ff6fa0811f0a171b0b0fa2266d2"
+    },
+    "host": {
+      "macos": "26.4.1",
+      "architecture": "arm64"
+    },
+    "source_unchanged_during_run": true,
+    "canonical_build_comparison": {
+      "sha256": "0c61cb191cb5deaa39639516b6adfbccb3f3edaff586f0d8210bce6008864c24",
+      "source_files_compared": 74,
+      "source_drift": [],
+      "release_archive_matches": true,
+      "qualification": "Comparison only; rebuild the archive/bindings when native sources change. This runner does not rebuild Rust."
+    }
+  },
+  "code_input_sha256": {
+    "scripts/test-long-edit.py": "3f19e995c0f6c7a91be54e637f4f635b1743a8b3a992d387d9a197a3023ae083",
+    "tests/LongEditAcceptance.swift": "522d7406e6c235ec8ceb2a5ea476a7e99ab695b10f85ee51b01d8c010e202256",
+    "apps/apple/BookNook/Models.swift": "5d2b499df274e3c6a5661a0745a031ff82927ed08ed0465af9fc2b806091da17",
+    "apps/apple/BookNook/NativeNotebookEditor.swift": "e9ee806d865521620bca3b31010ac2730b7240b2d86f2db2374f088e10670abd",
+    "apps/apple/BookNook/NotebookView.swift": "1e8adaaaca7458964682a91883c67fbd796334af2ff7b907d7b905de34a4d86f",
+    "apps/apple/Generated/booknook_native.swift": "26bca6d1c59e2bf691379c3352501b43a64b7c616e37627741e7041a4350d105",
+    "apps/apple/Generated/booknook_nativeFFI.h": "67db13f2b404fa2f6c3c71b63efb3e28af05fe1492b3e6f38e240e94244d7d37",
+    "crates/native/src/edit_journal.rs": "a53d13c005d363b16b12e1a797434e2335d87d841cbf8a78a156df1e346fd35c",
+    "crates/native/src/store.rs": "3c31329a642004167b6fa2bf3534dfadb8e74f8e1969c55632a591a709eb319b",
+    "crates/core/src/notebook.rs": "df7a19a049b5e584beb67fcc5eeefda5e513e86a222a4ea3c20bf9cf7b652672",
+    "crates/core/src/validation.rs": "35a593fe0e266306bf9fd0564d63f670912e3f07b8884f52a9b1d1fd4ee47c2f",
+    "Cargo.toml": "e15774bd2cfe29435ec9e51d8dacfea7872f3d7480910466e55cbcb3e4eeff4c",
+    "Cargo.lock": "ed0a6eee579b417b5ead60aa1deb317833fa35caf437d3e70cca396a8b938032",
+    "target/release/libbooknook_native.a": "08833d0170f9136affcdc04cd3655baa7b555cb61f0c20101f56e35dbae00a33"
+  },
+  "code_input_note": "Complete source input hashes and exact Swift compiler command are in the hashed manifest; this receipt lists the boundary and persistence inputs.",
+  "production_changes": false,
+  "additive_test_files": [
+    "tests/LongEditAcceptance.swift",
+    "scripts/test-long-edit.py"
+  ],
+  "normal_suite_changed": false,
+  "workload": {
+    "initial_utf16_units": 117638,
+    "initial_utf8_bytes": 117649,
+    "initial_style_runs": 120,
+    "initial_history_versions": 12,
+    "edits": 120,
+    "bursts": 12,
+    "independent_within_burst_cadence_ms": 50,
+    "journal_observer_sleep_ms": 5,
+    "heartbeat_target_ms": 10,
+    "cadence_rule": "Input is scheduled independently of journal acknowledgement inside each10-edit burst; then latest burst sequence and normal idle flush are awaited. Intermediate intents may coalesce.",
+    "native_delegate_rule": "No manual capture fallback exists; missing or duplicate delegate callback fails integrity acceptance."
+  },
+  "metrics": {
+    "within_burst_actual_start_interval": {
+      "count": 108,
+      "maximum_ms": 66.88600010238588,
+      "median_ms": 50.20883306860924,
+      "minimum_ms": 34.52383307740092,
+      "p95_ms": 51.94316594861448
+    },
+    "scheduled_start_lateness": {
+      "count": 120,
+      "maximum_ms": 17.337624914944172,
+      "median_ms": 1.6191669274121523,
+      "minimum_ms": 0.4516248591244221,
+      "p95_ms": 2.926416927948594
+    },
+    "synchronous_insert_and_delegate": {
+      "count": 120,
+      "maximum_ms": 21.809166995808482,
+      "median_ms": 8.796375012025237,
+      "minimum_ms": 5.810166941955686,
+      "p95_ms": 11.926583014428616
+    },
+    "last_input_to_observed_latest_burst_commit": {
+      "count": 12,
+      "maximum_ms": 29.66262516565621,
+      "median_ms": 22.837291937321424,
+      "minimum_ms": 19.776499830186367,
+      "p95_ms": 29.66262516565621
+    },
+    "idle_wait_including_remaining_300ms_debounce": {
+      "count": 12,
+      "maximum_ms": 497.3148750141263,
+      "median_ms": 429.94150007143617,
+      "minimum_ms": 370.00849982723594,
+      "p95_ms": 497.3148750141263
+    },
+    "main_actor_heartbeat_gap": {
+      "count": 853,
+      "maximum_ms": 43.21629204787314,
+      "median_ms": 11.055125156417489,
+      "minimum_ms": 10.024707997217774,
+      "p95_ms": 24.393208092078567
+    },
+    "first_burst_last_input_to_verified_save_ms": 392.1362499240786,
+    "last_burst_last_input_to_verified_save_ms": 525.0341249629855,
+    "editing_wall_seconds": 10.909525165800005,
+    "explicit_final_drain_ms": 54.960584035143256,
+    "model_reopen_ms": 359.1565422248095,
+    "observed_distinct_journal_sequences": 119
+  },
+  "integrity": {
+    "native_callbacks": 120,
+    "callbacks_on_main_thread": true,
+    "last_durable_sequence": 120,
+    "final_history_versions": 24,
+    "final_style_runs": 120,
+    "final_text_sha256": "aa37f614f3afa7e658ac43dad625c38ce5a2a0604765e53b0f453c8949686fda",
+    "final_utf8_bytes": 117837,
+    "assertions": "Latest sequence per burst durable; exact Unicode text and portable styles after every flush and reopen; seeded history IDs retained; no autosave errors",
+    "storage": {
+      "revision": 27,
+      "state_json_unicode_characters": 8422198,
+      "state_json_utf8_bytes": 8422278,
+      "pending_edits": 0,
+      "sqlite_integrity_check": "ok",
+      "sqlite_file_bytes": 17203200,
+      "inspection": "Read-only SQLite connection after the harness exited"
+    }
+  },
+  "finding": "No integrity failure. Full-history store size and idle-flush time increased as saved versions grew. Native store loads and validates full state, including historical CRDT updates, and flush serializes full state. This source-level scaling concern is correlated with observed timings; no per-function attribution or production redesign was performed.",
+  "limits": [
+    "No visible window, physical typing, SwiftUI body rendering/word-count/layout, IME/Pencil, account or Keychain operations. Main-actor scheduling probe and read-only SQLite polling add measurement overhead. One bounded synthetic workload; no performance threshold or guarantee.",
+    "Latest sequence observations include polling/main-actor scheduling latency; observed missing intermediate sequences do not prove coalescing.",
+    "Last-input-to-verified-save includes normal300msdebounce and verification work. Bursts deliberately await idle before the next burst; this is not an hours-long continuous typing workload.",
+    "Unoptimized Swift development build links recorded release Rust. No timing thresholds or performance guarantees.",
+    "macOS hiservices-xpcservice connection-invalid startup diagnostics are retained in execution.log; native editing/storage assertions passed afterward."
+  ],
+  "historical_support": [
+    {
+      "directory": "<local-workspace>/work/long-edit-acceptance",
+      "manifest_sha256": "1550a33baf4aabe264d3385d21257d0da19458af107e30c9cf4b010e6369e54a",
+      "purpose": "Acknowledgement-paced baseline; not independent typing cadence"
+    },
+    {
+      "directory": "<local-workspace>/work/long-edit-cadence",
+      "manifest_sha256": "1ac4456907679755f0a743c606e7c4deff07193a1013bc784fb102e9e5c263a2",
+      "purpose": "First independent cadence observation; work-only harness"
+    },
+    {
+      "directory": "<local-workspace>/work/long-edit-delivered-acceptance",
+      "manifest_sha256": "76a892dd0b7552989c976c9adeb56d3811fb4c1f773f04c8c00b8d24905eb1ec",
+      "purpose": "First delivered runner reproduction before removal of unused manual-capture fallback"
+    }
+  ],
+  "fresh_directory_guard": {
+    "receipt": "<local-workspace>/work/long-edit-fresh-directory-check.json",
+    "sha256": "f2f47766c5c2d03fcd0b1c181151774a124ec293a683185f31364654491dcfcb",
+    "result": "passed: existing output rejected with exit2 and manifest unchanged"
+  },
+  "publication_redaction": {
+    "scope": "Local filesystem paths and Apple developer-team identity replaced with placeholders.",
+    "original_receipt_retained_locally": true,
+    "original_sha256": "674f15a948826881ac946b37d360f3952ee6299a05f54113280049eacfe6e182",
+    "note": "Historical artifact hashes describe the original validation inputs, not this redacted documentation copy."
+  }
+}

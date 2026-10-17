@@ -1,0 +1,159 @@
+{
+  "schema": "booknook.reader-context-increment.v1",
+  "recorded_at_utc": "2026-10-15T23:59:23.669653+00:00",
+  "release_ready": false,
+  "status": "Implemented and bounded checks passed; live integrations, physical Pencil and distribution gates remain.",
+  "changes": [
+    "Retained EPUB/PDF ink drafts keep captured source context, original native bytes and stable retry identity across source-view teardown and persistence failure; explicit unplaced recovery is available when reliable placement cannot be obtained.",
+    "Delayed reader messages are rejected when captured book/pass/edition/asset/resource context is no longer current.",
+    "Compact panes retain their hosted view state. Hidden notebooks release only their own TextKit/Pencil responder; unfinished composition is captured before stale snapshots, and fresh hidden Pencil canvases cannot save an unintended erasure.",
+    "Reader font size persists, chapter and markup mode survive pane switching, and cancelling the attachment picker is not an error.",
+    "Experimental US-only explicit Kindle web sign-in/catalog import uses an isolated ephemeral WebKit session and complete bounded pagination; cancellation/malformed or incomplete responses do not partially import. Live Amazon compatibility remains unqualified.",
+    "The typed WASM SDK now exposes catalog/social recommendations and approved encrypted-sync preparation/seal/open with native parity; caller hosts retain atomic replay/outbox responsibilities."
+  ],
+  "current_source_and_build": {
+    "provenance": {
+      "workspace_file": "work/provider-custody-completion/baseline/outputs/booknook/docs/build-inputs.json",
+      "sha256": "5d54eaf241d3aba4f97c4adf994d15d580fd59a7d667784fe7da8cb4b07060b5",
+      "bytes": 59126
+    },
+    "preserved_provenance": {
+      "workspace_file": "work/reader-context-recovery-2026-10-15/device-sixth-attempt/preserved-inputs/manifests/build-inputs.json",
+      "sha256": "5d54eaf241d3aba4f97c4adf994d15d580fd59a7d667784fe7da8cb4b07060b5",
+      "bytes": 59126
+    },
+    "verification": {
+      "workspace_file": "work/reader-context-recovery-2026-10-15/device-sixth-attempt/input-verification.json",
+      "sha256": "83910258362696f5420e93b97af64c5ff7e2c973f2bcdd78cf77eeb7a1d2281a",
+      "bytes": 68241
+    },
+    "apple_builds": [
+      {
+        "platform": "macOS arm64",
+        "execution": {
+          "workspace_file": "work/reader-context-recovery-2026-10-15/mac-build.execution.json",
+          "sha256": "c75e31f6ae338489d0eb33f35dbb72ed0c0bb4883233d104b3eb856a2c0fa231",
+          "bytes": 716
+        },
+        "log": {
+          "workspace_file": "work/reader-context-recovery-2026-10-15/mac-build.log",
+          "sha256": "89c6736165ddbf3c16b245dbcac89c57cf3fe6a42b2690f9e45182b12a6b3051",
+          "bytes": 43256
+        }
+      },
+      {
+        "platform": "iOS simulator arm64",
+        "execution": {
+          "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-sim-build.execution.json",
+          "sha256": "4b8445de74c6bea76a02ff62d55f5000184244bc5365bd2e5c50de3252b687c9",
+          "bytes": 743
+        },
+        "log": {
+          "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-sim-build.log",
+          "sha256": "274325263899d0617b52b228fbd02ff5fc97ae94b6400d810b7342d18d69f482",
+          "bytes": 46090
+        }
+      },
+      {
+        "platform": "iOS device arm64",
+        "execution": {
+          "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-device-build.execution.json",
+          "sha256": "4372b68cd588e72468260539e09cded6f8e2efdd1005676ac91684519cab467a",
+          "bytes": 732
+        },
+        "log": {
+          "workspace_file": "work/reader-context-recovery-2026-10-15/ipad-device-build.log",
+          "sha256": "67aabcdf348a92f636ee201df0f4cfb92389f10ab58e21bf439302cc8e4410bc",
+          "bytes": 45293
+        }
+      }
+    ],
+    "app_archive_verification": {
+      "workspace_file": "work/provider-custody-completion/baseline/outputs/booknook-apps/VERIFICATION.json",
+      "sha256": "f4fe0c7866a2e3514ce68c225949aba4f69b5071acee71637b98be317c7e2f4c",
+      "bytes": 43564
+    },
+    "app_archives": [
+      {
+        "workspace_file": "work/provider-custody-completion/baseline/outputs/booknook-apps/booknook-mac-arm64-development-0.1.0.tar.gz",
+        "sha256": "4b03d5e62e32939985caef10c18a6684bf936b092adf09dd28890c33672117ad",
+        "bytes": 12648747
+      },
+      {
+        "workspace_file": "work/provider-custody-completion/baseline/outputs/booknook-apps/booknook-ipad-sim-arm64-development-0.1.0.tar.gz",
+        "sha256": "c588e08bc7a782ee04b59996833fc68d740e1dec64e328a0d3ea2ae8d390ac2d",
+        "bytes": 12674476
+      },
+      {
+        "workspace_file": "work/provider-custody-completion/baseline/outputs/booknook-apps/booknook-ipad-device-arm64-development-0.1.0.tar.gz",
+        "sha256": "2fa80a51b9c53f430a2cc2c9a0ef2d3c65ca635d0831974e11b97f9c8e00c360",
+        "bytes": 12419540
+      }
+    ]
+  },
+  "physical_acceptance": {
+    "workspace_file": "work/provider-custody-completion/baseline/outputs/booknook/docs/physical-reader-context-evidence.json",
+    "sha256": "a85a8695b8bc48bfbb7dc454dd4474966ea75a81ba26e4d60fb05fa6038261da",
+    "bytes": 14565
+  },
+  "headless_reader_acceptance": {
+    "receipt": {
+      "workspace_file": "work/reader-context-recovery-2026-10-15/device-sixth-attempt/reader-headless-scoped.json",
+      "sha256": "3dd48456e5d630e9f820f537fa7004bb0f7eb1a361b35dbb769423d993fd94d3",
+      "bytes": 17286
+    },
+    "scope": "Actual SQLite failure/retry/reopen/export, retained source-session and callback guards, and real headless WKWebView layout anchoring on the receipt\u2019s preserved earlier Swift inputs. Final compact host/visibility adjustments were subsequently covered by native focus regression, device test33 and all three app builds."
+  },
+  "native_focus_regression": {
+    "receipt": {
+      "workspace_file": "work/reader-context-recovery-2026-10-15/device-sixth-attempt/notebook-focus-scoped.json",
+      "sha256": "e842118b9ca624eb76b53b42fd01b84df6f7589327e73281955ee4fb7e24f483",
+      "bytes": 7412
+    },
+    "scope": "Actual hidden-window AppKit IME/latest-text preservation, stale-snapshot and queued-format guards, unrelated responder protection; negative control failed as expected. iOS branch typechecked. Its NotebookView input predates the final retained host wrapper; that exact version is preserved."
+  },
+  "kindle_acceptance": {
+    "receipt": {
+      "workspace_file": "work/reader-context-recovery-2026-10-15/kindle-web-acceptance.json",
+      "sha256": "89718078728efcf107b3c94a6dd44e2718c16b8a8695e0fdacb30fc8bad33d18",
+      "bytes": 22258
+    },
+    "log": {
+      "workspace_file": "work/reader-context-recovery-2026-10-15/kindle-web-deadline-verified.log",
+      "sha256": "2c2c0a299a06927ce31f57e5ec8aeaa43d4fe0ec25e00d59947afb03be8ef4bc",
+      "bytes": 798
+    },
+    "scope": "Synthetic parser/paging, native atomic import, actual headless WebKit isolation/deadline/cancellation; no Amazon account sign-in or live catalog response."
+  },
+  "sdk_and_rust": {
+    "workspace_check": {
+      "workspace_file": "work/reader-context-recovery-2026-10-15/workspace-check-receipt.json",
+      "sha256": "ff046ddf676bae8e7c5b088573c4b858e158baa73479d7be58d96fa9f3e3cdba",
+      "bytes": 523
+    },
+    "workspace_passed": 138,
+    "workspace_failed": 0,
+    "intentionally_ignored": 3,
+    "sdk_delivery": {
+      "workspace_file": "work/reader-context-recovery-2026-10-15/sdk-final/receipt.json",
+      "sha256": "6b6a1308c81d26aeb0f03391984098d6c578274a94b0ce7a6b1ccdbb392be9da",
+      "bytes": 13542
+    },
+    "sdk_checksums": {
+      "workspace_file": "work/provider-custody-completion/baseline/outputs/booknook-sdk/SHA256SUMS",
+      "sha256": "f4bb9eff24955cfb5d95f0109b45b49ece15f26ccfc3e3a7fdd618da6f24540f",
+      "bytes": 563
+    },
+    "sdk_scope": "Actual extracted Rust crates, installed npm CJS/ESM/Node/browser WASM and strict types, extracted Swift SDK; current staged archives match final build provenance. Native/WASM recommendation and encrypted-sync parity passed. No external publication occurred."
+  },
+  "limitations": [
+    "No physical Apple Pencil was available: pressure/contact/palm rejection, hardware stroke capture and stroke alignment under reflow/rotation remain unqualified.",
+    "Automatic approval review rejected the requested copy of the QA application store; it was not retried. No fresh device database/export inspection was performed. Current persistence evidence is UI reopen, not a byte-level database comparison.",
+    "The earlier historical exact ink/transcription store evidence remains historical and does not verify this final run.",
+    "No live Amazon/Audible/Castalia account, issuer authorization, social publication, distribution signing or deployment was qualified.",
+    "Process-memory pending reader captures survive view teardown and failed saves while the app stays open; this is not forced-termination durability for uncommitted ink.",
+    "The current native provider composition still has integration-specific paths; declared catalog/content/position/social/identity/authority ports and reusable native Castalia secure custody/consent composition are not all delivered as public interchangeable host components.",
+    "No complete-release readiness claim: live provider/issuer qualification, physical Pencil and distribution/deployment require their explicit external prerequisites."
+  ],
+  "evidence_scope": "Historical reader-context baseline before provider/custody extraction. Exact original evidence and delivered artifacts are preserved; no new physical-device claim."
+}

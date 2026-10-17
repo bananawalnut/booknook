@@ -1,0 +1,21 @@
+[package]
+name = "booknook-connectors"
+description = "Replaceable Book Nook Nostr, library companion and listening-position connectors"
+readme = "README.md"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+booknook-core.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+nostr-sdk = { version = "0.44", features = ["nip44"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "net", "io-util"] }
+
+[dev-dependencies]
+base64.workspace = true
+hex.workspace = true
+ed25519-dalek = "2.2"

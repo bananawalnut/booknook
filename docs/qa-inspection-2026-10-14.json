@@ -1,0 +1,65 @@
+{
+  "schema": "booknook.read-only-ui-inspection.v1",
+  "local_date": "2026-10-14",
+  "recorded_at_utc": "2026-10-15T05:39:49.909610+00:00",
+  "scope": "Fresh current-source isolated macOS app launch, accessibility tree and screenshot observation only; no keyboard/pointer action.",
+  "app_binary_sha256": "c40a4925f1135f86985bf48cf62a8c11974b95359542f7e63ebc6a70c7f2b204",
+  "build_provenance_sha256": "0c61cb191cb5deaa39639516b6adfbccb3f3edaff586f0d8210bce6008864c24",
+  "verified_source_count": 107,
+  "isolation": {
+    "bundle_id": "org.booknook.qa.inspection20261014",
+    "keychain_service": "org.booknook.qa.inspection20261014.castalia",
+    "data_directory": "work/qa-2026-10-14/desk",
+    "production_data_used": false,
+    "fixture": "Original Book Nook Quiet Library EPUB, notebook and Mara card; Orchard library entry."
+  },
+  "observations": [
+    "Initial launch observation showed an empty loading desk; the next accessibility/screenshot observation showed the seeded current-reading book.",
+    "The Quiet Library selected; notebook on left and contained local EPUB on right, with sidebar and chapter navigation.",
+    "Notebook exposes exact seeded three-paragraph text and 41 words; Saved locally status.",
+    "Mara character card shows description, traits, history count 2 and Develop this card control.",
+    "Pass 1, Start reading session and 0 completed in this pass are visible.",
+    "Reader exposes original chapter text, reading text size, attachment and chapter controls; highlight control disabled without a selection.",
+    "No visible clipping or error in the inspected initial split workspace."
+  ],
+  "screenshot_evidence": "CUA getAXStateAndScreenshot output in this conversation; no standalone screenshot file was saved.",
+  "input_actions": 0,
+  "completed_ux_rounds": 3,
+  "round4": "partial; this observation does not complete interactive acceptance",
+  "limitations": [
+    "Existing shared-Mac availability question remains unanswered after prior unrelated input. No keyboard or pointer testing resumed.",
+    "Did not exercise attachment picker, typing, menus, scrolling, history editing, account setup, sharing or recovery.",
+    "Tool launch duration is not an application startup benchmark.",
+    "No physical iPad available in fresh successful Xcode inventory; no physical-device input or accessibility qualification.",
+    "No accounts, signing, publication or remote relay operations."
+  ],
+  "work_evidence": [
+    {
+      "path": "work/qa-2026-10-14/provenance.json",
+      "sha256": "f777865001e244bcf5c8731ca71eb9ec7b15c9850a9a8ead51b622abb064d913"
+    },
+    {
+      "path": "work/qa-2026-10-14/startup-safety.json",
+      "sha256": "1ee503645d074443811837ba1b61db04831b2345c1893970d3989554d84986db"
+    },
+    {
+      "path": "work/qa-2026-10-14/build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "work/qa-2026-10-14/postlaunch-readonly.json",
+      "sha256": "51442dea200afb60a4cfcf20cb5e3615d04bfeb78c15c74fe40c368939fa5c91"
+    }
+  ],
+  "postlaunch_storage": {
+    "integrity": "ok",
+    "seed_revision": 6,
+    "observed_revision": 8,
+    "content_delta": "One local EPUB position observation; no account/source-position observation.",
+    "preserved": "Exact notebook text, CRDT, revisions, both Mara card versions, parents and interpretations.",
+    "pending_edits": 0,
+    "account_settings_present": false,
+    "social_or_outbox_present": false,
+    "binary_and_production_inputs_unchanged": true
+  }
+}

@@ -1,0 +1,632 @@
+{
+  "$defs": {
+    "AdmissionConsent": {
+      "additionalProperties": false,
+      "description": "An explicit, signed permission to show this membership acceptance to the group's\ncurrent and future admitted members. It never permits sharing the invitation or notes.",
+      "properties": {
+        "disclosure": {
+          "$ref": "#/$defs/AdmissionDisclosure"
+        },
+        "epoch": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "expires_at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "group_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "group_id",
+        "epoch",
+        "expires_at",
+        "disclosure"
+      ],
+      "type": "object"
+    },
+    "AdmissionDisclosure": {
+      "enum": [
+        "current_and_future_group_members"
+      ],
+      "type": "string"
+    },
+    "ApprovedPublication": {
+      "additionalProperties": false,
+      "properties": {
+        "approved_at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "event": {
+          "$ref": "#"
+        },
+        "presentation_json": {
+          "type": "string"
+        },
+        "request_json": {
+          "description": "Original strict JSON, not a permissively parsed map that could erase duplicate keys.",
+          "type": "string"
+        },
+        "schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema",
+        "event",
+        "approved_at",
+        "request_json",
+        "presentation_json"
+      ],
+      "type": "object"
+    },
+    "BookReference": {
+      "additionalProperties": false,
+      "properties": {
+        "author": {
+          "type": "string"
+        },
+        "id": {
+          "description": "A portable catalog identifier, such as an ISBN URN or a provider identifier.",
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "author"
+      ],
+      "type": "object"
+    },
+    "Delivery": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "public",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "direct",
+              "type": "string"
+            },
+            "recipients": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "kind",
+            "recipients"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Post": {
+      "additionalProperties": false,
+      "properties": {
+        "body": {
+          "type": "string"
+        },
+        "book": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BookReference"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "kind": {
+          "$ref": "#/$defs/PostKind"
+        },
+        "reading_status": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reply_to": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "spoiler": {
+          "type": "boolean"
+        },
+        "stars": {
+          "format": "uint8",
+          "maximum": 255,
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "body",
+        "spoiler"
+      ],
+      "type": "object"
+    },
+    "PostKind": {
+      "enum": [
+        "review",
+        "rating",
+        "reading_update",
+        "note",
+        "discussion"
+      ],
+      "type": "string"
+    },
+    "ReadingGroup": {
+      "additionalProperties": false,
+      "properties": {
+        "banned": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "closed": {
+          "type": "boolean"
+        },
+        "description": {
+          "type": "string"
+        },
+        "epoch": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "id": {
+          "type": "string"
+        },
+        "members": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "moderators": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "name": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "private": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "owner",
+        "name",
+        "description",
+        "private",
+        "epoch",
+        "members",
+        "moderators",
+        "banned",
+        "closed"
+      ],
+      "type": "object"
+    },
+    "SocialAction": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "description": "Both independently signed requests must be true before a friendship exists.",
+          "properties": {
+            "op": {
+              "const": "friendship",
+              "type": "string"
+            },
+            "peer": {
+              "type": "string"
+            },
+            "requested": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "op",
+            "peer",
+            "requested"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "group_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "op": {
+              "const": "publish",
+              "type": "string"
+            },
+            "post": {
+              "$ref": "#/$defs/Post"
+            }
+          },
+          "required": [
+            "op",
+            "post"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "event_id": {
+              "type": "string"
+            },
+            "op": {
+              "const": "retract",
+              "type": "string"
+            }
+          },
+          "required": [
+            "op",
+            "event_id"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "books": {
+              "items": {
+                "$ref": "#/$defs/BookReference"
+              },
+              "type": "array"
+            },
+            "description": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "op": {
+              "const": "create_list",
+              "type": "string"
+            }
+          },
+          "required": [
+            "op",
+            "id",
+            "name",
+            "description",
+            "books"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "books": {
+              "items": {
+                "$ref": "#/$defs/BookReference"
+              },
+              "type": "array"
+            },
+            "description": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "op": {
+              "const": "update_list",
+              "type": "string"
+            }
+          },
+          "required": [
+            "op",
+            "id",
+            "name",
+            "description",
+            "books"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "op": {
+              "const": "delete_list",
+              "type": "string"
+            }
+          },
+          "required": [
+            "op",
+            "id"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "description": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "op": {
+              "const": "create_group",
+              "type": "string"
+            },
+            "private": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "op",
+            "id",
+            "name",
+            "description",
+            "private"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An owner-signed snapshot bootstraps an invitee without exposing private discovery.",
+          "properties": {
+            "expires_at": {
+              "format": "uint64",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "group": {
+              "$ref": "#/$defs/ReadingGroup"
+            },
+            "id": {
+              "type": "string"
+            },
+            "invitee": {
+              "type": "string"
+            },
+            "op": {
+              "const": "invite",
+              "type": "string"
+            }
+          },
+          "required": [
+            "op",
+            "id",
+            "group",
+            "invitee",
+            "expires_at"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "admission_consent": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/AdmissionConsent"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "invitation_id": {
+              "type": "string"
+            },
+            "op": {
+              "const": "accept_invitation",
+              "type": "string"
+            }
+          },
+          "required": [
+            "op",
+            "invitation_id"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "Public consent enables independent verification of public group membership.",
+          "properties": {
+            "group_id": {
+              "type": "string"
+            },
+            "op": {
+              "const": "request_join",
+              "type": "string"
+            }
+          },
+          "required": [
+            "op",
+            "group_id"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "Adding members requires current consent: a private accepted invitation or public request.",
+          "properties": {
+            "admission_proofs": {
+              "items": {
+                "$ref": "#/$defs/ApprovedPublication"
+              },
+              "type": "array"
+            },
+            "group_id": {
+              "type": "string"
+            },
+            "members": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "moderators": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "op": {
+              "const": "set_members",
+              "type": "string"
+            }
+          },
+          "required": [
+            "op",
+            "group_id",
+            "members",
+            "moderators"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "ban_actor": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "event_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "group_id": {
+              "type": "string"
+            },
+            "op": {
+              "const": "moderate",
+              "type": "string"
+            }
+          },
+          "required": [
+            "op",
+            "group_id"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "group_id": {
+              "type": "string"
+            },
+            "op": {
+              "const": "close_group",
+              "type": "string"
+            }
+          },
+          "required": [
+            "op",
+            "group_id"
+          ],
+          "type": "object"
+        }
+      ]
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "action": {
+      "$ref": "#/$defs/SocialAction"
+    },
+    "actor": {
+      "type": "string"
+    },
+    "at": {
+      "format": "uint64",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "delivery": {
+      "$ref": "#/$defs/Delivery"
+    },
+    "id": {
+      "type": "string"
+    },
+    "resource_version": {
+      "format": "uint64",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "schema": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema",
+    "id",
+    "actor",
+    "at",
+    "resource_version",
+    "delivery",
+    "action"
+  ],
+  "title": "SocialEvent",
+  "type": "object",
+  "$id": "urn:booknook:schema:0.3.0:social-event"
+}

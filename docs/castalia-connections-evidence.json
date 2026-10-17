@@ -1,0 +1,153 @@
+{
+  "schema": "booknook.castalia-connections-validation.v1",
+  "date": "2026-10-15",
+  "recorded_at_utc": "2026-10-15T19:57:13.835576+00:00",
+  "changes": [
+    "No separate Book Nook membership",
+    "Shared Castalia public authority profiles and provider connections",
+    "Explicit atomic trust review and stale manual-save rejection",
+    "Endpoint-bound unsaved issuer tokens",
+    "Secure-local source adapters and portable source references",
+    "Stable references across renewal and distinct references after new registration",
+    "Legacy adapter compatibility and selected Kindle source precedence"
+  ],
+  "rust": {
+    "passed": 123,
+    "failed": 0,
+    "ignored": 3,
+    "ignored_scope": "Existing crash helper and opt-in relay/HTTP cases; local issuer HTTP separately passed"
+  },
+  "castalia_typescript_tests": 101,
+  "shared_contract_fixture_cases": 70,
+  "shared_fixtures_native_wasm_parity": "passed",
+  "companion_tests": 23,
+  "optional_adapter_tests": 24,
+  "native_targets": {
+    "mac": "passed",
+    "ipad_simulator": "passed",
+    "ipad_device": "passed unsigned"
+  },
+  "native_workflows": "passed against actual Swift controllers, release UniFFI and SQLite",
+  "reference_issuer": "Public profile export, deny-by-default issuance and actual loopback HTTP/native custody/receiver tests passed with synthetic identities",
+  "static_ontology": {
+    "schema": "booknook.static-ontology-check.v1",
+    "status": "passed",
+    "artifacts": 18,
+    "path_isolation": true,
+    "public_deployment": false
+  },
+  "build_provenance": {
+    "file": "evidence/castalia-build-inputs-2026-10-15.json",
+    "sha256": "24bca7871e935dab7544b70286a3a44bb7a2309c72f2ba49176b97ea06231fcf",
+    "source_inputs": 146,
+    "test_inputs": 29,
+    "scope": "Historical Castalia architecture build; later additive connector SDK verification is separate."
+  },
+  "upstream_contract_delivery": {
+    "source": "castalia-wallet-auth",
+    "provenance_sha256": "1abe0240716a915d56d55ae4370408cb198c7baae13d81f5025194dabc0b4761",
+    "published": false
+  },
+  "logs": [
+    {
+      "label": "Castalia update: workspace-check",
+      "workspace_file": "work/castalia-connections/workspace-check.log",
+      "sha256": "433363e2bbb01e5b998a7e1e345e1c27379f4632187a79d096a88ff517da9a24",
+      "bytes": 18570
+    },
+    {
+      "label": "Castalia update: sdk-parity",
+      "workspace_file": "work/castalia-connections/sdk-parity.log",
+      "sha256": "3226defba12d7fc3ecfe506437f98df56621e6f0a6b180f35fbb87b98ae3c498",
+      "bytes": 6794
+    },
+    {
+      "label": "Castalia update: mac-build",
+      "workspace_file": "work/castalia-connections/mac-build.log",
+      "sha256": "8c8c5ce142c654acf98678e6c12affbc941e79ef91462f59ae9863cb2d753fb4",
+      "bytes": 66309
+    },
+    {
+      "label": "Castalia update: native-workflows",
+      "workspace_file": "work/castalia-connections/native-workflows.log",
+      "sha256": "767af03dca218eb5eb7d686b6929bf5aa51e0a3ee604f7107d295866ba91badd",
+      "bytes": 5467
+    },
+    {
+      "label": "Castalia update: recovery-workflows",
+      "workspace_file": "work/castalia-connections/recovery-workflows.log",
+      "sha256": "0d7ab8d195fddba37975b2ef52009359c18f5f7f0db5251d215d1fe4c4dd48bf",
+      "bytes": 1037
+    },
+    {
+      "label": "Castalia update: issuer-http",
+      "workspace_file": "work/castalia-connections/issuer-http.log",
+      "sha256": "8c572d1cf447c05e73cd9cbc1b95dd127f03cca913b4ce26ddf8e723c467e88b",
+      "bytes": 1624
+    },
+    {
+      "label": "Castalia update: ipad-sim-build",
+      "workspace_file": "work/castalia-connections/ipad-sim-build.log",
+      "sha256": "bdde54ede06805e57b95493f63f9743cbe642a882510cc001256b7ab2dec069c",
+      "bytes": 68914
+    },
+    {
+      "label": "Castalia update: ipad-device-build",
+      "workspace_file": "work/castalia-connections/ipad-device-build.log",
+      "sha256": "4a70995bc4f3eed2be571820c4f6bc22146005c04c615f4e424531df4d93fab1",
+      "bytes": 67134
+    },
+    {
+      "label": "Castalia update: package-rust",
+      "workspace_file": "work/castalia-connections/package-rust.log",
+      "sha256": "752d2a42a7ecfbe5089b6b624405f80d11614265cdbc30700cefd1cc11a2fd3e",
+      "bytes": 19501
+    },
+    {
+      "label": "Castalia update: package-typescript",
+      "workspace_file": "work/castalia-connections/package-typescript.log",
+      "sha256": "4e28f65e1e9fab2918efec7bfd0e7e6f61198e1e96839547a91ae7aafcd574bb",
+      "bytes": 548
+    },
+    {
+      "label": "Castalia update: package-swift",
+      "workspace_file": "work/castalia-connections/package-swift.log",
+      "sha256": "9c0a279bf33527b50c08acd77ccc1c8a18ed45524a05d9f6e0669f89b29fe04c",
+      "bytes": 1057
+    },
+    {
+      "label": "Castalia update: stage-sdk",
+      "workspace_file": "work/castalia-connections/stage-sdk.log",
+      "sha256": "5db4366119701094bac89b0118869df3606e2188bd2412eeb758f3d3acc6a2d6",
+      "bytes": 126
+    },
+    {
+      "label": "Castalia update: companion-tests",
+      "workspace_file": "work/castalia-connections/companion-tests.log",
+      "sha256": "85e1e7c806588f20cf9a701f6994f760069cd247c06c9a5c52cc2c6a19ade02f",
+      "bytes": 4246
+    },
+    {
+      "label": "Castalia update: audible-tests",
+      "workspace_file": "work/castalia-connections/audible-tests.log",
+      "sha256": "51db326ce1e8b249c20eaed914b9d5534e9cccb3e92a0c134e16335426eee379",
+      "bytes": 4325
+    }
+  ],
+  "not_qualified": [
+    "Live Castalia issuer and native wallet transport",
+    "Real Kindle catalog/account",
+    "Real Audible login/MFA/renewal/position accuracy",
+    "Physical iPad Pencil and accessibility",
+    "Apple distribution signing/notarization"
+  ],
+  "release_ready": false,
+  "offscreen_profile_review": {
+    "workspace_file": "work/castalia-connections/offscreen-profile/evidence.json",
+    "sha256": "09b8fedf6bf3b2ada2f56c8a5bbed989f8630ae9d83d6674ab8148a815c57728",
+    "scope": "Offscreen rendering only; native scroll area omitted so full screen readability is unverified",
+    "status": "incomplete_visual_evidence",
+    "report": "castalia-profile-visual-review.json",
+    "completed_ux_round": false
+  }
+}

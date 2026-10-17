@@ -1,0 +1,465 @@
+{
+  "schema": "booknook.physical-ipad-acceptance.v1",
+  "recorded_at_utc": "2026-10-15T22:03:30.504579+00:00",
+  "status": "Bounded keyboard Undo/Redo, recovery, font consistency and docked-keyboard caret visibility passed; broader hardware and live-account release qualification open",
+  "release_ready": false,
+  "device": {
+    "model": "iPad Air 13-inch (M2)",
+    "os": "iPadOS 18.1.1 (22B91)",
+    "transport": "USB",
+    "developer_mode": "enabled",
+    "developer_profile_trust": "confirmed by user; launches succeeded"
+  },
+  "isolation": {
+    "app_bundle": "org.booknook.qa.ipad20261015",
+    "app_display_name": "BookNook iPad QA",
+    "keychain_service": "org.booknook.qa.ipad20261015.secure",
+    "data": "Original test EPUBs/PDF plus synthetic public provider profile and holder; isolated app container preserved between builds",
+    "live_credentials_used": false,
+    "castalia_signing_used": false,
+    "publication_used": false,
+    "application_network_operations_used": false
+  },
+  "development_signing": {
+    "app_and_runner_verified": true,
+    "profile_expiry": "2026-10-22",
+    "distribution_signed": false,
+    "archived_production_device_app": "Still unsigned; separately built and verified"
+  },
+  "final_qa_build": {
+    "workspace_file": "work/ipad-acceptance-2026-10-15/final-build-keyboard.json",
+    "sha256": "3a2e56c0ca053bbad6b9a59e2a3e0d29fd98dd9799755fef5ad47e41300977e2",
+    "bytes": 17603
+  },
+  "production_builds": {
+    "workspace_file": "work/ipad-acceptance-2026-10-15/production-keyboard-final-builds/receipt.json",
+    "sha256": "c456d1c7e635f7231c00a788b826ec7bb1cd80f7f54a1a3eee06a3931a78a828",
+    "bytes": 8382
+  },
+  "production_changes": {
+    "apps/apple/BookNook/ConnectionSetup.swift": "a44fe7ab5c4b8fdb2c5ca625f83e44d4cc0ea2a231fe86f2d910767fabc38384",
+    "apps/apple/BookNook/SocialCommunity.swift": "3901d2b3570fbe32f2d7a3b233c7c2f1f66b45e37b11a5ed96cd50f8568a4f29",
+    "apps/apple/BookNook/ReaderWebBridge.swift": "cbb843794593fff9a4d55df969f7d62e2992c606e7382cef4374c46c5859525f",
+    "tests/ReaderNavigationTests.swift": "da63eb287c3d7f4aa4130cb70b9b945288ccc24a6cf55274307d79f02c5e6707",
+    "apps/apple/BookNook/NativeNotebookEditor.swift": "928b8a34e9f5ba2b6e281d01f79ecb8ff80906cbd2749dba1bbf810d613d8ce3",
+    "tests/NotebookEditorTests.swift": "6fb15062257b64df58177e58860aec68f100406bceb1f7b66d05fe893361cb02"
+  },
+  "successful_bounded_test_runs": 15,
+  "tests": [
+    {
+      "test": "test00NoInputLaunch",
+      "result": "passed",
+      "seconds": 5.214,
+      "log": {
+        "workspace_file": "work/ipad-acceptance-2026-10-15/physical-no-input-runner-refreshed.log",
+        "sha256": "3a1f2614afd5e90a912d58df2988045c1269bd55deaad31568451a324d4753ac",
+        "bytes": 4244
+      }
+    },
+    {
+      "test": "test10ConnectionsDisclosure",
+      "result": "passed",
+      "seconds": 7.68,
+      "log": {
+        "workspace_file": "work/ipad-acceptance-2026-10-15/physical-connections.log",
+        "sha256": "b32783d9d5962f7fa09e0b528d9e325539d86dbee381f25a9f3ed61c07955290",
+        "bytes": 5842
+      }
+    },
+    {
+      "test": "test11ProviderPicker",
+      "result": "passed",
+      "seconds": 10.752,
+      "log": {
+        "workspace_file": "work/ipad-acceptance-2026-10-15/physical-provider-picker-after-fix.log",
+        "sha256": "0b2185e7e19c8ac8678bba4108ad6462059ef33e6decf9323c01cee95ea49d88",
+        "bytes": 6435
+      }
+    },
+    {
+      "test": "test12PickerLocalLocation",
+      "result": "passed",
+      "seconds": 7.942,
+      "log": {
+        "workspace_file": "work/ipad-acceptance-2026-10-15/physical-picker-local.log",
+        "sha256": "a4c2611917eae41f663cd937a4307df23d8a0198ce5e4d1ff4a2126c40c2b7a2",
+        "bytes": 6071
+      }
+    },
+    {
+      "test": "test13ProfileReviewTop",
+      "result": "passed",
+      "seconds": 13.576,
+      "log": {
+        "workspace_file": "work/ipad-acceptance-2026-10-15/physical-profile-review-top.log",
+        "sha256": "cb2c57b8536a8aa906580524c1c3b86b48463bf0181db5880435b41e533c88b7",
+        "bytes": 8240
+      }
+    },
+    {
+      "test": "test14ProfileCancelApplyAndReopen",
+      "result": "passed",
+      "seconds": 49.847,
+      "log": {
+        "workspace_file": "work/ipad-acceptance-2026-10-15/physical-profile-cancel-apply.log",
+        "sha256": "84dbfadcf67bae78ba450ed5dce38aedae8e02bc5f2613ed61d491ee6680013d",
+        "bytes": 23630
+      }
+    },
+    {
+      "test": "test21ExactNotebookSaveAndReopen",
+      "result": "passed",
+      "seconds": 16.463,
+      "log": {
+        "workspace_file": "work/ipad-acceptance-2026-10-15/physical-notebook-exact.log",
+        "sha256": "cbf78a42da83840ecbb376a578ce9fef60896dcdeffcbc6e48a088c82e838058",
+        "bytes": 9141
+      }
+    },
+    {
+      "test": "test30CommunitySharingScreen",
+      "result": "passed",
+      "seconds": 8.774,
+      "log": {
+        "workspace_file": "work/ipad-acceptance-2026-10-15/physical-community-sharing.log",
+        "sha256": "c58ac02247239665c7330bec849612723f1900e9fab936b6942ba99e671d5a0e",
+        "bytes": 6155
+      }
+    },
+    {
+      "test": "test31CommunityPickerCancellation",
+      "result": "passed",
+      "seconds": 18.3,
+      "log": {
+        "workspace_file": "work/ipad-acceptance-2026-10-15/physical-community-picker-cancel.log",
+        "sha256": "133cc7c0196b8a91f388decee14e5112f7725678fa4af28f512fad7e16685cea",
+        "bytes": 9906
+      }
+    },
+    {
+      "test": "test22ReaderInitialNavigation",
+      "result": "passed",
+      "seconds": 9.132,
+      "log": {
+        "workspace_file": "work/ipad-acceptance-2026-10-15/physical-reader-initial-after-fix.log",
+        "sha256": "64c784643a14dd54c0bdd629b896a1a268003ee18225a1751b565e80ced20c8b",
+        "bytes": 6807
+      }
+    },
+    {
+      "test": "test23ReaderControls",
+      "result": "passed",
+      "seconds": 24.44,
+      "log": {
+        "workspace_file": "work/ipad-acceptance-2026-10-15/physical-reader-controls.log",
+        "sha256": "a7d7c92a2b113141d6ab822aed57f5265ba36f82ce11ae2a16e260af67f39b52",
+        "bytes": 14423
+      }
+    },
+    {
+      "test": "test24CharacterHistory",
+      "result": "passed",
+      "seconds": 14.334,
+      "log": {
+        "workspace_file": "work/ipad-acceptance-2026-10-15/physical-character-history.log",
+        "sha256": "a629ad20b1484e0850a8fc03c964fe7a68300d1283b02994964ec8a158ec175a",
+        "bytes": 8265
+      }
+    },
+    {
+      "test": "test25KeyboardUndoRedo",
+      "result": "passed",
+      "seconds": 29.157,
+      "log": {
+        "workspace_file": "work/ipad-acceptance-2026-10-15/physical-keyboard-undo-redo.log",
+        "sha256": "077a28d876c8e780fbac0fe465a6e550bc64a09eb4fe9e6c94ece54671a86514",
+        "bytes": 14152
+      }
+    },
+    {
+      "test": "test26KeyboardUndoRedoStableInputMode",
+      "result": "passed",
+      "seconds": 47.001,
+      "log": {
+        "workspace_file": "work/ipad-acceptance-2026-10-15/physical-keyboard-font-stable-query.log",
+        "sha256": "8689af39bdccf99bd3dd1b1c93a456cb288d35b0ca0cdad3a7b0585cecb40a70",
+        "bytes": 18125
+      }
+    },
+    {
+      "test": "test26KeyboardUndoRedoStableInputMode",
+      "result": "passed",
+      "seconds": 54.535,
+      "log": {
+        "workspace_file": "work/ipad-acceptance-2026-10-15/physical-keyboard-final.log",
+        "sha256": "1e860bf5d7631eee95c3dba36dabe5d047b5a5bc3add4eb88788de802342c80c",
+        "bytes": 18808
+      }
+    }
+  ],
+  "verified_behaviors": [
+    "Connections disclosure and native Files picker",
+    "Complete synthetic public-profile review: existing holder retained; Apply disabled until recognition; cancel preserves old provider; explicit Apply preserves new provider; both checked after reopen",
+    "Exact automated UITextView ASCII composition, autosave, termination/relaunch and recovery",
+    "Community public-identity and history file pickers present and cancel back to Sharing",
+    "Chapter menu and internal link; next/previous with boundary disabling; text-size menu and reflow; explicit external link remains blocked with explanation; default size restored",
+    "Both seeded character-card history versions reachable through scrolling; no publication or sharing draft created",
+    "Fresh-thought Command-Z removes final period, Shift-Command-Z restores exact text, save/reopen preserves it; all preexisting blocks unchanged.",
+    "Fresh and reopened thought text has consistent visible font size after the empty-editor repair.",
+    "The focused caret is fully visible above the docked software keyboard after measured scroll forwarding; final exact production editor also passes first Undo, Redo and reopen."
+  ],
+  "reader_regression": {
+    "negative_control": {
+      "workspace_file": "work/reader-navigation-status/before-framework.log",
+      "sha256": "29f23c249fcdadca3b69759461a68fbd3d4d653e570a7685181ca60818c16251",
+      "bytes": 144
+    },
+    "after_fix": {
+      "workspace_file": "work/reader-navigation-status/after-framework.log",
+      "sha256": "ce6053c253f0b95fd885c32686e0b0377a0d5549d34f84e302b790e92483fce1",
+      "bytes": 403
+    },
+    "scope": "Real WKWebView cancels programmatic about:blank without false external-link warning; explicit links still explain rejection; containment unchanged. The exact initial iPad request was not logged."
+  },
+  "nonpasses_and_limitations": [
+    "Initial app/runner launch blocked by developer certificate trust; user trusted profile and verified runner reinstalled; subsequent tests passed",
+    "First weak picker test only captured the screen and is excluded from pass count. Strengthened test failed before importer fix and passed after it.",
+    "First reader initial test failed because restored chapter was 3 while test assumed chapter 1; fixed harness explicitly selects chapter 1. This is not a negative control proving the warning cause.",
+    "App-only XCTest screenshots had a crop/orientation artifact; full-screen screenshots and accessibility trees used for inspection.",
+    "Pencil, physical keyboard/IME, VoiceOver, PDF markup and extended editing not yet qualified; accessory availability is not acceptance.",
+    "Synthetic public profile review does not qualify real Castalia authority/custody or native wallet transport.",
+    "No real Kindle or Audible account, signing, social publication, private group or multi-device hardware qualification.",
+    "First post-font test25 failed because text did not change on first Cmd-Z; software keyboard collapsed and Redo stayed disabled. Later controlled passes do not diagnose the initial no-op.",
+    "First test26 failed before Arrow/Undo because a fixed AX editor index became invalid when an offscreen editor disappeared; dynamic last-editor lookup fixed only the harness.",
+    "Keyboard geometry observation runs are separate from editing acceptance counts; original and intermediate caret containment failures are retained."
+  ],
+  "manual_hardware": {
+    "status": "Partial: saved physical-keyboard text verified; focused automated Undo/Redo and recovery passed; manual selection behavior unexplained and Pencil unqualified",
+    "reported_at_utc": "2026-10-15T21:30:07.630209+00:00",
+    "physical_keyboard": {
+      "user_report": "Typed the new thought; Command-Z highlighted the last word; Redo behavior uncertain.",
+      "saved_note": "Hardware keyboard check: cafe",
+      "exact_requested_unicode_sentence": false,
+      "undo_redo": "Controlled physical-device XCTest tests passed first Undo, exact Redo and reopen; the earlier manual word-selection behavior remains unexplained."
+    },
+    "text_size": "User confirms Larger text and controls work; earlier automated reader check independently passed.",
+    "rotation": "User said remaining steps were performed; no independently observed placement evidence.",
+    "pencil": {
+      "user_report": "May not work and has no tip; user is checking another app.",
+      "persisted_annotations": 0,
+      "qualification": "Not passed. Hardware cause not confirmed; no app defect inferred."
+    },
+    "data_observation": {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/manual-keyboard-store/booknook.sqlite",
+      "sha256": "da63a52bdf62b3fc863995d79f497584be3ba97c1de4c55d1d301afbafab6cfc",
+      "revision": 116,
+      "integrity_check": "ok",
+      "pending_edits": 0
+    },
+    "next_check": "Pencil with usable hardware; broader hardware-keyboard/IME, VoiceOver and prolonged editing remain unqualified.",
+    "keyboard_shortcut_test": {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/keyboard-undo-evidence.json",
+      "sha256": "62278cc3b38ebdeaecccddf48c77607e9a573b120bf0e8bcfecc0062a1d28553",
+      "bytes": 2521
+    },
+    "latest_keyboard_test": {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/keyboard-final-evidence.json",
+      "sha256": "b9368a53ca6ad2a1fe9f178a4571b3a636a5162b7535ce5d7d213132525f7ccc",
+      "bytes": 3260
+    }
+  },
+  "privacy": "Raw Files picker screenshots/accessibility may show unrelated filenames and stay in local work evidence. Public evidence excludes device serial, developer account, provisioning payloads and raw picker content.",
+  "ux_rounds": {
+    "completed": 3,
+    "fourth": "partial; extended with physical checks",
+    "fifth_started": false
+  },
+  "reviewed_screenshots": [
+    {
+      "file": "evidence/ipad-reader-2026-10-15.png",
+      "sha256": "c14eb80955a691b081b978f74834a497fe8466de6519a6edd71247ecca01d1d6"
+    },
+    {
+      "file": "evidence/ipad-provider-review-2026-10-15.png",
+      "sha256": "ab0072796d9fa3a72278ab86f4426bd73a26e2af04e13e8ef554b88e39c6ca9e"
+    },
+    {
+      "file": "evidence/ipad-keyboard-visible-2026-10-15.png",
+      "sha256": "ceb8b2e29180e8c440757adc4c3f7bc6d6b2989e41aedf5e6727ea337bebbb55"
+    }
+  ],
+  "store_observation": {
+    "workspace_file": "work/ipad-acceptance-2026-10-15/store-observation.json",
+    "sha256": "60cf6cbee3160fe2c59b141b7dd62f965ea0845144b686d95c0e89bf389caf4f",
+    "revision": 116,
+    "result": "Historical revision116 snapshot before the manual hardware result was evaluated; see latest_store_observation for final preserved-data verification."
+  },
+  "earlier_qa_build": {
+    "workspace_file": "work/ipad-acceptance-2026-10-15/final-build.json",
+    "sha256": "e59d2e0b37841e5e13e9c4c57c631c2c97e76f9deb44ea7c53c1e8ce01c2c918",
+    "bytes": 17349
+  },
+  "font_regression": {
+    "change": "Explicit body font/color and typing attributes only when installing an empty snapshot; nonempty rich styles preserved.",
+    "appkit_before": {
+      "workspace_file": "work/editor-empty-font/appkit-before.log",
+      "sha256": "94ecfe9d8a39edbe5246484fa95781ce49d3dc845f585dcea33930321d509084",
+      "bytes": 260
+    },
+    "appkit_after": {
+      "workspace_file": "work/editor-empty-font/appkit-after.log",
+      "sha256": "73543b672ac8550180227ea01bb3f84fea1b7f79df8de99c70965219b7f4397a",
+      "bytes": 384
+    },
+    "negative_control": {
+      "workspace_file": "work/editor-empty-font/appkit-negative-control.log",
+      "sha256": "d0d544942bea6fff85c49626296d5ce271c005f654ee7ebe0e09505129bb585c",
+      "bytes": 118
+    },
+    "physical_evidence": {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/keyboard-font-evidence.json",
+      "sha256": "e252a4c8f286319f64ecacdea88ddfa541282e1e1d00dd6454a4ac6e60231001",
+      "bytes": 5027
+    },
+    "limits": "Fresh/reopened UIKit font size visually consistent; no measured UIKit point-size claim."
+  },
+  "keyboard_visibility": {
+    "result": "passed for docked software keyboard on tested iPad",
+    "before": {
+      "receipt": {
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/keyboard-geometry-before.json",
+        "sha256": "0fabb996e0e04dbed4c5af43cca61103cd41bf67da1b9490f2f1c8cb38a4f285",
+        "bytes": 1450
+      },
+      "sample_delay_seconds": 0.5,
+      "visible_top": 273.5,
+      "visible_bottom": 528.176256758228,
+      "caret_top": 680,
+      "caret_bottom": 703.5,
+      "fully_visible": false
+    },
+    "intermediate_without_padding": {
+      "receipt": {
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/keyboard-geometry-settled.json",
+        "sha256": "d30ad2dafbc28345e0e3b424f4e73b9673c5155af5fa5a2f204a81b5a5aca5d1",
+        "bytes": 1420
+      },
+      "sample_delay_seconds": 1.5,
+      "visible_top": 273.5,
+      "visible_bottom": 526.0,
+      "caret_top": 503,
+      "caret_bottom": 526.5,
+      "fully_visible": false
+    },
+    "after": {
+      "receipt": {
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/keyboard-geometry-padding.json",
+        "sha256": "44b604850d0bd63cc8e39324213a9270d9b01f26f0202b82a4a76d5a35d6c67b",
+        "bytes": 1420
+      },
+      "sample_delay_seconds": 1.5,
+      "visible_top": 273.5,
+      "visible_bottom": 526.0,
+      "caret_top": 495,
+      "caret_bottom": 518.5,
+      "fully_visible": true
+    },
+    "change": "UIKit forwards the measured caret plus native text-container padding through ancestor scroll viewports using adjustedContentInset and clamped minimal offsets. Existing keyboard insets, text, selection, focus and undo history are not changed.",
+    "observations": [
+      {
+        "test": "test27FocusedEditorKeyboardGeometry",
+        "result": "passed",
+        "seconds": 20.116,
+        "log": {
+          "workspace_file": "work/ipad-acceptance-2026-10-15/physical-keyboard-geometry-before.log",
+          "sha256": "a0744dd0192ad857fec2fff6b2b58cf7f4318600b82d07511547b229b145bd5f",
+          "bytes": 7661
+        }
+      },
+      {
+        "test": "test27FocusedEditorKeyboardGeometry",
+        "result": "passed",
+        "seconds": 19.305,
+        "log": {
+          "workspace_file": "work/ipad-acceptance-2026-10-15/physical-keyboard-geometry-after.log",
+          "sha256": "12f805ec18bbf61e3fc3e5db2ac1bb8a5f2a0d90380dd5f18b7206ba51c182ac",
+          "bytes": 7588
+        }
+      },
+      {
+        "test": "test27FocusedEditorKeyboardGeometry",
+        "result": "passed",
+        "seconds": 19.001,
+        "log": {
+          "workspace_file": "work/ipad-acceptance-2026-10-15/physical-keyboard-geometry-settled.log",
+          "sha256": "732fe9909cff9867cb5de1eebb22e329ff49a7194414538de42d29dc6af0e85c",
+          "bytes": 7594
+        }
+      },
+      {
+        "test": "test27FocusedEditorKeyboardGeometry",
+        "result": "passed",
+        "seconds": 18.987,
+        "log": {
+          "workspace_file": "work/ipad-acceptance-2026-10-15/physical-keyboard-geometry-padding.log",
+          "sha256": "962ed225f3485ccdfcfb7e5b2958448e511e008649f336959b4302092faeb0ee",
+          "bytes": 7594
+        }
+      }
+    ],
+    "observation_scope": "test27 itself observes and verifies unchanged text. Separate numerical containment assertions fail for original and intermediate geometry and pass for the final padded correction. The initial 0.5-second after-fix probe sampled during the keyboard transition; settled samples use1.5seconds.",
+    "probe_sources": [
+      {
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/NativeNotebookEditor-keyboard-geometry.swift",
+        "sha256": "b428471efcf952661c49c1a3b009c9b7b24061473ad87fc233f5c90918a63067",
+        "bytes": 16615
+      },
+      {
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/NativeNotebookEditor-keyboard-settled-probe.swift",
+        "sha256": "42111d58a91eff804cc65aa769b13576855c6634ad28d39c70ddd0d0f07cbca0",
+        "bytes": 19761
+      },
+      {
+        "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/NativeNotebookEditor-keyboard-padding-probe.swift",
+        "sha256": "e4ddd5a0b5199c523a821ceb73f1e063ce4ea3c618672360b472fd2e33708ba3",
+        "bytes": 20030
+      }
+    ],
+    "final_without_probe": {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/keyboard-final-evidence.json",
+      "sha256": "b9368a53ca6ad2a1fe9f178a4571b3a636a5162b7535ce5d7d213132525f7ccc",
+      "bytes": 3260
+    },
+    "original_later_screen": {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/keyboard-geometry-before/EC6769F2-2B9F-4B33-B481-BDA4AB31DFAB.png",
+      "sha256": "568e418d21db2d619e841584d9470691920ab36566560ec0d7b8e77bd638d8ff",
+      "bytes": 538730
+    },
+    "original_later_accessibility": {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/keyboard-geometry-before/D4EA9DE8-F8E0-4925-8969-EF19D4C565F9.txt",
+      "sha256": "8e0f73a923ca2a0884a8c9a29961c67b57b404f1caf5579c39f737aea4d0dd23",
+      "bytes": 33026
+    },
+    "original_later_observation": "Later settled screen and AX also show focused editor y673..883 behind accessory top526, independently corroborating the original early numeric sample."
+  },
+  "final_keyboard_evidence": {
+    "workspace_file": "work/ipad-acceptance-2026-10-15/keyboard-final-evidence.json",
+    "sha256": "b9368a53ca6ad2a1fe9f178a4571b3a636a5162b7535ce5d7d213132525f7ccc",
+    "bytes": 3260
+  },
+  "latest_store_observation": {
+    "file": {
+      "workspace_file": "work/ipad-acceptance-2026-10-15/Evidence/keyboard-final-store/booknook.sqlite",
+      "sha256": "aa1fe3e3b52edeb3eba260ab56d20f4d1f48c28d88dbbb64d2b6ffdcd3fbd111",
+      "bytes": 110592
+    },
+    "revision": 187,
+    "integrity_check": "ok",
+    "existing_blocks_preserved_exactly": 8,
+    "new_test_blocks": 1,
+    "cards_and_settings_unchanged": true,
+    "pending_edits": 0,
+    "social_revision": 0,
+    "social_queues_empty": true
+  }
+}

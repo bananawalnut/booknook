@@ -1,0 +1,34 @@
+{
+  "verified_at": "2026-10-12T20:24:59.420870+00:00",
+  "source_sha256": {
+    "apps/apple/BookNook/CompanionCatalogImport.swift": "64620c770fede7e234d0e100de6bb759041ea4c451603d00002778c7584fb61d",
+    "apps/apple/BookNook/ConnectionSetup.swift": "2c4b82bf89dd82d3e7e684c2cf80dcffd21c8c0d02221c1d5a12de319dc6ccaa",
+    "tests/CompanionCatalogImportTests.swift": "b3028576a35e3e11534682aae748f543f77f88491678520cc54e86a02a0c40a3",
+    "tests/DeskWorkflowTests.swift": "66d0a13e5f0c83383963ef067c3f01c10daf09fd7cb00b013db65a9702136c6d",
+    "scripts/test-ui-workflows.sh": "593c495cfa79065f9f8b3b2e8302994438a516681fb2580631ca599a9ef3c26a"
+  },
+  "evidence_sha256": {
+    "catalog-import-workflows.log": "b97ec1d4136cb1bd5ad4cb2985f352578299bd53bdc7a1a28f57fcd419bbec0f",
+    "catalog-import-negative-control/result.log": "cbcd1e0b1058079156678bb6f0feb5c20c347c987c8e365fd0618ae82197aeba",
+    "catalog-import-negative-control/build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "catalog-import-negative-control/command.json": "092b64ee7128de4eec33114c9b6498a1d683c6368bbcd7613de4d0ab02290d3d"
+  },
+  "command": "bash scripts/test-ui-workflows.sh",
+  "result": "passed",
+  "negative_control": "Same production workflow staged with sole model.accept(snapshot) -> model.state = snapshot mutation. Actual SQLite import snapshot delayed across newer real model save. Test detected lost newer model revision; controlled exit0 confirms expected detection. Regression test assertion converted to a caught error in staged copy to avoid a crash. Production sources unchanged.",
+  "qualified": [
+    "actual shared native import sequence",
+    "real SQLite persistence and reopen",
+    "postcommit manifest failure/cancellation preserves committed import",
+    "cancellation-ignoring precommit source cannot trigger persistence",
+    "read/upload/catalog/native-persist failures do not refresh or report success",
+    "concurrent run rejected before source invocation",
+    "monotonic model snapshot application after delayed commit response"
+  ],
+  "limits": [
+    "synthetic source dependency; not live companion HTTP/account qualification",
+    "no UI interaction or file-picker acceptance",
+    "endpoint capability assignment guard reviewed in callsite; not simulated UI input",
+    "parent owns final all-platform compile and package provenance"
+  ]
+}

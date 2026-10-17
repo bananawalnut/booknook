@@ -1,0 +1,92 @@
+{
+  "schema": "booknook.ontology-manifest.v1",
+  "version": "0.2.0",
+  "namespace": "urn:booknook:ontology:",
+  "castalia": {
+    "version": "0.6.0",
+    "canonical_base_url": "https://zenith-research.ca/ontology/v0.6.0",
+    "bundle_digest": "11d670a57b2052b4de00509559d081b524bf953c6da2544a25f33976857f8f4f"
+  },
+  "artifacts": [
+    {
+      "path": "audio-candidates.schema.json",
+      "sha256": "e6aa4dfa76a7e739deaa2c96cb6b0b12da12873fc3a82dbb63fd72a9f12f9aec"
+    },
+    {
+      "path": "audio-observation.schema.json",
+      "sha256": "af8b89353ca93af9d0e8f70cd5f8c9b1bde03a6c4b60ddcb87fc18b444821200"
+    },
+    {
+      "path": "authority-policy.schema.json",
+      "sha256": "dcf92eb6f727fb6934beedb02a850a401b107f9bee1e62b8c222b6acc56301fa"
+    },
+    {
+      "path": "castalia-mapping.json",
+      "sha256": "bd70758ca0592b9221a04bc4fd5ef1baf6a77b193d76ddea631d661b827f0d12"
+    },
+    {
+      "path": "castalia-native-authority-profile.schema.json",
+      "sha256": "5bcb39d232865fa4a7de200625e3ec02e21799d99eab544ab4bab9f8fc5fd9e4"
+    },
+    {
+      "path": "castalia-provider-connection.schema.json",
+      "sha256": "ff3eec75a34c70a0a08b497f5448072446f7892db8d2b81b52a8341498f3f5e1"
+    },
+    {
+      "path": "command.schema.json",
+      "sha256": "f5610dbbed05398c747f9fe00e39aa37a6fccb8421c72cdbd43eaf351cf2c000"
+    },
+    {
+      "path": "conformance.json",
+      "sha256": "2543e51e6f6aebddca2ffad6ae798c4bf42d869800e3249938910b33c2bbe6ec"
+    },
+    {
+      "path": "connections.schema.json",
+      "sha256": "836f9e1b9b49f3c1e1cfa627383e52c1411bfa987c85daece786818b46d5a6dd"
+    },
+    {
+      "path": "context.jsonld",
+      "sha256": "cf85dc951efec08a675f66ea42ad4de4d272692cda858d423b698711f8a6cd86"
+    },
+    {
+      "path": "identity.schema.json",
+      "sha256": "cd53f9c9b81318957a3ecc74b051ede6a6080f29f41edf4518ba273b502d3ea5"
+    },
+    {
+      "path": "notebook-ink.json",
+      "sha256": "0c9d231dac51d49c5c6472674336315e2fca443231ed9bbd8a2ad8286e428d4d"
+    },
+    {
+      "path": "notebook-ink.schema.json",
+      "sha256": "628dd22795fe1e8ec20274754dc978889c948de6dbc3ecea4728cf1f4fc2ac41"
+    },
+    {
+      "path": "ontology.jsonld",
+      "sha256": "213519597c331a211dfe07fbc16b4024bd46533d9915c4f9594915e7c1e91baa"
+    },
+    {
+      "path": "publication.schema.json",
+      "sha256": "615f39dbfa708b3205bfac27fbec6611c4b2d045af64da5954b55cc6a8e87142"
+    },
+    {
+      "path": "social-action.schema.json",
+      "sha256": "61b19e7693fec5d32056f0dca2c96198b515473c9a3c3db4179b216932e7f034"
+    },
+    {
+      "path": "social-event.schema.json",
+      "sha256": "abae795af3bde339539fb0382f29f5969fad3f28afaf7da884397215b57954c4"
+    },
+    {
+      "path": "social-local.schema.json",
+      "sha256": "346990b88779e8b9fcb7c0666b142d4c2b989a0dc1e505d2c8cbd79ce7c3a8f6"
+    },
+    {
+      "path": "social.schema.json",
+      "sha256": "7c8dc6093af6a86c2422ee4fbc58b0855070d2bfce17deb3b90c2f6c27224618"
+    },
+    {
+      "path": "state.schema.json",
+      "sha256": "b4d1fca0d56534c6dce3a69168397012bfd0fef90beca877fc7538df9067ccc9"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+name: BookNook
+options:
+  bundleIdPrefix: org.booknook
+  deploymentTarget:
+    macOS: '14.0'
+    iOS: '17.0'
+settings:
+  SWIFT_VERSION: '5.0'
+  ENABLE_USER_SCRIPT_SANDBOXING: NO
+  CODE_SIGNING_ALLOWED: NO
+  GENERATE_INFOPLIST_FILE: YES
+  SWIFT_OBJC_BRIDGING_HEADER: Generated/booknook_nativeFFI.h
+  HEADER_SEARCH_PATHS: $(SRCROOT)/Generated
+  OTHER_LDFLAGS: ["$(BOOKNOOK_RUST_LIBRARY)", -lsqlite3, -lc++, -framework, Security]
+  INFOPLIST_KEY_CFBundleDisplayName: Book Nook
+  INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.books
+  INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+  INFOPLIST_KEY_UILaunchScreen_Generation: YES
+targets:
+  BookNookMac:
+    type: application
+    platform: macOS
+    sources:
+      - BookNook
+      - Generated/booknook_native.swift
+      - ../../sdk/swift/Sources/BookNookServices
+      - ../../sdk/swift/Sources/CastaliaNative
+      - path: Resources
+        buildPhase: resources
+      - path: ../../ontology
+        type: folder
+        buildPhase: resources
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: org.booknook.desktop
+      BOOKNOOK_RUST_LIBRARY: $(SRCROOT)/../../target/release/libbooknook_native.a
+  BookNookPad:
+    type: application
+    platform: iOS
+    sources:
+      - BookNook
+      - Generated/booknook_native.swift
+      - ../../sdk/swift/Sources/BookNookServices
+      - ../../sdk/swift/Sources/CastaliaNative
+      - path: Resources
+        buildPhase: resources
+      - path: ../../ontology
+        type: folder
+        buildPhase: resources
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: org.booknook.ipad
+      TARGETED_DEVICE_FAMILY: '2'
+      SUPPORTS_MACCATALYST: NO
+      BOOKNOOK_RUST_LIBRARY[sdk=iphonesimulator*]: $(SRCROOT)/../../target/aarch64-apple-ios-sim/release/libbooknook_native.a
+      BOOKNOOK_RUST_LIBRARY[sdk=iphoneos*]: $(SRCROOT)/../../target/aarch64-apple-ios/release/libbooknook_native.a
+      INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: [UIInterfaceOrientationPortrait, UIInterfaceOrientationPortraitUpsideDown, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
+schemes:
+  BookNookMac:
+    build:
+      targets:
+        BookNookMac: all
+  BookNookPad:
+    build:
+      targets:
+        BookNookPad: all

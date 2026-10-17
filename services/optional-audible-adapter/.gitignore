@@ -1,0 +1,4 @@
+# Local optional-package verification artifacts; never source distribution inputs.
+*.egg-info/
+build/
+__pycache__/

@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "booknook-optional-audible-adapter"
+version = "0.1.0"
+description = "Explicitly optional Audible source process for the Book Nook companion"
+requires-python = ">=3.10,<3.13"
+license = {text = "AGPL-3.0-only"}
+dependencies = ["audible==0.10.0", "keyring==25.6.0"]
+
+[project.scripts]
+booknook-audible-adapter = "booknook_audible:main"
+
+[tool.setuptools]
+py-modules = ["booknook_audible"]

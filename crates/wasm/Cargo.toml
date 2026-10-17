@@ -1,0 +1,16 @@
+[package]
+name = "booknook-wasm"
+description = "Book Nook portable document and social contracts through WebAssembly"
+readme = "README.md"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+booknook-core.workspace = true
+serde_json.workspace = true
+serde.workspace = true
+wasm-bindgen = "=0.2.127"

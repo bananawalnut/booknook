@@ -1,0 +1,97 @@
+{
+  "schema": "booknook.quiet-writing-desk-evidence.v1",
+  "status": "passed_bounded_simulator_acceptance",
+  "release_ready": false,
+  "summary": "Always-visible resizable panes, side swap and automatic native prose/ink routing passed isolated Simulator acceptance. Screenshot review exposed a missing EPUB viewport; the fixed reader passed native/CSS width and zoom checks through reopen.",
+  "receipt": {
+    "workspace_file": "work/quiet-writing-desk-2026-10-15/Evidence/acceptance-receipt.json",
+    "sha256": "7e051a5cc509ddf3e2ab9ac92208a022caf1920851070366c66b632f21207147",
+    "bytes": 20514
+  },
+  "source_mapping": {
+    "workspace_file": "work/quiet-writing-desk-2026-10-15/Evidence/source-inputs.json",
+    "sha256": "9569658fbc7b4b048c8bdad59cda434504bef24734871d236127896e34e478f3",
+    "bytes": 56817
+  },
+  "qa_build": {
+    "workspace_file": "work/quiet-writing-desk-2026-10-15/Evidence/final-build-inputs.json",
+    "sha256": "86060ac14f71bd3c68f08a0c6b30d76e26c2ab6bc17d67932ae7be312f3a633e",
+    "bytes": 31268
+  },
+  "final_xctest": {
+    "cases": 1,
+    "failures": 0,
+    "duration_seconds": 46.922,
+    "log": {
+      "workspace_file": "work/quiet-writing-desk-2026-10-15/Evidence/viewport-final-test.log",
+      "sha256": "78d9937d115d464000990df3b276d039def5b27964b056b7cfa3d44e1d9c71c8",
+      "bytes": 27447
+    }
+  },
+  "screenshots": [
+    {
+      "name": "06-reopened-saved-writing_0_7C3A69F2-218B-4107-9B7A-D1271105C399.png",
+      "file": {
+        "workspace_file": "work/quiet-writing-desk-2026-10-15/Evidence/viewport-final-attachments/EC7468D8-A02A-4E50-B579-E5D039CB2FC8.png",
+        "sha256": "0c61045f3c30b53fdf0c79cbefbab4c4b25efec5a08843b96300b6781ed84bef",
+        "bytes": 293748
+      }
+    },
+    {
+      "name": "05-typed-and-saved_0_C3C83007-F2D5-413F-8B15-628250FFD076.png",
+      "file": {
+        "workspace_file": "work/quiet-writing-desk-2026-10-15/Evidence/viewport-final-attachments/7EB11083-6B81-49F6-B25F-F088B97EA055.png",
+        "sha256": "8011131ce01ab7d1ef5805f5592d4858ffdc4c056f1b3d542715a039129a3d76",
+        "bytes": 341176
+      }
+    },
+    {
+      "name": "04b-notebook-finger-scroll_0_40867FE4-CFAA-4F15-8902-BC8C4E425A83.png",
+      "file": {
+        "workspace_file": "work/quiet-writing-desk-2026-10-15/Evidence/viewport-final-attachments/EA05D19E-57BB-41AE-9F3B-24D3CB5E0899.png",
+        "sha256": "b535a482b077bfe8242d30190f1e7a162e9a8ff48ddb4cf98e07b10c38e9fdf9",
+        "bytes": 318377
+      }
+    },
+    {
+      "name": "04-portrait-shaped-both-panes_0_2E63AEDF-1EE8-4A78-834B-B57D1E26F2C5.png",
+      "file": {
+        "workspace_file": "work/quiet-writing-desk-2026-10-15/Evidence/viewport-final-attachments/17AFAADC-5007-4F96-B054-4CA49C711365.png",
+        "sha256": "50806e93917b4fc9c71cb3161b2db147f55fb31ea9da81b5e8e1e0a6be026982",
+        "bytes": 332685
+      }
+    },
+    {
+      "name": "03-swapped-with-state-retained_0_D5ADF40C-AECE-466A-AE09-DC013B01DDB0.png",
+      "file": {
+        "workspace_file": "work/quiet-writing-desk-2026-10-15/Evidence/viewport-final-attachments/3C698966-98CD-4BAD-BAB5-611B364BEF46.png",
+        "sha256": "64e56d31f8673c10846b4a5ff0fe620e387c67a30724455613a1cf03176a4dbc",
+        "bytes": 289881
+      }
+    },
+    {
+      "name": "02-divider-resized_0_85093729-0D9D-4CE8-8916-34C4C8B6112C.png",
+      "file": {
+        "workspace_file": "work/quiet-writing-desk-2026-10-15/Evidence/viewport-final-attachments/04501E9C-A3F3-4649-832F-D4398D78C2D7.png",
+        "sha256": "59ab8c0a34c145ad05fa835dc1297f1c57788defedd884bb497699cd2def87b6",
+        "bytes": 289594
+      }
+    },
+    {
+      "name": "01-wide-desk-before-input_0_99B132E4-09FD-44CB-8478-D1BF0DEED0FA.png",
+      "file": {
+        "workspace_file": "work/quiet-writing-desk-2026-10-15/Evidence/viewport-final-attachments/8F6FFD63-C84E-43D8-A675-28B5512176F0.png",
+        "sha256": "71d719cb2d1a50b1cd04c5213704ee0b51046526448028413ac7764634d5b7b9",
+        "bytes": 285566
+      }
+    }
+  ],
+  "scope": "Synthetic isolated iOS18.6 Simulator; actual UIKit/TextKit/PencilKit/WebKit with original fixture and task-local store. No physical-device or orientation commands, global Mac input, live accounts, publication, or hardware Pencil qualification.",
+  "historical_results": "The earlier37.921second interaction pass had a visual viewport defect. Its log/screenshots and exact pre-fix metrics remain in the receipt; the final run supersedes visual acceptance. Mid-stroke geometry correction arose from source review and has a final runtime regression, not an executed pre-fix negative-control.",
+  "limits": [
+    "No physical iPad or Apple Pencil action in this increment; earlier physical-mode/compact tests apply to their historical source only.",
+    "No VoiceOver, real Pencil contact/pressure/tilt/palm rejection, hardware keyboard, live Amazon/Castalia account or production relay qualification.",
+    "Simulator frames test740pt and940pt desk widths; narrower displays and actual device rotations are not claimed.",
+    "No new production Keychain or database export; only synthetic app-local state is inspected through application/native APIs."
+  ]
+}

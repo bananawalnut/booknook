@@ -1,0 +1,4 @@
+{
+  "schema": "booknook.kindle-catalog.v1",
+  "items": [{"asin": "B000000001", "title": "Connector conformance fixture", "authors": ["Book Nook"], "position": "kindle-location:35", "observed_at": 1791676800}]
+}
