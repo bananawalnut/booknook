@@ -7,6 +7,48 @@ let nookPaper = readingPaper
 let nookInk = Color(red: 41.0 / 255, green: 63.0 / 255, blue: 56.0 / 255)
 let nookAccent = Color(red: 0.22, green: 0.39, blue: 0.33)
 
+struct BookNookNavigation {
+    var sidebarNeedsReveal = false
+    var showSidebar: () -> Void = {}
+}
+
+private struct BookNookNavigationKey: EnvironmentKey {
+    static let defaultValue = BookNookNavigation()
+}
+
+extension EnvironmentValues {
+    var bookNookNavigation: BookNookNavigation {
+        get { self[BookNookNavigationKey.self] }
+        set { self[BookNookNavigationKey.self] = newValue }
+    }
+}
+
+/// Reopening belongs to the section's existing heading, not another toolbar row.
+struct SidebarRevealButton: View {
+    @Environment(\.bookNookNavigation) private var navigation
+    var body: some View {
+        if navigation.sidebarNeedsReveal {
+            Button(action: navigation.showSidebar) {
+                Image(systemName: "sidebar.left").frame(width: 44, height: 44)
+            }
+            .buttonStyle(.borderless)
+            .accessibilityLabel("Show sidebar")
+            .accessibilityIdentifier("show-sidebar")
+            .help("Show your library and navigation")
+        }
+    }
+}
+
+private struct BookNookNavigationChrome: ViewModifier {
+    func body(content: Content) -> some View {
+        #if os(iOS)
+        content.toolbar(removing: .sidebarToggle).toolbar(.hidden, for: .navigationBar)
+        #else
+        content.toolbar(removing: .sidebarToggle)
+        #endif
+    }
+}
+
 #if !BOOKNOOK_TEST
 @main struct BookNookApp: App {
     @StateObject private var model = DeskModel()
@@ -28,10 +70,26 @@ struct RootView: View {
     @State private var exporting = false
     @State private var reviewingBackup = false
     @State private var exportDocument: ExportDocument?
+    @State private var columnVisibility = NavigationSplitViewVisibility.all
+    @State private var compactColumn = NavigationSplitViewColumn.detail
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    #endif
     var body: some View {
-        NavigationSplitView {
+        NavigationSplitView(columnVisibility: $columnVisibility, preferredCompactColumn: $compactColumn) {
             VStack(alignment: .leading, spacing: 22) {
-                HStack(spacing: 10) { Image(systemName: "book.closed").font(.title); Text("Book Nook").font(.system(.title2, design: .serif)).bold() }.padding(.top, 16)
+                HStack(spacing: 10) {
+                    Image("BookNookMark").resizable().interpolation(.none).scaledToFit()
+                        .frame(width: 28, height: 28).clipShape(RoundedRectangle(cornerRadius: 6))
+                        .accessibilityHidden(true)
+                    Text("Book Nook").font(.system(.title2, design: .serif)).bold().lineLimit(1).minimumScaleFactor(0.8)
+                    Spacer(minLength: 0)
+                    Button {
+                        withAnimation { columnVisibility = .detailOnly; compactColumn = .detail }
+                    } label: { Image(systemName: "sidebar.left").frame(width: 44, height: 44) }
+                    .buttonStyle(.borderless).accessibilityLabel("Hide sidebar")
+                    .accessibilityIdentifier("hide-sidebar").help("Make room for your reading desk")
+                }.padding(.top, 4)
                 Text("A little room for big ideas.").font(.caption).foregroundStyle(.secondary)
                 VStack(spacing: 4) {
                     nav("desk", "Reading desk", "pencil.and.outline")
@@ -45,7 +103,7 @@ struct RootView: View {
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 8) {
                         ForEach(model.books) { book in
-                            Button { Task { do { try await model.selectBook(book.id); model.section = "desk" } catch { model.error = bookNookErrorMessage(error) } } } label: {
+                            Button { Task { do { try await model.selectBook(book.id); model.section = "desk"; showDetailInCompact() } catch { model.error = bookNookErrorMessage(error) } } } label: {
                                 HStack(alignment: .top) {
                                     RoundedRectangle(cornerRadius: 3).fill(nookAccent.opacity(0.15)).frame(width: 27, height: 38).overlay(Image(systemName: "book.closed").font(.caption))
                                     VStack(alignment: .leading, spacing: 3) { Text(book.title).lineLimit(2).font(.callout); Text(book.authors.joined(separator: ", ")).font(.caption).foregroundStyle(.secondary).lineLimit(1) }
@@ -55,9 +113,28 @@ struct RootView: View {
                         }
                     }
                 }
-                Button { addBook = true } label: { Label("Add a book", systemImage: "plus") }.buttonStyle(.bordered)
+                HStack {
+                    Button { addBook = true } label: { Label("Add a book", systemImage: "plus") }.buttonStyle(.bordered)
+                    Spacer(minLength: 4)
+                    Menu {
+                        Menu {
+                            Button("Goodreads CSV") { importKind = "goodreads"; importing = true }
+                            Button("Kindle catalog JSON") { importKind = "kindle"; importing = true }
+                            Button("Restore Book Nook export") { importKind = "restore"; importing = true }
+                        } label: { Label("Import", systemImage: "square.and.arrow.down") }
+                        .accessibilityLabel("Import books or restore backup")
+                        .accessibilityIdentifier("library-import")
+                        Button { reviewingBackup = true } label: { Label("Export private backup", systemImage: "square.and.arrow.up") }
+                            .accessibilityIdentifier("export-private-backup")
+                            .disabled(model.saving || model.state == nil)
+                    } label: { Image(systemName: "ellipsis").frame(width: 44, height: 44) }
+                    .menuStyle(.button).buttonStyle(.borderless).accessibilityLabel("Import and backup")
+                    .accessibilityIdentifier("library-actions")
+                    .help("Import books or export a private backup")
+                }
                 Label(model.saving ? "Saving locally…" : "Your writing stays with you", systemImage: model.saving ? "clock" : "lock").font(.caption2).foregroundStyle(.secondary)
-            }.padding(20).background(nookPaper).navigationSplitViewColumnWidth(min: 220, ideal: 250, max: 320)
+            }.padding(20).background(nookPaper).navigationSplitViewColumnWidth(min: 240, ideal: 270, max: 320)
+                .modifier(BookNookNavigationChrome())
         } detail: {
             Group {
                 switch model.section {
@@ -67,20 +144,13 @@ struct RootView: View {
                 case "sync": SyncRecoveryView()
                 default: if model.book != nil { ReadingDeskView() } else { welcome }
                 }
-            }.background(nookPaper).toolbar {
-                ToolbarItemGroup {
-                    if model.section != "desk" {
-                    Menu { Button("Goodreads CSV") { importKind = "goodreads"; importing = true }; Button("Kindle catalog JSON") { importKind = "kindle"; importing = true }; Button("Restore Book Nook export") { importKind = "restore"; importing = true } } label: { Label("Import", systemImage: "square.and.arrow.down") }.accessibilityLabel("Import books or restore backup")
-                    Button { reviewingBackup = true } label: { Label("Export private backup", systemImage: "square.and.arrow.up") }.help("Save a complete, unencrypted backup of your library and private writing").disabled(model.saving || model.state == nil)
-                    }
-                }
-            }
+            }.background(nookPaper)
+                .environment(\.bookNookNavigation, BookNookNavigation(sidebarNeedsReveal: sidebarNeedsReveal, showSidebar: showSidebar))
+                .modifier(BookNookNavigationChrome())
         }
+        .navigationSplitViewStyle(.balanced)
         .foregroundStyle(nookInk)
-        #if os(iOS)
-        .toolbarBackground(nookPaper, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
-        #else
+        #if os(macOS)
         .toolbarBackground(nookPaper, for: .windowToolbar)
         #endif
         .sheet(isPresented: $addBook) { AddBookView() }
@@ -98,6 +168,7 @@ struct RootView: View {
             }.padding(28).frame(minWidth: 380, idealWidth: 580)
         }
         .castaliaConsent(model.authorization)
+        .onChange(of: model.section) { _, _ in showDetailInCompact() }
         .onChange(of: scenePhase) { _, phase in if phase != .active { Task { do { try await model.drainSaves() } catch { model.error = bookNookErrorMessage(error) } } } }
         .fileImporter(isPresented: $importing, allowedContentTypes: importKind == "goodreads" ? [.commaSeparatedText, .plainText] : [.json]) { result in
             Task {
@@ -112,12 +183,30 @@ struct RootView: View {
         .fileExporter(isPresented: $exporting, document: exportDocument, contentType: .json, defaultFilename: "BookNook-export") { result in if case .failure(let e) = result, !bookNookOperationWasCancelled(e) { model.error = bookNookErrorMessage(e) } }
         .alert("Book Nook", isPresented: Binding(get: { model.error != nil }, set: { if !$0 { model.error = nil } })) { Button("OK") { model.error = nil }; if model.saving { Button("Retry save") { model.retrySave() } } } message: { Text(model.error ?? "") }
     }
+    private var sidebarNeedsReveal: Bool {
+        #if os(iOS)
+        columnVisibility == .detailOnly || horizontalSizeClass == .compact
+        #else
+        columnVisibility == .detailOnly
+        #endif
+    }
+    private func showSidebar() {
+        withAnimation { columnVisibility = .all; compactColumn = .sidebar }
+    }
+    private func showDetailInCompact() {
+        #if os(iOS)
+        if horizontalSizeClass == .compact { compactColumn = .detail }
+        #endif
+    }
     func nav(_ id: String, _ title: String, _ icon: String) -> some View {
-        Button { model.section = id } label: { Label(title, systemImage: icon).frame(maxWidth: .infinity, alignment: .leading).padding(10).background(model.section == id ? nookAccent.opacity(0.12) : .clear, in: RoundedRectangle(cornerRadius: 8)) }.buttonStyle(.plain)
+        Button { model.section = id; showDetailInCompact() } label: { Label(title, systemImage: icon).frame(maxWidth: .infinity, alignment: .leading).padding(10).background(model.section == id ? nookAccent.opacity(0.12) : .clear, in: RoundedRectangle(cornerRadius: 8)) }.buttonStyle(.plain)
     }
     var welcome: some View {
         VStack(alignment: .leading, spacing: 24) {
-            Image(systemName: "pencil.and.outline").font(.system(size: 42)).foregroundStyle(nookAccent)
+            HStack(spacing: 12) {
+                SidebarRevealButton()
+                Image(systemName: "pencil.and.outline").font(.system(size: 42)).foregroundStyle(nookAccent)
+            }
             Text("Make room for\nyour next thought.").font(.system(size: 42, weight: .regular, design: .serif))
             Text("Bring a book. Keep a notebook. Follow an idea from its first impression to everything it becomes.").font(.title3).foregroundStyle(.secondary).frame(maxWidth: 470, alignment: .leading)
             Button("Start your reading desk") { addBook = true }.buttonStyle(.borderedProminent).controlSize(.large)

@@ -1,5 +1,11 @@
 # Validation record
 
+## Pixel-art branding and inline sidebar navigation — 2026-10-16
+
+Both current Apple apps compile: signed iPad Release and macOS Debug, version **0.1.0 (2026101603)**. Asset/signature/source-hash checks verify the pixel app icons and the in-app sidebar mark. The focused Simulator suite passes **2 tests, 0 failures in 52.294 seconds**: header-aligned collapse/reopen, no redundant native navigation bar, reading/library/welcome transitions, Add-book cancellation, retained import choices and backup review/cancel, unchanged notebook text, and compact library navigation under a real UIKit child trait override. Full-screen synthetic screenshots were inspected. Earlier nonpasses are retained in [current evidence](pixel-sidebar-evidence.json), including an unsigned Simulator Keychain-entitlement alert when a prior check entered Connections; this suite does not qualify signing/custody.
+
+The normal iPad app was updated in place, preserving its app identity. No private data was exported or migrated, and no orientation command or physical-input automation was sent. Historical artifacts and broader integration/device qualification retain their documented scopes below.
+
 ## Original app icon — 2026-10-16
 
 The icon-only follow-up adds original open-book artwork, ten iPad renditions and ten macOS renditions. Every slot has the expected pixel dimensions; iPad PNGs are opaque and macOS PNGs retain transparent outer padding. Both target asset settings select their correct icon set. The signed iPad Release build **0.1.0 (2026101602)** passes compilation, signature verification and `CFBundleIcons`/compiled-asset checks; the macOS catalog separately compiles to `AppIconMac.icns` and `Assets.car`. The full macOS app was not rebuilt for this artwork-only change. The normal iPad app was updated in place. Functional notebook/reader code is unchanged from the focused QA below. The source artwork, native-size renders and [reproduction script](../scripts/generate-app-icons.swift) are included in the public repository; signing receipts remain local.

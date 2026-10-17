@@ -1705,5 +1705,15 @@
     "build": "2026101601",
     "profile_expiration_utc": "2026-10-24T01:48:21Z",
     "app_store_distribution": false
+  },
+  "pixel_sidebar": {
+    "evidence": "docs/pixel-sidebar-evidence.json",
+    "tests": 2,
+    "failures": 0,
+    "seconds": 52.294,
+    "signed_ipad_release_build": true,
+    "macos_debug_build": true,
+    "ipad_build": "2026101603",
+    "keychain_qualification": false
   }
 }

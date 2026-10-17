@@ -12,13 +12,13 @@ struct LibraryView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
-                Text("Your library").font(.system(size: 34, design: .serif))
+                HStack(spacing: 12) { SidebarRevealButton(); Text("Your library").font(.system(size: 34, design: .serif)) }
                 Text("A record of books, and of the reader you become.").foregroundStyle(.secondary)
                 TextField("Find a book or author", text: $query).textFieldStyle(.roundedBorder)
                 if filteredBooks.isEmpty {
                     VStack(alignment: .leading, spacing: 10) {
                         Text(model.books.isEmpty ? "Your library starts here" : "No matching books").font(.headline)
-                        Text(model.books.isEmpty ? "Add your first book from the sidebar, or import a library from the toolbar." : "Try a different title or author.").foregroundStyle(.secondary)
+                        Text(model.books.isEmpty ? "Add your first book from the sidebar, or use its import and backup menu to bring a library." : "Try a different title or author.").foregroundStyle(.secondary)
                         if !query.isEmpty { Button("Clear search") { query = "" } }
                     }.padding(.vertical, 18)
                 }
@@ -147,7 +147,7 @@ struct ConnectionsView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
-                Text("Your books. Your connections.").font(.system(size: 34, design: .serif))
+                HStack(spacing: 12) { SidebarRevealButton(); Text("Your books. Your connections.").font(.system(size: 34, design: .serif)) }
                 Text("The reading desk works offline. Every external source declares what it can provide.").foregroundStyle(.secondary)
                 ConnectionSetupView()
                 HStack { Label("Local library and notebook", systemImage: "internaldrive"); Spacer(); Text("Available").foregroundStyle(nookAccent) }.padding(20).background(nookAccent.opacity(0.04), in: RoundedRectangle(cornerRadius: 12))

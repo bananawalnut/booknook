@@ -14,7 +14,7 @@ settings:
   OTHER_LDFLAGS: ["$(BOOKNOOK_RUST_LIBRARY)", -lsqlite3, -lc++, -framework, Security]
   INFOPLIST_KEY_CFBundleDisplayName: Book Nook
   MARKETING_VERSION: 0.1.0
-  CURRENT_PROJECT_VERSION: 2026101602
+  CURRENT_PROJECT_VERSION: 2026101603
   INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.books
   INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
   INFOPLIST_KEY_UILaunchScreen_Generation: YES

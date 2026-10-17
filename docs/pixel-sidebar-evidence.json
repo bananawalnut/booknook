@@ -1,0 +1,81 @@
+{
+  "schema": "booknook.pixel-sidebar-evidence.v1",
+  "date": "2026-10-16",
+  "scope": "Original pixel-art branding and compact inline sidebar navigation",
+  "decisions": [
+    "D106",
+    "D107"
+  ],
+  "builds": {
+    "schema": "booknook.pixel-sidebar-build.v1",
+    "date": "2026-10-16",
+    "ipad_bundle": "org.booknook.ipad",
+    "version": "0.1.0",
+    "build": "2026101603",
+    "signed_ipad_release_build": true,
+    "macos_debug_build": true,
+    "signature_verified": true,
+    "ipad_icon": "AppIconPad",
+    "mac_icon": "AppIconMac",
+    "pixel_sidebar_mark_compiled": true,
+    "source_inputs_sha256": "1cab854598d5819df7607ba26987a3ef124d9d4084423205d49198564b92a3a5",
+    "ipad_executable_sha256": "3dded08f68419121de88060b08620bd85fe2b66520be3e1b1ff8f5c8fd6c2dbd",
+    "ipad_assets_sha256": "e0a00e1f3737333c47ceaf2ea3486dc7aa1fd27ac97bd684d8cd42c1ecccb547"
+  },
+  "qa": {
+    "tests": 2,
+    "failures": 0,
+    "seconds": 52.294,
+    "environment": "iPad Simulator iOS 18.6; isolated synthetic local stores; production views and assets",
+    "result_bundle": "work/pixel-sidebar-2026-10-16/SidebarQAFinal.xcresult",
+    "log": "work/pixel-sidebar-2026-10-16/sidebar-qa-final.log",
+    "coverage": [
+      "Sidebar collapse is on the Book Nook title row; no native navigation bar remains",
+      "Inline reveal on book, library and welcome headings",
+      "Import menu retains Goodreads, Kindle catalog and restore actions",
+      "Backup review still opens and Cancel exits without exporting",
+      "Reading desk text and both panes survive sidebar and section changes",
+      "Add-book form opens/cancels and compact library navigation can reopen sidebar"
+    ],
+    "compact_traits": "Actual UIKit child trait override in a 420-point viewport; no physical device rotation or Split View gesture",
+    "root_reviewed_screenshots": [
+      "evidence/pixel-inline-sidebar.png",
+      "evidence/pixel-reading-header.png"
+    ],
+    "connections_custody_qualified": false
+  },
+  "retained_nonpasses": [
+    {
+      "path": "work/pixel-sidebar-2026-10-16/sidebar-qa.log",
+      "reason": "Isolated QA target initially used default AppIcon name; corrected to the production AppIconPad name before execution."
+    },
+    {
+      "path": "work/pixel-sidebar-2026-10-16/SidebarQAIcons.xcresult",
+      "reason": "Regular reading/navigation/actions passed. Compact Connections check encountered a real Keychain-entitlement denial in the unsigned Simulator app, whose modal alert blocked interaction."
+    },
+    {
+      "path": "work/pixel-sidebar-2026-10-16/SidebarQACompactTraits.xcresult",
+      "reason": "Full-screen evidence identified the same Keychain-entitlement modal; reveal control was visible at its correct frame. Final compact test uses Library, with no account access or mocked secure storage."
+    }
+  ],
+  "artwork": {
+    "source": "assets/branding/booknook-icon.png",
+    "sha256": "d40448e0447de5a0f547ac1f05c57e3b3a47eb482222234540b0546a5d2ab69e",
+    "rendering": "Nearest-neighbor app/icon UI renditions; 20 app-icon slots plus 3 in-app mark scales",
+    "license": "MIT OR Apache-2.0"
+  },
+  "physical_update": {
+    "bundle": "org.booknook.ipad",
+    "version": "0.1.0",
+    "build": "2026101603",
+    "installed": true,
+    "installation_receipt": "work/pixel-sidebar-2026-10-16/install.json",
+    "private_data_exported_or_migrated": false,
+    "orientation_commands": false,
+    "physical_input_test_performed": false,
+    "launched": true,
+    "launch_receipt": "work/pixel-sidebar-2026-10-16/launch.json",
+    "installed_version_receipt": "work/pixel-sidebar-2026-10-16/installed-app.json"
+  },
+  "full_production_mvp_release_qualified": false
+}

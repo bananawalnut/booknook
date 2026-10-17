@@ -22,7 +22,7 @@ open apps/apple/Build/mac/Build/Products/Debug/BookNookMac.app
 
 For iPad, run `bash scripts/build-apple.sh ipad-sim`, then open `apps/apple/BookNook.xcodeproj` and choose `BookNookPad`. `ipad-device` compiles an unsigned physical-device variant; installation/distribution requires your own Apple signing team.
 
-Start with **Add a book**, or **Import** a Goodreads CSV or Kindle catalog. Attach an accessible EPUB or PDF in the reader. Entries without readable content still support tracking and notebooks. In **Your library → Subjects**, add catalog topics for interest-based discovery; matching ignores case and duplicate topics. No DRM removal or unrestricted Kindle-content access is provided.
+Start with **Add a book**, or import a Goodreads CSV or Kindle catalog from the sidebar’s **Import and backup** menu. Attach an accessible EPUB or PDF in the reader. Entries without readable content still support tracking and notebooks. In **Your library → Subjects**, add catalog topics for interest-based discovery; matching ignores case and duplicate topics. No DRM removal or unrestricted Kindle-content access is provided.
 
 On iPad, tap a text note to type. Flip that note to its whiteboard to draw with a finger or Apple Pencil; use two fingers to pan and pinch to zoom. The light margin provides character cards and note options. The **Notebook on left/right** button remembers placement. Original handwriting, erased versions and reviewed on-device transcriptions remain independently recoverable; transcription never replaces ink or typed prose. See the [handwriting guide](docs/NOTEBOOK-HANDWRITING.md).
 

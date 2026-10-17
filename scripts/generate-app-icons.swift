@@ -25,7 +25,7 @@ func render(pixels: Int, mac: Bool, to url: URL) throws {
     guard let context = CGContext(data: nil, width: pixels, height: pixels,
         bitsPerComponent: 8, bytesPerRow: pixels * 4, space: colorSpace,
         bitmapInfo: alpha.rawValue) else { fatalError("Cannot allocate icon bitmap") }
-    context.interpolationQuality = .high
+    context.interpolationQuality = .none
     let size = CGFloat(pixels), bounds = CGRect(x: 0, y: 0, width: size, height: size)
     if mac {
         // macOS 14 does not supply the iPad home-screen mask. Keep the
@@ -69,4 +69,13 @@ for mac in [false, true] {
     }
     try writeJSON(["images": images, "info": ["author": "xcode", "version": 1]], at: set.appendingPathComponent("Contents.json"))
 }
-print("Generated 20 iPad/macOS app-icon renditions from the original Book Nook artwork.")
+let mark = catalog.appendingPathComponent("BookNookMark.imageset")
+try FileManager.default.createDirectory(at: mark, withIntermediateDirectories: true)
+var markImages: [[String: Any]] = []
+for scale in 1...3 {
+    let name = "booknook-mark@\(scale)x.png"
+    try render(pixels: 32 * scale, mac: false, to: mark.appendingPathComponent(name))
+    markImages.append(["filename": name, "idiom": "universal", "scale": "\(scale)x"])
+}
+try writeJSON(["images": markImages, "info": ["author": "xcode", "version": 1]], at: mark.appendingPathComponent("Contents.json"))
+print("Generated 20 app icons and three pixel-art interface marks.")

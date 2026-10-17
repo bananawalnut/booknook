@@ -41,6 +41,7 @@ struct SocialCommunityView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
                 HStack(alignment: .top) {
+                    SidebarRevealButton()
                     VStack(alignment: .leading, spacing: 8) { Text(tab == "Discover" ? "Find your next read" : "A shared love of reading").font(.system(size: 32, design: .serif)); Text(tab == "Discover" ? "Follow your interests, at your own pace." : "A chronological conversation, at your own pace.").foregroundStyle(.secondary) }
                     Spacer()
                     if social.busy { ProgressView().controlSize(.small) }

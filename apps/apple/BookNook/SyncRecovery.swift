@@ -59,7 +59,7 @@ private struct SyncRecoveryContent: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
-                Text("Keep your reading with you").font(.system(size: 34, design: .serif))
+                HStack(spacing: 12) { SidebarRevealButton(); Text("Keep your reading with you").font(.system(size: 34, design: .serif)) }
                 Text("Local writing is saved automatically. Review an encrypted snapshot before transferring it to another device that uses your Castalia identity.").foregroundStyle(.secondary)
                 VStack(alignment: .leading, spacing: 10) {
                     Text(prerequisites.canApprove ? "Ready to pair and approve transfers" : "Set up your identity before pairing").font(.headline)

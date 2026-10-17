@@ -25,6 +25,7 @@ struct ReadingDeskView: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack(alignment: .center) {
+                SidebarRevealButton()
                 VStack(alignment: .leading, spacing: 5) {
                     Text(model.book?.title ?? "Reading desk").font(.system(.title2, design: .serif)).lineLimit(1)
                     Text(model.book?.authors.joined(separator: ", ") ?? "").font(.caption).foregroundStyle(.secondary).lineLimit(1)
