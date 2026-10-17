@@ -6,7 +6,15 @@ A native reading notebook for macOS and iPad, backed by open Rust, Swift and WAS
 
 The implementation includes an offline reading desk, rich TextKit editing, EPUB/PDF reading and annotation, character interpretation history, imports, Castalia consent, approved encrypted device transfers, and Nostr social workflows. **It is not a qualified production release:** live Kindle/Audible account access, a real Castalia issuer, physical iPad input/accessibility, and distribution still require qualification. Unavailable integrations return explicit errors. See [delivery status](docs/DELIVERY.md), the [full-plan acceptance matrix](docs/PLAN-ACCEPTANCE.md), [validation](docs/VALIDATION.md), the [decision log](docs/DECISIONS.md), and the three-round [UX review](docs/UX-REVIEW.md).
 
-![Native macOS reading desk with an original synthetic book](docs/screenshots/macos-preview.png)
+**macOS — reading desk**
+
+![Current Book Nook macOS app with the warm reading desk, text note, character card and EPUB side by side](docs/screenshots/macos-current.jpg)
+
+**iPad — reading desk**
+
+![Current Book Nook iPad app in landscape, showing the inline sidebar controls, note margin, character card and ebook](docs/screenshots/ipad-current.png)
+
+Captured from the normal native Release app targets, version **0.1.0 (2026101603)**. The iPad capture uses an iPad Air 13-inch Simulator running iPadOS 18.6. Both use original sample books and notes in isolated local libraries. See [capture details](docs/screenshots/README.md).
 
 ## Run the native apps
 
