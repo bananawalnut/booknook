@@ -1,5 +1,11 @@
 # Validation record
 
+## Current app-only preview — 2026-11-14
+
+[App build 2026111404](app-2026111404-public-preview-evidence.json), version 0.2.0, is published from exact source `759097365d933ddeb9fc4d37e09481380ea64eba`, including the profile-file repair. Three fresh Swift Release builds, full extracted-bundle/platform metadata checks and all 38 exact-source CI steps pass; all 11 unauthenticated public downloads match the manifest. The manifest retains its 638-file historical snapshot at `7590973`; later documentation commits are separate and leave app/build/SDK/ontology/license inputs unchanged. The six SDK archives and unchanged Rust slices retain their separate a945 source and qualification; source license inventory 362 and receiving closure 333 are separate dependency counts.
+
+This increment did not install, launch or visibly exercise the apps. Final availability at 18:56 UTC found a locked Mac, no reachable paired iOS device and no installed iOS 17 Simulator runtime. Physical input/accessibility, live accounts/authority, remote device/social workflows, minimum-OS runtime and production signing remain open. Historical checks below retain their own source/build scope.
+
 ## DevGraph reconciliation and CI consumer correction — 2026-11-13
 
 Independent canonical reads verify 42 newly registered Work records, their parentage, both Projects' Castalia membership and 34 dependency edges. This is tracking evidence, not product acceptance; [the index](DEVGRAPH.md) preserves open release gates.

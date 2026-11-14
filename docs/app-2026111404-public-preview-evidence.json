@@ -1,0 +1,483 @@
+{
+  "schema": "booknook.app-only-public-preview-evidence.v1",
+  "status": "PASS_APP_RELEASE_ARCHIVES_EXACT_CI_PUBLICATION_AND_11_PUBLIC_DOWNLOADS",
+  "observed_at": "2026-11-14T18:54:47.428877+00:00",
+  "source_commit": "759097365d933ddeb9fc4d37e09481380ea64eba",
+  "profile_fix_commit": "995bf0df36f3a638fd185f704c19f41af4269cd6",
+  "package_version": "0.2.0",
+  "app_build": "2026111404",
+  "profile_fix": {
+    "evidence": "profile-import-file-evidence.json",
+    "sha256": "a414064a96481e287ba29f43bd0db63c8b66914218dea1215c483a0496b016e0",
+    "qualification_source_commit": "995bf0df36f3a638fd185f704c19f41af4269cd6",
+    "included_in_new_app_source": true,
+    "old_a945_app_archives_include_fix": false,
+    "scope": "Original FIFO negative control, 14 fixed real-file cases, full native workflow and iPad typechecks retain their own earlier source-bound evidence."
+  },
+  "source_provenance": {
+    "tracked_git_blobs": 638,
+    "source_inputs_sha256": "c25e79ccf4eec30713acad91102efb434807f065780eaa2cd99a5808baa8ec78",
+    "build_provenance_sha256": "1237203941db52516186e445ed6df4f9d066c8b20c9211be0ba4266bde964ac1",
+    "scope": "The manifest retains all 638 tracked blobs, including documentation, as a historical snapshot at source 759097365d933ddeb9fc4d37e09481380ea64eba. Later documentation commits are separate; app/build/SDK/ontology/license inputs remain unchanged. This is not a dependency count or a claim that all current documentation matches the old snapshot."
+  },
+  "local_qualification": {
+    "result": "PASS",
+    "native_verification_receipt_sha256": "543b7bef43c2a30676db3466a1f77e8af863a08cb7223b109b5ff7778ae99879",
+    "outer_completion_receipt_sha256": "979ce523d2e40096d846b9c852af98965443eb4b1336cd3ba6b56afb07aa355e",
+    "archive_verification_sha256": "4a008306d67382019e9e74369fae302cd4d0cda1fa07076e4192386d79c2ca2e",
+    "execution_receipt_sha256": "f45b8b2242dee9bf3cc54e1b4cf1562bf05d5cfd9350783c57a0875401b339b5",
+    "all_ten_phases_exit_zero": true,
+    "phases": [
+      {
+        "phase": "xcodegen",
+        "exit_code": 0,
+        "stdout_sha256": "4294d7405d3d6a98e9bc30cdeb0059ecb6f33f8fe2537715676287323c861e84",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "phase": "mac-settings",
+        "exit_code": 0,
+        "stdout_sha256": "a57b869b8d752ebc8c0b334e2ee1b6d9acee5e104941b217c73d02ea9e94ac81",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "phase": "mac-build",
+        "exit_code": 0,
+        "stdout_sha256": "1e522badb4a2af1952ec1d5b89aa0969dcea858d7cda5a833f8d8ea0283f72c5",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "phase": "ipad-sim-settings",
+        "exit_code": 0,
+        "stdout_sha256": "8be4a1caeb2807ab00ac287e689df27633a9e2013ac16b5c7f150ad691b66910",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "phase": "ipad-sim-build",
+        "exit_code": 0,
+        "stdout_sha256": "bd18136a383ef72700f0d20ba1d8f25f99a3858c46a9076ebe5a1626b52cf637",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "phase": "ipad-device-settings",
+        "exit_code": 0,
+        "stdout_sha256": "81f10ba4ee5dab967935e5bf4311329ded3751801771d722ea3d75d2772338cb",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "phase": "ipad-device-build",
+        "exit_code": 0,
+        "stdout_sha256": "745648c65c059414fdd6446316594bc13f2558c77286bf3c8d9d91c747e231c5",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "phase": "build-provenance",
+        "exit_code": 0,
+        "stdout_sha256": "2a9803be14a193caf6bfee23be37a28def3944665649b3f1138c9c67799ad87d",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "phase": "native-packaging",
+        "exit_code": 0,
+        "stdout_sha256": "0b4dfc141b07d803bbd10246f9268b8a745742a680589ddc8fdf786208249c4b",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "phase": "final-verification",
+        "exit_code": 0,
+        "stdout_sha256": "ba9c976edd0470764fad9478a0a063d92de162c643a3ee71be3d3f92238b5036",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "configuration": "Release",
+    "three_new_swift_app_builds": true,
+    "independent_archive_extraction_full_bundle_tree_match": true,
+    "original_target_unchanged": true,
+    "rust_rebuilt": false,
+    "sdk_rebuilt_or_repacked": false,
+    "toolchain": {
+      "xcode": "Xcode 26.4.1\nBuild version 17E202",
+      "swift": "Apple Swift version 6.3.1 (swiftlang-6.3.1.1.2 clang-2100.0.123.102)\nTarget: arm64-apple-macosx26.0",
+      "xcodegen": "Version: 2.46.0"
+    },
+    "apps": [
+      {
+        "target": "mac",
+        "archive": "booknook-mac-arm64-development-0.2.0-build2026111404.tar.gz",
+        "bytes": 14833847,
+        "sha256": "acb0f284ac58aeb824b72606728ea09d9a75633b833e8209ce8ce80966408701",
+        "regular_files": 88,
+        "bundle_tree_sha256": "c50e7ac4a1a09eea286063a183dffc3af0ce50955d06a25b5d0c6dc55542bd4a",
+        "mach_o": [
+          {
+            "architecture": "arm64",
+            "platform": "MACOS",
+            "minimum_os": "14.0",
+            "signature": "linker-ad-hoc"
+          }
+        ],
+        "offline_ontology_file_count": 80
+      },
+      {
+        "target": "ipad-sim",
+        "archive": "booknook-ipad-sim-arm64-development-0.2.0-build2026111404.tar.gz",
+        "bytes": 11354282,
+        "sha256": "6430e1973cfbd94ab49073b9e65db8bd36b5fc6f7d445443a93fe230b78d1bba",
+        "regular_files": 88,
+        "bundle_tree_sha256": "7ee34bbd0bcd872918a7dce80f2e970103537741ddfa6f81e1f9a8775901ad67",
+        "mach_o": [
+          {
+            "architecture": "arm64",
+            "platform": "IOSSIMULATOR",
+            "minimum_os": "17.0",
+            "signature": "linker-ad-hoc"
+          }
+        ],
+        "offline_ontology_file_count": 80
+      },
+      {
+        "target": "ipad-device",
+        "archive": "booknook-ipad-device-arm64-development-0.2.0-build2026111404.tar.gz",
+        "bytes": 11143973,
+        "sha256": "bc50a239a4c974a60b732732dc9598ed774dfd1858ee2bf1012bf90d278df93c",
+        "regular_files": 88,
+        "bundle_tree_sha256": "ab3b84a19da1a873cbaad252b6758657ad34136f6952891850e08a4b64715c13",
+        "mach_o": [
+          {
+            "architecture": "arm64",
+            "platform": "IOS",
+            "minimum_os": "17.0",
+            "signature": "unsigned"
+          }
+        ],
+        "offline_ontology_file_count": 80
+      }
+    ]
+  },
+  "hosted_ci": {
+    "run": 43626272370,
+    "url": "https://github.com/bananawalnut/booknook/actions/runs/43626272370",
+    "source_commit": "759097365d933ddeb9fc4d37e09481380ea64eba",
+    "steps": {
+      "apple": 17,
+      "portable": 21
+    },
+    "all_steps_success": true,
+    "server_metadata_sha256": "a2966f6b4486ac825af3f290630cb7371d08700c948b4f1f3fbd3a8de15534eb",
+    "scope": "Exact-source hosted builds/tests/packages; separate from these local Release archive bytes."
+  },
+  "publication": {
+    "url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.0-app-preview.20261114.4",
+    "tag": "v0.2.0-app-preview.20261114.4",
+    "release_id": 445516870,
+    "published_at": "2026-11-14T18:54:24Z",
+    "readback_at": "2026-11-14T18:54:26.350646+00:00",
+    "direct_commit_tag": "759097365d933ddeb9fc4d37e09481380ea64eba",
+    "prerelease": true,
+    "asset_count": 11,
+    "asset_bytes": 37549753,
+    "manifest_sha256": "139da3f971b6837857aead4a7f2a02e6bc9ddba44581b759980f7f67478794eb",
+    "release_notes_sha256": "0bd67984a93471e9da43064daeb1bc0ffbec0ef11703eea2a4eb20c4a59c026e",
+    "server_all11_asset_hashes_match": true,
+    "receipt_sha256": "03d6494122b053b3a8970fd8c5538a9236b6f41721856ab21b85b559f4a04c4d",
+    "assets": {
+      "booknook-mac-arm64-development-0.2.0-build2026111404.tar.gz": {
+        "bytes": 14833847,
+        "sha256": "acb0f284ac58aeb824b72606728ea09d9a75633b833e8209ce8ce80966408701"
+      },
+      "booknook-ipad-sim-arm64-development-0.2.0-build2026111404.tar.gz": {
+        "bytes": 11354282,
+        "sha256": "6430e1973cfbd94ab49073b9e65db8bd36b5fc6f7d445443a93fe230b78d1bba"
+      },
+      "booknook-ipad-device-arm64-development-0.2.0-build2026111404.tar.gz": {
+        "bytes": 11143973,
+        "sha256": "bc50a239a4c974a60b732732dc9598ed774dfd1858ee2bf1012bf90d278df93c"
+      },
+      "DEPENDENCY-LICENSES.csv": {
+        "bytes": 44279,
+        "sha256": "51f274cdde48d37d3c6e7eea466ec2d204323ff9005757fb263b019b64caf722"
+      },
+      "LICENSE-APACHE": {
+        "bytes": 11326,
+        "sha256": "fabba0cb7d00a4b3211fdc13699223ab2d22f88678ccd608494cf2b332b903e9"
+      },
+      "LICENSE-BOUNDARIES.md": {
+        "bytes": 8348,
+        "sha256": "dd02f4ba673b2e30507b23d43025797b48b7f5216ad98043b2b54744e76fb117"
+      },
+      "LICENSE-MIT": {
+        "bytes": 1079,
+        "sha256": "e4c16e07e31d3fdbba827f245f39f51ee0871898f1585653129bcbe3c63a7410"
+      },
+      "LICENSE-MPL-2.0": {
+        "bytes": 16727,
+        "sha256": "66a3107d5ad6a058aab753eaac2047ccb2ed0e39465dd0fe5844da3e300d5172"
+      },
+      "RELEASE-MANIFEST.json": {
+        "bytes": 64058,
+        "sha256": "139da3f971b6837857aead4a7f2a02e6bc9ddba44581b759980f7f67478794eb"
+      },
+      "SOURCE-INPUTS.json": {
+        "bytes": 70851,
+        "sha256": "c25e79ccf4eec30713acad91102efb434807f065780eaa2cd99a5808baa8ec78"
+      },
+      "SHA256SUMS": {
+        "bytes": 983,
+        "sha256": "58d924f915072645a8be7fccd4569b5b9fce82404d3be8f1587fbe82ebdf55af"
+      }
+    }
+  },
+  "publication_reconciliation": {
+    "initial_create_command_exit_code": 0,
+    "initial_immediate_list_did_not_include_committed_draft": true,
+    "initial_attempt_refused_to_proceed": true,
+    "create_intent_sha256": "7930463521677c5525d13e26433dd486f02f8ab749f9e02fac153fa779533d37",
+    "create_result_sha256": "9dd6db7ac4b91c5484165ce804cbcf3cabed3f0d6d96df87fa251d38a1f748d3",
+    "immediate_list_receipt_sha256": "e2f76df6642ac934de55dcd556b73063f975e74c1f898c640595e43fa65814fc",
+    "get_only_reconciliation_at": "2026-11-14T18:53:50.839601+00:00",
+    "reconciliation_receipt_sha256": "a332b4dda2b5c3a572d4e846004eb0e654486fabf462f7bf914fba5aa3a9e656",
+    "existing_exact_draft_id": 445516870,
+    "existing_exact_draft_had_no_assets": true,
+    "continuation_skipped_create": true,
+    "create_reissued": false,
+    "intent_deleted": false,
+    "scope": "The transient list-visibility refusal and durable intent were preserved. Subsequent GET-only readback found the same exact draft; continuation uploaded and published that draft without repeating creation."
+  },
+  "public_downloads": {
+    "result": "PASS_11_ACTUAL_PUBLIC_DOWNLOADS",
+    "at": "2026-11-14T18:54:47.428877+00:00",
+    "receipt_sha256": "cec3c086ff91731877364f53e463dc3db56fe54f60ff069fd4ae4aaa89442887",
+    "count": 11,
+    "bytes": 37549753,
+    "local_app_substitution": false,
+    "sdk_downloaded_or_repacked": false,
+    "downloads": [
+      {
+        "name": "DEPENDENCY-LICENSES.csv",
+        "bytes": 44279,
+        "sha256": "51f274cdde48d37d3c6e7eea466ec2d204323ff9005757fb263b019b64caf722",
+        "initial_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-app-preview.20261114.4/DEPENDENCY-LICENSES.csv",
+        "final_host": "release-assets.githubusercontent.com",
+        "content_type": "application/octet-stream",
+        "elapsed_seconds": 0.52,
+        "verified_tls": true,
+        "ambient_proxy_auth_cookies_client_cert": false
+      },
+      {
+        "name": "LICENSE-APACHE",
+        "bytes": 11326,
+        "sha256": "fabba0cb7d00a4b3211fdc13699223ab2d22f88678ccd608494cf2b332b903e9",
+        "initial_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-app-preview.20261114.4/LICENSE-APACHE",
+        "final_host": "release-assets.githubusercontent.com",
+        "content_type": "application/octet-stream",
+        "elapsed_seconds": 0.407,
+        "verified_tls": true,
+        "ambient_proxy_auth_cookies_client_cert": false
+      },
+      {
+        "name": "LICENSE-BOUNDARIES.md",
+        "bytes": 8348,
+        "sha256": "dd02f4ba673b2e30507b23d43025797b48b7f5216ad98043b2b54744e76fb117",
+        "initial_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-app-preview.20261114.4/LICENSE-BOUNDARIES.md",
+        "final_host": "release-assets.githubusercontent.com",
+        "content_type": "application/octet-stream",
+        "elapsed_seconds": 0.408,
+        "verified_tls": true,
+        "ambient_proxy_auth_cookies_client_cert": false
+      },
+      {
+        "name": "LICENSE-MIT",
+        "bytes": 1079,
+        "sha256": "e4c16e07e31d3fdbba827f245f39f51ee0871898f1585653129bcbe3c63a7410",
+        "initial_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-app-preview.20261114.4/LICENSE-MIT",
+        "final_host": "release-assets.githubusercontent.com",
+        "content_type": "application/octet-stream",
+        "elapsed_seconds": 0.386,
+        "verified_tls": true,
+        "ambient_proxy_auth_cookies_client_cert": false
+      },
+      {
+        "name": "LICENSE-MPL-2.0",
+        "bytes": 16727,
+        "sha256": "66a3107d5ad6a058aab753eaac2047ccb2ed0e39465dd0fe5844da3e300d5172",
+        "initial_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-app-preview.20261114.4/LICENSE-MPL-2.0",
+        "final_host": "release-assets.githubusercontent.com",
+        "content_type": "application/octet-stream",
+        "elapsed_seconds": 0.408,
+        "verified_tls": true,
+        "ambient_proxy_auth_cookies_client_cert": false
+      },
+      {
+        "name": "RELEASE-MANIFEST.json",
+        "bytes": 64058,
+        "sha256": "139da3f971b6837857aead4a7f2a02e6bc9ddba44581b759980f7f67478794eb",
+        "initial_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-app-preview.20261114.4/RELEASE-MANIFEST.json",
+        "final_host": "release-assets.githubusercontent.com",
+        "content_type": "application/octet-stream",
+        "elapsed_seconds": 0.544,
+        "verified_tls": true,
+        "ambient_proxy_auth_cookies_client_cert": false
+      },
+      {
+        "name": "SHA256SUMS",
+        "bytes": 983,
+        "sha256": "58d924f915072645a8be7fccd4569b5b9fce82404d3be8f1587fbe82ebdf55af",
+        "initial_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-app-preview.20261114.4/SHA256SUMS",
+        "final_host": "release-assets.githubusercontent.com",
+        "content_type": "application/octet-stream",
+        "elapsed_seconds": 0.391,
+        "verified_tls": true,
+        "ambient_proxy_auth_cookies_client_cert": false
+      },
+      {
+        "name": "SOURCE-INPUTS.json",
+        "bytes": 70851,
+        "sha256": "c25e79ccf4eec30713acad91102efb434807f065780eaa2cd99a5808baa8ec78",
+        "initial_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-app-preview.20261114.4/SOURCE-INPUTS.json",
+        "final_host": "release-assets.githubusercontent.com",
+        "content_type": "application/octet-stream",
+        "elapsed_seconds": 0.407,
+        "verified_tls": true,
+        "ambient_proxy_auth_cookies_client_cert": false
+      },
+      {
+        "name": "booknook-ipad-device-arm64-development-0.2.0-build2026111404.tar.gz",
+        "bytes": 11143973,
+        "sha256": "bc50a239a4c974a60b732732dc9598ed774dfd1858ee2bf1012bf90d278df93c",
+        "initial_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-app-preview.20261114.4/booknook-ipad-device-arm64-development-0.2.0-build2026111404.tar.gz",
+        "final_host": "release-assets.githubusercontent.com",
+        "content_type": "application/octet-stream",
+        "elapsed_seconds": 0.841,
+        "verified_tls": true,
+        "ambient_proxy_auth_cookies_client_cert": false
+      },
+      {
+        "name": "booknook-ipad-sim-arm64-development-0.2.0-build2026111404.tar.gz",
+        "bytes": 11354282,
+        "sha256": "6430e1973cfbd94ab49073b9e65db8bd36b5fc6f7d445443a93fe230b78d1bba",
+        "initial_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-app-preview.20261114.4/booknook-ipad-sim-arm64-development-0.2.0-build2026111404.tar.gz",
+        "final_host": "release-assets.githubusercontent.com",
+        "content_type": "application/octet-stream",
+        "elapsed_seconds": 1.289,
+        "verified_tls": true,
+        "ambient_proxy_auth_cookies_client_cert": false
+      },
+      {
+        "name": "booknook-mac-arm64-development-0.2.0-build2026111404.tar.gz",
+        "bytes": 14833847,
+        "sha256": "acb0f284ac58aeb824b72606728ea09d9a75633b833e8209ce8ce80966408701",
+        "initial_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-app-preview.20261114.4/booknook-mac-arm64-development-0.2.0-build2026111404.tar.gz",
+        "final_host": "release-assets.githubusercontent.com",
+        "content_type": "application/octet-stream",
+        "elapsed_seconds": 0.991,
+        "verified_tls": true,
+        "ambient_proxy_auth_cookies_client_cert": false
+      }
+    ],
+    "scope": "Unauthenticated verified-TLS byte receipt only; no app launch, install or runtime/hardware/live acceptance."
+  },
+  "existing_sdk_release": {
+    "source_commit": "a945df213150abe10e27cc6c5e92da130588bef8",
+    "version": "0.2.0",
+    "url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.0-preview.20261114",
+    "tag": "v0.2.0-preview.20261114",
+    "manifest_sha256": "2e299d2a8ca5ef8863513a5bb098be00b8ec71954b06dc258465935f94baca52",
+    "all17_assets_and_tag_unchanged": true,
+    "final_release_readback_receipt_sha256": "5ff421ecba7e872fbdf061dac8c75e97be1690ffe59d032b58450fd490707a04",
+    "final_tag_readback_receipt_sha256": "e9c43299aab6830db16b2700673581fd352d9c0fb819e0ef9c6f5467dd3018c1",
+    "existing_six_sdk_archives": [
+      {
+        "name": "booknook-swift-sdk-0.2.0.tar.gz",
+        "bytes": 142623125,
+        "sha256": "b016a826419e5bbd5ce6c47db7754ca877b8b44eba777cbccfb1d50da36ce778",
+        "kind": "swift-sdk",
+        "url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/booknook-swift-sdk-0.2.0.tar.gz"
+      },
+      {
+        "name": "booknook-connectors-0.2.0.crate",
+        "bytes": 72666,
+        "sha256": "93fb37916cdda97c1b67ff97c122a5260b71879a36a9a0394a77f7f6aa5a356d",
+        "kind": "rust-crate",
+        "url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/booknook-connectors-0.2.0.crate"
+      },
+      {
+        "name": "booknook-core-0.2.0.crate",
+        "bytes": 178896,
+        "sha256": "ce1778e342d46dd450aa6c4c50fd05006559cf5123aa3e1130e691ca614bf715",
+        "kind": "rust-crate",
+        "url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/booknook-core-0.2.0.crate"
+      },
+      {
+        "name": "booknook-native-0.2.0.crate",
+        "bytes": 181205,
+        "sha256": "fc9eebfd4ed7daee83988900a88c3b425877275ecc7118fa9a2b23538e859474",
+        "kind": "rust-crate",
+        "url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/booknook-native-0.2.0.crate"
+      },
+      {
+        "name": "booknook-wasm-0.2.0.crate",
+        "bytes": 38324,
+        "sha256": "a5f1d89d11459cc8319ff0aa1ffe39f4e5a7911b2d289ab3c757bed45866f063",
+        "kind": "rust-crate",
+        "url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/booknook-wasm-0.2.0.crate"
+      },
+      {
+        "name": "booknook-sdk-0.2.0.tgz",
+        "bytes": 4578439,
+        "sha256": "32905509fd054ab448ae6856ad165e6d7fb75544cec749cd3d4064efeee5032e",
+        "kind": "npm",
+        "url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/booknook-sdk-0.2.0.tgz"
+      }
+    ],
+    "sdk_repacked": false,
+    "public_consumer_evidence": "security-020-public-preview-evidence.json",
+    "source_license_inventory_entries": 362,
+    "prior_audited_receiving_registry_versions": 333,
+    "scope": "Existing SDK receiving results remain bound to a945 artifacts and their separately audited receiving lock. Swift runtime execution there was macOS arm64 only; this app refresh performs no new SDK execution."
+  },
+  "unchanged": [
+    "SDK code and all six SDK archive bytes",
+    "Rust library slices and generated FFI",
+    "Signing, authority, consent and install contracts",
+    "Ontology, wire contracts and saved-data formats",
+    "Original profile-import and a945 qualification evidence"
+  ],
+  "limits": [
+    "Development previews are not production-MVP acceptance.",
+    "No new app installation, launch, GUI, physical input, accessibility, live account/issuer/custody, remote social/device sync or minimum-OS runtime qualification.",
+    "The device app is unsigned, not an installable signed IPA. Mac and Simulator retain linker-ad-hoc signatures; no Developer ID, notarization or store submission.",
+    "MACOS 14/IOSSIMULATOR 17/IOS 17 are inspected platform/minimum-OS metadata, not execution on those versions.",
+    "Public downloads prove exact received bytes, not app execution. No registry publication, reproducible-build or signed-attestation claim.",
+    "Profile O_NONBLOCK avoids FIFO-open waiting; regular/network-filesystem reads still have no deadline or mid-syscall cancellation guarantee."
+  ],
+  "final_availability": {
+    "observed_at": "2026-11-14T18:56:15.173052+00:00",
+    "receipt_sha256": "9234c95e69524735fefab4b4efb910bf128f764d14809db72de0224df0000d66",
+    "mac_ui": "Locked; actual inventory returned no accessible app surfaces.",
+    "devices": [
+      {
+        "type": "iPad",
+        "tunnel_state": "unavailable",
+        "ddi_services_available": false
+      },
+      {
+        "type": "iPhone",
+        "tunnel_state": "disconnected",
+        "ddi_services_available": false
+      },
+      {
+        "type": "iPhone",
+        "tunnel_state": "unavailable",
+        "ddi_services_available": false
+      }
+    ],
+    "reachable_paired_devices": 0,
+    "available_ios_simulator_versions": [
+      "18.6",
+      "26.4.1"
+    ],
+    "ios17_runtime_available": false,
+    "actions": "Read-only availability inventory; no UI input, orientation, signing, installation, launch, credential or global toolchain changes.",
+    "scope": "Availability only; no runtime executed or physical acceptance inferred."
+  }
+}
