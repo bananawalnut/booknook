@@ -1,0 +1,360 @@
+{
+  "schema": "booknook.receiving-lock-security-evidence.v1",
+  "verified_at": "2026-11-14T17:22:10.410964+00:00",
+  "status": "PASS_EXACT_DEPENDENCY_LOCK_ONLY",
+  "release": {
+    "url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.0-preview.20261114",
+    "source_commit": "a945df213150abe10e27cc6c5e92da130588bef8",
+    "package_version": "0.2.0"
+  },
+  "receiving_lock": {
+    "sha256": "7ec494c8c759c61dce23e06910e53e6d2e6c88a50bf69b461c0070b9c2199fd0",
+    "bytes": 82787,
+    "registry_entries": 333,
+    "resolved_from_absent_lock_offline": true,
+    "rewritten_or_pinned": false
+  },
+  "original_comparison": {
+    "result": "REFUSED_BEFORE_COMPILATION",
+    "reason": "Fresh receiving resolution selected25 exact versions outside the source-lock subset; original lock and nonpass preserved.",
+    "exact_prior_subset_entries": 308,
+    "new_exact_versions": 25
+  },
+  "audit": {
+    "auditor": "cargo-audit-audit 0.22.1",
+    "database": {
+      "official_url": "https://github.com/RustSec/advisory-db.git",
+      "commit": "4ef2df8e806a65e2f1ecc14f56f51249062b23d6",
+      "clean_before_and_after": true,
+      "head_unchanged": true
+    },
+    "exit_code": 0,
+    "vulnerabilities": 0,
+    "unsound": 0,
+    "yanked": 0,
+    "ignores": [],
+    "target_arch_filters": [],
+    "target_os_filters": [],
+    "severity_filter": null,
+    "maintenance": [
+      {
+        "package": "basic-toml",
+        "version": "0.1.10",
+        "advisory": "RUSTSEC-2026-0374",
+        "url": "https://rustsec.org/advisories/RUSTSEC-2026-0374.html"
+      },
+      {
+        "package": "smallstr",
+        "version": "0.3.1",
+        "advisory": "RUSTSEC-2026-0215",
+        "url": "https://rustsec.org/advisories/RUSTSEC-2026-0215.html"
+      }
+    ],
+    "execution_receipt_sha256": "88df42f61139336011d93348bfc34bb567c171e54da826da07322465c8185d30",
+    "raw_report_sha256": "49c6f87c211716cca4a70e19c0df62734572389117460a47f3d10d06dfe06b8d",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "registry": {
+    "all333_exact_versions_checksum_matched_and_not_yanked": true,
+    "prior308": {
+      "source_evidence_url": "https://github.com/bananawalnut/booknook/blob/a945df213150abe10e27cc6c5e92da130588bef8/docs/security-dependency-audit-evidence.json",
+      "source_evidence_sha256": "020de842234191a93efd803d058633a2cadf2a66adfe6dce4c2de8df3efec073",
+      "complete_registry_receipt_sha256": "1e48e4d38860240cc4a14f455d16a7dd943fcc39ee836996720f1e765789697b",
+      "observed_at": "2026-11-14T16:11:46.030526+00:00"
+    },
+    "new25_receipt_sha256": "effe4a635254bc342ce75de67532ba51f80c6515c4d3c69a5259025b6b292b87",
+    "new25": [
+      {
+        "package": "cc",
+        "version": "1.10.0",
+        "sha256": "86e055fa6e3e40ad6187ba25b6855eeb635d5271f8e0f0e1e9a5826b8d75bea0",
+        "url": "https://crates.io/api/v1/crates/cc/1.10.0",
+        "yanked": false,
+        "declared_license": "MIT OR Apache-2.0",
+        "rust_version": "1.65.0",
+        "metadata_response_sha256": "cf8a6f5aac390212617878603217c93a3b42769cb8ebdbd32c0c5e4f1ad2ebbf",
+        "observed_at": "2026-11-14T17:19:53.914259+00:00"
+      },
+      {
+        "package": "crc32fast",
+        "version": "1.5.3",
+        "sha256": "0ba106e844045ddc02c20768ac4b0b7cb45f2cc2ecbd833ac9f5dacb183c2055",
+        "url": "https://crates.io/api/v1/crates/crc32fast/1.5.3",
+        "yanked": false,
+        "declared_license": "MIT OR Apache-2.0",
+        "rust_version": "1.63",
+        "metadata_response_sha256": "d5b5fa6dcf70f872722a3589122401a43f9fd4a617f4628812cc0271bab6981f",
+        "observed_at": "2026-11-14T17:19:53.925065+00:00"
+      },
+      {
+        "package": "equivalent",
+        "version": "1.0.3",
+        "sha256": "00d174d5400e5e8fd687ad1049e2f578285fa914201b1af7e8b112a4546bd826",
+        "url": "https://crates.io/api/v1/crates/equivalent/1.0.3",
+        "yanked": false,
+        "declared_license": "Apache-2.0 OR MIT",
+        "rust_version": "1.6",
+        "metadata_response_sha256": "f2f3a132d2b07a84d0cd35ecd8359e308bf3cdc19c65513519d5552cd5b3648e",
+        "observed_at": "2026-11-14T17:19:53.921167+00:00"
+      },
+      {
+        "package": "find-msvc-tools",
+        "version": "0.1.15",
+        "sha256": "1c66915cc5391097de7a2b0b972e8505aa33c0df401fd3a6811dbdb32881ba48",
+        "url": "https://crates.io/api/v1/crates/find-msvc-tools/0.1.15",
+        "yanked": false,
+        "declared_license": "MIT OR Apache-2.0",
+        "rust_version": "1.65.0",
+        "metadata_response_sha256": "b19de40c1d54456ede34fabbb943768a721c7cda2eb11a85c28aa80075f79ecd",
+        "observed_at": "2026-11-14T17:19:53.925107+00:00"
+      },
+      {
+        "package": "icu_collections",
+        "version": "2.4.0",
+        "sha256": "fe090a42a0d3140fed8c63263ed1fecc02422cb2f4bfe55cd8de2de1b8e105dd",
+        "url": "https://crates.io/api/v1/crates/icu_collections/2.4.0",
+        "yanked": false,
+        "declared_license": "Unicode-3.0",
+        "rust_version": "1.88",
+        "metadata_response_sha256": "097935f914a1d9e42cdb6c6d901432fe2fafab0adf4b816f30641fd3be449f51",
+        "observed_at": "2026-11-14T17:19:54.213313+00:00"
+      },
+      {
+        "package": "icu_locale_core",
+        "version": "2.4.0",
+        "sha256": "25d29b57c17c6528d0dc4c2141cfa2d08200465acb537a3909c8b9b8a4a984c0",
+        "url": "https://crates.io/api/v1/crates/icu_locale_core/2.4.0",
+        "yanked": false,
+        "declared_license": "Unicode-3.0",
+        "rust_version": "1.88",
+        "metadata_response_sha256": "db0f1e0996eaba94f950bd1d285234138d5ff83bff7a93b5789b17393c2b32c9",
+        "observed_at": "2026-11-14T17:19:54.208603+00:00"
+      },
+      {
+        "package": "icu_normalizer",
+        "version": "2.4.0",
+        "sha256": "404a3b8c486f205c87fe7f23ab6894d84a4ad76d6e4671ae1981ba7def87c599",
+        "url": "https://crates.io/api/v1/crates/icu_normalizer/2.4.0",
+        "yanked": false,
+        "declared_license": "Unicode-3.0",
+        "rust_version": "1.88",
+        "metadata_response_sha256": "2dade04c14ede8de4842075c033d579db02e994bb801425a5d5fa0094023a1e5",
+        "observed_at": "2026-11-14T17:19:54.213052+00:00"
+      },
+      {
+        "package": "icu_normalizer_data",
+        "version": "2.4.0",
+        "sha256": "20f0088bfb7441f7a37fa0c9e20cb1e9cba1cac6b9ce8cd2a6dc44294f8e8cbc",
+        "url": "https://crates.io/api/v1/crates/icu_normalizer_data/2.4.0",
+        "yanked": false,
+        "declared_license": "Unicode-3.0",
+        "rust_version": "1.88",
+        "metadata_response_sha256": "cbb50a0c560de4e33c05ec67bd0007848efa5f916a21bf9610a45d79c99bec8e",
+        "observed_at": "2026-11-14T17:19:54.213224+00:00"
+      },
+      {
+        "package": "icu_properties",
+        "version": "2.4.0",
+        "sha256": "2ea83d991c56158f7cf898bf86436c1dfe7c07ee82fe88951f2695c9f37a379f",
+        "url": "https://crates.io/api/v1/crates/icu_properties/2.4.0",
+        "yanked": false,
+        "declared_license": "Unicode-3.0",
+        "rust_version": "1.88",
+        "metadata_response_sha256": "4f5c8f05719e97ee839d0879f1d1a6730361c0fe2040f8fd0b0e1f9c7ec443ae",
+        "observed_at": "2026-11-14T17:19:54.494750+00:00"
+      },
+      {
+        "package": "icu_properties_data",
+        "version": "2.4.0",
+        "sha256": "b98f29af82d02b163fe50161388350e743bb3107cc8e8c2f7314cb505faddfcf",
+        "url": "https://crates.io/api/v1/crates/icu_properties_data/2.4.0",
+        "yanked": false,
+        "declared_license": "Unicode-3.0",
+        "rust_version": "1.88",
+        "metadata_response_sha256": "46af9a68f839c286420e07cc0163530c9ed1b205912fee22d3285882b531a484",
+        "observed_at": "2026-11-14T17:19:54.316667+00:00"
+      },
+      {
+        "package": "icu_provider",
+        "version": "2.4.0",
+        "sha256": "413099315636c588ee8f011190b329b971a09a8fae9d157e01dcae8379468514",
+        "url": "https://crates.io/api/v1/crates/icu_provider/2.4.0",
+        "yanked": false,
+        "declared_license": "Unicode-3.0",
+        "rust_version": "1.88",
+        "metadata_response_sha256": "ce99d779c1154d78ce99febd8adb4d3d79c5891fa754e6034ba3814a41f4d039",
+        "observed_at": "2026-11-14T17:19:54.503672+00:00"
+      },
+      {
+        "package": "libc",
+        "version": "0.2.191",
+        "sha256": "65cd87c9a6d60536580b316ad985726104730a5151c99845f2490428ef91240a",
+        "url": "https://crates.io/api/v1/crates/libc/0.2.191",
+        "yanked": false,
+        "declared_license": "MIT OR Apache-2.0",
+        "rust_version": "1.65",
+        "metadata_response_sha256": "c5fe5bb0103aeefea4dbb53fd4a09994ffbe6a5cdacc51207c2cb5016bd8b7bb",
+        "observed_at": "2026-11-14T17:19:54.501597+00:00"
+      },
+      {
+        "package": "serde_json",
+        "version": "1.0.154",
+        "sha256": "e7e9cc8b1b85264074fbcc02a88680c4096b1e47df8f739dceb03bf482f04bd6",
+        "url": "https://crates.io/api/v1/crates/serde_json/1.0.154",
+        "yanked": false,
+        "declared_license": "MIT OR Apache-2.0",
+        "rust_version": "1.71",
+        "metadata_response_sha256": "0725de00b88586e3949e56513fdea2807fcd54644b4db60feda4b2bf01273776",
+        "observed_at": "2026-11-14T17:19:54.601029+00:00"
+      },
+      {
+        "package": "smallvec",
+        "version": "1.16.4",
+        "sha256": "d0d5d4b1981b8bbbb7aed204cae5726d683d5d6ac7e74ec54122ea28f315e7c8",
+        "url": "https://crates.io/api/v1/crates/smallvec/1.16.4",
+        "yanked": false,
+        "declared_license": "MIT OR Apache-2.0",
+        "rust_version": null,
+        "metadata_response_sha256": "d0eaad497d14c2c8f96d982f4eec5bb841a9ae91d308cc49d841a99ddb1aa12a",
+        "observed_at": "2026-11-14T17:19:54.785166+00:00"
+      },
+      {
+        "package": "syn",
+        "version": "3.0.9",
+        "sha256": "d78c8dee4c7bf0e14673097256fed6142ce9d3b85a408189d07482442145823b",
+        "url": "https://crates.io/api/v1/crates/syn/3.0.9",
+        "yanked": false,
+        "declared_license": "MIT OR Apache-2.0",
+        "rust_version": "1.71",
+        "metadata_response_sha256": "51d61bd5abae50a0e6df3437ac96c26e4a9997e8e796f234898c67c83ff8ba97",
+        "observed_at": "2026-11-14T17:19:54.792135+00:00"
+      },
+      {
+        "package": "tinystr",
+        "version": "0.8.5",
+        "sha256": "abc840c238154d58f9e86b2792261edfde565a17696e1cda1a449de27979801a",
+        "url": "https://crates.io/api/v1/crates/tinystr/0.8.5",
+        "yanked": false,
+        "declared_license": "Unicode-3.0",
+        "rust_version": "1.82",
+        "metadata_response_sha256": "18b65e1bf8dfa343e0f4542757845303babbec0c6dc0de12b755a236020ef870",
+        "observed_at": "2026-11-14T17:19:54.788113+00:00"
+      },
+      {
+        "package": "tokio",
+        "version": "1.54.1",
+        "sha256": "b52fd3255258d26fac7264ab5a76b53c13367136dc011d3d6ad4f8ed070396a3",
+        "url": "https://crates.io/api/v1/crates/tokio/1.54.1",
+        "yanked": false,
+        "declared_license": "MIT",
+        "rust_version": "1.85",
+        "metadata_response_sha256": "244c66c50f7f9ef441a09b0ccd67234129bea2bfeacaa0aceb5893f0ea9c26a6",
+        "observed_at": "2026-11-14T17:19:54.899284+00:00"
+      },
+      {
+        "package": "unicode-ident",
+        "version": "1.0.27",
+        "sha256": "a2c754d6c33795a1c324727428e5a7dedb5b06195f9890bdbcba760d3e246563",
+        "url": "https://crates.io/api/v1/crates/unicode-ident/1.0.27",
+        "yanked": false,
+        "declared_license": "(MIT OR Apache-2.0) AND Unicode-3.0",
+        "rust_version": "1.71",
+        "metadata_response_sha256": "4616ef5a77762ce75e8bd975831d981a3c4918152bf4adfc777420506e38d254",
+        "observed_at": "2026-11-14T17:19:55.078135+00:00"
+      },
+      {
+        "package": "unicode-normalization",
+        "version": "0.1.26",
+        "sha256": "75cd3fb03d5288b3ba9a1ee103ac7e9cbb59f0b03d64f8ddfcc04dd42758a85d",
+        "url": "https://crates.io/api/v1/crates/unicode-normalization/0.1.26",
+        "yanked": false,
+        "declared_license": "(MIT OR Apache-2.0) AND Unicode-3.0",
+        "rust_version": "1.36",
+        "metadata_response_sha256": "73a03a8641b0eb584469b2d65d18fad93d3ca6616ef8fa215451018ccba3c37d",
+        "observed_at": "2026-11-14T17:19:55.067261+00:00"
+      },
+      {
+        "package": "webpki-roots",
+        "version": "1.0.11",
+        "sha256": "f5f280bbb2b287bc8e7de7e3852945a0ff50d1bbcb5ed42b6c7a568c546df171",
+        "url": "https://crates.io/api/v1/crates/webpki-roots/1.0.11",
+        "yanked": false,
+        "declared_license": "CDLA-Permissive-2.0",
+        "rust_version": "1.71",
+        "metadata_response_sha256": "288f91eca148527a439dbfa6485e9d99e4f99c170ad1100f55c7e8cc23a96251",
+        "observed_at": "2026-11-14T17:19:55.072995+00:00"
+      },
+      {
+        "package": "yoke",
+        "version": "0.8.4",
+        "sha256": "417ef3fcf6c300b7dbd25c85531a746931c02ad536f3cf4786ed1e88223340b3",
+        "url": "https://crates.io/api/v1/crates/yoke/0.8.4",
+        "yanked": false,
+        "declared_license": "Unicode-3.0",
+        "rust_version": "1.82",
+        "metadata_response_sha256": "1e264a2afddf8bff57510aa9cdf8a07ae18b5bad9e186d88cbec1da6a9a472d1",
+        "observed_at": "2026-11-14T17:19:55.195513+00:00"
+      },
+      {
+        "package": "zerocopy",
+        "version": "0.8.63",
+        "sha256": "e5fe1f8f1b06191a00962174c61aa5005e0bb391a6d80d07e24d115c01a92ed8",
+        "url": "https://crates.io/api/v1/crates/zerocopy/0.8.63",
+        "yanked": false,
+        "declared_license": "BSD-2-Clause OR Apache-2.0 OR MIT",
+        "rust_version": "1.56.0",
+        "metadata_response_sha256": "744a2d67bc36bfdc9178fa314c17fa4d750c5b9f1fc4c701651ef699a64fe5d0",
+        "observed_at": "2026-11-14T17:19:55.353151+00:00"
+      },
+      {
+        "package": "zerocopy-derive",
+        "version": "0.8.63",
+        "sha256": "863ad3ac83293fb4d740aedbfdc9240dd8d1a50c1099acd76ce80ce7c7230c7f",
+        "url": "https://crates.io/api/v1/crates/zerocopy-derive/0.8.63",
+        "yanked": false,
+        "declared_license": "BSD-2-Clause OR Apache-2.0 OR MIT",
+        "rust_version": null,
+        "metadata_response_sha256": "b19302c4e9b8c9c76eb0a30eddf9e7ebee2e87fc6a6537d6f32cf86594cf95fc",
+        "observed_at": "2026-11-14T17:19:55.351538+00:00"
+      },
+      {
+        "package": "zerovec",
+        "version": "0.11.9",
+        "sha256": "f58a2799cfe9a1670c7ea8edbd52ef8edb93cb37a7f83bf31ba9e35d9dae6a40",
+        "url": "https://crates.io/api/v1/crates/zerovec/0.11.9",
+        "yanked": false,
+        "declared_license": "Unicode-3.0",
+        "rust_version": "1.83",
+        "metadata_response_sha256": "96174ae9562df8be10575858e663823db3b474893591dc9e596a57e182609b8e",
+        "observed_at": "2026-11-14T17:19:55.359059+00:00"
+      },
+      {
+        "package": "zerovec-derive",
+        "version": "0.11.7",
+        "sha256": "c3743ddbf47738d929cd1ae2e199d40d0162979dfe31aef8ae646d2bf00bf97a",
+        "url": "https://crates.io/api/v1/crates/zerovec-derive/0.11.7",
+        "yanked": false,
+        "declared_license": "Unicode-3.0",
+        "rust_version": "1.83",
+        "metadata_response_sha256": "2882621f382f1c301bead7c37cd827bb574704a8ea4ff94e62020a539fcc4078",
+        "observed_at": "2026-11-14T17:19:55.299647+00:00"
+      }
+    ]
+  },
+  "unchanged_root_license_inventory": {
+    "entries": 362,
+    "sha256": "51f274cdde48d37d3c6e7eea466ec2d204323ff9005757fb263b019b64caf722"
+  },
+  "private_final_receipt_sha256": "4d3aa1c86c0d059b92470856d4d04be410bf62e80c0f9690f4474ba2decfa827",
+  "consumer_execution": {
+    "status": "PENDING",
+    "qualified": false
+  },
+  "limits": [
+    "Point-in-time known advisory and registry metadata checks for this exact receiving lock only; not exhaustive security assurance, reachability proof or signed attestation.",
+    "308 exact versions inherit official registry observations from the earlier qualified source snapshot;25 new exact versions were checked through official crates.io HTTPS now.",
+    "Declared license strings are metadata, not a new legal approval or change to the root362-package inventory.",
+    "No receiving lock rewriting, re-resolution, fallback, pinning, Cargo build/fetch, global registry mutation, product source change or release mutation.",
+    "Fresh public receiving-consumer compile and execution remains pending root-authorized continuation."
+  ]
+}

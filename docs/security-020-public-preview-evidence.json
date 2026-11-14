@@ -1,0 +1,380 @@
+{
+  "schema": "booknook.security-public-preview-evidence.v1",
+  "observed_at": "2026-11-14T17:39:43.310373+00:00",
+  "status": "PUBLISHED_DOWNLOADS_RECEIVING_CONSUMERS_AND_CLARIFICATION_VERIFIED",
+  "release": {
+    "url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.0-preview.20261114",
+    "tag": "v0.2.0-preview.20261114",
+    "source_commit": "a945df213150abe10e27cc6c5e92da130588bef8",
+    "package_version": "0.2.0",
+    "native_build": "2026111403",
+    "published_at": "2026-11-14T17:14:37Z",
+    "draft": false,
+    "prerelease": true,
+    "direct_tag_commit_verified": true
+  },
+  "manifest": {
+    "url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/RELEASE-MANIFEST.json",
+    "sha256": "2e299d2a8ca5ef8863513a5bb098be00b8ec71954b06dc258465935f94baca52",
+    "source_inputs": 510,
+    "tracked_source_inputs": 509,
+    "sole_generated_source_copy": {
+      "sdk/swift/Sources/BookNookNative/booknook_native.swift": {
+        "exact_copy_of_tracked_source": "apps/apple/Generated/booknook_native.swift",
+        "sha256": "f7988cdc5cbe4d4fa992e846281ed16b90ac9ddbe32972a17da0d2fab6b0767d"
+      }
+    }
+  },
+  "delivery": {
+    "asset_count": 17,
+    "all_server_asset_digests_match": true,
+    "all_actual_download_files_independently_rehashed": true,
+    "unauthenticated_https": true,
+    "ambient_proxy_disabled": true,
+    "tls_verification": true,
+    "download_receipt_sha256": "4d601dfeda413dd73a382cb24c153aa3989c0a48bfd8d5f39192e7d42e1551bb",
+    "assets": [
+      {
+        "name": "DEPENDENCY-LICENSES.csv",
+        "bytes": 44279,
+        "sha256": "51f274cdde48d37d3c6e7eea466ec2d204323ff9005757fb263b019b64caf722",
+        "download_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/DEPENDENCY-LICENSES.csv"
+      },
+      {
+        "name": "LICENSE-APACHE",
+        "bytes": 11326,
+        "sha256": "fabba0cb7d00a4b3211fdc13699223ab2d22f88678ccd608494cf2b332b903e9",
+        "download_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/LICENSE-APACHE"
+      },
+      {
+        "name": "LICENSE-BOUNDARIES.md",
+        "bytes": 8348,
+        "sha256": "dd02f4ba673b2e30507b23d43025797b48b7f5216ad98043b2b54744e76fb117",
+        "download_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/LICENSE-BOUNDARIES.md"
+      },
+      {
+        "name": "LICENSE-MIT",
+        "bytes": 1079,
+        "sha256": "e4c16e07e31d3fdbba827f245f39f51ee0871898f1585653129bcbe3c63a7410",
+        "download_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/LICENSE-MIT"
+      },
+      {
+        "name": "LICENSE-MPL-2.0",
+        "bytes": 16727,
+        "sha256": "66a3107d5ad6a058aab753eaac2047ccb2ed0e39465dd0fe5844da3e300d5172",
+        "download_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/LICENSE-MPL-2.0"
+      },
+      {
+        "name": "RELEASE-MANIFEST.json",
+        "bytes": 9536,
+        "sha256": "2e299d2a8ca5ef8863513a5bb098be00b8ec71954b06dc258465935f94baca52",
+        "download_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/RELEASE-MANIFEST.json"
+      },
+      {
+        "name": "SHA256SUMS",
+        "bytes": 1498,
+        "sha256": "a7ba8b3d0355c6e1102f6c80c6a0cd9d657394be8c1fc507faf8681075bbded7",
+        "download_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/SHA256SUMS"
+      },
+      {
+        "name": "SOURCE-INPUTS.json",
+        "bytes": 56749,
+        "sha256": "6f11001d27e33a83a8dafbff740ef581ac4414dda74b50164ff28f60021f9f08",
+        "download_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/SOURCE-INPUTS.json"
+      },
+      {
+        "name": "booknook-connectors-0.2.0.crate",
+        "bytes": 72666,
+        "sha256": "93fb37916cdda97c1b67ff97c122a5260b71879a36a9a0394a77f7f6aa5a356d",
+        "download_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/booknook-connectors-0.2.0.crate"
+      },
+      {
+        "name": "booknook-core-0.2.0.crate",
+        "bytes": 178896,
+        "sha256": "ce1778e342d46dd450aa6c4c50fd05006559cf5123aa3e1130e691ca614bf715",
+        "download_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/booknook-core-0.2.0.crate"
+      },
+      {
+        "name": "booknook-ipad-device-arm64-development-0.2.0.tar.gz",
+        "bytes": 11141435,
+        "sha256": "89baa63d49ae12b28cc61fe5dea220aac994158d0a17cd04ff13843930d212cc",
+        "download_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/booknook-ipad-device-arm64-development-0.2.0.tar.gz"
+      },
+      {
+        "name": "booknook-ipad-sim-arm64-development-0.2.0.tar.gz",
+        "bytes": 11353083,
+        "sha256": "bf528897f987a43ffbf76b09597711732fe323901213f29ba102713b24b4d50d",
+        "download_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/booknook-ipad-sim-arm64-development-0.2.0.tar.gz"
+      },
+      {
+        "name": "booknook-mac-arm64-development-0.2.0.tar.gz",
+        "bytes": 14832162,
+        "sha256": "5725db20a889b1828f2e50bcbd906088b303819879aad32d9b0fb14466195027",
+        "download_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/booknook-mac-arm64-development-0.2.0.tar.gz"
+      },
+      {
+        "name": "booknook-native-0.2.0.crate",
+        "bytes": 181205,
+        "sha256": "fc9eebfd4ed7daee83988900a88c3b425877275ecc7118fa9a2b23538e859474",
+        "download_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/booknook-native-0.2.0.crate"
+      },
+      {
+        "name": "booknook-sdk-0.2.0.tgz",
+        "bytes": 4578439,
+        "sha256": "32905509fd054ab448ae6856ad165e6d7fb75544cec749cd3d4064efeee5032e",
+        "download_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/booknook-sdk-0.2.0.tgz"
+      },
+      {
+        "name": "booknook-swift-sdk-0.2.0.tar.gz",
+        "bytes": 142623125,
+        "sha256": "b016a826419e5bbd5ce6c47db7754ca877b8b44eba777cbccfb1d50da36ce778",
+        "download_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/booknook-swift-sdk-0.2.0.tar.gz"
+      },
+      {
+        "name": "booknook-wasm-0.2.0.crate",
+        "bytes": 38324,
+        "sha256": "a5f1d89d11459cc8319ff0aa1ffe39f4e5a7911b2d289ab3c757bed45866f063",
+        "download_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.0-preview.20261114/booknook-wasm-0.2.0.crate"
+      }
+    ]
+  },
+  "withdrawn_history": {
+    "tag": "v0.1.0-preview.20261114",
+    "remains_draft": true,
+    "assets_retained": 17,
+    "not_qualified_for_use": true,
+    "superseded_0_1_1_candidate_published": false
+  },
+  "source_qualification": {
+    "hosted_ci": {
+      "run": 43616208883,
+      "url": "https://github.com/bananawalnut/booknook/actions/runs/43616208883",
+      "source_commit": "a945df213150abe10e27cc6c5e92da130588bef8",
+      "jobs": [
+        {
+          "name": "apple",
+          "conclusion": "success",
+          "started_at": "2026-11-14T16:33:03Z",
+          "completed_at": "2026-11-14T16:53:09Z",
+          "url": "https://github.com/bananawalnut/booknook/actions/runs/43616208883/job/132511710894"
+        },
+        {
+          "name": "portable",
+          "conclusion": "success",
+          "started_at": "2026-11-14T16:33:03Z",
+          "completed_at": "2026-11-14T16:39:08Z",
+          "url": "https://github.com/bananawalnut/booknook/actions/runs/43616208883/job/132511711078"
+        }
+      ]
+    },
+    "native": "Three Release arm64 app/library builds and archive checks; macOS extracted Swift consumer. No three-platform runtime claim.",
+    "rust_extracted_tests": {
+      "passed": 291,
+      "failed": 0,
+      "intentional_skips": 5
+    },
+    "npm": "Fresh local archive installed CJS/ESM, Node/web-target WASM and declarations passed before publication.",
+    "security": {
+      "audit_evidence": {
+        "path": "docs/security-dependency-audit-evidence.json",
+        "sha256": "020de842234191a93efd803d058633a2cadf2a66adfe6dce4c2de8df3efec073",
+        "source_commit": "a945df213150abe10e27cc6c5e92da130588bef8",
+        "url": "https://github.com/bananawalnut/booknook/blob/a945df213150abe10e27cc6c5e92da130588bef8/docs/security-dependency-audit-evidence.json"
+      },
+      "database_commit": "4ef2df8e806a65e2f1ecc14f56f51249062b23d6",
+      "database_verified_at": "2026-11-14T16:29:25.242703+00:00",
+      "qualified_locks": {
+        "root": {
+          "path": "Cargo.lock",
+          "sha256": "c066aec68125082b9a6992607e49703f3b784a86316c7fbca5193b59817f6f01"
+        },
+        "relay-read-probe": {
+          "path": "tests/relay-read-probe/Cargo.lock",
+          "sha256": "97b1d8cf1cc1e7b37713da47069128df7bc5fc5dda74fbcca1da81ed6a7565fb"
+        }
+      },
+      "resolved_matches": {
+        "vulnerabilities": 11,
+        "unsound": 3,
+        "advisory_ids": [
+          "RUSTSEC-2026-0459",
+          "RUSTSEC-2026-0346",
+          "RUSTSEC-2026-0347",
+          "RUSTSEC-2026-0348",
+          "RUSTSEC-2026-0349",
+          "RUSTSEC-2026-0382",
+          "RUSTSEC-2026-0381",
+          "RUSTSEC-2026-0429",
+          "RUSTSEC-2026-0367",
+          "RUSTSEC-2026-0368",
+          "RUSTSEC-2026-0369",
+          "RUSTSEC-2026-0253",
+          "RUSTSEC-2026-0486",
+          "RUSTSEC-2026-0386"
+        ]
+      },
+      "current_matches": {
+        "vulnerabilities": 0,
+        "unsound": 0,
+        "yanked": 0
+      },
+      "remaining_maintenance": [
+        {
+          "kind": "unmaintained",
+          "package": "basic-toml",
+          "version": "0.1.10",
+          "advisory": "RUSTSEC-2026-0374",
+          "url": "https://rustsec.org/advisories/RUSTSEC-2026-0374.html"
+        },
+        {
+          "kind": "unmaintained",
+          "package": "smallstr",
+          "version": "0.3.1",
+          "advisory": "RUSTSEC-2026-0215",
+          "url": "https://rustsec.org/advisories/RUSTSEC-2026-0215.html"
+        }
+      ],
+      "registry_exact_versions_checked": 358,
+      "negentropy": "0.5.3",
+      "earlier_negentropy_advisory": "RUSTSEC-2026-0365",
+      "replaces_withdrawn_preview": "v0.1.0-preview.20261114",
+      "unpublished_superseded_candidate": "0.1.1",
+      "rust_api_migration": "Nostr SDK 0.45.6/protocol 0.45.7 change exposed Rust types and custom transport APIs; durable JSON/wire/ontology formats are unchanged.",
+      "existing_consumer_lockfiles": "Update and audit the receiving workspace's full resolved dependency closure; updating negentropy alone is insufficient. Library archive lockfiles do not replace downstream application locks.",
+      "limits": "Known advisory matching and registry metadata at the stated snapshot; unsigned observational evidence, not exhaustive security assurance, reachability proof or signed attestation. Build/package/CI/consumer qualification is separate."
+    },
+    "root_license_inventory_entries": 362,
+    "counts_distinguished": {
+      "native_frozen_source_inputs": 362,
+      "root_all_features_license_inventory_entries": 362,
+      "published_source_map_inputs": 510,
+      "receiving_registry_entries": 333
+    }
+  },
+  "receiving_qualification": {
+    "status": "PASS_EXACT_RECORDED_CONSUMERS",
+    "qualified": true,
+    "receipt_sha256": "f1206e8cc392179b49beb66817d29ff0aa38d15dd741120c463c72ba13e192e7",
+    "six_commands": [
+      {
+        "label": "rust-public-consumer",
+        "exit_code": 0,
+        "log_sha256": "53ebbef75d71f99c86fbdddf7bd3c51db3486bfefdcf577c365eaec9511526c8"
+      },
+      {
+        "label": "npm-install",
+        "exit_code": 0,
+        "log_sha256": "7faec74840380c8782e2532bde4ba3b691142d76bf2d838a2fa724d3b864047a"
+      },
+      {
+        "label": "npm-commonjs",
+        "exit_code": 0,
+        "log_sha256": "3be9b0e6abe53f49eeacdd2737d6d56230febcfd617b42959068baa324d09fbe"
+      },
+      {
+        "label": "npm-esm-node-web-wasm",
+        "exit_code": 0,
+        "log_sha256": "9431648b363a55316af8b41dcfbf89228e0ad1adadba227daedbd10b97f8b565"
+      },
+      {
+        "label": "npm-nodenext-types",
+        "exit_code": 0,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "swift-public-consumer",
+        "exit_code": 0,
+        "log_sha256": "9ee0f065cf3e5c66ca1f5040469caf01e20afb2c94deebbb18e7c33ea9371b25"
+      }
+    ],
+    "scope": {
+      "rust": "Actual downloaded four local crate archives; cargo run --locked --offline with the separately audited unchanged receiving lock.",
+      "npm": "Actual downloaded archive installed with scripts disabled; CommonJS, ESM Node/web-target WASM in Node, and strict NodeNext declarations passed;72 installed package files matched archive contents.",
+      "swift": "Actual downloaded Swift SDK consumed by a fresh macOS arm64 SwiftPM executable. No iPad runtime or browser-runtime claim."
+    },
+    "exact_lock_sha256": "7ec494c8c759c61dce23e06910e53e6d2e6c88a50bf69b461c0070b9c2199fd0",
+    "source_lock_preserved_by_receiving_resolution": false,
+    "registry_counts": {
+      "receiving": 333,
+      "exact_prior_source_versions": 308,
+      "new_exact_versions": 25,
+      "root_all_features_license_inventory": 362
+    },
+    "original_source_subset_check": {
+      "result": "REFUSED_BEFORE_COMPILATION",
+      "receipt_sha256": "54919b1ed7ae9d1df74797230a867fc97be7519285ade9b8425d043cd5653b8e",
+      "preserved": true
+    },
+    "continuation": {
+      "same_original_generated_lock": true,
+      "re_resolution_or_pinning_or_fallback": false,
+      "parent_review_sha256": "7344576fb0a9b034a5269fdb4291ce8ca0a9298e808648cbee6ac94ae802dca0",
+      "harness_sha256": "c52f7d4d70045907f4d8ca5c311f61d75c6d4ea57906a87bd353df54d630db0b",
+      "fresh_online_resolver_qualification": false
+    },
+    "dependency_audit": {
+      "status": "PASS_EXACT_LOCK_ONLY",
+      "vulnerabilities": 0,
+      "unsound": 0,
+      "yanked": 0,
+      "maintenance_notices": 2,
+      "receipt_sha256": "4d3aa1c86c0d059b92470856d4d04be410bf62e80c0f9690f4474ba2decfa827",
+      "database_commit": "4ef2df8e806a65e2f1ecc14f56f51249062b23d6",
+      "new25_metadata_receipt_sha256": "effe4a635254bc342ce75de67532ba51f80c6515c4d3c69a5259025b6b292b87"
+    },
+    "limitations": [
+      "GitHub archive delivery only, not registry publication or signed attestation.",
+      "Minimal external consumer smoke only; no repetition of full suites, GUI, device, minimum-OS runtime or live-account qualification.",
+      "Public SDK execution used deterministic temporary local state; delivery used unauthenticated HTTPS asset downloads. Receiving dependency resolution was offline; no fresh online registry resolution or registry publication was tested."
+    ]
+  },
+  "historical_gate_events": [
+    {
+      "event": "Initial preparation refused packaged sibling registry placeholders; correction requires exact qualified core/connectors archive hashes and source identity while every external dependency remains an exact source-lock subset.",
+      "receipt_sha256": "4f95c80964d0eac159f0b2f0184ee0354c6a245c655f0d50a8a49d3e04123c80",
+      "correction_tests_sha256": "4745033dc050cfa4bb80458d17d7b66b08ee9bf4dd82fee8e3fd5e055ee356a0"
+    },
+    {
+      "event": "Raw422 input snapshot retained; ten generated framework artifacts independently matched actual qualified Swift archive members and excluded only from the separate source map.",
+      "receipt_sha256": "9fa10fa59dddb6f1df6860c4decb29c2d90affafb13a8d423134b7211ef8dfd5"
+    },
+    {
+      "event": "Only the new preview hold was cleared by root after qualification; the old0.1.1 candidate hold remains intact.",
+      "parent_review_sha256": "d1dfeed1d8a8f4c6812bb4151cd97af68a4d36bcd31141a7ff51373089b8ca58"
+    }
+  ],
+  "independent_review_sha256": "0b8fff77e9eb23b469d294c1d83dbdc73d6a5710fa7ab2ccc0bccb69fe3972b0",
+  "review_note": "Actual release-body readback clarifies the broader Swift wording in the immutable manifest. Public delivery, exact receiving-lock audit and consumer execution are separately bound observations.",
+  "limits": [
+    "Development preview; production MVP/live integration acceptance remains open.",
+    "Native app downloads are arm64 development bundles; the device archive is unsigned, not an installable signed IPA.",
+    "No physical/current installation, GUI, live accounts/authority, remote social/device exchange or minimum-OS runtime qualification.",
+    "GitHub archive delivery only; no registry or Apple distribution claim.",
+    "Checksums, source maps and audit evidence are unsigned observations, not signed attestations, exhaustive security assurance or reproducible compiler proof.",
+    "Receiving workspaces must update and audit their own complete dependency locks; the packaged source lock is not a replacement for a downstream lock.",
+    "The previous preview, superseded candidate and initial refusals remain historical evidence; their bytes/results do not qualify the replacement.",
+    "Receiving-consumer qualification applies to the exact recorded offline resolution and deterministic smoke cases, not all future dependency resolutions or full production MVP acceptance.",
+    "The published manifest and17 asset bytes remain unchanged; the verified release-body clarification supersedes only the broader Swift consumer wording."
+  ],
+  "manifest_wording_clarification": {
+    "immutable_manifest_sha256": "2e299d2a8ca5ef8863513a5bb098be00b8ec71954b06dc258465935f94baca52",
+    "field": "qualification.swift",
+    "published_phrase": "against all three freshly rebuilt Release Rust XCFramework slices",
+    "qualified_observation": "All three native Rust slices and app archives were built and packaged. Extracted Swift consumer execution was macOS arm64 only; no iPad consumer runtime result is claimed.",
+    "manifest_or_asset_bytes_changed": false,
+    "release_body_clarification": {
+      "status": "PASS_READBACK_VERIFIED",
+      "readback_verified": true,
+      "verified_at": "2026-11-14T17:38:28.059105+00:00",
+      "receipt_sha256": "be451a51831e4d39c7f7e2e6a6b5ff79c1692567a46c45876abe0253cc54d729",
+      "body_sha256": "76e98f6f12da4e9ba90f3c534d3fa01f54f75b0252794b64704c75f4a76d8d9d",
+      "clarification_sha256": "35d76b7abe3c0b8cfd2405e0a32d30264a86b00f9ee717fd350d9b1a73fffe8e",
+      "prepared_body_matches_server_ignoring_only_terminal_newlines": true,
+      "all17_asset_names_bytes_digests_unchanged": true,
+      "immutable_manifest_sha256": "2e299d2a8ca5ef8863513a5bb098be00b8ec71954b06dc258465935f94baca52",
+      "release_url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.0-preview.20261114",
+      "scope": "Release-body clarification only; unchanged published manifest and asset bytes. Extracted Swift consumer runtime is macOS arm64 only."
+    }
+  },
+  "receiving_independent_review_sha256": "ef44d08bfe68d86df9e70239c0c97f8625498d91e29f0f226000f3d0e0d29dae"
+}

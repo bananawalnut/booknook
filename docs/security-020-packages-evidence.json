@@ -1,0 +1,125 @@
+{
+  "schema": "booknook.security-020-packages-evidence.v1",
+  "verified_at": "2026-11-14T17:06:04.959659+00:00",
+  "repository": "https://github.com/bananawalnut/booknook",
+  "based_on_commit": "a945df213150abe10e27cc6c5e92da130588bef8",
+  "package_version": "0.2.0",
+  "scope": "Actual selected local Rust/npm archive qualification after the maintained dependency migration; separate from hosted CI and native Release/Swift archive qualification.",
+  "started_at": "2026-11-14T16:56:24.415065+00:00",
+  "completed_at": "2026-11-14T17:00:45.853865+00:00",
+  "frozen_inputs": {
+    "count": 422,
+    "snapshot_sha256": "6bc9a7a577a1f03b69ff2e98c578c318e4a5b3ed7da0883c8a517c358d9a6cc4",
+    "reviewed_uncommitted_sdk_source_included": false,
+    "source_drift_count": 0
+  },
+  "commands": [
+    {
+      "command": [
+        "bash",
+        "scripts/package-rust.sh"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 198.96840687497752,
+      "source_drift_count": 0,
+      "log_sha256": "253471117b921e33481e3306883662310b3406df8925ebb86f5dcd6a36f5f9f5"
+    },
+    {
+      "command": [
+        "bash",
+        "scripts/package-typescript.sh"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 61.78862287499942,
+      "source_drift_count": 0,
+      "log_sha256": "b13e0769477abc61d7d667b1679dcec87745f6585bacfd37d008ba8f96ae86fe"
+    }
+  ],
+  "rust_result": {
+    "versioned_crates": 4,
+    "actual_extracted_all_targets": true,
+    "test_binaries": 52,
+    "test_result_sections": 52,
+    "passed": 291,
+    "failed": 0,
+    "declared_ignored": 5,
+    "examples_included": true
+  },
+  "typescript_result": {
+    "actual_tarball_isolated_install": true,
+    "commonjs_facade": "PASS",
+    "esm_facade": "PASS",
+    "node_wasm": "PASS",
+    "browser_target_wasm": "PASS",
+    "nodenext_declarations": "PASS",
+    "browser_target_qualification": "Actual browser-target module initialization/consumer execution in Node; no browser application or visible UI acceptance is inferred."
+  },
+  "artifacts": [
+    {
+      "name": "booknook-connectors-0.2.0.crate",
+      "bytes": 72666,
+      "sha256": "93fb37916cdda97c1b67ff97c122a5260b71879a36a9a0394a77f7f6aa5a356d",
+      "qualification": "Independent extracted all-targets tests/examples"
+    },
+    {
+      "name": "booknook-core-0.2.0.crate",
+      "bytes": 178896,
+      "sha256": "ce1778e342d46dd450aa6c4c50fd05006559cf5123aa3e1130e691ca614bf715",
+      "qualification": "Independent extracted all-targets tests/examples"
+    },
+    {
+      "name": "booknook-native-0.2.0.crate",
+      "bytes": 181205,
+      "sha256": "fc9eebfd4ed7daee83988900a88c3b425877275ecc7118fa9a2b23538e859474",
+      "qualification": "Independent extracted all-targets tests/examples"
+    },
+    {
+      "name": "booknook-wasm-0.2.0.crate",
+      "bytes": 38324,
+      "sha256": "a5f1d89d11459cc8319ff0aa1ffe39f4e5a7911b2d289ab3c757bed45866f063",
+      "qualification": "Independent extracted all-targets tests/examples"
+    },
+    {
+      "name": "booknook-sdk-0.2.0.tgz",
+      "bytes": 4578439,
+      "sha256": "32905509fd054ab448ae6856ad165e6d7fb75544cec749cd3d4064efeee5032e",
+      "qualification": "Isolated installed archive CJS/ESM, independent Node/browser-target WASM and NodeNext declaration consumers"
+    }
+  ],
+  "dependency_evidence": {
+    "public_source": "docs/security-dependency-audit-evidence.json",
+    "source_evidence_sha256": "020de842234191a93efd803d058633a2cadf2a66adfe6dce4c2de8df3efec073",
+    "root_lock_sha256": "c066aec68125082b9a6992607e49703f3b784a86316c7fbca5193b59817f6f01",
+    "probe_lock_sha256": "97b1d8cf1cc1e7b37713da47069128df7bc5fc5dda74fbcca1da81ed6a7565fb",
+    "scope": "Known advisories and official registry metadata of exact source locks; independent downstream resolution needs its own checks."
+  },
+  "toolchains": {
+    "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+    "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+    "node": "v24.18.0",
+    "npm": "11.16.0",
+    "wasm-bindgen": "wasm-bindgen 0.2.127"
+  },
+  "cleanup": {
+    "owned_temporary_target_link_removed": true,
+    "original_target_restored": true
+  },
+  "provenance": {
+    "raw_receipt_sha256": "4eb7febefa7e2111d1ae1fff4fb28a1955d236cbcf951e3682e1694d751763be",
+    "raw_receipt_is_private": true,
+    "observation_type": "Unsigned local execution/byte observations; not signed release or reproducible-build attestation.",
+    "artifact_bytes_and_hashes_independently_rechecked_during_sanitization": true
+  },
+  "publication": {
+    "registry_published": false,
+    "replacement_preview_published_at_this_observation": false,
+    "public_download_receiving_consumers_qualified": false
+  },
+  "limits": [
+    "No Cargo build/test, package install, release mutation or remote receiving run was launched by this evidence-sanitization task; it reads and verifies the actual completed packaging receipts/logs/archives.",
+    "These local package results do not substitute for fresh public-download receiving consumers of the replacement archives.",
+    "No registry publication, App Store/TestFlight distribution, notarization, production signing or production-MVP acceptance is claimed.",
+    "No minimum-OS runtime, GUI, physical device, live account/authority, remote social relay or paired-device-sync qualification is inferred.",
+    "The independent native Release/Swift lane has its own source and archive evidence; no older held 0.1.1 or withdrawn 0.1.0 package proof is borrowed."
+  ]
+}
