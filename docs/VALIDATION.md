@@ -1,5 +1,11 @@
 # Validation record
 
+## DevGraph reconciliation and CI consumer correction — 2026-11-13
+
+Independent canonical reads verify 42 newly registered Work records, their parentage, both Projects' Castalia membership and 34 dependency edges. This is tracking evidence, not product acceptance; [the index](DEVGRAPH.md) preserves open release gates.
+
+The [public run at abd2cb1](https://github.com/bananawalnut/booknook/actions/runs/38995901473) passed its Apple job and portable checks through installed npm runtime smoke tests, then failed strict TypeScript consumer compilation because an optional timestamp was read as required. The one-line fixture correction uses `note.created.at ?? null` and does not change the schema. A newly packed/offline-installed SDK with current TypeScript declarations reproduced TS2322 before the change and passed strict .mts/.cts checks afterward. All 23 companion tests passed. Existing WASM binaries were reused; no fresh runtime parity, full package script, native build or remote-CI success is claimed by this local check. [Focused evidence](ci-fixture-evidence.json) records tool versions and scope. Earlier records below remain historical.
+
 ## Pixel-art branding and inline sidebar navigation — 2026-10-16
 
 Both current Apple apps compile: signed iPad Release and macOS Debug, version **0.1.0 (2026101603)**. Asset/signature/source-hash checks verify the pixel app icons and the in-app sidebar mark. The focused Simulator suite passes **2 tests, 0 failures in 52.294 seconds**: header-aligned collapse/reopen, no redundant native navigation bar, reading/library/welcome transitions, Add-book cancellation, retained import choices and backup review/cancel, unchanged notebook text, and compact library navigation under a real UIKit child trait override. Full-screen synthetic screenshots were inspected. Earlier nonpasses are retained in [current evidence](pixel-sidebar-evidence.json), including an unsigned Simulator Keychain-entitlement alert when a prior check entered Connections; this suite does not qualify signing/custody.

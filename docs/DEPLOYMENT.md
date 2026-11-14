@@ -14,7 +14,7 @@ On 2026-10-16, the canonical app was installed and launched on the paired iPad u
 
 Generate the canonical project with `xcodegen generate --spec apps/apple/project.yml`. Build with an explicit toolchain and task-local derived data, overriding the project's unsigned defaults using `CODE_SIGNING_ALLOWED=YES CODE_SIGN_STYLE=Automatic CODE_SIGN_IDENTITY='Apple Development' DEVELOPMENT_TEAM=<your-team>`. Select `-configuration Release -sdk iphoneos -destination 'id=<paired-device>'`; use `-allowProvisioningUpdates` when Xcode must create a profile for the canonical identifier. Install the resulting `BookNookPad.app` with `devicectl device install app`, then launch `org.booknook.ipad`.
 
-The delivered local build has a device-specific Apple Development profile expiring at 2026-10-24 01:48:21 UTC (October 23 in Vancouver). Renew before expiry to keep launching it. This is a normal local app, not a TestFlight/App Store release or a certificate that all original integration gates passed. [Exact evidence](finger-local-release-evidence.json) and the signed archive's `VERIFICATION.json` record its scope and hashes.
+The October 16 local build had a device-specific Apple Development profile expiring at 2026-10-24 01:48:21 UTC (October 23 in Vancouver). That recorded expiry has passed; inspect current device/signing state before renewing or reinstalling. This is a normal local app, not a TestFlight/App Store release or a certificate that all original integration gates passed. [Exact evidence](finger-local-release-evidence.json) and the signed archive's `VERIFICATION.json` record its scope and hashes.
 
 ## Native development archives
 

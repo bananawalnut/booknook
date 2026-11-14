@@ -53,6 +53,10 @@ Private membership changes carry separately signed admission proofs when peers d
 
 Chronological feed/deduplication, mutual friendships, reviews/ratings/updates, shared lists, public/private groups, discussion, spoilers, blocking and moderation are implemented through the portable social contract and native interface. Recommendations use catalog inputs and independently verified public friend evidence; the input has no private-writing field. Actual network and account qualification must be read from the validation record rather than inferred from protocol tests or compiled UI.
 
+## Planned portable feeds
+
+[Portable feed configuration and discovery](FEEDS.md) is a new, unimplemented increment. Shared Castaway contracts own non-secret subscription portability and selected disclosure; accepting hosts own local activation, secure adapters, network policy and caches. Book Nook will compose a versioned feed provider through its public SDKs and display source-attributed external publications separately from verified Nostr activity. Strict existing Castaway v1/v2 and provider v1 contracts cannot receive feed fields in place. Reader/persistence compatibility and cross-client fixtures precede new writers. [DevGraph](DEVGRAPH.md) records the shared owner, Book Nook tasks and dependencies without closing original release gates.
+
 ## Optional listening source
 
 The paired companion can invoke the separately installed AGPL Audible adapter as a bounded process. The adapter uses an external-browser PKCE login, explicit virtual-device registration consent, and OS keyring storage without plaintext fallback. Native Connections persists only its pending login in Keychain and offers completion, cancellation, renewal, disconnect and guarded uncertainty recovery. Position normalization preserves upstream observation time and skips missing evidence. Catalog title/author metadata is optional and does not invent ebook identifiers.

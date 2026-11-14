@@ -1,0 +1,56 @@
+{
+  "schema": "booknook.ci-fixture-evidence.v1",
+  "recorded_at": "2026-11-14T01:16:38Z",
+  "baseline_revision": "abd2cb1928518be66eda247bea473c98413bb1a2",
+  "failed_public_run": "https://github.com/bananawalnut/booknook/actions/runs/38995901473",
+  "change": {
+    "path": "tests/PackagedSDKTypes.mts",
+    "line": 50,
+    "before": "const originalTime: number|null = note.created.at;",
+    "after": "const originalTime: number|null = note.created.at ?? null;",
+    "sha256": "d878186531258122e44d08a6f3c79da5ab5f3da55bd10a2e225ce518d7b27c01"
+  },
+  "tools": {
+    "node": "v26.8.2",
+    "typescript": "5.9.3",
+    "python": "3.14.7"
+  },
+  "validation": [
+    {
+      "check": "Current TypeScript JS/declarations build",
+      "command": "node scripts/build.mjs",
+      "exit_code": 0
+    },
+    {
+      "check": "Actual npm pack/prepack and offline archive install",
+      "exit_code": 0,
+      "archive_sha256": "e8e998ee9e40ec2af6b73a28a5652b5e99aa7cc86d77e63236a661f6cd005143"
+    },
+    {
+      "check": "Original strict installed consumer negative control",
+      "exit_code": 2,
+      "expected": true,
+      "result": "TS2322 at the optional timestamp assertion"
+    },
+    {
+      "check": "Fixed strict installed .mts/.cts declaration consumers",
+      "exit_code": 0
+    },
+    {
+      "check": "Companion suite",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/companion -v",
+      "exit_code": 0,
+      "passed": 23,
+      "seconds": 5.59
+    }
+  ],
+  "limits": [
+    "Existing web/node WASM binaries reused; no fresh current-source runtime parity or full package-typescript.sh run",
+    "Local Node 26 differs from workflow Node 22",
+    "No new native/device test, account/custody qualification or public CI pass established by these local checks"
+  ],
+  "wasm_sha256": {
+    "web": "529b55e3cbccdff6a16f9bf9bc668c7be82b44da418ae239f221a764ebe4a465",
+    "nodejs": "9ac4d802547c03edfc9197a14e4bb67d7e56e8529ee9f6ac0914e5c14c598804"
+  }
+}
