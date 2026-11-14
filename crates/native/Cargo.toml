@@ -14,7 +14,7 @@ bindgen = ["uniffi/cli"]
 
 [dependencies]
 async-trait = "0.1"
-booknook-connectors = { path = "../connectors", version = "0.1.0" }
+booknook-connectors = { path = "../connectors", version = "0.1.1" }
 nostr-sdk = "0.44"
 tokio = { version = "1", features = ["rt-multi-thread", "time", "sync"] }
 booknook-core.workspace = true

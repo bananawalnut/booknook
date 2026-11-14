@@ -1,0 +1,191 @@
+{
+  "schema": "booknook.negentropy-security-evidence.v1",
+  "verified_at": "2026-11-14T14:58:27.749277+00:00",
+  "assessment": "Known security/correctness defects prompted a targeted dependency update; bounded old/fixed regression and actual locked-dependency CI regression passed. Full rebuilt artifact qualification is separate.",
+  "advisory": {
+    "id": "RUSTSEC-2026-0365",
+    "url": "https://rustsec.org/advisories/RUSTSEC-2026-0365.html",
+    "old_version": "0.5.1",
+    "patched_version_tested": "0.5.3",
+    "minimum_patched_0_5_version": "0.5.2",
+    "feature": "std",
+    "yank_reason_primary_url": "https://github.com/nostrdevkit/negentropy/pull/14#issuecomment-6186518223",
+    "finding": "A peer-controlled IdList count was allocated before message-length validation. The maintainer explicitly tied yanking prior versions to the security fix."
+  },
+  "upstream_changes": [
+    {
+      "version": "0.5.2",
+      "url": "https://github.com/nostrdevkit/negentropy/commit/40f7290cbc5755a5ba3190279fbc848a97866280",
+      "change": "Validate ID count against bytes remaining before reserving memory."
+    },
+    {
+      "version": "0.5.3",
+      "url": "https://github.com/nostrdevkit/negentropy/commit/79dc6436992594865d5fbfa47c76bed3db366356",
+      "change": "Fingerprint from the last emitted range boundary after a frame-size cut so reconciliation does not silently omit differences.",
+      "issue_url": "https://github.com/nostrdevkit/negentropy/issues/15"
+    }
+  ],
+  "compatibility": {
+    "requirement": "nostr-relay-pool 0.44.3 requests negentropy ^0.5 with std explicitly enabled.",
+    "license": "MIT unchanged",
+    "msrv": "1.51.0 unchanged",
+    "edition": "2018 unchanged",
+    "manifest_url": "https://github.com/nostrdevkit/negentropy/blob/97e78fe6345d14fcdef103a7c67de31cfd3ff6cb/Cargo.toml"
+  },
+  "private_old_fixed_regression": {
+    "cases": [
+      {
+        "name": "old-responder",
+        "expected_exit": 86,
+        "exit_code": 86,
+        "stdout": "",
+        "stderr": "GUARDED_ALLOCATION requested=1133871366152\n",
+        "elapsed_seconds": 0.26089,
+        "blocked_allocation_bytes": 1133871366152
+      },
+      {
+        "name": "old-initiator",
+        "expected_exit": 86,
+        "exit_code": 86,
+        "stdout": "",
+        "stderr": "GUARDED_ALLOCATION requested=1133871366152\n",
+        "elapsed_seconds": 0.002961,
+        "blocked_allocation_bytes": 1133871366152
+      },
+      {
+        "name": "fixed-responder",
+        "expected_exit": 0,
+        "exit_code": 0,
+        "stdout": "RESULT mode=fixed-responder result=ParseEndsPrematurely max_allocation=544 limit=1048576\n",
+        "stderr": "",
+        "elapsed_seconds": 0.002378,
+        "maximum_observed_allocation_bytes": 544
+      },
+      {
+        "name": "fixed-initiator",
+        "expected_exit": 0,
+        "exit_code": 0,
+        "stdout": "RESULT mode=fixed-initiator result=ParseEndsPrematurely max_allocation=544 limit=1048576\n",
+        "stderr": "",
+        "elapsed_seconds": 0.002188,
+        "maximum_observed_allocation_bytes": 544
+      }
+    ],
+    "payload_hex": "61000002c080808000",
+    "allocation_guard_bytes": 1048576,
+    "old_blocked_request_bytes": 1133871366152,
+    "oversized_allocation_performed": false,
+    "method": "GlobalAlloc checks alloc/alloc_zeroed/realloc before System. Oversized requests use stack-only reporting then _exit(86); no real OOM is attempted. Actual cached 0.5.1 and 0.5.3 are exercised with std in both roles.",
+    "harness_source_sha256": "898cbb4d41159a2666693198de615f1f93f5162fdf6b4642d5810751eb9a130f",
+    "prior_runner_nonpass": "Initial runner incorrectly expected the exact upstream allocation byte count; this platform requested 8 bytes less. The guard correctly exited 86. Only the runner assertion changed to require a blocked request above the bound; the same binary was reused."
+  },
+  "inspected_packages": [
+    {
+      "name": "negentropy",
+      "version": "0.5.1",
+      "cached_crate_sha256": "81c353b400a5503efdcf398f11a83fb7aa84f59f5d76fc4bf5bbc1e4f5366caa",
+      "lib_rs_sha256": "a6b8a40282f101175be39d98171b9fef952a7f09cbe98c3d93dcd6b0d3f42dd4"
+    },
+    {
+      "name": "negentropy",
+      "version": "0.5.3",
+      "cached_crate_sha256": "fd6f12461d14b5768028d39fab3cdfbcefb0bc7f09e95f413a00b6fdedcc9c2d",
+      "lib_rs_sha256": "b1c5e374354cc3aeca7bb9926ba9bfb3e4197507968a57afc567ba52291e0c36"
+    }
+  ],
+  "reference_transport_reachability": {
+    "revision": "732c6a44892866510049bbb33a0067299f79b794",
+    "paths": [
+      "crates/connectors/src/nostr_transport.rs",
+      "crates/connectors/src/lib.rs"
+    ],
+    "finding": "Inspected reference transports use Client.fetch_events/send_event and keep Client private. No product NIP-77 sync or Negentropy call was found; the upstream parser is inside explicit relay sync processing of peer NEG-MSG.",
+    "limits": [
+      "Static trace does not prove unreachability for every downstream use.",
+      "No current reference-app remote exploitability is asserted from dependency presence alone.",
+      "Core/WASM protocol-only nostr dependency is distinct from nostr-sdk/relay-pool; workspace lock membership is not a linked-binary inventory."
+    ]
+  },
+  "private_evidence_sha256": {
+    "upstream_assessment": "ce9295ca5385b29099d9dfb3624a3432e0bd5a76e46a4cd28daebaa92d02dc2a",
+    "guarded_regression": "7c0f5db3e3543baa00f7cf34ff8650a00b9273cd55c0bb9f686bf791e644de51",
+    "promoted_regression_log": "0fd8c046f02340bb2ae0d7a130e8c306546993da6eb998a752759b7bedf3d33a"
+  },
+  "qualification_limits": [
+    "No real relay/account traffic, actual OOM or unbounded allocation attempted.",
+    "Only a standalone security fixture/runner and CI step were added by this lane; no production manifest, lock or native compile-input changes.",
+    "The frame-cut completeness fix was inspected upstream but not independently executed by this malformed-input harness.",
+    "Previous successful 0.5.1 consumer tests do not negate the advisory; new app/package evidence must identify the patched closure."
+  ],
+  "repository_ci_regression": {
+    "command": "python3 -B scripts/test-negentropy-bounds.py",
+    "selection": "cargo metadata --locked --offline resolves the actual workspace dependency. An isolated temporary package path-depends on that exact source with std; no hardcoded package version or shared Cargo target.",
+    "result": {
+      "result": "pass",
+      "resolved_version": "0.5.3",
+      "resolved_package_id": "registry+https://github.com/rust-lang/crates.io-index#negentropy@0.5.3",
+      "std_enabled_in_probe": true,
+      "workspace_lock_sha256": "4a10cc4f88d251956e0de1c6692ac6b93c47a06bd13f16c8f843c0a44d9eeb4c",
+      "resolved_manifest_sha256": "c5ea88e1be3258a6e1126994ddae3d16ee872304a1d5f8509a4ee1d1d769fc91",
+      "fixture_sha256": "20a36c481e197ff25aa77b4e5610384981d441291f0acb72ba7f01b9bd8a6dbb",
+      "allocation_guard_bytes": 1048576,
+      "cases": [
+        {
+          "mode": "responder",
+          "result": "ParseEndsPrematurely",
+          "maximum_observed_allocation_bytes": 544,
+          "exit_code": 0
+        },
+        {
+          "mode": "initiator",
+          "result": "ParseEndsPrematurely",
+          "maximum_observed_allocation_bytes": 544,
+          "exit_code": 0
+        }
+      ]
+    },
+    "owned_source_sha256": {
+      "tests/security/negentropy-bounds.rs": "20a36c481e197ff25aa77b4e5610384981d441291f0acb72ba7f01b9bd8a6dbb",
+      "scripts/test-negentropy-bounds.py": "2c092ab99943f8f59e1c213e8074decec0313df4045afba3fd6e4e02ad4df642",
+      ".github/workflows/check.yml": "53b461fb41b9d5f315dc53ed82810b7a264e638f89f3512f9624612ee9c57eb4"
+    },
+    "ci_position": "Portable job immediately after locked fetch and complete dependency-license inventory."
+  },
+  "final_0_1_1_lock_observation": {
+    "observed_at": "2026-11-14T15:06:33.955926+00:00",
+    "command": "python3 -B scripts/test-negentropy-bounds.py",
+    "exit_code": 0,
+    "workspace_lock_sha256_before": "ba27b3c5a5703c1975c10be3fa6913bfbb8bdddc7859619febc1656df2e59995",
+    "workspace_lock_sha256_after": "ba27b3c5a5703c1975c10be3fa6913bfbb8bdddc7859619febc1656df2e59995",
+    "lock_unchanged": true,
+    "result": {
+      "resolved_version": "0.5.3",
+      "resolved_package_id": "registry+https://github.com/rust-lang/crates.io-index#negentropy@0.5.3",
+      "std_enabled_in_probe": true,
+      "resolved_manifest_sha256": "c5ea88e1be3258a6e1126994ddae3d16ee872304a1d5f8509a4ee1d1d769fc91",
+      "allocation_guard_bytes": 1048576,
+      "cases": [
+        {
+          "mode": "responder",
+          "result": "ParseEndsPrematurely",
+          "maximum_observed_allocation_bytes": 544,
+          "exit_code": 0
+        },
+        {
+          "mode": "initiator",
+          "result": "ParseEndsPrematurely",
+          "maximum_observed_allocation_bytes": 544,
+          "exit_code": 0
+        }
+      ]
+    },
+    "version_delta": {
+      "previous_fixed_lock_sha256": "4a10cc4f88d251956e0de1c6692ac6b93c47a06bd13f16c8f843c0a44d9eeb4c",
+      "only_changes_from_previous_fixed_lock": "booknook-connectors/core/native/wasm package versions 0.1.0 to 0.1.1",
+      "workspace_manifest": "workspace package version and booknook-core workspace dependency version 0.1.1",
+      "apple_project": "MARKETING_VERSION 0.1.1; CURRENT_PROJECT_VERSION 2026111402"
+    },
+    "private_review_sha256": "d91dda604a1d8b1b32418da50c09b125889f0dac1456605af76a9a9665e39088",
+    "scope": "Local isolated regression against final 0.1.1 workspace lock. Earlier repository_ci_regression result remains the historical pre-version-bump fixed-lock observation; this is not hosted CI or rebuilt package qualification."
+  }
+}

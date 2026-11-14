@@ -377,7 +377,7 @@ dependencies = [
 
 [[package]]
 name = "booknook-connectors"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "base64 0.22.1",
  "booknook-core",
@@ -395,7 +395,7 @@ dependencies = [
 
 [[package]]
 name = "booknook-core"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "base64 0.22.1",
  "chacha20poly1305",
@@ -419,7 +419,7 @@ dependencies = [
 
 [[package]]
 name = "booknook-native"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "aes-gcm",
  "argon2",
@@ -448,7 +448,7 @@ dependencies = [
 
 [[package]]
 name = "booknook-wasm"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "booknook-core",
  "serde",
@@ -1530,9 +1530,9 @@ dependencies = [
 
 [[package]]
 name = "negentropy"
-version = "0.5.1"
+version = "0.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "81c353b400a5503efdcf398f11a83fb7aa84f59f5d76fc4bf5bbc1e4f5366caa"
+checksum = "fd6f12461d14b5768028d39fab3cdfbcefb0bc7f09e95f413a00b6fdedcc9c2d"
 
 [[package]]
 name = "nom"

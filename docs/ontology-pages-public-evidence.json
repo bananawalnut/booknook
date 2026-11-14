@@ -1,0 +1,1307 @@
+{
+  "schema": "booknook.ontology-pages-public-evidence.v1",
+  "verified_at": "2026-11-14T14:18:10.593244+00:00",
+  "result": "pass",
+  "scope": "Actual public deployment and recursive byte qualification for the selected static ontology host.",
+  "base_url": "https://bananawalnut.github.io/booknook/ontology/",
+  "discovery_url": "https://bananawalnut.github.io/booknook/ontology/discovery.json",
+  "deployed_source_commit": "732c6a44892866510049bbb33a0067299f79b794",
+  "observed_start_utc": "2026-11-14T14:15:51.638904+00:00",
+  "observed_end_utc": "2026-11-14T14:15:54.975218+00:00",
+  "workflow_run": {
+    "id": 43603595461,
+    "url": "https://github.com/bananawalnut/booknook/actions/runs/43603595461",
+    "head_sha": "732c6a44892866510049bbb33a0067299f79b794",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-14T14:11:50Z",
+    "updated_at": "2026-11-14T14:12:17Z"
+  },
+  "jobs": [
+    {
+      "id": 132473355283,
+      "name": "build",
+      "html_url": "https://github.com/bananawalnut/booknook/actions/runs/43603595461/job/132473355283",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-14T14:11:52Z",
+      "completed_at": "2026-11-14T14:12:02Z"
+    },
+    {
+      "id": 132473406666,
+      "name": "deploy",
+      "html_url": "https://github.com/bananawalnut/booknook/actions/runs/43603595461/job/132473406666",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-14T14:12:06Z",
+      "completed_at": "2026-11-14T14:12:16Z"
+    }
+  ],
+  "deployment": {
+    "id": 7788710882,
+    "sha": "732c6a44892866510049bbb33a0067299f79b794",
+    "environment": "github-pages",
+    "latest_status": {
+      "state": "success",
+      "environment_url": "https://bananawalnut.github.io/booknook/",
+      "created_at": "2026-11-14T14:12:17Z",
+      "log_url": "https://github.com/bananawalnut/booknook/actions/runs/43603595461/job/132473406666"
+    }
+  },
+  "settings": {
+    "html_url": "https://bananawalnut.github.io/booknook/",
+    "build_type": "workflow",
+    "public": true,
+    "https_enforced": true,
+    "cname": null
+  },
+  "settings_read_boundary": {
+    "unauthenticated_api_status": 404,
+    "authorized_existing_cli_get": "success",
+    "configuration_mutations_performed_by_qualifier": false,
+    "artifact_host_authentication": "none"
+  },
+  "counts": {
+    "ontology_files": 80,
+    "manifests": 6,
+    "artifacts": 73,
+    "bytes": 1332982,
+    "http_200": 80,
+    "redirects": 0
+  },
+  "request_policy": {
+    "client": "curl 8.7.1 (x86_64-apple-darwin25.0) libcurl/8.7.1 (SecureTransport) LibreSSL/3.3.6 zlib/1.2.12 nghttp2/1.68.0",
+    "curl_configuration_disabled": true,
+    "ambient_environment_removed": true,
+    "proxy": "explicitly disabled (--proxy empty, --noproxy *)",
+    "authentication": "none; no userinfo, Authorization, cookies, netrc or credential flags",
+    "tls": "HTTPS only; curl system certificate/hostname verification; TLS1.2 minimum; no insecure bypass",
+    "redirect_following": false,
+    "max_concurrency": 4,
+    "connect_timeout_seconds": 7,
+    "transfer_timeout_seconds": 20,
+    "process_timeout_seconds": 25,
+    "max_file_bytes": 262144,
+    "actual_per_file_limit": "exact expected offline length",
+    "max_files": 128,
+    "max_expected_total_bytes": 4194304,
+    "retry_count": 0
+  },
+  "content_type_counts": {
+    "application/json; charset=utf-8": 74,
+    "application/ld+json": 6
+  },
+  "access_control_allow_origin_counts": {
+    "*": 80
+  },
+  "all_tls_verification_results_zero": true,
+  "all_proxy_used_results_zero": true,
+  "all_public_bytes_equal_offline": true,
+  "inventory": {
+    "current": "0.3.0",
+    "manifests": [
+      {
+        "group": "releases",
+        "path": "v0.1.0/manifest.json",
+        "version": "0.1.0",
+        "artifacts": 18
+      },
+      {
+        "group": "releases",
+        "path": "v0.2.0/manifest.json",
+        "version": "0.2.0",
+        "artifacts": 20
+      },
+      {
+        "group": "releases",
+        "path": "v0.3.0/manifest.json",
+        "version": "0.3.0",
+        "artifacts": 23
+      },
+      {
+        "group": "provider_contracts",
+        "path": "providers/v1/manifest.json",
+        "version": "1",
+        "artifacts": 6
+      },
+      {
+        "group": "portable_contracts",
+        "path": "portable/v1/manifest.json",
+        "version": "1",
+        "artifacts": 3
+      },
+      {
+        "group": "portable_contracts",
+        "path": "portable/v2/manifest.json",
+        "version": "2",
+        "artifacts": 3
+      }
+    ],
+    "artifact_count": 73,
+    "files": {
+      "discovery.json": {
+        "sha256": "cd1a416d37db8b67ec5c864d56dc51dd4ee680882258017218f77fcb0d882a7c",
+        "bytes": 755
+      },
+      "v0.1.0/manifest.json": {
+        "sha256": "1280c588363ecb240a8f439f835a336b84e1fc961b8f44ab264c3f34296812b4",
+        "bytes": 2818
+      },
+      "v0.1.0/audio-candidates.schema.json": {
+        "sha256": "5ba273aec5beb7edf0a4d601678d6fa3f42eb1e40bf3e52be95d0575d5bd54f8",
+        "bytes": 1418
+      },
+      "v0.1.0/audio-observation.schema.json": {
+        "sha256": "486049e1d07d6cb06957a821562f7c02de9951930d99ac62e05d7ac383fd5360",
+        "bytes": 2304
+      },
+      "v0.1.0/authority-policy.schema.json": {
+        "sha256": "71b67f479c3d4610ba4af084a6b4c3e003f9a45a5b60ff6abf2799d6f8addbea",
+        "bytes": 1607
+      },
+      "v0.1.0/castalia-mapping.json": {
+        "sha256": "bd70758ca0592b9221a04bc4fd5ef1baf6a77b193d76ddea631d661b827f0d12",
+        "bytes": 1494
+      },
+      "v0.1.0/castalia-native-authority-profile.schema.json": {
+        "sha256": "5bcb39d232865fa4a7de200625e3ec02e21799d99eab544ab4bab9f8fc5fd9e4",
+        "bytes": 2338
+      },
+      "v0.1.0/castalia-provider-connection.schema.json": {
+        "sha256": "ff3eec75a34c70a0a08b497f5448072446f7892db8d2b81b52a8341498f3f5e1",
+        "bytes": 2408
+      },
+      "v0.1.0/command.schema.json": {
+        "sha256": "5f2e61345b7692c53f67e8d8b67d6fce7078c1bfba3cfe341851dd02686d516e",
+        "bytes": 26174
+      },
+      "v0.1.0/conformance.json": {
+        "sha256": "94f1443d84dfd6d6f675ded2d40c666b1b9b1d2b3e72268bbb5194558cd50fab",
+        "bytes": 77135
+      },
+      "v0.1.0/connections.schema.json": {
+        "sha256": "682e23e140b7b6ae1997de357e38bc7c5297e98137fcb1fd7c78a01f6289c424",
+        "bytes": 4469
+      },
+      "v0.1.0/context.jsonld": {
+        "sha256": "9107ae8da77dbe8d7c379e944f3c99e112126bf84af14286caa87644e95572d8",
+        "bytes": 915
+      },
+      "v0.1.0/identity.schema.json": {
+        "sha256": "68866e8630125d88aeb39964cbb6e5034a5701eb2cc05799b757eea4b33c5c49",
+        "bytes": 1486
+      },
+      "v0.1.0/ontology.jsonld": {
+        "sha256": "a4515dd1b8a6290237cc1bfadf854fc6c670cfed094dd93eefc4ed8830eb8315",
+        "bytes": 3221
+      },
+      "v0.1.0/publication.schema.json": {
+        "sha256": "aaf2e5df78513831a52c3082f529cce0549f46c5c6d94f53ee63617a82aa8e26",
+        "bytes": 14257
+      },
+      "v0.1.0/social-action.schema.json": {
+        "sha256": "8b05a74af7d176eb6248a9892a9fa156a4596c6056b5bd3d9dff2ec042229601",
+        "bytes": 13034
+      },
+      "v0.1.0/social-event.schema.json": {
+        "sha256": "f92f3d962a5e1378c01b52e7cee488b0f653647271ae3e2bad3a469c3e4630c3",
+        "bytes": 14230
+      },
+      "v0.1.0/social-local.schema.json": {
+        "sha256": "5a199d0bae2771381305f8c0b9a1fe12e3cf2b044df16fcfbd9aacbf67bd7fe8",
+        "bytes": 16650
+      },
+      "v0.1.0/social.schema.json": {
+        "sha256": "f09fb3b50bb8cfdfc0cd24db18f12578a005500cb52a45df4eb5d79b8dda4405",
+        "bytes": 19923
+      },
+      "v0.1.0/state.schema.json": {
+        "sha256": "752ce61a0ecdf2517aca64484967c2c9180c6c9edacd73f0ba6f25dfc92be72f",
+        "bytes": 27944
+      },
+      "v0.2.0/manifest.json": {
+        "sha256": "ad6e81bbafabfb4f8226b8af9a26aebf4ae1c6d686bbad53fba3d3b71bc4ea39",
+        "bytes": 3087
+      },
+      "v0.2.0/audio-candidates.schema.json": {
+        "sha256": "e6aa4dfa76a7e739deaa2c96cb6b0b12da12873fc3a82dbb63fd72a9f12f9aec",
+        "bytes": 1418
+      },
+      "v0.2.0/audio-observation.schema.json": {
+        "sha256": "af8b89353ca93af9d0e8f70cd5f8c9b1bde03a6c4b60ddcb87fc18b444821200",
+        "bytes": 2304
+      },
+      "v0.2.0/authority-policy.schema.json": {
+        "sha256": "dcf92eb6f727fb6934beedb02a850a401b107f9bee1e62b8c222b6acc56301fa",
+        "bytes": 1607
+      },
+      "v0.2.0/castalia-mapping.json": {
+        "sha256": "bd70758ca0592b9221a04bc4fd5ef1baf6a77b193d76ddea631d661b827f0d12",
+        "bytes": 1494
+      },
+      "v0.2.0/castalia-native-authority-profile.schema.json": {
+        "sha256": "5bcb39d232865fa4a7de200625e3ec02e21799d99eab544ab4bab9f8fc5fd9e4",
+        "bytes": 2338
+      },
+      "v0.2.0/castalia-provider-connection.schema.json": {
+        "sha256": "ff3eec75a34c70a0a08b497f5448072446f7892db8d2b81b52a8341498f3f5e1",
+        "bytes": 2408
+      },
+      "v0.2.0/command.schema.json": {
+        "sha256": "f5610dbbed05398c747f9fe00e39aa37a6fccb8421c72cdbd43eaf351cf2c000",
+        "bytes": 28482
+      },
+      "v0.2.0/conformance.json": {
+        "sha256": "2543e51e6f6aebddca2ffad6ae798c4bf42d869800e3249938910b33c2bbe6ec",
+        "bytes": 77239
+      },
+      "v0.2.0/connections.schema.json": {
+        "sha256": "836f9e1b9b49f3c1e1cfa627383e52c1411bfa987c85daece786818b46d5a6dd",
+        "bytes": 4469
+      },
+      "v0.2.0/context.jsonld": {
+        "sha256": "cf85dc951efec08a675f66ea42ad4de4d272692cda858d423b698711f8a6cd86",
+        "bytes": 1249
+      },
+      "v0.2.0/identity.schema.json": {
+        "sha256": "cd53f9c9b81318957a3ecc74b051ede6a6080f29f41edf4518ba273b502d3ea5",
+        "bytes": 1486
+      },
+      "v0.2.0/notebook-ink.json": {
+        "sha256": "0c9d231dac51d49c5c6472674336315e2fca443231ed9bbd8a2ad8286e428d4d",
+        "bytes": 112517
+      },
+      "v0.2.0/notebook-ink.schema.json": {
+        "sha256": "628dd22795fe1e8ec20274754dc978889c948de6dbc3ecea4728cf1f4fc2ac41",
+        "bytes": 10229
+      },
+      "v0.2.0/ontology.jsonld": {
+        "sha256": "213519597c331a211dfe07fbc16b4024bd46533d9915c4f9594915e7c1e91baa",
+        "bytes": 5193
+      },
+      "v0.2.0/publication.schema.json": {
+        "sha256": "615f39dbfa708b3205bfac27fbec6611c4b2d045af64da5954b55cc6a8e87142",
+        "bytes": 14257
+      },
+      "v0.2.0/social-action.schema.json": {
+        "sha256": "61b19e7693fec5d32056f0dca2c96198b515473c9a3c3db4179b216932e7f034",
+        "bytes": 13034
+      },
+      "v0.2.0/social-event.schema.json": {
+        "sha256": "abae795af3bde339539fb0382f29f5969fad3f28afaf7da884397215b57954c4",
+        "bytes": 14230
+      },
+      "v0.2.0/social-local.schema.json": {
+        "sha256": "346990b88779e8b9fcb7c0666b142d4c2b989a0dc1e505d2c8cbd79ce7c3a8f6",
+        "bytes": 16650
+      },
+      "v0.2.0/social.schema.json": {
+        "sha256": "7c8dc6093af6a86c2422ee4fbc58b0855070d2bfce17deb3b90c2f6c27224618",
+        "bytes": 19923
+      },
+      "v0.2.0/state.schema.json": {
+        "sha256": "b4d1fca0d56534c6dce3a69168397012bfd0fef90beca877fc7538df9067ccc9",
+        "bytes": 31281
+      },
+      "v0.3.0/manifest.json": {
+        "sha256": "49191c6f497cb57fab41d0dfce9fcceb7642ad4c937eaeef38f93321e0511059",
+        "bytes": 3501
+      },
+      "v0.3.0/audio-candidates.schema.json": {
+        "sha256": "53ba572f596b78b2c40c4ddee4bd8a207ded3f2fd0b02ec7c5c95c9fee47cec7",
+        "bytes": 1418
+      },
+      "v0.3.0/audio-observation.schema.json": {
+        "sha256": "119a74fdbe49ba37583102ec13f5829c89e36272ebf617e61ead028fe889f502",
+        "bytes": 2304
+      },
+      "v0.3.0/authority-policy.schema.json": {
+        "sha256": "c8afdc48e1aab9fe70f7c8c63702a466f81ca5dae208d4ba26a70bfacb0662fe",
+        "bytes": 1607
+      },
+      "v0.3.0/captured-reading-context.schema.json": {
+        "sha256": "8aaac37460becace5cad5c0b48883a3bc0c18b1a80af5018050ebc280a0ef48d",
+        "bytes": 6758
+      },
+      "v0.3.0/castalia-mapping.json": {
+        "sha256": "bd70758ca0592b9221a04bc4fd5ef1baf6a77b193d76ddea631d661b827f0d12",
+        "bytes": 1494
+      },
+      "v0.3.0/castalia-native-authority-profile.schema.json": {
+        "sha256": "5bcb39d232865fa4a7de200625e3ec02e21799d99eab544ab4bab9f8fc5fd9e4",
+        "bytes": 2338
+      },
+      "v0.3.0/castalia-provider-connection.schema.json": {
+        "sha256": "ff3eec75a34c70a0a08b497f5448072446f7892db8d2b81b52a8341498f3f5e1",
+        "bytes": 2408
+      },
+      "v0.3.0/command.schema.json": {
+        "sha256": "1c376f15fdfc5cfbb02693fba99b984f85689ae21a372d98d4a810c5a441eb62",
+        "bytes": 33975
+      },
+      "v0.3.0/conformance.json": {
+        "sha256": "2543e51e6f6aebddca2ffad6ae798c4bf42d869800e3249938910b33c2bbe6ec",
+        "bytes": 77239
+      },
+      "v0.3.0/connections.schema.json": {
+        "sha256": "1a58dddede62120938d12f1f4e4e7ac39c1068972f4f18bfe36a1a81ab88ea1a",
+        "bytes": 4469
+      },
+      "v0.3.0/context.jsonld": {
+        "sha256": "ad2f0867fbab077a74f51210b5e8309028bd6132309dd1d21d0c19b2618ae24e",
+        "bytes": 1419
+      },
+      "v0.3.0/identity.schema.json": {
+        "sha256": "15db0b8d944554c2062f06f335495276c58df091906617affbf8d24e63afb82e",
+        "bytes": 1486
+      },
+      "v0.3.0/note-whiteboard.json": {
+        "sha256": "362f4389bf2ab4aa1efa24d73af5163e8bacd33767b8c8b9954a77e03c736d3c",
+        "bytes": 94091
+      },
+      "v0.3.0/note.schema.json": {
+        "sha256": "01af079c625764e231b9b537e596f5bedc7cb002d3d5fea7d7b4400602f73faa",
+        "bytes": 7746
+      },
+      "v0.3.0/notebook-ink.json": {
+        "sha256": "0c9d231dac51d49c5c6472674336315e2fca443231ed9bbd8a2ad8286e428d4d",
+        "bytes": 112517
+      },
+      "v0.3.0/notebook-ink.schema.json": {
+        "sha256": "0933306ed128338f70d63cbedb9d084a3cc8eaa69ecd42be5ed8f2012278e84b",
+        "bytes": 11135
+      },
+      "v0.3.0/ontology.jsonld": {
+        "sha256": "b3eb95e7952ec2c011f62c41ff76218988716d261e6ae6d5e346f78b6066e940",
+        "bytes": 6206
+      },
+      "v0.3.0/publication.schema.json": {
+        "sha256": "e1083da0b0ef377440b006ff44d1f9f601222887a0c5b3e735603418c191bf30",
+        "bytes": 14257
+      },
+      "v0.3.0/social-action.schema.json": {
+        "sha256": "083b2141a584bab1310d99df41ad6d09763de392422e971ff806eaf011ae6cf7",
+        "bytes": 13034
+      },
+      "v0.3.0/social-event.schema.json": {
+        "sha256": "b06b611f90f6380a698e98508ee3298e217f9c7616186a5a95348e3daf52a83c",
+        "bytes": 14230
+      },
+      "v0.3.0/social-local.schema.json": {
+        "sha256": "e2072a0f3cdc2b5a40473641a1626d5d5146d17b1822d710aaa11a8cd5f2ff07",
+        "bytes": 16650
+      },
+      "v0.3.0/social.schema.json": {
+        "sha256": "b102db0dce044d3fc0668a431a54d5b71c0c6117beac310608aa11aa72da57f5",
+        "bytes": 19923
+      },
+      "v0.3.0/state.schema.json": {
+        "sha256": "05d657d063393f1209cacbba7cd0c690d3aad81b15b110e896d0e811b869840f",
+        "bytes": 33942
+      },
+      "providers/v1/manifest.json": {
+        "sha256": "1df9f744a1b5aea265078ea7dc33c76e55d64deff23c2aefc92fd4706caa5fb8",
+        "bytes": 981
+      },
+      "providers/v1/conformance.json": {
+        "sha256": "1204634e9c959469c7b611903d5ee228d013e7cacd4b77e402f46d827abb8d25",
+        "bytes": 6592
+      },
+      "providers/v1/provider-execution.schema.json": {
+        "sha256": "25deec8b99262eb589cf1b2162e6803de086da9bd824cbd3026e03c1dbe4f91d",
+        "bytes": 18375
+      },
+      "providers/v1/provider-operation.schema.json": {
+        "sha256": "6ce90396928fc2a5d2dc02bd56a0c561651a22b8ea98380c3551af768005b5b9",
+        "bytes": 5552
+      },
+      "providers/v1/provider-registry.schema.json": {
+        "sha256": "ff0caed30cf76396fa6dbf5f240faf508581bb339b25735d5f35def8a6026e3a",
+        "bytes": 4132
+      },
+      "providers/v1/provider-request.schema.json": {
+        "sha256": "7065b0d5c2f21fc4bcb3b343522a74e00a36b540dbfee9c3d3771bdeacba0abd",
+        "bytes": 7023
+      },
+      "providers/v1/provider-response.schema.json": {
+        "sha256": "68ff7c975f123eecb794af718ed2517fd3dd8b1806f2a2513a65931b861ab249",
+        "bytes": 10781
+      },
+      "portable/v1/manifest.json": {
+        "sha256": "c9ae6fbf19e1dfe5dab30c7f70b15a238c9b7089eba4c7d1a8c0ec0662d77c1a",
+        "bytes": 546
+      },
+      "portable/v1/conformance.json": {
+        "sha256": "bf0dbee52bf6d4a76e0bc40daf659befed2e9c02c7e5ffe60a17aef1ec7a4b81",
+        "bytes": 25343
+      },
+      "portable/v1/portable-export.schema.json": {
+        "sha256": "c23adacf6dee4607605b8e14e606a056bf0990f2b8456ab0bb7b63cf8b954c93",
+        "bytes": 56092
+      },
+      "portable/v1/social-archive.schema.json": {
+        "sha256": "bb16e721071c2717a42f4dbe62a0c45914ed7b86a26aaa5495c8867c2f00116a",
+        "bytes": 23687
+      },
+      "portable/v2/manifest.json": {
+        "sha256": "d63ded55dd4415c0dc2b3f4e3017d84206c66421b8e08492afb98fc212aab4de",
+        "bytes": 546
+      },
+      "portable/v2/conformance.json": {
+        "sha256": "1ab9fde76efdd3a2ad2514a68ee413d2097125444dcdc9354673372ea16b7b38",
+        "bytes": 7270
+      },
+      "portable/v2/portable-export.schema.json": {
+        "sha256": "02d55f3cf1e53c64dd6e37e4225e1d7401cf6da26ffe2d492d4c0fc53eb443e0",
+        "bytes": 58753
+      },
+      "portable/v2/social-archive.schema.json": {
+        "sha256": "5593f4da9a676c54e32a07f4dad3982ac0c5b7393503a5088e69bfa4a04fd5db",
+        "bytes": 23687
+      }
+    }
+  },
+  "per_file_http_metadata": {
+    "discovery.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/discovery.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "portable/v1/conformance.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/portable/v1/conformance.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "portable/v1/manifest.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/portable/v1/manifest.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "portable/v1/portable-export.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/portable/v1/portable-export.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "portable/v1/social-archive.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/portable/v1/social-archive.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "portable/v2/conformance.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/portable/v2/conformance.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "portable/v2/manifest.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/portable/v2/manifest.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "portable/v2/portable-export.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/portable/v2/portable-export.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "portable/v2/social-archive.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/portable/v2/social-archive.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "providers/v1/conformance.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/providers/v1/conformance.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "providers/v1/manifest.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/providers/v1/manifest.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "providers/v1/provider-execution.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/providers/v1/provider-execution.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "providers/v1/provider-operation.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/providers/v1/provider-operation.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "providers/v1/provider-registry.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/providers/v1/provider-registry.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "providers/v1/provider-request.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/providers/v1/provider-request.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "providers/v1/provider-response.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/providers/v1/provider-response.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.1.0/audio-candidates.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.1.0/audio-candidates.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.1.0/audio-observation.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.1.0/audio-observation.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.1.0/authority-policy.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.1.0/authority-policy.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.1.0/castalia-mapping.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.1.0/castalia-mapping.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.1.0/castalia-native-authority-profile.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.1.0/castalia-native-authority-profile.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.1.0/castalia-provider-connection.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.1.0/castalia-provider-connection.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.1.0/command.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.1.0/command.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.1.0/conformance.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.1.0/conformance.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.1.0/connections.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.1.0/connections.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.1.0/context.jsonld": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.1.0/context.jsonld",
+      "http_status": 200,
+      "content_type": "application/ld+json",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.1.0/identity.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.1.0/identity.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.1.0/manifest.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.1.0/manifest.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.1.0/ontology.jsonld": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.1.0/ontology.jsonld",
+      "http_status": 200,
+      "content_type": "application/ld+json",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.1.0/publication.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.1.0/publication.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.1.0/social-action.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.1.0/social-action.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.1.0/social-event.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.1.0/social-event.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.1.0/social-local.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.1.0/social-local.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.1.0/social.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.1.0/social.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.1.0/state.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.1.0/state.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.2.0/audio-candidates.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.2.0/audio-candidates.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.2.0/audio-observation.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.2.0/audio-observation.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.2.0/authority-policy.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.2.0/authority-policy.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.2.0/castalia-mapping.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.2.0/castalia-mapping.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.2.0/castalia-native-authority-profile.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.2.0/castalia-native-authority-profile.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.2.0/castalia-provider-connection.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.2.0/castalia-provider-connection.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.2.0/command.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.2.0/command.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.2.0/conformance.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.2.0/conformance.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.2.0/connections.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.2.0/connections.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.2.0/context.jsonld": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.2.0/context.jsonld",
+      "http_status": 200,
+      "content_type": "application/ld+json",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.2.0/identity.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.2.0/identity.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.2.0/manifest.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.2.0/manifest.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.2.0/notebook-ink.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.2.0/notebook-ink.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.2.0/notebook-ink.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.2.0/notebook-ink.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.2.0/ontology.jsonld": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.2.0/ontology.jsonld",
+      "http_status": 200,
+      "content_type": "application/ld+json",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.2.0/publication.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.2.0/publication.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.2.0/social-action.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.2.0/social-action.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.2.0/social-event.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.2.0/social-event.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.2.0/social-local.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.2.0/social-local.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.2.0/social.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.2.0/social.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.2.0/state.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.2.0/state.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/audio-candidates.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/audio-candidates.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/audio-observation.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/audio-observation.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/authority-policy.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/authority-policy.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/captured-reading-context.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/captured-reading-context.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/castalia-mapping.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/castalia-mapping.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/castalia-native-authority-profile.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/castalia-native-authority-profile.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/castalia-provider-connection.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/castalia-provider-connection.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/command.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/command.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/conformance.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/conformance.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/connections.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/connections.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/context.jsonld": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/context.jsonld",
+      "http_status": 200,
+      "content_type": "application/ld+json",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/identity.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/identity.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/manifest.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/manifest.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/note-whiteboard.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/note-whiteboard.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/note.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/note.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/notebook-ink.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/notebook-ink.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/notebook-ink.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/notebook-ink.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/ontology.jsonld": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/ontology.jsonld",
+      "http_status": 200,
+      "content_type": "application/ld+json",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/publication.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/publication.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/social-action.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/social-action.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/social-event.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/social-event.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/social-local.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/social-local.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/social.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/social.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    },
+    "v0.3.0/state.schema.json": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/v0.3.0/state.schema.json",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "redirects": 0
+    }
+  },
+  "private_path_checks": {
+    "private-sentinel": {
+      "url": "https://bananawalnut.github.io/booknook/private-account-sentinel.json",
+      "status": 404,
+      "redirects": 0,
+      "tls_verify_result": 0,
+      "proxy_used": 0,
+      "bytes": 9379,
+      "sha256": "b620507312c5e97566a3c6cfaf99144fefc18a0da7d941401dfa0f5f58fb0368"
+    },
+    "private-environment": {
+      "url": "https://bananawalnut.github.io/booknook/.env",
+      "status": 404,
+      "redirects": 0,
+      "tls_verify_result": 0,
+      "proxy_used": 0,
+      "bytes": 9379,
+      "sha256": "b620507312c5e97566a3c6cfaf99144fefc18a0da7d941401dfa0f5f58fb0368"
+    },
+    "git-config": {
+      "url": "https://bananawalnut.github.io/booknook/.git/config",
+      "status": 404,
+      "redirects": 0,
+      "tls_verify_result": 0,
+      "proxy_used": 0,
+      "bytes": 9379,
+      "sha256": "b620507312c5e97566a3c6cfaf99144fefc18a0da7d941401dfa0f5f58fb0368"
+    },
+    "repository-readme": {
+      "url": "https://bananawalnut.github.io/booknook/README.md",
+      "status": 404,
+      "redirects": 0,
+      "tls_verify_result": 0,
+      "proxy_used": 0,
+      "bytes": 9379,
+      "sha256": "b620507312c5e97566a3c6cfaf99144fefc18a0da7d941401dfa0f5f58fb0368"
+    },
+    "ontology-private-cwd": {
+      "url": "https://bananawalnut.github.io/booknook/ontology/private-cwd-sentinel.txt",
+      "status": 404,
+      "redirects": 0,
+      "tls_verify_result": 0,
+      "proxy_used": 0,
+      "bytes": 9379,
+      "sha256": "b620507312c5e97566a3c6cfaf99144fefc18a0da7d941401dfa0f5f58fb0368"
+    }
+  },
+  "local_resolver_negative_checks": [
+    {
+      "case": "corrupt_nested_provider_artifact",
+      "result": "rejected",
+      "path": "providers/v1/conformance.json",
+      "error": "Ontology checksum mismatch: providers/v1/conformance.json",
+      "network": false
+    },
+    {
+      "case": "nonrelative_or_private_path_reference",
+      "input": "../not-an-artifact.json",
+      "result": "rejected_before_read",
+      "error": "Invalid relative ontology path: ../not-an-artifact.json",
+      "network": false
+    },
+    {
+      "case": "nonrelative_or_private_path_reference",
+      "input": "/not-an-artifact.json",
+      "result": "rejected_before_read",
+      "error": "Invalid relative ontology path: /not-an-artifact.json",
+      "network": false
+    },
+    {
+      "case": "nonrelative_or_private_path_reference",
+      "input": "https://outside.invalid/private.json",
+      "result": "rejected_before_read",
+      "error": "Invalid relative ontology path: https://outside.invalid/private.json",
+      "network": false
+    },
+    {
+      "case": "nonrelative_or_private_path_reference",
+      "input": "%2e%2e/private.json",
+      "result": "rejected_before_read",
+      "error": "Invalid relative ontology path: %2e%2e/private.json",
+      "network": false
+    }
+  ],
+  "release_bundle_ontology_comparisons": {
+    "mac": {
+      "result": "pass",
+      "files": 80,
+      "bytes": 1332982,
+      "all_bytes_equal_public_and_source": true,
+      "inventory_sha256": "ba6ac14646ea3875168131c70d620748416709465c639afd953d9b0dd12aa163",
+      "scope": "Read-only current Release offline ontology resources; no app launch or installation."
+    },
+    "ipad-sim": {
+      "result": "pass",
+      "files": 80,
+      "bytes": 1332982,
+      "all_bytes_equal_public_and_source": true,
+      "inventory_sha256": "ba6ac14646ea3875168131c70d620748416709465c639afd953d9b0dd12aa163",
+      "scope": "Read-only current Release offline ontology resources; no app launch or installation."
+    },
+    "ipad-device": {
+      "result": "pass",
+      "files": 80,
+      "bytes": 1332982,
+      "all_bytes_equal_public_and_source": true,
+      "inventory_sha256": "ba6ac14646ea3875168131c70d620748416709465c639afd953d9b0dd12aa163",
+      "scope": "Read-only current Release offline ontology resources; no app launch or installation."
+    }
+  },
+  "private_receipt_sha256": "ae542c64804bff68b1706fb6613f6a29479e2d3e53a02e89ab477cf26e2d70ef",
+  "artifact_fetch_receipt_sha256": "af36f8b6a719087b814bfebcceb46d3415bfc7e7a94f343a7860e42ab4c13d9b",
+  "deployment_readback_receipt_sha256": "d183b7efd00ca96b769f9a6ad84bd269e42964b680eec41d8cdee74502c07b6d",
+  "authorized_settings_read_receipt_sha256": "d0198010266ce4fceaba6363d12d8e49850aebd26e03d52aece1d7b7a044afb8",
+  "limitations": [
+    "Qualification used GET requests only. No settings, deployment, implementation, issued ontology, tracker, build or GUI changes; only the authorized public evidence file was added.",
+    "Public file and negative-path fetches were unauthenticated, HTTPS-only, no ambient proxy/curl config and no redirects; settings metadata required the existing authorized GitHub CLI.",
+    "Actual public availability at the observed time is not permanent availability.",
+    "MIME/CORS are observed; no standard remote JSON-LD loader or browser runtime execution was performed.",
+    "All fixture bytes were compared without repeating conformance suites; no unrelated SDK/account/hardware acceptance inferred."
+  ]
+}

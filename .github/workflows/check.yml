@@ -30,6 +30,8 @@ jobs:
         run: |
           cargo fetch --locked
           python3 scripts/license-inventory.py --check
+      - name: Reject oversized negentropy ID lists before allocation
+        run: python3 -B scripts/test-negentropy-bounds.py
       - run: bash scripts/test-issuer.sh
       - run: cargo install wasm-bindgen-cli --version 0.2.127 --locked
       - run: bash scripts/test-sdk.sh

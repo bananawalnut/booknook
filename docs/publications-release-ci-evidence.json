@@ -1,0 +1,315 @@
+{
+  "schema": "booknook.publications-release-hosted-ci.v1",
+  "verified_at": "2026-11-14T14:35:09.492569+00:00",
+  "source_revision": "732c6a44892866510049bbb33a0067299f79b794",
+  "run_id": 43603595524,
+  "run_url": "https://github.com/bananawalnut/booknook/actions/runs/43603595524",
+  "event": "push",
+  "branch": "main",
+  "status": "completed",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "name": "portable",
+      "id": 132473355810,
+      "url": "https://github.com/bananawalnut/booknook/actions/runs/43603595524/job/132473355810",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-14T14:11:52Z",
+      "completed_at": "2026-11-14T14:18:33Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:11:53Z",
+          "completed_at": "2026-11-14T14:11:54Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:11:54Z",
+          "completed_at": "2026-11-14T14:11:55Z"
+        },
+        {
+          "number": 3,
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:11:55Z",
+          "completed_at": "2026-11-14T14:12:06Z"
+        },
+        {
+          "number": 4,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:12:06Z",
+          "completed_at": "2026-11-14T14:12:07Z"
+        },
+        {
+          "number": 5,
+          "name": "Install the WebAssembly C toolchain",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:12:07Z",
+          "completed_at": "2026-11-14T14:12:14Z"
+        },
+        {
+          "number": 6,
+          "name": "Run bash scripts/check.sh",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:12:14Z",
+          "completed_at": "2026-11-14T14:14:41Z"
+        },
+        {
+          "number": 7,
+          "name": "Verify the complete dependency-license inventory",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:14:41Z",
+          "completed_at": "2026-11-14T14:14:42Z"
+        },
+        {
+          "number": 8,
+          "name": "Run bash scripts/test-issuer.sh",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:14:42Z",
+          "completed_at": "2026-11-14T14:14:45Z"
+        },
+        {
+          "number": 9,
+          "name": "Run cargo install wasm-bindgen-cli --version 0.2.127 --locked",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:14:45Z",
+          "completed_at": "2026-11-14T14:16:10Z"
+        },
+        {
+          "number": 10,
+          "name": "Run bash scripts/test-sdk.sh",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:16:10Z",
+          "completed_at": "2026-11-14T14:17:20Z"
+        },
+        {
+          "number": 11,
+          "name": "Run bash scripts/package-rust.sh",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:17:20Z",
+          "completed_at": "2026-11-14T14:18:18Z"
+        },
+        {
+          "number": 12,
+          "name": "Run bash scripts/package-typescript.sh",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:18:18Z",
+          "completed_at": "2026-11-14T14:18:26Z"
+        },
+        {
+          "number": 13,
+          "name": "Run python3 -m unittest discover -s tests/companion -v",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:18:26Z",
+          "completed_at": "2026-11-14T14:18:31Z"
+        },
+        {
+          "number": 14,
+          "name": "Verify Apple bundle deployment metadata checks",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:18:31Z",
+          "completed_at": "2026-11-14T14:18:31Z"
+        },
+        {
+          "number": 27,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:18:31Z",
+          "completed_at": "2026-11-14T14:18:31Z"
+        },
+        {
+          "number": 28,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:18:31Z",
+          "completed_at": "2026-11-14T14:18:32Z"
+        },
+        {
+          "number": 29,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:18:32Z",
+          "completed_at": "2026-11-14T14:18:32Z"
+        }
+      ]
+    },
+    {
+      "name": "apple",
+      "id": 132473355940,
+      "url": "https://github.com/bananawalnut/booknook/actions/runs/43603595524/job/132473355940",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-14T14:11:53Z",
+      "completed_at": "2026-11-14T14:34:27Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:11:54Z",
+          "completed_at": "2026-11-14T14:11:55Z"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:11:55Z",
+          "completed_at": "2026-11-14T14:11:57Z"
+        },
+        {
+          "number": 3,
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:11:57Z",
+          "completed_at": "2026-11-14T14:12:12Z"
+        },
+        {
+          "number": 4,
+          "name": "Run brew install xcodegen",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:12:12Z",
+          "completed_at": "2026-11-14T14:12:20Z"
+        },
+        {
+          "number": 5,
+          "name": "Run bash scripts/build-apple.sh mac",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:12:20Z",
+          "completed_at": "2026-11-14T14:20:08Z"
+        },
+        {
+          "number": 6,
+          "name": "Run bash scripts/build-apple.sh ipad-sim",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:20:08Z",
+          "completed_at": "2026-11-14T14:24:51Z"
+        },
+        {
+          "number": 7,
+          "name": "Run bash scripts/build-apple.sh ipad-device",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:24:51Z",
+          "completed_at": "2026-11-14T14:29:17Z"
+        },
+        {
+          "number": 8,
+          "name": "Run bash scripts/test-reading.sh",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:29:17Z",
+          "completed_at": "2026-11-14T14:29:56Z"
+        },
+        {
+          "number": 9,
+          "name": "Run bash scripts/test-recovery.sh",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:29:56Z",
+          "completed_at": "2026-11-14T14:30:04Z"
+        },
+        {
+          "number": 10,
+          "name": "Run bash scripts/test-ui-workflows.sh",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:30:04Z",
+          "completed_at": "2026-11-14T14:32:35Z"
+        },
+        {
+          "number": 11,
+          "name": "Run bash scripts/test-feed-source-swift.sh",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:32:35Z",
+          "completed_at": "2026-11-14T14:33:18Z"
+        },
+        {
+          "number": 12,
+          "name": "Run bash scripts/test-feed-xml-swift.sh",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:33:18Z",
+          "completed_at": "2026-11-14T14:33:24Z"
+        },
+        {
+          "number": 13,
+          "name": "Run bash scripts/test-feed-public-https-swift.sh",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:33:24Z",
+          "completed_at": "2026-11-14T14:33:28Z"
+        },
+        {
+          "number": 14,
+          "name": "Run bash scripts/test-feed-cache-swift.sh",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:33:28Z",
+          "completed_at": "2026-11-14T14:33:33Z"
+        },
+        {
+          "number": 15,
+          "name": "Run bash scripts/package-swift.sh --use-built",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:33:33Z",
+          "completed_at": "2026-11-14T14:34:20Z"
+        },
+        {
+          "number": 30,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:34:20Z",
+          "completed_at": "2026-11-14T14:34:21Z"
+        },
+        {
+          "number": 31,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-14T14:34:21Z",
+          "completed_at": "2026-11-14T14:34:24Z"
+        }
+      ]
+    }
+  ],
+  "scope": "Hosted portable and Apple workflow checks for the exact committed Publications app, Release packaging, deployment-metadata gate, browser receiver fixture and ontology Pages source at the named revision. Only the listed executed steps establish CI results.",
+  "qualification_limits": [
+    "This evidence document itself is recorded after the named run and is not part of that tested commit.",
+    "Hosted Apple builds and workflow/package consumers do not establish physical-device installation, minimum-OS runtime compatibility, hardware input, accessibility or live-account qualification.",
+    "No production Wallet capability enablement, custody/grant change, app repin, registry publication or runtime deployment is inferred.",
+    "The sibling Pages deployment and public ontology checks have separate evidence and are not included in this workflow result."
+  ],
+  "private_full_result_sha256": "c9c1b86f856a65ebfffc1659e0bd9e3d9aff08f9b5c9707b76c2362d1ddc257d"
+}

@@ -1,0 +1,174 @@
+{
+  "schema": "booknook.public-preview-publication-evidence.v1",
+  "current_status": {
+    "state": "withdrawn_to_draft",
+    "recommended_for_new_installations": false,
+    "withdrawal_command_at": "2026-11-14T14:48:54.240697+00:00",
+    "withdrawal_readback_has_timestamp": false,
+    "readback": {
+      "draft": true,
+      "prerelease": true,
+      "tag": "v0.1.0-preview.20261114",
+      "source_commit": "732c6a44892866510049bbb33a0067299f79b794",
+      "preserved_asset_count": 17,
+      "all_initial_asset_hashes_preserved": true
+    },
+    "reason": {
+      "advisory": "RUSTSEC-2026-0365",
+      "advisory_url": "https://rustsec.org/advisories/RUSTSEC-2026-0365.html",
+      "maintainer_fix_url": "https://github.com/nostrdevkit/negentropy/pull/14",
+      "previous_dependency": "negentropy 0.5.1",
+      "selected_dependency": "negentropy 0.5.3",
+      "reference_app_reachability": "Current fetch_events/send_event paths do not demonstrate NIP-77 parser reachability; withdrawal is conservative."
+    },
+    "bounded_parser_regression": {
+      "recorded_at": "2026-11-14T14:54:44.548945+00:00",
+      "old_version": "0.5.1",
+      "fixed_version": "0.5.3",
+      "oversized_old_allocation_intercepted_before_forwarding": true,
+      "allocation_guard_bytes": 1048576,
+      "fixed_maximum_observed_allocation_bytes": 544,
+      "actual_huge_allocation_or_oom_performed": false,
+      "scope": "Local initiator/responder parser calls only; no relay exploit, app-wide, archive or replacement-consumer qualification."
+    },
+    "replacement_plan": {
+      "tag": "v0.1.1-preview.20261114",
+      "app_and_all_sdk_versions": "0.1.1",
+      "native_build": "2026111402",
+      "native_release_rebuilds": "pending",
+      "swift_app_rust_npm_packages": "pending",
+      "exact_source_hosted_ci": "pending",
+      "publication_and_fresh_public_consumers": "pending"
+    },
+    "historical_evidence_scope": "All original fields below, including draft=false, publication/verification timestamps, CI and asset hashes, describe the INITIAL pre-patch publication only. They do not assert current public availability, installation suitability, patched release or replacement consumer success. Any old public-consumer pass is withdrawn-preview history.",
+    "private_withdrawal_readback_sha256": "fe5a06e9f002962fd01d189ae7f54d039439e536bcfe7b9eb653a3dcda2937b5",
+    "private_withdrawal_command_sha256": "d4dd5361f03323294e430a03371c6a4ea9cf2ef34097d44b869c264d874fa360",
+    "private_guarded_regression_sha256": "7c0f5db3e3543baa00f7cf34ff8650a00b9273cd55c0bb9f686bf791e644de51"
+  },
+  "published_at": "2026-11-14T14:38:25Z",
+  "verified_at": "2026-11-14T14:39:46.173254+00:00",
+  "release_url": "https://github.com/bananawalnut/booknook/releases/tag/v0.1.0-preview.20261114",
+  "source_commit": "732c6a44892866510049bbb33a0067299f79b794",
+  "tag": "v0.1.0-preview.20261114",
+  "package_version": "0.1.0",
+  "native_build": "2026111401",
+  "draft": false,
+  "prerelease": true,
+  "tag_points_directly_to_source_commit": true,
+  "assets": {
+    "booknook-connectors-0.1.0.crate": {
+      "bytes": 70813,
+      "sha256": "4e37c483d2ceda31e0523dc032eee76376ac4a2c12f903a9788f7d813e0315ab"
+    },
+    "booknook-core-0.1.0.crate": {
+      "bytes": 178016,
+      "sha256": "78856c0e76750e0638f1703e777df13a13737dadbd946855949d9a31918001b6"
+    },
+    "booknook-native-0.1.0.crate": {
+      "bytes": 179961,
+      "sha256": "34dbd5a74625abda9ed744012e2ecb11627e9eb4717bdbc3187827eb8c918e28"
+    },
+    "booknook-wasm-0.1.0.crate": {
+      "bytes": 37497,
+      "sha256": "3c3ddcecd2e440f5195bd2c0496bea59337472f639ff395751e2e7af1f2141d4"
+    },
+    "booknook-sdk-0.1.0.tgz": {
+      "bytes": 4585877,
+      "sha256": "9846e025606d8a4716b7b386a6a074718e1d65e455b8660a36da1f03fb057b02"
+    },
+    "booknook-swift-sdk-0.1.0.tar.gz": {
+      "bytes": 139744460,
+      "sha256": "02f6d71efb932b81acbba8a0953f43de38e04da3976dda3968c4718140336a2e"
+    },
+    "booknook-mac-arm64-development-0.1.0.tar.gz": {
+      "bytes": 14681934,
+      "sha256": "874e6705a977f1ae8222b439d06bb64eef70def12a34e562b42b3cb7e584d7e2"
+    },
+    "booknook-ipad-sim-arm64-development-0.1.0.tar.gz": {
+      "bytes": 11540378,
+      "sha256": "661de50689797464092a91a845fae3f0117a483ef258513720498e7962a25164"
+    },
+    "booknook-ipad-device-arm64-development-0.1.0.tar.gz": {
+      "bytes": 11323129,
+      "sha256": "1a903094f14a38bd957b23551425e0ef0c19cb028d21ad011445757b82eb0fb8"
+    },
+    "LICENSE-APACHE": {
+      "bytes": 11326,
+      "sha256": "fabba0cb7d00a4b3211fdc13699223ab2d22f88678ccd608494cf2b332b903e9"
+    },
+    "LICENSE-BOUNDARIES.md": {
+      "bytes": 7742,
+      "sha256": "79459b0de7e449dc140f8e7148943a7630a556736cd16aee52d5b06c8a5473ca"
+    },
+    "RELEASE-MANIFEST.json": {
+      "bytes": 6409,
+      "sha256": "ef9ba90a5cae1ba3769ef5c22d21311f384336fb6106a1865787a48a802dc5eb"
+    },
+    "DEPENDENCY-LICENSES.csv": {
+      "bytes": 42872,
+      "sha256": "01d802487f09c922c9e697134cc25a30279930aa1c6701cd0f4ae278c6171cc0"
+    },
+    "LICENSE-MPL-2.0": {
+      "bytes": 16727,
+      "sha256": "66a3107d5ad6a058aab753eaac2047ccb2ed0e39465dd0fe5844da3e300d5172"
+    },
+    "SOURCE-INPUTS.json": {
+      "bytes": 48997,
+      "sha256": "67ae37c6c61da621869eac2a5d125cdfded4934327a464ba0c1c14f64c94ba2e"
+    },
+    "SHA256SUMS": {
+      "bytes": 1498,
+      "sha256": "4057d3eeef26dcfe478adee93bf377bd94e8e2c30541548e1503140ed9e74e98"
+    },
+    "LICENSE-MIT": {
+      "bytes": 1079,
+      "sha256": "e4c16e07e31d3fdbba827f245f39f51ee0871898f1585653129bcbe3c63a7410"
+    }
+  },
+  "artifact_count": 9,
+  "supporting_file_count": 8,
+  "all_github_reported_asset_sha256_match": true,
+  "manifest_sha256": "ef9ba90a5cae1ba3769ef5c22d21311f384336fb6106a1865787a48a802dc5eb",
+  "source_inputs": {
+    "file": "SOURCE-INPUTS.json",
+    "count": 444,
+    "sha256": "67ae37c6c61da621869eac2a5d125cdfded4934327a464ba0c1c14f64c94ba2e",
+    "tracked_files_compared_directly_to_source_commit": 443,
+    "derived_source_copies": {
+      "sdk/swift/Sources/BookNookNative/booknook_native.swift": {
+        "exact_copy_of_tracked_source": "apps/apple/Generated/booknook_native.swift",
+        "sha256": "f7988cdc5cbe4d4fa992e846281ed16b90ac9ddbe32972a17da0d2fab6b0767d"
+      }
+    }
+  },
+  "hosted_ci": {
+    "run": 43603595524,
+    "url": "https://github.com/bananawalnut/booknook/actions/runs/43603595524",
+    "source_commit": "732c6a44892866510049bbb33a0067299f79b794",
+    "jobs": [
+      {
+        "name": "portable",
+        "conclusion": "success",
+        "started_at": "2026-11-14T14:11:52Z",
+        "completed_at": "2026-11-14T14:18:33Z",
+        "url": "https://github.com/bananawalnut/booknook/actions/runs/43603595524/job/132473355810"
+      },
+      {
+        "name": "apple",
+        "conclusion": "success",
+        "started_at": "2026-11-14T14:11:53Z",
+        "completed_at": "2026-11-14T14:34:27Z",
+        "url": "https://github.com/bananawalnut/booknook/actions/runs/43603595524/job/132473355940"
+      }
+    ]
+  },
+  "ontology_discovery_url": "https://bananawalnut.github.io/booknook/ontology/discovery.json",
+  "private_publication_receipt_sha256": "143f4210419a90b7c9168d88d63bf294d74d126935cca0fe6855837677c17f5f",
+  "limits": [
+    "This receipt qualifies release publication and server-reported integrity, not independent public-download installation; see the separate consumer evidence.",
+    "Dated development preview, not completion of production MVP acceptance.",
+    "Native arm64 archives are linker-ad-hoc macOS/Simulator or unsigned device development artifacts; the device bundle is not an installable signed IPA.",
+    "No registry publication, live integration, current physical installation, hands-on UI or minimum-OS runtime qualification is inferred.",
+    "Source maps and checksums are provenance/integrity records, not signed attestations or clean-compiler reproducibility proof."
+  ]
+}
