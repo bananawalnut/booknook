@@ -11,6 +11,7 @@ import Foundation
         }
         Task { @MainActor in
             do {
+                if CommandLine.arguments.contains("--publications") { try await testPublicationWorkflow(); exit(0) }
                 if CommandLine.arguments.contains("--ink-recognition") {
                     let root = FileManager.default.temporaryDirectory.appendingPathComponent("ink-recognition-" + UUID().uuidString)
                     defer { try? FileManager.default.removeItem(at: root) }
@@ -182,6 +183,7 @@ import Foundation
         try await testCompanionCatalogImportWorkflow()
         try await testCastaliaProfileImportWorkflow()
         try await testPublicProviderRepositoryWorkflow()
+        try await testPublicationWorkflow()
         print("Native desk workflows: duplicate-title identity, failed navigation, explicit sessions, private earlier-character-version drafts, thrown save rejection, unrated Unicode review, list edit/conflict retention, failed social retry with durable draft recovery, reopen and cancellation distinctions passed.")
     }
 }

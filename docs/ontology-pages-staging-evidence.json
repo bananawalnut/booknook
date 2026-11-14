@@ -1,0 +1,505 @@
+{
+  "schema": "booknook.ontology-pages-staging-evidence.v1",
+  "verified_at": "2026-11-14T13:56:59.683202+00:00",
+  "based_on_commit": "995b36bd380c6d1fb1401599c6754dc13fbc082d",
+  "scope": "Local staging and byte-download mirror qualification; not a Pages deployment or acceptance of the production MVP.",
+  "selected_host": {
+    "discovery_url": "https://bananawalnut.github.io/booknook/ontology/discovery.json",
+    "status": "selected_anticipated_not_deployed",
+    "actual_public_pages_verification": false
+  },
+  "local_staging": {
+    "result": "pass",
+    "command": "python3 -B scripts/stage-ontology-pages.py --output <new-absent-directory>",
+    "ontology_files": 80,
+    "manifest_count": 6,
+    "artifact_count": 73,
+    "staged_files": 82,
+    "staged_bytes": 1333311,
+    "extra_files": {
+      "index.html": {
+        "bytes": 329,
+        "sha256": "a42754b72b889e13a8b606a0386e06e5b4141a5037d17640dbcc305fef1bddec"
+      },
+      ".nojekyll": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "private_working_directory_sentinel": "Preserved and excluded; no unreferenced source files copied.",
+    "output_contents": "Only the verified discovery closure under ontology/, a minimal script-free index and .nojekyll.",
+    "bounds": {
+      "max_files": 256,
+      "max_file_bytes": 1048576,
+      "max_total_input_bytes": 8388608
+    }
+  },
+  "checks": {
+    "focused": {
+      "command": "python3 -B tests/ontology-pages.py -v",
+      "result": "pass",
+      "test_count": 10,
+      "coverage": [
+        "Complete recursive closure including additional discovery groups",
+        "Original-byte preservation and exact output allowlist",
+        "Private cwd and unreferenced source sentinels excluded",
+        "Corrupt nested artifact rejected before output",
+        "Unsafe paths/symlinked source or directories or files refused",
+        "FIFO opened nonblocking then refused; hardlinks refused",
+        "Existing/symlinked output and source-overlapping output refused",
+        "Per-file/total/count bounds fail whole candidate",
+        "Injected staging write failure cleans temporary output"
+      ]
+    },
+    "loopback": {
+      "command": "python3 -B tests/ontology-host.py",
+      "result": "pass",
+      "manifest_count": 6,
+      "artifact_count": 73,
+      "corrupt_nested_provider_artifact": "rejected",
+      "private_working_directory_file": "404"
+    },
+    "workflow": {
+      "command": "actionlint .github/workflows/ontology-pages.yml",
+      "tool": "actionlint 1.7.12",
+      "result": "pass",
+      "hosted_execution_claimed": false
+    }
+  },
+  "source_files": {
+    "scripts/stage-ontology-pages.py": {
+      "bytes": 6788,
+      "sha256": "035f291d2b377201085f344c85c7f57bb2adf0fdcbb1d6cda9233b7fe983e380"
+    },
+    "tests/ontology-pages.py": {
+      "bytes": 8471,
+      "sha256": "de74168191643243fa1f19c009a3873ef8a39bec27850fca72696c89046300c3"
+    },
+    ".github/workflows/ontology-pages.yml": {
+      "bytes": 1941,
+      "sha256": "f41aa92cc4505133f356fea188109d21deae86d80dd59e72525225e0506a33fb"
+    }
+  },
+  "official_actions": {
+    "actions/checkout": {
+      "version": "v7.0.1",
+      "commit": "3d3c42e5aac5ba805825da76410c181273ba90b1"
+    },
+    "actions/configure-pages": {
+      "version": "v6.0.0",
+      "commit": "45bfe0192ca1faeb007ade9deae92b16b8254a0d"
+    },
+    "actions/upload-pages-artifact": {
+      "version": "v5.0.0",
+      "commit": "fc324d3547104276b827a68afc52ff2a11cc49c9"
+    },
+    "actions/deploy-pages": {
+      "version": "v5.0.1",
+      "commit": "368f82528645a54fb793d4d04e342629a3f51346"
+    }
+  },
+  "workflow_permissions": {
+    "build": {
+      "contents": "read",
+      "pages": "read"
+    },
+    "deploy": {
+      "contents": "read",
+      "pages": "write",
+      "id-token": "write"
+    },
+    "settings_enablement": "false; repository settings are configured separately by the authorized operator."
+  },
+  "verified_raw_mirror": {
+    "discovery_url": "https://raw.githubusercontent.com/bananawalnut/booknook/995b36bd380c6d1fb1401599c6754dc13fbc082d/ontology/discovery.json",
+    "pinned_commit": "995b36bd380c6d1fb1401599c6754dc13fbc082d",
+    "observed_start_utc": "2026-11-14T13:39:17.884719+00:00",
+    "observed_end_utc": "2026-11-14T13:39:23.216240+00:00",
+    "result": "pass",
+    "files": 80,
+    "bytes": 1332982,
+    "all_public_bytes_equal_offline": true,
+    "http_200_count": 80,
+    "tls_certificate_and_hostname_verification": "Enabled, HTTPS only with TLS1.2 minimum; all certificate verification results zero.",
+    "proxy_or_authentication": "No ambient proxy or authentication; curl configuration disabled; all proxy-used results zero.",
+    "redirects": 0,
+    "content_type": "text/plain; charset=utf-8",
+    "access_control_allow_origin": "*",
+    "remote_jsonld_loader_qualified": false,
+    "private_full_receipt_sha256": "6f79984a05acbd00c6b97ffcc659b0449ee6c3b82876c1f1ad01ad4633d359ea"
+  },
+  "artifact_inventory": {
+    "current": "0.3.0",
+    "manifests": [
+      {
+        "group": "releases",
+        "path": "v0.1.0/manifest.json",
+        "version": "0.1.0",
+        "artifacts": 18
+      },
+      {
+        "group": "releases",
+        "path": "v0.2.0/manifest.json",
+        "version": "0.2.0",
+        "artifacts": 20
+      },
+      {
+        "group": "releases",
+        "path": "v0.3.0/manifest.json",
+        "version": "0.3.0",
+        "artifacts": 23
+      },
+      {
+        "group": "provider_contracts",
+        "path": "providers/v1/manifest.json",
+        "version": "1",
+        "artifacts": 6
+      },
+      {
+        "group": "portable_contracts",
+        "path": "portable/v1/manifest.json",
+        "version": "1",
+        "artifacts": 3
+      },
+      {
+        "group": "portable_contracts",
+        "path": "portable/v2/manifest.json",
+        "version": "2",
+        "artifacts": 3
+      }
+    ],
+    "artifact_count": 73,
+    "files": {
+      "discovery.json": {
+        "sha256": "cd1a416d37db8b67ec5c864d56dc51dd4ee680882258017218f77fcb0d882a7c",
+        "bytes": 755
+      },
+      "v0.1.0/manifest.json": {
+        "sha256": "1280c588363ecb240a8f439f835a336b84e1fc961b8f44ab264c3f34296812b4",
+        "bytes": 2818
+      },
+      "v0.1.0/audio-candidates.schema.json": {
+        "sha256": "5ba273aec5beb7edf0a4d601678d6fa3f42eb1e40bf3e52be95d0575d5bd54f8",
+        "bytes": 1418
+      },
+      "v0.1.0/audio-observation.schema.json": {
+        "sha256": "486049e1d07d6cb06957a821562f7c02de9951930d99ac62e05d7ac383fd5360",
+        "bytes": 2304
+      },
+      "v0.1.0/authority-policy.schema.json": {
+        "sha256": "71b67f479c3d4610ba4af084a6b4c3e003f9a45a5b60ff6abf2799d6f8addbea",
+        "bytes": 1607
+      },
+      "v0.1.0/castalia-mapping.json": {
+        "sha256": "bd70758ca0592b9221a04bc4fd5ef1baf6a77b193d76ddea631d661b827f0d12",
+        "bytes": 1494
+      },
+      "v0.1.0/castalia-native-authority-profile.schema.json": {
+        "sha256": "5bcb39d232865fa4a7de200625e3ec02e21799d99eab544ab4bab9f8fc5fd9e4",
+        "bytes": 2338
+      },
+      "v0.1.0/castalia-provider-connection.schema.json": {
+        "sha256": "ff3eec75a34c70a0a08b497f5448072446f7892db8d2b81b52a8341498f3f5e1",
+        "bytes": 2408
+      },
+      "v0.1.0/command.schema.json": {
+        "sha256": "5f2e61345b7692c53f67e8d8b67d6fce7078c1bfba3cfe341851dd02686d516e",
+        "bytes": 26174
+      },
+      "v0.1.0/conformance.json": {
+        "sha256": "94f1443d84dfd6d6f675ded2d40c666b1b9b1d2b3e72268bbb5194558cd50fab",
+        "bytes": 77135
+      },
+      "v0.1.0/connections.schema.json": {
+        "sha256": "682e23e140b7b6ae1997de357e38bc7c5297e98137fcb1fd7c78a01f6289c424",
+        "bytes": 4469
+      },
+      "v0.1.0/context.jsonld": {
+        "sha256": "9107ae8da77dbe8d7c379e944f3c99e112126bf84af14286caa87644e95572d8",
+        "bytes": 915
+      },
+      "v0.1.0/identity.schema.json": {
+        "sha256": "68866e8630125d88aeb39964cbb6e5034a5701eb2cc05799b757eea4b33c5c49",
+        "bytes": 1486
+      },
+      "v0.1.0/ontology.jsonld": {
+        "sha256": "a4515dd1b8a6290237cc1bfadf854fc6c670cfed094dd93eefc4ed8830eb8315",
+        "bytes": 3221
+      },
+      "v0.1.0/publication.schema.json": {
+        "sha256": "aaf2e5df78513831a52c3082f529cce0549f46c5c6d94f53ee63617a82aa8e26",
+        "bytes": 14257
+      },
+      "v0.1.0/social-action.schema.json": {
+        "sha256": "8b05a74af7d176eb6248a9892a9fa156a4596c6056b5bd3d9dff2ec042229601",
+        "bytes": 13034
+      },
+      "v0.1.0/social-event.schema.json": {
+        "sha256": "f92f3d962a5e1378c01b52e7cee488b0f653647271ae3e2bad3a469c3e4630c3",
+        "bytes": 14230
+      },
+      "v0.1.0/social-local.schema.json": {
+        "sha256": "5a199d0bae2771381305f8c0b9a1fe12e3cf2b044df16fcfbd9aacbf67bd7fe8",
+        "bytes": 16650
+      },
+      "v0.1.0/social.schema.json": {
+        "sha256": "f09fb3b50bb8cfdfc0cd24db18f12578a005500cb52a45df4eb5d79b8dda4405",
+        "bytes": 19923
+      },
+      "v0.1.0/state.schema.json": {
+        "sha256": "752ce61a0ecdf2517aca64484967c2c9180c6c9edacd73f0ba6f25dfc92be72f",
+        "bytes": 27944
+      },
+      "v0.2.0/manifest.json": {
+        "sha256": "ad6e81bbafabfb4f8226b8af9a26aebf4ae1c6d686bbad53fba3d3b71bc4ea39",
+        "bytes": 3087
+      },
+      "v0.2.0/audio-candidates.schema.json": {
+        "sha256": "e6aa4dfa76a7e739deaa2c96cb6b0b12da12873fc3a82dbb63fd72a9f12f9aec",
+        "bytes": 1418
+      },
+      "v0.2.0/audio-observation.schema.json": {
+        "sha256": "af8b89353ca93af9d0e8f70cd5f8c9b1bde03a6c4b60ddcb87fc18b444821200",
+        "bytes": 2304
+      },
+      "v0.2.0/authority-policy.schema.json": {
+        "sha256": "dcf92eb6f727fb6934beedb02a850a401b107f9bee1e62b8c222b6acc56301fa",
+        "bytes": 1607
+      },
+      "v0.2.0/castalia-mapping.json": {
+        "sha256": "bd70758ca0592b9221a04bc4fd5ef1baf6a77b193d76ddea631d661b827f0d12",
+        "bytes": 1494
+      },
+      "v0.2.0/castalia-native-authority-profile.schema.json": {
+        "sha256": "5bcb39d232865fa4a7de200625e3ec02e21799d99eab544ab4bab9f8fc5fd9e4",
+        "bytes": 2338
+      },
+      "v0.2.0/castalia-provider-connection.schema.json": {
+        "sha256": "ff3eec75a34c70a0a08b497f5448072446f7892db8d2b81b52a8341498f3f5e1",
+        "bytes": 2408
+      },
+      "v0.2.0/command.schema.json": {
+        "sha256": "f5610dbbed05398c747f9fe00e39aa37a6fccb8421c72cdbd43eaf351cf2c000",
+        "bytes": 28482
+      },
+      "v0.2.0/conformance.json": {
+        "sha256": "2543e51e6f6aebddca2ffad6ae798c4bf42d869800e3249938910b33c2bbe6ec",
+        "bytes": 77239
+      },
+      "v0.2.0/connections.schema.json": {
+        "sha256": "836f9e1b9b49f3c1e1cfa627383e52c1411bfa987c85daece786818b46d5a6dd",
+        "bytes": 4469
+      },
+      "v0.2.0/context.jsonld": {
+        "sha256": "cf85dc951efec08a675f66ea42ad4de4d272692cda858d423b698711f8a6cd86",
+        "bytes": 1249
+      },
+      "v0.2.0/identity.schema.json": {
+        "sha256": "cd53f9c9b81318957a3ecc74b051ede6a6080f29f41edf4518ba273b502d3ea5",
+        "bytes": 1486
+      },
+      "v0.2.0/notebook-ink.json": {
+        "sha256": "0c9d231dac51d49c5c6472674336315e2fca443231ed9bbd8a2ad8286e428d4d",
+        "bytes": 112517
+      },
+      "v0.2.0/notebook-ink.schema.json": {
+        "sha256": "628dd22795fe1e8ec20274754dc978889c948de6dbc3ecea4728cf1f4fc2ac41",
+        "bytes": 10229
+      },
+      "v0.2.0/ontology.jsonld": {
+        "sha256": "213519597c331a211dfe07fbc16b4024bd46533d9915c4f9594915e7c1e91baa",
+        "bytes": 5193
+      },
+      "v0.2.0/publication.schema.json": {
+        "sha256": "615f39dbfa708b3205bfac27fbec6611c4b2d045af64da5954b55cc6a8e87142",
+        "bytes": 14257
+      },
+      "v0.2.0/social-action.schema.json": {
+        "sha256": "61b19e7693fec5d32056f0dca2c96198b515473c9a3c3db4179b216932e7f034",
+        "bytes": 13034
+      },
+      "v0.2.0/social-event.schema.json": {
+        "sha256": "abae795af3bde339539fb0382f29f5969fad3f28afaf7da884397215b57954c4",
+        "bytes": 14230
+      },
+      "v0.2.0/social-local.schema.json": {
+        "sha256": "346990b88779e8b9fcb7c0666b142d4c2b989a0dc1e505d2c8cbd79ce7c3a8f6",
+        "bytes": 16650
+      },
+      "v0.2.0/social.schema.json": {
+        "sha256": "7c8dc6093af6a86c2422ee4fbc58b0855070d2bfce17deb3b90c2f6c27224618",
+        "bytes": 19923
+      },
+      "v0.2.0/state.schema.json": {
+        "sha256": "b4d1fca0d56534c6dce3a69168397012bfd0fef90beca877fc7538df9067ccc9",
+        "bytes": 31281
+      },
+      "v0.3.0/manifest.json": {
+        "sha256": "49191c6f497cb57fab41d0dfce9fcceb7642ad4c937eaeef38f93321e0511059",
+        "bytes": 3501
+      },
+      "v0.3.0/audio-candidates.schema.json": {
+        "sha256": "53ba572f596b78b2c40c4ddee4bd8a207ded3f2fd0b02ec7c5c95c9fee47cec7",
+        "bytes": 1418
+      },
+      "v0.3.0/audio-observation.schema.json": {
+        "sha256": "119a74fdbe49ba37583102ec13f5829c89e36272ebf617e61ead028fe889f502",
+        "bytes": 2304
+      },
+      "v0.3.0/authority-policy.schema.json": {
+        "sha256": "c8afdc48e1aab9fe70f7c8c63702a466f81ca5dae208d4ba26a70bfacb0662fe",
+        "bytes": 1607
+      },
+      "v0.3.0/captured-reading-context.schema.json": {
+        "sha256": "8aaac37460becace5cad5c0b48883a3bc0c18b1a80af5018050ebc280a0ef48d",
+        "bytes": 6758
+      },
+      "v0.3.0/castalia-mapping.json": {
+        "sha256": "bd70758ca0592b9221a04bc4fd5ef1baf6a77b193d76ddea631d661b827f0d12",
+        "bytes": 1494
+      },
+      "v0.3.0/castalia-native-authority-profile.schema.json": {
+        "sha256": "5bcb39d232865fa4a7de200625e3ec02e21799d99eab544ab4bab9f8fc5fd9e4",
+        "bytes": 2338
+      },
+      "v0.3.0/castalia-provider-connection.schema.json": {
+        "sha256": "ff3eec75a34c70a0a08b497f5448072446f7892db8d2b81b52a8341498f3f5e1",
+        "bytes": 2408
+      },
+      "v0.3.0/command.schema.json": {
+        "sha256": "1c376f15fdfc5cfbb02693fba99b984f85689ae21a372d98d4a810c5a441eb62",
+        "bytes": 33975
+      },
+      "v0.3.0/conformance.json": {
+        "sha256": "2543e51e6f6aebddca2ffad6ae798c4bf42d869800e3249938910b33c2bbe6ec",
+        "bytes": 77239
+      },
+      "v0.3.0/connections.schema.json": {
+        "sha256": "1a58dddede62120938d12f1f4e4e7ac39c1068972f4f18bfe36a1a81ab88ea1a",
+        "bytes": 4469
+      },
+      "v0.3.0/context.jsonld": {
+        "sha256": "ad2f0867fbab077a74f51210b5e8309028bd6132309dd1d21d0c19b2618ae24e",
+        "bytes": 1419
+      },
+      "v0.3.0/identity.schema.json": {
+        "sha256": "15db0b8d944554c2062f06f335495276c58df091906617affbf8d24e63afb82e",
+        "bytes": 1486
+      },
+      "v0.3.0/note-whiteboard.json": {
+        "sha256": "362f4389bf2ab4aa1efa24d73af5163e8bacd33767b8c8b9954a77e03c736d3c",
+        "bytes": 94091
+      },
+      "v0.3.0/note.schema.json": {
+        "sha256": "01af079c625764e231b9b537e596f5bedc7cb002d3d5fea7d7b4400602f73faa",
+        "bytes": 7746
+      },
+      "v0.3.0/notebook-ink.json": {
+        "sha256": "0c9d231dac51d49c5c6472674336315e2fca443231ed9bbd8a2ad8286e428d4d",
+        "bytes": 112517
+      },
+      "v0.3.0/notebook-ink.schema.json": {
+        "sha256": "0933306ed128338f70d63cbedb9d084a3cc8eaa69ecd42be5ed8f2012278e84b",
+        "bytes": 11135
+      },
+      "v0.3.0/ontology.jsonld": {
+        "sha256": "b3eb95e7952ec2c011f62c41ff76218988716d261e6ae6d5e346f78b6066e940",
+        "bytes": 6206
+      },
+      "v0.3.0/publication.schema.json": {
+        "sha256": "e1083da0b0ef377440b006ff44d1f9f601222887a0c5b3e735603418c191bf30",
+        "bytes": 14257
+      },
+      "v0.3.0/social-action.schema.json": {
+        "sha256": "083b2141a584bab1310d99df41ad6d09763de392422e971ff806eaf011ae6cf7",
+        "bytes": 13034
+      },
+      "v0.3.0/social-event.schema.json": {
+        "sha256": "b06b611f90f6380a698e98508ee3298e217f9c7616186a5a95348e3daf52a83c",
+        "bytes": 14230
+      },
+      "v0.3.0/social-local.schema.json": {
+        "sha256": "e2072a0f3cdc2b5a40473641a1626d5d5146d17b1822d710aaa11a8cd5f2ff07",
+        "bytes": 16650
+      },
+      "v0.3.0/social.schema.json": {
+        "sha256": "b102db0dce044d3fc0668a431a54d5b71c0c6117beac310608aa11aa72da57f5",
+        "bytes": 19923
+      },
+      "v0.3.0/state.schema.json": {
+        "sha256": "05d657d063393f1209cacbba7cd0c690d3aad81b15b110e896d0e811b869840f",
+        "bytes": 33942
+      },
+      "providers/v1/manifest.json": {
+        "sha256": "1df9f744a1b5aea265078ea7dc33c76e55d64deff23c2aefc92fd4706caa5fb8",
+        "bytes": 981
+      },
+      "providers/v1/conformance.json": {
+        "sha256": "1204634e9c959469c7b611903d5ee228d013e7cacd4b77e402f46d827abb8d25",
+        "bytes": 6592
+      },
+      "providers/v1/provider-execution.schema.json": {
+        "sha256": "25deec8b99262eb589cf1b2162e6803de086da9bd824cbd3026e03c1dbe4f91d",
+        "bytes": 18375
+      },
+      "providers/v1/provider-operation.schema.json": {
+        "sha256": "6ce90396928fc2a5d2dc02bd56a0c561651a22b8ea98380c3551af768005b5b9",
+        "bytes": 5552
+      },
+      "providers/v1/provider-registry.schema.json": {
+        "sha256": "ff0caed30cf76396fa6dbf5f240faf508581bb339b25735d5f35def8a6026e3a",
+        "bytes": 4132
+      },
+      "providers/v1/provider-request.schema.json": {
+        "sha256": "7065b0d5c2f21fc4bcb3b343522a74e00a36b540dbfee9c3d3771bdeacba0abd",
+        "bytes": 7023
+      },
+      "providers/v1/provider-response.schema.json": {
+        "sha256": "68ff7c975f123eecb794af718ed2517fd3dd8b1806f2a2513a65931b861ab249",
+        "bytes": 10781
+      },
+      "portable/v1/manifest.json": {
+        "sha256": "c9ae6fbf19e1dfe5dab30c7f70b15a238c9b7089eba4c7d1a8c0ec0662d77c1a",
+        "bytes": 546
+      },
+      "portable/v1/conformance.json": {
+        "sha256": "bf0dbee52bf6d4a76e0bc40daf659befed2e9c02c7e5ffe60a17aef1ec7a4b81",
+        "bytes": 25343
+      },
+      "portable/v1/portable-export.schema.json": {
+        "sha256": "c23adacf6dee4607605b8e14e606a056bf0990f2b8456ab0bb7b63cf8b954c93",
+        "bytes": 56092
+      },
+      "portable/v1/social-archive.schema.json": {
+        "sha256": "bb16e721071c2717a42f4dbe62a0c45914ed7b86a26aaa5495c8867c2f00116a",
+        "bytes": 23687
+      },
+      "portable/v2/manifest.json": {
+        "sha256": "d63ded55dd4415c0dc2b3f4e3017d84206c66421b8e08492afb98fc212aab4de",
+        "bytes": 546
+      },
+      "portable/v2/conformance.json": {
+        "sha256": "1ab9fde76efdd3a2ad2514a68ee413d2097125444dcdc9354673372ea16b7b38",
+        "bytes": 7270
+      },
+      "portable/v2/portable-export.schema.json": {
+        "sha256": "02d55f3cf1e53c64dd6e37e4225e1d7401cf6da26ffe2d492d4c0fc53eb443e0",
+        "bytes": 58753
+      },
+      "portable/v2/social-archive.schema.json": {
+        "sha256": "5593f4da9a676c54e32a07f4dad3982ac0c5b7393503a5088e69bfa4a04fd5db",
+        "bytes": 23687
+      }
+    }
+  },
+  "private_staging_receipt_sha256": "b0ac34d08baa333733045dbad2daa71796f70352cbda123e05deacbed9a40cb4",
+  "limits": [
+    "Pages settings, deployment and actual Pages TLS/MIME/CORS/discovery have not been qualified in this evidence.",
+    "The raw mirror is verified only as a byte-download endpoint; standard remote JSON-LD loading is not claimed.",
+    "Corruption, unsafe paths, symlinks, special files, hardlinks and write failures are local resolver/staging tests, not mutations to a public host.",
+    "The output parent is controlled by the build owner; this is not a hostile same-owner filesystem sandbox.",
+    "Issued ontology bytes and relative paths remain unchanged. All existing discovery groups are followed.",
+    "No app/account/credential/private working-directory data is included in the staged site.",
+    "No permanent availability, production app, live account, signing authority or hardware acceptance is inferred."
+  ]
+}

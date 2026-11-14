@@ -42,6 +42,8 @@ jobs:
           CC_wasm32_unknown_unknown: clang
           AR_wasm32_unknown_unknown: llvm-ar
       - run: python3 -m unittest discover -s tests/companion -v
+      - name: Verify Apple bundle deployment metadata checks
+        run: python3 -B tests/package-apple-apps.py
   apple:
     runs-on: macos-latest
     steps:

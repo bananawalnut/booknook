@@ -1,0 +1,33 @@
+{
+  "schema": "booknook.feed-export-enum-ci-evidence.v1",
+  "verified_at": "2026-11-14T13:52:42.805675+00:00",
+  "head_commit": "995b36bd380c6d1fb1401599c6754dc13fbc082d",
+  "run_url": "https://github.com/bananawalnut/booknook/actions/runs/43599336741",
+  "result": "success",
+  "jobs": [
+    {
+      "name": "apple",
+      "status": "completed",
+      "conclusion": "success",
+      "databaseId": 132460516133,
+      "startedAt": "2026-11-14T13:21:20Z",
+      "completedAt": "2026-11-14T13:41:57Z",
+      "url": "https://github.com/bananawalnut/booknook/actions/runs/43599336741/job/132460516133"
+    },
+    {
+      "name": "portable",
+      "status": "completed",
+      "conclusion": "success",
+      "databaseId": 132460516375,
+      "startedAt": "2026-11-14T13:21:18Z",
+      "completedAt": "2026-11-14T13:27:09Z",
+      "url": "https://github.com/bananawalnut/booknook/actions/runs/43599336741/job/132460516375"
+    }
+  ],
+  "scope": "Exact committed portable feed export, literal-string correction, prior native cache/source/XML SDKs and existing reference app, with both full hosted jobs and package consumers.",
+  "limits": [
+    "Does not cover subsequent Publications app, Release packaging, metadata-gate, browser-receiver fixture or ontology Pages source.",
+    "Hosted source/package checks do not establish physical-device installation, minimum-OS runtime compatibility, live account access or public package publication."
+  ],
+  "private_full_result_sha256": "a6e67067bd51a52588b21a2f002071fea2f801329df5d7aa28bc4ce349001e31"
+}

@@ -1,0 +1,8 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: MIT OR Apache-2.0 -->
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Book Nook feed receiver · test fixture</title><style>body{max-width:48rem;margin:2rem auto;padding:1.5rem;background:#f4eddf;color:#382e25;font:17px system-ui}button,select{font:inherit;padding:.5rem;margin:.4rem}pre{white-space:pre-wrap;overflow-wrap:anywhere;padding:1rem;background:#ece2cf}section{margin:1.5rem 0}label{display:block}#error{color:#9d2525}</style></head><body>
+<h1>Review publication settings</h1><p>Disposable test fixture. This page is not a released browser app.</p><p>Ask Wallet to choose and share settings, then review them here before saving. Saving never enables or fetches a source.</p>
+<button id="request-feeds" disabled>Choose settings in Castalia Wallet</button><p id="status" role="status">Opening isolated local storage…</p><p id="error" role="alert"></p>
+<section aria-label="Import review"><div id="conflicts"></div><pre id="preview"></pre><button id="resolve-conflicts" disabled>Review all conflict choices</button><button id="confirm-import" disabled>Save reviewed settings</button><button id="cancel-import" disabled>Cancel import</button></section>
+<section><h2>Saved settings</h2><pre id="saved"></pre><p id="activation">All sources remain inactive. No fetch provider is installed.</p></section>
+<script type="module" src="/booknook/receiver.mjs"></script></body></html>

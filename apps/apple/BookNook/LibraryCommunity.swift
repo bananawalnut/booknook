@@ -150,6 +150,7 @@ struct ConnectionsView: View {
                 HStack(spacing: 12) { SidebarRevealButton(); Text("Your books. Your connections.").font(.system(size: 34, design: .serif)) }
                 Text("The reading desk works offline. Every external source declares what it can provide.").foregroundStyle(.secondary)
                 ConnectionSetupView()
+                PublicationsSettingsView(publications: model.publications)
                 HStack { Label("Local library and notebook", systemImage: "internaldrive"); Spacer(); Text("Available").foregroundStyle(nookAccent) }.padding(20).background(nookAccent.opacity(0.04), in: RoundedRectangle(cornerRadius: 12))
                 ForEach(model.gates) { gate in
                     VStack(alignment: .leading, spacing: 10) { HStack { Text(gate.id.replacingOccurrences(of: "-", with: " ").capitalized).font(.headline); Spacer(); Label("Release gate", systemImage: "exclamationmark.circle").font(.caption).foregroundStyle(.orange) }; Text(gate.reason ?? "Qualification required").font(.callout).foregroundStyle(.secondary) }.padding(20).background(nookAccent.opacity(0.04), in: RoundedRectangle(cornerRadius: 12))

@@ -398,7 +398,7 @@ private func uniffiTraitInterfaceCallWithError<T, E>(
         callStatus.pointee.errorBuf = FfiConverterString.lower(String(describing: error))
     }
 }
-// Initial value and increment amount for handles. 
+// Initial value and increment amount for handles.
 // These ensure that SWIFT handles always have the lowest bit set
 fileprivate let UNIFFI_HANDLEMAP_INITIAL: UInt64 = 1
 fileprivate let UNIFFI_HANDLEMAP_DELTA: UInt64 = 2
@@ -576,36 +576,36 @@ fileprivate struct FfiConverterData: FfiConverterRustBuffer {
 
 
 public protocol CastaliaCustodyProtocol: AnyObject, Sendable {
-    
+
     /**
      * Call only after explicit consent, with newly loaded independent trust.
      */
     func approve(token: String, currentPolicyJson: String) throws  -> String
-    
-    func cancel(token: String) throws 
-    
+
+    func cancel(token: String) throws
+
     func canonicalRequest(requestJson: String) throws  -> String
-    
-    func lock() throws 
-    
+
+    func lock() throws
+
     /**
      * The host provides its own exact canonical request and disclosure. Incoming
      * credentials cannot replace independent pins, holder, caller or audience.
      */
     func prepare(requestJson: String, expectedRequestJson: String, expectedDisclosureJson: String, policyJson: String) throws  -> String
-    
+
     func publicKey() throws  -> String?
-    
+
     /**
      * Attempts invalidate earlier preparations even if recovery validation fails.
      */
     func unlock(recoveryJson: String, passphrase: String) throws  -> String
-    
+
     /**
      * Isolated validation never changes this object's unlocked identity.
      */
     func validateRecovery(recoveryJson: String, passphrase: String) throws  -> String
-    
+
 }
 open class CastaliaCustody: CastaliaCustodyProtocol, @unchecked Sendable {
     fileprivate let handle: UInt64
@@ -665,9 +665,9 @@ public convenience init() {
         try! rustCall { uniffi_booknook_native_fn_free_castaliacustody(handle, $0) }
     }
 
-    
 
-    
+
+
     /**
      * Call only after explicit consent, with newly loaded independent trust.
      */
@@ -681,7 +681,7 @@ open func approve(token: String, currentPolicyJson: String)throws  -> String  {
     )
 })
 }
-    
+
 open func cancel(token: String)throws   {try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
     uniffi_booknook_native_fn_method_castaliacustody_cancel(
@@ -690,7 +690,7 @@ open func cancel(token: String)throws   {try rustCallWithError(FfiConverterTypeN
     )
 }
 }
-    
+
 open func canonicalRequest(requestJson: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -700,7 +700,7 @@ open func canonicalRequest(requestJson: String)throws  -> String  {
     )
 })
 }
-    
+
 open func lock()throws   {try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
     uniffi_booknook_native_fn_method_castaliacustody_lock(
@@ -708,7 +708,7 @@ open func lock()throws   {try rustCallWithError(FfiConverterTypeNativeError_lift
     )
 }
 }
-    
+
     /**
      * The host provides its own exact canonical request and disclosure. Incoming
      * credentials cannot replace independent pins, holder, caller or audience.
@@ -725,7 +725,7 @@ open func prepare(requestJson: String, expectedRequestJson: String, expectedDisc
     )
 })
 }
-    
+
 open func publicKey()throws  -> String?  {
     return try  FfiConverterOptionString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -734,7 +734,7 @@ open func publicKey()throws  -> String?  {
     )
 })
 }
-    
+
     /**
      * Attempts invalidate earlier preparations even if recovery validation fails.
      */
@@ -748,7 +748,7 @@ open func unlock(recoveryJson: String, passphrase: String)throws  -> String  {
     )
 })
 }
-    
+
     /**
      * Isolated validation never changes this object's unlocked identity.
      */
@@ -762,9 +762,9 @@ open func validateRecovery(recoveryJson: String, passphrase: String)throws  -> S
     )
 })
 }
-    
 
-    
+
+
 }
 
 
@@ -814,183 +814,183 @@ public func FfiConverterTypeCastaliaCustody_lower(_ value: CastaliaCustody) -> U
 
 
 public protocol DeskProtocol: AnyObject, Sendable {
-    
+
     func assetDirectory(assetId: String) throws  -> String
-    
+
     func authorizedAction(payloadJson: String, action: String, resourceVersion: UInt64, idempotencyKey: String) throws  -> String
-    
+
     func canonicalPayload(payloadJson: String) throws  -> String
-    
+
     func connectionSettings() throws  -> String
-    
+
     func custodyApprove(token: String) throws  -> String
-    
-    func custodyCancel(token: String) throws 
-    
-    func custodyLock() throws 
-    
+
+    func custodyCancel(token: String) throws
+
+    func custodyLock() throws
+
     func custodyPrepare(requestJson: String, payloadJson: String, action: String, resourceVersion: UInt64) throws  -> String
-    
+
     func custodyPublicKey() throws  -> String?
-    
+
     func custodyUnlock(recoveryJson: String, passphrase: String) throws  -> String
-    
+
     /**
      * Validate an import candidate in isolated custody without replacing the live identity.
      * The temporary decrypted key is zeroized when this call returns.
      */
     func custodyValidateRecovery(recoveryJson: String, passphrase: String) throws  -> String
-    
+
     func execute(commandJson: String) throws  -> String
-    
-    func exportArchive(path: String) throws 
-    
+
+    func exportArchive(path: String) throws
+
     func importContent(bookId: String, path: String) throws  -> String
-    
+
     func releaseGates() throws  -> String
-    
+
     /**
      * Restores only into an empty desk. Never silently replaces an existing reader's library.
      */
     func restoreArchive(path: String) throws  -> String
-    
-    func saveConnectionSettings(settingsJson: String) throws 
-    
+
+    func saveConnectionSettings(settingsJson: String) throws
+
     func snapshot() throws  -> String
-    
+
     /**
      * Call only after the reader reviews the chosen pass and optional edition association.
      */
     func attachAudioObservation(observationJson: String, passId: String, confirmedEditionId: String?) throws  -> String
-    
+
     func attachAudioObservationFromConnection(observationJson: String, passId: String, confirmedEditionId: String?, connectionId: String) throws  -> String
-    
+
     func audioEditionCandidates(observationJson: String) throws  -> String
-    
+
     /**
      * Export public authority configuration; never includes holder custody or provider secrets.
      */
     func exportCastaliaProfile() throws  -> String
-    
+
     func importKindleFromConnection(catalogJson: String, at: UInt64, connectionId: String) throws  -> String
-    
+
     func installCastaliaProfile(profileJson: String, expectedProfileDigest: String, expectedSettingsDigest: String, holderPublicKey: String) throws  -> String
-    
+
     /**
      * Preview public metadata only. Trust is installed exclusively through an explicit apply action.
      */
     func previewCastaliaProfile(profileJson: String) throws  -> String
-    
+
     /**
      * Compare the persisted baseline before saving an edited settings form. Independent
      * windows may never replace a newly reviewed authority with an old cached form.
      */
     func saveConnectionSettingsIfCurrent(settingsJson: String, expectedSettingsJson: String) throws  -> String
-    
+
     /**
      * Replace the selected companion's public registry only; authority and unrelated settings survive.
      */
     func saveProviderConnections(connectionsJson: String) throws  -> String
-    
+
     func validateProviderConnection(connectionJson: String) throws  -> String
-    
+
     func flushTextEdits() throws  -> String
-    
-    func stageTextEdit(editJson: String) throws 
-    
+
+    func stageTextEdit(editJson: String) throws
+
     func notebookHistory(notebookId: String, blockId: String) throws  -> String
-    
+
     func restoreNotebookRevision(notebookId: String, revisionId: String, baseUpdate: String) throws  -> String
-    
+
     func providerAttachAudio(executionJson: String, observationJson: String, passId: String, confirmedEditionId: String?) throws  -> String
-    
+
     func providerAttachPosition(executionJson: String, observationJson: String, passId: String) throws  -> String
-    
+
     func providerCommitCatalog(executionJson: String) throws  -> String
-    
+
     func providerCommitContent(executionJson: String, contentBytes: Data, bookId: String) throws  -> String
-    
+
     func providerDescriptors() throws  -> String
-    
+
     /**
      * No state changes. The caller checks cancellation before a separate synchronous commit.
      */
     func providerFetch(providerId: String, operationJson: String) async throws  -> ProviderReply
-    
-    func replaceProviderHost(host: ProviderHost, generation: UInt64) throws 
-    
+
+    func replaceProviderHost(host: ProviderHost, generation: UInt64) throws
+
     /**
      * Calls are run off the UI/repository actor by the Swift facade. No SQLite lock is held
      * while awaiting relays. Every accepted event and acknowledgment is committed separately.
      * Same approval and recipient checks as the built-in exchange; only transport is replaced.
      */
     func providerSocialExchange(providerId: String, secret: Data, discover: Bool) throws  -> String
-    
+
     func providerSocialRecommendations(providerId: String, candidatesJson: String, excludedJson: String) async throws  -> String
-    
-    func socialApprove(eventJson: String, requestJson: String, presentationJson: String) throws 
-    
+
+    func socialApprove(eventJson: String, requestJson: String, presentationJson: String) throws
+
     func socialApproveBinding(bindingJson: String, requestJson: String, presentationJson: String) throws  -> String
-    
+
     func socialExchange(secret: Data, discover: Bool) throws  -> String
-    
-    func socialExport(path: String) throws 
-    
+
+    func socialExport(path: String) throws
+
     func socialExportBinding(holder: String) throws  -> String
-    
+
     /**
      * Invoked only by the explicit native Generate transport key action. The result goes
      * directly to Keychain, and never enters settings, SQLite, exported archives or logs.
      */
     func socialGenerateTransportSecret()  -> Data
-    
-    func socialImportBinding(documentJson: String) throws 
-    
-    func socialLocal(commandJson: String) throws 
-    
+
+    func socialImportBinding(documentJson: String) throws
+
+    func socialLocal(commandJson: String) throws
+
     func socialNewOwnedId() throws  -> String
-    
+
     func socialPrepare(actionJson: String) throws  -> String
-    
+
     func socialPrepareBinding(secret: Data) throws  -> String
-    
+
     func socialRecommendations(candidatesJson: String, excludedJson: String) throws  -> String
-    
+
     /**
      * Restore local social history only into an empty social desk. Network authorization is
      * still required on later exchange; this never imports custody secrets or trusted pins.
      */
-    func socialRestore(path: String) throws 
-    
-    func socialRevokeBinding(holder: String) throws 
-    
+    func socialRestore(path: String) throws
+
+    func socialRevokeBinding(holder: String) throws
+
     func socialSnapshot(revealSpoilers: Bool) throws  -> String
-    
+
     func syncApprove(batchId: String, keyHex: String, requestJson: String, presentationJson: String) throws  -> String
-    
-    func syncApprovePeer(peerJson: String, requestJson: String, presentationJson: String) throws 
-    
-    func syncCancelPrepared(batchId: String) throws 
-    
-    func syncExport(batchId: String, path: String) throws 
-    
+
+    func syncApprovePeer(peerJson: String, requestJson: String, presentationJson: String) throws
+
+    func syncCancelPrepared(batchId: String) throws
+
+    func syncExport(batchId: String, path: String) throws
+
     func syncNewPairingKey() throws  -> String
-    
+
     func syncPrepare(peerId: String) throws  -> String
-    
+
     func syncPreparePeer(deviceId: String, label: String, keyHex: String, enabled: Bool) throws  -> String
-    
+
     func syncReceive(path: String, sourceDevice: String, keyHex: String) throws  -> String
-    
+
     /**
      * Removes only the retry copy after a human confirms delivery or cancels it.
      */
-    func syncRemoveOutbox(batchId: String) throws 
-    
+    func syncRemoveOutbox(batchId: String) throws
+
     func syncResolve(conflictId: String, useIncoming: Bool) throws  -> String
-    
+
     func syncStatus() throws  -> String
-    
+
 }
 open class Desk: DeskProtocol, @unchecked Sendable {
     fileprivate let handle: UInt64
@@ -1051,7 +1051,7 @@ public convenience init(directory: String)throws  {
         try! rustCall { uniffi_booknook_native_fn_free_desk(handle, $0) }
     }
 
-    
+
 public static func withProviders(directory: String, host: ProviderHost, generation: UInt64)throws  -> Desk  {
     return try  FfiConverterTypeDesk_lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1062,9 +1062,9 @@ public static func withProviders(directory: String, host: ProviderHost, generati
     )
 })
 }
-    
 
-    
+
+
 open func assetDirectory(assetId: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1074,7 +1074,7 @@ open func assetDirectory(assetId: String)throws  -> String  {
     )
 })
 }
-    
+
 open func authorizedAction(payloadJson: String, action: String, resourceVersion: UInt64, idempotencyKey: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1087,7 +1087,7 @@ open func authorizedAction(payloadJson: String, action: String, resourceVersion:
     )
 })
 }
-    
+
 open func canonicalPayload(payloadJson: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1097,7 +1097,7 @@ open func canonicalPayload(payloadJson: String)throws  -> String  {
     )
 })
 }
-    
+
 open func connectionSettings()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1106,7 +1106,7 @@ open func connectionSettings()throws  -> String  {
     )
 })
 }
-    
+
 open func custodyApprove(token: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1116,7 +1116,7 @@ open func custodyApprove(token: String)throws  -> String  {
     )
 })
 }
-    
+
 open func custodyCancel(token: String)throws   {try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
     uniffi_booknook_native_fn_method_desk_custody_cancel(
@@ -1125,7 +1125,7 @@ open func custodyCancel(token: String)throws   {try rustCallWithError(FfiConvert
     )
 }
 }
-    
+
 open func custodyLock()throws   {try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
     uniffi_booknook_native_fn_method_desk_custody_lock(
@@ -1133,7 +1133,7 @@ open func custodyLock()throws   {try rustCallWithError(FfiConverterTypeNativeErr
     )
 }
 }
-    
+
 open func custodyPrepare(requestJson: String, payloadJson: String, action: String, resourceVersion: UInt64)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1146,7 +1146,7 @@ open func custodyPrepare(requestJson: String, payloadJson: String, action: Strin
     )
 })
 }
-    
+
 open func custodyPublicKey()throws  -> String?  {
     return try  FfiConverterOptionString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1155,7 +1155,7 @@ open func custodyPublicKey()throws  -> String?  {
     )
 })
 }
-    
+
 open func custodyUnlock(recoveryJson: String, passphrase: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1166,7 +1166,7 @@ open func custodyUnlock(recoveryJson: String, passphrase: String)throws  -> Stri
     )
 })
 }
-    
+
     /**
      * Validate an import candidate in isolated custody without replacing the live identity.
      * The temporary decrypted key is zeroized when this call returns.
@@ -1181,7 +1181,7 @@ open func custodyValidateRecovery(recoveryJson: String, passphrase: String)throw
     )
 })
 }
-    
+
 open func execute(commandJson: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1191,7 +1191,7 @@ open func execute(commandJson: String)throws  -> String  {
     )
 })
 }
-    
+
 open func exportArchive(path: String)throws   {try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
     uniffi_booknook_native_fn_method_desk_export_archive(
@@ -1200,7 +1200,7 @@ open func exportArchive(path: String)throws   {try rustCallWithError(FfiConverte
     )
 }
 }
-    
+
 open func importContent(bookId: String, path: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1211,7 +1211,7 @@ open func importContent(bookId: String, path: String)throws  -> String  {
     )
 })
 }
-    
+
 open func releaseGates()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1220,7 +1220,7 @@ open func releaseGates()throws  -> String  {
     )
 })
 }
-    
+
     /**
      * Restores only into an empty desk. Never silently replaces an existing reader's library.
      */
@@ -1233,7 +1233,7 @@ open func restoreArchive(path: String)throws  -> String  {
     )
 })
 }
-    
+
 open func saveConnectionSettings(settingsJson: String)throws   {try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
     uniffi_booknook_native_fn_method_desk_save_connection_settings(
@@ -1242,7 +1242,7 @@ open func saveConnectionSettings(settingsJson: String)throws   {try rustCallWith
     )
 }
 }
-    
+
 open func snapshot()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1251,7 +1251,7 @@ open func snapshot()throws  -> String  {
     )
 })
 }
-    
+
     /**
      * Call only after the reader reviews the chosen pass and optional edition association.
      */
@@ -1266,7 +1266,7 @@ open func attachAudioObservation(observationJson: String, passId: String, confir
     )
 })
 }
-    
+
 open func attachAudioObservationFromConnection(observationJson: String, passId: String, confirmedEditionId: String?, connectionId: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1279,7 +1279,7 @@ open func attachAudioObservationFromConnection(observationJson: String, passId: 
     )
 })
 }
-    
+
 open func audioEditionCandidates(observationJson: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1289,7 +1289,7 @@ open func audioEditionCandidates(observationJson: String)throws  -> String  {
     )
 })
 }
-    
+
     /**
      * Export public authority configuration; never includes holder custody or provider secrets.
      */
@@ -1301,7 +1301,7 @@ open func exportCastaliaProfile()throws  -> String  {
     )
 })
 }
-    
+
 open func importKindleFromConnection(catalogJson: String, at: UInt64, connectionId: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1313,7 +1313,7 @@ open func importKindleFromConnection(catalogJson: String, at: UInt64, connection
     )
 })
 }
-    
+
 open func installCastaliaProfile(profileJson: String, expectedProfileDigest: String, expectedSettingsDigest: String, holderPublicKey: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1326,7 +1326,7 @@ open func installCastaliaProfile(profileJson: String, expectedProfileDigest: Str
     )
 })
 }
-    
+
     /**
      * Preview public metadata only. Trust is installed exclusively through an explicit apply action.
      */
@@ -1339,7 +1339,7 @@ open func previewCastaliaProfile(profileJson: String)throws  -> String  {
     )
 })
 }
-    
+
     /**
      * Compare the persisted baseline before saving an edited settings form. Independent
      * windows may never replace a newly reviewed authority with an old cached form.
@@ -1354,7 +1354,7 @@ open func saveConnectionSettingsIfCurrent(settingsJson: String, expectedSettings
     )
 })
 }
-    
+
     /**
      * Replace the selected companion's public registry only; authority and unrelated settings survive.
      */
@@ -1367,7 +1367,7 @@ open func saveProviderConnections(connectionsJson: String)throws  -> String  {
     )
 })
 }
-    
+
 open func validateProviderConnection(connectionJson: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1377,7 +1377,7 @@ open func validateProviderConnection(connectionJson: String)throws  -> String  {
     )
 })
 }
-    
+
 open func flushTextEdits()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1386,7 +1386,7 @@ open func flushTextEdits()throws  -> String  {
     )
 })
 }
-    
+
 open func stageTextEdit(editJson: String)throws   {try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
     uniffi_booknook_native_fn_method_desk_stage_text_edit(
@@ -1395,7 +1395,7 @@ open func stageTextEdit(editJson: String)throws   {try rustCallWithError(FfiConv
     )
 }
 }
-    
+
 open func notebookHistory(notebookId: String, blockId: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1406,7 +1406,7 @@ open func notebookHistory(notebookId: String, blockId: String)throws  -> String 
     )
 })
 }
-    
+
 open func restoreNotebookRevision(notebookId: String, revisionId: String, baseUpdate: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1418,7 +1418,7 @@ open func restoreNotebookRevision(notebookId: String, revisionId: String, baseUp
     )
 })
 }
-    
+
 open func providerAttachAudio(executionJson: String, observationJson: String, passId: String, confirmedEditionId: String?)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1431,7 +1431,7 @@ open func providerAttachAudio(executionJson: String, observationJson: String, pa
     )
 })
 }
-    
+
 open func providerAttachPosition(executionJson: String, observationJson: String, passId: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1443,7 +1443,7 @@ open func providerAttachPosition(executionJson: String, observationJson: String,
     )
 })
 }
-    
+
 open func providerCommitCatalog(executionJson: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1453,7 +1453,7 @@ open func providerCommitCatalog(executionJson: String)throws  -> String  {
     )
 })
 }
-    
+
 open func providerCommitContent(executionJson: String, contentBytes: Data, bookId: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1465,7 +1465,7 @@ open func providerCommitContent(executionJson: String, contentBytes: Data, bookI
     )
 })
 }
-    
+
 open func providerDescriptors()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1474,7 +1474,7 @@ open func providerDescriptors()throws  -> String  {
     )
 })
 }
-    
+
     /**
      * No state changes. The caller checks cancellation before a separate synchronous commit.
      */
@@ -1493,7 +1493,7 @@ open func providerFetch(providerId: String, operationJson: String)async throws  
             errorHandler: FfiConverterTypeNativeError_lift
         )
 }
-    
+
 open func replaceProviderHost(host: ProviderHost, generation: UInt64)throws   {try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
     uniffi_booknook_native_fn_method_desk_replace_provider_host(
@@ -1503,7 +1503,7 @@ open func replaceProviderHost(host: ProviderHost, generation: UInt64)throws   {t
     )
 }
 }
-    
+
     /**
      * Calls are run off the UI/repository actor by the Swift facade. No SQLite lock is held
      * while awaiting relays. Every accepted event and acknowledgment is committed separately.
@@ -1520,7 +1520,7 @@ open func providerSocialExchange(providerId: String, secret: Data, discover: Boo
     )
 })
 }
-    
+
 open func providerSocialRecommendations(providerId: String, candidatesJson: String, excludedJson: String)async throws  -> String  {
     return
         try  await uniffiRustCallAsync(
@@ -1536,7 +1536,7 @@ open func providerSocialRecommendations(providerId: String, candidatesJson: Stri
             errorHandler: FfiConverterTypeNativeError_lift
         )
 }
-    
+
 open func socialApprove(eventJson: String, requestJson: String, presentationJson: String)throws   {try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
     uniffi_booknook_native_fn_method_desk_social_approve(
@@ -1547,7 +1547,7 @@ open func socialApprove(eventJson: String, requestJson: String, presentationJson
     )
 }
 }
-    
+
 open func socialApproveBinding(bindingJson: String, requestJson: String, presentationJson: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1559,7 +1559,7 @@ open func socialApproveBinding(bindingJson: String, requestJson: String, present
     )
 })
 }
-    
+
 open func socialExchange(secret: Data, discover: Bool)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1570,7 +1570,7 @@ open func socialExchange(secret: Data, discover: Bool)throws  -> String  {
     )
 })
 }
-    
+
 open func socialExport(path: String)throws   {try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
     uniffi_booknook_native_fn_method_desk_social_export(
@@ -1579,7 +1579,7 @@ open func socialExport(path: String)throws   {try rustCallWithError(FfiConverter
     )
 }
 }
-    
+
 open func socialExportBinding(holder: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1589,7 +1589,7 @@ open func socialExportBinding(holder: String)throws  -> String  {
     )
 })
 }
-    
+
     /**
      * Invoked only by the explicit native Generate transport key action. The result goes
      * directly to Keychain, and never enters settings, SQLite, exported archives or logs.
@@ -1602,7 +1602,7 @@ open func socialGenerateTransportSecret() -> Data  {
     )
 })
 }
-    
+
 open func socialImportBinding(documentJson: String)throws   {try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
     uniffi_booknook_native_fn_method_desk_social_import_binding(
@@ -1611,7 +1611,7 @@ open func socialImportBinding(documentJson: String)throws   {try rustCallWithErr
     )
 }
 }
-    
+
 open func socialLocal(commandJson: String)throws   {try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
     uniffi_booknook_native_fn_method_desk_social_local(
@@ -1620,7 +1620,7 @@ open func socialLocal(commandJson: String)throws   {try rustCallWithError(FfiCon
     )
 }
 }
-    
+
 open func socialNewOwnedId()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1629,7 +1629,7 @@ open func socialNewOwnedId()throws  -> String  {
     )
 })
 }
-    
+
 open func socialPrepare(actionJson: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1639,7 +1639,7 @@ open func socialPrepare(actionJson: String)throws  -> String  {
     )
 })
 }
-    
+
 open func socialPrepareBinding(secret: Data)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1649,7 +1649,7 @@ open func socialPrepareBinding(secret: Data)throws  -> String  {
     )
 })
 }
-    
+
 open func socialRecommendations(candidatesJson: String, excludedJson: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1660,7 +1660,7 @@ open func socialRecommendations(candidatesJson: String, excludedJson: String)thr
     )
 })
 }
-    
+
     /**
      * Restore local social history only into an empty social desk. Network authorization is
      * still required on later exchange; this never imports custody secrets or trusted pins.
@@ -1673,7 +1673,7 @@ open func socialRestore(path: String)throws   {try rustCallWithError(FfiConverte
     )
 }
 }
-    
+
 open func socialRevokeBinding(holder: String)throws   {try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
     uniffi_booknook_native_fn_method_desk_social_revoke_binding(
@@ -1682,7 +1682,7 @@ open func socialRevokeBinding(holder: String)throws   {try rustCallWithError(Ffi
     )
 }
 }
-    
+
 open func socialSnapshot(revealSpoilers: Bool)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1692,7 +1692,7 @@ open func socialSnapshot(revealSpoilers: Bool)throws  -> String  {
     )
 })
 }
-    
+
 open func syncApprove(batchId: String, keyHex: String, requestJson: String, presentationJson: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1705,7 +1705,7 @@ open func syncApprove(batchId: String, keyHex: String, requestJson: String, pres
     )
 })
 }
-    
+
 open func syncApprovePeer(peerJson: String, requestJson: String, presentationJson: String)throws   {try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
     uniffi_booknook_native_fn_method_desk_sync_approve_peer(
@@ -1716,7 +1716,7 @@ open func syncApprovePeer(peerJson: String, requestJson: String, presentationJso
     )
 }
 }
-    
+
 open func syncCancelPrepared(batchId: String)throws   {try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
     uniffi_booknook_native_fn_method_desk_sync_cancel_prepared(
@@ -1725,7 +1725,7 @@ open func syncCancelPrepared(batchId: String)throws   {try rustCallWithError(Ffi
     )
 }
 }
-    
+
 open func syncExport(batchId: String, path: String)throws   {try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
     uniffi_booknook_native_fn_method_desk_sync_export(
@@ -1735,7 +1735,7 @@ open func syncExport(batchId: String, path: String)throws   {try rustCallWithErr
     )
 }
 }
-    
+
 open func syncNewPairingKey()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1744,7 +1744,7 @@ open func syncNewPairingKey()throws  -> String  {
     )
 })
 }
-    
+
 open func syncPrepare(peerId: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1754,7 +1754,7 @@ open func syncPrepare(peerId: String)throws  -> String  {
     )
 })
 }
-    
+
 open func syncPreparePeer(deviceId: String, label: String, keyHex: String, enabled: Bool)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1767,7 +1767,7 @@ open func syncPreparePeer(deviceId: String, label: String, keyHex: String, enabl
     )
 })
 }
-    
+
 open func syncReceive(path: String, sourceDevice: String, keyHex: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1779,7 +1779,7 @@ open func syncReceive(path: String, sourceDevice: String, keyHex: String)throws 
     )
 })
 }
-    
+
     /**
      * Removes only the retry copy after a human confirms delivery or cancels it.
      */
@@ -1791,7 +1791,7 @@ open func syncRemoveOutbox(batchId: String)throws   {try rustCallWithError(FfiCo
     )
 }
 }
-    
+
 open func syncResolve(conflictId: String, useIncoming: Bool)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1802,7 +1802,7 @@ open func syncResolve(conflictId: String, useIncoming: Bool)throws  -> String  {
     )
 })
 }
-    
+
 open func syncStatus()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1811,9 +1811,9 @@ open func syncStatus()throws  -> String  {
     )
 })
 }
-    
 
-    
+
+
 }
 
 
@@ -1863,15 +1863,1578 @@ public func FfiConverterTypeDesk_lower(_ value: Desk) -> UInt64 {
 
 
 /**
+ * Share this same opaque coordinator across windows. Constructors perform local
+ * blocking filesystem work: foreign callers MUST construct off the UI thread.
+ */
+public protocol FeedCacheControllerV1Protocol: AnyObject, Sendable {
+
+    func activate(sourceId: String, operation: FeedCacheOperationV1) async throws
+
+    /**
+     * Once enqueued cleanup still finishes if the awaiting caller is cancelled.
+     */
+    func close(operation: FeedCacheOperationV1) async throws
+
+    func configuration(operation: FeedCacheOperationV1) async throws  -> FeedCacheConfigurationV1
+
+    /**
+     * Re-normalizes original retained XML; never decodes normalized cache JSON.
+     */
+    func offline(sourceId: String, operation: FeedCacheOperationV1) async throws  -> Data
+
+    func pause(sourceId: String, operation: FeedCacheOperationV1) async throws
+
+    /**
+     * Produced-only inert display data, bounded to 5 MiB. Not an import format.
+     */
+    func refresh(sourceId: String, operation: FeedCacheOperationV1) async throws  -> Data
+
+    func replaceConfiguration(expectedToken: String, raw: Data, operation: FeedCacheOperationV1) async throws
+
+    func replaceProvider(expectedToken: String, host: FeedSourceHostV1, operation: FeedCacheOperationV1) async throws
+
+    func status(sourceId: String, operation: FeedCacheOperationV1) async throws  -> Data
+
+}
+/**
+ * Share this same opaque coordinator across windows. Constructors perform local
+ * blocking filesystem work: foreign callers MUST construct off the UI thread.
+ */
+open class FeedCacheControllerV1: FeedCacheControllerV1Protocol, @unchecked Sendable {
+    fileprivate let handle: UInt64
+
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoHandle {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noHandle: NoHandle) {
+        self.handle = 0
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_booknook_native_fn_clone_feedcachecontrollerv1(self.handle, $0) }
+    }
+public convenience init(directory: String, expectedConfiguration: Data?, host: FeedSourceHostV1)throws  {
+    let handle =
+        try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_constructor_feedcachecontrollerv1_new(
+        FfiConverterString.lower(directory),
+        FfiConverterOptionData.lower(expectedConfiguration),
+        FfiConverterCallbackInterfaceFeedSourceHostV1_lower(host),uniffiCallStatus
+    )
+}
+    self.init(unsafeFromHandle: handle)
+}
+
+    deinit {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
+            return
+        }
+
+        try! rustCall { uniffi_booknook_native_fn_free_feedcachecontrollerv1(handle, $0) }
+    }
+
+
+    /**
+     * Offline construction; no activation and no caller Tokio reactor required.
+     */
+public static func publicHttps(directory: String, expectedConfiguration: Data?)throws  -> FeedCacheControllerV1  {
+    return try  FfiConverterTypeFeedCacheControllerV1_lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_constructor_feedcachecontrollerv1_public_https(
+        FfiConverterString.lower(directory),
+        FfiConverterOptionData.lower(expectedConfiguration),uniffiCallStatus
+    )
+})
+}
+
+
+
+open func activate(sourceId: String, operation: FeedCacheOperationV1)async throws   {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_booknook_native_fn_method_feedcachecontrollerv1_activate(
+                        self.uniffiCloneHandle(),FfiConverterString.lower(sourceId),FfiConverterTypeFeedCacheOperationV1_lower(operation)
+                )
+            },
+            pollFunc: ffi_booknook_native_rust_future_poll_void,
+            completeFunc: ffi_booknook_native_rust_future_complete_void,
+            freeFunc: ffi_booknook_native_rust_future_free_void,
+            liftFunc: { $0 },
+            errorHandler: FfiConverterTypeNativeError_lift
+        )
+}
+
+    /**
+     * Once enqueued cleanup still finishes if the awaiting caller is cancelled.
+     */
+open func close(operation: FeedCacheOperationV1)async throws   {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_booknook_native_fn_method_feedcachecontrollerv1_close(
+                        self.uniffiCloneHandle(),FfiConverterTypeFeedCacheOperationV1_lower(operation)
+                )
+            },
+            pollFunc: ffi_booknook_native_rust_future_poll_void,
+            completeFunc: ffi_booknook_native_rust_future_complete_void,
+            freeFunc: ffi_booknook_native_rust_future_free_void,
+            liftFunc: { $0 },
+            errorHandler: FfiConverterTypeNativeError_lift
+        )
+}
+
+open func configuration(operation: FeedCacheOperationV1)async throws  -> FeedCacheConfigurationV1  {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_booknook_native_fn_method_feedcachecontrollerv1_configuration(
+                        self.uniffiCloneHandle(),FfiConverterTypeFeedCacheOperationV1_lower(operation)
+                )
+            },
+            pollFunc: ffi_booknook_native_rust_future_poll_rust_buffer,
+            completeFunc: ffi_booknook_native_rust_future_complete_rust_buffer,
+            freeFunc: ffi_booknook_native_rust_future_free_rust_buffer,
+            liftFunc: FfiConverterTypeFeedCacheConfigurationV1_lift,
+            errorHandler: FfiConverterTypeNativeError_lift
+        )
+}
+
+    /**
+     * Re-normalizes original retained XML; never decodes normalized cache JSON.
+     */
+open func offline(sourceId: String, operation: FeedCacheOperationV1)async throws  -> Data  {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_booknook_native_fn_method_feedcachecontrollerv1_offline(
+                        self.uniffiCloneHandle(),FfiConverterString.lower(sourceId),FfiConverterTypeFeedCacheOperationV1_lower(operation)
+                )
+            },
+            pollFunc: ffi_booknook_native_rust_future_poll_rust_buffer,
+            completeFunc: ffi_booknook_native_rust_future_complete_rust_buffer,
+            freeFunc: ffi_booknook_native_rust_future_free_rust_buffer,
+            liftFunc: FfiConverterData.lift,
+            errorHandler: FfiConverterTypeNativeError_lift
+        )
+}
+
+open func pause(sourceId: String, operation: FeedCacheOperationV1)async throws   {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_booknook_native_fn_method_feedcachecontrollerv1_pause(
+                        self.uniffiCloneHandle(),FfiConverterString.lower(sourceId),FfiConverterTypeFeedCacheOperationV1_lower(operation)
+                )
+            },
+            pollFunc: ffi_booknook_native_rust_future_poll_void,
+            completeFunc: ffi_booknook_native_rust_future_complete_void,
+            freeFunc: ffi_booknook_native_rust_future_free_void,
+            liftFunc: { $0 },
+            errorHandler: FfiConverterTypeNativeError_lift
+        )
+}
+
+    /**
+     * Produced-only inert display data, bounded to 5 MiB. Not an import format.
+     */
+open func refresh(sourceId: String, operation: FeedCacheOperationV1)async throws  -> Data  {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_booknook_native_fn_method_feedcachecontrollerv1_refresh(
+                        self.uniffiCloneHandle(),FfiConverterString.lower(sourceId),FfiConverterTypeFeedCacheOperationV1_lower(operation)
+                )
+            },
+            pollFunc: ffi_booknook_native_rust_future_poll_rust_buffer,
+            completeFunc: ffi_booknook_native_rust_future_complete_rust_buffer,
+            freeFunc: ffi_booknook_native_rust_future_free_rust_buffer,
+            liftFunc: FfiConverterData.lift,
+            errorHandler: FfiConverterTypeNativeError_lift
+        )
+}
+
+open func replaceConfiguration(expectedToken: String, raw: Data, operation: FeedCacheOperationV1)async throws   {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_booknook_native_fn_method_feedcachecontrollerv1_replace_configuration(
+                        self.uniffiCloneHandle(),FfiConverterString.lower(expectedToken),FfiConverterData.lower(raw),FfiConverterTypeFeedCacheOperationV1_lower(operation)
+                )
+            },
+            pollFunc: ffi_booknook_native_rust_future_poll_void,
+            completeFunc: ffi_booknook_native_rust_future_complete_void,
+            freeFunc: ffi_booknook_native_rust_future_free_void,
+            liftFunc: { $0 },
+            errorHandler: FfiConverterTypeNativeError_lift
+        )
+}
+
+open func replaceProvider(expectedToken: String, host: FeedSourceHostV1, operation: FeedCacheOperationV1)async throws   {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_booknook_native_fn_method_feedcachecontrollerv1_replace_provider(
+                        self.uniffiCloneHandle(),FfiConverterString.lower(expectedToken),FfiConverterCallbackInterfaceFeedSourceHostV1_lower(host),FfiConverterTypeFeedCacheOperationV1_lower(operation)
+                )
+            },
+            pollFunc: ffi_booknook_native_rust_future_poll_void,
+            completeFunc: ffi_booknook_native_rust_future_complete_void,
+            freeFunc: ffi_booknook_native_rust_future_free_void,
+            liftFunc: { $0 },
+            errorHandler: FfiConverterTypeNativeError_lift
+        )
+}
+
+open func status(sourceId: String, operation: FeedCacheOperationV1)async throws  -> Data  {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_booknook_native_fn_method_feedcachecontrollerv1_status(
+                        self.uniffiCloneHandle(),FfiConverterString.lower(sourceId),FfiConverterTypeFeedCacheOperationV1_lower(operation)
+                )
+            },
+            pollFunc: ffi_booknook_native_rust_future_poll_rust_buffer,
+            completeFunc: ffi_booknook_native_rust_future_complete_rust_buffer,
+            freeFunc: ffi_booknook_native_rust_future_free_rust_buffer,
+            liftFunc: FfiConverterData.lift,
+            errorHandler: FfiConverterTypeNativeError_lift
+        )
+}
+
+
+
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeFeedCacheControllerV1: FfiConverter {
+    typealias FfiType = UInt64
+    typealias SwiftType = FeedCacheControllerV1
+
+    public static func lift(_ handle: UInt64) throws -> FeedCacheControllerV1 {
+        return FeedCacheControllerV1(unsafeFromHandle: handle)
+    }
+
+    public static func lower(_ value: FeedCacheControllerV1) -> UInt64 {
+        return value.uniffiCloneHandle()
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FeedCacheControllerV1 {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+    public static func write(_ value: FeedCacheControllerV1, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedCacheControllerV1_lift(_ handle: UInt64) throws -> FeedCacheControllerV1 {
+    return try FfiConverterTypeFeedCacheControllerV1.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedCacheControllerV1_lower(_ value: FeedCacheControllerV1) -> UInt64 {
+    return FfiConverterTypeFeedCacheControllerV1.lower(value)
+}
+
+
+
+
+
+
+/**
+ * One-use cancellation only, never permission to fetch or admit an external read.
+ * cancel fences registered storage/core work synchronously before waking await.
+ */
+public protocol FeedCacheOperationV1Protocol: AnyObject, Sendable {
+
+    /**
+     * A request, not a rollback promise: a synchronous commit may have started.
+     */
+    func cancel()
+
+}
+/**
+ * One-use cancellation only, never permission to fetch or admit an external read.
+ * cancel fences registered storage/core work synchronously before waking await.
+ */
+open class FeedCacheOperationV1: FeedCacheOperationV1Protocol, @unchecked Sendable {
+    fileprivate let handle: UInt64
+
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoHandle {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noHandle: NoHandle) {
+        self.handle = 0
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_booknook_native_fn_clone_feedcacheoperationv1(self.handle, $0) }
+    }
+public convenience init() {
+    let handle =
+        try! rustCall() {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_constructor_feedcacheoperationv1_new(uniffiCallStatus
+    )
+}
+    self.init(unsafeFromHandle: handle)
+}
+
+    deinit {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
+            return
+        }
+
+        try! rustCall { uniffi_booknook_native_fn_free_feedcacheoperationv1(handle, $0) }
+    }
+
+
+
+
+    /**
+     * A request, not a rollback promise: a synchronous commit may have started.
+     */
+open func cancel()  {try! rustCall() {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_feedcacheoperationv1_cancel(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+}
+}
+
+
+
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeFeedCacheOperationV1: FfiConverter {
+    typealias FfiType = UInt64
+    typealias SwiftType = FeedCacheOperationV1
+
+    public static func lift(_ handle: UInt64) throws -> FeedCacheOperationV1 {
+        return FeedCacheOperationV1(unsafeFromHandle: handle)
+    }
+
+    public static func lower(_ value: FeedCacheOperationV1) -> UInt64 {
+        return value.uniffiCloneHandle()
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FeedCacheOperationV1 {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+    public static func write(_ value: FeedCacheOperationV1, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedCacheOperationV1_lift(_ handle: UInt64) throws -> FeedCacheOperationV1 {
+    return try FfiConverterTypeFeedCacheOperationV1.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedCacheOperationV1_lower(_ value: FeedCacheOperationV1) -> UInt64 {
+    return FfiConverterTypeFeedCacheOperationV1.lower(value)
+}
+
+
+
+
+
+
+public protocol FeedExportReviewV1Protocol: AnyObject, Sendable {
+
+    /**
+     * Returns selected portable settings only, without writing or sending them.
+     */
+    func confirm(configurationBytes: Data) throws  -> String
+
+    /**
+     * The preview is the raw feed-section file, not a reconstructable review.
+     */
+    func preview() throws  -> String
+
+}
+open class FeedExportReviewV1: FeedExportReviewV1Protocol, @unchecked Sendable {
+    fileprivate let handle: UInt64
+
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoHandle {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noHandle: NoHandle) {
+        self.handle = 0
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_booknook_native_fn_clone_feedexportreviewv1(self.handle, $0) }
+    }
+public convenience init(configurationBytes: Data, selectionBytes: Data)throws  {
+    let handle =
+        try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_constructor_feedexportreviewv1_new(
+        FfiConverterData.lower(configurationBytes),
+        FfiConverterData.lower(selectionBytes),uniffiCallStatus
+    )
+}
+    self.init(unsafeFromHandle: handle)
+}
+
+    deinit {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
+            return
+        }
+
+        try! rustCall { uniffi_booknook_native_fn_free_feedexportreviewv1(handle, $0) }
+    }
+
+
+
+
+    /**
+     * Returns selected portable settings only, without writing or sending them.
+     */
+open func confirm(configurationBytes: Data)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_feedexportreviewv1_confirm(
+            self.uniffiCloneHandle(),
+        FfiConverterData.lower(configurationBytes),uniffiCallStatus
+    )
+})
+}
+
+    /**
+     * The preview is the raw feed-section file, not a reconstructable review.
+     */
+open func preview()throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_feedexportreviewv1_preview(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+})
+}
+
+
+
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeFeedExportReviewV1: FfiConverter {
+    typealias FfiType = UInt64
+    typealias SwiftType = FeedExportReviewV1
+
+    public static func lift(_ handle: UInt64) throws -> FeedExportReviewV1 {
+        return FeedExportReviewV1(unsafeFromHandle: handle)
+    }
+
+    public static func lower(_ value: FeedExportReviewV1) -> UInt64 {
+        return value.uniffiCloneHandle()
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FeedExportReviewV1 {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+    public static func write(_ value: FeedExportReviewV1, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedExportReviewV1_lift(_ handle: UInt64) throws -> FeedExportReviewV1 {
+    return try FfiConverterTypeFeedExportReviewV1.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedExportReviewV1_lower(_ value: FeedExportReviewV1) -> UInt64 {
+    return FfiConverterTypeFeedExportReviewV1.lower(value)
+}
+
+
+
+
+
+
+public protocol FeedImportReviewV1Protocol: AnyObject, Sendable {
+
+    /**
+     * Return a candidate only. The host owns consent and atomic persistence.
+     */
+    func confirm(configurationBytes: Data, incomingBytes: Data?) throws  -> String
+
+    func preview() throws  -> String
+
+    func resolve(configurationBytes: Data, incomingBytes: Data?, resolutionBytes: Data) throws  -> FeedImportReviewV1
+
+}
+open class FeedImportReviewV1: FeedImportReviewV1Protocol, @unchecked Sendable {
+    fileprivate let handle: UInt64
+
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoHandle {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noHandle: NoHandle) {
+        self.handle = 0
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_booknook_native_fn_clone_feedimportreviewv1(self.handle, $0) }
+    }
+public convenience init(configurationBytes: Data, incomingBytes: Data?)throws  {
+    let handle =
+        try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_constructor_feedimportreviewv1_new(
+        FfiConverterData.lower(configurationBytes),
+        FfiConverterOptionData.lower(incomingBytes),uniffiCallStatus
+    )
+}
+    self.init(unsafeFromHandle: handle)
+}
+
+    deinit {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
+            return
+        }
+
+        try! rustCall { uniffi_booknook_native_fn_free_feedimportreviewv1(handle, $0) }
+    }
+
+
+
+
+    /**
+     * Return a candidate only. The host owns consent and atomic persistence.
+     */
+open func confirm(configurationBytes: Data, incomingBytes: Data?)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_feedimportreviewv1_confirm(
+            self.uniffiCloneHandle(),
+        FfiConverterData.lower(configurationBytes),
+        FfiConverterOptionData.lower(incomingBytes),uniffiCallStatus
+    )
+})
+}
+
+open func preview()throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_feedimportreviewv1_preview(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+})
+}
+
+open func resolve(configurationBytes: Data, incomingBytes: Data?, resolutionBytes: Data)throws  -> FeedImportReviewV1  {
+    return try  FfiConverterTypeFeedImportReviewV1_lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_feedimportreviewv1_resolve(
+            self.uniffiCloneHandle(),
+        FfiConverterData.lower(configurationBytes),
+        FfiConverterOptionData.lower(incomingBytes),
+        FfiConverterData.lower(resolutionBytes),uniffiCallStatus
+    )
+})
+}
+
+
+
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeFeedImportReviewV1: FfiConverter {
+    typealias FfiType = UInt64
+    typealias SwiftType = FeedImportReviewV1
+
+    public static func lift(_ handle: UInt64) throws -> FeedImportReviewV1 {
+        return FeedImportReviewV1(unsafeFromHandle: handle)
+    }
+
+    public static func lower(_ value: FeedImportReviewV1) -> UInt64 {
+        return value.uniffiCloneHandle()
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FeedImportReviewV1 {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+    public static func write(_ value: FeedImportReviewV1, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedImportReviewV1_lift(_ handle: UInt64) throws -> FeedImportReviewV1 {
+    return try FfiConverterTypeFeedImportReviewV1.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedImportReviewV1_lower(_ value: FeedImportReviewV1) -> UInt64 {
+    return FfiConverterTypeFeedImportReviewV1.lower(value)
+}
+
+
+
+
+
+
+public protocol FeedProjectionReviewV1Protocol: AnyObject, Sendable {
+
+    /**
+     * Returns the minimal origin-bound projection; this does not send it.
+     */
+    func confirm(configurationBytes: Data, origin: String) throws  -> String
+
+    func preview() throws  -> String
+
+}
+open class FeedProjectionReviewV1: FeedProjectionReviewV1Protocol, @unchecked Sendable {
+    fileprivate let handle: UInt64
+
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoHandle {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noHandle: NoHandle) {
+        self.handle = 0
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_booknook_native_fn_clone_feedprojectionreviewv1(self.handle, $0) }
+    }
+public convenience init(configurationBytes: Data, selectionBytes: Data)throws  {
+    let handle =
+        try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_constructor_feedprojectionreviewv1_new(
+        FfiConverterData.lower(configurationBytes),
+        FfiConverterData.lower(selectionBytes),uniffiCallStatus
+    )
+}
+    self.init(unsafeFromHandle: handle)
+}
+
+    deinit {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
+            return
+        }
+
+        try! rustCall { uniffi_booknook_native_fn_free_feedprojectionreviewv1(handle, $0) }
+    }
+
+
+
+
+    /**
+     * Returns the minimal origin-bound projection; this does not send it.
+     */
+open func confirm(configurationBytes: Data, origin: String)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_feedprojectionreviewv1_confirm(
+            self.uniffiCloneHandle(),
+        FfiConverterData.lower(configurationBytes),
+        FfiConverterString.lower(origin),uniffiCallStatus
+    )
+})
+}
+
+open func preview()throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_feedprojectionreviewv1_preview(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+})
+}
+
+
+
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeFeedProjectionReviewV1: FfiConverter {
+    typealias FfiType = UInt64
+    typealias SwiftType = FeedProjectionReviewV1
+
+    public static func lift(_ handle: UInt64) throws -> FeedProjectionReviewV1 {
+        return FeedProjectionReviewV1(unsafeFromHandle: handle)
+    }
+
+    public static func lower(_ value: FeedProjectionReviewV1) -> UInt64 {
+        return value.uniffiCloneHandle()
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FeedProjectionReviewV1 {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+    public static func write(_ value: FeedProjectionReviewV1, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedProjectionReviewV1_lift(_ handle: UInt64) throws -> FeedProjectionReviewV1 {
+    return try FfiConverterTypeFeedProjectionReviewV1.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedProjectionReviewV1_lower(_ value: FeedProjectionReviewV1) -> UInt64 {
+    return FfiConverterTypeFeedProjectionReviewV1.lower(value)
+}
+
+
+
+
+
+
+public protocol FeedSourceAttemptV1Protocol: AnyObject, Sendable {
+
+    func cancel()  -> Bool
+
+    func execute() async throws  -> FeedSourceReadV1
+
+}
+open class FeedSourceAttemptV1: FeedSourceAttemptV1Protocol, @unchecked Sendable {
+    fileprivate let handle: UInt64
+
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoHandle {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noHandle: NoHandle) {
+        self.handle = 0
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_booknook_native_fn_clone_feedsourceattemptv1(self.handle, $0) }
+    }
+    // No primary constructor declared for this class.
+
+    deinit {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
+            return
+        }
+
+        try! rustCall { uniffi_booknook_native_fn_free_feedsourceattemptv1(handle, $0) }
+    }
+
+
+
+
+open func cancel() -> Bool  {
+    return try!  FfiConverterBool.lift(try! rustCall() {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_feedsourceattemptv1_cancel(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+})
+}
+
+open func execute()async throws  -> FeedSourceReadV1  {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_booknook_native_fn_method_feedsourceattemptv1_execute(
+                        self.uniffiCloneHandle()
+                )
+            },
+            pollFunc: ffi_booknook_native_rust_future_poll_u64,
+            completeFunc: ffi_booknook_native_rust_future_complete_u64,
+            freeFunc: ffi_booknook_native_rust_future_free_u64,
+            liftFunc: FfiConverterTypeFeedSourceReadV1_lift,
+            errorHandler: FfiConverterTypeNativeError_lift
+        )
+}
+
+
+
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeFeedSourceAttemptV1: FfiConverter {
+    typealias FfiType = UInt64
+    typealias SwiftType = FeedSourceAttemptV1
+
+    public static func lift(_ handle: UInt64) throws -> FeedSourceAttemptV1 {
+        return FeedSourceAttemptV1(unsafeFromHandle: handle)
+    }
+
+    public static func lower(_ value: FeedSourceAttemptV1) -> UInt64 {
+        return value.uniffiCloneHandle()
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FeedSourceAttemptV1 {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+    public static func write(_ value: FeedSourceAttemptV1, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedSourceAttemptV1_lift(_ handle: UInt64) throws -> FeedSourceAttemptV1 {
+    return try FfiConverterTypeFeedSourceAttemptV1.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedSourceAttemptV1_lower(_ value: FeedSourceAttemptV1) -> UInt64 {
+    return FfiConverterTypeFeedSourceAttemptV1.lower(value)
+}
+
+
+
+
+
+
+public protocol FeedSourceCancellationV1Protocol: AnyObject, Sendable {
+
+    /**
+     * False when final synchronous commit has already started; no rollback.
+     */
+    func cancel()  -> Bool
+
+    func isCancelled()  -> Bool
+
+}
+open class FeedSourceCancellationV1: FeedSourceCancellationV1Protocol, @unchecked Sendable {
+    fileprivate let handle: UInt64
+
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoHandle {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noHandle: NoHandle) {
+        self.handle = 0
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_booknook_native_fn_clone_feedsourcecancellationv1(self.handle, $0) }
+    }
+    // No primary constructor declared for this class.
+
+    deinit {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
+            return
+        }
+
+        try! rustCall { uniffi_booknook_native_fn_free_feedsourcecancellationv1(handle, $0) }
+    }
+
+
+
+
+    /**
+     * False when final synchronous commit has already started; no rollback.
+     */
+open func cancel() -> Bool  {
+    return try!  FfiConverterBool.lift(try! rustCall() {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_feedsourcecancellationv1_cancel(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+})
+}
+
+open func isCancelled() -> Bool  {
+    return try!  FfiConverterBool.lift(try! rustCall() {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_feedsourcecancellationv1_is_cancelled(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+})
+}
+
+
+
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeFeedSourceCancellationV1: FfiConverter {
+    typealias FfiType = UInt64
+    typealias SwiftType = FeedSourceCancellationV1
+
+    public static func lift(_ handle: UInt64) throws -> FeedSourceCancellationV1 {
+        return FeedSourceCancellationV1(unsafeFromHandle: handle)
+    }
+
+    public static func lower(_ value: FeedSourceCancellationV1) -> UInt64 {
+        return value.uniffiCloneHandle()
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FeedSourceCancellationV1 {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+    public static func write(_ value: FeedSourceCancellationV1, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedSourceCancellationV1_lift(_ handle: UInt64) throws -> FeedSourceCancellationV1 {
+    return try FfiConverterTypeFeedSourceCancellationV1.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedSourceCancellationV1_lower(_ value: FeedSourceCancellationV1) -> UInt64 {
+    return FfiConverterTypeFeedSourceCancellationV1.lower(value)
+}
+
+
+
+
+
+
+public protocol FeedSourceReadV1Protocol: AnyObject, Sendable {
+
+    /**
+     * Untrusted bytes, not parsed or safe to render.
+     */
+    func body()  -> Data
+
+    func cacheCondition() throws  -> String
+
+    func cancel()  -> Bool
+
+    func request() throws  -> String
+
+    func response() throws  -> String
+
+    func store(host: FeedCacheHostV1) async throws
+
+}
+open class FeedSourceReadV1: FeedSourceReadV1Protocol, @unchecked Sendable {
+    fileprivate let handle: UInt64
+
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoHandle {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noHandle: NoHandle) {
+        self.handle = 0
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_booknook_native_fn_clone_feedsourcereadv1(self.handle, $0) }
+    }
+    // No primary constructor declared for this class.
+
+    deinit {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
+            return
+        }
+
+        try! rustCall { uniffi_booknook_native_fn_free_feedsourcereadv1(handle, $0) }
+    }
+
+
+
+
+    /**
+     * Untrusted bytes, not parsed or safe to render.
+     */
+open func body() -> Data  {
+    return try!  FfiConverterData.lift(try! rustCall() {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_feedsourcereadv1_body(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+})
+}
+
+open func cacheCondition()throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_feedsourcereadv1_cache_condition(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+})
+}
+
+open func cancel() -> Bool  {
+    return try!  FfiConverterBool.lift(try! rustCall() {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_feedsourcereadv1_cancel(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+})
+}
+
+open func request()throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_feedsourcereadv1_request(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+})
+}
+
+open func response()throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_feedsourcereadv1_response(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+})
+}
+
+open func store(host: FeedCacheHostV1)async throws   {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_booknook_native_fn_method_feedsourcereadv1_store(
+                        self.uniffiCloneHandle(),FfiConverterCallbackInterfaceFeedCacheHostV1_lower(host)
+                )
+            },
+            pollFunc: ffi_booknook_native_rust_future_poll_void,
+            completeFunc: ffi_booknook_native_rust_future_complete_void,
+            freeFunc: ffi_booknook_native_rust_future_free_void,
+            liftFunc: { $0 },
+            errorHandler: FfiConverterTypeNativeError_lift
+        )
+}
+
+
+
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeFeedSourceReadV1: FfiConverter {
+    typealias FfiType = UInt64
+    typealias SwiftType = FeedSourceReadV1
+
+    public static func lift(_ handle: UInt64) throws -> FeedSourceReadV1 {
+        return FeedSourceReadV1(unsafeFromHandle: handle)
+    }
+
+    public static func lower(_ value: FeedSourceReadV1) -> UInt64 {
+        return value.uniffiCloneHandle()
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FeedSourceReadV1 {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+    public static func write(_ value: FeedSourceReadV1, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedSourceReadV1_lift(_ handle: UInt64) throws -> FeedSourceReadV1 {
+    return try FfiConverterTypeFeedSourceReadV1.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedSourceReadV1_lower(_ value: FeedSourceReadV1) -> UInt64 {
+    return FfiConverterTypeFeedSourceReadV1.lower(value)
+}
+
+
+
+
+
+
+public protocol FeedSourceSessionV1Protocol: AnyObject, Sendable {
+
+    func activate(sourceId: String) throws
+
+    func begin(sourceId: String, conditionalBytes: Data?) throws  -> FeedSourceAttemptV1
+
+    func close() throws
+
+    func disable(sourceId: String) throws
+
+    func replaceConfiguration(configurationBytes: Data) throws
+
+    func replaceProvider(host: FeedSourceHostV1) throws
+
+}
+open class FeedSourceSessionV1: FeedSourceSessionV1Protocol, @unchecked Sendable {
+    fileprivate let handle: UInt64
+
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoHandle {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noHandle: NoHandle) {
+        self.handle = 0
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_booknook_native_fn_clone_feedsourcesessionv1(self.handle, $0) }
+    }
+public convenience init(configurationBytes: Data, host: FeedSourceHostV1)throws  {
+    let handle =
+        try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_constructor_feedsourcesessionv1_new(
+        FfiConverterData.lower(configurationBytes),
+        FfiConverterCallbackInterfaceFeedSourceHostV1_lower(host),uniffiCallStatus
+    )
+}
+    self.init(unsafeFromHandle: handle)
+}
+
+    deinit {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
+            return
+        }
+
+        try! rustCall { uniffi_booknook_native_fn_free_feedsourcesessionv1(handle, $0) }
+    }
+
+
+    /**
+     * Explicit concrete native transport; construction is offline and inactive.
+     * Fetch still requires local activation and returns untrusted XML bytes.
+     */
+public static func publicHttps(configurationBytes: Data)throws  -> FeedSourceSessionV1  {
+    return try  FfiConverterTypeFeedSourceSessionV1_lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_constructor_feedsourcesessionv1_public_https(
+        FfiConverterData.lower(configurationBytes),uniffiCallStatus
+    )
+})
+}
+
+
+
+open func activate(sourceId: String)throws   {try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_feedsourcesessionv1_activate(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(sourceId),uniffiCallStatus
+    )
+}
+}
+
+open func begin(sourceId: String, conditionalBytes: Data?)throws  -> FeedSourceAttemptV1  {
+    return try  FfiConverterTypeFeedSourceAttemptV1_lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_feedsourcesessionv1_begin(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(sourceId),
+        FfiConverterOptionData.lower(conditionalBytes),uniffiCallStatus
+    )
+})
+}
+
+open func close()throws   {try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_feedsourcesessionv1_close(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+}
+}
+
+open func disable(sourceId: String)throws   {try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_feedsourcesessionv1_disable(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(sourceId),uniffiCallStatus
+    )
+}
+}
+
+open func replaceConfiguration(configurationBytes: Data)throws   {try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_feedsourcesessionv1_replace_configuration(
+            self.uniffiCloneHandle(),
+        FfiConverterData.lower(configurationBytes),uniffiCallStatus
+    )
+}
+}
+
+open func replaceProvider(host: FeedSourceHostV1)throws   {try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_feedsourcesessionv1_replace_provider(
+            self.uniffiCloneHandle(),
+        FfiConverterCallbackInterfaceFeedSourceHostV1_lower(host),uniffiCallStatus
+    )
+}
+}
+
+
+
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeFeedSourceSessionV1: FfiConverter {
+    typealias FfiType = UInt64
+    typealias SwiftType = FeedSourceSessionV1
+
+    public static func lift(_ handle: UInt64) throws -> FeedSourceSessionV1 {
+        return FeedSourceSessionV1(unsafeFromHandle: handle)
+    }
+
+    public static func lower(_ value: FeedSourceSessionV1) -> UInt64 {
+        return value.uniffiCloneHandle()
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FeedSourceSessionV1 {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+    public static func write(_ value: FeedSourceSessionV1, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedSourceSessionV1_lift(_ handle: UInt64) throws -> FeedSourceSessionV1 {
+    return try FfiConverterTypeFeedSourceSessionV1.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedSourceSessionV1_lower(_ value: FeedSourceSessionV1) -> UInt64 {
+    return FfiConverterTypeFeedSourceSessionV1.lower(value)
+}
+
+
+
+
+
+
+/**
  * Standalone portable notebook command engine. It has no cache, network, signing,
  * social/settings persistence, content-asset ingestion or native text-edit journal.
  */
 public protocol NotebookEngineProtocol: AnyObject, Sendable {
-    
+
     func execute(commandJson: String) throws  -> String
-    
+
     func snapshot() throws  -> String
-    
+
 }
 /**
  * Standalone portable notebook command engine. It has no cache, network, signing,
@@ -1927,7 +3490,7 @@ open class NotebookEngine: NotebookEngineProtocol, @unchecked Sendable {
         try! rustCall { uniffi_booknook_native_fn_free_notebookengine(handle, $0) }
     }
 
-    
+
     /**
      * Use a separate directory for this standalone SQLite store, not an active Desk.
      */
@@ -1939,7 +3502,7 @@ public static func local(directory: String)throws  -> NotebookEngine  {
     )
 })
 }
-    
+
     /**
      * No implicit initial state or writes. The host must already contain valid State.
      */
@@ -1951,9 +3514,9 @@ public static func withStorage(host: NotebookStorageHost)throws  -> NotebookEngi
     )
 })
 }
-    
 
-    
+
+
 open func execute(commandJson: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1963,7 +3526,7 @@ open func execute(commandJson: String)throws  -> String  {
     )
 })
 }
-    
+
 open func snapshot()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
         uniffiCallStatus in
@@ -1972,9 +3535,9 @@ open func snapshot()throws  -> String  {
     )
 })
 }
-    
 
-    
+
+
 }
 
 
@@ -2021,6 +3584,176 @@ public func FfiConverterTypeNotebookEngine_lower(_ value: NotebookEngine) -> UIn
 
 
 
+public struct FeedCacheConfigurationV1: Equatable, Hashable {
+    public var raw: Data
+    public var configurationToken: String
+    public var providerToken: String
+    public var providerDescriptorJson: String
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(raw: Data, configurationToken: String, providerToken: String, providerDescriptorJson: String) {
+        self.raw = raw
+        self.configurationToken = configurationToken
+        self.providerToken = providerToken
+        self.providerDescriptorJson = providerDescriptorJson
+    }
+
+
+
+
+}
+
+#if compiler(>=6)
+extension FeedCacheConfigurationV1: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeFeedCacheConfigurationV1: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FeedCacheConfigurationV1 {
+        return
+            try FeedCacheConfigurationV1(
+                raw: FfiConverterData.read(from: &buf),
+                configurationToken: FfiConverterString.read(from: &buf),
+                providerToken: FfiConverterString.read(from: &buf),
+                providerDescriptorJson: FfiConverterString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: FeedCacheConfigurationV1, into buf: inout [UInt8]) {
+        FfiConverterData.write(value.raw, into: &buf)
+        FfiConverterString.write(value.configurationToken, into: &buf)
+        FfiConverterString.write(value.providerToken, into: &buf)
+        FfiConverterString.write(value.providerDescriptorJson, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedCacheConfigurationV1_lift(_ buf: RustBuffer) throws -> FeedCacheConfigurationV1 {
+    return try FfiConverterTypeFeedCacheConfigurationV1.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedCacheConfigurationV1_lower(_ value: FeedCacheConfigurationV1) -> RustBuffer {
+    return FfiConverterTypeFeedCacheConfigurationV1.lower(value)
+}
+
+
+public struct FeedCacheStageV1: Equatable, Hashable {
+    public var reference: String
+    public var existingBody: Data?
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(reference: String, existingBody: Data?) {
+        self.reference = reference
+        self.existingBody = existingBody
+    }
+
+
+
+
+}
+
+#if compiler(>=6)
+extension FeedCacheStageV1: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeFeedCacheStageV1: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FeedCacheStageV1 {
+        return
+            try FeedCacheStageV1(
+                reference: FfiConverterString.read(from: &buf),
+                existingBody: FfiConverterOptionData.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: FeedCacheStageV1, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.reference, into: &buf)
+        FfiConverterOptionData.write(value.existingBody, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedCacheStageV1_lift(_ buf: RustBuffer) throws -> FeedCacheStageV1 {
+    return try FfiConverterTypeFeedCacheStageV1.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedCacheStageV1_lower(_ value: FeedCacheStageV1) -> RustBuffer {
+    return FfiConverterTypeFeedCacheStageV1.lower(value)
+}
+
+
+public struct FeedSourceReplyV1: Equatable, Hashable {
+    public var responseBytes: Data
+    public var body: Data
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(responseBytes: Data, body: Data) {
+        self.responseBytes = responseBytes
+        self.body = body
+    }
+
+
+
+
+}
+
+#if compiler(>=6)
+extension FeedSourceReplyV1: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeFeedSourceReplyV1: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FeedSourceReplyV1 {
+        return
+            try FeedSourceReplyV1(
+                responseBytes: FfiConverterData.read(from: &buf),
+                body: FfiConverterData.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: FeedSourceReplyV1, into buf: inout [UInt8]) {
+        FfiConverterData.write(value.responseBytes, into: &buf)
+        FfiConverterData.write(value.body, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedSourceReplyV1_lift(_ buf: RustBuffer) throws -> FeedSourceReplyV1 {
+    return try FfiConverterTypeFeedSourceReplyV1.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeFeedSourceReplyV1_lower(_ value: FeedSourceReplyV1) -> RustBuffer {
+    return FfiConverterTypeFeedSourceReplyV1.lower(value)
+}
+
+
 public struct ProviderReply: Equatable, Hashable {
     public var responseJson: String
     public var contentBytes: Data
@@ -2032,9 +3765,9 @@ public struct ProviderReply: Equatable, Hashable {
         self.contentBytes = contentBytes
     }
 
-    
 
-    
+
+
 }
 
 #if compiler(>=6)
@@ -2048,7 +3781,7 @@ public struct FfiConverterTypeProviderReply: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ProviderReply {
         return
             try ProviderReply(
-                responseJson: FfiConverterString.read(from: &buf), 
+                responseJson: FfiConverterString.read(from: &buf),
                 contentBytes: FfiConverterData.read(from: &buf)
         )
     }
@@ -2075,23 +3808,23 @@ public func FfiConverterTypeProviderReply_lower(_ value: ProviderReply) -> RustB
 }
 
 
-public 
+public
 enum NativeError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
-    
-    
+
+
     case Failure(message: String
     )
 
-    
 
-    
 
-    
+
+
+
     public var errorDescription: String? {
         String(reflecting: self)
     }
-    
+
 }
 
 #if compiler(>=6)
@@ -2108,9 +3841,9 @@ public struct FfiConverterTypeNativeError: FfiConverterRustBuffer {
         let variant: Int32 = try readInt(&buf)
         switch variant {
 
-        
 
-        
+
+
         case 1: return .Failure(
             message: try FfiConverterString.read(from: &buf)
             )
@@ -2122,14 +3855,14 @@ public struct FfiConverterTypeNativeError: FfiConverterRustBuffer {
     public static func write(_ value: NativeError, into buf: inout [UInt8]) {
         switch value {
 
-        
 
-        
-        
+
+
+
         case let .Failure(message):
             writeInt(&buf, Int32(1))
             FfiConverterString.write(message, into: &buf)
-            
+
         }
     }
 }
@@ -2152,6 +3885,380 @@ public func FfiConverterTypeNativeError_lower(_ value: NativeError) -> RustBuffe
 
 
 
+public protocol FeedCacheHostV1: AnyObject, Sendable {
+
+    func stage(conditionJson: String, body: Data, cancellation: FeedSourceCancellationV1) async throws  -> FeedCacheStageV1
+
+    /**
+     * Must atomically compare the expected generation/source key and finish its
+     * durable transaction before returning. Do not reenter the source session.
+     */
+    func compareAndStore(staged: String, conditionJson: String, body: Data) throws
+
+}
+
+
+// Put the implementation in a struct so we don't pollute the top-level namespace
+fileprivate struct UniffiCallbackInterfaceFeedCacheHostV1 {
+
+    // Create the VTable using a series of closures.
+    // Swift automatically converts these into C callback functions.
+    //
+    // Store the vtable directly.
+    static let vtable: UniffiVTableCallbackInterfaceFeedCacheHostV1 = UniffiVTableCallbackInterfaceFeedCacheHostV1(
+        uniffiFree: { (uniffiHandle: UInt64) -> () in
+            do {
+                try FfiConverterCallbackInterfaceFeedCacheHostV1.handleMap.remove(handle: uniffiHandle)
+            } catch {
+                print("Uniffi callback interface FeedCacheHostV1: handle missing in uniffiFree")
+            }
+        },
+        uniffiClone: { (uniffiHandle: UInt64) -> UInt64 in
+            do {
+                return try FfiConverterCallbackInterfaceFeedCacheHostV1.handleMap.clone(handle: uniffiHandle)
+            } catch {
+                fatalError("Uniffi callback interface FeedCacheHostV1: handle missing in uniffiClone")
+            }
+        },
+        stage: { (
+            uniffiHandle: UInt64,
+            conditionJson: RustBuffer,
+            body: RustBuffer,
+            cancellation: UInt64,
+            uniffiFutureCallback: @escaping UniffiForeignFutureCompleteRustBuffer,
+            uniffiCallbackData: UInt64,
+            uniffiOutDroppedCallback: UnsafeMutablePointer<UniffiForeignFutureDroppedCallbackStruct>
+        ) in
+            let makeCall = {
+                () async throws -> FeedCacheStageV1 in
+                guard let uniffiObj = try? FfiConverterCallbackInterfaceFeedCacheHostV1.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return try await uniffiObj.stage(
+                     conditionJson: try FfiConverterString.lift(conditionJson),
+                     body: try FfiConverterData.lift(body),
+                     cancellation: try FfiConverterTypeFeedSourceCancellationV1_lift(cancellation)
+                )
+            }
+
+            let uniffiHandleSuccess = { (returnValue: FeedCacheStageV1) in
+                uniffiFutureCallback(
+                    uniffiCallbackData,
+                    UniffiForeignFutureResultRustBuffer(
+                        returnValue: FfiConverterTypeFeedCacheStageV1_lower(returnValue),
+                        callStatus: RustCallStatus()
+                    )
+                )
+            }
+            let uniffiHandleError = { (statusCode, errorBuf) in
+                uniffiFutureCallback(
+                    uniffiCallbackData,
+                    UniffiForeignFutureResultRustBuffer(
+                        returnValue: RustBuffer.empty(),
+                        callStatus: RustCallStatus(code: statusCode, errorBuf: errorBuf)
+                    )
+                )
+            }
+            uniffiTraitInterfaceCallAsyncWithError(
+                makeCall: makeCall,
+                handleSuccess: uniffiHandleSuccess,
+                handleError: uniffiHandleError,
+                lowerError: FfiConverterTypeNativeError_lower,
+                droppedCallback: uniffiOutDroppedCallback
+            )
+        },
+        compareAndStore: { (
+            uniffiHandle: UInt64,
+            staged: RustBuffer,
+            conditionJson: RustBuffer,
+            body: RustBuffer,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterCallbackInterfaceFeedCacheHostV1.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return try uniffiObj.compareAndStore(
+                     staged: try FfiConverterString.lift(staged),
+                     conditionJson: try FfiConverterString.lift(conditionJson),
+                     body: try FfiConverterData.lift(body)
+                )
+            }
+
+
+            let writeReturn = { () }
+            uniffiTraitInterfaceCallWithError(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn,
+                lowerError: FfiConverterTypeNativeError_lower
+            )
+        }
+    )
+
+    // Rust stores this pointer for future callback invocations, so it must live
+    // for the process lifetime (not just for the init function call).
+    //
+    // `nonisolated(unsafe)` is needed under Swift 6 strict concurrency.
+    // This is safe because the pointee is initialized once during static init
+    // and never mutated by either side of the FFI.  Its fields are C function pointers.
+    nonisolated(unsafe) static let vtablePtr: UnsafePointer<UniffiVTableCallbackInterfaceFeedCacheHostV1> = {
+        let ptr = UnsafeMutablePointer<UniffiVTableCallbackInterfaceFeedCacheHostV1>.allocate(capacity: 1)
+        ptr.initialize(to: vtable)
+        return UnsafePointer(ptr)
+    }()
+}
+
+private func uniffiCallbackInitFeedCacheHostV1() {
+    uniffi_booknook_native_fn_init_callback_vtable_feedcachehostv1(UniffiCallbackInterfaceFeedCacheHostV1.vtablePtr)
+}
+
+// FfiConverter protocol for callback interfaces
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterCallbackInterfaceFeedCacheHostV1 {
+    fileprivate static let handleMap = UniffiHandleMap<FeedCacheHostV1>()
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+extension FfiConverterCallbackInterfaceFeedCacheHostV1 : FfiConverter {
+    typealias SwiftType = FeedCacheHostV1
+    typealias FfiType = UInt64
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public static func lift(_ handle: UInt64) throws -> SwiftType {
+        try handleMap.get(handle: handle)
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public static func lower(_ v: SwiftType) -> UInt64 {
+        return handleMap.insert(obj: v)
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public static func write(_ v: SwiftType, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(v))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterCallbackInterfaceFeedCacheHostV1_lift(_ handle: UInt64) throws -> FeedCacheHostV1 {
+    return try FfiConverterCallbackInterfaceFeedCacheHostV1.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterCallbackInterfaceFeedCacheHostV1_lower(_ v: FeedCacheHostV1) -> UInt64 {
+    return FfiConverterCallbackInterfaceFeedCacheHostV1.lower(v)
+}
+
+
+
+
+public protocol FeedSourceHostV1: AnyObject, Sendable {
+
+    func descriptorJson() throws  -> String
+
+    func fetch(requestJson: String, cancellation: FeedSourceCancellationV1) async throws  -> FeedSourceReplyV1
+
+}
+
+
+// Put the implementation in a struct so we don't pollute the top-level namespace
+fileprivate struct UniffiCallbackInterfaceFeedSourceHostV1 {
+
+    // Create the VTable using a series of closures.
+    // Swift automatically converts these into C callback functions.
+    //
+    // Store the vtable directly.
+    static let vtable: UniffiVTableCallbackInterfaceFeedSourceHostV1 = UniffiVTableCallbackInterfaceFeedSourceHostV1(
+        uniffiFree: { (uniffiHandle: UInt64) -> () in
+            do {
+                try FfiConverterCallbackInterfaceFeedSourceHostV1.handleMap.remove(handle: uniffiHandle)
+            } catch {
+                print("Uniffi callback interface FeedSourceHostV1: handle missing in uniffiFree")
+            }
+        },
+        uniffiClone: { (uniffiHandle: UInt64) -> UInt64 in
+            do {
+                return try FfiConverterCallbackInterfaceFeedSourceHostV1.handleMap.clone(handle: uniffiHandle)
+            } catch {
+                fatalError("Uniffi callback interface FeedSourceHostV1: handle missing in uniffiClone")
+            }
+        },
+        descriptorJson: { (
+            uniffiHandle: UInt64,
+            uniffiOutReturn: UnsafeMutablePointer<RustBuffer>,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> String in
+                guard let uniffiObj = try? FfiConverterCallbackInterfaceFeedSourceHostV1.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return try uniffiObj.descriptorJson(
+                )
+            }
+
+
+            let writeReturn = { uniffiOutReturn.pointee = FfiConverterString.lower($0) }
+            uniffiTraitInterfaceCallWithError(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn,
+                lowerError: FfiConverterTypeNativeError_lower
+            )
+        },
+        fetch: { (
+            uniffiHandle: UInt64,
+            requestJson: RustBuffer,
+            cancellation: UInt64,
+            uniffiFutureCallback: @escaping UniffiForeignFutureCompleteRustBuffer,
+            uniffiCallbackData: UInt64,
+            uniffiOutDroppedCallback: UnsafeMutablePointer<UniffiForeignFutureDroppedCallbackStruct>
+        ) in
+            let makeCall = {
+                () async throws -> FeedSourceReplyV1 in
+                guard let uniffiObj = try? FfiConverterCallbackInterfaceFeedSourceHostV1.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return try await uniffiObj.fetch(
+                     requestJson: try FfiConverterString.lift(requestJson),
+                     cancellation: try FfiConverterTypeFeedSourceCancellationV1_lift(cancellation)
+                )
+            }
+
+            let uniffiHandleSuccess = { (returnValue: FeedSourceReplyV1) in
+                uniffiFutureCallback(
+                    uniffiCallbackData,
+                    UniffiForeignFutureResultRustBuffer(
+                        returnValue: FfiConverterTypeFeedSourceReplyV1_lower(returnValue),
+                        callStatus: RustCallStatus()
+                    )
+                )
+            }
+            let uniffiHandleError = { (statusCode, errorBuf) in
+                uniffiFutureCallback(
+                    uniffiCallbackData,
+                    UniffiForeignFutureResultRustBuffer(
+                        returnValue: RustBuffer.empty(),
+                        callStatus: RustCallStatus(code: statusCode, errorBuf: errorBuf)
+                    )
+                )
+            }
+            uniffiTraitInterfaceCallAsyncWithError(
+                makeCall: makeCall,
+                handleSuccess: uniffiHandleSuccess,
+                handleError: uniffiHandleError,
+                lowerError: FfiConverterTypeNativeError_lower,
+                droppedCallback: uniffiOutDroppedCallback
+            )
+        }
+    )
+
+    // Rust stores this pointer for future callback invocations, so it must live
+    // for the process lifetime (not just for the init function call).
+    //
+    // `nonisolated(unsafe)` is needed under Swift 6 strict concurrency.
+    // This is safe because the pointee is initialized once during static init
+    // and never mutated by either side of the FFI.  Its fields are C function pointers.
+    nonisolated(unsafe) static let vtablePtr: UnsafePointer<UniffiVTableCallbackInterfaceFeedSourceHostV1> = {
+        let ptr = UnsafeMutablePointer<UniffiVTableCallbackInterfaceFeedSourceHostV1>.allocate(capacity: 1)
+        ptr.initialize(to: vtable)
+        return UnsafePointer(ptr)
+    }()
+}
+
+private func uniffiCallbackInitFeedSourceHostV1() {
+    uniffi_booknook_native_fn_init_callback_vtable_feedsourcehostv1(UniffiCallbackInterfaceFeedSourceHostV1.vtablePtr)
+}
+
+// FfiConverter protocol for callback interfaces
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterCallbackInterfaceFeedSourceHostV1 {
+    fileprivate static let handleMap = UniffiHandleMap<FeedSourceHostV1>()
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+extension FfiConverterCallbackInterfaceFeedSourceHostV1 : FfiConverter {
+    typealias SwiftType = FeedSourceHostV1
+    typealias FfiType = UInt64
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public static func lift(_ handle: UInt64) throws -> SwiftType {
+        try handleMap.get(handle: handle)
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public static func lower(_ v: SwiftType) -> UInt64 {
+        return handleMap.insert(obj: v)
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public static func write(_ v: SwiftType, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(v))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterCallbackInterfaceFeedSourceHostV1_lift(_ handle: UInt64) throws -> FeedSourceHostV1 {
+    return try FfiConverterCallbackInterfaceFeedSourceHostV1.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterCallbackInterfaceFeedSourceHostV1_lower(_ v: FeedSourceHostV1) -> UInt64 {
+    return FfiConverterCallbackInterfaceFeedSourceHostV1.lower(v)
+}
+
+
+
+
 /**
  * A host-owned, synchronous atomic store. Callbacks may run on any calling thread.
  * The host initializes its state and must serialize CAS with every other writer.
@@ -2159,13 +4266,13 @@ public func FfiConverterTypeNativeError_lower(_ value: NativeError) -> RustBuffe
  * A true result means the complete state is durably committed before returning.
  */
 public protocol NotebookStorageHost: AnyObject, Sendable {
-    
+
     func descriptorJson() throws  -> String
-    
+
     func loadJson() throws  -> String
-    
+
     func compareAndSave(expectedRevision: UInt64, stateJson: String) throws  -> Bool
-    
+
 }
 
 
@@ -2205,7 +4312,7 @@ fileprivate struct UniffiCallbackInterfaceNotebookStorageHost {
                 )
             }
 
-            
+
             let writeReturn = { uniffiOutReturn.pointee = FfiConverterString.lower($0) }
             uniffiTraitInterfaceCallWithError(
                 callStatus: uniffiCallStatus,
@@ -2228,7 +4335,7 @@ fileprivate struct UniffiCallbackInterfaceNotebookStorageHost {
                 )
             }
 
-            
+
             let writeReturn = { uniffiOutReturn.pointee = FfiConverterString.lower($0) }
             uniffiTraitInterfaceCallWithError(
                 callStatus: uniffiCallStatus,
@@ -2255,7 +4362,7 @@ fileprivate struct UniffiCallbackInterfaceNotebookStorageHost {
                 )
             }
 
-            
+
             let writeReturn = { uniffiOutReturn.pointee = FfiConverterBool.lower($0) }
             uniffiTraitInterfaceCallWithError(
                 callStatus: uniffiCallStatus,
@@ -2347,11 +4454,11 @@ public func FfiConverterCallbackInterfaceNotebookStorageHost_lower(_ v: Notebook
 
 
 public protocol ProviderHost: AnyObject, Sendable {
-    
+
     func descriptorsJson() throws  -> String
-    
+
     func execute(requestJson: String) async throws  -> ProviderReply
-    
+
 }
 
 
@@ -2391,7 +4498,7 @@ fileprivate struct UniffiCallbackInterfaceProviderHost {
                 )
             }
 
-            
+
             let writeReturn = { uniffiOutReturn.pointee = FfiConverterString.lower($0) }
             uniffiTraitInterfaceCallWithError(
                 callStatus: uniffiCallStatus,
@@ -2541,6 +4648,30 @@ fileprivate struct FfiConverterOptionString: FfiConverterRustBuffer {
         switch try readInt(&buf) as Int8 {
         case 0: return nil
         case 1: return try FfiConverterString.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterOptionData: FfiConverterRustBuffer {
+    typealias SwiftType = Data?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterData.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterData.read(from: &buf)
         default: throw UniffiInternalError.unexpectedOptionalTag
         }
     }
@@ -2710,6 +4841,50 @@ public func validateProviderConnections(connectionsJson: String)throws  -> Strin
     )
 })
 }
+public func emptyFeedConfigurationV1()throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_func_empty_feed_configuration_v1(uniffiCallStatus
+    )
+})
+}
+public func validateFeedConfigurationV1(raw: Data)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_func_validate_feed_configuration_v1(
+        FfiConverterData.lower(raw),uniffiCallStatus
+    )
+})
+}
+public func validateFeedSectionV1(raw: Data)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_func_validate_feed_section_v1(
+        FfiConverterData.lower(raw),uniffiCallStatus
+    )
+})
+}
+public func validateFeedSourceDescriptorV1(raw: Data)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_func_validate_feed_source_descriptor_v1(
+        FfiConverterData.lower(raw),uniffiCallStatus
+    )
+})
+}
+/**
+ * Pure bounded RSS2/Atom normalization. Output is inert produced-only JSON;
+ * this neither fetches nor validates reopened durable normalized caches.
+ */
+public func normalizeFeedXmlV1(contextBytes: Data, xmlBytes: Data)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_func_normalize_feed_xml_v1(
+        FfiConverterData.lower(contextBytes),
+        FfiConverterData.lower(xmlBytes),uniffiCallStatus
+    )
+})
+}
 
 private enum InitializationResult {
     case ok
@@ -2733,6 +4908,21 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_booknook_native_checksum_func_validate_provider_connections() != 8866) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_func_empty_feed_configuration_v1() != 49737) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_func_validate_feed_configuration_v1() != 53568) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_func_validate_feed_section_v1() != 4059) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_func_validate_feed_source_descriptor_v1() != 50932) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_func_normalize_feed_xml_v1() != 22453) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_booknook_native_checksum_method_desk_asset_directory() != 3976) {
@@ -2960,6 +5150,105 @@ private let initializationResult: InitializationResult = {
     if (uniffi_booknook_native_checksum_method_castaliacustody_validate_recovery() != 42076) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_booknook_native_checksum_method_feedcachecontrollerv1_activate() != 8647) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedcachecontrollerv1_close() != 45184) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedcachecontrollerv1_configuration() != 30547) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedcachecontrollerv1_offline() != 1253) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedcachecontrollerv1_pause() != 9326) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedcachecontrollerv1_refresh() != 14366) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedcachecontrollerv1_replace_configuration() != 17675) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedcachecontrollerv1_replace_provider() != 48953) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedcachecontrollerv1_status() != 62810) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedcacheoperationv1_cancel() != 43256) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedexportreviewv1_confirm() != 27706) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedexportreviewv1_preview() != 40708) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedimportreviewv1_confirm() != 52600) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedimportreviewv1_preview() != 20853) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedimportreviewv1_resolve() != 31500) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedprojectionreviewv1_confirm() != 47564) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedprojectionreviewv1_preview() != 7047) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedsourceattemptv1_cancel() != 5357) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedsourceattemptv1_execute() != 3423) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedsourcecancellationv1_cancel() != 24773) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedsourcecancellationv1_is_cancelled() != 12396) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedsourcereadv1_body() != 53035) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedsourcereadv1_cache_condition() != 4658) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedsourcereadv1_cancel() != 24747) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedsourcereadv1_request() != 47378) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedsourcereadv1_response() != 23000) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedsourcereadv1_store() != 43322) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedsourcesessionv1_activate() != 29885) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedsourcesessionv1_begin() != 717) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedsourcesessionv1_close() != 29189) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedsourcesessionv1_disable() != 32128) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedsourcesessionv1_replace_configuration() != 33872) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedsourcesessionv1_replace_provider() != 9050) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_booknook_native_checksum_method_notebookengine_execute() != 63772) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -2975,10 +5264,46 @@ private let initializationResult: InitializationResult = {
     if (uniffi_booknook_native_checksum_constructor_castaliacustody_new() != 1721) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_booknook_native_checksum_constructor_feedcachecontrollerv1_new() != 17780) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_constructor_feedcachecontrollerv1_public_https() != 18259) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_constructor_feedcacheoperationv1_new() != 45441) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_constructor_feedexportreviewv1_new() != 31291) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_constructor_feedimportreviewv1_new() != 41830) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_constructor_feedprojectionreviewv1_new() != 54539) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_constructor_feedsourcesessionv1_new() != 50145) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_constructor_feedsourcesessionv1_public_https() != 50780) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_booknook_native_checksum_constructor_notebookengine_local() != 42844) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_booknook_native_checksum_constructor_notebookengine_with_storage() != 64245) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedcachehostv1_stage() != 21327) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedcachehostv1_compare_and_store() != 41940) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedsourcehostv1_descriptor_json() != 17350) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_feedsourcehostv1_fetch() != 41972) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_booknook_native_checksum_method_notebookstoragehost_descriptor_json() != 38911) {
@@ -2997,6 +5322,8 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
 
+    uniffiCallbackInitFeedCacheHostV1()
+    uniffiCallbackInitFeedSourceHostV1()
     uniffiCallbackInitNotebookStorageHost()
     uniffiCallbackInitProviderHost()
     return InitializationResult.ok

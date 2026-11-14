@@ -329,6 +329,8 @@ struct SocialCommunityView: View {
                 }.padding(18).frame(maxWidth: .infinity, alignment: .leading).background(nookAccent.opacity(0.04), in: RoundedRectangle(cornerRadius: 12))
             }
             Divider().padding(.vertical, 8)
+            PublicationDiscoveryView(publications: model.publications) { model.section = "connections" }
+            Divider().padding(.vertical, 8)
             HStack { Text("Public reading groups").font(.title2); Spacer(); networkButton }
             if !social.sharingReady {
                 Text("Set up sharing to find groups and connect with other readers. Your book suggestions above work without it. Private groups are invitation-only.").font(.callout).foregroundStyle(.secondary)

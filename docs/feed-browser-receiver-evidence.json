@@ -1,0 +1,130 @@
+{
+  "schema": "booknook.browser-feed-receiver-evidence.v1",
+  "verified_at": "2026-11-14T14:04:57.524846+00:00",
+  "source_base": "995b36bd380c6d1fb1401599c6754dc13fbc082d",
+  "wallet_reviewed_head": "49b2562773dd6e3b1c03adb53d4a6f454c75fa4d",
+  "wallet_pr": "https://github.com/ZenithResearch/castalia-wallet/pull/27",
+  "source_sha256": {
+    "tests/browser-feed-receiver/index.html": "ad929ea4695f9909ad7efc1e0b399d76438228e73282e8e9395894f76f5d5ea9",
+    "tests/browser-feed-receiver/receiver.mjs": "b554476527278b8833fa14d0dab61df9d430ed42d07ecc7da919253d396795e9",
+    "tests/browser-feed-receiver/assertions.mjs": "38cc83d679612d62625217762e062342f62f590da0f7de03d4bcca5b2593f43e",
+    "tests/browser-feed-receiver/README.md": "8fcddf2923c498a95b218bffb7a3d55d315c30da46377bcf1e90bd308e5d48cb",
+    "scripts/prepare-feed-browser-receiver.py": "d9a3aa7ae80d32a1c2d4df7d73ac2eb1b3378524defbfc42ab8096458b00d813"
+  },
+  "browser_version": "151.0.7922.34",
+  "fixture_only": true,
+  "production_enabled": false,
+  "personal_profiles_used": false,
+  "runtime_payloads": [
+    {
+      "path": "fixture-provenance.json",
+      "bytes": 808,
+      "sha256": "09aea2fc1606ae17609e3436d274f012f7a3aa4a985763d68592046c2d18ecea"
+    },
+    {
+      "path": "index.html",
+      "bytes": 1501,
+      "sha256": "ad929ea4695f9909ad7efc1e0b399d76438228e73282e8e9395894f76f5d5ea9"
+    },
+    {
+      "path": "receiver.mjs",
+      "bytes": 11082,
+      "sha256": "b554476527278b8833fa14d0dab61df9d430ed42d07ecc7da919253d396795e9"
+    },
+    {
+      "path": "sdk/contract-json.js",
+      "bytes": 1099,
+      "sha256": "adecb3a9e3dc1dce2357abf4e988ea8219e4a21ed3f467a737c6c8573dc69e07"
+    },
+    {
+      "path": "sdk/feeds.js",
+      "bytes": 3168,
+      "sha256": "e08a913711a7afb50870005f112b47fab38a1e34602f724389c15f08bae0dbab"
+    },
+    {
+      "path": "wasm/booknook_wasm.js",
+      "bytes": 68286,
+      "sha256": "f84f317c1d4664de44c18be83e1b1327aca9d554fef98b66e31c3365bc00f7c5"
+    },
+    {
+      "path": "wasm/booknook_wasm_bg.wasm",
+      "bytes": 5414750,
+      "sha256": "90e38298e4c626448ec30ba0647a5db853f491286c89f16a5a37e7d5a47ae2b9"
+    }
+  ],
+  "sdk_archive_sha256": "9846e025606d8a4716b7b386a6a074718e1d65e455b8660a36da1f03fb057b02",
+  "browser_receipt_sha256": "483cf6a3459c3b36c4b579a98d52de321d773e21bda53746a528b427e575e079",
+  "browser_case_groups": [
+    {
+      "case": "untouched-production-default-refusal",
+      "passed": true
+    },
+    {
+      "case": "actual-synthetic-custody-unlock-separate-origin-approval-v3-guard",
+      "passed": true
+    },
+    {
+      "case": "actual-browser-delivery-and-explicit-inert-booknook-import",
+      "passed": true
+    },
+    {
+      "case": "receiving-host-independent-SDK-and-IndexedDB",
+      "passed": [
+        "opaque original-byte import",
+        "all conflicts explicit",
+        "cancel without save",
+        "additive selected interpretation",
+        "private records retained",
+        "empty/no-op row retained",
+        "malformed/wrapper/strict-URL refusal",
+        "actual competing-tab CAS",
+        "pre-CAS cancellation",
+        "restart inactive persistence"
+      ],
+      "fixtureOnly": true,
+      "runtimeOrProductionAcceptance": false
+    },
+    {
+      "case": "empty-explicit-consent",
+      "passed": true
+    },
+    {
+      "case": "choice-cancel",
+      "passed": true
+    },
+    {
+      "case": "consent-deny",
+      "passed": true
+    },
+    {
+      "case": "exact-ciphertext-staleness",
+      "passed": true
+    },
+    {
+      "case": "combined120s-deadline-synthetic-clock",
+      "passed": true
+    },
+    {
+      "case": "real-custody-lock-cancellation",
+      "passed": true
+    },
+    {
+      "case": "document-navigation-cancellation",
+      "passed": true
+    }
+  ],
+  "external_http_requests_observed_by_browser_context": [],
+  "qualification": [
+    "Actual installed npm ESM facade and web-target Rust WASM in Chrome, not a mocked codec.",
+    "Original import bytes and opaque review retained until explicit confirmation; all conflicts require choices.",
+    "Actual IndexedDB transaction compares the complete expected row; competing tab and cancellation barriers exercised.",
+    "Imported configuration is inactive after commit and browser restart; no source provider is installed."
+  ],
+  "limits": [
+    "Disposable test receiver is not the production browser app or native app UI acceptance.",
+    "Positive Wallet path uses a separate synthetic worker and fixture custody; production capability and default destination refusal stay unchanged.",
+    "The 120-second lifecycle case advances a synthetic clock; no wall-time soak or cold-start performance qualification.",
+    "Context request observations do not claim system-wide traffic inspection.",
+    "No live user credentials, personal vault, physical device, accessibility or production host acceptance."
+  ]
+}

@@ -102,11 +102,15 @@ actor DeskRepository {
         self.recommendationProviderID = recommendationProviderID
         self.socialProviderID = socialProviderID
     }
-    func open() throws -> (DeskSnapshot, [ReleaseGate]) {
+    func resolvedDirectory() throws -> URL {
         let root: URL
         if let directoryOverride { root = directoryOverride }
         else if let override = ProcessInfo.processInfo.environment["BOOKNOOK_DATA_DIR"] { root = URL(fileURLWithPath: override) }
         else { root = try FileManager.default.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("BookNook", isDirectory: true) }
+        return root
+    }
+    func open() throws -> (DeskSnapshot, [ReleaseGate]) {
+        let root = try resolvedDirectory()
         let services = try BookNookServices(directory: root, providers: AppleFileProviders.defaults() + additionalProviders)
         self.services = services; openedDirectory = root
         desk = services.desk
@@ -170,7 +174,11 @@ actor DeskRepository {
     @Published var gates: [ReleaseGate] = []
     @Published var selection: [String: Any]?
     let repository: DeskRepository
-    init(repository: DeskRepository = DeskRepository()) { self.repository = repository }
+    let publications: PublicationsModel
+    init(repository: DeskRepository = DeskRepository(), publicationProvider: (any BookNookFeedSourceProviderV1)? = nil) {
+        self.repository = repository
+        publications = PublicationsModel(repository: PublicationRepository(desk: repository, provider: publicationProvider))
+    }
     lazy var authorization = AuthorizationCoordinator(repository: repository)
     @Published var editorGeneration = UUID()
     struct PendingEditorDraft { let session: String; let baseUpdate: String; let text: String; let styles: [InlineStyle] }

@@ -50,6 +50,7 @@ let fixtureRoot = URL(fileURLWithPath: fixtures)
 try await runPackagedCastaliaSmoke(fixtureRoot: fixtureRoot)
 try await runPackagedProviderSmoke(fixtureRoot: fixtureRoot)
 try runPackagedNotebookSmoke()
+try await runPackagedFeedSmoke()
 let root = FileManager.default.temporaryDirectory.appendingPathComponent("booknook-sdk-consumer-\\(UUID().uuidString)")
 defer { try? FileManager.default.removeItem(at: root) }
 let desk = try Desk(directory: root.path)
@@ -68,7 +69,7 @@ print("Independent packaged Swift consumer linked native Rust and persisted/reop
 }
 }
 ''')
-for name in ['PackagedCastaliaSmoke.swift','PackagedProviderSmoke.swift','PackagedNotebookSmoke.swift']:
+for name in ['PackagedCastaliaSmoke.swift','PackagedProviderSmoke.swift','PackagedNotebookSmoke.swift','PackagedFeedSmoke.swift']:
     shutil.copy2(root/'tests'/name, consumer/'Sources/Smoke'/name)
 fixtures=output/'fixtures'
 fixtures.mkdir()
@@ -130,4 +131,4 @@ swift_consumer_bin="$(xcrun swift build --show-bin-path --package-path target/sd
   --config-path target/swift-sdk-config --security-path target/swift-sdk-security)"
 BOOKNOOK_SMOKE_FIXTURES="$PWD/target/sdk-package-check/swift/fixtures" "$swift_consumer_bin/Smoke"
 target/debug/examples/castalia-fixture verify < target/sdk-package-check/swift/fixtures/castalia-swift-receipt.json
-echo 'The extracted Swift archive passed independent provider, standalone notebook storage, Castalia custody and native persistence acceptance.'
+echo 'The extracted Swift archive passed independent feed/cache/import/export, provider, standalone notebook storage, Castalia custody and native persistence acceptance.'
