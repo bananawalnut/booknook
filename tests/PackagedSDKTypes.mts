@@ -47,5 +47,5 @@ await desk.execute(modernDrawing);
 const face: Command = {op:'set_note_face',notebook_id:'notebook',block_id:'block',face:'text',at:5};
 await desk.execute(face);
 declare const note: NoteMetadata;
-const originalTime: number|null = note.created.at;
+const originalTime: number|null = note.created.at ?? null;
 void originalTime;
