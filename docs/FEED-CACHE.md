@@ -1,6 +1,16 @@
 # Native feed cache controller
 
-`booknook_native::FeedCacheController` provides standalone host-local SQLite storage for public feed sources. The Rust SDK owns acquisition attempts, durable configuration and admission. It is separate from the notebook database, portable exports, credentials and social state. UniFFI/Swift integration and the app interface are subsequent delivery steps.
+`booknook_native::FeedCacheController` provides standalone host-local SQLite storage for public feed sources. The Rust SDK owns acquisition attempts, durable configuration and admission. It is separate from the notebook database, portable exports, credentials and social state. Additive UniFFI/Swift bindings expose the same coordinator. The app interface is a subsequent delivery step.
+
+## Native and Swift bindings
+
+UniFFI exposes `FeedCacheControllerV1`; Swift exposes `BookNookFeedCacheV1`. Use async `open(directory:expectedConfiguration:provider:)` for an installed provider or `publicHTTPS(directory:expectedConfiguration:)` for the isolated built-in transport. Swift constructs off the calling executor and closes an eventual handle if opening is canceled. Both factories stay offline and inactive. A new store needs explicit strict configuration; omit it only when reopening an existing store. Share the same facade across windows.
+
+Async methods provide configuration/provider CAS, activation, `pause`, refresh, offline display, status and close. Returned immutable Swift records preserve source/variant identity, provenance, hashes, tokens, inert text, raw date status and signed seconds/leap nanoseconds. Private bounded wire decoders accept native-produced payloads only; they are not a public cache import format.
+
+The inspected UniFFI bridge does not propagate Swift Task cancellation by itself. Each facade call therefore owns a one-use native cancellation scope that marks current storage flags and the active core token synchronously before waking pending work. Later registrations see cancellation. Pre-canceled operations enqueue nothing. Ready successful acknowledgements remain successful; cancellation after commit starts is not a rollback promise. Close intentionally awaits resource release even for a canceled Swift task.
+
+[Binding qualification](feed-cache-bindings-evidence.json) passes 20 cache unit cases, three durable integration scenarios plus one ordinary child helper, an exported opaque-facade test, strict all-target Clippy and actual fresh/preserved generated Swift consumers. Real held SQLite writes and queued cancellation are tested before releasing the writer, including canceled error-status recording. No app, device, external-network or minimum-OS runtime qualification is inferred.
 
 ## Opening and ownership
 
@@ -34,4 +44,4 @@ Local observation times stay separate from publisher dates. Local clock rollback
 
 Display records preserve provenance, raw/context/profile hashes and configuration/cache tokens so hosts can reject stale completions. Render inert text literally. Neither source metadata nor a transport key establishes Castalia authorship. `read_status()` describes local activation, retained data and failure; it does not assert publisher freshness.
 
-[Focused qualification](feed-cache-evidence.json) passes 17 native unit cases and three integration scenarios plus an ordinary child-helper entry, strict all-target Clippy and formatting. It uses actual SQLite/OS process primitives and explicitly labels injected acknowledgements and DNS-equivalent executor saturation. The local clock rollback branch is source-reviewed policy, not an injected-clock test. This API does not establish an installed app, foreign-future cancellation, physical-device acceptance or cross-client synchronization.
+[Focused qualification](feed-cache-evidence.json) passes 17 native unit cases and three integration scenarios plus an ordinary child-helper entry, strict all-target Clippy and formatting. It uses actual SQLite/OS process primitives and explicitly labels injected acknowledgements and DNS-equivalent executor saturation. The local clock rollback branch is source-reviewed policy, not an injected-clock test. That initial Rust-only evidence does not establish foreign-future cancellation; the additive facade has its own later evidence above. Neither establishes an installed app, physical-device acceptance or cross-client synchronization.

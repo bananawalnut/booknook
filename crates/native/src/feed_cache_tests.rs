@@ -374,6 +374,135 @@ fn lifecycle_cancellation_after_real_sqlite_wait_never_activates_or_replaces() {
         finish(&c, &p).await;
     });
 }
+
+#[test]
+fn foreign_scope_cancel_fences_sqlite_synchronously_without_repoll_or_drop() {
+    run(async {
+        let (c, state, p) = setup(false);
+        for operation in 0..3 {
+            let before = c.configuration().await.unwrap();
+            let (entered_tx, entered) = mpsc::sync_channel(1);
+            c.call(move |w, _| {
+                BUSY_SIGNAL.with(|signal| *signal.borrow_mut() = Some(entered_tx));
+                w.db.busy_handler(Some(sqlite_busy_signal))?;
+                Ok(())
+            })
+            .await
+            .unwrap();
+            let external = Connection::open(p.join("feeds.sqlite")).unwrap();
+            external.execute_batch("BEGIN IMMEDIATE").unwrap();
+            let scope = Arc::new(OperationCancellation::default());
+            scope.claim().unwrap();
+            let scoped = c.scoped(scope.clone());
+            let inner: std::pin::Pin<Box<dyn Future<Output = Result<()>>>> = match operation {
+                0 => Box::pin(scoped.activate(SOURCE)),
+                1 => {
+                    let mut raw = config(false);
+                    raw.push(b' ');
+                    Box::pin(scoped.replace_configuration(&before.configuration_token, raw))
+                }
+                _ => Box::pin(
+                    scoped.replace_provider(&before.provider_token, Box::new(Host(state.clone()))),
+                ),
+            };
+            let mut future = Box::pin(scope.run(inner));
+            assert!(poll(future.as_mut()).is_pending());
+            entered
+                .recv_timeout(std::time::Duration::from_secs(2))
+                .unwrap();
+            scope.cancel(); // No executor poll/drop occurs before releasing SQLite.
+            external.execute_batch("ROLLBACK").unwrap();
+            let after = c.configuration().await.unwrap();
+            assert_eq!(before.configuration_token, after.configuration_token);
+            assert_eq!(before.provider_token, after.provider_token);
+            assert!(!c.read_status(SOURCE).await.unwrap().locally_active);
+            assert!(future.await.is_err());
+        }
+        finish(&c, &p).await;
+    });
+}
+
+#[test]
+fn foreign_scope_precancel_queue_cancel_and_ready_success_are_distinct() {
+    run(async {
+        let (c, _, p) = setup(false);
+        let scope = Arc::new(OperationCancellation::default());
+        scope.cancel();
+        let ran = AtomicBool::new(false);
+        assert!(
+            scope
+                .run(async {
+                    ran.store(true, Ordering::SeqCst);
+                    Ok(())
+                })
+                .await
+                .is_err()
+        );
+        assert!(!ran.load(Ordering::SeqCst));
+        let (entered_tx, entered) = mpsc::sync_channel(1);
+        let (release, wait) = mpsc::sync_channel(1);
+        let mut running = Box::pin(c.call(move |_, _| {
+            entered_tx.send(()).unwrap();
+            wait.recv().unwrap();
+            Ok(())
+        }));
+        assert!(poll(running.as_mut()).is_pending());
+        entered.recv().unwrap();
+        let scope = Arc::new(OperationCancellation::default());
+        let scoped = c.scoped(scope.clone());
+        let mut queued = Box::pin(scope.run(scoped.activate(SOURCE)));
+        assert!(poll(queued.as_mut()).is_pending());
+        scope.cancel();
+        release.send(()).unwrap();
+        running.await.unwrap();
+        assert!(!c.read_status(SOURCE).await.unwrap().locally_active);
+        assert!(queued.await.is_err());
+        let scope = Arc::new(OperationCancellation::default());
+        let scoped = c.scoped(scope.clone());
+        let mut accepted = Box::pin(scope.run(scoped.activate(SOURCE)));
+        assert!(poll(accepted.as_mut()).is_pending());
+        assert!(c.read_status(SOURCE).await.unwrap().locally_active); // accepted but not acknowledged to future yet
+        scope.cancel();
+        assert!(accepted.await.is_ok()); // never overwrite a ready success
+        let attempt = c.call(|w, _| Ok(w.session.begin(SOURCE)?)).await.unwrap();
+        let read = attempt.cancellation();
+        assert!(!read.is_cancelled());
+        scope.register_read(&read);
+        assert!(read.is_cancelled()); // late registration is fenced
+        finish(&c, &p).await;
+    });
+}
+
+#[test]
+fn foreign_cancel_while_error_recording_waits_preserves_status() {
+    run(async {
+        let (c, _, p) = setup(false);
+        c.activate(SOURCE).await.unwrap();
+        let start = c.call(|w, cancel| w.begin(SOURCE, cancel)).await.unwrap();
+        let (entered_tx, entered) = mpsc::sync_channel(1);
+        c.call(move |w, _| {
+            BUSY_SIGNAL.with(|s| *s.borrow_mut() = Some(entered_tx));
+            w.db.busy_handler(Some(sqlite_busy_signal))?;
+            Ok(())
+        })
+        .await
+        .unwrap();
+        let external = Connection::open(p.join("feeds.sqlite")).unwrap();
+        external.execute_batch("BEGIN IMMEDIATE").unwrap();
+        let scope = Arc::new(OperationCancellation::default());
+        let scoped = c.scoped(scope.clone());
+        let mut recording = Box::pin(scoped.record_error(&start.binding, "synthetic failure"));
+        assert!(poll(recording.as_mut()).is_pending());
+        entered
+            .recv_timeout(std::time::Duration::from_secs(2))
+            .unwrap();
+        scope.cancel();
+        external.execute_batch("ROLLBACK").unwrap();
+        assert!(c.read_status(SOURCE).await.unwrap().last_error.is_none());
+        recording.await;
+        finish(&c, &p).await;
+    });
+}
 #[test]
 fn saturated_network_blocking_slots_do_not_strand_offline_storage() {
     run(async {

@@ -1,7 +1,11 @@
 mod feed_cache;
+mod feed_cache_bindings;
 pub use feed_cache::{
     FEED_CACHE_LOGICAL_QUOTA, FEED_CACHE_MAX_ROWS, FEED_CACHE_QUEUE_CAPACITY,
     FeedCacheConfiguration, FeedCacheController, FeedCacheEntry, FeedCacheStatus, FeedCacheView,
+};
+pub use feed_cache_bindings::{
+    FeedCacheConfigurationV1, FeedCacheControllerV1, FeedCacheOperationV1,
 };
 mod feed_xml;
 pub use feed_xml::normalize_feed_xml_v1;

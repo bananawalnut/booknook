@@ -16,12 +16,14 @@ use rusqlite::{Connection, OptionalExtension, params};
 use serde::Serialize;
 use std::{
     fs::{self, File, OpenOptions},
+    future::Future,
     path::Path,
     sync::{
-        Arc,
+        Arc, Mutex, Weak,
         atomic::{AtomicBool, Ordering},
         mpsc,
     },
+    task::{Poll, Waker},
     time::{SystemTime, UNIX_EPOCH},
 };
 use tokio::sync::oneshot;
@@ -129,6 +131,104 @@ pub struct FeedCacheStatus {
 #[derive(Clone)]
 pub struct FeedCacheController {
     sender: Arc<mpsc::SyncSender<Message>>,
+    operation: Option<Arc<OperationCancellation>>,
+}
+// One foreign call owns this scope. Synchronous cancellation fences queued or
+// running storage BEFORE waking the foreign future; wake/drop alone races SQLite.
+#[derive(Default)]
+pub(crate) struct OperationCancellation {
+    cancelled: AtomicBool,
+    claimed: AtomicBool,
+    state: Mutex<OperationState>,
+}
+#[derive(Default)]
+struct OperationState {
+    job: Option<Weak<AtomicBool>>,
+    read: Option<f::FeedCancellation>,
+    waker: Option<Waker>,
+}
+struct OperationWaiter<'a>(&'a OperationCancellation);
+impl Drop for OperationWaiter<'_> {
+    fn drop(&mut self) {
+        // A future's waker can own the future itself. Never retain it after
+        // completion/drop and create a scope -> waker -> future ownership cycle.
+        let waker = self
+            .0
+            .state
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .waker
+            .take();
+        drop(waker);
+    }
+}
+impl OperationCancellation {
+    pub(crate) fn claim(&self) -> Result<()> {
+        self.claimed
+            .compare_exchange(false, true, Ordering::SeqCst, Ordering::SeqCst)
+            .map(|_| ())
+            .map_err(|_| fail("Feed cache operation is one-use"))
+    }
+    pub(crate) fn cancel(&self) {
+        self.cancelled.store(true, Ordering::SeqCst);
+        let waker = {
+            let mut state = self
+                .state
+                .lock()
+                .unwrap_or_else(std::sync::PoisonError::into_inner);
+            if let Some(job) = state.job.as_ref().and_then(Weak::upgrade) {
+                job.store(true, Ordering::SeqCst);
+            }
+            if let Some(read) = &state.read {
+                read.cancel();
+            }
+            state.waker.take()
+        };
+        if let Some(waker) = waker {
+            waker.wake();
+        }
+    }
+    fn register_job(&self, job: &Arc<AtomicBool>) {
+        let mut state = self
+            .state
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        state.job = Some(Arc::downgrade(job));
+        if self.cancelled.load(Ordering::SeqCst) {
+            job.store(true, Ordering::SeqCst);
+        }
+    }
+    fn register_read(&self, read: &f::FeedCancellation) {
+        let mut state = self
+            .state
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        state.read = Some(read.clone());
+        if self.cancelled.load(Ordering::SeqCst) {
+            read.cancel();
+        }
+    }
+    pub(crate) async fn run<T>(&self, future: impl Future<Output = Result<T>>) -> Result<T> {
+        let _waiter = OperationWaiter(self);
+        let mut future = std::pin::pin!(future);
+        let mut started = false;
+        std::future::poll_fn(|cx| {
+            {
+                let mut state = self.state.lock().unwrap_or_else(std::sync::PoisonError::into_inner);
+                state.waker = Some(cx.waker().clone());
+            }
+            // Pre-cancel must not poll/enqueue even a lifecycle close. Once
+            // started, preserve an already-ready successful acknowledgement.
+            if !started && self.cancelled.load(Ordering::SeqCst) {
+                return Poll::Ready(Err(fail("Feed operation cancelled before starting")));
+            }
+            started = true;
+            if let Poll::Ready(result) = future.as_mut().poll(cx) { return Poll::Ready(result); }
+            if self.cancelled.load(Ordering::SeqCst) {
+                Poll::Ready(Err(fail("Feed operation cancelled; outcome may already be committed; inspect durable state")))
+            } else { Poll::Pending }
+        }).await
+    }
 }
 type Job = Box<dyn FnOnce(&mut Worker) + Send>;
 enum Message {
@@ -213,7 +313,14 @@ impl FeedCacheController {
             .map_err(|_| fail("Feed storage worker stopped during open"))??;
         Ok(Self {
             sender: Arc::new(sender),
+            operation: None,
         })
+    }
+    pub(crate) fn scoped(&self, operation: Arc<OperationCancellation>) -> Self {
+        Self {
+            sender: self.sender.clone(),
+            operation: Some(operation),
+        }
     }
     async fn call<T: Send + 'static>(
         &self,
@@ -221,6 +328,10 @@ impl FeedCacheController {
     ) -> Result<T> {
         let cancelled = Arc::new(AtomicBool::new(false));
         let _cancel_on_drop = CancelJob(cancelled.clone());
+        if let Some(scope) = &self.operation {
+            scope.register_job(&cancelled);
+        }
+        check_cancel(&cancelled)?;
         let (reply, response) = oneshot::channel();
         // Capacity belongs to the queued/running closure, not the awaiting caller.
         self.sender
@@ -344,6 +455,12 @@ impl FeedCacheController {
         let start = self.call(move |w, cancel| w.begin(&source, cancel)).await?;
         let cancellation = start.attempt.cancellation();
         let _cancel_read = CancelRead(cancellation.clone());
+        if let Some(scope) = &self.operation {
+            scope.register_read(&cancellation);
+            if scope.cancelled.load(Ordering::SeqCst) {
+                return Err(fail("Feed refresh cancelled before transport"));
+            }
+        }
         // No storage gate, worker, transaction, or UI blocking during transport.
         let reply = match start
             .provider
@@ -431,7 +548,7 @@ impl FeedCacheController {
         // secrets). Bounded local classification only; callers receive the error.
         let _ = message;
         let _ = self
-            .call(move |w, _| {
+            .call(move |w, cancel| {
                 let tx =
                     w.db.transaction_with_behavior(rusqlite::TransactionBehavior::Immediate)?;
                 check_binding(&tx, &w.owner, &binding)?;
@@ -439,6 +556,7 @@ impl FeedCacheController {
                     "UPDATE sources SET last_error='Feed refresh failed' WHERE source_id=?1",
                     [&binding.source],
                 )?;
+                check_cancel(cancel)?;
                 tx.commit()?;
                 Ok(())
             })

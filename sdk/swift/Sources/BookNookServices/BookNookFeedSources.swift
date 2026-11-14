@@ -25,7 +25,7 @@ public protocol BookNookFeedCacheStoreV1: Sendable {
     func stage(conditionJSON: String, untrustedBody: Data, cancellation: FeedSourceCancellationV1) async throws -> BookNookFeedCacheStageV1
     func compareAndStore(staged: String, conditionJSON: String, untrustedBody: Data) throws
 }
-private final class SourceBridge: FeedSourceHostV1, @unchecked Sendable {
+final class SourceBridge: FeedSourceHostV1, @unchecked Sendable {
     let provider: any BookNookFeedSourceProviderV1
     let descriptor: String
     init(_ provider: any BookNookFeedSourceProviderV1) {self.provider = provider; self.descriptor = provider.descriptorJSON}

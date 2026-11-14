@@ -1,0 +1,132 @@
+{
+  "schema": "booknook.feed-cache-hosted-ci.v1",
+  "source_revision": "45853769365ac66bfcda410cc3cb00ddc9bc126d",
+  "run_id": 43592570185,
+  "url": "https://github.com/bananawalnut/booknook/actions/runs/43592570185",
+  "conclusion": "success",
+  "completed_at": "2026-11-14T12:21:20Z",
+  "jobs": [
+    {
+      "name": "apple",
+      "id": 132440240992,
+      "url": "https://github.com/bananawalnut/booknook/actions/runs/43592570185/job/132440240992",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run brew install xcodegen",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/build-apple.sh mac",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/build-apple.sh ipad-sim",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/build-apple.sh ipad-device",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-reading.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-recovery.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-ui-workflows.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-feed-source-swift.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-feed-xml-swift.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-feed-public-https-swift.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/package-swift.sh --use-built",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "name": "portable",
+      "id": 132440241209,
+      "url": "https://github.com/bananawalnut/booknook/actions/runs/43592570185/job/132440241209",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install the WebAssembly C toolchain",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/check.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify the complete dependency-license inventory",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-issuer.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run cargo install wasm-bindgen-cli --version 0.2.127 --locked",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-sdk.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/package-rust.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/package-typescript.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run python3 -m unittest discover -s tests/companion -v",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "qualification_limits": [
+    "Covers committed Rust-native cache at4585376, not later UniFFI/Swift cache facade or app feed controls.",
+    "Apple build/workflow/package checks do not establish installation, minimum-OS runtime or physical iPad acceptance.",
+    "Hosted HTTPS checks use offline defaults; the separate opt-in public-network result is recorded in feed-native-factory-evidence.json.",
+    "No registry publication, runtime deployment, production-v3 enablement or live-account qualification is implied."
+  ]
+}

@@ -1,0 +1,161 @@
+{
+  "date": "2026-11-14",
+  "base_commit": "45853769365ac66bfcda410cc3cb00ddc9bc126d",
+  "toolchains": {
+    "rustc": "1.96.0 (ac68faa20 2026-05-25)",
+    "uniffi": "0.32.2 (locked)",
+    "swift": "Apple Swift6.0.3, swiftlang-6.0.3.1.10, clang1600.0.30.1; Swift5 language mode",
+    "host": "arm64-apple-macosx16.0"
+  },
+  "semantics": {
+    "operation": "One-use cancellation only; same coordinator clone, no external read/cache permit admission",
+    "cancellation": "Synchronous native cancel marks current storage flag and core token before waking/dropping; late registrations observe cancellation; ready successful acknowledgements are preserved",
+    "boundary": "Cancellation before final durable guard fences work; once synchronous commit starts outcome may be accepted, never a rollback promise",
+    "construction": "Synchronous native filesystem open runs in Swift Task.detached; canceled construction closes eventual handle",
+    "dto": "Bounded native-produced view/status, private Swift wire decoders and immutable public DTOs;5MiB view cap; no public cache decoder/import",
+    "close": "Swift cleanup intentionally awaits acknowledgement even if the Swift task is canceled"
+  },
+  "limits": [
+    "Native-only additive SDK facade; no Desk,apps,mainCommand,provider-v1,ontology,dependency or runtime changes",
+    "No installed app/device/browser UI or external HTTP fetch qualified by this consumer",
+    "Swift late completed-result cancellation plus deterministic native pending-acknowledgement test; not a promise to rollback accepted commits",
+    "Broad SDK/package validation remains parent-owned; checked production generated Swift/binaries intentionally untouched",
+    "No runtime MSRV or release-artifact attestation claim",
+    "Expected first Swift80046 failed queue-full after cancel stress; test corrected to explicitly await queue drain;8356 and final70519 passed",
+    "One preliminary66353 Cargo command without explicit shared target was stopped130; no qualification claimed; any ignored local target artifacts preserved"
+  ],
+  "target_symlinks_created": [],
+  "review": "Reader independent source pass reported no additional concrete blocker beyond canceled error-status recording; that issue fixed and actual BUSY regression passed",
+  "preserved_artifact_launch": {
+    "command": "TMPDIR=<external-build-cache>/feed-sdk-swift DYLD_LIBRARY_PATH=<external-build-cache>/feed-sdk-swift/qualified/cache-facade-v1 <external-build-cache>/feed-sdk-swift/qualified/cache-facade-v1/cache-consumer",
+    "exit_code": 0,
+    "result": "Actual preserved generated consumer reran green using saved matching dylib; explicit DYLD_LIBRARY_PATH overrides original debug rpath"
+  },
+  "final_identity_check": "All10 owned sources and6 preserved artifacts matched after final preserved launch.",
+  "schema": "booknook.native-feed-cache-bindings-evidence.v1",
+  "status": "Focused native and actual generated Swift qualification passed; additive standalone facade, without app acceptance.",
+  "source_files": [
+    {
+      "sha256": "4ea0b985e43cc7e2ab3317ede452a99c47750f0e668aef9dd558419cb6a4d8d9",
+      "bytes": 2133,
+      "path": ".github/workflows/check.yml"
+    },
+    {
+      "sha256": "ffffe85d6beede08f1648fc8cf43e0afcd5aa34a9e88d29d7b4031f7fb7eb722",
+      "bytes": 63070,
+      "path": "crates/native/src/feed_cache.rs"
+    },
+    {
+      "sha256": "1db68b9aede66bf8d7f55bbfd1225966d29f6e6818fd3bb7a69495f4fb73aa71",
+      "bytes": 36768,
+      "path": "crates/native/src/feed_cache_tests.rs"
+    },
+    {
+      "sha256": "206c1e8a35a1ee80d8e32ba50393c0045507a848f764e0d262b3e752aa3f45d3",
+      "bytes": 6197,
+      "path": "crates/native/src/feed_cache_bindings.rs"
+    },
+    {
+      "sha256": "defa379bc00fa3df7d156106bf0e0d9c2fefcc14d877fefe2bd85ae5202654ae",
+      "bytes": 1970,
+      "path": "crates/native/tests/feed_cache_bindings.rs"
+    },
+    {
+      "sha256": "37c9901726d1474b7e429d98ee06b569e4184bb5bf9bcbee5ddb0cee62a0b39f",
+      "bytes": 17069,
+      "path": "crates/native/src/lib.rs"
+    },
+    {
+      "sha256": "e4da65584746efa6861531b0a950ee05e1d3c9824954dde2620a70647995863b",
+      "bytes": 6155,
+      "path": "sdk/swift/Sources/BookNookServices/BookNookFeedSources.swift"
+    },
+    {
+      "sha256": "85c47a9b33bd0339484c1c2387936c3ad49fc520b7129c87af554e1e6029ed21",
+      "bytes": 13477,
+      "path": "sdk/swift/Sources/BookNookServices/BookNookFeedCache.swift"
+    },
+    {
+      "sha256": "7c6afb84d30b3b341720e32a805848b63494d4606d541ce835fa66ede30fe265",
+      "bytes": 12641,
+      "path": "tests/FeedCacheSDKBindingSmoke.swift"
+    },
+    {
+      "sha256": "7a96418945c5b7ce5c2a7778074289805716bfb4b0ddb1a2a3aa7027b87461ff",
+      "bytes": 1431,
+      "path": "scripts/test-feed-cache-swift.sh"
+    }
+  ],
+  "artifacts": [
+    {
+      "sha256": "037fddb3041699dc3b837c1ab742236738397e181bd8aa1612512a588f60bff6",
+      "bytes": 40532672,
+      "path": "feed-sdk-swift/qualified/cache-facade-v1/libbooknook_native.dylib"
+    },
+    {
+      "sha256": "17c474fd3aadc3212fc202e71859f2120e022e7c8c515709f42ff7996a1fea72",
+      "bytes": 22701424,
+      "path": "feed-sdk-swift/qualified/cache-facade-v1/uniffi-bindgen"
+    },
+    {
+      "sha256": "0ab397c5dbd1e0841305c410215d6ffa3d30420cbae7394a62f4e0e4318c97fc",
+      "bytes": 1268752,
+      "path": "feed-sdk-swift/qualified/cache-facade-v1/cache-consumer"
+    },
+    {
+      "sha256": "b16d25cea1cb391fb8fc0f5529ff7b3b91be0368dcd3f9be40dd5470897031b2",
+      "bytes": 189165,
+      "path": "feed-sdk-swift/qualified/cache-facade-v1/generated/booknook_native.swift"
+    },
+    {
+      "sha256": "030a7af121344dda755e99dcabceacb5424511efbbb22d07d174a41bd616f529",
+      "bytes": 110512,
+      "path": "feed-sdk-swift/qualified/cache-facade-v1/generated/booknook_nativeFFI.h"
+    },
+    {
+      "sha256": "d832a0d192305ef1730df3247a38a0fb9d71239b6bd80769b584c72ff8aa073d",
+      "bytes": 146,
+      "path": "feed-sdk-swift/qualified/cache-facade-v1/generated/booknook_nativeFFI.modulemap"
+    }
+  ],
+  "commands": [
+    {
+      "command": "CARGO_TARGET_DIR=<external-build-cache> CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 cargo test --locked --offline -p booknook-native --test feed_cache_bindings",
+      "exit_code": 101,
+      "result": "Expected preimplementation RED: missing FeedCacheControllerV1 and FeedCacheOperationV1 exports"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=<external-build-cache> CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 cargo test --locked --offline -p booknook-native --lib feed_cache::tests -- --test-threads=1",
+      "exit_code": 0,
+      "result": "20 passed,0 failed; includes actual SQLite BUSY cancellation without future repoll/drop, queued/pre-cancel, ready accepted acknowledgement, late core-token registration and cancellation during error-status write"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=<external-build-cache> CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 cargo test --locked --offline -p booknook-native --test feed_cache_bindings --test feed_cache",
+      "exit_code": 0,
+      "result": "Durable integration4/4 (includes1ordinary child helper), exported opaque facade1/1; actual force-kill/restart and no caller Tokio"
+    },
+    {
+      "command": "CARGO_TARGET_DIR=<external-build-cache> CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 cargo clippy --locked --offline -p booknook-native --all-targets -- -D warnings",
+      "exit_code": 0,
+      "result": "Strict all-target Clippy green"
+    },
+    {
+      "command": "TMPDIR=<external-build-cache>/feed-sdk-swift CARGO_TARGET_DIR=<external-build-cache> bash scripts/test-feed-cache-swift.sh",
+      "exit_code": 0,
+      "result": "Fresh matching dylib/generated Swift facade consumer green: inactive/offline reopen, CAS/provider/pause, callback reentry, typed variants/inert text/raw missing-invalid-preEpoch-leap dates, immediate core cancellation, real held SQLite writes plus bounded queued cancellation before release, accepted completed result, canceled-open eventual-close cleanup; no caller Tokio"
+    },
+    {
+      "command": "cargo fmt --all -- --check",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0
+    },
+    {
+      "command": "bash -n scripts/test-feed-cache-swift.sh",
+      "exit_code": 0
+    }
+  ],
+  "private_receipt_sha256": "72df8a2c530115a3d712fc739e9a63bdce23bad211b446a92cac18e8c164e8c3"
+}

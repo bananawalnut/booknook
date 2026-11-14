@@ -59,4 +59,5 @@ jobs:
       - run: bash scripts/test-feed-source-swift.sh
       - run: bash scripts/test-feed-xml-swift.sh
       - run: bash scripts/test-feed-public-https-swift.sh
+      - run: bash scripts/test-feed-cache-swift.sh
       - run: bash scripts/package-swift.sh --use-built
