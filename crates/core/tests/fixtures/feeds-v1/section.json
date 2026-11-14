@@ -1,0 +1,26 @@
+{
+  "schema": "castalia.feeds-section.v1",
+  "version": 1,
+  "subscriptions": [
+    {
+      "id": "b41ef5e8-0e06-43e0-aa47-19f382e00c08",
+      "url": "https://example.org/feed.xml",
+      "format": "atom",
+      "title": "Café Ω 🧑‍🎨",
+      "enabled": true,
+      "collectionIds": [
+        "3d25cd04-565a-4d2e-9831-c2f312e29d03"
+      ],
+      "disclosure": "selected"
+    }
+  ],
+  "collections": [
+    {
+      "id": "3d25cd04-565a-4d2e-9831-c2f312e29d03",
+      "title": "  Essays  "
+    }
+  ],
+  "preferences": {
+    "order": "newest-first"
+  }
+}

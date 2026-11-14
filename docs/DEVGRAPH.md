@@ -28,7 +28,7 @@ All 17 previously prepared issues are now children of `Project/booknook`. Their 
 | booknook-hands-on-workflows | Remaining current-build reader, character, sharing and recovery paths |
 | booknook-nostr-remote | Real bound identities, remote relays, private groups, removal, outage and retries |
 | booknook-device-sync-live | Approved encrypted transfer, conflicts and recovery across actual devices |
-| booknook-current-packages | Rebuild and verify current native/SDK archives and provenance |
+| booknook-current-packages | Rebuild and verify current native/SDK archives, provenance and runtime behavior at the declared macOS 14/iPadOS 17 minimums |
 | booknook-ontology-publication | Independent public ontology discovery and offline/public artifact agreement |
 | booknook-sdk-publication | Public package destinations, installable consumers and compatible versions |
 | booknook-ci-evidence | Current exact-revision CI and reconciliation of historical delivery claims |
@@ -64,6 +64,16 @@ Concrete Tasks are linked to their owning Issues:
 5. Later: `castalia-feed-public-output` and `castalia-feed-safe-hints`.
 
 Arrows above mean “precedes”; actual DevGraph DEPENDS_ON edges point from dependent to prerequisite. Issue-level dependencies mirror these boundaries. Current package qualification depends on the added feed qualification; SDK publication depends on current packages and CI. Shared work has one owner rather than a second Book Nook copy.
+
+## Execution continuation — 2026-11-14
+
+The complete original goal remains active. Public [CI at 3c334e9](https://github.com/bananawalnut/booknook/actions/runs/43540045312) is now **successful in both Apple and portable jobs**, resolving the original optional-timestamp fixture failure. This baseline does not qualify new feeds or close live/device gates.
+
+Shared readers are committed on canonical review branches: Wallet PR 23 at d688a385 and Web PR 68 initially at 3f6a364. The 102-case mirrored raw corpus covers limits, Unicode, URL/ID policies, duplicate properties and numeric aliases. Native candidate merging preserves committed, previous-host and incoming feeds; old unqualified hosts explicitly refuse the format. Optimized core, actual WASM, TypeScript and hosted Wallet gates passed. Web encrypted persistence and native consumer qualification continue; production v3 export remains disabled.
+
+Book Nook now has a Rust-only portable feed domain with exact-byte/revision reviews, bound conflict choices and origin-bound projections. Independent review caught and closed an orphan-collection disclosure path before commit. Thirteen focused tests, full core tests and strict Clippy pass. Native/WASM bindings and reference-app integration follow; this does not close the whole SDK/provider task. A Web dependency-policy failure is being repaired through an exact maintained dev-tool prerelease, without an override or exception. Hosted reruns and a separate existing cold-WASM build-budget failure remain.
+
+Next dependencies remain: complete independent reader/native/WASM fixtures; preserve encrypted host storage and review; selected-origin feed projection and inert accepting-site import; portable Book Nook provider, safe acquisition/cache and native discovery; cross-client acceptance and current packages. Public output and renderer hints remain later. No task is accepted merely because its branch exists or a targeted test passes.
 
 ## Read current state
 

@@ -1,6 +1,6 @@
 # Portable feeds: implementation target
 
-**Status: planned, 2026-11-13.** The current app does not import Castaway feed settings, fetch RSS/Atom or present external-publication cards. This document selects a narrow implementation target; its schema names are proposals, not an issued Castalia ontology release or a new writable Castaway format. [DevGraph ownership and dependencies](DEVGRAPH.md) precede implementation.
+**Status: development implementation, 2026-11-14.** The Rust SDK has inert validation, import reviews and selected projections. The current app does not import Castaway feed settings, fetch RSS/Atom or present external-publication cards. This document selects a narrow implementation target; its schema names are proposals, not an issued Castalia ontology release or an enabled production Castaway writer. [DevGraph ownership and dependencies](DEVGRAPH.md) precede implementation.
 
 ## Where it fits
 
@@ -47,16 +47,16 @@ The intended contents section is `sections.feeds`:
 }
 ```
 
-This is a proposed data contract, not an executable example supported by today's clients. It grants neither disclosure nor fetch permission. The encrypted file can itself reveal reading interests; downloading it and projecting selected settings are separate actions.
+This is a development data contract, not a currently enabled Book Nook import flow. It grants neither disclosure nor fetch permission. The encrypted file can itself reveal reading interests; downloading it and projecting selected settings are separate actions.
 
 Initial limits and semantics to encode in shared fixtures:
 
-- Exact keys and versions; reject duplicate JSON properties, unknown fields, malformed UTF-8, lone surrogates and invalid control characters.
-- Canonical lowercase UUIDs for subscription and collection IDs; no duplicate IDs or dangling collection references. Each collection is exactly an id/title record; subscription collectionIds carry membership.
+- Exact keys and versions; reject duplicate JSON properties, unknown fields, malformed UTF-8, lone surrogates and invalid control characters. Raw version tokens are JSON integers: decimal/exponent aliases such as 1.0 or 1e0 must fail before JavaScript number conversion.
+- Canonical lowercase UUIDs with version 1–8 and RFC variant 8/9/a/b; nil/max values are rejected. IDs are unique separately within subscription and collection namespaces. Collection references are unique within a subscription and must resolve. Each collection is exactly an id/title record; subscription collectionIds carry membership.
 - At most 256 subscriptions, 64 collections and 16 collection references per subscription. Limits fail the entire candidate without truncation.
-- At most 256 KiB raw UTF-8 feed-section JSON, 2,048 UTF-8 bytes per URL and 512 UTF-8 bytes per label. Preserve accepted labels exactly; no silent Unicode normalization. The existing whole encrypted Castaway artifact limit remains 1 MiB. Before committing wallet configuration, serialize/encrypt the complete candidate including preserved sections and base64 overhead and enforce that whole-file gate; reject an unexportable candidate without truncation or partial writes. A small feed section alone does not establish room in the vault.
+- At most 256 KiB compact serialized UTF-8 feed-section JSON, with the same byte gate on standalone raw input; 2,048 UTF-8 bytes per URL and 512 UTF-8 bytes per label. Empty/whitespace labels mean no custom label and remain unchanged. Reject Unicode Cc controls and lone surrogates while preserving accepted text, including combining forms and ZWJ; no silent Unicode normalization. The existing whole encrypted Castaway artifact limit remains 1 MiB. Before committing wallet configuration, serialize/encrypt the complete candidate including preserved sections and base64 overhead and enforce that whole-file gate; reject an unexportable candidate without truncation or partial writes. A small feed section alone does not establish room in the vault.
 - `format` is `auto`, `rss` or `atom`; `disclosure` is `private` or `selected`; `enabled` is a preference. All new-host sources start locally inactive regardless of these values.
-- First version accepts query-free public HTTPS URLs on the default port, with DNS hostnames and no userinfo or fragments. Query-based feeds remain explicitly unsupported until a reviewed non-secret query policy exists. Reject IP literals, ambiguous host encodings and local/unqualified hostnames. Public-address checks still occur at connection time and on redirects.
+- First version accepts query-free public HTTPS URLs on the default port, with DNS hostnames and no userinfo or fragments. Query-based feeds remain explicitly unsupported until a reviewed non-secret query policy exists. Require byte-identical URL serialization, ASCII DNS labels, implicit port, valid percent escapes and no parser-rewritten host/path. Reject IP literals, ambiguous host encodings, trailing host dots and local/unqualified hostnames. The initial suffix denylist is localhost/local/internal/home/lan/corp/test/invalid/example/onion/arpa, including subdomains; example.org/net/com are admissible syntax. Public-address checks still occur at connection time and on redirects.
 - Do not carry cookies, keys, credentials, grants, tokenized URLs, executable renderer references, item caches or polling cursors. URL syntax cannot prove a path is non-secret: import/export review must identify the endpoint as public rather than claiming heuristic token detection is sufficient.
 - Preserve array order in exports; display entries newest-first using source dates, stable tie-breakers and an explicit undated group. Do not invent publication times from fetch time or convert audiobook/ebook percentages.
 
@@ -95,6 +95,16 @@ Native hosts supply transport; a browser host may need a disclosed proxy for COR
 Native Dependencies.json at those reviewed commits actually pins `72ed5cd`; the workspace registry also records `9def6b2`. Preserve this provenance discrepancy and resolve actual package/runtime pins before release. The inspected portable codec blobs are identical at those core revisions, so the strict v1/v2 finding is unchanged. Historical worktree heads are inspection evidence, not automatically suitable development baselines.
 
 Qualification requires raw duplicate-key and hostile-input fixtures; wrong-owner/version/unknown-section refusal; legacy imports preserving feeds; empty/conflicting/canceled/stale imports; account edits preserving v3; encrypted cross-client round trips; restart/failed atomic writes; no-network import; selected-origin projection; SSRF/XXE/decompression/cache-generation tests, whole-vault size preflight, credential-free redirect/proxy behavior and reviewed collection-projection closure; installed SDK consumer parity; and current native discovery/accessibility use. These do not replace original source-account, custody, hardware, Nostr or device-sync gates.
+
+## Development evidence — 2026-11-14
+
+The new `booknook_core::feeds` domain validates original bounded bytes against all 102 canonical raw cases and preserves accepted values. Pure import reviews bind the exact source bytes and current configuration; resolving conflicts requires the original review and a complete explicit choice batch. Pure confirmation returns data for a host to persist atomically. It performs no activation, networking or custody operation.
+
+Selected projection reviews bind the exact HTTPS destination and source configuration. Sources, collection labels and each membership are separate choices; only marked-selected sources qualify. Unreferenced collection labels are removed after membership selection, including when no source is chosen. The original configuration is unchanged and its private fingerprint is excluded from the projection.
+
+Thirteen focused tests, the complete core suite, strict Clippy and independent re-review passed. [Rust-only evidence](feed-sdk-evidence.json) states the boundary: bindings, persistence, accepting-host UI, transport and activation still require implementation and qualification. Issued provider-v1 and ontology bytes are unchanged.
+
+Shared readers and preservation are under review in [Wallet PR 23](https://github.com/ZenithResearch/castalia-wallet/pull/23) and [Web PR 68](https://github.com/ZenithResearch/castalia-web/pull/68). Wallet hosted gates passed at d688a385. New native source/artifacts and Web storage are undergoing their own actual-core checks. Writer and unqualified-host gates remain explicit; a development fixture or temporary guard-removal test is not an enabled production capability.
 
 ## Later work
 

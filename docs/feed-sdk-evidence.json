@@ -1,0 +1,46 @@
+{
+  "schema": "booknook.feed-sdk-rust-evidence.v1",
+  "date": "2026-11-14",
+  "scope": "Rust core domain only; independent development schemas, no released provider-v1 or ontology modification",
+  "fixture_cases": 102,
+  "focused_tests": 13,
+  "checks": [
+    {
+      "command": "cargo test -p booknook-core --test feeds --locked --offline",
+      "result": "passed"
+    },
+    {
+      "command": "cargo test -p booknook-core --locked --offline",
+      "result": "passed"
+    },
+    {
+      "command": "cargo clippy -p booknook-core --test feeds --locked --offline -- -D warnings",
+      "result": "passed"
+    },
+    {
+      "command": "cargo fmt --all -- --check",
+      "result": "passed"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    }
+  ],
+  "review": {
+    "independent": true,
+    "orphan_label_disclosure": "failing regression before correction, final review found no remaining concrete blocker",
+    "stale_conflict_choices": "original-review-bound resolve, tested against changed raw bytes and configuration"
+  },
+  "source_sha256": {
+    "crates/core/src/feeds.rs": "f3a5cc512fa5a3f9ef4d8283c040cd043d22a26401959b605f76d32ea8e3ba4a",
+    "crates/core/tests/feeds.rs": "ce66175f67eed7f3ec54de04b6e75515df19ceb0f3323a65f5dfa651aabed2c9",
+    "crates/core/tests/fixtures/feeds-v1/section.json": "eff3c3c4b15743661c2628d504052211f54c0ec2ab220d6d1d103218569c0ec2",
+    "crates/core/tests/fixtures/feeds-v1/conformance.json": "07dfd61336d1ccbaafe2d3cf7540255ae5345222366daf4ce4e942b83a369d8f",
+    "crates/core/tests/fixtures/feeds-v1/provenance.json": "d65d4c266bddab5d040756b0450041b33b70f1bc2fe69070cd91d8eb359a5541"
+  },
+  "limitations": [
+    "No native or WASM feed binding qualification in this evidence",
+    "No host persistence, network, activation, feed discovery UI or publication acceptance",
+    "No operational authority or disclosure permission is granted by data confirmation"
+  ]
+}

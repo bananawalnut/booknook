@@ -1,0 +1,11 @@
+{
+  "schema": "booknook.feed-fixture-provenance.v1",
+  "sourceRepository": "https://github.com/ZenithResearch/castalia-wallet",
+  "sourceCommit": "ce33e70c4ecdef90886ce295a519e3d9b8eb13ac",
+  "sourceDirectory": "contracts/feeds/v1",
+  "cases": 102,
+  "sha256": {
+    "section.json": "eff3c3c4b15743661c2628d504052211f54c0ec2ab220d6d1d103218569c0ec2",
+    "conformance.json": "07dfd61336d1ccbaafe2d3cf7540255ae5345222366daf4ce4e942b83a369d8f"
+  }
+}
