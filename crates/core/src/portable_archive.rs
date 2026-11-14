@@ -8,7 +8,7 @@ use crate::{
     social_protocol::{self as social, SocialState},
 };
 use base64::{Engine, engine::general_purpose::STANDARD};
-use nostr::{Event, JsonUtil, PublicKey};
+use nostr::prelude::{Event, PublicKey};
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 

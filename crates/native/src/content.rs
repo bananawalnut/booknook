@@ -55,7 +55,8 @@ pub fn import(root: &Path, bytes: &[u8], kind: &str) -> Result<ContentAsset> {
                     if entry.unix_mode().is_some_and(|m| m & 0o170000 == 0o120000) {
                         return Err(error("EPUB symlinks are forbidden"));
                     }
-                    let relative = safe_relative(entry.name())?;
+                    let name = entry.name().map_err(|e| error(e.to_string()))?;
+                    let relative = safe_relative(name.as_ref())?;
                     total = total
                         .checked_add(entry.size())
                         .ok_or_else(|| error("EPUB size overflow"))?;

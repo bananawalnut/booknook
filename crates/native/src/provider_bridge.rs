@@ -463,7 +463,7 @@ impl Desk {
         config: booknook_core::settings::ConnectionSettings,
         request: p::ProviderRequest,
     ) -> Result<ProviderReply> {
-        use nostr_sdk::prelude::{Event, JsonUtil, PublicKey};
+        use nostr_sdk::prelude::{Event, PublicKey};
         let runtime = tokio::runtime::Builder::new_multi_thread()
             .worker_threads(2)
             .enable_all()

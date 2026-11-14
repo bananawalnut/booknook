@@ -4,7 +4,7 @@ Book Nook requires no runtime Book Nook server. The native app stores SQLite and
 
 ## Security replacement status
 
-The initial `0.1.0` public preview is withdrawn to draft with its assets/tag preserved. Do not install those archives as the current release. The app and all SDK packages now target `0.1.1`, build `2026111402`, and tag `v0.1.1-preview.20261114`. Native rebuilds, all package consumers, exact-source CI and replacement public-download verification remain pending. [Delivery status](DELIVERY.md) records the dependency flaw, bounded regression and reachability limits.
+The initial `0.1.0` preview remains withdrawn to draft with its assets/tag preserved. Do not install those archives as the current release. The broader audited Nostr/TLS/ZIP/SQLite remediation targets all app/SDK packages `0.2.0`, build `2026111403`, and tag `v0.2.0-preview.20261114`. Maintained Nostr 0.45.6/lru 0.18.2 requires exposed Rust type/custom transport migration; ontology, wire contracts and saved-data formats remain unchanged. [Fresh exact-lock advisory and registry checks](security-dependency-audit-evidence.json) pass, retaining maintenance notices. Rust/Swift/WASM consumers, native/packages, exact-source CI and public-download checks remain pending. No replacement has been published; held `0.1.1` candidates and source `130d5dba` CI remain partial history. [Delivery status](DELIVERY.md) records findings and qualification boundaries.
 
 ## Native and SDK builds
 
@@ -28,13 +28,13 @@ The historical pre-patch [November 14 Release checkpoint](native-release-2026111
 
 ## Locally consumable SDK packages
 
-The following commands create packages and test independent consumers without publishing or requiring a registry account. The 0.1.1 filenames below are replacement targets, not completed qualification:
+The following commands create packages and test independent consumers without publishing or requiring a registry account. The 0.2.0 filenames below are replacement targets, not completed qualification:
 
 | Command | Output and verification |
 | --- | --- |
-| `bash scripts/package-rust.sh` | Four `target/package/booknook-*-0.1.1.crate` archives. Unpacks the actual archives into a separate workspace, applies local patches for the unpublished Book Nook siblings, and runs all packaged tests and examples offline. |
-| `bash scripts/package-typescript.sh` | `target/packages/booknook-sdk-0.1.1.tgz`. Compiles CJS/ESM plus declarations, builds separate `pkg/web` and `pkg/nodejs` WASM assets, installs the tarball into an isolated consumer, and tests both JS entry points, both WASM initializers, and NodeNext declaration resolution. |
-| `bash scripts/package-swift.sh` | `target/packages/booknook-swift-sdk-0.1.1.tar.gz`. Builds all Apple targets, generates a standalone local Swift Package with an XCFramework, and links/runs an independent Swift consumer against a synthetic temporary desk. `--use-built` skips the Apple builds only after matching builds of all three targets. |
+| `bash scripts/package-rust.sh` | Four `target/package/booknook-*-0.2.0.crate` archives. Unpacks the actual archives into a separate workspace, applies local patches for the unpublished Book Nook siblings, and runs all packaged tests and examples offline. |
+| `bash scripts/package-typescript.sh` | `target/packages/booknook-sdk-0.2.0.tgz`. Compiles CJS/ESM plus declarations, builds separate `pkg/web` and `pkg/nodejs` WASM assets, installs the tarball into an isolated consumer, and tests both JS entry points, both WASM initializers, and NodeNext declaration resolution. |
+| `bash scripts/package-swift.sh` | `target/packages/booknook-swift-sdk-0.2.0.tar.gz`. Builds all Apple targets, generates a standalone local Swift Package with an XCFramework, and links/runs an independent Swift consumer against a synthetic temporary desk. `--use-built` skips the Apple builds only after matching builds of all three targets. |
 | `python3 scripts/stage-sdk-deliverables.py` | Copies the six packages to the adjacent user-facing `booknook-sdk` directory with a README and SHA-256 checksums. |
 
 The Swift package declares arm64 macOS 14+, iPadOS 17+ and arm64 iOS Simulator slices. Those deployment declarations are not minimum-OS runtime qualification. It does not claim Intel support or signed distribution. Its generated Swift and binary output are deliberately excluded from the source archive and are reproduced by the script. Handwritten `BookNookServices` and `CastaliaNative` sources are included in both source and binary SDK packages and compiled directly by the reference app. The independent Swift consumer builds first, then uses a fresh public synthetic Castalia credential to exercise a second application and verifies its receipt. Package source includes standard MIT/Apache license texts, dependency inventory boundaries and synthetic test fixtures. `scripts/sync-package-resources.py --check` checks package-local copies against the canonical source files; run it without `--check` after changing those files. No source package needs files outside its archive to compile its tests.

@@ -3,9 +3,8 @@
 //! Only this test maps a logical WSS endpoint to real plaintext loopback WebSockets.
 use super::*;
 use booknook_core::settings::{CastaliaSettings, ConnectionSettings};
-use nostr_sdk::pool::transport::{
-    error::TransportError,
-    websocket::{DefaultWebsocketTransport, WebSocketSink, WebSocketStream, WebSocketTransport},
+use nostr_sdk::transport::websocket::{
+    DefaultWebsocketTransport, WebSocketSink, WebSocketStream, WebSocketTransport,
 };
 use std::{
     net::TcpListener,
@@ -31,11 +30,17 @@ impl WebSocketTransport for LoopbackSocket {
     fn connect<'a>(
         &'a self,
         url: &'a Url,
-        mode: &'a ConnectionMode,
-        timeout: Duration,
-    ) -> nostr_sdk::util::BoxedFuture<
-        'a,
-        std::result::Result<(WebSocketSink, WebSocketStream), TransportError>,
+        proxy: Option<std::net::SocketAddr>,
+    ) -> std::pin::Pin<
+        Box<
+            dyn std::future::Future<
+                    Output = std::result::Result<
+                        (WebSocketSink, WebSocketStream),
+                        nostr_sdk::error::Error,
+                    >,
+                > + Send
+                + 'a,
+        >,
     > {
         Box::pin(async move {
             assert_eq!(url.scheme(), "wss");
@@ -43,9 +48,7 @@ impl WebSocketTransport for LoopbackSocket {
             assert_eq!(url.port(), Some(self.port));
             let mut local = url.clone();
             local.set_scheme("ws").unwrap();
-            DefaultWebsocketTransport
-                .connect(&local, mode, timeout)
-                .await
+            DefaultWebsocketTransport.connect(&local, proxy).await
         })
     }
 }
@@ -421,13 +424,13 @@ async fn private_group_native_journey(relay: &RelayProcess) {
             )
         };
         assert!(
-            !private
-                .iter()
-                .any(|event| event.tags.identifier() == Some(address(&stale.id).as_str()))
+            !private.iter().any(
+                |event| event.tags.identifier().as_deref() == Some(address(&stale.id).as_str())
+            )
         );
         let delivered: Vec<_> = private
             .iter()
-            .filter(|event| event.tags.identifier() == Some(address(&later.id).as_str()))
+            .filter(|event| event.tags.identifier().as_deref() == Some(address(&later.id).as_str()))
             .collect();
         assert_eq!(
             delivered.len(),
@@ -1004,7 +1007,7 @@ fn injected_social_transport_preserves_authorization_outage_replay_and_forgery_c
     let signed = EventBuilder::new(original.kind, payload.to_string())
         .tags(original.tags.clone())
         .custom_created_at(original.created_at)
-        .sign_with_keys(&keys[0])
+        .finalize(&keys[0])
         .unwrap();
     signed.verify().unwrap();
     bus.events

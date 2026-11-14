@@ -141,7 +141,7 @@ fn main() {
     let document = json!({"schema":"booknook.transport-identity.v1","binding":binding,"approved_at":100,"request_json":request_json,"presentation_json":presentation_json});
     let pending = EventBuilder::new(Kind::Custom(30078), "Synthetic unresolved relay data")
         .custom_created_at(Timestamp::from(201))
-        .sign_with_keys(&keys)
+        .finalize(&keys)
         .unwrap();
     value.social = Some(
         json!({"schema":archive::SOCIAL_SCHEMA,"state":social,"bindings":[{"document":document,"minimum_version":1}],"binding_history":[{"document":document,"retired_at":null}],"pending":[{"id":pending.id.to_hex(),"event_json":format!("\n{}\n",pending.as_json()),"reason":"Waiting for a synthetic parent"}]}),

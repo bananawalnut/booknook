@@ -1,6 +1,6 @@
 # Book Nook JavaScript SDK
 
-The package includes a typed facade, ESM/CommonJS JavaScript, and separate browser/Node WebAssembly runtimes. It requires no Book Nook server. Install a locally generated `booknook-sdk-0.1.1.tgz`; no npm registry publication is assumed.
+The package includes a typed facade, ESM/CommonJS JavaScript, and separate browser/Node WebAssembly runtimes. It requires no Book Nook server. Install a locally generated `booknook-sdk-0.2.0.tgz`; no npm registry publication is assumed.
 
 ```js
 import {BookNook} from '@booknook/sdk';

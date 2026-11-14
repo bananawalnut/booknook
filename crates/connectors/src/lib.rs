@@ -81,7 +81,7 @@ pub fn accept_event(
     if envelope.schema != "booknook.social-envelope.v1"
         || envelope.activity.actor != binding.binding.castalia_holder
         || event.created_at.as_secs() != envelope.activity.published_at
-        || event.tags.identifier()
+        || event.tags.identifier().as_deref()
             != Some(format!("booknook:activity:{}", envelope.activity.id).as_str())
     {
         return Err(Error::Denied("Activity envelope binding mismatch".into()));
@@ -104,14 +104,16 @@ pub struct NostrRelayTransport {
 }
 impl NostrRelayTransport {
     pub async fn connect(relays: &[String]) -> Result<Self> {
-        if relays.is_empty() {
-            return Err(Error::Unavailable("No Nostr relays configured".into()));
+        if relays.is_empty() || relays.len() > 20 {
+            return Err(Error::Invalid("Configure 1–20 Nostr relays".into()));
         }
-        let client = Client::default();
+        let client = ClientBuilder::new()
+            .connect_timeout(Duration::from_secs(10))
+            .build();
         for relay in relays {
             let url =
                 RelayUrl::parse(relay).map_err(|_| Error::Invalid("Invalid relay URL".into()))?;
-            if !relay.starts_with("wss://") {
+            if !relay.starts_with("wss://") || url.as_str().contains('@') {
                 return Err(Error::Invalid("Remote relays require wss".into()));
             }
             client
@@ -136,13 +138,11 @@ impl NostrRelayTransport {
         let result = self
             .client
             .send_event(event)
+            .ack_policy(AckPolicy::all())
+            .ok_timeout(Duration::from_secs(10))
             .await
             .map_err(|e| Error::Unavailable(e.to_string()))?;
-        if result.success.is_empty() {
-            return Err(Error::Unavailable(
-                "No relay acknowledged publication; retain the outbox item".into(),
-            ));
-        }
+        nostr_transport::require_acknowledged_relays(result)?;
         Ok(event.id.to_hex())
     }
     pub async fn fetch(&self, authors: Vec<PublicKey>, since: u64) -> Result<Vec<Event>> {
@@ -156,7 +156,9 @@ impl NostrRelayTransport {
             .limit(500);
         let events = self
             .client
-            .fetch_events(filter, Duration::from_secs(10))
+            .fetch_events(filter)
+            .timeout(Duration::from_secs(10))
+            .max_events(500)
             .await
             .map_err(|e| Error::Unavailable(e.to_string()))?;
         Ok(events.into_iter().collect())

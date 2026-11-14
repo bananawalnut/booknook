@@ -847,7 +847,7 @@ impl Desk {
                 .tags
                 .identifier()
                 .is_some_and(|v| v.starts_with("booknook:private:"))
-                && !event.tags.public_keys().any(|p| p == &keys.public_key())
+                && !event.tags.public_keys().any(|p| p == keys.public_key())
             {
                 continue;
             }
@@ -1355,7 +1355,7 @@ mod tests {
         let event = |at| {
             EventBuilder::new(Kind::Custom(30078), "Synthetic")
                 .custom_created_at(Timestamp::from(at))
-                .sign_with_keys(&old)
+                .finalize(&old)
                 .unwrap()
         };
         assert!(historical_sender(&senders, &event(110)).is_some());

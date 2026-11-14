@@ -12,8 +12,9 @@ serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
 reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
-nostr-sdk = { version = "0.44", features = ["nip44"] }
-tokio = { version = "1", features = ["macros", "rt-multi-thread", "net", "io-util", "time", "sync"] }
+nostr-sdk = "0.45.6"
+nostr = { version = "0.45.7", default-features = false, features = ["std", "nip44"] }
+tokio = { version = "1.53.3", features = ["macros", "rt-multi-thread", "net", "io-util", "time", "sync"] }
 
 [dev-dependencies]
 base64.workspace = true

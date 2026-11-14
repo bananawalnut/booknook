@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 use base64::{Engine, engine::general_purpose::STANDARD};
 use booknook_core::{Command, model::*, portable_archive as archive};
-use nostr::{EventBuilder, JsonUtil, Keys, Kind, Timestamp};
+use nostr::prelude::Event;
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
 fn minimal() -> archive::PortableArchive {
@@ -104,11 +104,16 @@ fn assets_are_complete_and_checksum_verified_without_rewriting_original_encoding
     );
 }
 fn pending_archive() -> Value {
-    let key = Keys::parse(&"03".repeat(32)).unwrap();
-    let event = EventBuilder::new(Kind::Custom(30078), "Pending synthetic content")
-        .custom_created_at(Timestamp::from(100))
-        .sign_with_keys(&key)
-        .unwrap();
+    // Reuse an actual signed pre-0.45 export: protocol validation must accept old
+    // stored events without adding signing/RNG features to the portable core.
+    let legacy: Value =
+        serde_json::from_str(include_str!("fixtures/portable-archive.json")).unwrap();
+    let event = Event::from_json(
+        legacy["social"]["pending"][0]["event_json"]
+            .as_str()
+            .unwrap(),
+    )
+    .unwrap();
     let exact = format!("\n{}\n", event.as_json());
     let mut value = minimal();
     value.social = Some(json!({"schema":archive::SOCIAL_SCHEMA,

@@ -45,7 +45,7 @@ fn setup() -> (Event, VerifiedBinding, AuthorityPolicy) {
     let event = EventBuilder::new(Kind::Custom(30078), content)
         .tags([Tag::identifier("booknook:activity:fixture-activity")])
         .custom_created_at(Timestamp::from(110))
-        .sign_with_keys(&transport)
+        .finalize(&transport)
         .unwrap();
     (event, binding, policy)
 }
@@ -69,7 +69,7 @@ fn transport_signature_does_not_replace_castalia_identity_binding() {
     let forged = EventBuilder::new(event.kind, event.content.clone())
         .tags(event.tags.clone())
         .custom_created_at(event.created_at)
-        .sign_with_keys(&impostor)
+        .finalize(&impostor)
         .unwrap();
     let mut state = State::default();
     assert!(forged.verify().is_ok());

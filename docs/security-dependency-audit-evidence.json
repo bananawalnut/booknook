@@ -1,0 +1,377 @@
+{
+  "schema": "booknook.security-dependency-audit-evidence.v1",
+  "verified_at": "2026-11-14T16:29:25.242703+00:00",
+  "release_scope": {
+    "app_and_sdk_version": "0.2.0",
+    "native_build": "2026111403",
+    "planned_tag": "v0.2.0-preview.20261114",
+    "replacement_published": false,
+    "status": "Exact frozen dependency checks complete; current build/package/exact-source CI/public-consumer qualification remains separate and pending."
+  },
+  "auditor": {
+    "name": "cargo-audit",
+    "version": "0.22.1",
+    "actual_version_banner": "cargo-audit-audit 0.22.1",
+    "binary_sha256": "10867780e5b5f4760c1f1ed6aede5606eb0e572ac9582e337f783a4dd338be64",
+    "installed_tool_used": true,
+    "local_install_or_build_run": false
+  },
+  "database": {
+    "official_url": "https://github.com/RustSec/advisory-db.git",
+    "commit": "4ef2df8e806a65e2f1ecc14f56f51249062b23d6",
+    "commit_date": "2026-11-13T13:33:03+01:00",
+    "remote_head_independently_matched": true,
+    "advisory_count": 1509,
+    "worktree_clean_before_and_after": true,
+    "head_unchanged": true,
+    "https_remote_read": {
+      "ambient_git_config_and_proxies_disabled": true,
+      "tls_verified": true,
+      "redirects": false
+    },
+    "provenance_limit": "Official HTTPS remote HEAD and clean local bytes were checked; repository origin metadata alone is not cryptographic attestation. The shallow audit JSON reports null commit/date, so explicit Git metadata identifies the snapshot."
+  },
+  "command": {
+    "registry_policy_environment": {
+      "CARGO_NET_OFFLINE": "true",
+      "CARGO_REGISTRIES_CRATES_IO_PROTOCOL": "sparse"
+    },
+    "template": [
+      "cargo-audit",
+      "audit",
+      "--color",
+      "never",
+      "--no-fetch",
+      "--deny",
+      "unsound",
+      "--deny",
+      "yanked",
+      "--json",
+      "--db",
+      "OFFICIAL_DATABASE_SNAPSHOT",
+      "--file",
+      "LOCKFILE"
+    ],
+    "same_database_snapshot_for_both_locks": true,
+    "architecture_os_severity_filters_or_ignored_ids": false,
+    "registry_lookup_errors_refused": true,
+    "caller_controls_registry_offline_policy": true
+  },
+  "audits": {
+    "root": {
+      "lockfile": "Cargo.lock",
+      "lock_sha256": "c066aec68125082b9a6992607e49703f3b784a86316c7fbca5193b59817f6f01",
+      "dependency_count": 362,
+      "exit_code": 0,
+      "vulnerability_count": 0,
+      "unsound_count": 0,
+      "yanked_count": 0,
+      "warning_counts": {
+        "unmaintained": 2
+      },
+      "warnings": [
+        {
+          "kind": "unmaintained",
+          "package": "basic-toml",
+          "version": "0.1.10",
+          "advisory": "RUSTSEC-2026-0374",
+          "url": "https://rustsec.org/advisories/RUSTSEC-2026-0374.html"
+        },
+        {
+          "kind": "unmaintained",
+          "package": "smallstr",
+          "version": "0.3.1",
+          "advisory": "RUSTSEC-2026-0215",
+          "url": "https://rustsec.org/advisories/RUSTSEC-2026-0215.html"
+        }
+      ],
+      "settings": {
+        "target_arch": [],
+        "target_os": [],
+        "severity": null,
+        "ignore": [],
+        "informational_warnings": [
+          "unmaintained",
+          "unsound",
+          "notice"
+        ]
+      },
+      "stdout_sha256": "e090218b56d64059f108bdf226b0bb04ff66f89b30e73da87cd4431849c5d177",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lookup_errors": false
+    },
+    "relay-read-probe": {
+      "lockfile": "tests/relay-read-probe/Cargo.lock",
+      "lock_sha256": "97b1d8cf1cc1e7b37713da47069128df7bc5fc5dda74fbcca1da81ed6a7565fb",
+      "dependency_count": 260,
+      "exit_code": 0,
+      "vulnerability_count": 0,
+      "unsound_count": 0,
+      "yanked_count": 0,
+      "warning_counts": {
+        "unmaintained": 1
+      },
+      "warnings": [
+        {
+          "kind": "unmaintained",
+          "package": "smallstr",
+          "version": "0.3.1",
+          "advisory": "RUSTSEC-2026-0215",
+          "url": "https://rustsec.org/advisories/RUSTSEC-2026-0215.html"
+        }
+      ],
+      "settings": {
+        "target_arch": [],
+        "target_os": [],
+        "severity": null,
+        "ignore": [],
+        "informational_warnings": [
+          "unmaintained",
+          "unsound",
+          "notice"
+        ]
+      },
+      "stdout_sha256": "b4651cf8531f0c9e6bcc2cb1b5e48c8fce426c30de935139b1ce9d6be7fec1e4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lookup_errors": false
+    }
+  },
+  "remediation": {
+    "baseline_root_vulnerabilities": 11,
+    "baseline_root_unsound_findings": 3,
+    "baseline_root_other_maintenance_warnings": 4,
+    "baseline_probe_vulnerabilities": 6,
+    "baseline_probe_informational_findings": 5,
+    "baseline_root_report_sha256": "f295f015ca2aaf09df02f5eabec9c2c814d449715ea4ec96c064a5c4066e14ca",
+    "resolved_advisory_matches": [
+      {
+        "kind": "vulnerability",
+        "advisory": "RUSTSEC-2026-0459",
+        "url": "https://rustsec.org/advisories/RUSTSEC-2026-0459.html",
+        "package": "libsqlite3-sys",
+        "previous_version": "0.38.2",
+        "selected_versions": [
+          "0.39.1"
+        ]
+      },
+      {
+        "kind": "vulnerability",
+        "advisory": "RUSTSEC-2026-0346",
+        "url": "https://rustsec.org/advisories/RUSTSEC-2026-0346.html",
+        "package": "rustls",
+        "previous_version": "0.23.45",
+        "selected_versions": [
+          "0.23.46"
+        ]
+      },
+      {
+        "kind": "vulnerability",
+        "advisory": "RUSTSEC-2026-0347",
+        "url": "https://rustsec.org/advisories/RUSTSEC-2026-0347.html",
+        "package": "rustls",
+        "previous_version": "0.23.45",
+        "selected_versions": [
+          "0.23.46"
+        ]
+      },
+      {
+        "kind": "vulnerability",
+        "advisory": "RUSTSEC-2026-0348",
+        "url": "https://rustsec.org/advisories/RUSTSEC-2026-0348.html",
+        "package": "rustls",
+        "previous_version": "0.23.45",
+        "selected_versions": [
+          "0.23.46"
+        ]
+      },
+      {
+        "kind": "vulnerability",
+        "advisory": "RUSTSEC-2026-0349",
+        "url": "https://rustsec.org/advisories/RUSTSEC-2026-0349.html",
+        "package": "rustls",
+        "previous_version": "0.23.45",
+        "selected_versions": [
+          "0.23.46"
+        ]
+      },
+      {
+        "kind": "vulnerability",
+        "advisory": "RUSTSEC-2026-0382",
+        "url": "https://rustsec.org/advisories/RUSTSEC-2026-0382.html",
+        "package": "rustls-webpki",
+        "previous_version": "0.103.15",
+        "selected_versions": [
+          "0.103.16"
+        ]
+      },
+      {
+        "kind": "vulnerability",
+        "advisory": "RUSTSEC-2026-0381",
+        "url": "https://rustsec.org/advisories/RUSTSEC-2026-0381.html",
+        "package": "webpki-roots",
+        "previous_version": "1.0.9",
+        "selected_versions": [
+          "0.26.11",
+          "1.0.10"
+        ]
+      },
+      {
+        "kind": "vulnerability",
+        "advisory": "RUSTSEC-2026-0429",
+        "url": "https://rustsec.org/advisories/RUSTSEC-2026-0429.html",
+        "package": "zip",
+        "previous_version": "4.6.1",
+        "selected_versions": [
+          "9.5.1"
+        ]
+      },
+      {
+        "kind": "vulnerability",
+        "advisory": "RUSTSEC-2026-0367",
+        "url": "https://rustsec.org/advisories/RUSTSEC-2026-0367.html",
+        "package": "zip",
+        "previous_version": "4.6.1",
+        "selected_versions": [
+          "9.5.1"
+        ]
+      },
+      {
+        "kind": "vulnerability",
+        "advisory": "RUSTSEC-2026-0368",
+        "url": "https://rustsec.org/advisories/RUSTSEC-2026-0368.html",
+        "package": "zip",
+        "previous_version": "4.6.1",
+        "selected_versions": [
+          "9.5.1"
+        ]
+      },
+      {
+        "kind": "vulnerability",
+        "advisory": "RUSTSEC-2026-0369",
+        "url": "https://rustsec.org/advisories/RUSTSEC-2026-0369.html",
+        "package": "zip",
+        "previous_version": "4.6.1",
+        "selected_versions": [
+          "9.5.1"
+        ]
+      },
+      {
+        "kind": "unsound",
+        "advisory": "RUSTSEC-2026-0253",
+        "url": "https://rustsec.org/advisories/RUSTSEC-2026-0253.html",
+        "package": "lru",
+        "previous_version": "0.16.4",
+        "selected_versions": [
+          "0.18.2"
+        ]
+      },
+      {
+        "kind": "unsound",
+        "advisory": "RUSTSEC-2026-0486",
+        "url": "https://rustsec.org/advisories/RUSTSEC-2026-0486.html",
+        "package": "rustix",
+        "previous_version": "1.1.5",
+        "selected_versions": [
+          "1.1.6"
+        ]
+      },
+      {
+        "kind": "unsound",
+        "advisory": "RUSTSEC-2026-0386",
+        "url": "https://rustsec.org/advisories/RUSTSEC-2026-0386.html",
+        "package": "tokio",
+        "previous_version": "1.53.2",
+        "selected_versions": [
+          "1.53.3"
+        ]
+      }
+    ],
+    "additional_context": "The earlier negentropy 0.5.1 allocation advisory was already patched before this broader baseline. Maintained Nostr SDK 0.45.6 removes the old relay pool and permits lru 0.18.2; exposed Rust types/transports require the 0.2.0 migration."
+  },
+  "remaining_maintenance": {
+    "waived_or_ignored": false,
+    "basic-toml": {
+      "version": "0.1.10",
+      "advisory": "RUSTSEC-2026-0374",
+      "path_scope": "The UniFFI bindgen/Askama generator dependency chain; lock presence alone does not prove runtime linkage."
+    },
+    "smallstr": {
+      "version": "0.3.1",
+      "advisory": "RUSTSEC-2026-0215",
+      "path_scope": "The yrs notebook CRDT dependency chain, also present in the relay probe."
+    },
+    "assessment": "These are published unmaintained notices, not matching vulnerability/unsound findings. They remain visible and require upstream maintenance tracking; replacing CRDT internals or the binding generator is separate compatibility work."
+  },
+  "official_registry": {
+    "verified_at": "2026-11-14T16:11:46.030526+00:00",
+    "package_names": 333,
+    "exact_versions": 358,
+    "present_checksum_matched_and_not_yanked": 358,
+    "official_sparse_index_versions": 357,
+    "exact_version_api_fallback": {
+      "package": "web-sys",
+      "version": "0.3.104",
+      "url": "https://crates.io/api/v1/crates/web-sys/0.3.104",
+      "response_bytes": 55231,
+      "reason": "The full sparse-index response exceeded its 4 MiB limit; that nonpass is retained and was not retried with a larger limit."
+    },
+    "request_policy": {
+      "unauthenticated": true,
+      "ambient_proxy_disabled": true,
+      "tls_verified": true,
+      "redirects": false,
+      "concurrency": 4,
+      "request_timeout_seconds": 20,
+      "connect_timeout_seconds": 5,
+      "sparse_response_limit_bytes": 4194304,
+      "exact_version_response_limit_bytes": 1048576,
+      "batch_response_limit_bytes": 134217728
+    },
+    "complete_receipt_sha256": "1e48e4d38860240cc4a14f455d16a7dd943fcc39ee836996720f1e765789697b",
+    "sparse_index_receipt_sha256": "78959fce3a3994617229603e0e75cd430183320d2bf12e5c9081fcdd3ec711be",
+    "exact_version_receipt_sha256": "830c01ff29652d25e40096ead092004c5622a9baf732af7a15fef7163c5ed0a8"
+  },
+  "initial_nonpasses": {
+    "empty_cargo_home": "Initial advisory-only runs could not complete registry yank lookups. Their raw stderr remains retained; they were not complete yank qualification.",
+    "supplement": "Independent official registry checks covered every exact version; the final gate then passed with a private snapshot of those selected index entries and no lookup errors.",
+    "setup": "The first helper setup refused a globally rewritten origin display. The final helper checks the exact raw local canonical origin and a clean unchanged database."
+  },
+  "qualified_ci_gate": {
+    "helper": "scripts/audit-dependencies.py",
+    "helper_sha256": "19b47c114dcbc2b10d514a18cd1678bb7eaa6fbfec618dee2f0bd31fa0dd9e61",
+    "tests": "tests/audit-dependencies.py",
+    "tests_sha256": "bfc719312b1a9f8a8d330b97d78ca4ea07953705e3cebff5c3247a60d86e89cb",
+    "focused_policy_and_actual_child_tests": 11,
+    "focused_tests_exit_code": 0,
+    "workflow": ".github/workflows/check.yml",
+    "workflow_sha256": "452c261ce9de84cc5462a9dfc09f954b9d710181b4aeb52bb11640531fc551e3",
+    "actionlint_exit_code": 0,
+    "actual_both_lock_gate_exit_code": 0,
+    "actual_always_color_environment_override_tested": true,
+    "private_execution_receipt_sha256": "0a41b1d5d9adb53e4aeab03ca92fa8783312d09ef2dcf2f4108f8caa97050096",
+    "summary_sha256": "3e06b38223f08913239bab0b7874309658f47e5b70b573fb887fea09c2357d92",
+    "source_index_cache_files_unchanged": 333,
+    "ci_execution_on_new_commit": "Pending; local gate checks do not claim a hosted run."
+  },
+  "license_inventory": {
+    "file": "docs/dependency-licenses.csv",
+    "sha256": "51f274cdde48d37d3c6e7eea466ec2d204323ff9005757fb263b019b64caf722",
+    "columns": [
+      "package",
+      "version",
+      "license",
+      "repository",
+      "scope"
+    ],
+    "rows": 362,
+    "missing_license_declarations": 0,
+    "scope": "All-feature build/platform graph including workspace packages; not a runtime binary linkage or legal compatibility conclusion."
+  },
+  "limits": [
+    "Known advisory matching against the stated point-in-time official database and registry metadata; not exhaustive security assurance.",
+    "No ignored advisory IDs, target/severity filters, or maintenance waivers.",
+    "Lockfile presence and successful matching do not prove vulnerable feature/call reachability, actual exploitation, binary linkage or native/WASM compatibility.",
+    "No Cargo build, install, update, native packaging, GUI/device test, public replacement release or public consumer run was performed in this audit lane.",
+    "Current 0.2.0 native/app/SDK package, exact-source CI and public-download consumers remain separately required."
+  ]
+}

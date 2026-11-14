@@ -33,7 +33,7 @@ impl Visit for Message {
 // Observe only SDK protocol message types, never retain or print frame contents.
 impl Subscriber for Watch {
     fn enabled(&self, metadata: &Metadata<'_>) -> bool {
-        metadata.target().starts_with("nostr_relay_pool")
+        metadata.target().starts_with("nostr_sdk::relay")
     }
     fn new_span(&self, _: &Attributes<'_>) -> Id {
         Id::from_u64(1)

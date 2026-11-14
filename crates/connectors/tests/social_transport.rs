@@ -74,7 +74,7 @@ fn private_nip44_round_trip_reveals_no_plaintext_and_binds_exact_recipient() {
     let own = wires.iter().find(|w| w.recipient() == actor(2)).unwrap();
     assert_eq!(
         own.event().tags.public_keys().collect::<Vec<_>>(),
-        vec![&sender.public_key()]
+        vec![sender.public_key()]
     );
     assert_eq!(
         decode_event(
@@ -149,7 +149,7 @@ fn public_transport_cannot_smuggle_a_private_publication_or_claim_another_holder
         private.event.id
     ))])
     .custom_created_at(Timestamp::from(110))
-    .sign_with_keys(&sender)
+    .finalize(&sender)
     .unwrap();
     assert!(decode_event(&wire, &bound, None, 111).is_err());
     let (state, public, policy) = approved(SocialAction::Publish {

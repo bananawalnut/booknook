@@ -30,6 +30,18 @@ jobs:
         run: |
           cargo fetch --locked
           python3 scripts/license-inventory.py --check
+      - name: Verify the dependency advisory gate policy
+        run: python3 -B tests/audit-dependencies.py
+      - name: Install the pinned dependency auditor
+        timeout-minutes: 10
+        run: cargo install cargo-audit --version 0.22.1 --locked
+      - name: Audit both lockfiles against fresh official RustSec advisories
+        timeout-minutes: 4
+        env:
+          CARGO_NET_OFFLINE: "true"
+        run: |
+          git -c http.sslVerify=true clone --depth 1 --no-tags https://github.com/RustSec/advisory-db.git "$RUNNER_TEMP/booknook-rustsec-db"
+          python3 -B scripts/audit-dependencies.py --database "$RUNNER_TEMP/booknook-rustsec-db" --output-dir "$RUNNER_TEMP/booknook-advisory-report"
       - name: Reject oversized negentropy ID lists before allocation
         run: python3 -B scripts/test-negentropy-bounds.py
       - run: bash scripts/test-issuer.sh

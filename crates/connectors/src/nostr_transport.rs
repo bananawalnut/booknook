@@ -8,8 +8,9 @@ use booknook_core::{
     canonical,
     social_protocol::{self as social, ApprovedPublication, Delivery, SocialState},
 };
-use nostr_sdk::pool::transport::websocket::{DefaultWebsocketTransport, IntoWebSocketTransport};
-use nostr_sdk::{nips::nip44, prelude::*};
+use nostr::nips::nip44;
+use nostr_sdk::prelude::*;
+use nostr_sdk::transport::websocket::{DefaultWebsocketTransport, IntoWebSocketTransport};
 use serde::{Deserialize, Serialize};
 use std::{
     collections::{BTreeMap, BTreeSet},
@@ -121,7 +122,7 @@ pub fn encode_publication(
                 Tag::hashtag("booknook"),
             ])
             .custom_created_at(Timestamp::from(now))
-            .sign_with_keys(keys)
+            .finalize(keys)
             .map_err(|e| Error::Unavailable(e.to_string()))?;
             result.push(PreparedDelivery {
                 recipient: "public".into(),
@@ -161,15 +162,16 @@ pub fn encode_publication(
                 // literary/group identifier or a Castalia directory identity.
                 let address =
                     booknook_core::digest(format!("{}:{}", publication.event.id, actor).as_bytes());
+                // Nostr 0.45 finalization preserves all supplied tags, including
+                // the sender's own p tag required for encrypted self-delivery.
                 let event = EventBuilder::new(KIND, encrypted)
-                    .allow_self_tagging()
                     .tags([
                         Tag::identifier(format!("booknook:private:{address}")),
                         Tag::public_key(public),
                         Tag::hashtag("booknook"),
                     ])
                     .custom_created_at(Timestamp::from(now))
-                    .sign_with_keys(keys)
+                    .finalize(keys)
                     .map_err(|e| Error::Unavailable(e.to_string()))?;
                 result.push(PreparedDelivery {
                     recipient: actor.clone(),
@@ -218,7 +220,7 @@ pub fn decode_event(
         binding_at(recipient, now)?;
         let recipient_key = key(recipient)?;
         if recipient_key != keys.public_key()
-            || event.tags.public_keys().collect::<Vec<_>>() != vec![&recipient_key]
+            || event.tags.public_keys().collect::<Vec<_>>() != vec![recipient_key]
         {
             return Err(denied("Wrong encrypted event recipient"));
         }
@@ -262,6 +264,24 @@ pub fn receive_event(
     social::receive(state, publication, policy, now)
 }
 
+// SDK 0.45 distinguishes a dispatched event from a positive relay acknowledgement.
+// The durable outbox may only advance for the latter, even if a caller changes
+// an SDK acknowledgement policy in future.
+pub(crate) fn require_acknowledged_relays(output: SendEventOutput) -> Result<BTreeSet<String>> {
+    let acknowledged: BTreeSet<String> = output
+        .success
+        .into_iter()
+        .filter(|(_, status)| status.is_ack())
+        .map(|(relay, _)| relay.to_string())
+        .collect();
+    if acknowledged.is_empty() {
+        return Err(Error::Unavailable(
+            "No relay acknowledged the publication; retain the outbox item".into(),
+        ));
+    }
+    Ok(acknowledged)
+}
+
 pub struct SocialRelayTransport {
     client: Client,
 }
@@ -279,7 +299,10 @@ impl SocialRelayTransport {
         if relays.is_empty() || relays.len() > 20 {
             return Err(Error::Invalid("Configure 1–20 Nostr relays".into()));
         }
-        let client = ClientBuilder::new().websocket_transport(transport).build();
+        let client = ClientBuilder::new()
+            .websocket_transport(transport)
+            .connect_timeout(Duration::from_secs(10))
+            .build();
         for relay in relays {
             let url =
                 RelayUrl::parse(relay).map_err(|_| Error::Invalid("Invalid relay URL".into()))?;
@@ -302,14 +325,11 @@ impl SocialRelayTransport {
         let result = self
             .client
             .send_event(&delivery.event)
+            .ack_policy(AckPolicy::all())
+            .ok_timeout(Duration::from_secs(10))
             .await
             .map_err(|e| Error::Unavailable(e.to_string()))?;
-        if result.success.is_empty() {
-            return Err(Error::Unavailable(
-                "No relay acknowledged the publication".into(),
-            ));
-        }
-        Ok(result.success.into_iter().map(|u| u.to_string()).collect())
+        require_acknowledged_relays(result)
     }
     /// Data-only transport port. Signing/permission checks belong to the calling protocol.
     pub async fn publish_signed_event(&self, event: &Event) -> Result<BTreeSet<String>> {
@@ -322,12 +342,11 @@ impl SocialRelayTransport {
         let result = self
             .client
             .send_event(event)
+            .ack_policy(AckPolicy::all())
+            .ok_timeout(Duration::from_secs(10))
             .await
             .map_err(|e| Error::Unavailable(e.to_string()))?;
-        if result.success.is_empty() {
-            return Err(Error::Unavailable("No relay acknowledged the event".into()));
-        }
-        Ok(result.success.into_iter().map(|u| u.to_string()).collect())
+        require_acknowledged_relays(result)
     }
     /// Retrieval is bounded. Every returned event must independently pass receive_event;
     /// relay search/filtering is never an authorization decision.
@@ -367,7 +386,9 @@ impl SocialRelayTransport {
         }
         let events = self
             .client
-            .fetch_events(filter, Duration::from_secs(10))
+            .fetch_events(filter)
+            .timeout(Duration::from_secs(10))
+            .max_events(500)
             .await
             .map_err(|e| Error::Unavailable(e.to_string()))?;
         Ok(events.into_iter().collect())
@@ -401,7 +422,7 @@ pub fn encode_binding(
         Tag::hashtag("booknook"),
     ])
     .custom_created_at(Timestamp::from(document.approved_at))
-    .sign_with_keys(keys)
+    .finalize(keys)
     .map_err(|e| Error::Unavailable(e.to_string()))
 }
 pub fn decode_binding(
@@ -420,7 +441,7 @@ pub fn decode_binding(
     let verified = verify_binding(&doc, policy, minimum_version, now)?;
     if event.pubkey != key(&verified)?
         || event.created_at.as_secs() != doc.approved_at
-        || event.tags.identifier()
+        || event.tags.identifier().as_deref()
             != Some(
                 format!(
                     "booknook:identity:{}:{}",
@@ -445,13 +466,48 @@ impl SocialRelayTransport {
         let result = self
             .client
             .send_event(&event)
+            .ack_policy(AckPolicy::all())
+            .ok_timeout(Duration::from_secs(10))
             .await
             .map_err(|e| Error::Unavailable(e.to_string()))?;
-        if result.success.is_empty() {
-            return Err(Error::Unavailable(
-                "No relay acknowledged the identity binding".into(),
-            ));
-        }
-        Ok(result.success.into_iter().map(|u| u.to_string()).collect())
+        require_acknowledged_relays(result)
+    }
+}
+
+#[cfg(test)]
+mod acknowledgement_tests {
+    use super::*;
+
+    #[test]
+    fn dispatched_or_failed_sdk_results_never_acknowledge_the_durable_outbox() {
+        let event_id = EventId::from_hex(&"ab".repeat(32)).unwrap();
+        let empty = SendEventOutput::new(event_id);
+        assert!(matches!(
+            require_acknowledged_relays(empty),
+            Err(Error::Unavailable(_))
+        ));
+
+        // This is the SDK's real typed success result for AckPolicy::none(),
+        // not a transport error. Treating success.keys() as acknowledgements
+        // would incorrectly advance the durable outbox.
+        let mut dispatched = SendEventOutput::new(event_id);
+        dispatched.success.insert(
+            RelayUrl::parse("wss://relay.example").unwrap(),
+            EventSendStatus::Sent,
+        );
+        assert!(matches!(
+            require_acknowledged_relays(dispatched),
+            Err(Error::Unavailable(_))
+        ));
+
+        let mut rejected = SendEventOutput::new(event_id);
+        rejected.failed.insert(
+            RelayUrl::parse("wss://relay.example").unwrap(),
+            "blocked: not accepted".into(),
+        );
+        assert!(matches!(
+            require_acknowledged_relays(rejected),
+            Err(Error::Unavailable(_))
+        ));
     }
 }
