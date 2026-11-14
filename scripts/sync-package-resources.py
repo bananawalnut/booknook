@@ -23,6 +23,8 @@ copies["crates/core/tests/fixtures/portable-archive.json"] = "ontology/portable/
 copies["crates/native/tests/fixtures/castalia-custody-vector.json"] = "fixtures/castalia-custody-vector.json"
 copies["crates/native/tests/fixtures/castalia-native-authority-profile-v1.json"] = "crates/core/tests/fixtures/castalia/native-authority-profile-v1.json"
 copies["crates/native/REFERENCE-ISSUER.md"] = "services/castalia-issuer/README.md"
+for name in ["section.json", "conformance.json"]:
+    copies[f"crates/native/tests/fixtures/feeds-v1/{name}"] = f"crates/core/tests/fixtures/feeds-v1/{name}"
 for destination, source in copies.items():
     expected = (ROOT / source).read_bytes()
     if destination.endswith(".md"):

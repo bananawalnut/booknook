@@ -29,3 +29,7 @@ node tests/portable-archive-parity.cjs target/sdk-check/index.js
 # Actual opaque feed review objects: original bytes, lifecycle and origin closure.
 node tests/feed-sdk-parity.cjs sdk/typescript/pkg/nodejs/booknook_wasm.js target/sdk-check/index.js
 sdk/typescript/node_modules/.bin/tsc --noEmit --strict --target es2022 --module nodenext --moduleResolution nodenext tests/FeedSDKTypes.mts
+
+# Actual async source provider, conditional-cache and guarded final-CAS runtime.
+node tests/feed-source-sdk.cjs sdk/typescript/pkg/nodejs/booknook_wasm.js target/sdk-check/index.js
+sdk/typescript/node_modules/.bin/tsc --noEmit --strict --target es2022 --module nodenext --moduleResolution nodenext tests/FeedSourceSDKTypes.mts

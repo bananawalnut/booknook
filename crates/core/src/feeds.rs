@@ -89,7 +89,7 @@ fn label(value: &str) -> Result<()> {
         "Feed labels must be Unicode scalar text without control characters, at most 512 UTF-8 bytes",
     )
 }
-fn uuid(value: &str) -> Result<()> {
+pub(crate) fn uuid(value: &str) -> Result<()> {
     let bytes = value.as_bytes();
     require(
         bytes.len() == 36
@@ -106,7 +106,7 @@ fn uuid(value: &str) -> Result<()> {
     )
 }
 /// Syntax only. A canonical hostname may still resolve to a private address.
-fn endpoint(raw: &str) -> Result<()> {
+pub(crate) fn endpoint(raw: &str) -> Result<()> {
     require(
         raw.len() <= 2048
             && raw.starts_with("https://")

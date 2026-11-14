@@ -176,3 +176,5 @@ export function openSyncBatch(core: EncryptedSyncCore, packet: ApprovedSyncPacke
   const opened = parseContract<Omit<OpenedSyncBatch, "plaintext"> & {plaintext: number[]}>(core.open_sync_batch(encodeContract(packet), key, recipient, encodeContract(policy), now));
   return {...opened, plaintext: Uint8Array.from(opened.plaintext)};
 }
+
+export * from "./feed-source.js";

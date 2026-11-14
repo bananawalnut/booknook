@@ -1,3 +1,9 @@
+mod feed_source;
+pub use feed_source::{
+    FeedCacheHostV1, FeedCacheStageV1, FeedSourceAttemptV1, FeedSourceCancellationV1,
+    FeedSourceHostV1, FeedSourceReadV1, FeedSourceReplyV1, FeedSourceSessionV1,
+    validate_feed_source_descriptor_v1,
+};
 mod feed_sdk;
 pub use feed_sdk::{
     FeedImportReviewV1, FeedProjectionReviewV1, empty_feed_configuration_v1,

@@ -1,3 +1,4 @@
+mod feed_source;
 use wasm_bindgen::prelude::*;
 mod castalia;
 mod feeds;

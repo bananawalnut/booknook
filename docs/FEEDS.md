@@ -80,6 +80,32 @@ Public feed requests use an isolated credential-free transport: omit cookies, au
 
 Native hosts supply transport; a browser host may need a disclosed proxy for CORS. Cache entries, ETags, polling cursors and local read state stay host-local in the first version. Conditional requests, offline reopening, bounded eviction and one-source failure isolation need acceptance coverage. A source changed during an awaited request cannot commit stale results.
 
+## Source-provider SDK v1
+
+The independent `booknook_core::feed_source` port composes explicitly installed host code. A descriptor negotiates support; it never installs transport or grants network permission:
+
+```json
+{"schema":"booknook.feed-source-provider.v1","version":1,"id":"reader.public","available":true,"protocols":["public-xml-bytes.v1"]}
+```
+
+Every runtime starts inactive, including when portable settings say enabled or selected. Activate a source locally before requesting it. Configuration/provider replacement revokes all activations and pending reads. Starting a newer refresh supersedes only older attempts for that source. Runtime, request, source, provider and monotonic generations bind responses and cache admission; provider requests omit collection labels, disclosure settings, identity and private configuration fingerprints.
+
+Rust uses `FeedSourceSession`, `FeedSourceProvider` and `FeedCacheStore`. Swift exposes `BookNookFeedSourcesV1`, `BookNookFeedSourceProviderV1` and `BookNookFeedCacheStoreV1`; TypeScript exposes corresponding typed executable-provider and cache-stage interfaces backed by real WASM objects. Cancellation and close invalidate pending work; serialized request/preview data cannot create a valid opaque read. Bytes remain untrusted and require separate safe acquisition, XML normalization and rendering stages.
+
+The local conditional hint is distinct from portable configuration:
+
+```json
+{"schema":"booknook.feed-conditional-hint.v1","source_id":"b41ef5e8-0e06-43e0-aa47-19f382e00c08","provider_id":"reader.public","url":"https://example.org/feed.xml","body_sha256":"b8a3805e669decf7180d8c7f4af5d4706d615d0678c424bd1c6b853def3bf3d2","validators":{"etag":"\"v1\"","last_modified":null}}
+```
+
+A not-modified response must match the exact issued source/provider/endpoint and prior digest, contain no body and use null content type. Cache admission requires actual retained bytes with that digest. The host must atomically compare durable source/generation/body state in its final transaction. Missing validators on 304 retain issued values; validators from a redirected final endpoint are not reused for the original endpoint. No fetch, publication or freshness timestamp is invented.
+
+Async staging may precede the final commit. The final durable CAS must finish synchronously under the live runtime guard and cannot reenter it. An asynchronous final store, including IndexedDB, needs a separately qualified persistent-generation transaction; pre/post-await checks alone are insufficient. Cancellation returns false once that final transaction has started; it cannot undo an accepted commit. A later acknowledgement error likewise does not imply rollback.
+
+Limits are 16 KiB metadata, 2 MiB untrusted body, 128 active pending reads and 32 installed core providers. ETags are bounded to 512 ASCII bytes with entity-tag syntax; Last-Modified accepts a valid 29-byte IMF-fixdate. Native/Swift and TypeScript wrappers currently compose one installed provider per runtime. No HTTP client, XML parser or durable cache backend is provided by this port. Issued provider-v1, the main Command, ontology artifacts and existing Apple app behavior are unchanged.
+
+The source SDK passes 117 core tests (16 focused source cases), three native source tests, strict Clippy, actual optimized Node and web-target WASM/typed consumers, and fresh generated Swift async consumers. Existing 102-vector review checks still pass against the new artifacts. Independent review verified all 18 final files without a concrete blocker. The unchanged Rust package script also passes against all four extracted versioned crates, with local canonical native fixture mirrors. See [source SDK evidence](feed-source-evidence.json) and [214-pass extracted-package evidence](feed-package-evidence.json); these checks do not qualify a concrete HTTP/XML/storage backend or an installed app.
+
 ## Consumer rollout evidence required
 
 | Surface | Inspected baseline | Required change |
@@ -106,7 +132,9 @@ Fourteen focused core tests, three native adapter tests and actual newly generat
 
 Review previews cannot be deserialized into usable handles. Confirmation returns data; hosts own consent, cancellation, atomic persistence and disclosure. Fresh Swift checks use a matching generated source/library pair in isolation; the checked Apple package still requires the normal regeneration and packaging workflow. Neither a web-target WASM module instantiated in Node nor a binding test establishes browser UI or installed-app acceptance.
 
-Shared readers and preservation are under review in [Wallet PR 23](https://github.com/ZenithResearch/castalia-wallet/pull/23) and [Web PR 68](https://github.com/ZenithResearch/castalia-web/pull/68). Wallet hosted gates passed at e84428c6. The native increments are [Transfer PR 19](https://github.com/ZenithResearch/zenith-transfer/pull/19) and [iOS PR 17](https://github.com/ZenithResearch/zenith-ios/pull/17), pinning d688a385 development artifacts. Four actual encrypted native tests cover cancellation, restart, older/empty imports, identity edits, stale CAS and SQLite write rollback; the full Transfer suite passed 416 with 20 opt-in/live skips. This is macOS domain qualification, not packaged/iOS runtime acceptance. Web guarded host storage is implemented; actual browser persistence and review qualification continue. Writer and unqualified-host gates remain explicit; a development fixture or temporary guard-removal test is not an enabled production capability.
+Shared preservation source is merged in [Wallet PR23](https://github.com/ZenithResearch/castalia-wallet/pull/23), [Transfer PR19](https://github.com/ZenithResearch/zenith-transfer/pull/19) and [iOS PR17](https://github.com/ZenithResearch/zenith-ios/pull/17), at e16dc940, 5cb22d7 and add44321 respectively. Wallet’s full suite passes 450 with 4 opt-in skips; 12 actual disposable Chrome storage checks include final-read custody invalidation. Native consumers retain exact d688a385 development artifacts; four actual encrypted tests and the full 416/20-skip Transfer suite qualify the macOS domain, without packaged/iOS runtime acceptance.
+
+[Web PR68](https://github.com/ZenithResearch/castalia-web/pull/68) remains open at b6ff626. Guarded encrypted storage/review passes 226 tests with 8 skips and 16 actual disposable Chrome/Worker/IndexedDB checks, including restart, CAS, cancellation, failed-write rollback and owner refusal. Quota denial is injected. The private transformed build has a default negative control; production v3 admission and writers remain disabled. The JavaScript size budget passes; the unchanged hosted cold-WASM prerequisite fails at 74,704.6/60,000 ms and has a dedicated DevGraph Issue. A development fixture or private qualification build is not an enabled production capability.
 
 ## Later work
 

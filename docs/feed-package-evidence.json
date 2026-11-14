@@ -1,0 +1,96 @@
+{
+  "schema": "booknook.rust-package-feed-fixture-evidence.v1",
+  "date": "2026-11-14",
+  "base_revision": "3f480a62b501cc3e335119a1df59871d54e7abfb",
+  "scope": "Native package test fixture repair, verified with the additive source-provider SDK present",
+  "source_sha256": {
+    "crates/native/tests/feed_sdk.rs": "2184faab3757feda8921e319b23cb7c2eaf96f328eb31fde13d1e42b9205a318",
+    "scripts/sync-package-resources.py": "25fca5903ecfd209e45e401ed77634153ec59f5075f34644390f8fb049904999",
+    "crates/native/tests/fixtures/feeds-v1/README.md": "01b7b9360d094169384f44930c8aef5caf47fbef61942fe5476bd2665282b7e9",
+    "crates/native/tests/fixtures/feeds-v1/section.json": "eff3c3c4b15743661c2628d504052211f54c0ec2ab220d6d1d103218569c0ec2",
+    "crates/native/tests/fixtures/feeds-v1/conformance.json": "07dfd61336d1ccbaafe2d3cf7540255ae5345222366daf4ce4e942b83a369d8f"
+  },
+  "red": {
+    "run_url": "https://github.com/bananawalnut/booknook/actions/runs/43579104645",
+    "job": 132399791580,
+    "step": "bash scripts/package-rust.sh",
+    "exit_code": 101,
+    "reason": "Native tests referenced workspace sibling fixture paths absent in versioned extracted crates."
+  },
+  "green": {
+    "command": "bash scripts/package-rust.sh",
+    "exit_code": 0,
+    "package_script_unchanged": true,
+    "package_script_sha256": "38ce38ce4f299da7b48950e4b67d5b7edd9ad7760d5c96ebdb8e9305fe064fd0",
+    "test_summary": {
+      "totals": {
+        "passed": 214,
+        "failed": 0,
+        "ignored": 3,
+        "measured": 0,
+        "filteredOut": 0
+      },
+      "testExecutables": 48,
+      "nativeFeedSdkTests": 3,
+      "nativeFeedSourceTests": 3,
+      "sharedRawVectorCases": 102,
+      "sharedRawVectorValid": 17,
+      "sharedRawVectorInvalid": 85
+    },
+    "resource_copies_checked": 45,
+    "temporary_target_link_removed": true
+  },
+  "archives": {
+    "booknook-core": {
+      "bytes": 163915,
+      "sha256": "5326224a728d27df02bc2156f98d3a564f3e08d237158e8739c3c112d867aa16",
+      "members": 68,
+      "feedFixtures": {
+        "section.json": {
+          "bytes": 561,
+          "sha256": "eff3c3c4b15743661c2628d504052211f54c0ec2ab220d6d1d103218569c0ec2",
+          "extractedBytesMatchArchive": true
+        },
+        "conformance.json": {
+          "bytes": 112237,
+          "sha256": "07dfd61336d1ccbaafe2d3cf7540255ae5345222366daf4ce4e942b83a369d8f",
+          "extractedBytesMatchArchive": true
+        }
+      }
+    },
+    "booknook-connectors": {
+      "bytes": 55915,
+      "sha256": "17ae0a4d7d6a22a2b4b193f5b868e0af7630ba17d3363ac7bf1b62616dff2d33",
+      "members": 19
+    },
+    "booknook-native": {
+      "bytes": 148363,
+      "sha256": "40ae22ba7f83556c56d976292c3f107f15608dcfaccc45b2294cfe100b857edf",
+      "members": 58,
+      "feedFixtures": {
+        "section.json": {
+          "bytes": 561,
+          "sha256": "eff3c3c4b15743661c2628d504052211f54c0ec2ab220d6d1d103218569c0ec2",
+          "extractedBytesMatchArchive": true
+        },
+        "conformance.json": {
+          "bytes": 112237,
+          "sha256": "07dfd61336d1ccbaafe2d3cf7540255ae5345222366daf4ce4e942b83a369d8f",
+          "extractedBytesMatchArchive": true
+        }
+      },
+      "nativeSdkTestsUsePackageLocalFixtures": true
+    },
+    "booknook-wasm": {
+      "bytes": 36680,
+      "sha256": "44b5f94721029987b881b194611abe77b0b5800af8a6fabbc47e67abe38f64b9",
+      "members": 15
+    }
+  },
+  "limitations": [
+    "These are local precommit development archives; Cargo VCS metadata marks the dirty source state, so these hashes are not a published release artifact attestation.",
+    "Exact-commit hosted CI remains pending. Existing3 ignored opt-in/live tests are not qualified.",
+    "No hardware, account, signing, app installation, SDK publication or runtime deployment gate is closed."
+  ],
+  "private_verification_sha256": "717bd3a9e823a307cf64a46f2a9e04e32d4a5c4c707121b998fd86e158d0e5a8"
+}

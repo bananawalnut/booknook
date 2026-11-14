@@ -3,6 +3,7 @@ pub mod audio;
 pub mod authority;
 pub mod castalia_connections;
 mod character_sharing;
+pub mod feed_source;
 pub mod feeds;
 pub mod history;
 pub mod identity;

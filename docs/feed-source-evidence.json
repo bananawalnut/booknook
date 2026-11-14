@@ -1,0 +1,350 @@
+{
+  "schema": "booknook.feed-source-evidence.v1",
+  "date": "2026-11-14",
+  "base_revision": "3f480a62b501cc3e335119a1df59871d54e7abfb",
+  "scope": "Independent source-provider SDK contracts with actual Rust/native/Swift/WASM/TypeScript execution; no concrete HTTP, XML or durable cache backend",
+  "source_sha256": {
+    ".github/workflows/check.yml": "6e3f510b0ac9202630a52f671a4ba89ca01000fd0c597607ef1c966c132fb5c2",
+    "crates/core/src/feed_source.rs": "de7a90c1674f3511e8e70bc26bead9e0d6ddc197ee725284acf9729709d25f97",
+    "crates/core/src/feeds.rs": "dd6e91b56f331889d2365cfbf01c74b59ccc9f68576319ccf8519c9451f4a4da",
+    "crates/core/src/lib.rs": "ece35c82ab4229b4d29182d7f2c5e9db91c66ee8e513f846d3743469be18cdf5",
+    "crates/core/tests/feed_source.rs": "193b22a55c026e0bcf59eaf78ec8d565f86572f488b6f3d06675d38b0ff7f77a",
+    "crates/native/src/feed_source.rs": "e1f7d7b18bf57004d8fa541d7575f38ea7127683f3c875bd736b2edd4e5a7da7",
+    "crates/native/src/lib.rs": "40f63aa9139ebe80ade502fecdad472bdc0b8dc9828271778ec1a3d18b5fc7bf",
+    "crates/native/tests/feed_source.rs": "fefe6c590794d30e1985593a1f78dfaf5642ea2fd05374fb2133a5635dc4d560",
+    "crates/wasm/src/feed_source.rs": "f1738876b84b08ab827a40721bdc1c04bb7386156596e17d22e7d9e53f7b63fb",
+    "crates/wasm/src/lib.rs": "540ed2f0f05d524e210d6fabc9ae02e304a7d90fa3834de3c00fc456d28dde74",
+    "scripts/test-feed-source-swift.sh": "ca506ab667bbcff36c5c9e5f1e9952cdc94a960ed46918c41add0fff9179a5dd",
+    "scripts/test-sdk.sh": "c58cc0d9a5abc4c153d811c2b3ece8a11c7debac5da37e45bce86e807b63eb79",
+    "sdk/swift/Sources/BookNookServices/BookNookFeedSources.swift": "225509717caf5e700120b152ece39f87d06de111b02776f782b6eebb96e2991d",
+    "sdk/typescript/feed-source.ts": "07716b7693fbe3ee99df186c49d474f06f1d504987017c348198aed01bc5d666",
+    "sdk/typescript/index.ts": "1e6ec8b88dfedc5298b8f341b5823f8a308a2c946312b4394b4e159924bbb19b",
+    "tests/FeedSourceSDKBindingSmoke.swift": "499f1fee14ac4e12f1623c789d20a0f8dbb2ba9d5f7af84f70735557f6482a6d",
+    "tests/FeedSourceSDKTypes.mts": "d5a3717afd1285016ece02ee942d0ced30b4eddeeeab765bb5c9850426a291b3",
+    "tests/feed-source-sdk.cjs": "21375624e50a3c8a840dae60f7b3816232b82d890afb086e76298093f591ca61"
+  },
+  "fixture_sha256": {
+    "crates/core/tests/fixtures/feeds-v1/section.json": "eff3c3c4b15743661c2628d504052211f54c0ec2ab220d6d1d103218569c0ec2",
+    "crates/core/tests/fixtures/feeds-v1/conformance.json": "07dfd61336d1ccbaafe2d3cf7540255ae5345222366daf4ce4e942b83a369d8f",
+    "crates/native/tests/fixtures/feeds-v1/section.json": "eff3c3c4b15743661c2628d504052211f54c0ec2ab220d6d1d103218569c0ec2",
+    "crates/native/tests/fixtures/feeds-v1/conformance.json": "07dfd61336d1ccbaafe2d3cf7540255ae5345222366daf4ce4e942b83a369d8f"
+  },
+  "checks": [
+    {
+      "command": "cargo test -p booknook-core --locked --offline",
+      "result": "passed:117 tests, including16 source-provider and14 existing feed-domain tests; canonical102 vectors unchanged"
+    },
+    {
+      "command": "cargo test -p booknook-core --test feed_source --locked --offline",
+      "result": "passed again on final test bytes:16tests"
+    },
+    {
+      "command": "cargo test -p booknook-native --test feed_source --test feed_sdk --locked --offline",
+      "result": "passed:source3 and existing feedSDK3, including102 canonical vectors"
+    },
+    {
+      "command": "cargo test -p booknook-native --test feed_source --locked --offline",
+      "result": "passed again on final local fixture include and stronger actual late304 completion assertion:3tests"
+    },
+    {
+      "command": "cargo clippy -p booknook-core --test feed_source --locked --offline -- -D warnings",
+      "result": "passed"
+    },
+    {
+      "command": "cargo clippy -p booknook-native --test feed_source --locked --offline -- -D warnings",
+      "result": "passed"
+    },
+    {
+      "command": "cargo clippy -p booknook-wasm --lib --locked --offline -- -D warnings",
+      "result": "passed"
+    },
+    {
+      "command": "bash scripts/build-wasm.sh nodejs",
+      "result": "passed actual optimized WASM build after retained-body forwarding fix"
+    },
+    {
+      "command": "bash scripts/build-wasm.sh web",
+      "result": "passed actual optimized web-target WASM generation"
+    },
+    {
+      "command": "npm --prefix sdk/typescript run build",
+      "result": "passed actual CJS+ESM wrappers"
+    },
+    {
+      "command": "npm --prefix sdk/typescript run check",
+      "result": "passed"
+    },
+    {
+      "command": "node tests/feed-source-sdk.cjs sdk/typescript/pkg/nodejs/booknook_wasm.js sdk/typescript/dist/cjs/index.js",
+      "result": "passed actual generated Node WASM and built TS provider/cache wrappers;304 requires matching retained bytes, staleness/cancellation/ABA/supersession/private omission/cache-reentry tested"
+    },
+    {
+      "command": "node tests/feed-source-sdk.cjs sdk/typescript/pkg/web/booknook_wasm.js sdk/typescript/dist/cjs/index.js",
+      "result": "passed actual generated web ESM WASM instantiated in Node, not browserUI; same304/runtime cases"
+    },
+    {
+      "command": "sdk/typescript/node_modules/.bin/tsc --noEmit --strict --target es2022 --module nodenext --moduleResolution nodenext tests/FeedSourceSDKTypes.mts",
+      "result": "passed actual generated declarations implement typed source runtime surface"
+    },
+    {
+      "command": "node tests/feed-sdk-parity.cjs sdk/typescript/pkg/nodejs/booknook_wasm.js sdk/typescript/dist/cjs/index.js",
+      "result": "passed102 existing raw vectors and actual typed review-object lifecycle on current artifact"
+    },
+    {
+      "command": "bash scripts/test-feed-source-swift.sh",
+      "result": "passed fresh matching host dylib and newly generated UniFFI Swift; prior102 review vectors plus actual async source/304/missing-wrong-correct cached-body/digest/endpoint/provider/config/cancellation/CAS reentry consumer"
+    },
+    {
+      "command": "cargo fmt --all --check",
+      "result": "passed"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    },
+    {
+      "command": "bash -n scripts/test-feed-source-swift.sh scripts/test-sdk.sh",
+      "result": "passed"
+    },
+    {
+      "command": "node --check tests/feed-source-sdk.cjs",
+      "result": "passed"
+    },
+    {
+      "command": "bash scripts/package-rust.sh",
+      "result": "passed:214 tests,0 failed,3 ignored across48 executables from four actual extracted crates, including3 native feed SDK tests and3 source-provider tests; canonical native fixtures are byte-identical"
+    }
+  ],
+  "toolchain": {
+    "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+    "wasm-bindgen": "wasm-bindgen 0.2.127",
+    "uniffi": "0.32.2",
+    "typescript": "5.9.3",
+    "zig": "0.14.1, existing previously checksum-verified task toolchain"
+  },
+  "development_artifacts": {
+    "isolated-swift-check/booknook_native.swift": {
+      "bytes": 166628,
+      "sha256": "d6e10d17fe48975f51700c83ebf10b78dbc1c7166ffc6dbd5f6409484d10c827"
+    },
+    "isolated-swift-check/booknook_nativeFFI.h": {
+      "bytes": 100314,
+      "sha256": "8b2068efd79b7be4d40fe941ce9adb7e0505f587835520397c07c767a54aa941"
+    },
+    "isolated-swift-check/booknook_nativeFFI.modulemap": {
+      "bytes": 146,
+      "sha256": "d832a0d192305ef1730df3247a38a0fb9d71239b6bd80769b584c72ff8aa073d"
+    },
+    "isolated-swift-check/consumer": {
+      "bytes": 719432,
+      "sha256": "76b5c90db68f11bf0b61ca9682faf90cff0dc83b1d693123891bd11d91fa420a"
+    },
+    "isolated-swift-check/source-consumer": {
+      "bytes": 808864,
+      "sha256": "0edb53ec5c9acc9c28937745363a4b6b724381d0c869a249843600c67c57a227"
+    },
+    "sdk/typescript/pkg/nodejs/booknook_wasm_bg.wasm": {
+      "bytes": 5225969,
+      "sha256": "feb53b680fafe417296e33574af377dc6fa3688ae8e58f6814e74378f89299f4"
+    },
+    "sdk/typescript/pkg/nodejs/booknook_wasm.d.ts": {
+      "bytes": 7809,
+      "sha256": "b0212cfcb55adfcae4ff189f0240976fa22993d9d05f3243b5b02d7827d8029c"
+    },
+    "sdk/typescript/pkg/nodejs/booknook_wasm.js": {
+      "bytes": 63026,
+      "sha256": "134e0358489b05a8959729a8c921e6eabcd80ed89739a5f045de06a68e83b7f5"
+    },
+    "sdk/typescript/pkg/web/booknook_wasm_bg.wasm": {
+      "bytes": 5225969,
+      "sha256": "feb53b680fafe417296e33574af377dc6fa3688ae8e58f6814e74378f89299f4"
+    },
+    "sdk/typescript/pkg/web/booknook_wasm.d.ts": {
+      "bytes": 16927,
+      "sha256": "81ea566411572e12df8b7d3adb35dc70799ba8049ca359f8f288cca99a2be2be"
+    },
+    "sdk/typescript/pkg/web/booknook_wasm.js": {
+      "bytes": 64575,
+      "sha256": "d7cf3ba7fa1ba0c05489770c9998c4d536b959523e7901a78221968ce5c15682"
+    },
+    "sdk/typescript/dist/cjs/feed-source.js": {
+      "bytes": 4376,
+      "sha256": "567b4d991eb2326debd902af02eb9967c3d9b961e0f060b42d051c3e980c8533"
+    },
+    "sdk/typescript/dist/esm/feed-source.d.ts": {
+      "bytes": 5512,
+      "sha256": "b4ea986fa772f83fd4b31aec703d3de612d5d0d9eb00dbacece6eed40204300c"
+    }
+  },
+  "independent_review": {
+    "status": "No concrete blockers; all18 current files match final snapshots. Production hashes match prior review; only subsequent test cleanup removed an unused Arc import.",
+    "ran_tests": false
+  },
+  "contract_examples": {
+    "descriptor": {
+      "schema": "booknook.feed-source-provider.v1",
+      "version": 1,
+      "id": "reader.public",
+      "available": true,
+      "protocols": [
+        "public-xml-bytes.v1"
+      ]
+    },
+    "conditionalHint": {
+      "schema": "booknook.feed-conditional-hint.v1",
+      "source_id": "b41ef5e8-0e06-43e0-aa47-19f382e00c08",
+      "provider_id": "reader.public",
+      "url": "https://example.org/feed.xml",
+      "body_sha256": "b8a3805e669decf7180d8c7f4af5d4706d615d0678c424bd1c6b853def3bf3d2",
+      "validators": {
+        "etag": "\"v1\"",
+        "last_modified": null
+      }
+    },
+    "issuedRequest": {
+      "schema": "booknook.feed-source-request.v1",
+      "runtime_id": "dddddddddddddddddddddddddddddddd",
+      "request_id": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "source_id": "b41ef5e8-0e06-43e0-aa47-19f382e00c08",
+      "provider_id": "reader.public",
+      "configuration_generation": 1,
+      "provider_generation": 1,
+      "activation_generation": 1,
+      "url": "https://example.org/feed.xml",
+      "format": "auto",
+      "protocol": "public-xml-bytes.v1",
+      "conditional": {
+        "schema": "booknook.feed-conditional-hint.v1",
+        "source_id": "b41ef5e8-0e06-43e0-aa47-19f382e00c08",
+        "provider_id": "reader.public",
+        "url": "https://example.org/feed.xml",
+        "body_sha256": "b8a3805e669decf7180d8c7f4af5d4706d615d0678c424bd1c6b853def3bf3d2",
+        "validators": {
+          "etag": "\"v1\"",
+          "last_modified": null
+        }
+      }
+    },
+    "bodyResponse": {
+      "schema": "booknook.feed-source-response.v1",
+      "runtime_id": "dddddddddddddddddddddddddddddddd",
+      "request_id": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "source_id": "b41ef5e8-0e06-43e0-aa47-19f382e00c08",
+      "provider_id": "reader.public",
+      "configuration_generation": 1,
+      "provider_generation": 1,
+      "activation_generation": 1,
+      "final_url": "https://example.org/feed.xml",
+      "content_type": "application/rss+xml",
+      "body_sha256": "b8a3805e669decf7180d8c7f4af5d4706d615d0678c424bd1c6b853def3bf3d2",
+      "outcome": "body",
+      "validators": {
+        "etag": "\"v1\"",
+        "last_modified": null
+      }
+    },
+    "notModifiedResponse": {
+      "schema": "booknook.feed-source-response.v1",
+      "runtime_id": "dddddddddddddddddddddddddddddddd",
+      "request_id": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "source_id": "b41ef5e8-0e06-43e0-aa47-19f382e00c08",
+      "provider_id": "reader.public",
+      "configuration_generation": 1,
+      "provider_generation": 1,
+      "activation_generation": 1,
+      "final_url": "https://example.org/feed.xml",
+      "content_type": null,
+      "body_sha256": "b8a3805e669decf7180d8c7f4af5d4706d615d0678c424bd1c6b853def3bf3d2",
+      "outcome": "not-modified",
+      "validators": {
+        "etag": null,
+        "last_modified": null
+      }
+    },
+    "notModifiedCacheCondition": {
+      "schema": "booknook.feed-cache-condition.v1",
+      "runtime_id": "dddddddddddddddddddddddddddddddd",
+      "request_id": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "source_id": "b41ef5e8-0e06-43e0-aa47-19f382e00c08",
+      "provider_id": "reader.public",
+      "configuration_generation": 1,
+      "provider_generation": 1,
+      "activation_generation": 1,
+      "body_sha256": "b8a3805e669decf7180d8c7f4af5d4706d615d0678c424bd1c6b853def3bf3d2",
+      "url": "https://example.org/feed.xml",
+      "final_url": "https://example.org/feed.xml",
+      "outcome": "not-modified",
+      "expected_body_sha256": "b8a3805e669decf7180d8c7f4af5d4706d615d0678c424bd1c6b853def3bf3d2",
+      "validators": {
+        "etag": "\"v1\"",
+        "last_modified": null
+      }
+    }
+  },
+  "api": {
+    "rust": [
+      "FeedSourceSession::new(configuration, installed_descriptors)",
+      "session.activate(source_id, provider_id)",
+      "session.begin(source_id) / begin_with_conditional(source_id, hint)",
+      "attempt.execute(&dyn FeedSourceProvider).await",
+      "read.store(&dyn FeedCacheStore).await",
+      "read.with_current_cache_commit(actual_existing_bytes, synchronous_atomic_CAS)"
+    ],
+    "native": [
+      "FeedSourceSessionV1::new(configuration_bytes, Box<dyn FeedSourceHostV1>)",
+      "activate(source_id); begin(source_id, optional_hint_bytes)",
+      "attempt.execute().await -> Arc<FeedSourceReadV1>",
+      "read.store(Box<dyn FeedCacheHostV1>).await",
+      "FeedCacheHostV1::stage(...).await -> FeedCacheStageV1 {reference,existing_body}",
+      "FeedCacheHostV1::compare_and_store(reference, checked_condition_json, untrusted_body) is synchronous"
+    ],
+    "typescript": [
+      "new BookNookFeedSourcesV1(actualWasm, configurationBytes, executableHostProvider)",
+      "sources.activate(sourceId)",
+      "await sources.fetch(sourceId, abortSignal, optionalHintBytes)",
+      "await read.store(hostCacheStore, abortSignal)",
+      "hostCacheStore.stage(...).await -> {committer,existingBody?}",
+      "committer.compare_and_store(conditionJson,untrustedBody): undefined",
+      "read.close(); sources.close()"
+    ],
+    "swift": [
+      "BookNookFeedSourcesV1(configuration: Data, provider: any BookNookFeedSourceProviderV1)",
+      "activate(sourceID: String)",
+      "await fetch(sourceID: String, conditional: Data? = nil)",
+      "await read.store(any BookNookFeedCacheStoreV1)",
+      "stage(...).await -> BookNookFeedCacheStageV1(reference:existingBody:)",
+      "compareAndStore(staged:conditionJSON:untrustedBody:) is synchronous"
+    ]
+  },
+  "limits": {
+    "metadataBytes": 16384,
+    "untrustedBodyBytes": 2097152,
+    "pendingActiveReads": 128,
+    "installedCoreProviders": 32,
+    "etagAsciiBytes": 512,
+    "lastModified": "valid29-byte IMF-fixdate; no controls/header injection"
+  },
+  "decisions": [
+    "Enabled is necessary preference but never local activation or authority. Metadata never installs executable transport.",
+    "Configuration/provider replacement revokes all activations and attempts; newer explicit refresh supersedes only the same source, without remote timestamp merging.",
+    "Random runtime ID plus monotonic local generations and request/source/provider correlation prevent stale/ABA/cross-runtime confusion.",
+    "Only endpoint/format/conditional validators and correlation metadata reach source transport; labels, collections, disclosure preferences, identity and vault fingerprints are absent.",
+    "304 requires the exact originally issued hint/provider/source/endpoint and base body digest, an empty body and null content type.",
+    "Actual existing cached bytes are bounded/hashed under the live final runtime guard before the final host CAS callback. The host must atomically verify persisted source/generation/body presence/digest in that same durable transaction.",
+    "Omitted304 validators retain issued values; validators observed from a different redirect endpoint are not promoted into reusable original-source cache validators.",
+    "Cancellation cannot retract a synchronous final transaction already accepted; cancel returns false at/after that boundary. Later recheck errors do not roll back an already validly committed transaction.",
+    "Final cache callback cannot reenter the session: try-lock fails closed instead of deadlocking.",
+    "No HTTP/XML/durable cache backend implementation is supplied or qualified. Native/TS adapters currently compose one explicitly installed source provider; portable Rust supports multiple descriptors."
+  ],
+  "storage_limit": "Async staging is supported. The final durable CAS must complete synchronously under the live runtime guard. IndexedDB or other asynchronous final-store transactions require a separately qualified shared persistent-generation/CAS design and are not supported by this v1 boundary. Pre/post await checks alone do not close that race.",
+  "limitations": [
+    "Deterministic host fixtures exercise real async bindings and CAS protocol, not public DNS/TLS/HTTP/XML or a durable storage backend.",
+    "Web-target WASM is instantiated in Node; this is not browser UI acceptance.",
+    "Swift uses newly generated matching host bindings during the check; the mutable task-cache artifacts are not packaged release artifacts.",
+    "No Apple app/device/signing/install, custody, issued provider-v1, main Command or issued ontology changes.",
+    "Async final stores such as IndexedDB require a separately qualified shared persistent-generation transaction.",
+    "Source imports remain inactive; metadata never installs executable transport or grants network authority."
+  ],
+  "private_verification_sha256": "6dbdf809323a88f9eda97a2f571549333744f7e47fa1d457fd2460681812f01e",
+  "package_evidence": "feed-package-evidence.json"
+}

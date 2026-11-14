@@ -8,10 +8,7 @@ fn bytes(value: &impl serde::Serialize) -> Vec<u8> {
     serde_json::to_vec(value).unwrap()
 }
 fn section() -> Value {
-    serde_json::from_slice(include_bytes!(
-        "../../core/tests/fixtures/feeds-v1/section.json"
-    ))
-    .unwrap()
+    serde_json::from_slice(include_bytes!("fixtures/feeds-v1/section.json")).unwrap()
 }
 fn config(feeds: Value) -> Value {
     json!({"schema":"booknook.feed-configuration.v1","revision":0,"feeds":feeds})
@@ -21,10 +18,8 @@ fn object(raw: String) -> Value {
 }
 #[test]
 fn native_adapter_matches_all_shared_raw_vectors_without_loss() {
-    let corpus: Value = serde_json::from_slice(include_bytes!(
-        "../../core/tests/fixtures/feeds-v1/conformance.json"
-    ))
-    .unwrap();
+    let corpus: Value =
+        serde_json::from_slice(include_bytes!("fixtures/feeds-v1/conformance.json")).unwrap();
     assert_eq!(corpus["cases"].as_array().unwrap().len(), 102);
     for case in corpus["cases"].as_array().unwrap() {
         let raw = case["raw"].as_str().unwrap().as_bytes().to_vec();

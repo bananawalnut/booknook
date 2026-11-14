@@ -56,4 +56,5 @@ jobs:
       - run: bash scripts/test-reading.sh
       - run: bash scripts/test-recovery.sh
       - run: bash scripts/test-ui-workflows.sh
+      - run: bash scripts/test-feed-source-swift.sh
       - run: bash scripts/package-swift.sh --use-built
