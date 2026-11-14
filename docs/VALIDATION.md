@@ -1,6 +1,16 @@
 # Validation record
 
-## Current app-only preview — 2026-11-14
+## Current app-only preview and bounded Mac checks — 2026-11-14
+
+[App build 2026111405](app-2026111405-public-preview-evidence.json), version 0.2.0, is [published](https://github.com/bananawalnut/booknook/releases/tag/v0.2.0-app-preview.20261114.5) from exact source `633f53dcc6d246ba6454b3403bbde10450102ef2`. Three Swift Release builds and all ten local build/archive verification phases pass; [exact-source CI](https://github.com/bananawalnut/booknook/actions/runs/43647644605) passes both jobs and all 38 steps. All 11 public assets were freshly downloaded and hash-checked, totaling 37,558,605 bytes. The app-only correction displays actual app and library-ontology versions in Connections. The six SDK archives and unchanged Rust slices retain their separate source `a945df2`; later documentation changes do not change either published artifact snapshot.
+
+Actual Mac QA on exact build 1404 passed ASCII typing plus native Unicode paste, observed Undo/Redo, EPUB reading, three character-card versions with reading context, pane swap/resize/scroll, text-whiteboard-text switching, and normal quit/reopen with independently decoded note/history/order/context intact. Exact build 1405 separately passed visible version/ontology labels and one later normal reopen with the same note/history. Its first startup delayed in `chmod` before SQLite, then resumed unaided. The cause is unresolved; a single later reopen neither erases that observation nor establishes repeatable startup performance. Earlier input timeout/ownership observations also remain nonpasses.
+
+This extends the partial fourth UX round, without completing all hands-on acceptance. No ink placement, physical keyboard/IME, accessibility, prolonged-session or forced-termination pass follows. The latest 22:22 UTC read-only inventory found no reachable paired iOS device. Current normal iPad development-signing/trust/install remains required; macOS 14/iPadOS 17 runtime, physical input, live accounts/Castalia authority, remote social/device exchange and the two maintenance follow-ups remain open. Notarization/App Store/TestFlight are optional distribution choices.
+
+## Historical build 2026111404 publication checkpoint — 2026-11-14
+
+The following publication-time observations preceded the resumed Mac QA above. They retain their original source and time scope.
 
 [App build 2026111404](app-2026111404-public-preview-evidence.json), version 0.2.0, is published from exact source `759097365d933ddeb9fc4d37e09481380ea64eba`, including the profile-file repair. Three fresh Swift Release builds, full extracted-bundle/platform metadata checks and all 38 exact-source CI steps pass; all 11 unauthenticated public downloads match the manifest. The manifest retains its 638-file historical snapshot at `7590973`; later documentation commits are separate and leave app/build/SDK/ontology/license inputs unchanged. The six SDK archives and unchanged Rust slices retain their separate a945 source and qualification; source license inventory 362 and receiving closure 333 are separate dependency counts.
 

@@ -1,0 +1,185 @@
+{
+  "schema": "booknook.app-only-public-preview-evidence.v1",
+  "recorded_at": "2026-11-14T22:44:01.798488+00:00",
+  "status": "PASS_DEVELOPMENT_DELIVERY_WITH_OPEN_ACCEPTANCE_GATES",
+  "observational_scope": "Unsigned source, build, CI, runtime and byte observations; not a signed attestation, reproducible-build claim or completed production MVP.",
+  "app": {
+    "source_commit": "633f53dcc6d246ba6454b3403bbde10450102ef2",
+    "version": "0.2.0",
+    "build": "2026111405",
+    "change": "Connections displays actual bundle version/build and the loaded library ontology_version instead of stale hardcoded labels. SDK, signing, wire, ontology and saved-data contracts are unchanged.",
+    "manifest_sha256": "d970afe9695a61fe7b3836cdae2b64079433d87769bb98b6b9cedfdab2624849",
+    "source_snapshot": {
+      "files": 639,
+      "sha256": "7fa118a8870750fd161c914211b732be75d290e9cef43530fa9f4e4351c6842f",
+      "scope": "Historical Git blob snapshot at the app source commit; later documentation commits are separate."
+    }
+  },
+  "native_qualification": {
+    "result": "PASS_THREE_RELEASE_APP_TARGETS",
+    "verification": {
+      "sha256": "a62b26d7948dbda62cc14018e99cd264aa4d9c4d9a0873ff8c275573f2b49744",
+      "bytes": 18248
+    },
+    "completion": {
+      "sha256": "a372a416f3756f733a3fc496b146d93d632b61d3fea8906f9ea0df7691c43c04",
+      "bytes": 891
+    },
+    "archive_verification_sha256": "20c174caa766d64ee760cad49055bfadb7d1e9e657147865b56cf59752c858ed",
+    "build_provenance_sha256": "22b8f99b12f2b4ab5bb561749e62c3d7051bb13f75218a007f6a3318720ffac9",
+    "checks": [
+      "Three sequential Release builds and complete archive extraction/tree comparison.",
+      "arm64, actual platform and deployment metadata; 80 bundled ontology/discovery files verified."
+    ],
+    "artifacts": [
+      {
+        "name": "booknook-mac-arm64-development-0.2.0-build2026111405.tar.gz",
+        "bytes": 14835757,
+        "sha256": "d1d709536b669b5a3e3c8f2b00d2ae813261a15117054f6538b611262e21ab6a",
+        "target": "mac"
+      },
+      {
+        "name": "booknook-ipad-sim-arm64-development-0.2.0-build2026111405.tar.gz",
+        "bytes": 11356062,
+        "sha256": "ddddd7501e89250310ea567c2d23183aed25a7f0da2f3e0bc4bd457d2740bc79",
+        "target": "ipad-sim"
+      },
+      {
+        "name": "booknook-ipad-device-arm64-development-0.2.0-build2026111405.tar.gz",
+        "bytes": 11147594,
+        "sha256": "87612b2945d4564c54cb357b837842b0e7b35c01622edd180c33264e8a1066ee",
+        "target": "ipad-device"
+      }
+    ],
+    "minimum_os_metadata": {
+      "mac": "14.0",
+      "ipad-sim": "17.0",
+      "ipad-device": "17.0"
+    },
+    "minimum_os_runtime_qualified": false
+  },
+  "hosted_ci": {
+    "result": "PASS",
+    "run_id": 43647644605,
+    "url": "https://github.com/bananawalnut/booknook/actions/runs/43647644605",
+    "source_commit": "633f53dcc6d246ba6454b3403bbde10450102ef2",
+    "attempt": 1,
+    "successful_steps": {
+      "portable": 21,
+      "apple": 17
+    },
+    "all_38_steps_successful": true,
+    "server_metadata_sha256": "525a3837befb53521bc6f0ec0ef475341dabe300a03302a3d1ca6abc07ef40bd",
+    "verification_sha256": "0e9acb2a489454ddf38d820631750483a0a050cb8a6002edb2e1880d1f806ad8",
+    "scope": "Exact-source hosted checks; these are separate from the locally built archive bytes."
+  },
+  "current_mac_1405": {
+    "result": "PASS_BOUNDED_FOOTER_AND_SAVED_DESK_REOPEN",
+    "method": "Root-controlled actual CUA in a private QA copy with only Info.plist data-directory override; independent process hashing/open-file metadata and read-only SQLite snapshots.",
+    "executable_sha256": "6988f6bcbb3eadc35ec2f398d409d98865ced8c0005d365bc8ca32fbf84957c0",
+    "app_version_label": "Book Nook 0.2.0 (2026111405) · Development preview",
+    "library_ontology_label": "Library ontology 0.3.0",
+    "footer_runtime_receipt_sha256": "04cb2a2956a6f862e829583311c65b6bba642332b0bbdb1e6ed6e8fea86d032c",
+    "root_visual_observation_sha256": "0f062b29b3cfcc8aa2caf980a103dec4c90a03eb8e7bd266e07252a8c76777f6",
+    "screenshot_scope": "Actual CUA screenshots inspected inline; file export was unavailable, so no image artifact or image hash is claimed.",
+    "later_reopen": {
+      "independent_receipt_sha256": "cda96a0692a90a929d513f033d63ee2570a2927ceb9756fbca5cc2ded86cf064",
+      "root_attributed_followup_sha256": "52cb19ed49bb0f2af79fab0ae4a0d84e5d64eb7a44522debf966ea9d8f6e7e46",
+      "normal_quit_and_single_reopen": true,
+      "root_reported_CUA_response_seconds": 3.25,
+      "timing_scope": "Tool response duration, not a calibrated launch benchmark.",
+      "saved_checks": [
+        "Exact previously verified Unicode note and note order retained.",
+        "Three immutable character versions, note creation context and four earlier Yrs history updates retained.",
+        "Reader, notebook-left/equal split visible in root observation."
+      ],
+      "pending_edits": 0,
+      "social_pending": 0
+    },
+    "isolation_limit": "Data-directory isolation covers SQLite/assets/journals; unchanged bundle identity still shares preferences and Keychain namespace. No credential, account, signing or network-activation action occurred."
+  },
+  "prior_mac_1404": {
+    "source_commit": "759097365d933ddeb9fc4d37e09481380ea64eba",
+    "build": "2026111404",
+    "summary_receipt_sha256": "2c6399d03e7e4a5e2099147cffd4e88ff91a4e0ca08e3001d2f11ca064f9f14e",
+    "final_root_visual_receipt_sha256": "d46552cdf2c1a0245b370e81c7ab40514efb403986ce11d6d95784f8f6318f8f",
+    "durable_post_reopen_sha256": "1e6071961984bb55476257bb9d4b6887ff8440a2c4253daf4d6ac42263a0f0da",
+    "scope": "Synthetic EPUB display, ASCII typing plus native Unicode paste, Cmd-Z/Shift-Cmd-Z, two saved character reinterpretations after an initial blank version, three-version history/context and normal quit/reopen. This historical workflow does not claim new build 1405 input or physical keyboard/IME acceptance.",
+    "earlier_input_nonpasses_retained": true
+  },
+  "startup_nonpass": {
+    "receipt_sha256": "ff591d2b74ebfaf4bd723d6d81355d6fa5bc939875903666e620d555c2a36206",
+    "observed": "Initial build 1405 startup delayed before SQLite opened; a process sample was in chmod. Startup subsequently resumed without a reported permission or data change.",
+    "cause": "UNRESOLVED",
+    "later_observation": "One subsequent normal reopen returned the loaded desk; this does not explain, fix or establish repeatability of startup.",
+    "smooth_startup_qualified": false
+  },
+  "existing_deliveries": {
+    "old_1404_public_evidence": "app-2026111404-public-preview-evidence.json",
+    "old_1404_evidence_sha256": "5eba6e8f0505dc0e3f7cf0a5d5fedcfa7194431da602529e16eec50a37fc7f7d",
+    "sdk_source_commit": "a945df213150abe10e27cc6c5e92da130588bef8",
+    "sdk_version": "0.2.0",
+    "sdk_url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.0-preview.20261114",
+    "sdk_manifest_sha256": "2e299d2a8ca5ef8863513a5bb098be00b8ec71954b06dc258465935f94baca52",
+    "six_sdk_archives_rebuilt_or_repacked": false,
+    "receiving_consumer_evidence": "security-020-public-preview-evidence.json",
+    "source_inventory_entries": 362,
+    "separately_audited_receiving_registry_versions": 333,
+    "scope": "Existing a945 SDK qualifications remain bound to their original bytes; prior Swift runtime execution was macOS arm64 only.",
+    "existing_sdk_release_unchanged_at_publication": true
+  },
+  "publication": {
+    "result": "PASS",
+    "url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.0-app-preview.20261114.5",
+    "tag": "v0.2.0-app-preview.20261114.5",
+    "direct_commit_tag": "633f53dcc6d246ba6454b3403bbde10450102ef2",
+    "release_id": 445639506,
+    "published_at": "2026-11-14T22:41:11Z",
+    "readback_at": "2026-11-14T22:41:13.939755+00:00",
+    "receipt_sha256": "5e214d65d78624fa43b597e8e7f7440948e5866e63219e29a87e705906567ed1",
+    "manifest_sha256": "d970afe9695a61fe7b3836cdae2b64079433d87769bb98b6b9cedfdab2624849",
+    "release_notes_sha256": "4f8c8a5470b0bdd821923e9a6f47769b3fbd524132ddd5f42e498000cc57c6e6",
+    "asset_count": 11,
+    "asset_bytes": 37558605,
+    "all_server_asset_hashes_match": true,
+    "creation_reconciliation": {
+      "initial_immediate_list_visibility_refusal_preserved": true,
+      "exact_draft_reconciled_GET_only": true,
+      "continuation_skipped_create": true,
+      "create_reissued": false,
+      "reconciliation_receipt_sha256": "75e9beb440de2c59d3581a603460c995f14d8b9267ce29bdef18425c3e872bb0"
+    }
+  },
+  "public_downloads": {
+    "result": "PASS_11_ACTUAL_PUBLIC_DOWNLOADS",
+    "at": "2026-11-14T22:42:30.915023+00:00",
+    "receipt_sha256": "44b66dade8d33293acba20a7292a857528295f3805c8e88dd928abd1ae7837de",
+    "count": 11,
+    "bytes": 37558605,
+    "all_names_sizes_hashes_equal_publication_assets": true,
+    "verified_tls": true,
+    "ambient_proxy_auth_cookies_client_cert": false,
+    "local_app_substitution": false,
+    "sdk_downloaded_or_repacked": false,
+    "scope": "Unauthenticated verified-TLS byte receipt only; no app launch, install or runtime/hardware/live acceptance."
+  },
+  "acceptance": {
+    "original_full_MVP_complete": false,
+    "UX_rounds_complete": 3,
+    "round_4": "partial",
+    "round_5_started": false,
+    "remaining": [
+      "Initial startup-delay cause and broader startup/endurance behavior.",
+      "Physical iPad/Pencil, composed IME/hardware input, accessibility/VoiceOver and long-document acceptance.",
+      "Live Kindle/Audible/Castalia authority, remote social exchange and multi-device qualification.",
+      "Execution on minimum-supported macOS 14/iPadOS 17; metadata and newer-host execution are separate.",
+      "Current normal iPad installation and required development signing."
+    ],
+    "limits": [
+      "Device archive remains unsigned and is not an installable signed IPA; Mac and Simulator are development builds.",
+      "No forced-termination, drawn/placed-ink or new broad GUI pass follows from these bounded observations.",
+      "No registry publication, personal account/credential use or remote integration activation occurred in this qualification."
+    ],
+    "optional_distribution": "Notarization and store distribution are optional follow-on work for the local-app delivery and are not MVP completion gates."
+  }
+}
