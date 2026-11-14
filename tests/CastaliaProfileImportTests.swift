@@ -1,5 +1,87 @@
 // SPDX-License-Identifier: MPL-2.0
 import Foundation
+import Darwin
+import Dispatch
+
+/// A regression against the former blocking open must fail, not wedge the suite.
+/// Once the deadline expires, repeatedly offer a nonblocking FIFO writer so a
+/// delayed blocking reader can finish opening and report the test failure.
+private final class ProfileFIFOReadDeadline: @unchecked Sendable {
+    private let lock = NSLock()
+    private var exceeded = false
+    private let timer = DispatchSource.makeTimerSource(queue: .global(qos: .userInitiated))
+
+    init(_ fifo: URL) {
+        timer.schedule(deadline: .now() + .seconds(2), repeating: .milliseconds(10))
+        timer.setEventHandler { [weak self] in
+            guard let self else { return }
+            self.lock.lock(); self.exceeded = true; self.lock.unlock()
+            let writer = Darwin.open(fifo.path, O_WRONLY | O_NONBLOCK | O_CLOEXEC)
+            if writer >= 0 { _ = Darwin.close(writer) }
+        }
+        timer.resume()
+    }
+
+    func finish() -> Bool {
+        timer.cancel()
+        lock.lock(); defer { lock.unlock() }
+        return exceeded
+    }
+
+    deinit { timer.cancel() }
+}
+
+private func testCastaliaProfileFileBoundary(_ root: URL) async throws {
+    func rejected(_ url: URL) async {
+        do { _ = try await CastaliaProfileCandidate.readFile(url); preconditionFailure("Expected profile file refusal") }
+        catch { }
+    }
+
+    let fifo = root.appendingPathComponent("profile-no-writer.fifo")
+    precondition(mkfifo(fifo.path, S_IRUSR | S_IWUSR) == 0)
+    let deadline = ProfileFIFOReadDeadline(fifo)
+    await rejected(fifo)
+    precondition(!deadline.finish(), "Profile reader blocked opening a FIFO until the watchdog supplied a writer")
+    await rejected(root)
+    await rejected(URL(string: "https://example.invalid/provider.json")!)
+    await rejected(URL(string: "file://remote.example.invalid/provider.json")!)
+    await rejected(root.appendingPathComponent("does-not-exist.json"))
+
+    let file = root.appendingPathComponent("profile-file-boundary.json")
+    for invalid in [Data(), Data([0xff, 0xfe]), Data([0xc3]), Data(repeating: 32, count: CastaliaProfileCandidate.maximumBytes + 1)] {
+        try invalid.write(to: file)
+        await rejected(file)
+    }
+    // This fills eight 1 KiB reads and requires a separate EOF observation. The
+    // first multibyte scalar straddles a chunk boundary; bytes must stay exact.
+    let unicode = Data((String(repeating: " ", count: 1_023) + "é😀 café 日本語\n").utf8)
+    var exact = unicode
+    exact.append(Data(repeating: 32, count: CastaliaProfileCandidate.maximumBytes - unicode.count))
+    try exact.write(to: file)
+    let full = try await CastaliaProfileCandidate.readFile(file)
+    precondition(full == exact && full.count == 8_192)
+    let short = Data("é😀 café 日本語\n".utf8)
+    try short.write(to: file)
+    let shortRead = try await CastaliaProfileCandidate.readFile(file)
+    precondition(shortRead == short)
+    let symlink = root.appendingPathComponent("regular-profile-link.json")
+    try FileManager.default.createSymbolicLink(at: symlink, withDestinationURL: file)
+    let linkedRead = try await CastaliaProfileCandidate.readFile(symlink)
+    precondition(linkedRead == short, "Existing regular-file symlink behavior must remain supported")
+
+    // Cancel before invoking the reader, rather than racing its detached task.
+    // A non-file URL also proves cancellation wins before URL/I/O handling.
+    let preCancelled = Task {
+        withUnsafeCurrentTask { $0?.cancel() }
+        do {
+            _ = try await CastaliaProfileCandidate.readFile(URL(string: "https://example.invalid/cancelled.json")!)
+            preconditionFailure("Pre-cancelled profile read succeeded")
+        } catch is CancellationError { }
+        catch { preconditionFailure("Pre-cancelled read must fail with CancellationError before I/O: \(error)") }
+    }
+    await preCancelled.value
+    print("Castalia profile file boundary: no-writer FIFO with watchdog, directory/nonlocal/missing/oversized/empty/invalid UTF-8 refusal, exact 8 KiB multichunk Unicode, EOF and pre-cancelled caller passed.")
+}
 
 @MainActor private final class ProfileInstallGate {
     var continuation: CheckedContinuation<Void, Never>?
@@ -27,6 +109,7 @@ import Foundation
         try? FileManager.default.removeItem(at: root)
     }
     setenv("BOOKNOOK_DATA_DIR", root.path, 1)
+    try await testCastaliaProfileFileBoundary(root)
     let model = DeskModel(); await model.open()
     precondition(model.error == nil)
     let decoder = JSONDecoder(); decoder.keyDecodingStrategy = .convertFromSnakeCase
