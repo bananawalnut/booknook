@@ -156,8 +156,17 @@ struct ConnectionsView: View {
                     VStack(alignment: .leading, spacing: 10) { HStack { Text(gate.id.replacingOccurrences(of: "-", with: " ").capitalized).font(.headline); Spacer(); Label("Release gate", systemImage: "exclamationmark.circle").font(.caption).foregroundStyle(.orange) }; Text(gate.reason ?? "Qualification required").font(.callout).foregroundStyle(.secondary) }.padding(20).background(nookAccent.opacity(0.04), in: RoundedRectangle(cornerRadius: 12))
                 }
                 Divider()
-                Text("Book Nook 0.1 · Development preview").font(.caption)
-                Text("Ontology 0.1.0 · Zenith / Castalia mapping 0.6.0\nNo Book Nook server is required.\nLocal saves never request a signature. Sharing and synchronization require explicit consent.").font(.caption).foregroundStyle(.secondary)
+                if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String,
+                   let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String,
+                   !version.isEmpty, !build.isEmpty {
+                    Text("Book Nook \(version) (\(build)) · Development preview").font(.caption)
+                } else {
+                    Text("Book Nook · Development preview").font(.caption)
+                }
+                if let snapshot = model.state {
+                    Text("Library ontology \(snapshot.ontologyVersion)").font(.caption).foregroundStyle(.secondary)
+                }
+                Text("No Book Nook server is required.\nLocal saves never request a signature. Sharing and synchronization require explicit consent.").font(.caption).foregroundStyle(.secondary)
             }.padding(36)
         }
     }

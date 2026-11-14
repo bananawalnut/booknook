@@ -44,6 +44,7 @@ struct ReadingSession: Decodable, Identifiable { let id: String; let passId: Str
 struct Annotation: Decodable, Identifiable { let id: String; let passId: String; let anchor: JSONValue; let originalContext: String; let layoutFingerprint: String?; let nativeDrawing: String?; let strokes: [JSONValue]; let inkGeometry: JSONValue? }
 struct PositionObservation: Codable, Identifiable { let id: String; let passId: String; let location: JSONValue; let observedAt: UInt64; let receivedAt: UInt64; let alignment: JSONValue; let providerConnectionId: String?; var audioMetadata: JSONValue? = nil }
 struct DeskSnapshot: Decodable {
+    let ontologyVersion: String
     let revision: UInt64
     let localReader: String
     let books: [String: LibraryBook]
