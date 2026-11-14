@@ -1,0 +1,414 @@
+{
+  "schema": "booknook.profile-import-file-evidence.v1",
+  "observed_at": "2026-11-14T18:05:02.606901+00:00",
+  "status": "PASS_LOCAL_AND_EXACT_SOURCE_HOSTED_CI",
+  "source_commit": "995bf0df36f3a638fd185f704c19f41af4269cd6",
+  "base_commit": "d1d47c58c2cabd2900519bac6e6985ac060caa25",
+  "source_files": {
+    "apps/apple/BookNook/CastaliaProfileImport.swift": "7f3cb7bbd662f9696c7bb4034a1165ccdca33374384a8ec2dc8265828c8765df",
+    "tests/CastaliaProfileImportTests.swift": "90678b7b63acaf1b72cb4bd455650155e73a0441116e61754a7917d84e5c84b9"
+  },
+  "qualification_receipt_sha256": "61e3c4cbf9576402f04f2efa12789201ad6be9ebce0c87a3e16c4c7ef9e278e8",
+  "old_behavior": {
+    "production_reader_source_sha256": "3ceee493ac3e37cedd1c08051e5053d484d8ba4e7f9a2fb349725d86f6f5e16f",
+    "ordinary_file_control": "PASS",
+    "real_no_writer_fifo": "External subprocess timeout after2seconds; Python subprocess.run killed and waited for child.",
+    "scope": "Actual unchanged reader source compiled; unrelated model types alone were compiler stubs. Reader I/O was not stubbed. No GUI-reachability or remote-exploit claim."
+  },
+  "fixed_behavior": {
+    "nonblocking_close_on_exec_open": true,
+    "opened_descriptor_regular_file_check": true,
+    "maximum_content_bytes": 8192,
+    "read_limit_including_overflow_detection": 8193,
+    "bounded_chunk_bytes": 1024,
+    "whole_buffer_utf8_validation": true,
+    "pre_cancelled_callers_rejected": true,
+    "regular_symlink_compatibility_retained": true,
+    "local_file_and_localhost_only": true,
+    "real_file_cases": [
+      {
+        "mode": "read",
+        "fixture": "normal.json",
+        "result": "PASS",
+        "seconds": 0.311,
+        "stdout": "READ 31 b0d5ddbedf14b93669ab2eade9ee6b6af120fb8acd13b7a21bd69a889b08807d"
+      },
+      {
+        "mode": "read",
+        "fixture": "exact-8192.json",
+        "result": "PASS",
+        "seconds": 0.0068,
+        "stdout": "READ 8192 2d017a20d7310d48f096f4e3e58212e0217f404893544f04ea8fdeef9f79a45a"
+      },
+      {
+        "mode": "read",
+        "fixture": "regular-link",
+        "result": "PASS",
+        "seconds": 0.0055,
+        "stdout": "READ 31 b0d5ddbedf14b93669ab2eade9ee6b6af120fb8acd13b7a21bd69a889b08807d"
+      },
+      {
+        "mode": "reject",
+        "fixture": "no-writer.fifo",
+        "result": "PASS",
+        "seconds": 0.0053,
+        "stdout": "REJECTED ConnectionInputError"
+      },
+      {
+        "mode": "reject",
+        "fixture": "fifo-link",
+        "result": "PASS",
+        "seconds": 0.0057,
+        "stdout": "REJECTED ConnectionInputError"
+      },
+      {
+        "mode": "reject",
+        "fixture": "fixed-fixtures",
+        "result": "PASS",
+        "seconds": 0.0049,
+        "stdout": "REJECTED ConnectionInputError"
+      },
+      {
+        "mode": "reject",
+        "fixture": "empty.json",
+        "result": "PASS",
+        "seconds": 0.005,
+        "stdout": "REJECTED ConnectionInputError"
+      },
+      {
+        "mode": "reject",
+        "fixture": "large.json",
+        "result": "PASS",
+        "seconds": 0.0048,
+        "stdout": "REJECTED ConnectionInputError"
+      },
+      {
+        "mode": "reject",
+        "fixture": "invalid.json",
+        "result": "PASS",
+        "seconds": 0.005,
+        "stdout": "REJECTED ConnectionInputError"
+      },
+      {
+        "mode": "reject",
+        "fixture": "missing.json",
+        "result": "PASS",
+        "seconds": 0.0047,
+        "stdout": "REJECTED NSError"
+      },
+      {
+        "mode": "url",
+        "fixture": "profile.json",
+        "result": "PASS",
+        "seconds": 0.0043,
+        "stdout": "REJECTED ConnectionInputError"
+      },
+      {
+        "mode": "url",
+        "fixture": "profile.json",
+        "result": "PASS",
+        "seconds": 0.0042,
+        "stdout": "REJECTED ConnectionInputError"
+      },
+      {
+        "mode": "url",
+        "fixture": "normal.json",
+        "result": "PASS",
+        "seconds": 0.0044,
+        "stdout": "READ 31 b0d5ddbedf14b93669ab2eade9ee6b6af120fb8acd13b7a21bd69a889b08807d"
+      },
+      {
+        "mode": "cancelled",
+        "fixture": "no-writer.fifo",
+        "result": "PASS",
+        "seconds": 0.0041,
+        "stdout": "CANCELLED"
+      }
+    ]
+  },
+  "qualification_commands": [
+    {
+      "label": "compile-fixed-probe",
+      "exit_code": 0,
+      "seconds": 5.379,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "full-native-workflow",
+      "exit_code": 0,
+      "seconds": 55.176,
+      "log_sha256": "a34cbf0281fd86f2fda7c30e17e45b103ee4e5efcd6bd29df4fec02562039454"
+    },
+    {
+      "label": "ipad-simulator-typecheck",
+      "exit_code": 0,
+      "seconds": 23.221,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "ipad-device-typecheck",
+      "exit_code": 0,
+      "seconds": 26.98,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "native_workflow": {
+    "actual_app_models_and_native_repository": true,
+    "reader_test_invoked_through_existing_profile_workflow": true,
+    "full_headless_workflow": "PASS",
+    "actual_wkwebview_anchor_regression": "PASS",
+    "unchanged_release_rust_library_sha256": "1af73e48965f91468fbd09254e050be09ca49fb7d2a41133da35b05247ea9e90",
+    "scope": "All actual app Swift source compiled on macOS and existing repository/workflow suite executed. Independent focused probe compiler stubs do not substitute for this workflow."
+  },
+  "ipad_typechecks": {
+    "simulator_target": "arm64-apple-ios17.0-simulator",
+    "device_target": "arm64-apple-ios17.0",
+    "result": "PASS",
+    "runtime_execution": false
+  },
+  "review": "Independent read-only source review passed; path race, descriptor lifetime, cancellation, bounds, compatibility and watchdog reviewed.",
+  "published_preview": {
+    "url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.0-preview.20261114",
+    "source_commit": "a945df213150abe10e27cc6c5e92da130588bef8",
+    "contains_fix": false,
+    "note_readback_at": "2026-11-14T18:08:29.995519+00:00",
+    "body_sha256": "c5fd055ebbcec6e04ad10090e1cbc4472a2f871fb4aa8bcb1fc64a4cbedb1f58",
+    "all17_assets_and_tag_unchanged": true,
+    "prior_body_retained_verbatim": true,
+    "receipt_sha256": "fc66e16a48786d354871bcc295eae4611faa0cdd20c4cbc7a3ed200ce10d61c8"
+  },
+  "unchanged": [
+    "Rust/Swift/WASM SDK source and packages",
+    "Signing and authority contracts",
+    "Ontology, schemas, wire and stored data",
+    "Existing published manifest and17asset bytes"
+  ],
+  "limits": [
+    "No new packaged app, renewed installation, current GUI, physical input/accessibility, live account/issuer/custody, remote social/device or minimum-OS runtime qualification.",
+    "O_NONBLOCK avoids FIFO open waiting; regular/network-filesystem I/O has no deadline or mid-syscall cancellation guarantee.",
+    "Multichunk reads and Unicode chunk boundary are exercised; injected OS short reads and forced path replacement are not claimed.",
+    "Local source qualification and independent review do not make the old a945 preview include the new source fix.",
+    "Hosted CI is separate from these local checks."
+  ],
+  "hosted_ci": {
+    "at": "2026-11-14T18:18:13.437081+00:00",
+    "result": "PASS",
+    "run": 43624695716,
+    "url": "https://github.com/bananawalnut/booknook/actions/runs/43624695716",
+    "source_commit": "995bf0df36f3a638fd185f704c19f41af4269cd6",
+    "attempt": 1,
+    "all38steps_success": true,
+    "apple_steps": 17,
+    "portable_steps": 21,
+    "new_actual_FIFO_test_marker_in_hosted_log": true,
+    "server_metadata_sha256": "b7c59db68f4c6a927e05b9ac6a70ea13484f340fb7ecd41816716d37baea5f4a",
+    "full_public_ci_log_sha256": "5d28f7c751bd5cf3cc74a5845d1b2e33c6ce74e09324cb043298210d24b154a5",
+    "full_public_ci_log_bytes": 1206875,
+    "scope": "Exact-source hosted builds/tests/packages; no current GUI, physical install/input, live account/authority, remote social/device or minimum-OS runtime claim.",
+    "jobs": [
+      {
+        "name": "portable",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Run dtolnay/rust-toolchain@stable",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Run actions/setup-node@v4",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Install the WebAssembly C toolchain",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Run bash scripts/check.sh",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Verify the complete dependency-license inventory",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Verify the dependency advisory gate policy",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Install the pinned dependency auditor",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Audit both lockfiles against fresh official RustSec advisories",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Reject oversized negentropy ID lists before allocation",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Run bash scripts/test-issuer.sh",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Run cargo install wasm-bindgen-cli --version 0.2.127 --locked",
+            "conclusion": "success"
+          },
+          {
+            "number": 14,
+            "name": "Run bash scripts/test-sdk.sh",
+            "conclusion": "success"
+          },
+          {
+            "number": 15,
+            "name": "Run bash scripts/package-rust.sh",
+            "conclusion": "success"
+          },
+          {
+            "number": 16,
+            "name": "Run bash scripts/package-typescript.sh",
+            "conclusion": "success"
+          },
+          {
+            "number": 17,
+            "name": "Run python3 -m unittest discover -s tests/companion -v",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Verify Apple bundle deployment metadata checks",
+            "conclusion": "success"
+          },
+          {
+            "number": 35,
+            "name": "Post Run actions/setup-node@v4",
+            "conclusion": "success"
+          },
+          {
+            "number": 36,
+            "name": "Post Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "number": 37,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "name": "apple",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Run dtolnay/rust-toolchain@stable",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Run brew install xcodegen",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Run bash scripts/build-apple.sh mac",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Run bash scripts/build-apple.sh ipad-sim",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Run bash scripts/build-apple.sh ipad-device",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Run bash scripts/test-reading.sh",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Run bash scripts/test-recovery.sh",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Run bash scripts/test-ui-workflows.sh",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Run bash scripts/test-feed-source-swift.sh",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Run bash scripts/test-feed-xml-swift.sh",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Run bash scripts/test-feed-public-https-swift.sh",
+            "conclusion": "success"
+          },
+          {
+            "number": 14,
+            "name": "Run bash scripts/test-feed-cache-swift.sh",
+            "conclusion": "success"
+          },
+          {
+            "number": 15,
+            "name": "Run bash scripts/package-swift.sh --use-built",
+            "conclusion": "success"
+          },
+          {
+            "number": 30,
+            "name": "Post Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "number": 31,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ],
+    "verification_receipt_sha256": "d23a992196e7b8e2a9ceac0d99f1131aa055f943b735e1dca6ba57e985a7be87"
+  }
+}

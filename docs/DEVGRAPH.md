@@ -94,7 +94,7 @@ The origin-free export SDK now passes its [focused parity and lifecycle checks](
 
 The unregistered shared controller passes 511 npm tests with four existing opt-in skips and typecheck, including actual synthetic encrypted/WASM/FIFO cases. This does not register or enable a page API. D137 keeps the next Chrome adapter behind a separate false-by-default capability and explicit destination support predicate; selection and consent are separate, with one 120-second lifecycle and 16 actual-work slots. Production v3 guards and Web PR68 remain unchanged.
 
-## Current delivery checkpoint — 2026-11-14
+## Published preview checkpoint — 2026-11-14
 
 Canonical post-publication read-back records Project/booknook **v42**, Project/castalia-portable-feeds **v17**, Issue/booknook-negentropy-security **v9**, Issue/booknook-sdk-publication **v6**, Issue/booknook-current-packages **v9**, Issue/booknook-ci-evidence **v16** and Issue/booknook-ontology-publication **v4**. Feed progress remains Task/booknook-feed-import-activate **v9**, Task/booknook-feed-discovery-ui **v8** and Task/castaway-feed-selective-projection **v11**. The plan retains **46 records and 39 dependency edges**. Five description-only patches recorded the completed preview evidence; titles, priorities, lifecycle, parentage, dependencies, 24 Project children and inherited Castalia membership were preserved. No Work acceptance is inferred.
 
@@ -110,6 +110,12 @@ Maintained Nostr SDK 0.45.6/lru 0.18.2 and the Rust transport/type migration tar
 
 The active plan is: reconcile the qualified archive checksums/notices → retain the published manifest, actual public receiving proof and canonical Work progress → continue external gates. Audit/CI/native proof is retained without repeating passed work absent changed inputs. Maintenance notices remain explicit; no documentation update accepts Work. Hardware, minimum-OS runtime, live accounts/authority, remote social and cross-device gates remain open. Public feed output/component hints remain later work; the active goal/objective is unchanged.
 
+
+## Profile-import source follow-up — 2026-11-14
+
+The subsequent four description-only updates were independently read back as Project/booknook **v43**, Issue/booknook-castalia-live **v4**, Issue/booknook-current-packages **v10** and Issue/booknook-ci-evidence **v17**. They record source `995bf0df36f3a638fd185f704c19f41af4269cd6`, the actual old FIFO hang and [fixed-reader evidence](profile-import-file-evidence.json): 14 local file cases, the full native workflow, both iPad typechecks and all 38 steps in [exact-source CI43624695716](https://github.com/bananawalnut/booknook/actions/runs/43624695716), including the hosted FIFO regression. Original descriptions remain verbatim below each checkpoint. Titles, priorities, lifecycle, relationships, 24 Project children and inherited Castalia membership are unchanged.
+
+The published a945 preview still lacks this app-only fix; its notes disclose the limitation and all 17 assets/tag are preserved. SDK source and artifacts are unchanged. Fresh native Release app archives for build **2026111404** remain pending; assigning a build number does not qualify compilation, packaging or installation. Current input/accessibility, live account/authority, remote social/device exchange and minimum-OS runtime gates remain open. Four unsigned EventReceipts report `pending`: local mutation committed, outbox processing pending, without a claim of external delivery.
 
 ## Read current state
 
