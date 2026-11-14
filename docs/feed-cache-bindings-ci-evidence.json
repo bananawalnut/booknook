@@ -1,0 +1,135 @@
+{
+  "schema": "booknook.feed-cache-bindings-hosted-ci.v1",
+  "source_revision": "a9a672ccfd5ea21b454773aa876cc540b9e7622c",
+  "run_id": 43595156561,
+  "url": "https://github.com/bananawalnut/booknook/actions/runs/43595156561",
+  "conclusion": "success",
+  "completed_at": "2026-11-14T12:53:14Z",
+  "jobs": [
+    {
+      "name": "apple",
+      "id": 132447974329,
+      "url": "https://github.com/bananawalnut/booknook/actions/runs/43595156561/job/132447974329",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run brew install xcodegen",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/build-apple.sh mac",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/build-apple.sh ipad-sim",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/build-apple.sh ipad-device",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-reading.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-recovery.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-ui-workflows.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-feed-source-swift.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-feed-xml-swift.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-feed-public-https-swift.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-feed-cache-swift.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/package-swift.sh --use-built",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "name": "portable",
+      "id": 132447974592,
+      "url": "https://github.com/bananawalnut/booknook/actions/runs/43595156561/job/132447974592",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install the WebAssembly C toolchain",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/check.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify the complete dependency-license inventory",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-issuer.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run cargo install wasm-bindgen-cli --version 0.2.127 --locked",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-sdk.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/package-rust.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/package-typescript.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run python3 -m unittest discover -s tests/companion -v",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "qualification_limits": [
+    "Covers committed native/Swift cache facade at a9a672c, not later portable-export SDK, string-enum correction or app Publications work.",
+    "Hosted Apple builds and Swift workflow/package checks do not establish installation, minimum-OS runtime or physical iPad acceptance.",
+    "Hosted HTTPS checks use offline defaults. No registry publication, runtime deployment, production-v3 enablement or live-account qualification is inferred."
+  ]
+}

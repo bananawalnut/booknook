@@ -15,6 +15,9 @@ async function main(){
  let calls=0,callback=async()=>{};
  const provider={descriptorBytes:bytes(descriptor),async fetch(request,cancel){calls++;await callback(request,cancel);const body=request.conditional?new Uint8Array():bytes('<rss/>');return {untrustedBody:body,responseBytes:bytes({schema:'booknook.feed-source-response.v1',runtime_id:request.runtime_id,request_id:request.request_id,source_id:request.source_id,provider_id:request.provider_id,configuration_generation:request.configuration_generation,provider_generation:request.provider_generation,activation_generation:request.activation_generation,final_url:request.url,content_type:request.conditional?null:'application/rss+xml',outcome:request.conditional?'not-modified':'body',validators:{etag:null,last_modified:null},body_sha256:request.conditional?request.conditional.body_sha256:crypto.createHash('sha256').update(body).digest('hex')})};}};
  assert.deepEqual(sdk.validateFeedSourceDescriptorV1(core,bytes(descriptor)),descriptor);
+ for(const bad of [null,true,1,[],['public-xml-bytes.v1'],{'public-xml-bytes.v1':null}]){
+  const malformed=bytes({...descriptor,protocols:[bad]});assert.throws(()=>sdk.validateFeedSourceDescriptorV1(core,malformed));assert.throws(()=>new sdk.BookNookFeedSourcesV1(core,config,{...provider,descriptorBytes:malformed}));
+ }
  for(const raw of [JSON.stringify(descriptor).replace('"version":1','"version":1e0'),JSON.stringify(descriptor).replace('{','{"version":1,'),'{"schema":"booknook.provider-registry.v1","providers":[]}'])assert.throws(()=>core.validate_feed_source_descriptor_v1(bytes(raw)));
  const runtime=new sdk.BookNookFeedSourcesV1(core,config,provider);
  await assert.rejects(runtime.fetch(id));assert.equal(calls,0);runtime.activate(id);
@@ -51,6 +54,11 @@ async function main(){
  const pending=await runtime.fetch(id);runtime.close();assert.throws(()=>pending.cacheCondition());pending.close();await assert.rejects(runtime.fetch(id));runtime.close();
  // A response or preview JSON cannot fabricate a live Rust read/candidate.
  assert.throws(()=>new sdk.BookNookFeedReadV1(JSON.parse(JSON.stringify(condition))));
+ for(const literal of ['body','not-modified'])for(const bad of [null,false,1,[],[literal],{[literal]:null}]){
+  const malformedProvider={...provider,async fetch(request,cancel){const reply=await provider.fetch(request,cancel);return {...reply,responseBytes:bytes({...JSON.parse(new TextDecoder().decode(reply.responseBytes)),outcome:bad})};}};
+  const malformed=new sdk.BookNookFeedSourcesV1(core,config,malformedProvider);malformed.activate(id);
+  await assert.rejects(malformed.fetch(id,undefined,literal==='body'?undefined:bytes(hint)));malformed.close();
+ }
  console.log('Actual '+(web?'web-target':'Node')+' WASM + typed host source SDK: async activation, cancellation, ABA/provider staleness, private-field omission and guarded cache/reentry passed. No network/storage backend qualification claimed.');
 }
 main().catch(error=>{console.error(error);process.exitCode=1;});

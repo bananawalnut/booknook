@@ -3,6 +3,35 @@ const CONTEXT: &[u8] = br#"{"schema":"booknook.feed-normalization-context.v1","s
 fn parse(xml: &str) -> NormalizedFeed {
     normalize(CONTEXT, xml.as_bytes()).unwrap()
 }
+
+#[test]
+fn literal_string_normalization_format_rejects_all_non_string_shapes() {
+    use serde_json::{Value, json};
+    for literal in ["auto", "rss", "atom"] {
+        let mut context: Value = serde_json::from_slice(CONTEXT).unwrap();
+        context["expected_format"] = json!(literal);
+        let xml = if literal == "atom" {
+            "<feed xmlns='http://www.w3.org/2005/Atom'><title>T</title></feed>"
+        } else {
+            "<rss version='2.0'><channel/></rss>"
+        };
+        assert!(normalize(&serde_json::to_vec(&context).unwrap(), xml.as_bytes()).is_ok());
+        for bad in [
+            Value::Null,
+            json!(false),
+            json!(1),
+            json!([]),
+            json!([literal]),
+            json!({literal:null}),
+        ] {
+            context["expected_format"] = bad;
+            assert!(
+                normalize(&serde_json::to_vec(&context).unwrap(), xml.as_bytes()).is_err(),
+                "{context}"
+            );
+        }
+    }
+}
 #[test]
 fn rss_preserves_native_identity_and_dates_without_fetch_time() {
     let feed = parse(

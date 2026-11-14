@@ -19,11 +19,17 @@ const configuration={schema:'booknook.feed-configuration.v1',revision:0,feeds:se
 const current=bytes(configuration);const incoming=structuredClone(section);incoming.subscriptions[0].title='Reviewed change';
 const raw=bytes(incoming);const choices=bytes([{target:'subscription',id:incoming.subscriptions[0].id,choice:'incoming'}]);
 assert.deepEqual(object(core.validate_feed_configuration_v1(current)),configuration);
+const nonStrings=literal=>[null,true,1,1.5,[],[literal],{[literal]:null}];const badSections=[];
+for(const [path,literal]of [[['schema'],'castalia.feeds-section.v1'],[['subscriptions',0,'format'],'atom'],[['subscriptions',0,'disclosure'],'selected'],[['preferences','order'],'newest-first']])for(const bad of nonStrings(literal)){
+ const value=structuredClone(section);let target=value;for(const p of path.slice(0,-1))target=target[p];target[path.at(-1)]=bad;const raw=bytes(value);badSections.push(raw);assert.throws(()=>core.validate_feed_section_v1(raw));
+}
+for(const bad of nonStrings('booknook.feed-configuration.v1'))assert.throws(()=>core.validate_feed_configuration_v1(bytes({...configuration,schema:bad})));
 const review=new core.FeedImportReviewV1(current,raw);
 let resolved;
 try{
  const preview=object(review.preview());assert.equal(preview.schema,'booknook.feed-import-review.v1');assert.equal(preview.conflicts.length,1);assert.equal(preview.candidate,null);
  assert.throws(()=>review.confirm(current,raw));
+ for(const [field,literal]of [['target','subscription'],['choice','incoming']])for(const bad of nonStrings(literal))assert.throws(()=>review.resolve(current,raw,bytes([{target:'subscription',id:incoming.subscriptions[0].id,choice:'incoming',[field]:bad}])));
  resolved=review.resolve(current,raw,choices);
  const confirmed=object(resolved.confirm(current,raw));assert.equal(confirmed.revision,1);assert.equal(confirmed.feeds.subscriptions[0].title,'Reviewed change');
  assert.throws(()=>review.resolve(current,bytes(JSON.stringify(incoming)+' '),choices));
@@ -37,6 +43,7 @@ const absent=new core.FeedImportReviewV1(current,undefined);try{assert.deepEqual
 const orphan='b41ef5e8-0e06-43e0-aa47-000000000999';const expanded=structuredClone(configuration);expanded.feeds.collections.push({id:orphan,title:'Private orphan'});
 const selection={schema:'booknook.feed-disclosure-selection.v1',origin:'https://reader.example.org',subscriptionIds:[section.subscriptions[0].id],collectionIds:[orphan],memberships:[{subscriptionId:section.subscriptions[0].id,collectionIds:[]}]};
 const projection=new core.FeedProjectionReviewV1(bytes(expanded),bytes(selection));
+for(const bad of nonStrings('booknook.feed-disclosure-selection.v1'))assert.throws(()=>new core.FeedProjectionReviewV1(bytes(expanded),bytes({...selection,schema:bad})));
 try{const selected=object(projection.confirm(bytes(expanded),selection.origin));assert.equal(selected.feeds.collections.length,0);assert.deepEqual(selected.feeds.subscriptions[0].collectionIds,[]);assert.ok(!JSON.stringify(selected).includes(orphan));assert.ok(!JSON.stringify(selected).includes('Private orphan'));assert.deepEqual(object(projection.preview()),selected);assert.throws(()=>projection.confirm(bytes(expanded),selection.origin+'/'));assert.throws(()=>projection.confirm(bytes({...expanded,revision:1}),selection.origin));}finally{projection.free();}
 assert.equal(expanded.feeds.collections.length,2);
 const exportSelection={schema:'booknook.feed-export-selection.v1',subscriptionIds:[section.subscriptions[0].id],collectionIds:[section.collections[0].id],memberships:[{subscriptionId:section.subscriptions[0].id,collectionIds:[section.collections[0].id]}]};
@@ -71,6 +78,7 @@ const disclosure=new core.FeedProjectionReviewV1(current,bytes({...exportSelecti
 try{assert.throws(()=>core.validate_feed_section_v1(bytes(disclosure.preview())));}finally{disclosure.free();}
 if(process.argv[3]){
  const sdk=require(path.resolve(process.argv[3]));
+ for(const bad of badSections)assert.throws(()=>sdk.validateFeedSectionV1(core,bad));
  for(const c of corpus.cases){if(c.valid)assert.deepEqual(sdk.validateFeedSectionV1(core,bytes(c.raw)),object(c.raw),c.id);else assert.throws(()=>sdk.validateFeedSectionV1(core,bytes(c.raw)),undefined,c.id);}
  const wrapped=sdk.BookNookFeedImportReviewV1.prepare(core,current,raw);
  const changed=wrapped.resolve(current,raw,choices);

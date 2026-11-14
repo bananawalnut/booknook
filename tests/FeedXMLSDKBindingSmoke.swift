@@ -17,6 +17,10 @@ private func pointer(_ object: Any,_ path: String) -> Any {
     static func main() throws {
         let corpus=try JSONSerialization.jsonObject(with:Data(contentsOf:URL(fileURLWithPath:CommandLine.arguments[1]))) as! [String:Any]
         let context=try JSONSerialization.data(withJSONObject:corpus["context"]!)
+        for bad in [NSNull(),true,1,[Any](),["auto"],["auto":NSNull()]] as [Any] {
+            var alias=corpus["context"] as! [String:Any];alias["expected_format"]=bad
+            rejected {_ = try BookNookFeedXMLV1.normalize(context:JSONSerialization.data(withJSONObject:alias),xml:Data("<rss version='2.0'><channel/></rss>".utf8))}
+        }
         let cases=corpus["cases"] as! [[String:Any]]
         for test in cases {
             let xml=Data((test["xml"] as! String).utf8)
@@ -39,6 +43,6 @@ private func pointer(_ object: Any,_ path: String) -> Any {
         }
         let deep="<rss version='2.0'><channel>"+String(repeating:"<x>",count:30_000)+String(repeating:"</x>",count:30_000)+"</channel></rss>"
         rejected {_ = try BookNookFeedXMLV1.normalize(context:context,xml:Data(deep.utf8))}
-        print("Actual generated Swift XML normalizer: \(cases.count) shared malicious/synthetic cases and hostile UTF8/depth passed; no transport/render/cache qualification.")
+        print("Actual generated Swift XML normalizer: \(cases.count) shared malicious/synthetic cases, literal-string format refusals and hostile UTF8/depth passed; no transport/render/cache qualification.")
     }
 }

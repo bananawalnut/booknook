@@ -1,0 +1,113 @@
+{
+  "schema": "booknook.feed-export-enum-package-evidence.v1",
+  "base_commit": "55d6f56c9bf65db11fbec993ddd501fc3f950dac",
+  "includes_reviewed_uncommitted_sdk_source": true,
+  "result": "PASS",
+  "source_snapshot_sha256": "92907f25df5dd82a7a81a28f57cb27c7d822fe9fa4ac0be9b8ade9b79aa9882a",
+  "input_count": 409,
+  "all_frozen_inputs_unchanged_during_checks": true,
+  "started_at": "2026-11-14T13:13:18.869428+00:00",
+  "finished_at": "2026-11-14T13:19:02.159398+00:00",
+  "toolchains": {
+    "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+    "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+    "node": "v24.18.0",
+    "npm": "11.16.0",
+    "wasm-bindgen": "wasm-bindgen 0.2.127"
+  },
+  "commands": [
+    {
+      "command": [
+        "bash",
+        "scripts/test-sdk.sh"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 136.71123124996666,
+      "logSha256": "cef6de6e789e68f009b154250009c2de06ad75d3f6c7c1d9d89765b6b783e34b"
+    },
+    {
+      "command": [
+        "bash",
+        "scripts/package-rust.sh"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 195.04153270897223,
+      "logSha256": "57e2959f25815a6ff64056984fc8df3387898442e19d3808bed0ecd21bd486f1"
+    },
+    {
+      "command": [
+        "bash",
+        "scripts/package-typescript.sh"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 11.076307167008054,
+      "logSha256": "6230bce74f799c8463244269dcc3f3d096243b92e26c7c75dee961dc850e1113"
+    }
+  ],
+  "extracted_rust_tests": {
+    "passed": 290,
+    "failed": 0,
+    "declared_skips": 5
+  },
+  "rust_skip_reasons": [
+    "opt-in public HTTPS acceptance",
+    "independent loopback relay binary required",
+    "child-process helper invoked by crash tests",
+    "opt-in native public HTTPS factory",
+    "loopback HTTP issuer acceptance"
+  ],
+  "installed_npm_file_count": 72,
+  "all_installed_files_match_archive": true,
+  "direct_installed_cjs_parity": {
+    "index.js": {
+      "sha256": "782aed61620e3d21b3cae8309135b9485069dfa0132f804dc9ea6308f8329c51",
+      "byteIdentical": true
+    },
+    "feeds.js": {
+      "sha256": "72bf0c0a9818cdc9fdbe23326cb47808934dc5529f169fc47d96116f83716c63",
+      "byteIdentical": true
+    },
+    "feed-source.js": {
+      "sha256": "567b4d991eb2326debd902af02eb9967c3d9b961e0f060b42d051c3e980c8533",
+      "byteIdentical": true
+    },
+    "feed-xml.js": {
+      "sha256": "8c33dbb3a9da3aa16887c76e7a6de4b9e882d9b7fa2787cc532d922cc4feeaa9",
+      "byteIdentical": true
+    }
+  },
+  "preserved_archives": [
+    {
+      "name": "booknook-connectors-0.1.0.crate",
+      "sha256": "ac1e9c03135f121f0c5c0e9fe485ef1be2f6faba06375cb10ed4743539668e1a",
+      "bytes": 70811
+    },
+    {
+      "name": "booknook-core-0.1.0.crate",
+      "sha256": "17c0113480886a184026838a8d1cf82e77b00cb310ff9afbb9f0c7a1b5661b7c",
+      "bytes": 178024
+    },
+    {
+      "name": "booknook-native-0.1.0.crate",
+      "sha256": "93362cd9ecbd0b4e5b8557520bc39cc42cd14343c3c7f2bbae68ede713cf1712",
+      "bytes": 179968
+    },
+    {
+      "name": "booknook-wasm-0.1.0.crate",
+      "sha256": "44804fd8086fd84edc9904fbbe4c914970b4c5fdb4b3d5d71fb27482816eca56",
+      "bytes": 37498
+    },
+    {
+      "name": "booknook-sdk-0.1.0.tgz",
+      "sha256": "9846e025606d8a4716b7b386a6a074718e1d65e455b8660a36da1f03fb057b02",
+      "bytes": 4585877
+    }
+  ],
+  "private_run_receipt_sha256": "743acb375772c93f4e0020c8db89c4b435cbbbe59c692026c878efafd493e692",
+  "scope_limits": [
+    "Local working-tree development archives, including reviewed source not yet committed at run start; not registry publication or clean release attestation.",
+    "Actual Node/browser WASM and installed CJS/ESM/NodeNext consumers passed; source/XML inputs remain untrusted.",
+    "Native app source was independent concurrent work and is excluded from this SDK acceptance. No visual, iPad, physical-device or minimum-OS runtime qualification.",
+    "The owned temporary target adapter was removed and the original target directory restored. No unrelated outputs were removed."
+  ]
+}

@@ -1,6 +1,29 @@
 use booknook_native::normalize_feed_xml_v1;
 use serde_json::Value;
 #[test]
+fn native_literal_string_normalization_context_refuses_format_aliases() {
+    let corpus: Value =
+        serde_json::from_slice(include_bytes!("fixtures/feed-xml-v1/cases.json")).unwrap();
+    for bad in [
+        Value::Null,
+        serde_json::json!(true),
+        serde_json::json!(1),
+        serde_json::json!([]),
+        serde_json::json!(["auto"]),
+        serde_json::json!({"auto":null}),
+    ] {
+        let mut context = corpus["context"].clone();
+        context["expected_format"] = bad;
+        assert!(
+            normalize_feed_xml_v1(
+                serde_json::to_vec(&context).unwrap(),
+                b"<rss version='2.0'><channel/></rss>".to_vec()
+            )
+            .is_err()
+        );
+    }
+}
+#[test]
 fn native_normalization_matches_core_and_all_synthetic_adversarial_cases() {
     let corpus: Value =
         serde_json::from_slice(include_bytes!("fixtures/feed-xml-v1/cases.json")).unwrap();

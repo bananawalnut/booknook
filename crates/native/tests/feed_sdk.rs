@@ -17,6 +17,34 @@ fn object(raw: String) -> Value {
     serde_json::from_str(&raw).unwrap()
 }
 #[test]
+fn native_literal_string_configuration_projection_and_resolution_boundaries() {
+    for (path, literal) in [
+        ("/schema", "castalia.feeds-section.v1"),
+        ("/subscriptions/0/format", "atom"),
+        ("/subscriptions/0/disclosure", "selected"),
+        ("/preferences/order", "newest-first"),
+    ] {
+        for bad in [
+            Value::Null,
+            json!(false),
+            json!(1),
+            json!([]),
+            json!([literal]),
+            json!({literal:null}),
+        ] {
+            let mut value = section();
+            *value.pointer_mut(path).unwrap() = bad;
+            assert!(validate_feed_section_v1(bytes(&value)).is_err(), "{value}");
+        }
+    }
+    let mut value = config(section());
+    value["schema"] = json!({"booknook.feed-configuration.v1":null});
+    assert!(validate_feed_configuration_v1(bytes(&value)).is_err());
+    let id = section()["subscriptions"][0]["id"].clone();
+    let bad = json!({"schema":{"booknook.feed-disclosure-selection.v1":null},"origin":"https://reader.example.org","subscriptionIds":[id.clone()],"collectionIds":[],"memberships":[{"subscriptionId":id,"collectionIds":[]}]});
+    assert!(FeedProjectionReviewV1::new(bytes(&config(section())), bytes(&bad)).is_err());
+}
+#[test]
 fn native_adapter_matches_all_shared_raw_vectors_without_loss() {
     let corpus: Value =
         serde_json::from_slice(include_bytes!("fixtures/feeds-v1/conformance.json")).unwrap();
@@ -66,6 +94,15 @@ fn native_review_objects_bind_exact_raw_and_configuration_and_resolve_through_co
             .is_err()
     );
     let choices = json!([{"target":"subscription","id":incoming["subscriptions"][0]["id"],"choice":"incoming"}]);
+    for (field, literal) in [("target", "subscription"), ("choice", "incoming")] {
+        let mut bad = choices.clone();
+        bad[0][field] = json!({literal:null});
+        assert!(
+            review
+                .resolve(current_raw.clone(), Some(incoming_raw.clone()), bytes(&bad))
+                .is_err()
+        );
+    }
     let resolved = review
         .resolve(
             current_raw.clone(),

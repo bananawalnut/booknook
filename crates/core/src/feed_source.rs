@@ -55,11 +55,12 @@ fn parse<T: for<'de> Deserialize<'de>>(raw: &[u8]) -> Result<T> {
     }
     crate::strict_parse(raw)
 }
-#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
 pub enum FeedSourceProtocol {
     #[serde(rename = "public-xml-bytes.v1")]
     PublicXmlBytesV1,
 }
+crate::feeds::deserialize_feed_string_enum!(FeedSourceProtocol { PublicXmlBytesV1 => "public-xml-bytes.v1" });
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct FeedSourceDescriptor {
@@ -213,12 +214,13 @@ impl FeedConditionalHint {
         self.validators.validate()
     }
 }
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum FeedSourceOutcome {
     Body,
     NotModified,
 }
+crate::feeds::deserialize_feed_string_enum!(FeedSourceOutcome { Body => "body", NotModified => "not-modified" });
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]

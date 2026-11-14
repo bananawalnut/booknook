@@ -27,30 +27,51 @@ fn require(condition: bool, message: &str) -> Result<()> {
         Err(invalid(message))
     }
 }
+// Feed wire enums are literal strings, not Serde's externally tagged unit-map
+// aliases. Keep this local to feed inputs; serialization and other decoders do
+// not change. String::deserialize refuses every non-string JSON shape.
+macro_rules! deserialize_feed_string_enum {
+    ($name:ident { $($variant:ident => $wire:literal),+ $(,)? }) => {
+        impl<'de> serde::Deserialize<'de> for $name {
+            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> std::result::Result<Self, D::Error> {
+                let value = <String as serde::Deserialize<'de>>::deserialize(deserializer)?;
+                match value.as_str() {
+                    $($wire => Ok(Self::$variant),)+
+                    _ => Err(serde::de::Error::custom(concat!(stringify!($name), " requires a supported literal string"))),
+                }
+            }
+        }
+    };
+}
+pub(crate) use deserialize_feed_string_enum;
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 pub enum FeedSectionSchema {
     #[serde(rename = "castalia.feeds-section.v1")]
     V1,
 }
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+deserialize_feed_string_enum!(FeedSectionSchema { V1 => "castalia.feeds-section.v1" });
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "lowercase")]
 pub enum FeedFormat {
     Auto,
     Rss,
     Atom,
 }
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+deserialize_feed_string_enum!(FeedFormat { Auto => "auto", Rss => "rss", Atom => "atom" });
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "lowercase")]
 pub enum FeedDisclosure {
     Private,
     Selected,
 }
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+deserialize_feed_string_enum!(FeedDisclosure { Private => "private", Selected => "selected" });
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 pub enum FeedOrder {
     #[serde(rename = "newest-first")]
     NewestFirst,
 }
+deserialize_feed_string_enum!(FeedOrder { NewestFirst => "newest-first" });
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct FeedPreferences {
@@ -244,11 +265,12 @@ impl FeedSection {
     }
 }
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 pub enum FeedConfigurationSchema {
     #[serde(rename = "booknook.feed-configuration.v1")]
     V1,
 }
+deserialize_feed_string_enum!(FeedConfigurationSchema { V1 => "booknook.feed-configuration.v1" });
 /// Data-only local configuration, separate from book archives and social events.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -296,18 +318,20 @@ impl FeedConfiguration {
     }
 }
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ConflictTarget {
     Collection,
     Subscription,
 }
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+deserialize_feed_string_enum!(ConflictTarget { Collection => "collection", Subscription => "subscription" });
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ResolutionChoice {
     Current,
     Incoming,
 }
+deserialize_feed_string_enum!(ResolutionChoice { Current => "current", Incoming => "incoming" });
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ConflictResolution {
@@ -524,11 +548,12 @@ impl ImportReview {
     }
 }
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 pub enum DisclosureSelectionSchema {
     #[serde(rename = "booknook.feed-disclosure-selection.v1")]
     V1,
 }
+deserialize_feed_string_enum!(DisclosureSelectionSchema { V1 => "booknook.feed-disclosure-selection.v1" });
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct MembershipSelection {
@@ -578,20 +603,7 @@ pub enum ExportSelectionSchema {
     #[serde(rename = "booknook.feed-export-selection.v1")]
     V1,
 }
-impl<'de> Deserialize<'de> for ExportSelectionSchema {
-    fn deserialize<D: serde::Deserializer<'de>>(
-        deserializer: D,
-    ) -> std::result::Result<Self, D::Error> {
-        let value = String::deserialize(deserializer)?;
-        if value == "booknook.feed-export-selection.v1" {
-            Ok(Self::V1)
-        } else {
-            Err(serde::de::Error::custom(
-                "Unknown feed export selection schema",
-            ))
-        }
-    }
-}
+deserialize_feed_string_enum!(ExportSelectionSchema { V1 => "booknook.feed-export-selection.v1" });
 /// Origin-free choices for a portable settings file. Source eligibility is a
 /// separate reviewed configuration edit; choosing a source never changes it.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]

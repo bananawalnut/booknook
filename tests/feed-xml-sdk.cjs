@@ -15,6 +15,7 @@ async function main(){
   assert.equal(rejected,true,'Expected whole-candidate validation refusal');
  };
  const pointer=(object,p)=>p.split('/').slice(1).reduce((v,k)=>v[k.replace(/~1/g,'/').replace(/~0/g,'~')],object);
+ for(const bad of [null,true,1,[],['auto'],{auto:null}])rejectsNormally(()=>sdk.normalizeFeedXmlV1(core,bytes({...corpus.context,expected_format:bad}),bytes("<rss version='2.0'><channel/></rss>")));
  for(const test of corpus.cases){
   const run=()=>sdk.normalizeFeedXmlV1(core,context,bytes(test.xml));
   if(!test.valid){rejectsNormally(run);continue;}

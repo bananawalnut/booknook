@@ -35,6 +35,100 @@ fn descriptor() -> String {
 fn poll<F: Future>(future: Pin<&mut F>) -> Poll<F::Output> {
     future.poll(&mut Context::from_waker(Waker::noop()))
 }
+struct EnumHost {
+    protocol: Value,
+    outcome: Value,
+}
+#[async_trait::async_trait]
+impl FeedSourceHostV1 for EnumHost {
+    fn descriptor_json(&self) -> NativeResult<String> {
+        let mut value: Value = serde_json::from_str(&descriptor()).unwrap();
+        value["protocols"][0] = self.protocol.clone();
+        Ok(value.to_string())
+    }
+    async fn fetch(
+        &self,
+        raw: String,
+        _: Arc<FeedSourceCancellationV1>,
+    ) -> NativeResult<FeedSourceReplyV1> {
+        let r: FeedSourceRequest = serde_json::from_str(&raw).unwrap();
+        let body = if r.conditional.is_some() {
+            vec![]
+        } else {
+            b"<rss/>".to_vec()
+        };
+        let response = if r.conditional.is_some() {
+            FeedSourceResponse::not_modified(
+                &r,
+                &r.url,
+                booknook_core::feed_source::FeedValidators::empty(),
+            )
+            .unwrap()
+        } else {
+            FeedSourceResponse::for_request(&r, &r.url, "application/rss+xml", &body).unwrap()
+        };
+        let mut value = serde_json::to_value(response).unwrap();
+        value["outcome"] = self.outcome.clone();
+        Ok(FeedSourceReplyV1 {
+            response_bytes: bytes(&value),
+            body,
+        })
+    }
+}
+#[test]
+fn native_literal_string_protocol_and_actual_async_outcome_refuse_aliases() {
+    for bad in [
+        Value::Null,
+        json!(true),
+        json!(1),
+        json!([]),
+        json!(["public-xml-bytes.v1"]),
+        json!({"public-xml-bytes.v1":null}),
+    ] {
+        assert!(
+            FeedSourceSessionV1::new(
+                config(),
+                Box::new(EnumHost {
+                    protocol: bad,
+                    outcome: json!("body")
+                })
+            )
+            .is_err()
+        );
+    }
+    for literal in ["body", "not-modified"] {
+        for bad in [
+            Value::Null,
+            json!(false),
+            json!(1),
+            json!([]),
+            json!([literal]),
+            json!({literal:null}),
+        ] {
+            let session = FeedSourceSessionV1::new(
+                config(),
+                Box::new(EnumHost {
+                    protocol: json!("public-xml-bytes.v1"),
+                    outcome: bad,
+                }),
+            )
+            .unwrap();
+            session.activate(source()).unwrap();
+            let attempt = session
+                .begin(
+                    source(),
+                    if literal == "body" {
+                        None
+                    } else {
+                        Some(hint())
+                    },
+                )
+                .unwrap();
+            let mut future = Box::pin(attempt.execute());
+            assert!(matches!(poll(future.as_mut()), Poll::Ready(Err(_))));
+        }
+    }
+}
 struct Host {
     pending: Arc<Mutex<bool>>,
     calls: Arc<AtomicUsize>,

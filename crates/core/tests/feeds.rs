@@ -238,6 +238,71 @@ fn selected_config() -> FeedConfiguration {
     configured(feeds)
 }
 
+fn non_string_enum_values(literal: &str) -> Vec<Value> {
+    vec![
+        Value::Null,
+        json!(true),
+        json!(1),
+        json!(1.0),
+        json!([]),
+        json!([literal]),
+        json!({literal:null}),
+    ]
+}
+
+#[test]
+fn literal_string_feed_enums_reject_tag_objects_and_every_non_string_shape() {
+    for (path, literals) in [
+        ("/schema", vec!["castalia.feeds-section.v1"]),
+        ("/subscriptions/0/format", vec!["auto", "rss", "atom"]),
+        ("/subscriptions/0/disclosure", vec!["private", "selected"]),
+        ("/preferences/order", vec!["newest-first"]),
+    ] {
+        for literal in literals {
+            let mut value = serde_json::to_value(section()).unwrap();
+            *value.pointer_mut(path).unwrap() = json!(literal);
+            assert_eq!(
+                serde_json::to_value(FeedSection::parse(&raw(&value)).unwrap()).unwrap(),
+                value
+            );
+            for non_string in non_string_enum_values(literal) {
+                *value.pointer_mut(path).unwrap() = non_string;
+                assert!(FeedSection::parse(&raw(&value)).is_err(), "{path}: {value}");
+            }
+        }
+    }
+    for non_string in non_string_enum_values("booknook.feed-configuration.v1") {
+        let mut value = serde_json::to_value(selected_config()).unwrap();
+        value["schema"] = non_string;
+        assert!(FeedConfiguration::parse(&raw(&value)).is_err(), "{value}");
+    }
+    for non_string in non_string_enum_values("booknook.feed-disclosure-selection.v1") {
+        let mut value = serde_json::to_value(selection()).unwrap();
+        value["schema"] = non_string;
+        assert!(DisclosureSelection::parse(&raw(&value)).is_err(), "{value}");
+    }
+    for (field, literals) in [
+        ("target", vec!["collection", "subscription"]),
+        ("choice", vec!["current", "incoming"]),
+    ] {
+        for literal in literals {
+            let mut value = json!([{"target":"subscription","id":id(1),"choice":"incoming"}]);
+            value[0][field] = json!(literal);
+            assert_eq!(
+                serde_json::to_value(ConflictResolution::parse_all(&raw(&value)).unwrap()).unwrap(),
+                value
+            );
+            for non_string in non_string_enum_values(literal) {
+                value[0][field] = non_string;
+                assert!(
+                    ConflictResolution::parse_all(&raw(&value)).is_err(),
+                    "{value}"
+                );
+            }
+        }
+    }
+}
+
 fn export_selection() -> ExportSelection {
     ExportSelection::parse(&raw(&json!({
         "schema":"booknook.feed-export-selection.v1",

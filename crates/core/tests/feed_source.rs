@@ -47,6 +47,76 @@ fn response(request: &FeedSourceRequest, body: &[u8]) -> Vec<u8> {
     )
     .unwrap()
 }
+
+#[test]
+fn literal_string_source_protocol_outcome_and_request_enums_are_not_tag_objects() {
+    let nons = |literal: &str| {
+        vec![
+            Value::Null,
+            json!(false),
+            json!(1),
+            json!([]),
+            json!([literal]),
+            json!({literal:null}),
+        ]
+    };
+    for bad in nons("public-xml-bytes.v1") {
+        let mut value = serde_json::to_value(descriptor("reader.public")).unwrap();
+        value["protocols"][0] = bad;
+        assert!(
+            FeedSourceDescriptor::parse(&serde_json::to_vec(&value).unwrap()).is_err(),
+            "{value}"
+        );
+    }
+    for (field, literal) in [("format", "atom"), ("protocol", "public-xml-bytes.v1")] {
+        let session = mk_session();
+        let attempt = mk_attempt(&session);
+        let request = attempt.dispatch().unwrap();
+        let value = serde_json::to_value(request).unwrap();
+        for bad in nons(literal) {
+            let mut value = value.clone();
+            value[field] = bad;
+            assert!(
+                booknook_core::strict_parse::<FeedSourceRequest>(
+                    &serde_json::to_vec(&value).unwrap()
+                )
+                .is_err(),
+                "{value}"
+            );
+        }
+    }
+    for literal in ["body", "not-modified"] {
+        let session = mk_session();
+        let attempt = mk_attempt(&session);
+        let request = attempt.dispatch().unwrap();
+        let mut value: Value = serde_json::from_slice(&response(&request, b"<rss/>")).unwrap();
+        value["outcome"] = json!(literal);
+        let typed: FeedSourceResponse =
+            booknook_core::strict_parse(&serde_json::to_vec(&value).unwrap()).unwrap();
+        assert_eq!(serde_json::to_value(typed).unwrap(), value);
+        for bad in nons(literal) {
+            let mut value = value.clone();
+            value["outcome"] = bad;
+            assert!(
+                booknook_core::strict_parse::<FeedSourceResponse>(
+                    &serde_json::to_vec(&value).unwrap()
+                )
+                .is_err(),
+                "{value}"
+            );
+        }
+    }
+    let session = mk_session();
+    let attempt = mk_attempt(&session);
+    let request = attempt.dispatch().unwrap();
+    let mut value: Value = serde_json::from_slice(&response(&request, b"<rss/>")).unwrap();
+    value["outcome"] = json!({"body":null});
+    assert!(
+        attempt
+            .complete(&serde_json::to_vec(&value).unwrap(), b"<rss/>".to_vec())
+            .is_err()
+    );
+}
 fn poll<F: Future>(future: Pin<&mut F>) -> Poll<F::Output> {
     future.poll(&mut Context::from_waker(Waker::noop()))
 }

@@ -11,7 +11,9 @@ private struct Source: BookNookFeedSourceProviderV1 {
     let waitForCancel: Bool
     let calls: Count
     var corrupt: String? = nil
-    var descriptorJSON:String {"{\"schema\":\"booknook.feed-source-provider.v1\",\"version\":1,\"id\":\"reader.public\",\"available\":true,\"protocols\":[\"public-xml-bytes.v1\"]}"}
+    var protocolOverrideJSON: String? = nil
+    var outcomeOverrideJSON: String? = nil
+    var descriptorJSON:String {let raw="{\"schema\":\"booknook.feed-source-provider.v1\",\"version\":1,\"id\":\"reader.public\",\"available\":true,\"protocols\":[\"public-xml-bytes.v1\"]}";return protocolOverrideJSON.map {raw.replacingOccurrences(of:"\"public-xml-bytes.v1\"",with:$0)} ?? raw}
     func fetch(requestJSON:String,cancellation:FeedSourceCancellationV1) async throws -> BookNookFeedSourceReplyV1 {
         calls.increment();let request=try object(requestJSON);precondition(request.count==12);precondition(request["title"]==nil && request["collections"]==nil && request["identity"]==nil)
         await Task.yield();try await before()
@@ -19,6 +21,7 @@ private struct Source: BookNookFeedSourceProviderV1 {
         let conditional=request["conditional"] as? [String:Any];let body=conditional == nil ? Data("<rss/>".utf8) : Data();var response=request
         response["schema"]="booknook.feed-source-response.v1";response.removeValue(forKey:"url");response.removeValue(forKey:"format");response.removeValue(forKey:"protocol");response.removeValue(forKey:"conditional");response["outcome"]=conditional == nil ? "body" : "not-modified";response["validators"]=["etag":NSNull(),"last_modified":NSNull()]
         response["final_url"]=request["url"];response["content_type"]=conditional == nil ? "application/rss+xml" as Any : NSNull();response["body_sha256"]=conditional?["body_sha256"] ?? SHA256.hash(data:body).map{String(format:"%02x",$0)}.joined();if let field=corrupt {response[field]=field.hasSuffix("generation") ? 999 : (field == "final_url" ? "https://other.example.org/feed" : "wrong") as Any}
+        if let override=outcomeOverrideJSON {response["outcome"]=try JSONSerialization.jsonObject(with:Data(override.utf8),options:[.fragmentsAllowed])}
         return BookNookFeedSourceReplyV1(responseBytes:try bytes(response),untrustedBody:body)
     }
 }
@@ -49,9 +52,14 @@ private struct Cache: BookNookFeedCacheStoreV1 {
         try runtime.replaceProvider(provider);try runtime.activate(sourceID:id)
         let digest=SHA256.hash(data:Data("<rss/>".utf8)).map{String(format:"%02x",$0)}.joined()
         let hint=try bytes(["schema":"booknook.feed-conditional-hint.v1","source_id":id,"provider_id":"reader.public","url":(feeds["subscriptions"] as! [[String:Any]])[0]["url"]!,"body_sha256":digest,"validators":["etag":"\"v1\"","last_modified":NSNull()]] as [String:Any])
+        for bad in ["null","true","1","[]","[\"public-xml-bytes.v1\"]","{\"public-xml-bytes.v1\":null}"] {rejected {_ = try BookNookFeedSourcesV1(configuration:config,provider:Source(before:{},waitForCancel:false,calls:calls,protocolOverrideJSON:bad))}}
+        for literal in ["body","not-modified"] {for bad in ["null","false","1","[]","[\"\(literal)\"]","{\"\(literal)\":null}"] {
+            let malformed=try BookNookFeedSourcesV1(configuration:config,provider:Source(before:{},waitForCancel:false,calls:calls,outcomeOverrideJSON:bad));try malformed.activate(sourceID:id)
+            await rejectedAsync {_ = try await malformed.fetch(sourceID:id,conditional:literal=="body" ? nil : hint)};try malformed.close()
+        }}
         for retained in [nil,Data("wrong".utf8),Data("<rss/>".utf8)] as [Data?] {let read=try await runtime.fetch(sourceID:id,conditional:hint);precondition(read.untrustedBody().isEmpty);let before=writes.get();let cache=Cache(runtime:runtime,writes:writes,before:{},retained:retained);if retained==Data("<rss/>".utf8){try await read.store(cache);precondition(writes.get()==before+1)}else{await rejectedAsync{try await read.store(cache)};precondition(writes.get()==before)};read.close()}
         for field in ["provider_id","configuration_generation","final_url","body_sha256"] {try runtime.replaceProvider(Source(before:{},waitForCancel:false,calls:calls,corrupt:field));try runtime.activate(sourceID:id);await rejectedAsync{_ = try await runtime.fetch(sourceID:id,conditional:hint)}}
         try runtime.replaceProvider(provider);try runtime.activate(sourceID:id);let closing=try await runtime.fetch(sourceID:id);try runtime.close();rejected{_ = try closing.cacheConditionJSON()};await rejectedAsync{_ = try await runtime.fetch(sourceID:id)}
-        print("Actual generated Swift async source SDK: explicit activation, cancellation, stale provider/config/storage rejection and guarded foreign cache reentry passed. No transport/backend qualification claimed.")
+        print("Actual generated Swift async source SDK: literal-string protocol/outcome refusals, explicit activation, cancellation, stale provider/config/storage rejection and guarded foreign cache reentry passed. No transport/backend qualification claimed.")
     }
 }

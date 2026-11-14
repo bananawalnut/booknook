@@ -10,6 +10,7 @@ private func bytes(_ object: Any) throws -> Data { try JSONSerialization.data(wi
 private func rejected(_ operation: () throws -> Void) {
     var failure = false; do { try operation() } catch { failure = true }; precondition(failure)
 }
+private func nonStrings(_ literal: String) -> [Any] { [NSNull(),true,1,1.5,[Any](),[literal],[literal:NSNull()]] }
 @main struct FeedSDKBindingSmoke {
     static func main() throws {
         let root = URL(fileURLWithPath: CommandLine.arguments[1])
@@ -29,6 +30,16 @@ private func rejected(_ operation: () throws -> Void) {
         let section = try JSONSerialization.jsonObject(with: Data(contentsOf: root.appendingPathComponent("section.json"))) as! [String: Any]
         let current: [String: Any] = ["schema":"booknook.feed-configuration.v1", "revision":0, "feeds":section]
         let currentBytes = try bytes(current)
+        for (field,literal) in [("schema","castalia.feeds-section.v1"),("format","atom"),("disclosure","selected"),("order","newest-first")] {
+            for bad in nonStrings(literal) {
+                var alias=section
+                if field=="schema" {alias[field]=bad}
+                else if field=="order" {var preferences=alias["preferences"] as! [String:Any];preferences[field]=bad;alias["preferences"]=preferences}
+                else {var sources=alias["subscriptions"] as! [[String:Any]];sources[0][field]=bad;alias["subscriptions"]=sources}
+                rejected {_ = try BookNookFeedsV1.validateSection(bytes(alias))}
+            }
+        }
+        for bad in nonStrings("booknook.feed-configuration.v1") {var alias=current;alias["schema"]=bad;rejected {_ = try BookNookFeedsV1.validateConfiguration(bytes(alias))}}
         var incoming = section
         var subscriptions = incoming["subscriptions"] as! [[String: Any]]
         let sourceID = subscriptions[0]["id"] as! String
@@ -39,6 +50,10 @@ private func rejected(_ operation: () throws -> Void) {
         let preview = try object(review.preview())
         precondition((preview["conflicts"] as! [Any]).count == 1)
         rejected { _ = try review.confirm(configuration: currentBytes, incoming: raw) }
+        for (field,literal) in [("target","subscription"),("choice","incoming")] {for bad in nonStrings(literal) {
+            var alias=try JSONSerialization.jsonObject(with:choices) as! [[String:Any]];alias[0][field]=bad
+            rejected {_ = try review.resolve(configuration:currentBytes,incoming:raw,resolutions:bytes(alias))}
+        }}
         let resolved = try review.resolve(configuration: currentBytes, incoming: raw, resolutions: choices)
         let candidate = try object(resolved.confirm(configuration: currentBytes, incoming: raw))
         precondition(candidate["revision"] as! Int == 1)
@@ -60,6 +75,7 @@ private func rejected(_ operation: () throws -> Void) {
         collections.append(["id":orphan, "title":"Private orphan"]); expanded["collections"] = collections
         let config = try bytes(["schema":"booknook.feed-configuration.v1", "revision":0, "feeds":expanded])
         let selection = try bytes(["schema":"booknook.feed-disclosure-selection.v1", "origin":"https://reader.example.org", "subscriptionIds":[sourceID], "collectionIds":[orphan], "memberships":[["subscriptionId":sourceID, "collectionIds":[]]]] as [String: Any])
+        for bad in nonStrings("booknook.feed-disclosure-selection.v1") {var alias=try JSONSerialization.jsonObject(with:selection) as! [String:Any];alias["schema"]=bad;rejected {_ = try BookNookFeedsV1.reviewProjection(configuration:config,selection:bytes(alias))}}
         let projection = try BookNookFeedsV1.reviewProjection(configuration: config, selection: selection)
         let output = try projection.confirm(configuration: config, origin:"https://reader.example.org")
         let selected = try object(output)["feeds"] as! [String: Any]
@@ -104,6 +120,6 @@ private func rejected(_ operation: () throws -> Void) {
             orphanReview.close()
         }
         portable.close(); rejected { _ = try portable.preview() }; rejected { _ = try portable.confirm(configuration: currentBytes) }; portable.close()
-        print("Actual generated UniFFI Swift feed SDK: 102 raw vectors, exact-review conflicts/staleness, opaque lifecycle, origin/collection closure and origin-free export/reimport passed.")
+        print("Actual generated UniFFI Swift feed SDK: 102 raw vectors, literal-string enum refusals, exact-review conflicts/staleness, opaque lifecycle, origin/collection closure and origin-free export/reimport passed.")
     }
 }

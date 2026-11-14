@@ -96,6 +96,46 @@ fn authoritative_open_owner_lock_and_inactive_restart() {
     });
 }
 #[test]
+fn durable_valid_string_configuration_reopens_but_historical_tag_alias_is_not_normalized() {
+    run(async {
+        let dir = directory();
+        let raw = configuration();
+        let c = FeedCacheController::open(&dir, Some(raw.clone()), host()).unwrap();
+        c.close().await.unwrap();
+        let reopened = FeedCacheController::open(&dir, None, host()).unwrap();
+        assert_eq!(reopened.configuration().await.unwrap().raw, raw);
+        reopened.close().await.unwrap();
+        let db = rusqlite::Connection::open(dir.join("feeds.sqlite")).unwrap();
+        let token: String = db
+            .query_row(
+                "SELECT configuration_token FROM controller WHERE id=1",
+                [],
+                |r| r.get(0),
+            )
+            .unwrap();
+        let mut alias: Value = serde_json::from_slice(&raw).unwrap();
+        alias["feeds"]["subscriptions"][0]["format"] = json!({"rss":null});
+        let alias = serde_json::to_vec(&alias).unwrap();
+        let rebound = format!("{}:{}", &token[..36], booknook_core::digest(&alias));
+        db.execute(
+            "UPDATE controller SET configuration=?1,configuration_token=?2 WHERE id=1",
+            rusqlite::params![alias, rebound],
+        )
+        .unwrap();
+        drop(db);
+        assert!(FeedCacheController::open(&dir, None, host()).is_err());
+        let db = rusqlite::Connection::open(dir.join("feeds.sqlite")).unwrap();
+        let retained: Vec<u8> = db
+            .query_row("SELECT configuration FROM controller WHERE id=1", [], |r| {
+                r.get(0)
+            })
+            .unwrap();
+        assert_eq!(retained, alias);
+        drop(db);
+        std::fs::remove_dir_all(dir).unwrap();
+    });
+}
+#[test]
 fn exact_configuration_cas_revokes_activation_without_losing_raw() {
     run(async {
         let dir = directory();
