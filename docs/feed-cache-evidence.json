@@ -1,0 +1,186 @@
+{
+  "schema": "booknook.native-feed-cache-evidence.v1",
+  "status": "Focused Rust-native development checks passed; foreign bindings and app acceptance remain subsequent work.",
+  "base_revision": "1696b0e5c7ec41aeb0286861712382de6eac7a95",
+  "created_at": "2026-11-14T11:56:16.167942+00:00",
+  "source_receipt_sha256": "4123e88d8a0d09de60f95443fe6fdc283ba02c3ecc46e757865c135953a21949",
+  "accepted_design_sha256": "09de8777d4c69c66a80a1e7b91227399530ec8b5a01ef49b0cbe1e454cfa5508",
+  "actual_toolchain": "rustc1.96.0(ac68faa20 2026-05-25), aarch64-apple-darwin",
+  "owned_files": [
+    {
+      "path": "crates/native/src/feed_cache.rs",
+      "sha256": "ab1a8ee6b8a991c5f245e3948a3506b1cfc62a855dfb9282a8851dbda6a4ecb7",
+      "bytes": 58670
+    },
+    {
+      "path": "crates/native/src/feed_cache_tests.rs",
+      "sha256": "26c1e343ca1673da7c4c4e91ea11531cea2190b670c3c0a09e2f5e5922a3de33",
+      "bytes": 31286
+    },
+    {
+      "path": "crates/native/tests/feed_cache.rs",
+      "sha256": "f195dccb011c08e903183532b8fe2df799a1276ebc38ffe47637d896a27e1283",
+      "bytes": 7820
+    },
+    {
+      "path": "crates/native/src/feed_source.rs",
+      "sha256": "6dab5261c3febd7f8d310328f8d3513e2eb6d0d936e593b522ad6c910931b0cf",
+      "bytes": 16507
+    },
+    {
+      "path": "crates/native/src/lib.rs",
+      "sha256": "94db7a56bf5cbcab596e72dff844c1017bf3e04be301a765dc85bd40b7c3164e",
+      "bytes": 16935
+    }
+  ],
+  "commands": [
+    {
+      "session": "47323",
+      "command": "cargo test --locked -p booknook-native --test feed_cache",
+      "exit_code": 101,
+      "stage": "initial TDD red",
+      "result": "New acceptance executable failed to import not-yet-implemented FeedCacheController."
+    },
+    {
+      "session": "81906",
+      "command": "cargo test --locked -p booknook-native --test feed_cache",
+      "exit_code": 101,
+      "stage": "initial implementation compile",
+      "result": "Fixed unsupported usize rusqlite SQL parameters before qualification."
+    },
+    {
+      "session": "14630",
+      "command": "cargo check --locked -p booknook-native --tests",
+      "exit_code": 0,
+      "stage": "type check"
+    },
+    {
+      "session": "99794",
+      "command": "cargo test --locked -p booknook-native --lib feed_cache::tests -- --test-threads=1",
+      "exit_code": 101,
+      "stage": "runtime red",
+      "result": "All 14 cases failed closed on initial token length assumption. Core request IDs are exact32 lowercase hex; private UUID-form token generation and request-specific bounds fixed before green."
+    },
+    {
+      "session": "2187",
+      "command": "cargo test --locked -p booknook-native --lib feed_cache::tests -- --test-threads=1",
+      "exit_code": 0,
+      "stage": "first runtime green",
+      "passed": 17
+    },
+    {
+      "session": "40815",
+      "command": "cargo test --locked -p booknook-native --test feed_cache",
+      "exit_code": 0,
+      "stage": "first actual child-process green",
+      "passed": 4,
+      "ordinary_helper_entries": 1
+    },
+    {
+      "session": "41960",
+      "command": "cargo clippy --locked -p booknook-native --all-targets -- -D warnings",
+      "exit_code": 0,
+      "stage": "FINAL exact-byte strict lint"
+    },
+    {
+      "session": "35417",
+      "command": "cargo test --locked -p booknook-native --lib feed_cache::tests -- --test-threads=1",
+      "exit_code": 0,
+      "stage": "FINAL exact-byte native unit acceptance",
+      "passed": 17,
+      "failed": 0,
+      "ignored": 0,
+      "filtered_other_native_tests": 33,
+      "runtime_seconds": 0.18
+    },
+    {
+      "session": "66446",
+      "command": "cargo test --locked -p booknook-native --test feed_cache",
+      "exit_code": 0,
+      "stage": "FINAL exact-byte actual child-process/configuration acceptance",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "ordinary_helper_entries": 1,
+      "runtime_seconds": 0.02
+    },
+    {
+      "command": "rustfmt --edition 2024 --check crates/native/src/feed_cache.rs crates/native/src/feed_cache_tests.rs crates/native/tests/feed_cache.rs crates/native/src/feed_source.rs crates/native/src/lib.rs",
+      "exit_code": 0,
+      "stage": "FINAL formatting"
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "stage": "FINAL tracked whitespace (new owned Rust files additionally checked by rustfmt)"
+    }
+  ],
+  "acceptance": {
+    "authoritative_configuration": "Exact input bytes preserved. Existing open loads persisted bytes or fails an exact expected-byte mismatch; strict schema/source-set checks never reset data. Configuration/provider tokens bind random incarnation plus exact-byte SHA.",
+    "ownership": "Real flock refusal in same process and child process. Controlled child commits, is force-killed, and reopened cache retains exact raw, rotates owner token, and remains inactive. Cloneable one-controller coordinator; drop test holds worker and proves caller does not join while lock remains owned.",
+    "controller_only_admission": "Refresh creates its own core attempt and durably registers request ID before provider fetch. No arbitrary FeedSourceRead or JSON condition accepted as write permit. Both provider adapters cache descriptor outside storage worker; actual fetch callback reentry is tested.",
+    "cancellation": "Bounded16 queued plus1 running storage worker separate from network executor. Canceled callers do not free queue capacity while queued closures remain. SQLite busy_handler signals actual BEGIN IMMEDIATE BUSY under external lock before dropping config/provider/activation futures; final canceled check prevents their mutations. Rust Future-drop cancellation only; no Swift Task.cancel claim.",
+    "executor_isolation": "All4 actual public-network blocking slots occupied by controlled closures that signal entry and wait for explicit cleanup release. Offline normalization/config SQLite operations complete on dedicated storage worker. This is DNS-equivalent executor saturation, not an actual DNS qualification.",
+    "conditional_304": "Actual retained bytes are loaded and SHA-verified inside same final SQLite transaction, under opaque core guarded commit. Missing/evicted/corrupt/body/context/profile/cache-token and valid-but-different full-context cases refuse; empty incoming304 body never replaces retained raw.",
+    "commit_outcomes": "Actual successful SQLite COMMIT followed by injected acknowledgment failure reconciles exact receipt and full candidate row using one fresh read-connection transaction snapshot. Separate postcommit profile mutation and unreadable-reconciliation faults close uncertain. Precommit injection rolls back; no blind replay or false rollback claim.",
+    "disk_full": "Actual SQLite max_page_count constraint induces FULL on larger valid feed insert, retaining prior committed raw. Then query_only=true rejects every SQL write while offline revalidation/display still succeeds. Disk is not intentionally filled.",
+    "offline": "Revalidate source/provider/URL/format/fullcontext/rawSHA/profile and re-normalize original bytes; final read transaction rechecks owner/config/cache/context/token. No recency UPDATE or implicit network. Corruption is per-source error; no generic corruption-to-fetch fallback.",
+    "explicit_edits": "Reviewed configuration CAS atomically evicts raw+receipt only for removed or URL/format-changed source IDs. Cosmetic/enabled changes retain valid cache. Different provider ID replacement evicts incompatible rows; same-ID executable replacement can retain context-valid raw. Injected failed lifecycle transactions retain prior rows.",
+    "quota": "64MiB logical retained raw+metadata and max128 current rows. Actual byte-length/type accounting rejects forged negative/underreported/overflow values; max-row test uses lower private test threshold to exercise same eviction algorithm. Eviction excludes admitted candidate and follows successful admission/refresh recency, not offline read-access LRU. This is not a physical SQLite/WAL disk cap.",
+    "view_identity_dates": "Unique per-source variant keys hash schema/profile/sourceID/stable canonical entry fields, excluding first ordinal, duplicate count and conflict marker. Reorder/duplicate stability and conflicting native-ID variants tested. Published and updated remain independent; missing/invalid/pre-epoch/leap representation preserved. Published parsed(seconds,nanos) sorts lexicographically newest-first; undated ties retain source ordinal. No fetch/check timestamp sorting fallback."
+  },
+  "api": {
+    "type": "Rust-native FeedCacheController (not UniFFI-exported in this checkpoint)",
+    "constructors": [
+      "open(directory, optional_exact_expected_configuration, installed_native_host)",
+      "public_https(directory, optional_exact_expected_configuration)"
+    ],
+    "synchronous_boundary": "Constructors perform local filesystem I/O and must run off UI. They are offline and inactive. Existing descriptor must match persisted provider; constructor does not overwrite it.",
+    "async_methods": [
+      "configuration",
+      "replace_configuration(expected_configuration_token, exact_reviewed_raw)",
+      "replace_provider(expected_provider_token, installed_native_host)",
+      "activate(source_id)",
+      "disable(source_id)",
+      "refresh(source_id)",
+      "offline(source_id)",
+      "read_status(source_id)",
+      "close"
+    ],
+    "records": [
+      "FeedCacheConfiguration",
+      "FeedCacheView",
+      "FeedCacheEntry",
+      "FeedCacheStatus"
+    ],
+    "close_drop": "close acknowledges after worker DB/owner-lock release. Drop never joins; worker drains/cancels queued jobs then closes. Reopen refuses while old worker still owns lock.",
+    "revisions": "Public feed revision values remain strictly validated raw JSON, never cast to SQLite signed counters. Internal ordering counters checked on increment.",
+    "authority": "Host-local cache/activation only, no Castalia/vault identity or private Desk authority."
+  },
+  "qualification_limits": [
+    "Rust-native standalone foundation only. No UniFFI/Swift facade, generated binding or app integration in this checkpoint; foreign-task cancellation propagation remains a separately qualified next increment.",
+    "All default acceptance uses deterministic installed provider and actual local SQLite/OS process primitives, no external network. These tests do not newly qualify HTTP/DNS/remote services.",
+    "Native macOS actual Rust1.96.0 only; no lower MSRV or Windows execution claim. Hosted Linux qualification belongs to subsequent parent CI.",
+    "Local timestamps are coarse nonnegative wall-clock seconds. Admission explicitly refuses a wall clock behind prior check/body-success and retains prior cache; it never clamps or invents publisher timestamps. Clock rollback branch is source-reviewed policy, not an injected-clock acceptance claim.",
+    "64MiB/128row limits are logical retention limits; physical SQLite pages/WAL, especially pinned-reader WAL retention, may exceed them. Best-effort PASSIVE checkpoint occurs outside guarded admission; no hard physical disk cap or VACUUM claim.",
+    "No cache migration/reset or generic reopened normalized-JSON decoder supplied; unknown storage schema fails, unknown/corrupt per-source profile/context/body remains unavailable.",
+    "No broad SDK/package rerun during this slice; parent owns checkpoint qualification/publication. Existing provider-v1/main Command/issued ontology, private Desk/custody, Swift/apps, and dependency manifests/lock/inventory remain unchanged."
+  ],
+  "new_dependencies": [],
+  "license": "All new SDK/test files SPDX MIT OR Apache-2.0; no new dependency-license inventory entries.",
+  "tested_executables": [
+    {
+      "filename": "booknook_native-383d01ba1924e2b3",
+      "sha256": "37a8c42eb3d985860f76da7ff3d206c23f81fa8143eb6fd89fda2d3b277ffcae",
+      "bytes": 40165328,
+      "provenance": "Local development test executable; not a release package."
+    },
+    {
+      "filename": "feed_cache-a51c2e8cc9babe88",
+      "sha256": "d4476ac5af3c5fc342b1a46047ad7e3e8ebc4cd0df440747a4ed13ded87a27c8",
+      "bytes": 8835232,
+      "provenance": "Local development test executable; not a release package."
+    }
+  ],
+  "independent_review": "Review found no remaining concrete blocker; root rehashed all five source files and both actual test executables and reviewed the final read-only offline transaction delta. No extra test run is inferred."
+}

@@ -1,0 +1,128 @@
+{
+  "schema": "booknook.feed-acquisition-hosted-ci.v1",
+  "source_revision": "1696b0e5c7ec41aeb0286861712382de6eac7a95",
+  "run_id": 43588902314,
+  "url": "https://github.com/bananawalnut/booknook/actions/runs/43588902314",
+  "conclusion": "success",
+  "completed_at": "2026-11-14T11:30:05Z",
+  "jobs": [
+    {
+      "name": "apple",
+      "id": 132429210929,
+      "url": "https://github.com/bananawalnut/booknook/actions/runs/43588902314/job/132429210929",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run brew install xcodegen",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/build-apple.sh mac",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/build-apple.sh ipad-sim",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/build-apple.sh ipad-device",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-reading.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-recovery.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-ui-workflows.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-feed-source-swift.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-feed-xml-swift.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-feed-public-https-swift.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/package-swift.sh --use-built",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "name": "portable",
+      "id": 132429211121,
+      "url": "https://github.com/bananawalnut/booknook/actions/runs/43588902314/job/132429211121",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/check.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify the complete dependency-license inventory",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-issuer.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run cargo install wasm-bindgen-cli --version 0.2.127 --locked",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/test-sdk.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/package-rust.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run bash scripts/package-typescript.sh",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run python3 -m unittest discover -s tests/companion -v",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "qualification_limits": [
+    "Covers committed acquisition/source SDK at 1696b0e only; later durable-cache and disclosure working changes are excluded.",
+    "Apple build, workflow and Swift-package checks do not establish installation, minimum-OS runtime or physical iPad acceptance.",
+    "Hosted HTTPS factory checks use their offline defaults; separate local opt-in actual public HTTPS evidence is recorded in feed-native-factory-evidence.json.",
+    "No registry publication, service deployment, production-v3 enablement or live-account qualification is implied."
+  ]
+}

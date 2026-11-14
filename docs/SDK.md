@@ -151,3 +151,5 @@ Native hosts can explicitly install `booknook_connectors::public_https_feed::Pub
 
 
 The bounded feed increment passes the complete SDK regression suite, actual four-crate extraction/test run (254 passed, five declared skips) and installed TypeScript package checks. See [package evidence](feed-ingestion-package-evidence.json), [XML parity](feed-xml-evidence.json) and [native factory qualification](feed-native-factory-evidence.json). Browser-target WASM is initialized in Node during these checks; no browser UI, installed Apple app or package-registry release is inferred.
+
+The standalone native Rust `FeedCacheController` now provides coordinated durable storage through the same installed-provider port. [Its storage contract](FEED-CACHE.md) covers authoritative configuration CAS, inactive restart, guarded 304 admission, cancellation, recovery and bounded logical eviction. UniFFI/Swift cache bindings and the app interface remain subsequent work.

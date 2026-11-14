@@ -186,6 +186,16 @@ impl f::FeedSourceProvider for Installed {
         })
     }
 }
+// Cache controller adapters cache foreign descriptors before entering its worker.
+// They deliberately expose neither opaque reads nor the V1 session internals.
+pub(crate) fn cache_installed_provider(
+    host: Box<dyn FeedSourceHostV1>,
+) -> Result<Arc<dyn f::FeedSourceProvider>> {
+    Ok(Arc::new(Installed::new(host)?))
+}
+pub(crate) fn cache_public_https_provider() -> Result<Arc<dyn f::FeedSourceProvider>> {
+    cache_installed_provider(Box::new(PublicHttpsHost))
+}
 #[derive(uniffi::Object)]
 pub struct FeedSourceSessionV1 {
     inner: f::FeedSourceSession,
@@ -444,4 +454,13 @@ impl FeedSourceReadV1 {
     pub async fn store(&self, host: Box<dyn FeedCacheHostV1>) -> Result<()> {
         Ok(self.inner.store(&Cache { host }).await?)
     }
+}
+
+// Only deterministic executor-isolation tests use these closures; this is not
+// actual DNS qualification and does not alter the production transport policy.
+#[cfg(test)]
+pub(crate) fn cache_test_block_network_pool(
+    job: impl FnOnce() + Send + 'static,
+) -> Result<tokio::task::JoinHandle<()>> {
+    Ok(public_feed_runtime()?.spawn_blocking(job))
 }

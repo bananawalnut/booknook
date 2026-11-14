@@ -1,3 +1,8 @@
+mod feed_cache;
+pub use feed_cache::{
+    FEED_CACHE_LOGICAL_QUOTA, FEED_CACHE_MAX_ROWS, FEED_CACHE_QUEUE_CAPACITY,
+    FeedCacheConfiguration, FeedCacheController, FeedCacheEntry, FeedCacheStatus, FeedCacheView,
+};
 mod feed_xml;
 pub use feed_xml::normalize_feed_xml_v1;
 mod feed_source;
