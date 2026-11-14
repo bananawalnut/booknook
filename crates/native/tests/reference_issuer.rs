@@ -11,7 +11,7 @@ use std::{
     net::TcpStream,
     os::unix::fs::{PermissionsExt, symlink},
     path::PathBuf,
-    process::{Child, Command, Stdio},
+    process::{Child, ChildStdin, Command, Stdio},
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
 const TOKEN: &str = "synthetic-issuer-access-only-never-production-00000001";
@@ -72,8 +72,8 @@ impl Fixture {
     fn save(&self) {
         self.write("issuer.json", &canonical(&self.config).unwrap());
     }
-    fn call(&self, token: &str, request: &Value) -> std::process::Output {
-        let mut child = Command::new(env!("CARGO_BIN_EXE_booknook-issuer"))
+    fn issue_process(&self) -> Child {
+        Command::new(env!("CARGO_BIN_EXE_booknook-issuer"))
             .args([
                 "--config",
                 self.root.join("issuer.json").to_str().unwrap(),
@@ -83,9 +83,34 @@ impl Fixture {
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .spawn()
-            .unwrap();
-        child.stdin.take().unwrap().write_all(&canonical(&json!({"schema":"booknook.issuer-call.v1","authorization":format!("Bearer {token}"),"request":request})).unwrap()).unwrap();
-        child.wait_with_output().unwrap()
+            .unwrap()
+    }
+    fn finish_call(
+        &self,
+        child: Child,
+        mut input: ChildStdin,
+        token: &str,
+        request: &Value,
+    ) -> std::process::Output {
+        let written = input.write_all(&canonical(&json!({"schema":"booknook.issuer-call.v1","authorization":format!("Bearer {token}"),"request":request})).unwrap());
+        drop(input);
+        let output = child.wait_with_output().unwrap();
+        // Configuration refusal can close stdin before the parent writes. Keep
+        // asserting the actual exit/status/output rather than panicking on that
+        // expected pipe closure; other I/O errors and success stay failures.
+        if let Err(error) = written {
+            assert_eq!(error.kind(), std::io::ErrorKind::BrokenPipe);
+            assert!(
+                !output.status.success(),
+                "Issuer closed input but reported success"
+            );
+        }
+        output
+    }
+    fn call(&self, token: &str, request: &Value) -> std::process::Output {
+        let mut child = self.issue_process();
+        let input = child.stdin.take().unwrap();
+        self.finish_call(child, input, token, request)
     }
     fn policy(&self) -> AuthorityPolicy {
         AuthorityPolicy {
@@ -336,6 +361,28 @@ fn issuer_denies_forged_context_expired_or_missing_grants_and_disclosures() {
     f.save();
     assert_eq!(f.call(TOKEN, &f.request).status.code(), Some(3));
 }
+#[test]
+fn issuer_configuration_rejection_before_stdin_still_reports_its_failure() {
+    let f = Fixture::new();
+    fs::set_permissions(
+        f.root.join("signer.raw32"),
+        fs::Permissions::from_mode(0o644),
+    )
+    .unwrap();
+    let mut child = f.issue_process();
+    // Keep the parent pipe handle while the actual issuer exits before reading.
+    // This deterministically reproduces the scheduling race seen in Linux CI.
+    let input = child.stdin.take().unwrap();
+    assert_eq!(child.wait().unwrap().code(), Some(4));
+    let output = f.finish_call(child, input, TOKEN, &f.request);
+    assert_eq!(output.status.code(), Some(4));
+    assert!(output.stdout.is_empty());
+    assert_eq!(
+        String::from_utf8(output.stderr).unwrap().trim(),
+        "issuer_not_configured"
+    );
+}
+
 #[test]
 fn issuer_refuses_unsafe_or_substituted_signing_material() {
     let f = Fixture::new();

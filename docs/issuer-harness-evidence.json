@@ -1,0 +1,32 @@
+{
+  "schema": "booknook.issuer-harness-regression.v1",
+  "date": "2026-11-14",
+  "base_revision": "c92c3e9b835fdc3120fb3536802e44ce6721bb8b",
+  "failed_ci": "https://github.com/bananawalnut/booknook/actions/runs/43577349908",
+  "failure": "Issuer correctly exits4 on unsafe signing configuration before reading stdin; the test helper unconditionally unwrapped write_all and could panic BrokenPipe.",
+  "change": "Test harness tolerates only BrokenPipe with a non-successful child, then preserves all exit/output assertions. Production issuer code is unchanged.",
+  "regression": "Actual child has already exited4 before the parent writes; the old helper deterministically panicked BrokenPipe. Corrected helper retains exact exit4, empty stdout and issuer_not_configured stderr.",
+  "checks": [
+    {
+      "command": "cargo test -p booknook-native --test reference_issuer issuer_configuration_rejection_before_stdin_still_reports_its_failure -- --exact",
+      "result": "passed"
+    },
+    {
+      "command": "bash scripts/test-issuer.sh",
+      "result": "passed:7 actual issuer tests, including loopback HTTP"
+    },
+    {
+      "command": "cargo clippy -p booknook-native --test reference_issuer -- -D warnings",
+      "result": "passed"
+    }
+  ],
+  "source_sha256": {
+    "crates/native/tests/reference_issuer.rs": "d14368ae16a8ddc2e442cd962d56f918d479e0676603f86dca481f0701098f8c"
+  },
+  "production_signing_changed": false,
+  "limitations": [
+    "Hosted portable rerun at the new exact commit is still required.",
+    "Local test build also contained the additive source-provider WIP; production issuer implementation inputs were unchanged.",
+    "No private key, authority, configured account, permission or deployed service changed."
+  ]
+}
