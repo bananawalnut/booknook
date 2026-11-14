@@ -1,0 +1,242 @@
+{
+  "schema": "booknook.feed-xml-fixtures.v1",
+  "provenance": "Original synthetic adversarial fixtures; no network destinations are fetched. Runtime/output only, no durable cache decoder qualification.",
+  "context": {
+    "schema": "booknook.feed-normalization-context.v1",
+    "source_id": "b41ef5e8-0e06-43e0-aa47-19f382e00c08",
+    "provider_id": "reader.public",
+    "requested_url": "https://example.org/feed.xml",
+    "final_url": "https://example.org/feed.xml",
+    "expected_format": "auto"
+  },
+  "cases": [
+    {
+      "id": "rss-native-unicode-dates",
+      "xml": "<rss version=\"2.0\"><channel><title>Essays</title><item><guid> opaque é </guid><title>Café &amp; sea</title><pubDate>Tue, 03 Jun 2003 09:39:21 GMT</pubDate></item></channel></rss>",
+      "valid": true,
+      "checks": {
+        "/entries/0/identity/kind": "native",
+        "/entries/0/identity/value": " opaque é ",
+        "/entries/0/title/text": "Café & sea",
+        "/entries/0/published/status": "parsed",
+        "/entries/0/published/unix_seconds": 1054633161,
+        "/entries/0/updated/status": "missing",
+        "/entries/0/first_source_ordinal": 0
+      }
+    },
+    {
+      "id": "atom-prefix-and-separate-dates",
+      "xml": "<a:feed xmlns:a=\"http://www.w3.org/2005/Atom\"><a:entry><a:id>urn:uuid:exact</a:id><a:published>2024-01-01T01:02:03+01:00</a:published><a:updated>not a date</a:updated></a:entry></a:feed>",
+      "valid": true,
+      "checks": {
+        "/format": "atom",
+        "/entries/0/published/status": "parsed",
+        "/entries/0/updated/status": "invalid",
+        "/entries/0/updated/raw": "not a date"
+      }
+    },
+    {
+      "id": "literal-html-and-inert-xhtml",
+      "xml": "<feed xmlns=\"http://www.w3.org/2005/Atom\"><entry><id>x</id><title type=\"html\">&lt;img src=x onerror=bad()&gt;</title><content type=\"xhtml\"><div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Hello <b>world</b></p><SCRIPT>hidden</SCRIPT><style>hidden</style><img src=\"https://evil.example.org/pixel\"/><a href=\"javascript:bad()\">read</a><svg xmlns=\"http://www.w3.org/2000/svg\"><text>hidden</text></svg></div></content></entry></feed>",
+      "valid": true,
+      "checks": {
+        "/entries/0/title/representation": "literal-markup",
+        "/entries/0/title/text": "<img src=x onerror=bad()>",
+        "/entries/0/content/representation": "xhtml-text",
+        "/entries/0/content/text": "Hello world read"
+      }
+    },
+    {
+      "id": "comments-and-cdata",
+      "xml": "<rss version=\"2.0\"><channel><item><title>A<!--hidden-->B</title><description><![CDATA[<!DOCTYPE rss><script>literal</script>]]></description></item></channel></rss>",
+      "valid": true,
+      "checks": {
+        "/entries/0/title/text": "AB",
+        "/entries/0/summary/representation": "literal-markup",
+        "/entries/0/summary/text": "<!DOCTYPE rss><script>literal</script>",
+        "/entries/0/identity/kind": "derived-sha256"
+      }
+    },
+    {
+      "id": "external-content-and-unsafe-links",
+      "xml": "<feed xmlns=\"http://www.w3.org/2005/Atom\" xml:base=\"https://other.example.org/read/\"><entry><id>x</id><content src=\"file:///secret\"/><link href=\"article\"/><link href=\"javascript:bad()\"/><link href=\"data:text/html,bad\"/><link href=\"file:///secret\"/><link href=\"\"/></entry></feed>",
+      "valid": true,
+      "checks": {
+        "/entries/0/links/0/url": "https://other.example.org/read/article",
+        "/entries/0/omitted_links": 4,
+        "/entries/0/omitted_content": true,
+        "/entries/0/content": null
+      }
+    },
+    {
+      "id": "extension-lookalikes",
+      "xml": "<rss version=\"2.0\" xmlns:x=\"https://evil.example.org/ns\"><channel><item><guid>real</guid><x:guid>fake</x:guid><x:title>hidden</x:title></item><x:item><title>hidden</title></x:item></channel></rss>",
+      "valid": true,
+      "checks": {
+        "/entries/0/identity/value": "real",
+        "/entries/0/title": null
+      }
+    },
+    {
+      "id": "exact-duplicates",
+      "xml": "<rss version=\"2.0\"><channel><item><guid>x</guid><title>A</title></item><item><guid>x</guid><title>A</title></item></channel></rss>",
+      "valid": true,
+      "checks": {
+        "/entries/0/duplicate_count": 2,
+        "/entries/0/conflicting_identity": false,
+        "/entries/0/first_source_ordinal": 0
+      }
+    },
+    {
+      "id": "conflicting-native-id",
+      "xml": "<rss version=\"2.0\"><channel><item><guid>x</guid><title>B</title></item><item><guid>x</guid><title>A</title></item></channel></rss>",
+      "valid": true,
+      "checks": {
+        "/entries/0/conflicting_identity": true,
+        "/entries/1/conflicting_identity": true
+      }
+    },
+    {
+      "id": "empty-feed",
+      "xml": "<rss version=\"2.0\"><channel/></rss>",
+      "valid": true,
+      "checks": {
+        "/entries": []
+      }
+    },
+    {
+      "id": "empty-dtd",
+      "xml": "<!DOCTYPE rss><rss version=\"2.0\"><channel/></rss>",
+      "valid": false,
+      "checks": {}
+    },
+    {
+      "id": "external-dtd",
+      "xml": "<!DOCTYPE rss SYSTEM \"https://evil.example.org/dtd\"><rss version=\"2.0\"><channel/></rss>",
+      "valid": false,
+      "checks": {}
+    },
+    {
+      "id": "internal-entity",
+      "xml": "<!DOCTYPE rss [<!ENTITY x \"expand\">]><rss version=\"2.0\"><channel><title>&x;</title></channel></rss>",
+      "valid": false,
+      "checks": {}
+    },
+    {
+      "id": "parameter-entity",
+      "xml": "<!DOCTYPE rss [<!ENTITY % p SYSTEM \"file:///etc/passwd\">%p;]><rss/>",
+      "valid": false,
+      "checks": {}
+    },
+    {
+      "id": "unknown-entity",
+      "xml": "<rss version=\"2.0\"><channel><title>&unknown;</title></channel></rss>",
+      "valid": false,
+      "checks": {}
+    },
+    {
+      "id": "namespace-spoof-root",
+      "xml": "<feed xmlns=\"https://evil.example.org/Atom\"><entry/></feed>",
+      "valid": false,
+      "checks": {}
+    },
+    {
+      "id": "unqualified-atom",
+      "xml": "<feed><entry/></feed>",
+      "valid": false,
+      "checks": {}
+    },
+    {
+      "id": "duplicate-attribute",
+      "xml": "<rss version=\"2.0\" version=\"2.0\"><channel/></rss>",
+      "valid": false,
+      "checks": {}
+    },
+    {
+      "id": "duplicate-singleton",
+      "xml": "<rss version=\"2.0\"><channel><title>A</title><title>B</title></channel></rss>",
+      "valid": false,
+      "checks": {}
+    },
+    {
+      "id": "malformed-end",
+      "xml": "<rss version=\"2.0\"><channel></rss>",
+      "valid": false,
+      "checks": {}
+    },
+    {
+      "id": "unsupported-encoding",
+      "xml": "<?xml version=\"1.0\" encoding=\"UTF-16\"?><rss version=\"2.0\"><channel/></rss>",
+      "valid": false,
+      "checks": {}
+    },
+    {
+      "id": "xhtml-spoof",
+      "xml": "<feed xmlns=\"http://www.w3.org/2005/Atom\"><entry><content type=\"xhtml\"><div xmlns=\"https://evil.example.org/xhtml\">spoof</div></content></entry></feed>",
+      "valid": false,
+      "checks": {}
+    },
+    {
+      "id": "invalid-character-ref",
+      "xml": "<rss version=\"2.0\"><channel><title>&#0;</title></channel></rss>",
+      "valid": false,
+      "checks": {}
+    },
+    {
+      "id": "article-query-fragment-http",
+      "xml": "<rss version=\"2.0\" xml:base=\"http://books.example.org/reviews/?from=feed\"><channel><item><guid>review</guid><link>../review/show/42?book=1&amp;reader=2#comment</link></item></channel></rss>",
+      "valid": true,
+      "checks": {
+        "/entries/0/links/0/url": "http://books.example.org/review/show/42?book=1&reader=2#comment"
+      }
+    },
+    {
+      "id": "atom-date-epoch",
+      "xml": "<feed xmlns=\"http://www.w3.org/2005/Atom\"><entry><id>epoch</id><published>1970-01-01T00:00:00Z</published></entry></feed>",
+      "valid": true,
+      "checks": {
+        "/entries/0/published/status": "parsed",
+        "/entries/0/published/raw": "1970-01-01T00:00:00Z",
+        "/entries/0/published/unix_seconds": 0,
+        "/entries/0/published/nanoseconds": 0,
+        "/entries/0/updated/status": "missing"
+      }
+    },
+    {
+      "id": "atom-date-pre-epoch",
+      "xml": "<feed xmlns=\"http://www.w3.org/2005/Atom\"><entry><id>pre-epoch</id><published>1969-12-31T23:59:59.5Z</published></entry></feed>",
+      "valid": true,
+      "checks": {
+        "/entries/0/published/status": "parsed",
+        "/entries/0/published/raw": "1969-12-31T23:59:59.5Z",
+        "/entries/0/published/unix_seconds": -1,
+        "/entries/0/published/nanoseconds": 500000000,
+        "/entries/0/updated/status": "missing"
+      }
+    },
+    {
+      "id": "atom-date-leap-second",
+      "xml": "<feed xmlns=\"http://www.w3.org/2005/Atom\"><entry><id>leap-second</id><published>2016-12-31T23:59:60Z</published></entry></feed>",
+      "valid": true,
+      "checks": {
+        "/entries/0/published/status": "parsed",
+        "/entries/0/published/raw": "2016-12-31T23:59:60Z",
+        "/entries/0/published/unix_seconds": 1483228799,
+        "/entries/0/published/nanoseconds": 1000000000,
+        "/entries/0/updated/status": "missing"
+      }
+    },
+    {
+      "id": "atom-date-nanosecond",
+      "xml": "<feed xmlns=\"http://www.w3.org/2005/Atom\"><entry><id>nanosecond</id><published>2024-01-01T00:00:00.123456789Z</published></entry></feed>",
+      "valid": true,
+      "checks": {
+        "/entries/0/published/status": "parsed",
+        "/entries/0/published/raw": "2024-01-01T00:00:00.123456789Z",
+        "/entries/0/published/unix_seconds": 1704067200,
+        "/entries/0/published/nanoseconds": 123456789,
+        "/entries/0/updated/status": "missing"
+      }
+    }
+  ]
+}

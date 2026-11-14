@@ -15,7 +15,7 @@ metadata = json.loads(subprocess.check_output([
     "cargo", "metadata", "--locked", "--offline", "--all-features", "--format-version", "1"
 ], cwd=root))
 output = io.StringIO(newline="")
-out = csv.writer(output)
+out = csv.writer(output, lineterminator="\n")
 out.writerow(["package", "version", "license", "repository", "scope"])
 for package in sorted(metadata["packages"], key=lambda p: (p["name"], p["version"])):
     out.writerow([

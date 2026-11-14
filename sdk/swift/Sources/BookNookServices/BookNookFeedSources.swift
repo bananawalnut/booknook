@@ -52,6 +52,12 @@ private final class CacheBridge: FeedCacheHostV1, @unchecked Sendable {
 /// revokes all activations and pending reads. No Desk or vault authority involved.
 public final class BookNookFeedSourcesV1: @unchecked Sendable {
     private let handle: FeedSourceSessionV1
+    private init(handle: FeedSourceSessionV1) { self.handle = handle }
+    /// Explicit isolated native HTTPS transport. Offline construction; sources
+    /// remain inactive until the host calls activate. Returns untrusted XML bytes.
+    public static func publicHTTPS(configuration: Data) throws -> BookNookFeedSourcesV1 {
+        BookNookFeedSourcesV1(handle: try FeedSourceSessionV1.publicHttps(configurationBytes: configuration))
+    }
     public init(configuration: Data, provider: any BookNookFeedSourceProviderV1) throws {
         handle = try FeedSourceSessionV1(configurationBytes: configuration, host: SourceBridge(provider))
     }

@@ -178,3 +178,5 @@ export function openSyncBatch(core: EncryptedSyncCore, packet: ApprovedSyncPacke
 }
 
 export * from "./feed-source.js";
+
+export * from "./feed-xml.js";

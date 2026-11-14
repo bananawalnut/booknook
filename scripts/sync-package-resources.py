@@ -25,6 +25,7 @@ copies["crates/native/tests/fixtures/castalia-native-authority-profile-v1.json"]
 copies["crates/native/REFERENCE-ISSUER.md"] = "services/castalia-issuer/README.md"
 for name in ["section.json", "conformance.json"]:
     copies[f"crates/native/tests/fixtures/feeds-v1/{name}"] = f"crates/core/tests/fixtures/feeds-v1/{name}"
+copies["crates/native/tests/fixtures/feed-xml-v1/cases.json"] = "crates/core/tests/fixtures/feed-xml-v1/cases.json"
 for destination, source in copies.items():
     expected = (ROOT / source).read_bytes()
     if destination.endswith(".md"):

@@ -1,0 +1,129 @@
+{
+  "schema": "booknook.feed-native-factory-evidence.v1",
+  "date": "2026-11-14",
+  "base_revision": "1032ae1a4d21bbfd6dd099c681b6cc4d699a542b",
+  "scope": "Additive native/Swift public HTTPS factory with owned foreign-executor support; no app/durable-cache acceptance",
+  "source_sha256": {
+    "crates/native/src/feed_source.rs": "a096304e143a95d3a0f809ad467c28689010b63a76ae1e2ed8a7939c2f4c4cc5",
+    "crates/native/tests/feed_source.rs": "b152c106a7ebad5b2a15c719d766faf61b855fab8dd3e4bc1a74eb09465eb124",
+    "sdk/swift/Sources/BookNookServices/BookNookFeedSources.swift": "707717034b16a2d32e5c9eb5eca9b97602686f353154e10171e2118bb5ecba45",
+    "tests/FeedPublicHTTPSSDKBindingSmoke.swift": "0c5ac9b2f0dfc65e3477fb829447346c8008e56b085db2ec9a2f498748bfdcd0",
+    "scripts/test-feed-public-https-swift.sh": "4270b5329a3fc7f89531b6bdcd0a2c346d1f6e33e6b8f3cf3f7af7fd7a705ad3",
+    ".github/workflows/check.yml": "8bc795ec802d971b0b6df9ac39c6b8b2d8e22a01efb992a6e1cb4024b6e0fb3d"
+  },
+  "behavior": {
+    "constructor": "Additive named UniFFI FeedSourceSessionV1::public_https and Swift BookNookFeedSourcesV1.publicHTTPS(configuration:). Existing callback constructor preserved.",
+    "inactive_offline": "Construction validates configuration/descriptor only; no runtime initialization, DNS or HTTP. Local activation remains explicit.",
+    "foreign_executor": "One lazy shared native Tokio runtime, two worker threads and four blocking threads, enable_all. No caller reactor, per-call runtime or block_on required.",
+    "cancellation": "Private PublicFeedTask owns spawned JoinHandle and cancellation token; premature future drop cancels token and aborts work. Successful completion disarms cleanup so the read stays usable.",
+    "storage_boundary": "Existing opaque attempt/read and guarded synchronous final cache CAS unchanged. No durable storage is added or qualified.",
+    "transport": "Same isolated PublicHttpsFeedProvider production constructor. Its separate verification receipt records resolver pinning, peer verification, deadlines, isolation, redirect and byte/header/encoding limits.",
+    "output": "Untrusted bounded raw feed bytes; the opt-in smoke explicitly activates before fetching, then normalizes exact returned bytes into inert records. Normalization itself performs no source activation, media fetch, persistence or rendering."
+  },
+  "tools": {
+    "rustc": "1.96.0 (ac68faa20 2026-05-25)",
+    "cargo": "1.96.0 (30a34c682 2026-05-25)"
+  },
+  "checks": [
+    {
+      "command": "cargo test -p booknook-native --test feed_source --locked --offline",
+      "result": "4 passed,0 failed,1 opt-in public Rust test ignored"
+    },
+    {
+      "command": "cargo test -p booknook-native --lib concrete_public_https --locked --offline",
+      "result": "2 passed; actual spawned task abort on unfinished foreign-future drop, completed read remains live"
+    },
+    {
+      "command": "cargo clippy -p booknook-native --all-targets --locked --offline -- -D warnings",
+      "result": "passed in coordinated XML/native check; not a second invocation"
+    },
+    {
+      "command": "env -u BOOKNOOK_FEED_ACCEPTANCE_URL bash scripts/test-feed-public-https-swift.sh",
+      "result": "passed matching generated Swift offline smoke"
+    },
+    {
+      "command": "BOOKNOOK_FEED_ACCEPTANCE_URL=https://blog.rust-lang.org/feed.xml ./public-https-consumer <feed-fixtures>",
+      "result": "passed actual production DNS/TLS HTTPS\u2192UniFFI\u2192XML;164045bytes,10inert entries; provenance/profile/native-ID/rawSHA assertions"
+    }
+  ],
+  "acceptance": {
+    "default_ci": {
+      "external_network": false,
+      "checks": [
+        "Malformed configuration refuses",
+        "Offline inactive construction",
+        "Wrapper inactive fetch refuses",
+        "Generated source inactive begin refuses",
+        "Pre-dispatch cancellation refuses execution",
+        "Configuration replacement revokes opaque attempts",
+        "Close/revoke lifecycle"
+      ],
+      "result": "passed"
+    },
+    "opt_in_public": {
+      "url": "https://blog.rust-lang.org/feed.xml",
+      "external_network": true,
+      "production_constructor": true,
+      "cfg_test_hooks": false,
+      "real_foreign_executor": true,
+      "response_bytes": 164045,
+      "raw_sha256": "6ccfa9bcad14da35d56e61300fd83c156af4b9fbe178b0c023fcafe666521833",
+      "normalized_inert_entries": 10,
+      "normalization_context": "Constructed from actual read.requestJSON() and read.responseJSON(): source ID, provider ID, requested URL, final URL and requested format. No independent config constants used for provenance.",
+      "assertions": [
+        "Exact raw body digest",
+        "Normalized schema and profile",
+        "Source/provider/requested/final provenance matches actual request/response",
+        "Normalized raw SHA matches exact bytes",
+        "Nonempty entries and native entry ID",
+        "Successful read remains live before explicit close/config revocation"
+      ],
+      "output_policy": "Only byte count, entry count and digest reported; no article body echoed.",
+      "result": "passed"
+    },
+    "boundaries": [
+      "The ignored native Rust opt-in public test was not run; actual generated Swift acceptance exercised the production constructor without a caller Tokio runtime.",
+      "Controlled loopback TLS and synthetic DNS adversarial tests are separately classified in native-https-verification.json; they do not claim production public DNS validation.",
+      "The observed public result is one read-only endpoint at one time, not universal RSS/Atom or network reachability qualification."
+    ]
+  },
+  "development_artifacts": {
+    "qualified-swift/public-https-v1/libbooknook_native.dylib": {
+      "sha256": "9cd4f0e5a78301d6e5625f2b8e42b83d7f4cd7bb4573c0636a95e11d7acfd8f1",
+      "bytes": 39487840
+    },
+    "qualified-swift/public-https-v1/public-https-consumer": {
+      "sha256": "12fa926a6b2423fd03d585f1de9d809ca1a8213a8525b6d164b9bcfd6bfb12a3",
+      "bytes": 760568
+    },
+    "qualified-swift/public-https-v1/booknook_native.swift": {
+      "sha256": "820da965f878c060b0fd6e4be81feb84d0adc48b8b2ab2dc0f247244e0608561",
+      "bytes": 168045
+    },
+    "qualified-swift/public-https-v1/booknook_nativeFFI.h": {
+      "sha256": "c285be9bf6d0b8bdcfdc617b7dea2dd43dd46005ffbfd30ce08c0b0f8d02c71c",
+      "bytes": 101520
+    },
+    "qualified-swift/public-https-v1/booknook_nativeFFI.modulemap": {
+      "sha256": "d832a0d192305ef1730df3247a38a0fb9d71239b6bd80769b584c72ff8aa073d",
+      "bytes": 146
+    }
+  },
+  "artifact_limit": "Preserved exact matching host dylib/generated Swift/consumer pairs; development verification only, not packaged release or deployment attestations.",
+  "independent_review": {
+    "result": "No concrete blocker after final native runtime/lifecycle and Swift read-bound normalization deltas.",
+    "source_hashes_match": true
+  },
+  "limitations": [
+    "No app, UI, physical device, simulator, installation, deployment, custody/signing or authority changes.",
+    "No durable normalized cache, normalized reopen decoder, renderer or user feed activation UI is qualified by this increment.",
+    "Required Swift CI remains deterministic and offline; public network acceptance is explicit opt-in only.",
+    "System getaddrinfo can outlive caller cancellation, but its actual blocking closure retains a bounded DNS permit until completion; separate transport tests prove adapter resource bounds.",
+    "Runtime is process-lifetime shared; native factory does not claim process shutdown/runtime teardown behavior.",
+    "Packaging and full package verification are parent-owned subsequent work; debug artifacts may be rebuilt, so exact tested pair and consumer were preserved under qualified/public-https-v1.",
+    "No production file changes occurred after final successful native/Swift qualification."
+  ],
+  "related_https_evidence": "feed-https-evidence.json",
+  "related_xml_evidence": "feed-xml-evidence.json",
+  "private_verification_sha256": "1ca672d7dacecccf86f3c0627a9eb76e2a356fc59fdb42149e6f74fbff08c80b"
+}

@@ -1,0 +1,617 @@
+{
+  "schema": "booknook.sdk-package-verification.v1",
+  "status": "passed",
+  "recordedAtUtc": "2026-11-14T11:07:39.715652+00:00",
+  "source": {
+    "repository": "https://github.com/bananawalnut/booknook",
+    "baseCommit": "1032ae1a4d21bbfd6dd099c681b6cc4d699a542b",
+    "includesReviewedUncommittedChanges": true,
+    "frozenCodeLockLicenseFixtureInputCount": 404,
+    "frozenInputTreeSha256": "0880b03a4aae9f8254c85f39a1bd1d8d8ee14915457a4a0fcb0ba23a103df8c2",
+    "sourceDrift": false,
+    "publicDocumentationExcludedFromDriftCheck": true
+  },
+  "toolchain": {
+    "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+    "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+    "node": "v24.18.0",
+    "npm": "11.16.0",
+    "wasmBindgen": "wasm-bindgen 0.2.127",
+    "zig": "0.14.1"
+  },
+  "zigBinarySha256": "b3de43be2f2a65738c11d6bba5520e3e2f75a3aadbedd4ac3640a6a107fcd593",
+  "qualification": {
+    "localPlatform": "macOS arm64",
+    "existingStableCacheReused": true,
+    "cargoOffline": true,
+    "npmOffline": true,
+    "newHeavyCacheCreated": false,
+    "temporaryTargetLinkRemoved": true,
+    "sourceEditsByVerifier": false,
+    "testsOrThresholdsSuppressed": false,
+    "publishedOrDeployed": false
+  },
+  "commands": [
+    {
+      "command": [
+        "bash",
+        "scripts/test-sdk.sh"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 266.3777277499903,
+      "logSha256": "9811726bb362194a55ccf9961a84c29a4515b35a7cbe7933433839d3c2e273ec",
+      "sourceDriftAfter": []
+    },
+    {
+      "command": [
+        "bash",
+        "scripts/package-rust.sh"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 440.7386708749691,
+      "logSha256": "f84c32d3ecc82a6f57b65f4acd825ad8c2dcde73207c9a4c524b6a20195ac8bd",
+      "sourceDriftAfter": []
+    },
+    {
+      "command": [
+        "bash",
+        "scripts/package-typescript.sh"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 8.111902415985242,
+      "logSha256": "d20c150f14948cf7f0808ace5ab605b5a9301f7bd027b3f92beb6f2ce205370d",
+      "sourceDriftAfter": []
+    }
+  ],
+  "sdkCoverage": {
+    "existingStorageSocialArchiveProviderChecksPassed": true,
+    "nativeWasmNativeAssetInkCardSocialProofQueueRoundtripPassed": true,
+    "actualNodeWasmFeedReviewSourceXmlChecksPassed": true,
+    "strictTypesPassed": true,
+    "reportedVectorCounts": {
+      "castaliaSharedFixtures": 70,
+      "noteWhiteboardVectors": 12,
+      "portableWasmConformanceVectors": 13,
+      "genericChangedBindingExpiryForgeryRejections": 10,
+      "publishedProviderFixtures": 6,
+      "atomicArchiveRejections": 11,
+      "feedRawVectors": 102,
+      "feedXmlCases": 27
+    },
+    "vectorCountsAreSeparateSuitesNotATotal": true
+  },
+  "rustPackageTests": {
+    "totals": {
+      "passed": 254,
+      "failed": 0,
+      "ignored": 5,
+      "measured": 0,
+      "filteredOut": 0
+    },
+    "reportedTestExecutables": 50,
+    "ignored": [
+      {
+        "test": "public_https_feed::tests::public_https_acceptance_uses_production_dns_tls_and_no_test_override",
+        "reason": "Opt-in live read-only public HTTPS qualification; set BOOKNOOK_FEED_ACCEPTANCE_URL to a controlled/public XML endpoint"
+      },
+      {
+        "test": "social_bridge::relay_acceptance::independent_relay_roundtrip_outage_and_durable_retry",
+        "reason": "requires BOOKNOOK_RELAY_BINARY pointing at the pinned independent relay; localhost sockets only"
+      },
+      {
+        "test": "acknowledged_writer_process_helper",
+        "reason": "subprocess fixture; invoked explicitly by the two crash recovery tests"
+      },
+      {
+        "test": "public_https_factory_fetch_runs_on_owned_runtime_without_caller_tokio",
+        "reason": "Opt-in live public native factory; runs without a caller Tokio runtime"
+      },
+      {
+        "test": "actual_http_issuer_roundtrips_native_consent_and_receiver",
+        "reason": "Starts an actual local HTTP issuer; run scripts/test-issuer.sh in a loopback-enabled environment"
+      }
+    ],
+    "actualFourCratesExtractedAndTested": true
+  },
+  "rustArchives": {
+    "booknook-core": {
+      "file": "target/package/booknook-core-0.1.0.crate",
+      "bytes": 175254,
+      "sha256": "44923cff2397102873c026ca5a959967c4d5de61da7e5db2827b31396774d115",
+      "packagedFixtures": {
+        "tests/fixtures/castalia/native-authority-profile-v1-cases.json": {
+          "bytes": 30613,
+          "sha256": "1d3895f024c01379acc556750a4ad5eb8fe5b1358765effd4776fb10f91c463e",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/fixtures/castalia/native-authority-profile-v1.json": {
+          "bytes": 538,
+          "sha256": "ebca72b01bd5aa769fd8bd1d5db325a20b5c414d668ae056d6f44197f88599e6",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/fixtures/castalia/provider-connections-v1-cases.json": {
+          "bytes": 21656,
+          "sha256": "8352cddc6b693c9c9c02966ff91fe809e90b370e67265bbeee2d5b4f48cf65b1",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/fixtures/castalia/provider-connections-v1.json": {
+          "bytes": 395,
+          "sha256": "b350bea2d701dce361c652313c7f2bd345134689e6efa51448abe851069183b0",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/fixtures/conformance.json": {
+          "bytes": 77135,
+          "sha256": "94f1443d84dfd6d6f675ded2d40c666b1b9b1d2b3e72268bbb5194558cd50fab",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/fixtures/feed-xml-v1/cases.json": {
+          "bytes": 9554,
+          "sha256": "a3d403861037f311d1ab3ba5773b7d738421feedff6f4466771cf6ee299c8047",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/fixtures/feeds-v1/conformance.json": {
+          "bytes": 112237,
+          "sha256": "07dfd61336d1ccbaafe2d3cf7540255ae5345222366daf4ce4e942b83a369d8f",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/fixtures/feeds-v1/provenance.json": {
+          "bytes": 448,
+          "sha256": "d65d4c266bddab5d040756b0450041b33b70f1bc2fe69070cd91d8eb359a5541",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/fixtures/feeds-v1/section.json": {
+          "bytes": 561,
+          "sha256": "eff3c3c4b15743661c2628d504052211f54c0ec2ab220d6d1d103218569c0ec2",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/fixtures/note-whiteboard.json": {
+          "bytes": 94091,
+          "sha256": "362f4389bf2ab4aa1efa24d73af5163e8bacd33767b8c8b9954a77e03c736d3c",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/fixtures/notebook-ink.json": {
+          "bytes": 112517,
+          "sha256": "0c9d231dac51d49c5c6472674336315e2fca443231ed9bbd8a2ad8286e428d4d",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/fixtures/portable-archive.json": {
+          "bytes": 25343,
+          "sha256": "bf0dbee52bf6d4a76e0bc40daf659befed2e9c02c7e5ffe60a17aef1ec7a4b81",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/fixtures/receipts.rs": {
+          "bytes": 3770,
+          "sha256": "b136f6978c3331c2d0f2f775d0aa8ce826a279f3d53c89f74907f0e970c5e2c5",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/fixtures/social_receipts.rs": {
+          "bytes": 4187,
+          "sha256": "97a77f14f2e8af796799d2d781565fbc02d142956cf5eb67a6d93445aa0efe80",
+          "archiveExtractedSourceBytesEqual": true
+        }
+      },
+      "memberCount": 71
+    },
+    "booknook-connectors": {
+      "file": "target/package/booknook-connectors-0.1.0.crate",
+      "bytes": 70818,
+      "sha256": "a849d485eba8aca1158f0cf28a4119ede38ef0ee6795b9c5de5c998531fa2d8f",
+      "packagedFixtures": {
+        "tests/fixtures/receipts.rs": {
+          "bytes": 3770,
+          "sha256": "b136f6978c3331c2d0f2f775d0aa8ce826a279f3d53c89f74907f0e970c5e2c5",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/fixtures/social_receipts.rs": {
+          "bytes": 4187,
+          "sha256": "97a77f14f2e8af796799d2d781565fbc02d142956cf5eb67a6d93445aa0efe80",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/public_https_feed/mod.rs": {
+          "bytes": 30035,
+          "sha256": "22603b0dd0efaa7216d56e75352b391a9ac8c107de3eccae1897d3313361c767",
+          "archiveExtractedSourceBytesEqual": true
+        }
+      },
+      "memberCount": 21
+    },
+    "booknook-native": {
+      "file": "target/package/booknook-native-0.1.0.crate",
+      "bytes": 153690,
+      "sha256": "80e23a69d6ba3fb382f0008b5300324a193e180560a2064bde091807ddc618a3",
+      "packagedFixtures": {
+        "tests/fixtures/castalia-custody-vector.json": {
+          "bytes": 1130,
+          "sha256": "095435b12b3651b9d271d056f3b310bc947151f8721bbf1c72aba8ac756bf413",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/fixtures/castalia-native-authority-profile-v1.json": {
+          "bytes": 538,
+          "sha256": "ebca72b01bd5aa769fd8bd1d5db325a20b5c414d668ae056d6f44197f88599e6",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/fixtures/feed-xml-v1/cases.json": {
+          "bytes": 9554,
+          "sha256": "a3d403861037f311d1ab3ba5773b7d738421feedff6f4466771cf6ee299c8047",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/fixtures/feeds-v1/README.md": {
+          "bytes": 1402,
+          "sha256": "01b7b9360d094169384f44930c8aef5caf47fbef61942fe5476bd2665282b7e9",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/fixtures/feeds-v1/conformance.json": {
+          "bytes": 112237,
+          "sha256": "07dfd61336d1ccbaafe2d3cf7540255ae5345222366daf4ce4e942b83a369d8f",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/fixtures/feeds-v1/section.json": {
+          "bytes": 561,
+          "sha256": "eff3c3c4b15743661c2628d504052211f54c0ec2ab220d6d1d103218569c0ec2",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/fixtures/generic_castalia.rs": {
+          "bytes": 2555,
+          "sha256": "de6f856eaf47f479721a51e4bf6d2220b1cfed9be8a70cedda2b5aa952f4747f",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/fixtures/receipts.rs": {
+          "bytes": 3770,
+          "sha256": "b136f6978c3331c2d0f2f775d0aa8ce826a279f3d53c89f74907f0e970c5e2c5",
+          "archiveExtractedSourceBytesEqual": true
+        },
+        "tests/fixtures/social_receipts.rs": {
+          "bytes": 4187,
+          "sha256": "97a77f14f2e8af796799d2d781565fbc02d142956cf5eb67a6d93445aa0efe80",
+          "archiveExtractedSourceBytesEqual": true
+        }
+      },
+      "memberCount": 61
+    },
+    "booknook-wasm": {
+      "file": "target/package/booknook-wasm-0.1.0.crate",
+      "bytes": 37444,
+      "sha256": "ed8bbf34c689bdfe8e41eb8e00633d8f9a0f8ef0d023e873539d4825ae0f3235",
+      "packagedFixtures": {},
+      "memberCount": 16
+    }
+  },
+  "npmPackage": {
+    "file": "target/packages/booknook-sdk-0.1.0.tgz",
+    "bytes": 4580574,
+    "sha256": "14fce242cd828e89eabdb6487c4b14097bd8c804205d15a82d110feeabc1a328",
+    "npmIntegrity": "sha512-sPUy9lwk5O/A7973b8fj9HB7GOdAJN/jlk/SMlz4SPaj1f8Cez6oRlzFxILCQungppraaQUXP/4pHPOf5sug5A==",
+    "npmShasum": "060cbea46388e273f420b64a42290d6f510e08b0",
+    "installedFileHashes": {
+      "LICENSE-APACHE": {
+        "bytes": 11326,
+        "sha256": "fabba0cb7d00a4b3211fdc13699223ab2d22f88678ccd608494cf2b332b903e9"
+      },
+      "LICENSE-MIT": {
+        "bytes": 1079,
+        "sha256": "e4c16e07e31d3fdbba827f245f39f51ee0871898f1585653129bcbe3c63a7410"
+      },
+      "DEPENDENCY-LICENSES.csv": {
+        "bytes": 42872,
+        "sha256": "01d802487f09c922c9e697134cc25a30279930aa1c6701cd0f4ae278c6171cc0"
+      },
+      "dist/cjs/archive-types.js": {
+        "bytes": 77,
+        "sha256": "d43aa81f5bc89faa359e0f97c814ba25155591ff078fbb9bfd40f8c7c9683230"
+      },
+      "dist/esm/archive-types.js": {
+        "bytes": 11,
+        "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+      },
+      "dist/cjs/archives.js": {
+        "bytes": 1232,
+        "sha256": "334b495ffc2618524b998dfb9e95b0c5e980bad83a382065bf454d847009e35c"
+      },
+      "dist/esm/archives.js": {
+        "bytes": 963,
+        "sha256": "11e7cb5f6ea327f0ae5126bb8df8bf5d81c07f0647e9b23c5131bb15e27aec2d"
+      },
+      "pkg/nodejs/booknook_wasm.js": {
+        "bytes": 64027,
+        "sha256": "3b64f36ba4bb0b94ba68fe2403b42e089ffa7ee2842a4d673273ef561e3f58f6"
+      },
+      "pkg/web/booknook_wasm.js": {
+        "bytes": 65528,
+        "sha256": "e755152fd820731800d0c4b8aee502059e05c37f3e79346ca4c026e461c415f1"
+      },
+      "dist/cjs/castalia.js": {
+        "bytes": 1251,
+        "sha256": "e26ea7e8fd173bdeec5a15d7e0a0a2177d1ee5d28174eeb603c3980783190bac"
+      },
+      "dist/esm/castalia.js": {
+        "bytes": 903,
+        "sha256": "18b0bcb4ac49452e799b13f4f8ac998fb60020c55003997915cc3c2275ba2f56"
+      },
+      "dist/cjs/contract-json.js": {
+        "bytes": 1296,
+        "sha256": "3f2505b38f70f36b73f1b4c848edd79ea5d7862e5a7bb40bf824a2d7af993917"
+      },
+      "dist/esm/contract-json.js": {
+        "bytes": 1099,
+        "sha256": "adecb3a9e3dc1dce2357abf4e988ea8219e4a21ed3f467a737c6c8573dc69e07"
+      },
+      "dist/cjs/feed-source.js": {
+        "bytes": 4376,
+        "sha256": "567b4d991eb2326debd902af02eb9967c3d9b961e0f060b42d051c3e980c8533"
+      },
+      "dist/esm/feed-source.js": {
+        "bytes": 3948,
+        "sha256": "443e9f2dbf47932c1c7ba520af65e53a489316121117e76f921df6902649d948"
+      },
+      "dist/cjs/feed-xml.js": {
+        "bytes": 560,
+        "sha256": "8c33dbb3a9da3aa16887c76e7a6de4b9e882d9b7fa2787cc532d922cc4feeaa9"
+      },
+      "dist/esm/feed-xml.js": {
+        "bytes": 411,
+        "sha256": "e1b89d39b9dbb559bf46a68b42dfba437782753d1b88f8633f53ca6c5748d5cc"
+      },
+      "dist/cjs/feeds.js": {
+        "bytes": 2979,
+        "sha256": "cf7afd8f36a1789e0f67c285c05e722802c038805b6b0c25b2b24bcc804a23ee"
+      },
+      "dist/esm/feeds.js": {
+        "bytes": 2356,
+        "sha256": "13dad02a9b3638e6e287d37ef85bee9d67902a50b09201515707348d7920d966"
+      },
+      "dist/cjs/index.js": {
+        "bytes": 9851,
+        "sha256": "782aed61620e3d21b3cae8309135b9485069dfa0132f804dc9ea6308f8329c51"
+      },
+      "dist/esm/index.js": {
+        "bytes": 6997,
+        "sha256": "b979a7169f4130aac3a8d53882775211d6d95fba17869712076167e57130a0f3"
+      },
+      "dist/cjs/portable-services.js": {
+        "bytes": 77,
+        "sha256": "d43aa81f5bc89faa359e0f97c814ba25155591ff078fbb9bfd40f8c7c9683230"
+      },
+      "dist/esm/portable-services.js": {
+        "bytes": 11,
+        "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+      },
+      "dist/cjs/provider-types.js": {
+        "bytes": 77,
+        "sha256": "d43aa81f5bc89faa359e0f97c814ba25155591ff078fbb9bfd40f8c7c9683230"
+      },
+      "dist/esm/provider-types.js": {
+        "bytes": 11,
+        "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+      },
+      "dist/cjs/providers.js": {
+        "bytes": 8199,
+        "sha256": "a359fa708422c734033efd614e8a5bc3303a90af75456ca905a63f788ae514bb"
+      },
+      "dist/esm/providers.js": {
+        "bytes": 7782,
+        "sha256": "4759aa4aa1e6189bfc6c6fe55963377bb809f78ae9a536ea06532f0139421922"
+      },
+      "dist/cjs/social-types.js": {
+        "bytes": 77,
+        "sha256": "d43aa81f5bc89faa359e0f97c814ba25155591ff078fbb9bfd40f8c7c9683230"
+      },
+      "dist/esm/social-types.js": {
+        "bytes": 11,
+        "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+      },
+      "dist/cjs/types.js": {
+        "bytes": 77,
+        "sha256": "d43aa81f5bc89faa359e0f97c814ba25155591ff078fbb9bfd40f8c7c9683230"
+      },
+      "dist/esm/types.js": {
+        "bytes": 11,
+        "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+      },
+      "dist/cjs/package.json": {
+        "bytes": 20,
+        "sha256": "dbf8353f77358bc12169b7bb7301e1978d5b503e002ee927229a8993672818fc"
+      },
+      "dist/esm/package.json": {
+        "bytes": 18,
+        "sha256": "1239d4d885dcad42201a27ed9324f8f0f760b78700d8db9ced39a511cffe7eae"
+      },
+      "package.json": {
+        "bytes": 1593,
+        "sha256": "f0d62c41921bcb49e31747a648a0b384a89d77ddc0eb47563158dd3186df59b5"
+      },
+      "pkg/nodejs/package.json": {
+        "bytes": 20,
+        "sha256": "dbf8353f77358bc12169b7bb7301e1978d5b503e002ee927229a8993672818fc"
+      },
+      "pkg/web/package.json": {
+        "bytes": 18,
+        "sha256": "1239d4d885dcad42201a27ed9324f8f0f760b78700d8db9ced39a511cffe7eae"
+      },
+      "INTEGRATION-DECISIONS.md": {
+        "bytes": 19623,
+        "sha256": "ff374562d8befd2d93c9c29188f177820954f939f73c79b4619f664fe0e452f5"
+      },
+      "LICENSE-BOUNDARIES.md": {
+        "bytes": 7797,
+        "sha256": "813da8ede891b97278c3e92df22740dcaf9d54fcf0e70d0a6b16f92d1c1239e8"
+      },
+      "README.md": {
+        "bytes": 11028,
+        "sha256": "2e0b992f62fba5f27aa24459ef1e3dd7126c221d003d92a45403d0ca568ad48e"
+      },
+      "scripts/verify-package.mjs": {
+        "bytes": 681,
+        "sha256": "c25ca502d7d0a1cba6a3361c7f078ace1f83ed9ad950c300c8bc9ca8ded9ba9b"
+      },
+      "dist/cjs/archive-types.d.ts": {
+        "bytes": 13122,
+        "sha256": "740ef69ec5b8960a06d81a88f1065998b08ba69a58f5730de0ec3b63560890c4"
+      },
+      "dist/esm/archive-types.d.ts": {
+        "bytes": 13122,
+        "sha256": "740ef69ec5b8960a06d81a88f1065998b08ba69a58f5730de0ec3b63560890c4"
+      },
+      "dist/cjs/archives.d.ts": {
+        "bytes": 1166,
+        "sha256": "c191647deb6c95b8b285590c8a6b45975fb65fd4b818ebc5bdcee6db304a33b6"
+      },
+      "dist/esm/archives.d.ts": {
+        "bytes": 1166,
+        "sha256": "c191647deb6c95b8b285590c8a6b45975fb65fd4b818ebc5bdcee6db304a33b6"
+      },
+      "pkg/nodejs/booknook_wasm_bg.wasm.d.ts": {
+        "bytes": 8293,
+        "sha256": "09ffb714c05984d4852d130e6694cc49dd6acb314fea092ac56d16a17abd73e3"
+      },
+      "pkg/web/booknook_wasm_bg.wasm.d.ts": {
+        "bytes": 8293,
+        "sha256": "09ffb714c05984d4852d130e6694cc49dd6acb314fea092ac56d16a17abd73e3"
+      },
+      "pkg/nodejs/booknook_wasm.d.ts": {
+        "bytes": 7993,
+        "sha256": "77a1d5341e38aa47b629fe97e4698b86fbb7ae5bf8006e1644920c560b819282"
+      },
+      "pkg/web/booknook_wasm.d.ts": {
+        "bytes": 17229,
+        "sha256": "ba95a8ae0dc212f8a9f5153b678dd4dc8af67d061887a4f7e3594691ce8351d3"
+      },
+      "dist/cjs/castalia.d.ts": {
+        "bytes": 2434,
+        "sha256": "4a2f723e088ab1e273f95a3b8621f391787fe306aa04cef90380c3551b8bad2f"
+      },
+      "dist/esm/castalia.d.ts": {
+        "bytes": 2434,
+        "sha256": "4a2f723e088ab1e273f95a3b8621f391787fe306aa04cef90380c3551b8bad2f"
+      },
+      "dist/cjs/contract-json.d.ts": {
+        "bytes": 422,
+        "sha256": "0fa36e2a66e494e038dc33a55028555530145267e75dcffcb286b314bf674e69"
+      },
+      "dist/esm/contract-json.d.ts": {
+        "bytes": 422,
+        "sha256": "0fa36e2a66e494e038dc33a55028555530145267e75dcffcb286b314bf674e69"
+      },
+      "dist/cjs/feed-source.d.ts": {
+        "bytes": 5512,
+        "sha256": "b4ea986fa772f83fd4b31aec703d3de612d5d0d9eb00dbacece6eed40204300c"
+      },
+      "dist/esm/feed-source.d.ts": {
+        "bytes": 5512,
+        "sha256": "b4ea986fa772f83fd4b31aec703d3de612d5d0d9eb00dbacece6eed40204300c"
+      },
+      "dist/cjs/feed-xml.d.ts": {
+        "bytes": 2281,
+        "sha256": "499d730d87e32a0226f76ab1d1f62ae9c8d6a0437e0fde66de19d661abf98cbd"
+      },
+      "dist/esm/feed-xml.d.ts": {
+        "bytes": 2281,
+        "sha256": "499d730d87e32a0226f76ab1d1f62ae9c8d6a0437e0fde66de19d661abf98cbd"
+      },
+      "dist/cjs/feeds.d.ts": {
+        "bytes": 4327,
+        "sha256": "0dcff6d6486666ce15f7b166745cdbb60df80a6414564a78baad8be478382283"
+      },
+      "dist/esm/feeds.d.ts": {
+        "bytes": 4327,
+        "sha256": "0dcff6d6486666ce15f7b166745cdbb60df80a6414564a78baad8be478382283"
+      },
+      "dist/cjs/index.d.ts": {
+        "bytes": 7330,
+        "sha256": "7f9bcca7dce70bd107931f05a55191a88432fc6a6b6ab7d7285914a82509924d"
+      },
+      "dist/esm/index.d.ts": {
+        "bytes": 7330,
+        "sha256": "7f9bcca7dce70bd107931f05a55191a88432fc6a6b6ab7d7285914a82509924d"
+      },
+      "dist/cjs/portable-services.d.ts": {
+        "bytes": 1534,
+        "sha256": "c3f941dfa7e0677466c1a5b1e35a3a258577ef2853e44ec6bc200bbcefe09b64"
+      },
+      "dist/esm/portable-services.d.ts": {
+        "bytes": 1534,
+        "sha256": "c3f941dfa7e0677466c1a5b1e35a3a258577ef2853e44ec6bc200bbcefe09b64"
+      },
+      "dist/cjs/provider-types.d.ts": {
+        "bytes": 5070,
+        "sha256": "4f8a9c13c1e87d8d2af2876a9e5e55d762110d12948f6b882c5e83d0e1b6c201"
+      },
+      "dist/esm/provider-types.d.ts": {
+        "bytes": 5070,
+        "sha256": "4f8a9c13c1e87d8d2af2876a9e5e55d762110d12948f6b882c5e83d0e1b6c201"
+      },
+      "dist/cjs/providers.d.ts": {
+        "bytes": 4887,
+        "sha256": "678ee2b67fd333fa34acf7b396a856bd655bcc299dc783e5963e5fd4350da003"
+      },
+      "dist/esm/providers.d.ts": {
+        "bytes": 4887,
+        "sha256": "678ee2b67fd333fa34acf7b396a856bd655bcc299dc783e5963e5fd4350da003"
+      },
+      "dist/cjs/social-types.d.ts": {
+        "bytes": 4905,
+        "sha256": "48406fef4ce4df3e5b8afba9f679c5fac5cd95d10ba5bac7b83ecacbc2a81157"
+      },
+      "dist/esm/social-types.d.ts": {
+        "bytes": 4905,
+        "sha256": "48406fef4ce4df3e5b8afba9f679c5fac5cd95d10ba5bac7b83ecacbc2a81157"
+      },
+      "dist/cjs/types.d.ts": {
+        "bytes": 15470,
+        "sha256": "e934fca6e3c8bf46bd3f7bcc9829dc9e1e50cb2fbd8a30e2f0dd5fcbe7d7147f"
+      },
+      "dist/esm/types.d.ts": {
+        "bytes": 15470,
+        "sha256": "e934fca6e3c8bf46bd3f7bcc9829dc9e1e50cb2fbd8a30e2f0dd5fcbe7d7147f"
+      },
+      "pkg/nodejs/booknook_wasm_bg.wasm": {
+        "bytes": 5417304,
+        "sha256": "d3a1f456c8e6b4af2fa6872afd416dc55cbe8bd2a142af60d25be41bc4b3da07"
+      },
+      "pkg/web/booknook_wasm_bg.wasm": {
+        "bytes": 5417304,
+        "sha256": "d3a1f456c8e6b4af2fa6872afd416dc55cbe8bd2a142af60d25be41bc4b3da07"
+      }
+    },
+    "installedFileCount": 72,
+    "allInstalledPayloadBytesEqualArchive": true
+  },
+  "installedNpmConsumers": {
+    "commonJs": true,
+    "esm": true,
+    "independentNodeWasmInitialization": true,
+    "independentBrowserWasmInitialization": true,
+    "strictNodeNextMtsAndCts": true,
+    "directSdkTestToInstalledCjsByteParity": {
+      "index.js": {
+        "directSdkTestCompiledSha256": "782aed61620e3d21b3cae8309135b9485069dfa0132f804dc9ea6308f8329c51",
+        "installedCjsSha256": "782aed61620e3d21b3cae8309135b9485069dfa0132f804dc9ea6308f8329c51",
+        "byteIdentical": true
+      },
+      "feeds.js": {
+        "directSdkTestCompiledSha256": "cf7afd8f36a1789e0f67c285c05e722802c038805b6b0c25b2b24bcc804a23ee",
+        "installedCjsSha256": "cf7afd8f36a1789e0f67c285c05e722802c038805b6b0c25b2b24bcc804a23ee",
+        "byteIdentical": true
+      },
+      "feed-source.js": {
+        "directSdkTestCompiledSha256": "567b4d991eb2326debd902af02eb9967c3d9b961e0f060b42d051c3e980c8533",
+        "installedCjsSha256": "567b4d991eb2326debd902af02eb9967c3d9b961e0f060b42d051c3e980c8533",
+        "byteIdentical": true
+      },
+      "feed-xml.js": {
+        "directSdkTestCompiledSha256": "8c33dbb3a9da3aa16887c76e7a6de4b9e882d9b7fa2787cc532d922cc4feeaa9",
+        "installedCjsSha256": "8c33dbb3a9da3aa16887c76e7a6de4b9e882d9b7fa2787cc532d922cc4feeaa9",
+        "byteIdentical": true
+      }
+    }
+  },
+  "limits": [
+    "Local qualification of reviewed uncommitted frozen inputs; no remote CI pass or released SDK is asserted.",
+    "Runtime tests use existing synthetic fixtures. Existing opt-in/live ignored tests keep their declared scope.",
+    "Public HTTPS factory/live qualification is separate parent-owned evidence; these SDK/package commands do not claim device, app UI, activation, polling, durable cache, account or hardware qualification.",
+    "Build cache was already warm; no clean or cold-build performance claim."
+  ],
+  "developmentArtifactProvenance": "These actual local archives contain reviewed uncommitted working changes; their Cargo VCS metadata is not an exact clean release attestation. Sources/fixtures are hashed separately. Nothing was published to a package registry or deployed.",
+  "browserTargetScope": "Browser-target WASM initialization is exercised by the installed package checks in Node; this is not browser UI acceptance.",
+  "verifierPublicReceiptSha256": "c7ddc45f279f90cf0fd9bcdf396ead9e5a20bbeaef4befdaf14df95b63d1c955",
+  "verifierPrivateReceiptSha256": "2e648c18573b9c1851d543f89d5f051b950db76ab34795663a93d5e86e9351bd"
+}

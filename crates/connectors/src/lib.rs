@@ -1,6 +1,7 @@
 //! Optional native adapters. These are never required for the offline desk.
 pub mod amazon;
 pub mod nostr_transport;
+pub mod public_https_feed;
 use booknook_core::{
     Error, Result,
     authority::{self, AuthorityPolicy},

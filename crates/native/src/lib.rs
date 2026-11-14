@@ -1,3 +1,5 @@
+mod feed_xml;
+pub use feed_xml::normalize_feed_xml_v1;
 mod feed_source;
 pub use feed_source::{
     FeedCacheHostV1, FeedCacheStageV1, FeedSourceAttemptV1, FeedSourceCancellationV1,

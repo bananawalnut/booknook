@@ -1,0 +1,221 @@
+{
+  "schema": "booknook.feed-xml-evidence.v1",
+  "date": "2026-11-14",
+  "base_revision": "1032ae1a4d21bbfd6dd099c681b6cc4d699a542b",
+  "scope": "Bounded network-free RSS2/Atom normalization and actual native/Swift/WASM/typed TypeScript parity; produced-only inert output",
+  "source_sha256": {
+    ".github/workflows/check.yml": "8bc795ec802d971b0b6df9ac39c6b8b2d8e22a01efb992a6e1cb4024b6e0fb3d",
+    "Cargo.lock": "450b4016ecbb803f98c6c61c15072208750c2eedf3a5986a81dc737a37780d49",
+    "crates/connectors/Cargo.toml": "236ae08aafd06f614f61e64ece3703cdb0574e28434774dbc598583db7db0514",
+    "crates/core/Cargo.toml": "f3e8994c99090d3952ab0008cdcef7cc3a3ff39f6edbe4eae1b3b088e7025972",
+    "crates/core/src/feed_source.rs": "4efc9cf479083279c95923a0a6806cb14436ac2c27ba2b8c35a3abf34f4171be",
+    "crates/core/src/feed_xml.rs": "597f4ee8523d258d620aed16acc1ee56d12081851356fa86b847f02a9a6aa456",
+    "crates/core/src/lib.rs": "ef394c5b14e6938454150301f6ff5e04f3d0cac7db92fb26d7b51ccd5f5c5c40",
+    "crates/core/tests/feed_xml.rs": "5bbda8b499f19a79b5688d9174ec803eaec07764b2c666e1528a78d93dc9aaeb",
+    "crates/core/tests/fixtures/feed-xml-v1/cases.json": "a3d403861037f311d1ab3ba5773b7d738421feedff6f4466771cf6ee299c8047",
+    "crates/native/src/feed_xml.rs": "5c562472f1bf04dddead308f9e9fe6595493517b7c9f6131044159dad7264a45",
+    "crates/native/src/lib.rs": "85e9b40bdc5b0508e7be1979e135143ae49f30c26c783f7908452a89e3f9a995",
+    "crates/native/tests/feed_xml.rs": "eba97456df0cd5bbea54365c130c1b7215c630f914ffc27e4343c5a8d2efa889",
+    "crates/native/tests/fixtures/feed-xml-v1/cases.json": "a3d403861037f311d1ab3ba5773b7d738421feedff6f4466771cf6ee299c8047",
+    "crates/wasm/src/feed_xml.rs": "8fd63bce838a30ec9c26e6fd3a38c301241978d4fb4e7d162d0900f87fd045ed",
+    "crates/wasm/src/lib.rs": "85cb94fa708c896e4017470839baa0f0bd721f00200d04c1d3fe0de370686c36",
+    "scripts/license-inventory.py": "ed5f988eb83c713e14f789eff19bcbaece650e6aec07122df4c24c5ee064f35c",
+    "scripts/sync-package-resources.py": "e107b5ad67fe4dcb299aabc66ed3b531c3a52bd23c815526a786b9e5012cd2e9",
+    "scripts/test-feed-xml-swift.sh": "da902f35af7962738f8da9dd485f3159a0e1d6cedef6f0b033e0dee5d4cf0026",
+    "scripts/test-sdk.sh": "725f6e221669e12f17e05172d2812acabd2989cc1db512a28c7667a7790269d1",
+    "sdk/swift/Sources/BookNookServices/BookNookFeedXML.swift": "ea01b817a8a991ffe0823ee3aa941bc6a7f113d167f72830e40eed2a47044841",
+    "sdk/typescript/feed-xml.ts": "d8871210a21f8a257bf1be415cc414422fefb7eefcc88ac7f596f94a5dc738ea",
+    "sdk/typescript/index.ts": "ceff5e06f440146274476c9bf4f84655d36b099b8e2142b7a38e25ec7e08a97b",
+    "tests/FeedXMLSDKBindingSmoke.swift": "d835f69f1eda43ab23ce4cb21d2485095c46c4a6ff550512bc66af3d655bd713",
+    "tests/FeedXMLSDKTypes.mts": "31887df2472f15f50cdff44ce73d8935f464eb899cb37365d711a86be9ad59ee",
+    "tests/feed-xml-sdk.cjs": "0af08788ba299c99bade0177332b3be8d64537408bb7f990465e317641e55982",
+    "docs/dependency-licenses.csv": "01d802487f09c922c9e697134cc25a30279930aa1c6701cd0f4ae278c6171cc0",
+    "crates/core/DEPENDENCY-LICENSES.csv": "01d802487f09c922c9e697134cc25a30279930aa1c6701cd0f4ae278c6171cc0",
+    "crates/connectors/DEPENDENCY-LICENSES.csv": "01d802487f09c922c9e697134cc25a30279930aa1c6701cd0f4ae278c6171cc0",
+    "crates/native/DEPENDENCY-LICENSES.csv": "01d802487f09c922c9e697134cc25a30279930aa1c6701cd0f4ae278c6171cc0",
+    "crates/wasm/DEPENDENCY-LICENSES.csv": "01d802487f09c922c9e697134cc25a30279930aa1c6701cd0f4ae278c6171cc0",
+    "sdk/typescript/DEPENDENCY-LICENSES.csv": "01d802487f09c922c9e697134cc25a30279930aa1c6701cd0f4ae278c6171cc0",
+    "sdk/swift/DEPENDENCY-LICENSES.csv": "01d802487f09c922c9e697134cc25a30279930aa1c6701cd0f4ae278c6171cc0"
+  },
+  "contracts": {
+    "input": "booknook.feed-normalization-context.v1 original strict bounded JSON + original XML bytes",
+    "output": "booknook.normalized-feed.v1 produced-only",
+    "normalizer_profile": "booknook.rss2-atom.inert.v1",
+    "api": "booknook_core::feed_xml::normalize / native+WASM normalize_feed_xml_v1 / TS normalizeFeedXmlV1 / Swift BookNookFeedXMLV1.normalize",
+    "limits": {
+      "raw_bytes": 2097152,
+      "context_bytes": 16384,
+      "raw_event_and_field_bytes": 65536,
+      "depth_including_empty": 64,
+      "events_and_dom_nodes": 50000,
+      "attributes_including_namespace_declarations": 64,
+      "entries": 500,
+      "output_bytes": 4194304
+    },
+    "date_semantics": "Separate original published/updated; missing/invalid explicit. Chrono non-leap Unix seconds; leap nanoseconds may be1e9..<2e9 relative to preceding whole non-leap second. No clock/fetch-time substitute.",
+    "identity_and_order": "Opaque native IDs preserve XML logical text. Tagged SHA-derived fallback. Exact normalized duplicates counted, conflicting native-ID variants retained; zero-based first_source_ordinal preserved; deterministic ID+variant order.",
+    "inertness": "Text only. Escaped HTML is explicitly literal-markup fallback; XHTML text extraction drops active/style/media/unknown-namespace subtrees. No code/renderer/media/src fetch. Links are explicit-action HTTP(S) data, queries/fragments/ports retained; unsafe schemes/userinfo/raw controls/backslashes/unsafe syntactic hosts omitted. DNS is not qualified by normalization.",
+    "cache_identity": "Full normalization context (source/provider/requested+final URLs/expectedformat), rawSHA and normalizer profile; no global SHA/profile-only cache key."
+  },
+  "checks": [
+    {
+      "command": "cargo test -p booknook-core --locked --offline",
+      "result": "132 passed, including XML15/source16/feeds14; 0 failed"
+    },
+    {
+      "command": "cargo clippy -p booknook-core --test feed_xml --locked --offline -- -D warnings",
+      "result": "passed"
+    },
+    {
+      "command": "cargo clippy -p booknook-wasm --lib --locked --offline -- -D warnings",
+      "result": "passed"
+    },
+    {
+      "command": "bash scripts/build-wasm.sh nodejs; bash scripts/build-wasm.sh web",
+      "result": "both actual optimized WASM artifacts generated, exit0"
+    },
+    {
+      "command": "npm --prefix sdk/typescript run build; npm --prefix sdk/typescript run check",
+      "result": "passed"
+    },
+    {
+      "command": "node tests/feed-xml-sdk.cjs sdk/typescript/pkg/nodejs/booknook_wasm.js sdk/typescript/dist/cjs/index.js",
+      "result": "actual Node WASM + built typed wrapper27 cases; SHA and normal refusals/no traps; UTF8/UTF16, depth64/65/30000 and501-entry refusal passed"
+    },
+    {
+      "command": "node tests/feed-xml-sdk.cjs sdk/typescript/pkg/web/booknook_wasm.js sdk/typescript/dist/cjs/index.js",
+      "result": "actual web-target WASM instantiated in Node; same27 and bounds passed; no browser UI claim"
+    },
+    {
+      "command": "sdk/typescript/node_modules/.bin/tsc --noEmit --strict --target es2022 --module nodenext --moduleResolution nodenext tests/FeedXMLSDKTypes.mts",
+      "result": "actual generated declaration consumer passed"
+    },
+    {
+      "command": "node tests/feed-sdk-parity.cjs sdk/typescript/pkg/nodejs/booknook_wasm.js sdk/typescript/dist/cjs/index.js",
+      "result": "actual102 canonical vectors/review/projection regression passed"
+    },
+    {
+      "command": "node tests/feed-source-sdk.cjs sdk/typescript/pkg/nodejs/booknook_wasm.js sdk/typescript/dist/cjs/index.js",
+      "result": "actual async/cancel/stale/304/CAS source regression passed"
+    },
+    {
+      "command": "node tests/feed-sdk-parity.cjs sdk/typescript/pkg/web/booknook_wasm.js sdk/typescript/dist/cjs/index.js",
+      "result": "actual web-target102 canonical vectors/review/projection regression passed"
+    },
+    {
+      "command": "node tests/feed-source-sdk.cjs sdk/typescript/pkg/web/booknook_wasm.js sdk/typescript/dist/cjs/index.js",
+      "result": "actual web-target async/cancel/stale/304/CAS source regression passed"
+    },
+    {
+      "command": "cargo test -p booknook-native --test feed_xml --test feed_sdk --locked --offline",
+      "result": "XML corpus27 adapter parity1test + existing SDK3tests/102vectors passed"
+    },
+    {
+      "command": "cargo clippy -p booknook-native --all-targets --locked --offline -- -D warnings",
+      "result": "passed all native targets on frozen native factory + XML source"
+    },
+    {
+      "command": "bash scripts/test-feed-xml-swift.sh",
+      "result": "fresh matching native dylib + generated UniFFI Swift; baseline102 review + XML27 and UTF8/depth64/65/30000 passed"
+    },
+    {
+      "command": "python3 scripts/license-inventory.py; python3 scripts/sync-package-resources.py; python3 scripts/license-inventory.py --check; python3 scripts/sync-package-resources.py --check",
+      "result": "350 all-feature packages,0 missing license declarations,46 resources; deterministic LF; command exited0 without a long-running session"
+    },
+    {
+      "command": "cargo fmt --all --check; git diff --check; bash -n scripts/test-feed-xml-swift.sh",
+      "result": "passed; preserved exact tested Swift/library artifacts with same SHA as original tested files"
+    }
+  ],
+  "development_artifacts": {
+    "sdk/typescript/pkg/nodejs/booknook_wasm.js": {
+      "sha256": "3b64f36ba4bb0b94ba68fe2403b42e089ffa7ee2842a4d673273ef561e3f58f6",
+      "bytes": 64027
+    },
+    "sdk/typescript/pkg/nodejs/booknook_wasm.d.ts": {
+      "sha256": "77a1d5341e38aa47b629fe97e4698b86fbb7ae5bf8006e1644920c560b819282",
+      "bytes": 7993
+    },
+    "sdk/typescript/pkg/nodejs/booknook_wasm_bg.wasm": {
+      "sha256": "d3a1f456c8e6b4af2fa6872afd416dc55cbe8bd2a142af60d25be41bc4b3da07",
+      "bytes": 5417304
+    },
+    "sdk/typescript/pkg/web/booknook_wasm.js": {
+      "sha256": "e755152fd820731800d0c4b8aee502059e05c37f3e79346ca4c026e461c415f1",
+      "bytes": 65528
+    },
+    "sdk/typescript/pkg/web/booknook_wasm.d.ts": {
+      "sha256": "ba95a8ae0dc212f8a9f5153b678dd4dc8af67d061887a4f7e3594691ce8351d3",
+      "bytes": 17229
+    },
+    "sdk/typescript/pkg/web/booknook_wasm_bg.wasm": {
+      "sha256": "d3a1f456c8e6b4af2fa6872afd416dc55cbe8bd2a142af60d25be41bc4b3da07",
+      "bytes": 5417304
+    },
+    "sdk/typescript/dist/cjs/feed-xml.js": {
+      "sha256": "8c33dbb3a9da3aa16887c76e7a6de4b9e882d9b7fa2787cc532d922cc4feeaa9",
+      "bytes": 560
+    },
+    "sdk/typescript/dist/esm/feed-xml.d.ts": {
+      "sha256": "499d730d87e32a0226f76ab1d1f62ae9c8d6a0437e0fde66de19d661abf98cbd",
+      "bytes": 2281
+    },
+    "development-cache/wasm32-unknown-unknown/release/booknook_wasm.wasm": {
+      "sha256": "be76739d8173b8a2402f1c51969996df08e23587a25cdffa2359bc1a53302812",
+      "bytes": 6256864
+    },
+    "qualified-swift/xml-v1/libbooknook_native.dylib": {
+      "sha256": "9cd4f0e5a78301d6e5625f2b8e42b83d7f4cd7bb4573c0636a95e11d7acfd8f1",
+      "bytes": 39487840
+    },
+    "qualified-swift/xml-v1/xml-consumer": {
+      "sha256": "95e8c57c9875f9db0a38d9acdd86223fe8b5103f8d796683961c6795c0bf04fb",
+      "bytes": 685296
+    },
+    "qualified-swift/xml-v1/review-consumer": {
+      "sha256": "594af03ddcbe1af7904ac4b6ba84cc41e49b4893d6ea4fd6df1d1d50df02f18d",
+      "bytes": 737720
+    },
+    "qualified-swift/xml-v1/generated/booknook_native.swift": {
+      "sha256": "820da965f878c060b0fd6e4be81feb84d0adc48b8b2ab2dc0f247244e0608561",
+      "bytes": 168045
+    },
+    "qualified-swift/xml-v1/generated/booknook_nativeFFI.h": {
+      "sha256": "c285be9bf6d0b8bdcfdc617b7dea2dd43dd46005ffbfd30ce08c0b0f8d02c71c",
+      "bytes": 101520
+    },
+    "qualified-swift/xml-v1/generated/booknook_nativeFFI.modulemap": {
+      "sha256": "d832a0d192305ef1730df3247a38a0fb9d71239b6bd80769b584c72ff8aa073d",
+      "bytes": 146
+    }
+  },
+  "artifact_limit": "Matching host pairs were built and used by the recorded consumers; these are mutable development/test artifacts, not packaged release or deployment attestations. Qualified Swift pair copies retain the tested bytes.",
+  "dependencies": {
+    "inventory_packages": 350,
+    "license_declarations_missing": 0,
+    "resource_mirrors": 46,
+    "inventory_lineterminator": "LF",
+    "parser_dependency_declared_rust_version_max": "1.86",
+    "test_dependency_declared_rust_version_max": "1.88",
+    "minimum_version_qualification": "Dependency metadata only; no SDK/runtime MSRV declared or lower-version execution qualified. Actual executions rustc1.96.0 only."
+  },
+  "tools": {
+    "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+    "wasm_bindgen": "0.2.127",
+    "typescript": "5.9.3",
+    "uniffi": "0.32.2",
+    "zig": "0.14.1, checksum-verified existing toolchain"
+  },
+  "independent_review": "Reviewer matched all13 pre-consumer hashes; source/corpus unchanged. Only Node test tighter normal error/no trap assertions changed afterward, then actual tests passed. Final verification records final hashes.",
+  "corpus_provenance": "Embedded in cases.json; original synthetic fixtures; native mirror byte-identical and checked.",
+  "limitations": [
+    "Produced-only output: no reopened normalized JSON decoder/durable cache/storage backend",
+    "No full HTML-to-text extraction or HTML renderer; explicit literal fallback",
+    "No browser UI/Apple app packaging/device/signing/installation checks",
+    "Transport/DNS/HTTP/native factory qualification is separate author evidence",
+    "Full scripts/test-sdk.sh and extracted package regression delegated to parent/package agent; not duplicated here",
+    "Checked-in Swift artifact/header pair unchanged; isolated freshly generated host pair tested"
+  ],
+  "related_https_evidence": "feed-https-evidence.json",
+  "private_verification_sha256": "d82b22efed7558bae589601aa5a18f3facb689dc205ddf72714e5c1fb5742eef"
+}

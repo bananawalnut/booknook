@@ -139,3 +139,15 @@ with `CC_wasm32_unknown_unknown` / `AR_wasm32_unknown_unknown`; Apple clang lack
 alternative (Zig 0.14.1, checksum checked against the [official index](https://ziglang.org/download/index.json)).
 The script changes no global configuration and keeps compiler caches in `target/`. Prebuilt
 SDK consumers do not need this compiler. The compiler is a build tool, not bundled SDK code.
+
+
+## Feed review, source and XML ports
+
+The independent feed APIs do not change issued provider-v1 or the notebook command/state schemas. Opaque review handles support conflict resolution and selected-origin projection; installed source sessions start inactive and require explicit local activation. Async staging ends in a synchronous atomic host cache CAS under the live runtime guard. [Feed contracts and limits](FEEDS.md) document the APIs, provenance, cancellation and the unsupported asynchronous final-store boundary.
+
+Pure Rust `feed_xml::normalize`, native/WASM `normalize_feed_xml_v1`, Swift `BookNookFeedXMLV1.normalize(context:xml:)` and TypeScript `normalizeFeedXmlV1` accept original bounded context/XML bytes and return inert produced-only records. Render strings as text. Missing/invalid dates, literal HTML fallback and conflicting IDs remain explicit; no fetched timestamp, identity attribution or publication authority is inferred. These types are not a decoder for untrusted reopened cache JSON.
+
+Native hosts can explicitly install `booknook_connectors::public_https_feed::PublicHttpsFeedProvider` through the source-provider port. The built-in transport is credential-free and bounded; it is separate from portable parsing and is not available as a browser transport. The additive native `FeedSourceSessionV1::public_https` and Swift `BookNookFeedSourcesV1.publicHTTPS(configuration:)` factories select this implementation explicitly, remain offline/inactive at construction and supply their own asynchronous executor. No Book Nook server is required. Durable cache and native discovery remain separate delivery steps.
+
+
+The bounded feed increment passes the complete SDK regression suite, actual four-crate extraction/test run (254 passed, five declared skips) and installed TypeScript package checks. See [package evidence](feed-ingestion-package-evidence.json), [XML parity](feed-xml-evidence.json) and [native factory qualification](feed-native-factory-evidence.json). Browser-target WASM is initialized in Node during these checks; no browser UI, installed Apple app or package-registry release is inferred.

@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
-//! Independent installed-source callbacks; no Desk, command, custody or network
-//! implementation. Async staging is separate from guarded synchronous cache CAS.
+//! Independent installed-source callbacks and explicit native public HTTPS factory.
+//! No Desk or custody authority. Async staging stays separate from guarded cache CAS.
 use crate::{NativeError, Result};
 use booknook_core::{Error, feed_source as f, feeds::FeedConfiguration};
-use std::sync::{Arc, Mutex};
+use std::sync::{Arc, Mutex, OnceLock};
 fn encode(value: &impl serde::Serialize) -> Result<String> {
     Ok(serde_json::to_string(value)?)
 }
@@ -66,6 +66,86 @@ pub trait FeedCacheHostV1: Send + Sync {
         body: Vec<u8>,
     ) -> Result<()>;
 }
+
+// UniFFI futures are polled by the foreign executor, which has no Tokio reactor.
+// Lazily own one bounded executor for explicitly requested native HTTP work;
+// neither constructing this host nor constructing a source session starts it.
+fn public_feed_runtime() -> Result<&'static tokio::runtime::Runtime> {
+    static RUNTIME: OnceLock<std::result::Result<tokio::runtime::Runtime, std::io::Error>> =
+        OnceLock::new();
+    RUNTIME
+        .get_or_init(|| {
+            tokio::runtime::Builder::new_multi_thread()
+                .worker_threads(2)
+                .max_blocking_threads(4)
+                .thread_name("booknook-public-feed")
+                .enable_all()
+                .build()
+        })
+        .as_ref()
+        .map_err(|_| NativeError::Failure {
+            message: "Cannot start the native public feed executor".into(),
+        })
+}
+
+struct PublicFeedTask {
+    handle: tokio::task::JoinHandle<booknook_core::Result<f::FeedSourceReply>>,
+    cancellation: f::FeedCancellation,
+    complete: bool,
+}
+impl PublicFeedTask {
+    async fn finish(mut self) -> booknook_core::Result<f::FeedSourceReply> {
+        // JoinHandle can be polled by a foreign executor; only its spawned work
+        // needs the Tokio reactor. No block_on or caller-thread network work.
+        let result = (&mut self.handle).await;
+        self.complete = true;
+        result.map_err(|_| Error::Unavailable("Native public feed worker stopped".into()))?
+    }
+}
+impl Drop for PublicFeedTask {
+    fn drop(&mut self) {
+        if !self.complete {
+            self.cancellation.cancel();
+            self.handle.abort();
+        }
+    }
+}
+
+struct PublicHttpsHost;
+#[async_trait::async_trait]
+impl FeedSourceHostV1 for PublicHttpsHost {
+    fn descriptor_json(&self) -> Result<String> {
+        let provider = booknook_connectors::public_https_feed::PublicHttpsFeedProvider::new();
+        encode(&f::FeedSourceProvider::descriptor(&provider)?)
+    }
+    async fn fetch(
+        &self,
+        request_json: String,
+        cancellation: Arc<FeedSourceCancellationV1>,
+    ) -> Result<FeedSourceReplyV1> {
+        if request_json.len() > f::MAX_SOURCE_METADATA_BYTES {
+            return Err(Error::Invalid("Oversized native feed source request".into()).into());
+        }
+        let request: f::FeedSourceRequest = booknook_core::strict_parse(request_json.as_bytes())?;
+        let cancellation = cancellation.inner.clone();
+        let worker_cancellation = cancellation.clone();
+        let handle = public_feed_runtime()?.spawn(async move {
+            let provider = booknook_connectors::public_https_feed::PublicHttpsFeedProvider::new();
+            f::FeedSourceProvider::fetch(&provider, request, worker_cancellation).await
+        });
+        let reply = PublicFeedTask {
+            handle,
+            cancellation,
+            complete: false,
+        }
+        .finish()
+        .await?;
+        Ok(FeedSourceReplyV1 {
+            response_bytes: reply.response_bytes,
+            body: reply.body,
+        })
+    }
+}
 struct Installed {
     host: Arc<dyn FeedSourceHostV1>,
     descriptor: f::FeedSourceDescriptor,
@@ -113,6 +193,13 @@ pub struct FeedSourceSessionV1 {
 }
 #[uniffi::export]
 impl FeedSourceSessionV1 {
+    /// Explicit concrete native transport; construction is offline and inactive.
+    /// Fetch still requires local activation and returns untrusted XML bytes.
+    #[uniffi::constructor]
+    pub fn public_https(configuration_bytes: Vec<u8>) -> Result<Self> {
+        Self::new(configuration_bytes, Box::new(PublicHttpsHost))
+    }
+
     #[uniffi::constructor]
     pub fn new(configuration_bytes: Vec<u8>, host: Box<dyn FeedSourceHostV1>) -> Result<Self> {
         let configuration = FeedConfiguration::parse(&configuration_bytes)?;
@@ -168,6 +255,115 @@ impl FeedSourceSessionV1 {
             inner: self.inner.begin_with_conditional(&source_id, hint)?,
             installed: installed.clone(),
         }))
+    }
+}
+
+#[cfg(test)]
+mod public_https_factory_tests {
+    use super::*;
+    use std::{
+        future::Future,
+        sync::atomic::{AtomicBool, Ordering},
+        task::{Context, Poll, Waker},
+        time::{Duration, Instant},
+    };
+
+    fn cancellation() -> f::FeedCancellation {
+        let section = booknook_core::feeds::FeedSection::parse(include_bytes!(
+            "../tests/fixtures/feeds-v1/section.json"
+        ))
+        .unwrap();
+        let source = section.subscriptions[0].id.clone();
+        let provider = booknook_connectors::public_https_feed::PublicHttpsFeedProvider::new();
+        let descriptor = f::FeedSourceProvider::descriptor(&provider).unwrap();
+        let id = descriptor.id.clone();
+        let session = f::FeedSourceSession::new(
+            FeedConfiguration::new(0, section).unwrap(),
+            vec![descriptor],
+        )
+        .unwrap();
+        session.activate(&source, &id).unwrap();
+        session.begin(&source).unwrap().cancellation()
+    }
+    fn wait<F: Future>(future: F) -> F::Output {
+        assert!(tokio::runtime::Handle::try_current().is_err());
+        let mut future = Box::pin(future);
+        let end = Instant::now() + Duration::from_secs(2);
+        loop {
+            if let Poll::Ready(value) = future
+                .as_mut()
+                .poll(&mut Context::from_waker(Waker::noop()))
+            {
+                return value;
+            }
+            assert!(Instant::now() < end);
+            std::thread::sleep(Duration::from_millis(1));
+        }
+    }
+    #[test]
+    fn concrete_public_https_foreign_future_drop_cancels_and_aborts_owned_work() {
+        let cancellation = cancellation();
+        let started = Arc::new(AtomicBool::new(false));
+        let dropped = Arc::new(AtomicBool::new(false));
+        struct Dropped(Arc<AtomicBool>);
+        impl Drop for Dropped {
+            fn drop(&mut self) {
+                self.0.store(true, Ordering::SeqCst);
+            }
+        }
+        let worker_started = started.clone();
+        let worker_dropped = dropped.clone();
+        let handle = public_feed_runtime().unwrap().spawn(async move {
+            let _drop = Dropped(worker_dropped);
+            worker_started.store(true, Ordering::SeqCst);
+            std::future::pending::<booknook_core::Result<f::FeedSourceReply>>().await
+        });
+        let mut future = Box::pin(
+            PublicFeedTask {
+                handle,
+                cancellation: cancellation.clone(),
+                complete: false,
+            }
+            .finish(),
+        );
+        assert!(
+            future
+                .as_mut()
+                .poll(&mut Context::from_waker(Waker::noop()))
+                .is_pending()
+        );
+        let end = Instant::now() + Duration::from_secs(2);
+        while !started.load(Ordering::SeqCst) {
+            assert!(Instant::now() < end);
+            std::thread::sleep(Duration::from_millis(1));
+        }
+        drop(future);
+        assert!(cancellation.is_cancelled());
+        while !dropped.load(Ordering::SeqCst) {
+            assert!(Instant::now() < end);
+            std::thread::sleep(Duration::from_millis(1));
+        }
+    }
+    #[test]
+    fn concrete_public_https_completed_worker_does_not_cancel_successful_read() {
+        let cancellation = cancellation();
+        let handle = public_feed_runtime().unwrap().spawn(async {
+            Ok(f::FeedSourceReply {
+                response_bytes: vec![],
+                body: b"raw fixture".to_vec(),
+            })
+        });
+        let result = wait(
+            PublicFeedTask {
+                handle,
+                cancellation: cancellation.clone(),
+                complete: false,
+            }
+            .finish(),
+        )
+        .unwrap();
+        assert_eq!(result.body, b"raw fixture");
+        assert!(!cancellation.is_cancelled());
     }
 }
 #[derive(uniffi::Object)]

@@ -42,7 +42,7 @@ fn conflict() -> Error {
 fn text(value: &str, max: usize) -> bool {
     !value.trim().is_empty() && value.len() <= max && !value.chars().any(char::is_control)
 }
-fn safe_id(value: &str) -> bool {
+pub(crate) fn safe_id(value: &str) -> bool {
     !value.is_empty()
         && value.len() <= 200
         && value

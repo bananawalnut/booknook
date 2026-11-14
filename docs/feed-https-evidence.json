@@ -1,0 +1,84 @@
+{
+  "schema": "booknook.feed-https-evidence.v1",
+  "date": "2026-11-14",
+  "base_revision": "1032ae1a4d21bbfd6dd099c681b6cc4d699a542b",
+  "scope": "Source-only native credential-free public HTTPS provider. No app, device, deployment, durable cache or authority changes.",
+  "source_sha256": {
+    "crates/connectors/src/public_https_feed.rs": "d30f2851c357c8968a4ceab584f4b25a01cefa1bea7d8711fd74acecc3e1d2d8",
+    "crates/connectors/tests/public_https_feed/mod.rs": "22603b0dd0efaa7216d56e75352b391a9ac8c107de3eccae1897d3313361c767",
+    "crates/connectors/src/lib.rs": "3b944be2e8a78ef9bc7da72c44d2eda80aa0dc1eb58c3deef8bd0839ef489cd1",
+    "crates/core/src/feeds.rs": "f3f3a3f24ce9380e747f969b2f757cd2163d3e43161bab361564058e2fa800ba"
+  },
+  "tools": {
+    "rustc": "1.96.0 (ac68faa20 2026-05-25)",
+    "cargo": "1.96.0 (30a34c682 2026-05-25)"
+  },
+  "checks": {
+    "final_provider": {
+      "passed": 22,
+      "failed": 0,
+      "ignored": 0,
+      "includes_live_public_acceptance": true
+    },
+    "full_connector": {
+      "passed": 40,
+      "failed": 0,
+      "ignored": 1,
+      "note": "Before subsequent behavior-preserving Clippy condition rewrite and stronger proxy child-test assertion."
+    },
+    "strict_clippy_all_targets": {
+      "exit_code": 0,
+      "warnings_denied": true
+    },
+    "rustfmt": {
+      "exit_code": 0
+    },
+    "diff_check": {
+      "exit_code": 0
+    }
+  },
+  "public_fetch": {
+    "url": "https://blog.rust-lang.org/feed.xml",
+    "final_url": "https://blog.rust-lang.org/feed.xml",
+    "bytes": 164045,
+    "body_sha256": "6ccfa9bcad14da35d56e61300fd83c156af4b9fbe178b0c023fcafe666521833",
+    "final_combined_test_seconds": 0.37,
+    "constructor": "PublicHttpsFeedProvider::new()",
+    "test_transport_override": false
+  },
+  "profile": {
+    "requests": 4,
+    "actual_blocking_resolver_jobs": 4,
+    "dns_answer_limit": 32,
+    "redirect_limit": 3,
+    "total_deadline_seconds": 20,
+    "connect_and_read_stall_seconds": 5,
+    "body_limit_bytes": 2097152,
+    "encoding": "Identity Content-Encoding only; strict UTF-8 bytes/declaration and XML media-type profile.",
+    "addresses": "All returned answers validated before deduplication, every hop independently pinned, no fallback resolver, exact actual peer match required. Conservative IANA special-purpose refusal; IPv6 currently allocated RIR prefixes only.",
+    "tls": "Explicit Rustls; clear all built-in root sources then enable WebPKI only; certificate/hostname verification preserved.",
+    "redirects": "Relative paths supported; absolute/network-path raw authority validated before parsing; all complete targets rechecked; no query/fragment/backslash/default-port normalization bypass.",
+    "state": "No activation, credentials, cookie jar, proxy, inherited client/headers, media fetch, XML normalization or cache writes."
+  },
+  "evidence_boundaries": {
+    "real_local_transport": "Production reqwest/TLS acquisition code over real loopback sockets with compile-only test-root/address overrides; not live public DNS qualification.",
+    "policy_tests": "Synthetic address sets, missing/unexpected peers and no-fallback resolver tests; not live adversarial DNS.",
+    "resolver_resource_test": "Real bounded spawn_blocking lifecycle with a deterministic stalled closure; proves permits survive caller cancellation, not OS DNS correctness.",
+    "live_public_transport": "One observed external public feed with actual production DNS/TLS/peer validation and no test override; does not prove every public publisher or adversarial public DNS scenario.",
+    "native_binding": "Separate concrete native factory and actual generated Swift qualification are recorded in feed-native-factory-evidence.json; this transport receipt qualifies the provider itself.",
+    "remaining": [
+      "No durable cache, XML safety or normalized record claim by this adapter.",
+      "No browser/WASM transport, UI activation, installed app, device or credentials tested.",
+      "OS getaddrinfo cannot be forcibly interrupted; timed-out jobs retain bounded permits until actual completion.",
+      "New IANA IPv6 allocations require policy review; special-purpose globally reachable anycast exceptions deliberately refused."
+    ]
+  },
+  "dependencies": "Owned by feed_reader_review, not this agent. reqwest remains pinned0.12.28; tokio time/sync enabled; exact tokio-rustls0.26.6 and rcgen0.14.7 are test-only.",
+  "primary_sources": [
+    "https://docs.rs/reqwest/0.12.28/reqwest/struct.ClientBuilder.html",
+    "https://www.iana.org/assignments/iana-ipv4-special-registry/",
+    "https://www.iana.org/assignments/iana-ipv6-special-registry/",
+    "https://www.iana.org/assignments/ipv6-unicast-address-assignments/"
+  ],
+  "private_verification_sha256": "8859ff8b148d9625e609db1cadcbf481e667d92173ef53a176aa457e3e296d52"
+}

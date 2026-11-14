@@ -268,3 +268,86 @@ fn actual_native_304_requires_matching_retained_body_and_current_generation_at_f
     *pending.lock().unwrap() = false;
     assert!(matches!(poll(future.as_mut()), Poll::Ready(Err(_))));
 }
+
+#[test]
+fn concrete_public_https_factory_is_offline_inactive_and_preserves_provider_revocation() {
+    // A native/UniFFI caller has no Tokio reactor at construction or callback use.
+    assert!(tokio::runtime::Handle::try_current().is_err());
+    let session = FeedSourceSessionV1::public_https(config()).unwrap();
+    assert!(session.begin(source(), None).is_err());
+    session.activate(source()).unwrap();
+    let old = session.begin(source(), None).unwrap();
+    let calls = Arc::new(AtomicUsize::new(0));
+    session
+        .replace_provider(Box::new(Host {
+            pending: Arc::new(Mutex::new(false)),
+            calls: calls.clone(),
+        }))
+        .unwrap();
+    let mut old_future = Box::pin(old.execute());
+    assert!(matches!(poll(old_future.as_mut()), Poll::Ready(Err(_))));
+    assert_eq!(calls.load(Ordering::SeqCst), 0);
+    assert!(session.begin(source(), None).is_err());
+    session.activate(source()).unwrap();
+    let fresh = session.begin(source(), None).unwrap();
+    let mut fresh_future = Box::pin(fresh.execute());
+    let Poll::Ready(Ok(read)) = poll(fresh_future.as_mut()) else {
+        panic!("existing callback provider stopped working");
+    };
+    assert_eq!(read.body(), b"<rss/>");
+    assert_eq!(calls.load(Ordering::SeqCst), 1);
+    assert!(read.cache_condition().is_ok());
+    assert!(tokio::runtime::Handle::try_current().is_err());
+}
+
+fn wait_without_tokio<F: Future>(future: F) -> F::Output {
+    struct ThreadWake(std::thread::Thread);
+    impl std::task::Wake for ThreadWake {
+        fn wake(self: Arc<Self>) {
+            self.0.unpark();
+        }
+    }
+    let waker = Waker::from(Arc::new(ThreadWake(std::thread::current())));
+    let mut future = Box::pin(future);
+    let deadline = std::time::Instant::now() + std::time::Duration::from_secs(25);
+    loop {
+        if let Poll::Ready(result) = future.as_mut().poll(&mut Context::from_waker(&waker)) {
+            return result;
+        }
+        assert!(
+            std::time::Instant::now() < deadline,
+            "foreign-executor fetch did not finish"
+        );
+        std::thread::park_timeout(std::time::Duration::from_millis(50));
+    }
+}
+
+#[test]
+#[ignore = "Opt-in live public native factory; runs without a caller Tokio runtime"]
+fn public_https_factory_fetch_runs_on_owned_runtime_without_caller_tokio() {
+    assert!(tokio::runtime::Handle::try_current().is_err());
+    let url = std::env::var("BOOKNOOK_FEED_ACCEPTANCE_URL")
+        .expect("explicit public XML endpoint required");
+    let mut configuration: Value = serde_json::from_slice(&config()).unwrap();
+    configuration["feeds"]["subscriptions"][0]["url"] = json!(url);
+    let session = FeedSourceSessionV1::public_https(bytes(&configuration)).unwrap();
+    assert!(session.begin(source(), None).is_err());
+    session.activate(source()).unwrap();
+    let attempt = session.begin(source(), None).unwrap();
+    let read = wait_without_tokio(attempt.execute()).unwrap();
+    let response: Value = serde_json::from_str(&read.response().unwrap()).unwrap();
+    assert_eq!(response["provider_id"], "booknook.public-https.v1");
+    assert_eq!(response["body_sha256"], booknook_core::digest(&read.body()));
+    assert!(!read.body().is_empty());
+    assert!(read.cache_condition().is_ok()); // completed task must not cancel success
+    session
+        .replace_configuration(bytes(&configuration))
+        .unwrap();
+    assert!(read.cache_condition().is_err());
+    assert!(tokio::runtime::Handle::try_current().is_err());
+    println!(
+        "native foreign-executor production HTTPS: {} bytes sha256 {}",
+        read.body().len(),
+        response["body_sha256"]
+    );
+}

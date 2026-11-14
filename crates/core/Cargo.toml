@@ -25,3 +25,9 @@ nostr = { version = "0.44", default-features = false, features = ["std"] }
 
 schemars = "1"
 unicode-normalization = "0.1"
+
+# Bounded pull-reader preflight precedes the namespace-aware read-only DOM.
+quick-xml = { version = "=0.42.0", default-features = false }
+roxmltree = "=0.20.0"
+# Date parsing only: no clock, local timezone, or JavaScript Date API.
+chrono = { version = "=0.4.45", default-features = false, features = ["std"] }

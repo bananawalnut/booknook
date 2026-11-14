@@ -33,3 +33,7 @@ sdk/typescript/node_modules/.bin/tsc --noEmit --strict --target es2022 --module 
 # Actual async source provider, conditional-cache and guarded final-CAS runtime.
 node tests/feed-source-sdk.cjs sdk/typescript/pkg/nodejs/booknook_wasm.js target/sdk-check/index.js
 sdk/typescript/node_modules/.bin/tsc --noEmit --strict --target es2022 --module nodenext --moduleResolution nodenext tests/FeedSourceSDKTypes.mts
+
+# Pure bounded XML normalization through actual WASM and generated declarations.
+node tests/feed-xml-sdk.cjs sdk/typescript/pkg/nodejs/booknook_wasm.js target/sdk-check/index.js
+sdk/typescript/node_modules/.bin/tsc --noEmit --strict --target es2022 --module nodenext --moduleResolution nodenext tests/FeedXMLSDKTypes.mts

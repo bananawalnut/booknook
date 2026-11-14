@@ -106,6 +106,11 @@ pub(crate) fn uuid(value: &str) -> Result<()> {
     )
 }
 /// Syntax only. A canonical hostname may still resolve to a private address.
+pub fn validate_public_feed_endpoint(raw: &str) -> Result<()> {
+    endpoint(raw)
+}
+
+/// Shared exact syntax policy; network providers must also check DNS and peers.
 pub(crate) fn endpoint(raw: &str) -> Result<()> {
     require(
         raw.len() <= 2048
