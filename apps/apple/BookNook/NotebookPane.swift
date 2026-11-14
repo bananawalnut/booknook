@@ -35,7 +35,7 @@ struct NotebookPane: View {
                         }.disabled(adding).accessibilityIdentifier("notebook-add-note").buttonStyle(.borderless).font(.caption).foregroundStyle(nookInk.opacity(0.6))
                             .padding(.top, 12)
                     }.padding(.horizontal, 16).padding(.top, 16).padding(.bottom, 40)
-                }.accessibilityLabel("Notebook")
+                }.accessibilityLabel("Margin")
                     .onChange(of: model.notebookScrollTarget) { _, target in
                         if let target { withAnimation { proxy.scrollTo("\(target):\(model.editorGeneration)", anchor: .top) } }
                     }

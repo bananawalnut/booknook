@@ -33,11 +33,11 @@ struct ReadingDeskView: View {
                 Spacer(minLength: 12)
                 if model.saving { ProgressView().controlSize(.small).accessibilityLabel("Saving locally") }
                 Button { changeWorkspace { notebookOnRight.toggle() } } label: {
-                    Image(systemName: "rectangle.split.2x1").frame(width: 36, height: 36)
+                    Image(systemName: "arrow.left.arrow.right").frame(width: 36, height: 36)
                 }
-                .accessibilityLabel(notebookOnRight ? "Notebook on left" : "Notebook on right")
-                .accessibilityValue(notebookOnRight ? "Notebook currently on right" : "Notebook currently on left")
-                .help(notebookOnRight ? "Move notebook to the left" : "Move notebook to the right")
+                .accessibilityLabel(notebookOnRight ? "Margin on left" : "Margin on right")
+                .accessibilityValue(notebookOnRight ? "Margin currently on right" : "Margin currently on left")
+                .help(notebookOnRight ? "Move Margin to the left" : "Move Margin to the right")
                 .disabled(changingWorkspace)
                 Menu {
                     Menu("Reading passes") {
@@ -93,15 +93,15 @@ struct ReadingDeskView: View {
                     notebookFraction: splitFraction(in: size, translation: drag.translation.width))
                 notebookFraction = Double(next.notebook.width / available)
             })
-            .accessibilityElement().accessibilityLabel("Resize notebook and book")
-            .accessibilityValue("Notebook \(Int(current * 100)) percent")
+            .accessibilityElement().accessibilityLabel("Resize Margin and book")
+            .accessibilityValue("Margin \(Int(current * 100)) percent")
             .accessibilityAdjustableAction { direction in
                 let fraction = current + (direction == .increment ? 0.05 : -0.05)
                 let next = NotebookPaneFrames(size: size, notebookOnRight: notebookOnRight, notebookFraction: fraction)
                 notebookFraction = Double(next.notebook.width / available)
             }
             .accessibilityAction(named: Text("Equal pane widths")) { notebookFraction = 0.5 }
-            .help("Drag to resize the notebook and book")
+            .help("Drag to resize Margin and book")
     }
     func changeWorkspace(_ change: @escaping () -> Void) {
         guard !changingWorkspace else { return }

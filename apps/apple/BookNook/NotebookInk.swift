@@ -26,12 +26,12 @@ struct NotebookInkBlockView<Actions: View>: View {
         HStack(alignment: .top, spacing: 12) {
             VStack(spacing: 4) {
                 Button(action: flip) {
-                    Image(systemName: whiteboard ? "text.alignleft" : "rectangle.portrait.on.rectangle.portrait.angled")
+                    Image(systemName: "arrow.2.squarepath")
                         .frame(width: 44, height: 44).contentShape(Rectangle())
                 }.disabled(isFlipping)
-                    .accessibilityLabel(whiteboard ? "Show note text" : "Flip note to whiteboard")
+                    .accessibilityLabel(whiteboard ? "Show note text" : "Flip note to Scribble")
                     .accessibilityIdentifier("notebook-face-\(session.blockID)")
-                    .help(whiteboard ? "Show note text" : "Flip this note to its whiteboard")
+                    .help(whiteboard ? "Show note text" : "Flip this note to Scribble")
                 Button(action: addCharacter) {
                     Image(systemName: "person.crop.rectangle.badge.plus").frame(width: 44, height: 44).contentShape(Rectangle())
                 }.accessibilityLabel("Add character card to this note")
@@ -67,7 +67,7 @@ struct NotebookInkBlockView<Actions: View>: View {
                     Text(noteLabel).font(.caption.weight(.medium))
                     if let contextLabel { Text(contextLabel).font(.caption2).lineLimit(2) }
                     Spacer(minLength: 0)
-                    if whiteboard { Text("Whiteboard").font(.caption2) }
+                    if whiteboard { Text("Scribble").font(.caption2) }
                 }.foregroundStyle(nookInk.opacity(0.55))
                 #if os(iOS)
                 NotebookNoteFaces(text: $text, styles: $styles, formatRequest: formatRequest,
@@ -83,7 +83,7 @@ struct NotebookInkBlockView<Actions: View>: View {
                 }.frame(height: whiteboard ? 480 : 210)
                 #endif
                 if whiteboard && tools.atLimit {
-                    Text("You have reached this board’s coordinate limit. Add another note to keep drawing.")
+                    Text("This Scribble has reached its coordinate limit. Add another note to keep drawing.")
                         .font(.caption).foregroundStyle(.secondary)
                 }
                 if session.needsVersionChoice {

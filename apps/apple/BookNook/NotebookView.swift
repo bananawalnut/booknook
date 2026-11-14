@@ -47,7 +47,7 @@ struct NoteBlockView: View {
                         }
                     }
                 }
-                Button { notebookHistory = true } label: { Label("Notebook revision history", systemImage: "clock.arrow.circlepath") }
+                Button { notebookHistory = true } label: { Label("Note revision history", systemImage: "clock.arrow.circlepath") }
                 Button { shareCommit.clearError(); shareText = text; sharing = true } label: { Label("Prepare selected note for sharing", systemImage: "square.and.arrow.up") }.disabled(text.isEmpty)
                 Text("\(text.split(whereSeparator: \.isWhitespace).count) words")
             }

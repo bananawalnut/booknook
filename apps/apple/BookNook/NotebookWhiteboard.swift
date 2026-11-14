@@ -64,7 +64,7 @@ final class NotebookWhiteboardHost: UIView, PKCanvasViewDelegate {
         canvas.panGestureRecognizer.minimumNumberOfTouches = 2
         canvas.panGestureRecognizer.maximumNumberOfTouches = 2
         canvas.panGestureRecognizer.allowedTouchTypes = [NSNumber(value: UITouch.TouchType.direct.rawValue)]
-        canvas.accessibilityLabel = "Note whiteboard"
+        canvas.accessibilityLabel = "Scribble canvas for this note"
         canvas.accessibilityHint = "Draw with a finger or Pencil. Pan with two fingers and pinch to zoom."
         canvas.accessibilityIdentifier = "notebook-whiteboard-\(session.blockID)"
         session.capturePendingStroke = { [weak self] in self?.capture() }
@@ -295,7 +295,7 @@ final class NotebookMacBoardView: NSView {
     init(tools: NotebookWhiteboardTools) {
         super.init(frame: .zero)
         setAccessibilityElement(true); setAccessibilityRole(.image)
-        setAccessibilityLabel("Note whiteboard. Drag or scroll to pan; pinch or use the menu to zoom. Pencil originals are read-only on Mac.")
+        setAccessibilityLabel("Scribble canvas for this note. Drag or scroll to pan; pinch or use the menu to zoom. Pencil originals are read-only on Mac.")
         tools.zoomIn = { [weak self] in self?.changeZoom(1.25) }; tools.zoomOut = { [weak self] in self?.changeZoom(0.8) }
         tools.home = { [weak self] in self?.origin = .zero; self?.zoom = 1; self?.needsDisplay = true }
     }

@@ -137,7 +137,7 @@ struct NativeNotebookEditor: NSViewRepresentable {
         view.isRichText = true; view.importsGraphics = false; view.allowsUndo = true
         view.isVerticallyResizable = true; view.isHorizontallyResizable = false; view.autoresizingMask = [.width]
         view.textContainer?.widthTracksTextView = true; view.textContainerInset = NSSize(width: 4, height: 10)
-        view.drawsBackground = false; view.setAccessibilityLabel("Notebook text"); view.delegate = context.coordinator
+        view.drawsBackground = false; view.setAccessibilityLabel("Note text"); view.delegate = context.coordinator
         installNotebookContent(text, styles: styles, in: view); context.coordinator.lastText = text; context.coordinator.lastStyles = styles
         view.changed = { [weak view, weak coordinator = context.coordinator] in if let view { coordinator?.capture(view) } }
         scroll.documentView = view
@@ -264,7 +264,7 @@ struct NativeNotebookEditor: UIViewRepresentable {
         let view = NotebookTextView(usingTextLayoutManager: true); view.delegate = coordinator
         view.allowsEditingTextAttributes = true
         installNotebookContent(text, styles: styles, in: view); coordinator.lastText = text; coordinator.lastStyles = styles
-        view.adjustsFontForContentSizeCategory = true; view.backgroundColor = .clear; view.accessibilityLabel = "Notebook text"
+        view.adjustsFontForContentSizeCategory = true; view.backgroundColor = .clear; view.accessibilityLabel = "Note text"
         coordinator.setPaneActive(active ?? notebookPaneActive, view: view)
         return view
     }

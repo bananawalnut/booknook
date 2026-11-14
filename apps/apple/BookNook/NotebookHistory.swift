@@ -39,7 +39,7 @@ struct NotebookHistoryView: View {
             Text("Your thought, over time").font(.system(.title2, design: .serif))
             Text("Restoring creates a new saved revision. Earlier writing remains recoverable.").foregroundStyle(.secondary)
             if loading { ProgressView().frame(maxWidth: .infinity, minHeight: 200) }
-            else if versions.isEmpty { ContentUnavailableView("No earlier writing yet", systemImage: "clock.arrow.circlepath", description: Text("Committed notebook edits are saved automatically.")) }
+            else if versions.isEmpty { ContentUnavailableView("No earlier writing yet", systemImage: "clock.arrow.circlepath", description: Text("Note edits are saved automatically.")) }
             else {
                 Picker("Saved revision", selection: $selected) {
                     ForEach(versions) { version in Text("\(Date(timeIntervalSince1970: Double(version.at)).formatted()) · \(version.reader.prefix(12))").tag(Optional(version.id)) }
