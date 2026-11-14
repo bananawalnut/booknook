@@ -1,6 +1,6 @@
 use booknook_core::feeds::{FeedConfiguration, FeedSection, ImportReview};
 use booknook_native::{
-    FeedImportReviewV1, FeedProjectionReviewV1, empty_feed_configuration_v1,
+    FeedExportReviewV1, FeedImportReviewV1, FeedProjectionReviewV1, empty_feed_configuration_v1,
     validate_feed_configuration_v1, validate_feed_section_v1,
 };
 use serde_json::{Value, json};
@@ -173,4 +173,53 @@ fn native_projection_preserves_exact_origin_and_removes_unreferenced_private_lab
             .len(),
         2
     );
+}
+
+#[test]
+fn native_portable_export_is_origin_free_closed_and_bound_to_canonical_configuration() {
+    let current = config(section());
+    let current_raw = bytes(&current);
+    let selection = json!({"schema":"booknook.feed-export-selection.v1",
+        "subscriptionIds":[current["feeds"]["subscriptions"][0]["id"]],
+        "collectionIds":[current["feeds"]["collections"][0]["id"]],
+        "memberships":[{"subscriptionId":current["feeds"]["subscriptions"][0]["id"],
+        "collectionIds":[current["feeds"]["collections"][0]["id"]]}]});
+    let review = FeedExportReviewV1::new(current_raw.clone(), bytes(&selection)).unwrap();
+    let output = review
+        .confirm([current_raw.as_slice(), b" \n"].concat())
+        .unwrap();
+    assert_eq!(object(output.clone()), current["feeds"]);
+    assert_eq!(object(review.preview().unwrap()), current["feeds"]);
+    assert!(FeedSection::parse(output.as_bytes()).is_ok());
+    let empty = bytes(&FeedConfiguration::empty());
+    let imported = FeedImportReviewV1::new(empty.clone(), Some(output.into_bytes())).unwrap();
+    assert_eq!(
+        object(
+            imported
+                .confirm(empty, Some(review.preview().unwrap().into_bytes()))
+                .unwrap()
+        )["feeds"],
+        current["feeds"]
+    );
+    let mut changed = current.clone();
+    changed["revision"] = json!(1);
+    assert!(review.confirm(bytes(&changed)).is_err());
+    changed = current.clone();
+    changed["feeds"]["subscriptions"][0]["title"] = json!("edited");
+    assert!(review.confirm(bytes(&changed)).is_err());
+    changed = current.clone();
+    changed["feeds"]["subscriptions"][0]["disclosure"] = json!("private");
+    assert!(FeedExportReviewV1::new(bytes(&changed), bytes(&selection)).is_err());
+    let text = String::from_utf8(bytes(&selection)).unwrap();
+    for invalid in [
+        text.replacen('{', "{\"origin\":\"https://reader.example.org\",", 1),
+        text.replacen('{', "{\"subscription\\u0049ds\":[],", 1),
+        text.replace(
+            "\"schema\":\"booknook.feed-export-selection.v1\"",
+            "\"schema\":{\"booknook.feed-export-selection.v1\":null}",
+        ),
+    ] {
+        assert!(FeedExportReviewV1::new(current_raw.clone(), invalid.into_bytes()).is_err());
+    }
+    assert!(FeedExportReviewV1::new(current_raw, vec![0xc3, 0x28]).is_err());
 }

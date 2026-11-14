@@ -66,7 +66,44 @@ private func rejected(_ operation: () throws -> Void) {
         precondition((selected["collections"] as! [Any]).isEmpty)
         precondition(!output.contains(orphan) && !output.contains("Private orphan"))
         rejected { _ = try projection.confirm(configuration: config, origin:"https://reader.example.org/") }
+        rejected { _ = try BookNookFeedsV1.validateSection(Data(output.utf8)) }
         projection.close(); rejected { _ = try projection.preview() }
-        print("Actual generated UniFFI Swift feed SDK: 102 raw vectors, exact-review conflicts/staleness, opaque lifecycle and origin/collection closure passed.")
+        let collectionID = (section["collections"] as! [[String: Any]])[0]["id"] as! String
+        let exportChoices: [String: Any] = ["schema":"booknook.feed-export-selection.v1", "subscriptionIds":[sourceID], "collectionIds":[collectionID], "memberships":[["subscriptionId":sourceID,"collectionIds":[collectionID]]]]
+        let exportBytes = try bytes(exportChoices)
+        let portable = try BookNookFeedsV1.reviewExport(configuration: currentBytes, selection: exportBytes)
+        var equivalent = currentBytes; equivalent.append(contentsOf: [0x20, 0x0a])
+        let portableOutput = try portable.confirm(configuration: equivalent)
+        let portableObject = try object(portableOutput)
+        let portablePreview = try portable.preview()
+        precondition(NSDictionary(dictionary: portableObject).isEqual(to: section))
+        precondition(portablePreview == portableOutput)
+        _ = try BookNookFeedsV1.validateSection(Data(portableOutput.utf8))
+        let empty = Data(try BookNookFeedsV1.emptyConfiguration().utf8)
+        let imported = try BookNookFeedsV1.reviewImport(configuration: empty, incoming: Data(portableOutput.utf8))
+        let importedSection = try object(imported.confirm(configuration: empty, incoming: Data(portableOutput.utf8)))["feeds"] as! [String: Any]
+        precondition(NSDictionary(dictionary: importedSection).isEqual(to: section)); imported.close()
+        rejected { _ = try portable.confirm(configuration: bytes(changed)) }
+        var privateSection = section
+        var privateSources = section["subscriptions"] as! [[String: Any]]
+        privateSources[0]["disclosure"] = "private"; privateSection["subscriptions"] = privateSources
+        rejected { _ = try BookNookFeedsV1.reviewExport(configuration: bytes(["schema":"booknook.feed-configuration.v1","revision":0,"feeds":privateSection]), selection: exportBytes) }
+        let text = String(decoding: exportBytes, as: UTF8.self)
+        for invalid in [text.replacingCharacters(in: text.startIndex...text.startIndex, with:"{\"origin\":\"https://reader.example.org\","), text.replacingCharacters(in: text.startIndex...text.startIndex, with:"{\"subscription\\u0049ds\":[],"), text.replacingOccurrences(of:"\"schema\":\"booknook.feed-export-selection.v1\"", with:"\"schema\":{\"booknook.feed-export-selection.v1\":null}")] {
+            rejected { _ = try BookNookFeedsV1.reviewExport(configuration: currentBytes, selection: Data(invalid.utf8)) }
+        }
+        rejected { _ = try BookNookFeedsV1.reviewExport(configuration: currentBytes, selection: Data([0xc3,0x28])) }
+        for sourceIDs in [[sourceID], []] {
+            let memberships: [[String: Any]] = sourceIDs.map { ["subscriptionId":$0,"collectionIds":[]] }
+            let chosen = try bytes(["schema":"booknook.feed-export-selection.v1","subscriptionIds":sourceIDs,"collectionIds":[orphan],"memberships":memberships] as [String: Any])
+            let orphanReview = try BookNookFeedsV1.reviewExport(configuration: config, selection: chosen)
+            let result = try orphanReview.confirm(configuration: config)
+            precondition(!result.contains(orphan) && !result.contains("Private orphan"))
+            let resultObject = try object(result)
+            precondition((resultObject["collections"] as! [Any]).isEmpty)
+            orphanReview.close()
+        }
+        portable.close(); rejected { _ = try portable.preview() }; rejected { _ = try portable.confirm(configuration: currentBytes) }; portable.close()
+        print("Actual generated UniFFI Swift feed SDK: 102 raw vectors, exact-review conflicts/staleness, opaque lifecycle, origin/collection closure and origin-free export/reimport passed.")
     }
 }

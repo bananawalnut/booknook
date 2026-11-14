@@ -39,6 +39,36 @@ const selection={schema:'booknook.feed-disclosure-selection.v1',origin:'https://
 const projection=new core.FeedProjectionReviewV1(bytes(expanded),bytes(selection));
 try{const selected=object(projection.confirm(bytes(expanded),selection.origin));assert.equal(selected.feeds.collections.length,0);assert.deepEqual(selected.feeds.subscriptions[0].collectionIds,[]);assert.ok(!JSON.stringify(selected).includes(orphan));assert.ok(!JSON.stringify(selected).includes('Private orphan'));assert.deepEqual(object(projection.preview()),selected);assert.throws(()=>projection.confirm(bytes(expanded),selection.origin+'/'));assert.throws(()=>projection.confirm(bytes({...expanded,revision:1}),selection.origin));}finally{projection.free();}
 assert.equal(expanded.feeds.collections.length,2);
+const exportSelection={schema:'booknook.feed-export-selection.v1',subscriptionIds:[section.subscriptions[0].id],collectionIds:[section.collections[0].id],memberships:[{subscriptionId:section.subscriptions[0].id,collectionIds:[section.collections[0].id]}]};
+const portable=new core.FeedExportReviewV1(current,bytes(exportSelection));
+let exported;
+try{
+ exported=portable.confirm(bytes(JSON.stringify(configuration)+' \n'));assert.deepEqual(object(exported),section);assert.equal(portable.preview(),exported);
+ assert.deepEqual(object(core.validate_feed_section_v1(bytes(exported))),section);
+ assert.throws(()=>portable.confirm(bytes({...configuration,revision:1})));
+ const edited=structuredClone(configuration);edited.feeds.subscriptions[0].title+='!';assert.throws(()=>portable.confirm(bytes(edited)));
+}finally{portable.free();}
+const emptyCurrent=bytes(object(core.empty_feed_configuration_v1()));
+const reimport=new core.FeedImportReviewV1(emptyCurrent,bytes(exported));try{assert.deepEqual(object(reimport.confirm(emptyCurrent,bytes(exported))).feeds,section);}finally{reimport.free();}
+const privateCurrent=structuredClone(configuration);privateCurrent.feeds.subscriptions[0].disclosure='private';
+assert.throws(()=>new core.FeedExportReviewV1(bytes(privateCurrent),bytes(exportSelection)));assert.equal(privateCurrent.feeds.subscriptions[0].disclosure,'private');
+for(const invalid of [
+ JSON.stringify(exportSelection).replace('{','{"origin":"https://reader.example.org",'),
+ JSON.stringify(exportSelection).replace('{','{"subscriptionIds":[],'),
+ JSON.stringify(exportSelection).replace('{','{"subscription\\u0049ds":[],'),
+ bytes({...exportSelection,schema:{'booknook.feed-export-selection.v1':null}}),
+ new Uint8Array([0xc3,0x28]),
+ bytes({...exportSelection,memberships:[]}),
+ bytes({...exportSelection,collectionIds:[]}),
+ bytes({...exportSelection,subscriptionIds:[section.subscriptions[0].id,section.subscriptions[0].id]}),
+])assert.throws(()=>new core.FeedExportReviewV1(current,typeof invalid==='string'?bytes(invalid):invalid));
+const orphanChoice={...exportSelection,collectionIds:[orphan],memberships:[{subscriptionId:section.subscriptions[0].id,collectionIds:[]}]};
+for(const chosen of [orphanChoice,{...orphanChoice,subscriptionIds:[],memberships:[]}]){
+ const p=new core.FeedExportReviewV1(bytes(expanded),bytes(chosen));try{const output=p.confirm(bytes(expanded));const value=object(output);assert.equal(value.collections.length,0);assert.ok(!output.includes(orphan));assert.equal(value.subscriptions.length,chosen.subscriptionIds.length);}finally{p.free();}
+}
+assert.equal(expanded.feeds.collections.length,2);
+const disclosure=new core.FeedProjectionReviewV1(current,bytes({...exportSelection,schema:'booknook.feed-disclosure-selection.v1',origin:'https://reader.example.org'}));
+try{assert.throws(()=>core.validate_feed_section_v1(bytes(disclosure.preview())));}finally{disclosure.free();}
 if(process.argv[3]){
  const sdk=require(path.resolve(process.argv[3]));
  for(const c of corpus.cases){if(c.valid)assert.deepEqual(sdk.validateFeedSectionV1(core,bytes(c.raw)),object(c.raw),c.id);else assert.throws(()=>sdk.validateFeedSectionV1(core,bytes(c.raw)),undefined,c.id);}
@@ -47,8 +77,12 @@ if(process.argv[3]){
  assert.equal(changed.confirm(current,raw).revision,1);assert.throws(()=>wrapped.resolve(current,bytes(JSON.stringify(incoming)+' '),choices));
  changed.close();assert.throws(()=>changed.confirm(current,raw),/closed/i);changed.close();wrapped.close();assert.throws(()=>wrapped.preview(),/closed/i);
  const selected=sdk.BookNookFeedProjectionReviewV1.prepare(core,bytes(expanded),bytes(selection));assert.equal(selected.confirm(bytes(expanded),selection.origin).feeds.collections.length,0);selected.close();assert.throws(()=>selected.preview(),/closed/i);
+ const exportedReview=sdk.BookNookFeedExportReviewV1.prepare(core,current,bytes(exportSelection));
+ assert.deepEqual(exportedReview.preview(),section);assert.deepEqual(exportedReview.confirm(bytes(JSON.stringify(configuration)+' ')),section);
+ assert.throws(()=>sdk.BookNookFeedExportReviewV1.prepare(core,current,bytes(JSON.stringify(exportSelection).replace('{','{"subscriptionIds":[],'))));
+ exportedReview.close();assert.throws(()=>exportedReview.preview(),/closed/i);assert.throws(()=>exportedReview.confirm(current),/closed/i);exportedReview.close();
 }
-console.log('Actual WASM feed SDK: 102 raw vectors, exact-review conflict/stale checks, inert absence, origin/collection closure'+(process.argv[3]?' and real TypeScript wrapper lifecycle':'')+' passed.');
+console.log('Actual WASM feed SDK: 102 raw vectors, exact-review conflict/stale checks, inert absence, origin/collection closure, origin-free export/reimport'+(process.argv[3]?' and real TypeScript wrapper lifecycle':'')+' passed.');
 
 }
 main().catch(error=>{console.error(error);process.exitCode=1;});

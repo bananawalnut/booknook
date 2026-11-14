@@ -169,3 +169,9 @@ Shared preservation source is merged in [Wallet PR23](https://github.com/ZenithR
 ## Later work
 
 Public RSS/Atom output uses only explicitly reviewed already-public ShareDraft/review/list snapshots. It does not publish private notebook text, purchased book content, private groups, subscription lists or reading history by implication. Rich component hints remain small, allowlisted data interpreted by trusted installed renderers with readable fallbacks. Feed-supplied code and renderer URLs are excluded. Both extensions remain later DevGraph work.
+
+## Origin-free settings export SDK
+
+A native settings file has no website destination. The additive closed `booknook.feed-export-selection.v1` request contains `subscriptionIds`, `collectionIds` and explicit `memberships`, with no origin. Opaque core/native/Swift/WASM/TypeScript reviews return the existing raw `castalia.feeds-section.v1`, which the original strict import accepts unchanged. Choosing export never marks a private source selected; eligibility is a separate reviewed configuration edit. Only chosen memberships survive and orphan labels are omitted.
+
+Confirmation preserves Book Nook’s canonical configuration/revision semantics: equivalent JSON whitespace/key order remains acceptable, while changed revision/content refuses. Existing origin-bound projection and its stricter HTTPS policy are unchanged. [Focused export qualification](feed-export-evidence.json) passes17 core cases,4 native cases, all102 canonical vectors through actual fresh/saved Swift and Node/web-target WASM consumers, typed wrapper lifecycle, old TypeScript adapter compatibility and strict Clippy. The saved Swift dylib’s actual loading is explicitly verified. No app file operations, network, device or release-package qualification is inferred. The separately reproduced legacy enum-tag alias mismatch is tracked as Issue/booknook-feed-string-enums (D135); the new export-selection schema already requires its literal string.

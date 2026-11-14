@@ -1,6 +1,7 @@
 use booknook_core::feeds::{
-    ConflictResolution, ConflictTarget, DisclosureSelection, FeedConfiguration, FeedDisclosure,
-    FeedSection, ImportReview, MembershipSelection, ProjectionReview, ResolutionChoice,
+    ConflictResolution, ConflictTarget, DisclosureSelection, ExportReview, ExportSelection,
+    FeedConfiguration, FeedDisclosure, FeedSection, ImportReview, MembershipSelection,
+    ProjectionReview, ResolutionChoice,
 };
 use serde_json::{Value, json};
 
@@ -235,6 +236,138 @@ fn selected_config() -> FeedConfiguration {
     feeds.subscriptions.extend(private.subscriptions);
     feeds.collections.extend(private.collections);
     configured(feeds)
+}
+
+fn export_selection() -> ExportSelection {
+    ExportSelection::parse(&raw(&json!({
+        "schema":"booknook.feed-export-selection.v1",
+        "subscriptionIds":[id(1)], "collectionIds":[id(101)],
+        "memberships":[{"subscriptionId":id(1),"collectionIds":[id(101)]}]
+    })))
+    .unwrap()
+}
+
+#[test]
+fn portable_export_returns_reimportable_raw_section_without_mutating_source() {
+    let mut current = selected_config();
+    current.feeds.subscriptions[0].title = "e\u{301} 👩‍👩‍👧‍👦".into();
+    current.feeds.subscriptions[0].url = "https://reader.example.org/%c3%a9/feed.xml".into();
+    let before = current.clone();
+    let review = ExportReview::prepare(&current, &export_selection()).unwrap();
+    let exported = review.confirm(&current).unwrap();
+    assert_eq!(review.candidate(), &exported);
+    assert_eq!(exported.subscriptions, current.feeds.subscriptions[..1]);
+    assert_eq!(exported.collections, current.feeds.collections[..1]);
+    let encoded = raw(&exported);
+    let value: Value = serde_json::from_slice(&encoded).unwrap();
+    assert_eq!(value["schema"], "castalia.feeds-section.v1");
+    assert!(value.get("origin").is_none());
+    assert!(value.get("feeds").is_none());
+    assert_eq!(FeedSection::parse(&encoded).unwrap(), exported);
+    let empty = FeedConfiguration::empty();
+    assert_eq!(
+        ImportReview::prepare(&empty, Some(&encoded))
+            .unwrap()
+            .confirm(&empty, Some(&encoded))
+            .unwrap()
+            .feeds,
+        exported
+    );
+    assert_eq!(current, before);
+    let equivalent = FeedConfiguration::parse(&[raw(&current), b" \n".to_vec()].concat()).unwrap();
+    assert_eq!(review.confirm(&equivalent).unwrap(), exported);
+    let mut stale = current.clone();
+    stale.revision += 1;
+    assert!(review.confirm(&stale).is_err());
+    stale = current.clone();
+    stale.feeds.subscriptions[0].title.push('!');
+    assert!(review.confirm(&stale).is_err());
+}
+
+#[test]
+fn portable_export_closes_labels_and_requires_explicit_eligible_memberships() {
+    let current = selected_config();
+    let before = current.clone();
+    let mut chosen = export_selection();
+    chosen.collection_ids.push(id(102));
+    chosen.memberships[0].collection_ids.clear();
+    let exported = ExportReview::prepare(&current, &chosen)
+        .unwrap()
+        .confirm(&current)
+        .unwrap();
+    assert!(exported.collections.is_empty());
+    assert!(exported.subscriptions[0].collection_ids.is_empty());
+    assert!(
+        !String::from_utf8(raw(&exported))
+            .unwrap()
+            .contains(&id(102))
+    );
+    chosen.subscription_ids.clear();
+    chosen.memberships.clear();
+    assert_eq!(
+        ExportReview::prepare(&current, &chosen)
+            .unwrap()
+            .confirm(&current)
+            .unwrap(),
+        FeedSection::empty()
+    );
+    let good = export_selection();
+    let mut cases = Vec::new();
+    let mut bad = good.clone();
+    bad.subscription_ids.push(id(1));
+    cases.push(bad);
+    let mut bad = good.clone();
+    bad.subscription_ids[0] = id(999);
+    cases.push(bad);
+    let mut bad = good.clone();
+    bad.memberships.clear();
+    cases.push(bad);
+    let mut bad = good.clone();
+    bad.memberships.push(bad.memberships[0].clone());
+    cases.push(bad);
+    let mut bad = good.clone();
+    bad.collection_ids.clear();
+    cases.push(bad);
+    let mut bad = good.clone();
+    bad.collection_ids.push(id(102));
+    bad.memberships[0].collection_ids.push(id(102));
+    cases.push(bad);
+    let mut bad = good;
+    bad.subscription_ids[0] = id(2);
+    bad.memberships[0].subscription_id = id(2);
+    bad.memberships[0].collection_ids.clear();
+    cases.push(bad);
+    for bad in cases {
+        assert!(ExportReview::prepare(&current, &bad).is_err(), "{bad:?}");
+    }
+    assert_eq!(current, before);
+}
+
+#[test]
+fn portable_export_selection_raw_json_is_closed_bounded_and_duplicate_safe() {
+    let chosen = raw(&export_selection());
+    let text = String::from_utf8(chosen.clone()).unwrap();
+    for bad in [
+        text.replacen("{", "{\"origin\":\"https://reader.example.org\",", 1),
+        text.replacen("{", "{\"subscriptionIds\":[],", 1),
+        text.replacen("{", "{\"subscription\\u0049ds\":[],", 1),
+        text.replace(
+            "\"schema\":\"booknook.feed-export-selection.v1\"",
+            "\"schema\":{\"booknook.feed-export-selection.v1\":null}",
+        ),
+        text.replacen(
+            "booknook.feed-export-selection.v1",
+            "booknook.feed-disclosure-selection.v1",
+            1,
+        ),
+    ] {
+        assert!(ExportSelection::parse(bad.as_bytes()).is_err(), "{bad}");
+    }
+    assert!(ExportSelection::parse(&[0xc3, 0x28]).is_err());
+    assert!(ExportSelection::parse(&[]).is_err());
+    let exact = [chosen.as_slice(), &vec![b' '; 256 * 1024 - chosen.len()]].concat();
+    assert!(ExportSelection::parse(&exact).is_ok());
+    assert!(ExportSelection::parse(&[exact.as_slice(), b" "].concat()).is_err());
 }
 
 #[test]

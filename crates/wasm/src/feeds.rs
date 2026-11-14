@@ -2,8 +2,8 @@
 //! Byte-preserving feed SDK over the same Rust review objects as UniFFI.
 //! No review is deserializable. Dropping/freeing objects ends their lifetime.
 use booknook_core::feeds::{
-    ConflictResolution, DisclosureSelection, FeedConfiguration, FeedSection, ImportReview,
-    ProjectionReview,
+    ConflictResolution, DisclosureSelection, ExportReview, ExportSelection, FeedConfiguration,
+    FeedSection, ImportReview, ProjectionReview,
 };
 use wasm_bindgen::prelude::*;
 fn failure(error: booknook_core::Error) -> JsValue {
@@ -98,5 +98,30 @@ impl FeedProjectionReviewV1 {
     pub fn confirm(&self, configuration_bytes: &[u8], origin: &str) -> Result<String, JsValue> {
         let current = FeedConfiguration::parse(configuration_bytes).map_err(failure)?;
         encode(&self.inner.confirm(&current, origin).map_err(failure)?)
+    }
+}
+#[wasm_bindgen]
+pub struct FeedExportReviewV1 {
+    inner: ExportReview,
+}
+#[wasm_bindgen]
+impl FeedExportReviewV1 {
+    #[wasm_bindgen(constructor)]
+    pub fn new(
+        configuration_bytes: &[u8],
+        selection_bytes: &[u8],
+    ) -> Result<FeedExportReviewV1, JsValue> {
+        let current = FeedConfiguration::parse(configuration_bytes).map_err(failure)?;
+        let selection = ExportSelection::parse(selection_bytes).map_err(failure)?;
+        Ok(Self {
+            inner: ExportReview::prepare(&current, &selection).map_err(failure)?,
+        })
+    }
+    pub fn preview(&self) -> Result<String, JsValue> {
+        encode(self.inner.candidate())
+    }
+    pub fn confirm(&self, configuration_bytes: &[u8]) -> Result<String, JsValue> {
+        let current = FeedConfiguration::parse(configuration_bytes).map_err(failure)?;
+        encode(&self.inner.confirm(&current).map_err(failure)?)
     }
 }

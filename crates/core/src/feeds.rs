@@ -573,6 +573,46 @@ impl DisclosureSelection {
         }
     }
 }
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+pub enum ExportSelectionSchema {
+    #[serde(rename = "booknook.feed-export-selection.v1")]
+    V1,
+}
+impl<'de> Deserialize<'de> for ExportSelectionSchema {
+    fn deserialize<D: serde::Deserializer<'de>>(
+        deserializer: D,
+    ) -> std::result::Result<Self, D::Error> {
+        let value = String::deserialize(deserializer)?;
+        if value == "booknook.feed-export-selection.v1" {
+            Ok(Self::V1)
+        } else {
+            Err(serde::de::Error::custom(
+                "Unknown feed export selection schema",
+            ))
+        }
+    }
+}
+/// Origin-free choices for a portable settings file. Source eligibility is a
+/// separate reviewed configuration edit; choosing a source never changes it.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct ExportSelection {
+    pub schema: ExportSelectionSchema,
+    pub subscription_ids: Vec<String>,
+    pub collection_ids: Vec<String>,
+    pub memberships: Vec<MembershipSelection>,
+}
+impl ExportSelection {
+    /// Parse original bounded bytes, including duplicate-key checks. Preparing
+    /// the review additionally checks every choice against the current source.
+    pub fn parse(raw: &[u8]) -> Result<Self> {
+        require(
+            !raw.is_empty() && raw.len() <= MAX_SECTION_BYTES,
+            "Feed export selection JSON exceeds its byte limit or is empty",
+        )?;
+        crate::strict_parse(raw)
+    }
+}
 fn exact_origin(raw: &str) -> Result<()> {
     require(
         raw.len() <= 2048,
@@ -606,6 +646,91 @@ impl SelectedFeedProjection {
         &self.feeds
     }
 }
+/// Shared closure for file export and origin-bound projection. Preserve source
+/// order, include only explicit memberships and omit every unreferenced label.
+fn selected_section(
+    current: &FeedConfiguration,
+    subscription_ids: &[String],
+    collection_ids: &[String],
+    selected_memberships: &[MembershipSelection],
+) -> Result<FeedSection> {
+    let subscriptions = unique_ids(subscription_ids, MAX_SUBSCRIPTIONS)?;
+    let collections = unique_ids(collection_ids, MAX_COLLECTIONS)?;
+    require(
+        selected_memberships.len() == subscriptions.len(),
+        "Every selected feed needs an explicit collection membership choice",
+    )?;
+    let mut memberships = BTreeMap::new();
+    for membership in selected_memberships {
+        uuid(&membership.subscription_id)?;
+        require(
+            subscriptions.contains(membership.subscription_id.as_str()),
+            "Membership choice names an unselected feed",
+        )?;
+        let references = unique_ids(&membership.collection_ids, MAX_COLLECTION_REFERENCES)?;
+        require(
+            references.iter().all(|id| collections.contains(id)),
+            "Feed membership requires an explicitly selected collection label",
+        )?;
+        require(
+            memberships
+                .insert(membership.subscription_id.as_str(), references)
+                .is_none(),
+            "Duplicate feed membership choice",
+        )?;
+    }
+    for id in &subscriptions {
+        let source = current
+            .feeds
+            .subscriptions
+            .iter()
+            .find(|source| source.id == **id)
+            .ok_or_else(|| invalid("Selected feed does not exist"))?;
+        require(
+            source.disclosure == FeedDisclosure::Selected,
+            "Private feed must first be marked selected through a reviewed configuration edit",
+        )?;
+        let references = memberships
+            .get(id)
+            .ok_or_else(|| invalid("Selected feed has no explicit membership choice"))?;
+        require(
+            references
+                .iter()
+                .all(|id| source.collection_ids.iter().any(|original| original == id)),
+            "Selected membership is not part of this feed",
+        )?;
+    }
+    require(
+        collections.iter().all(|id| {
+            current
+                .feeds
+                .collections
+                .iter()
+                .any(|collection| collection.id == **id)
+        }),
+        "Selected collection label does not exist",
+    )?;
+    let mut feeds = current.feeds.clone();
+    feeds
+        .subscriptions
+        .retain(|source| subscriptions.contains(source.id.as_str()));
+    for source in &mut feeds.subscriptions {
+        let references = &memberships[source.id.as_str()];
+        source
+            .collection_ids
+            .retain(|id| references.contains(id.as_str()));
+    }
+    let referenced: BTreeSet<&str> = feeds
+        .subscriptions
+        .iter()
+        .flat_map(|source| source.collection_ids.iter().map(String::as_str))
+        .collect();
+    feeds
+        .collections
+        .retain(|collection| referenced.contains(collection.id.as_str()));
+    feeds.validate()?;
+    Ok(feeds)
+}
 #[derive(Clone, Debug)]
 pub struct ProjectionReview {
     configuration_digest: String,
@@ -615,81 +740,12 @@ impl ProjectionReview {
     pub fn prepare(current: &FeedConfiguration, selection: &DisclosureSelection) -> Result<Self> {
         let configuration_digest = current.fingerprint()?;
         exact_origin(&selection.origin)?;
-        let subscriptions = unique_ids(&selection.subscription_ids, MAX_SUBSCRIPTIONS)?;
-        let collections = unique_ids(&selection.collection_ids, MAX_COLLECTIONS)?;
-        require(
-            selection.memberships.len() == subscriptions.len(),
-            "Every selected feed needs an explicit collection membership choice",
+        let feeds = selected_section(
+            current,
+            &selection.subscription_ids,
+            &selection.collection_ids,
+            &selection.memberships,
         )?;
-        let mut memberships = BTreeMap::new();
-        for membership in &selection.memberships {
-            uuid(&membership.subscription_id)?;
-            require(
-                subscriptions.contains(membership.subscription_id.as_str()),
-                "Membership choice names an unselected feed",
-            )?;
-            let references = unique_ids(&membership.collection_ids, MAX_COLLECTION_REFERENCES)?;
-            require(
-                references.iter().all(|id| collections.contains(id)),
-                "Feed membership requires an explicitly selected collection label",
-            )?;
-            require(
-                memberships
-                    .insert(membership.subscription_id.as_str(), references)
-                    .is_none(),
-                "Duplicate feed membership choice",
-            )?;
-        }
-        for id in &subscriptions {
-            let source = current
-                .feeds
-                .subscriptions
-                .iter()
-                .find(|source| source.id == **id)
-                .ok_or_else(|| invalid("Selected feed does not exist"))?;
-            require(
-                source.disclosure == FeedDisclosure::Selected,
-                "Private feed must first be marked selected through a reviewed configuration edit",
-            )?;
-            let references = memberships
-                .get(id)
-                .ok_or_else(|| invalid("Selected feed has no explicit membership choice"))?;
-            require(
-                references
-                    .iter()
-                    .all(|id| source.collection_ids.iter().any(|original| original == id)),
-                "Selected membership is not part of this feed",
-            )?;
-        }
-        require(
-            collections.iter().all(|id| {
-                current
-                    .feeds
-                    .collections
-                    .iter()
-                    .any(|collection| collection.id == **id)
-            }),
-            "Selected collection label does not exist",
-        )?;
-        let mut feeds = current.feeds.clone();
-        feeds
-            .subscriptions
-            .retain(|source| subscriptions.contains(source.id.as_str()));
-        for source in &mut feeds.subscriptions {
-            let references = &memberships[source.id.as_str()];
-            source
-                .collection_ids
-                .retain(|id| references.contains(id.as_str()));
-        }
-        let referenced: BTreeSet<&str> = feeds
-            .subscriptions
-            .iter()
-            .flat_map(|source| source.collection_ids.iter().map(String::as_str))
-            .collect();
-        feeds
-            .collections
-            .retain(|collection| referenced.contains(collection.id.as_str()));
-        feeds.validate()?;
         Ok(Self {
             configuration_digest,
             candidate: SelectedFeedProjection {
@@ -712,6 +768,40 @@ impl ProjectionReview {
         if origin != self.candidate.origin || current.fingerprint()? != self.configuration_digest {
             return Err(Error::Conflict(
                 "Feed disclosure destination or configuration changed after review".into(),
+            ));
+        }
+        Ok(self.candidate.clone())
+    }
+}
+/// Opaque local review of an origin-free portable file. Serialized previews
+/// cannot reconstruct it. Confirmation returns the same raw feed-section shape
+/// accepted by import, with no new envelope, permission, send or storage action.
+#[derive(Clone, Debug)]
+pub struct ExportReview {
+    configuration_digest: String,
+    candidate: FeedSection,
+}
+impl ExportReview {
+    pub fn prepare(current: &FeedConfiguration, selection: &ExportSelection) -> Result<Self> {
+        Ok(Self {
+            configuration_digest: current.fingerprint()?,
+            candidate: selected_section(
+                current,
+                &selection.subscription_ids,
+                &selection.collection_ids,
+                &selection.memberships,
+            )?,
+        })
+    }
+    pub fn candidate(&self) -> &FeedSection {
+        &self.candidate
+    }
+    /// Recheck the canonical configuration, including revision, as projection
+    /// does. Equivalent JSON formatting is not a source change.
+    pub fn confirm(&self, current: &FeedConfiguration) -> Result<FeedSection> {
+        if current.fingerprint()? != self.configuration_digest {
+            return Err(Error::Conflict(
+                "Feed configuration changed after export review".into(),
             ));
         }
         Ok(self.candidate.clone())

@@ -3,8 +3,8 @@
 //! previews cannot recreate reviews or grant persistence/network authority.
 use crate::Result;
 use booknook_core::feeds::{
-    ConflictResolution, DisclosureSelection, FeedConfiguration, FeedSection, ImportReview,
-    ProjectionReview,
+    ConflictResolution, DisclosureSelection, ExportReview, ExportSelection, FeedConfiguration,
+    FeedSection, ImportReview, ProjectionReview,
 };
 use std::sync::Arc;
 fn encode(value: &impl serde::Serialize) -> Result<String> {
@@ -86,5 +86,29 @@ impl FeedProjectionReviewV1 {
     pub fn confirm(&self, configuration_bytes: Vec<u8>, origin: String) -> Result<String> {
         let current = FeedConfiguration::parse(&configuration_bytes)?;
         encode(&self.inner.confirm(&current, &origin)?)
+    }
+}
+#[derive(uniffi::Object)]
+pub struct FeedExportReviewV1 {
+    inner: ExportReview,
+}
+#[uniffi::export]
+impl FeedExportReviewV1 {
+    #[uniffi::constructor]
+    pub fn new(configuration_bytes: Vec<u8>, selection_bytes: Vec<u8>) -> Result<Self> {
+        let current = FeedConfiguration::parse(&configuration_bytes)?;
+        let selection = ExportSelection::parse(&selection_bytes)?;
+        Ok(Self {
+            inner: ExportReview::prepare(&current, &selection)?,
+        })
+    }
+    /// The preview is the raw feed-section file, not a reconstructable review.
+    pub fn preview(&self) -> Result<String> {
+        encode(self.inner.candidate())
+    }
+    /// Returns selected portable settings only, without writing or sending them.
+    pub fn confirm(&self, configuration_bytes: Vec<u8>) -> Result<String> {
+        let current = FeedConfiguration::parse(&configuration_bytes)?;
+        encode(&self.inner.confirm(&current)?)
     }
 }

@@ -32,6 +32,11 @@ export interface FeedDisclosureSelectionV1 {
 export interface SelectedFeedProjectionV1 {
   schema: "booknook.selected-feeds.v1"; origin: string; feeds: FeedSectionV1;
 }
+export interface FeedExportSelectionV1 {
+  schema: "booknook.feed-export-selection.v1";
+  subscriptionIds: string[]; collectionIds: string[];
+  memberships: {subscriptionId: string; collectionIds: string[]}[];
+}
 export interface FeedImportReviewHandleV1 {
   preview(): string;
   resolve(configurationBytes: Uint8Array, incomingBytes: Uint8Array | null | undefined,
@@ -44,6 +49,11 @@ export interface FeedProjectionReviewHandleV1 {
   confirm(configurationBytes: Uint8Array, origin: string): string;
   free(): void;
 }
+export interface FeedExportReviewHandleV1 {
+  preview(): string;
+  confirm(configurationBytes: Uint8Array): string;
+  free(): void;
+}
 /** The real generated module implements this independent versioned domain.
  * Original bytes enter Rust unchanged; these APIs never fetch, store or activate. */
 export interface FeedSdkCoreV1 {
@@ -54,6 +64,11 @@ export interface FeedSdkCoreV1 {
     incomingBytes?: Uint8Array | null) => FeedImportReviewHandleV1;
   FeedProjectionReviewV1: new(configurationBytes: Uint8Array,
     selectionBytes: Uint8Array) => FeedProjectionReviewHandleV1;
+}
+/** Additive export capability; existing feed adapters need not implement it. */
+export interface FeedExportSdkCoreV1 extends FeedSdkCoreV1 {
+  FeedExportReviewV1: new(configurationBytes: Uint8Array,
+    selectionBytes: Uint8Array) => FeedExportReviewHandleV1;
 }
 export function validateFeedSectionV1(core: FeedSdkCoreV1, raw: Uint8Array): FeedSectionV1 {
   return parseContract(core.validate_feed_section_v1(raw));
@@ -102,6 +117,24 @@ export class BookNookFeedProjectionReviewV1 {
   preview(): SelectedFeedProjectionV1 { return parseContract(this.live().preview()); }
   confirm(current: Uint8Array, origin: string): SelectedFeedProjectionV1 {
     return parseContract(this.live().confirm(current, origin));
+  }
+  close(): void { const handle = this.handle; this.handle = undefined; handle?.free(); }
+}
+/** Origin-free file review. Original choices enter Rust unchanged. A confirmed
+ * section is data only; this wrapper neither changes eligibility nor writes it. */
+export class BookNookFeedExportReviewV1 {
+  private constructor(private handle: FeedExportReviewHandleV1 | undefined) {}
+  static prepare(core: FeedExportSdkCoreV1, current: Uint8Array,
+    selectionBytes: Uint8Array): BookNookFeedExportReviewV1 {
+    return new BookNookFeedExportReviewV1(new core.FeedExportReviewV1(current, selectionBytes));
+  }
+  private live(): FeedExportReviewHandleV1 {
+    if (!this.handle) throw new Error("Feed export review is closed");
+    return this.handle;
+  }
+  preview(): FeedSectionV1 { return parseContract(this.live().preview()); }
+  confirm(current: Uint8Array): FeedSectionV1 {
+    return parseContract(this.live().confirm(current));
   }
   close(): void { const handle = this.handle; this.handle = undefined; handle?.free(); }
 }

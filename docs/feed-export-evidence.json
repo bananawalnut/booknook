@@ -1,0 +1,364 @@
+{
+  "recorded_at": "2026-11-14T12:42:17.504718+00:00",
+  "base_commit": "a9a672ccfd5ea21b454773aa876cc540b9e7622c",
+  "api": {
+    "selection_schema": "booknook.feed-export-selection.v1",
+    "core": "ExportSelection::parse(original_bytes), ExportReview::prepare(current, choices), candidate(), confirm(current) -> FeedSection",
+    "native_wasm": "FeedExportReviewV1(configuration_bytes, selection_bytes); preview(); confirm(configuration_bytes)",
+    "swift": "BookNookFeedsV1.reviewExport(configuration:selection:) -> BookNookFeedExportReviewV1; preview(), confirm(configuration:), close()",
+    "typescript": "FeedExportSdkCoreV1 extends existing unchanged FeedSdkCoreV1; BookNookFeedExportReviewV1.prepare(core,current,selectionBytes), preview(), confirm(current), close()"
+  },
+  "decisions": [
+    "New choices schema is closed, original-byte parsed and literal-string only; duplicate keys including escaped aliases and malformed UTF8 fail before typed use.",
+    "Output is unchanged raw castalia.feeds-section.v1, with no new envelope, destination, recipient or authority claim.",
+    "Private sources must first become eligible through a separate reviewed configuration edit. Export never changes eligibility.",
+    "Extracted one selected_section closure shared with origin-bound ProjectionReview. Existing exact-origin checks and existing projection fingerprint/confirmation behavior remain unchanged.",
+    "Source configuration fingerprint is canonical plus revision: equivalent whitespace/key order is allowed, changed revision/content refuses confirmation. This differs from exact incoming-byte import binding.",
+    "Only selected source memberships survive; unreferenced or private-only collection labels/IDs are omitted. Source values and ordering are retained without mutation.",
+    "Data-only API performs no file persistence, cache activation, networking, identity/custody or publication.",
+    "Old manually supplied TypeScript feed adapters remain source-compatible; new capability has a separate extension interface."
+  ],
+  "toolchains": {
+    "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+    "swift": "swift-driver version: 1.115.1 Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)\nTarget: arm64-apple-macosx16.0",
+    "node": "v26.8.2",
+    "typescript": "Version 5.9.3",
+    "wasm_bindgen": "wasm-bindgen 0.2.127",
+    "uniffi": "0.32.2 (existing Cargo.lock)",
+    "zig_binary_sha256": "b3de43be2f2a65738c11d6bba5520e3e2f75a3aadbedd4ac3640a6a107fcd593"
+  },
+  "commands": [
+    {
+      "session": "93279",
+      "command": "cargo test --locked --offline -p booknook-core --test feeds portable_export",
+      "exit_code": 101,
+      "result": "Expected initial RED: ExportReview/ExportSelection symbols absent"
+    },
+    {
+      "session": "59236",
+      "command": "cargo test --locked --offline -p booknook-core --test feeds portable_export_selection_raw_json",
+      "exit_code": 101,
+      "result": "Independent review regression RED: new schema object-null enum form incorrectly accepted before fix"
+    },
+    {
+      "session": "37703",
+      "command": "cargo test --locked --offline -p booknook-core --test feeds",
+      "exit_code": 0,
+      "result": "17 passed; includes102 canonical raw vectors, existing projection/origin closure and3 new export tests with literal-string schema regression"
+    },
+    {
+      "session": "42792",
+      "command": "cargo test --locked --offline -p booknook-native --test feed_sdk",
+      "exit_code": 0,
+      "result": "4 passed; actual native adapter102 vectors and new export raw section reimport/private/stale/strict schema checks"
+    },
+    {
+      "session": "42792",
+      "command": "bash scripts/test-feed-sdk-swift.sh",
+      "exit_code": 0,
+      "result": "Fresh host library and UniFFI generator, generated Swift/header pair, actual Swift SDK consumer passed102 raw vectors plus export/reimport/private/strict-schema/stale/closed and orphan tests"
+    },
+    {
+      "session": "5216",
+      "command": "xcrun swiftc -parse-as-library -swift-version 5 -module-cache-path <target>/feed-sdk-swift/module-cache -I <qualified>/generated -Xcc -fmodule-map-file=<qualified>/generated/booknook_nativeFFI.modulemap -L <qualified> -lbooknook_native -Xlinker -rpath -Xlinker <qualified> <qualified>/generated/booknook_native.swift sdk/swift/Sources/BookNookServices/BookNookFeeds.swift tests/FeedSDKBindingSmoke.swift -o <qualified>/consumer; <qualified>/consumer <repo>/crates/core/tests/fixtures/feeds-v1",
+      "exit_code": 0,
+      "result": "Saved pair compiled and consumer passed. Executable retains absolute Cargo dylib dependency; exact saved-library runtime identity is established by the later explicit loader override check."
+    },
+    {
+      "session": "5216",
+      "command": "bash scripts/build-wasm.sh nodejs; bash scripts/build-wasm.sh web",
+      "exit_code": 0,
+      "result": "Fresh actual release WASM and generated Node/browser bindings; verified prior Zig binary SHA256 and matching wasm-bindgen0.2.127"
+    },
+    {
+      "session": "5216",
+      "command": "npm --prefix sdk/typescript run check",
+      "exit_code": 0,
+      "result": "Strict public TypeScript source check"
+    },
+    {
+      "session": "5216",
+      "command": "sdk/typescript/node_modules/.bin/tsc --target es2022 --module commonjs --moduleResolution node --strict --outDir <target>/feed-sdk-export-v1/typescript-cjs sdk/typescript/index.ts",
+      "exit_code": 0,
+      "result": "Built actual public typed wrapper consumed by runtime tests"
+    },
+    {
+      "session": "5216",
+      "command": "node tests/feed-sdk-parity.cjs sdk/typescript/pkg/nodejs/booknook_wasm.js <target>/feed-sdk-export-v1/typescript-cjs/index.js; node tests/feed-sdk-parity.cjs sdk/typescript/pkg/web/booknook_wasm.js <target>/feed-sdk-export-v1/typescript-cjs/index.js",
+      "exit_code": 0,
+      "result": "Both actual runtimes passed102 raw cases directly and through real TypeScript wrappers, existing projection/import and new origin-free export/reimport/private/duplicate/schema/stale/closure/lifecycle checks"
+    },
+    {
+      "session": "5216",
+      "command": "sdk/typescript/node_modules/.bin/tsc --noEmit --strict --target es2022 --module nodenext --moduleResolution nodenext tests/FeedSDKTypes.mts",
+      "exit_code": 0,
+      "result": "Fresh generated Node and browser constructors satisfy new FeedExportSdkCoreV1; explicit adapter with only old members still satisfies old FeedSdkCoreV1"
+    },
+    {
+      "session": "35320",
+      "command": "cargo clippy --locked --offline -p booknook-core -p booknook-native -p booknook-wasm --all-targets -- -D warnings",
+      "exit_code": 0,
+      "result": "Strict all-target Clippy passed"
+    },
+    {
+      "session": "35320",
+      "command": "cargo fmt --all -- --check; git diff --check; node --check tests/feed-sdk-parity.cjs",
+      "exit_code": 0,
+      "result": "All passed"
+    },
+    {
+      "session": "82373",
+      "command": "DYLD_LIBRARY_PATH=<qualified> DYLD_PRINT_LIBRARIES=1 <qualified>/consumer <repo>/crates/core/tests/fixtures/feeds-v1",
+      "exit_code": 0,
+      "result": "Actual consumer passed; dyld output asserted saved qualified/libbooknook_native.dylib loaded and no debug/deps dylib loaded. Parent independently recorded same result in preserved-loader-check.json."
+    }
+  ],
+  "artifact_match_checks": "Preserved Node/web generated files exactly match the tested project outputs; preserved Swift generated pair and dylib match the fresh tested build. Consumer was recompiled with the saved pair, then independently rerun with DYLD_LIBRARY_PATH and DYLD_PRINT_LIBRARIES proving the exact saved dylib loaded; do not rely on rpath because the Rust dylib install_name is absolute.",
+  "scope_limits": [
+    "No app/UI, device, simulator, install, signing, deployment or real transport qualification in this increment. No network test was run.",
+    "No new dependency, Cargo manifest/lock, frozen provider-v1, main Command, issued ontology or canonical fixture bytes changed.",
+    "Existing unit-enum object/null aliases in other legacy feed input enums were reproduced independently and reported to parent for a separate bounded conformance correction. They are deliberately unchanged here; only the newly introduced ExportSelectionSchema is string-only.",
+    "No generic deserialized review or persistence/authority guarantee: hosts own consent and any subsequent atomic configuration/file operations.",
+    "Run the saved Swift consumer with the recorded DYLD_LIBRARY_PATH override to select its preserved dylib after later Cargo builds."
+  ],
+  "schema": "booknook.feed-export-sdk-evidence.v1",
+  "private_receipt_sha256": "8c4cec9aa16ebf2bf7cab613abf8decd8cd556a892a51eba2a1ab3111b5fa44e",
+  "source_files": [
+    {
+      "sha256": "9875f5797542914c6b7cb17023c36874193bd910d8580a825f1600e3c56f3202",
+      "bytes": 28826,
+      "path": "crates/core/src/feeds.rs"
+    },
+    {
+      "sha256": "3c8544fdbffce7242de82acda77b02d27bb276bcddadcebbe1c28e60be055842",
+      "bytes": 24169,
+      "path": "crates/core/tests/feeds.rs"
+    },
+    {
+      "sha256": "674e7de3357bbf57516769a7d476861be939a9edb46a081456bbc235a7aa27d8",
+      "bytes": 4259,
+      "path": "crates/native/src/feed_sdk.rs"
+    },
+    {
+      "sha256": "9082b5e94e829a877e59e3d0f2c0d87d9303d4566922a3b7ee7eb4978f6a663c",
+      "bytes": 8996,
+      "path": "crates/native/tests/feed_sdk.rs"
+    },
+    {
+      "sha256": "8e2c4ad0457c212d9adda6ee2e7d250e86f02357cf74c1097394ce21e47c3c31",
+      "bytes": 4664,
+      "path": "crates/wasm/src/feeds.rs"
+    },
+    {
+      "sha256": "70620d49af7d7e0aecedbcdb3ddf29be0b3eeee23e6477daed7f36cceb8b6e5c",
+      "bytes": 4678,
+      "path": "sdk/swift/Sources/BookNookServices/BookNookFeeds.swift"
+    },
+    {
+      "sha256": "1abd30f4179f7aaa6b48fb5696f7aeda767cee648db67374cbdfd22057e5c15b",
+      "bytes": 6943,
+      "path": "sdk/typescript/feeds.ts"
+    },
+    {
+      "sha256": "9460d7e15c1311e28e617895f7a1bb59a8567c067b413b311f0486bf1841d848",
+      "bytes": 8881,
+      "path": "tests/feed-sdk-parity.cjs"
+    },
+    {
+      "sha256": "cb283d20a729cc071958fffb7b304dfe1fc7d9f800903a8110ebc90c44a99fdb",
+      "bytes": 8809,
+      "path": "tests/FeedSDKBindingSmoke.swift"
+    },
+    {
+      "sha256": "f775a87dc3c23ccaaddf3d08a30522cd32d68b355dfc159f553bf1c1d06867ec",
+      "bytes": 2257,
+      "path": "tests/FeedSDKTypes.mts"
+    },
+    {
+      "sha256": "14989c4b72cc24e9817b8e7736e129fa52c9818c17294daa22b574e2c7e70cfd",
+      "bytes": 17089,
+      "path": "crates/native/src/lib.rs"
+    }
+  ],
+  "artifacts": [
+    {
+      "sha256": "494143c417b256ff6475653a2352b0909cc1478ff44e209e49d61c4ac72765f8",
+      "bytes": 8234,
+      "path": "feed-sdk-export-v1/nodejs/booknook_wasm.d.ts"
+    },
+    {
+      "sha256": "97bd2f2239d55919e5bec7ab01f773914feb161b275f5bf9b7693d248967bab9",
+      "bytes": 66827,
+      "path": "feed-sdk-export-v1/nodejs/booknook_wasm.js"
+    },
+    {
+      "sha256": "47b617288ab5ee34df5dc82700e9f5b4bca8e859741eed7a46d4a4ba46282f99",
+      "bytes": 5428073,
+      "path": "feed-sdk-export-v1/nodejs/booknook_wasm_bg.wasm"
+    },
+    {
+      "sha256": "50585e617efe8767898c4e4e6314cadf3dcb0c5807975dbd60a4d46b81c14e63",
+      "bytes": 8682,
+      "path": "feed-sdk-export-v1/nodejs/booknook_wasm_bg.wasm.d.ts"
+    },
+    {
+      "sha256": "dbf8353f77358bc12169b7bb7301e1978d5b503e002ee927229a8993672818fc",
+      "bytes": 20,
+      "path": "feed-sdk-export-v1/nodejs/package.json"
+    },
+    {
+      "sha256": "d43aa81f5bc89faa359e0f97c814ba25155591ff078fbb9bfd40f8c7c9683230",
+      "bytes": 77,
+      "path": "feed-sdk-export-v1/typescript-cjs/archive-types.js"
+    },
+    {
+      "sha256": "334b495ffc2618524b998dfb9e95b0c5e980bad83a382065bf454d847009e35c",
+      "bytes": 1232,
+      "path": "feed-sdk-export-v1/typescript-cjs/archives.js"
+    },
+    {
+      "sha256": "e26ea7e8fd173bdeec5a15d7e0a0a2177d1ee5d28174eeb603c3980783190bac",
+      "bytes": 1251,
+      "path": "feed-sdk-export-v1/typescript-cjs/castalia.js"
+    },
+    {
+      "sha256": "3f2505b38f70f36b73f1b4c848edd79ea5d7862e5a7bb40bf824a2d7af993917",
+      "bytes": 1296,
+      "path": "feed-sdk-export-v1/typescript-cjs/contract-json.js"
+    },
+    {
+      "sha256": "567b4d991eb2326debd902af02eb9967c3d9b961e0f060b42d051c3e980c8533",
+      "bytes": 4376,
+      "path": "feed-sdk-export-v1/typescript-cjs/feed-source.js"
+    },
+    {
+      "sha256": "8c33dbb3a9da3aa16887c76e7a6de4b9e882d9b7fa2787cc532d922cc4feeaa9",
+      "bytes": 560,
+      "path": "feed-sdk-export-v1/typescript-cjs/feed-xml.js"
+    },
+    {
+      "sha256": "72bf0c0a9818cdc9fdbe23326cb47808934dc5529f169fc47d96116f83716c63",
+      "bytes": 3934,
+      "path": "feed-sdk-export-v1/typescript-cjs/feeds.js"
+    },
+    {
+      "sha256": "782aed61620e3d21b3cae8309135b9485069dfa0132f804dc9ea6308f8329c51",
+      "bytes": 9851,
+      "path": "feed-sdk-export-v1/typescript-cjs/index.js"
+    },
+    {
+      "sha256": "d43aa81f5bc89faa359e0f97c814ba25155591ff078fbb9bfd40f8c7c9683230",
+      "bytes": 77,
+      "path": "feed-sdk-export-v1/typescript-cjs/portable-services.js"
+    },
+    {
+      "sha256": "d43aa81f5bc89faa359e0f97c814ba25155591ff078fbb9bfd40f8c7c9683230",
+      "bytes": 77,
+      "path": "feed-sdk-export-v1/typescript-cjs/provider-types.js"
+    },
+    {
+      "sha256": "a359fa708422c734033efd614e8a5bc3303a90af75456ca905a63f788ae514bb",
+      "bytes": 8199,
+      "path": "feed-sdk-export-v1/typescript-cjs/providers.js"
+    },
+    {
+      "sha256": "d43aa81f5bc89faa359e0f97c814ba25155591ff078fbb9bfd40f8c7c9683230",
+      "bytes": 77,
+      "path": "feed-sdk-export-v1/typescript-cjs/social-types.js"
+    },
+    {
+      "sha256": "d43aa81f5bc89faa359e0f97c814ba25155591ff078fbb9bfd40f8c7c9683230",
+      "bytes": 77,
+      "path": "feed-sdk-export-v1/typescript-cjs/types.js"
+    },
+    {
+      "sha256": "2ef762ee766e8546d0573002cb3ddc21d4086d16b55c33fe2f070c7619bef848",
+      "bytes": 17859,
+      "path": "feed-sdk-export-v1/web/booknook_wasm.d.ts"
+    },
+    {
+      "sha256": "f84f317c1d4664de44c18be83e1b1327aca9d554fef98b66e31c3365bc00f7c5",
+      "bytes": 68286,
+      "path": "feed-sdk-export-v1/web/booknook_wasm.js"
+    },
+    {
+      "sha256": "47b617288ab5ee34df5dc82700e9f5b4bca8e859741eed7a46d4a4ba46282f99",
+      "bytes": 5428073,
+      "path": "feed-sdk-export-v1/web/booknook_wasm_bg.wasm"
+    },
+    {
+      "sha256": "50585e617efe8767898c4e4e6314cadf3dcb0c5807975dbd60a4d46b81c14e63",
+      "bytes": 8682,
+      "path": "feed-sdk-export-v1/web/booknook_wasm_bg.wasm.d.ts"
+    },
+    {
+      "sha256": "1239d4d885dcad42201a27ed9324f8f0f760b78700d8db9ced39a511cffe7eae",
+      "bytes": 18,
+      "path": "feed-sdk-export-v1/web/package.json"
+    },
+    {
+      "sha256": "3acfbcab913960065a62b1a8222644aebe7d901a5e95d0fb288900438ec4851d",
+      "bytes": 865176,
+      "path": "feed-sdk-swift/qualified/portable-export-v1/consumer"
+    },
+    {
+      "sha256": "c2fb4dfa86a8334f7cbd9d770caaf4dc0545fdd2825e0116927c6d3ae9533876",
+      "bytes": 194276,
+      "path": "feed-sdk-swift/qualified/portable-export-v1/generated/booknook_native.swift"
+    },
+    {
+      "sha256": "0ebf6a4097928fe7e2254ed68e36e34a2ecb0cb96f75a03a0f7fd26577c23aa8",
+      "bytes": 112823,
+      "path": "feed-sdk-swift/qualified/portable-export-v1/generated/booknook_nativeFFI.h"
+    },
+    {
+      "sha256": "d832a0d192305ef1730df3247a38a0fb9d71239b6bd80769b584c72ff8aa073d",
+      "bytes": 146,
+      "path": "feed-sdk-swift/qualified/portable-export-v1/generated/booknook_nativeFFI.modulemap"
+    },
+    {
+      "sha256": "8075b45ddaa0aa8e756e55f743be94c8d7ba2f8a8cf5cc670e12a49a354653d9",
+      "bytes": 40588256,
+      "path": "feed-sdk-swift/qualified/portable-export-v1/libbooknook_native.dylib"
+    },
+    {
+      "sha256": "17c474fd3aadc3212fc202e71859f2120e022e7c8c515709f42ff7996a1fea72",
+      "bytes": 22701424,
+      "path": "feed-sdk-swift/qualified/portable-export-v1/uniffi-bindgen"
+    }
+  ],
+  "unchanged_contract_evidence": [
+    {
+      "sha256": "450b4016ecbb803f98c6c61c15072208750c2eedf3a5986a81dc737a37780d49",
+      "bytes": 85598,
+      "path": "Cargo.lock"
+    },
+    {
+      "sha256": "07dfd61336d1ccbaafe2d3cf7540255ae5345222366daf4ce4e942b83a369d8f",
+      "bytes": 112237,
+      "path": "crates/core/tests/fixtures/feeds-v1/conformance.json"
+    },
+    {
+      "sha256": "eff3c3c4b15743661c2628d504052211f54c0ec2ab220d6d1d103218569c0ec2",
+      "bytes": 561,
+      "path": "crates/core/tests/fixtures/feeds-v1/section.json"
+    }
+  ],
+  "saved_library_loading": {
+    "exit_code": 0,
+    "qualified_library_loaded": true,
+    "library_sha256": "8075b45ddaa0aa8e756e55f743be94c8d7ba2f8a8cf5cc670e12a49a354653d9",
+    "consumer_sha256": "3acfbcab913960065a62b1a8222644aebe7d901a5e95d0fb288900438ec4851d",
+    "result": "Actual generated UniFFI Swift feed SDK: 102 raw vectors, exact-review conflicts/staleness, opaque lifecycle, origin/collection closure and origin-free export/reimport passed.",
+    "limits": "Standalone generated consumer, not app or minimum-OS runtime qualification."
+  },
+  "parent_ci_wiring": {
+    "path": "scripts/test-sdk.sh",
+    "sha256": "becb6d251e9d790fae01ede2995f83b90f79ca8df3cddc6791a2c9d277ae7469",
+    "changes": [
+      "Build web-target bindings before the generated-declaration check.",
+      "Run the same feed review consumer against actual Node and web-target WASM."
+    ],
+    "verification": "bash syntax passed; component build/runtime commands passed locally; complete SDK rerun is scheduled after the separate string-enum correction."
+  }
+}

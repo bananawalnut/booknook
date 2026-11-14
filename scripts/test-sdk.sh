@@ -15,6 +15,7 @@ fi
 cargo build --locked -p booknook-native --bin booknook --example portable-fixture
 cargo build --locked -p booknook-core --example contract-probe
 bash scripts/build-wasm.sh nodejs
+bash scripts/build-wasm.sh web
 npm --prefix sdk/typescript run check
 sdk/typescript/node_modules/.bin/tsc --target es2022 --module commonjs --moduleResolution node --strict \
   --outDir target/sdk-check sdk/typescript/index.ts
@@ -28,6 +29,7 @@ node tests/portable-archive-parity.cjs target/sdk-check/index.js
 
 # Actual opaque feed review objects: original bytes, lifecycle and origin closure.
 node tests/feed-sdk-parity.cjs sdk/typescript/pkg/nodejs/booknook_wasm.js target/sdk-check/index.js
+node tests/feed-sdk-parity.cjs sdk/typescript/pkg/web/booknook_wasm.js target/sdk-check/index.js
 sdk/typescript/node_modules/.bin/tsc --noEmit --strict --target es2022 --module nodenext --moduleResolution nodenext tests/FeedSDKTypes.mts
 
 # Actual async source provider, conditional-cache and guarded final-CAS runtime.

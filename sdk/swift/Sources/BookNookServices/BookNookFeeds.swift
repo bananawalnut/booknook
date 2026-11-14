@@ -22,6 +22,9 @@ public enum BookNookFeedsV1 {
     public static func reviewProjection(configuration: Data, selection: Data) throws -> BookNookFeedProjectionReviewV1 {
         BookNookFeedProjectionReviewV1(try FeedProjectionReviewV1(configurationBytes: configuration, selectionBytes: selection))
     }
+    public static func reviewExport(configuration: Data, selection: Data) throws -> BookNookFeedExportReviewV1 {
+        BookNookFeedExportReviewV1(try FeedExportReviewV1(configurationBytes: configuration, selectionBytes: selection))
+    }
 }
 private enum FeedReviewError: LocalizedError {
     case closed
@@ -62,6 +65,23 @@ public final class BookNookFeedProjectionReviewV1 {
     public func preview() throws -> String { try live { try $0.preview() } }
     public func confirm(configuration: Data, origin: String) throws -> String {
         try live { try $0.confirm(configurationBytes: configuration, origin: origin) }
+    }
+    public func close() { lock.lock(); defer { lock.unlock() }; handle = nil }
+}
+/// Origin-free portable settings review. The raw section returned by confirmation
+/// can be imported directly; the host still owns consent and file persistence.
+public final class BookNookFeedExportReviewV1 {
+    private let lock = NSLock()
+    private var handle: FeedExportReviewV1?
+    fileprivate init(_ handle: FeedExportReviewV1) { self.handle = handle }
+    private func live<T>(_ operation: (FeedExportReviewV1) throws -> T) throws -> T {
+        lock.lock(); defer { lock.unlock() }
+        guard let handle else { throw FeedReviewError.closed }
+        return try operation(handle)
+    }
+    public func preview() throws -> String { try live { try $0.preview() } }
+    public func confirm(configuration: Data) throws -> String {
+        try live { try $0.confirm(configurationBytes: configuration) }
     }
     public func close() { lock.lock(); defer { lock.unlock() }; handle = nil }
 }
