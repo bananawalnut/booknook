@@ -478,3 +478,38 @@ fn conflict_choices_are_bound_to_the_original_review_not_reused_after_source_cha
     );
     assert_eq!(current.revision, 0);
 }
+
+#[test]
+fn raw_binding_requests_remain_bounded_and_reject_duplicates_before_typed_decoding() {
+    let selection = raw(&selection());
+    assert!(DisclosureSelection::parse(&selection).is_ok());
+    let selection_text = String::from_utf8(selection.clone()).unwrap();
+    let duplicate = selection_text.replacen(
+        "\"origin\":",
+        "\"origin\":\"https://other.example.org\",\"origin\":",
+        1,
+    );
+    assert!(DisclosureSelection::parse(duplicate.as_bytes()).is_err());
+    assert!(DisclosureSelection::parse(&[0xc3, 0x28]).is_err());
+    let exact = [
+        selection.as_slice(),
+        &vec![b' '; 256 * 1024 - selection.len()],
+    ]
+    .concat();
+    assert!(DisclosureSelection::parse(&exact).is_ok());
+    assert!(DisclosureSelection::parse(&[exact.as_slice(), b" "].concat()).is_err());
+    let choices = json!([{"target":"subscription","id":id(1),"choice":"incoming"}]);
+    assert_eq!(
+        ConflictResolution::parse_all(&raw(&choices)).unwrap().len(),
+        1
+    );
+    assert!(
+        ConflictResolution::parse_all(b"[{\"target\":\"subscription\",\"target\":\"collection\"}]")
+            .is_err()
+    );
+    assert!(
+        ConflictResolution::parse_all(&[b"[]".as_slice(), &vec![b' '; 256 * 1024]].concat())
+            .is_err()
+    );
+    assert!(ConflictResolution::parse_all(&raw(&vec![choices[0].clone(); 321])).is_err());
+}

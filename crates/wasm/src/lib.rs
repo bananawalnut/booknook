@@ -1,5 +1,6 @@
 use wasm_bindgen::prelude::*;
 mod castalia;
+mod feeds;
 mod providers;
 
 /// Full export envelope (state, original assets, archived social proofs), not State alone.

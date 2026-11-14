@@ -25,3 +25,7 @@ node tests/castalia-generic-parity.cjs target/sdk-check/index.js
 node tests/provider-runtime.cjs target/sdk-check/index.js
 
 node tests/portable-archive-parity.cjs target/sdk-check/index.js
+
+# Actual opaque feed review objects: original bytes, lifecycle and origin closure.
+node tests/feed-sdk-parity.cjs sdk/typescript/pkg/nodejs/booknook_wasm.js target/sdk-check/index.js
+sdk/typescript/node_modules/.bin/tsc --noEmit --strict --target es2022 --module nodenext --moduleResolution nodenext tests/FeedSDKTypes.mts

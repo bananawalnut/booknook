@@ -1,0 +1,127 @@
+{
+  "schema": "booknook.feed-sdk-binding-evidence.v1",
+  "date": "2026-11-14",
+  "base_revision": "a9d0fd94b8269fde018f74d2faf56b12b428ea70",
+  "scope": "Data-only Rust/native/Swift/WASM/TypeScript development SDK; no released provider-v1 or ontology modifications",
+  "fixture_cases": 102,
+  "focused_core_tests": 14,
+  "focused_native_adapter_tests": 3,
+  "checks": [
+    {
+      "command": "cargo test -p booknook-core --test feeds --locked --offline",
+      "result": "passed: 14 tests, including the 102 canonical raw vectors"
+    },
+    {
+      "command": "cargo test -p booknook-native --test feed_sdk --locked --offline",
+      "result": "passed: 3 tests, including the 102 canonical raw vectors through actual native adapter"
+    },
+    {
+      "command": "bash scripts/build-wasm.sh nodejs; bash scripts/build-wasm.sh web",
+      "result": "passed: actual optimized WASM target with verified existing Zig and external Cargo target directory"
+    },
+    {
+      "command": "npm --prefix sdk/typescript run build",
+      "result": "passed: actual CJS and ESM wrappers"
+    },
+    {
+      "command": "node tests/feed-sdk-parity.cjs sdk/typescript/pkg/nodejs/booknook_wasm.js sdk/typescript/dist/cjs/index.js",
+      "result": "passed: actual Node generated WASM and built TypeScript wrapper; 102 vectors, conflicts, staleness, lifecycle, origin and collection closure"
+    },
+    {
+      "command": "node tests/feed-sdk-parity.cjs sdk/typescript/pkg/web/booknook_wasm.js sdk/typescript/dist/cjs/index.js",
+      "result": "passed: actual web-target ESM WASM instantiated in Node; same 102 vectors and behavioral cases"
+    },
+    {
+      "command": "npm --prefix sdk/typescript run check",
+      "result": "passed: existing strict ES2022 SDK check"
+    },
+    {
+      "command": "sdk/typescript/node_modules/.bin/tsc --noEmit --strict --target es2022 --module nodenext --moduleResolution nodenext tests/FeedSDKTypes.mts",
+      "result": "passed: real generated declarations match wrapper interfaces without extra lib flags"
+    },
+    {
+      "command": "bash scripts/test-feed-sdk-swift.sh",
+      "result": "passed: actual newly generated UniFFI Swift and fresh host dylib, 102 vectors, conflicts/staleness, lifecycle, origin and collection closure"
+    },
+    {
+      "command": "cargo clippy -p booknook-core --test feeds --locked --offline -- -D warnings",
+      "result": "passed"
+    },
+    {
+      "command": "cargo clippy -p booknook-native --test feed_sdk --locked --offline -- -D warnings",
+      "result": "passed"
+    },
+    {
+      "command": "cargo clippy -p booknook-wasm --lib --locked --offline -- -D warnings",
+      "result": "passed"
+    },
+    {
+      "command": "cargo fmt --all --check",
+      "result": "passed"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    },
+    {
+      "command": "bash -n scripts/build-wasm.sh scripts/test-sdk.sh scripts/test-feed-sdk-swift.sh",
+      "result": "passed"
+    },
+    {
+      "command": "node --check tests/feed-sdk-parity.cjs",
+      "result": "passed"
+    },
+    {
+      "command": "bash scripts/test-sdk.sh",
+      "result": "passed: complete existing native/WASM SDK parity and regression suite against freshly rebuilt code"
+    }
+  ],
+  "review": {
+    "independent": true,
+    "result": "No concrete blockers; all16 candidate source hashes matched reviewed verification.",
+    "exact_inputs": "Opaque actual core review objects enforce raw bytes, current configuration, complete conflict choices and destination origin."
+  },
+  "source_sha256": {
+    "crates/core/src/feeds.rs": "b90a26d3b1180bf9da6a067b76384665c22d7330983b4debfd6965cca1ab1f52",
+    "crates/core/tests/feeds.rs": "362c1d47506866a4b2539de3791df6bea47008c163cfb18b87e4b8ce1037d9da",
+    "crates/native/src/lib.rs": "d3e40f4d5d1041986c21a362e2f5fc450d4c0fc52e45aa5da078af39644e5d0e",
+    "crates/wasm/src/lib.rs": "16f1415b2efb21bf1d6db70e717c207ab2bdc57720fd035d150f7ce8435064d6",
+    "scripts/build-wasm.sh": "abbbd60572b2c82c17f5912b58c65633819036d3a61538b27728f6c7d8bfcb18",
+    "scripts/test-sdk.sh": "e3076dead368a0be53102b478fa58fc005341bd4d2b0ced945fbdfe54d962f67",
+    "sdk/typescript/index.ts": "7810980dade553e4875ae0d4cd374bd0ad1adf755413c566a896d4b9abe132cb",
+    "crates/native/src/feed_sdk.rs": "d865478f164bd8df61ac712471993240919a940c9e14316abda87860111f7407",
+    "crates/native/tests/feed_sdk.rs": "8a8caf6d23ce37582015aa81b1b275e12f26c72db8e277136a0bfbd2919e7bb6",
+    "crates/wasm/src/feeds.rs": "3e8884b9f0e7e81452508ea81f70bbb987b311f52f8accf28fc084c8978f74e4",
+    "scripts/test-feed-sdk-swift.sh": "c43ba2a85fad9df3e8492daf821f120dfcecc50d94ea690385e0e16c1d59b088",
+    "sdk/swift/Sources/BookNookServices/BookNookFeeds.swift": "010a43022e9418c855bfde657624dfc795e5371e9b8ee551d5cc89de551bd05d",
+    "sdk/typescript/feeds.ts": "d3b1251f58ba499de2e7599d933dd28d41cd644e218afe6776383d0e3710bb58",
+    "tests/FeedSDKBindingSmoke.swift": "45b75f0a1d96a587532b8b8fe8da564272aa077f772b51810e8fbe895eb0b179",
+    "tests/FeedSDKTypes.mts": "ac793ec3cbee326aa50dc082d20f9793e70b27e579924e15c5c4008989789a4d",
+    "tests/feed-sdk-parity.cjs": "4800ca405ece1981bd66981d8403e7c1cfe6074db51b3f1e6413636a54048c94"
+  },
+  "fixture_sha256": {
+    "crates/core/tests/fixtures/feeds-v1/section.json": "eff3c3c4b15743661c2628d504052211f54c0ec2ab220d6d1d103218569c0ec2",
+    "crates/core/tests/fixtures/feeds-v1/conformance.json": "07dfd61336d1ccbaafe2d3cf7540255ae5345222366daf4ce4e942b83a369d8f",
+    "crates/core/tests/fixtures/feeds-v1/provenance.json": "d65d4c266bddab5d040756b0450041b33b70f1bc2fe69070cd91d8eb359a5541"
+  },
+  "qualified_consumers": [
+    "Actual native Rust adapter",
+    "Fresh matching UniFFI Swift source and host library",
+    "Actual generated Node WASM with typed TypeScript wrapper",
+    "Actual generated web-target WASM instantiated in Node",
+    "Strict ES2022 declaration consumer using existing TypeScript5.9.3"
+  ],
+  "decisions": [
+    "Independent versioned data-only feed SDK; frozen provider-v1, issued ontology and main Command remain unchanged.",
+    "Opaque actual core review objects; original raw bytes and current configuration checked by confirm and resolve.",
+    "Bounded core parsing helpers centralize adapter validation.",
+    "Generated TypeScript declarations reference esnext.disposable only when generated Symbol.dispose declarations require it; no runtime shim.",
+    "Actual fresh Swift bindings and dylib are isolated in stable external cache; existing checked-in Swift artifact/header pair was not replaced."
+  ],
+  "limitations": [
+    "No host persistence, network acquisition, activation, discovery UI or authority semantics added.",
+    "Web-target WASM in Node is not browser UI acceptance.",
+    "Fresh isolated Swift tests do not qualify packaged apps; normal Apple regeneration/build/package workflow remains required.",
+    "No app packaging, signing, installation or physical-device acceptance performed for this increment."
+  ]
+}

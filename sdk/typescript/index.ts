@@ -5,6 +5,7 @@ export type * from "./portable-services.js";
 export * from "./castalia.js";
 export * from "./providers.js";
 export * from "./archives.js";
+export * from "./feeds.js";
 
 import {parseContract, encodeContract, checkTime, checkNumbers} from "./contract-json.js";
 

@@ -310,6 +310,22 @@ pub struct ConflictResolution {
     pub id: String,
     pub choice: ResolutionChoice,
 }
+impl ConflictResolution {
+    /// Decode a bounded choice batch from original bytes. Actual conflict IDs,
+    /// uniqueness and applicability remain bound to `ImportReview::resolve`.
+    pub fn parse_all(raw: &[u8]) -> Result<Vec<Self>> {
+        require(
+            !raw.is_empty() && raw.len() <= MAX_SECTION_BYTES,
+            "Feed resolution JSON exceeds its byte limit or is empty",
+        )?;
+        let values: Vec<Self> = crate::strict_parse(raw)?;
+        require(
+            values.len() <= MAX_SUBSCRIPTIONS + MAX_COLLECTIONS,
+            "Too many feed conflict resolutions",
+        )?;
+        Ok(values)
+    }
+}
 /// Both interpretations are retained for local review; no partial candidate commits.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize)]
 pub struct FeedConflict {
@@ -528,6 +544,15 @@ pub struct DisclosureSelection {
     pub memberships: Vec<MembershipSelection>,
 }
 impl DisclosureSelection {
+    /// Structurally decode original bounded bytes. `ProjectionReview::prepare`
+    /// additionally validates the exact origin and all choices against its source.
+    pub fn parse(raw: &[u8]) -> Result<Self> {
+        require(
+            !raw.is_empty() && raw.len() <= MAX_SECTION_BYTES,
+            "Feed selection JSON exceeds its byte limit or is empty",
+        )?;
+        crate::strict_parse(raw)
+    }
     pub fn new(
         origin: String,
         subscription_ids: Vec<String>,

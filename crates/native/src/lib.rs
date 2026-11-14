@@ -1,3 +1,8 @@
+mod feed_sdk;
+pub use feed_sdk::{
+    FeedImportReviewV1, FeedProjectionReviewV1, empty_feed_configuration_v1,
+    validate_feed_configuration_v1, validate_feed_section_v1,
+};
 mod audio_bridge;
 mod castalia_custody;
 pub use castalia_custody::CastaliaCustody;
