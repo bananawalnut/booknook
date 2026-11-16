@@ -345,6 +345,129 @@ fn direct_pairing_rekey_cannot_bypass_pending_outbox_guard() {
     );
 }
 
+fn prepared_receipt(desk: &Desk, peer: &str) -> (String, String, String) {
+    let prepared = value(desk.sync_prepare(peer.into()).unwrap());
+    let batch = &prepared["batch"];
+    let (request, presentation, _) = proofs::receipt(
+        &canonical(batch).unwrap(),
+        "sync.send",
+        batch["revision"].as_u64().unwrap(),
+        at(),
+        2,
+    );
+    (batch["id"].as_str().unwrap().into(), request, presentation)
+}
+
+fn receipt_count(desk: &Desk) -> i64 {
+    desk.lock()
+        .unwrap()
+        .connection
+        .query_row("SELECT count(*) FROM consumed_receipts", [], |row| {
+            row.get(0)
+        })
+        .unwrap()
+}
+
+fn refuse_stale_preparation(
+    desk: &Desk,
+    batch_id: &str,
+    key: &str,
+    request: String,
+    presentation: String,
+) {
+    let before_receipts = receipt_count(desk);
+    let before_outbox = value(desk.sync_status().unwrap())["outbox"].clone();
+    let error = desk
+        .sync_approve(batch_id.into(), key.into(), request, presentation)
+        .expect_err("Stale or legacy preparation must not queue a transfer");
+    assert!(
+        error
+            .to_string()
+            .contains("Create and review a new encrypted snapshot")
+    );
+    assert_eq!(receipt_count(desk), before_receipts);
+    assert_eq!(value(desk.sync_status().unwrap())["outbox"], before_outbox);
+    desk.sync_cancel_prepared(batch_id.into()).unwrap();
+    let remaining: i64 = desk
+        .lock()
+        .unwrap()
+        .connection
+        .query_row(
+            "SELECT count(*) FROM sync_prepared WHERE id=?1",
+            [batch_id],
+            |row| row.get(0),
+        )
+        .unwrap();
+    assert_eq!(remaining, 0, "Refused preparation must remain cancellable");
+}
+
+#[test]
+fn prepared_snapshot_cannot_be_approved_after_rekey_on_another_handle() {
+    let ar = Directory::new();
+    let br = Directory::new();
+    let a = setup(&ar);
+    let b = setup(&br);
+    let rekey = Desk::new(ar.path()).unwrap();
+    let ai = id(&a);
+    let bi = id(&b);
+    let old = "ab".repeat(32);
+    let new = "cd".repeat(32);
+    pair(&a, &bi, &old, true);
+    add_book(&a);
+    let (batch, request, presentation) = prepared_receipt(&a, &bi);
+    pair(&rekey, &bi, &new, true);
+    refuse_stale_preparation(&a, &batch, &new, request, presentation);
+
+    pair(&b, &ai, &new, true);
+    let fresh = approved(&a, &bi, &new);
+    let path = ar.0.join("fresh.json");
+    a.sync_export(fresh, path.to_string_lossy().into()).unwrap();
+    b.sync_receive(path.to_string_lossy().into(), ai, new)
+        .unwrap();
+    let received: State = serde_json::from_str(&b.snapshot().unwrap()).unwrap();
+    assert_eq!(
+        received.books.values().next().unwrap().title,
+        "Private source book"
+    );
+}
+
+#[test]
+fn prepared_snapshot_cannot_be_approved_after_same_key_disable_and_enable() {
+    let root = Directory::new();
+    let desk = setup(&root);
+    let other = Desk::new(root.path()).unwrap();
+    let key = "2c".repeat(32);
+    pair(&desk, "peer", &key, true);
+    let (batch, request, presentation) = prepared_receipt(&desk, "peer");
+    pair(&other, "peer", &key, false);
+    pair(&other, "peer", &key, true);
+    refuse_stale_preparation(&desk, &batch, &key, request, presentation);
+}
+
+#[test]
+fn legacy_preparation_is_cancellable_and_existing_approved_outbox_survives() {
+    let root = Directory::new();
+    let desk = setup(&root);
+    let key = "3d".repeat(32);
+    pair(&desk, "peer", &key, true);
+    let existing = approved(&desk, "peer", &key);
+    let (legacy, request, presentation) = prepared_receipt(&desk, "peer");
+    // Reopen the old on-disk layout: old prepared rows do not have an independently
+    // captured pairing. Already approved packets must remain exportable.
+    desk.lock()
+        .unwrap()
+        .connection
+        .execute_batch("DROP TABLE IF EXISTS sync_prepared_pairings;")
+        .unwrap();
+    drop(desk);
+    let desk = Desk::new(root.path()).unwrap();
+    refuse_stale_preparation(&desk, &legacy, &key, request, presentation);
+    let path = root.0.join("prior-approval.json");
+    desk.sync_export(existing, path.to_string_lossy().into())
+        .unwrap();
+    assert!(path.is_file());
+}
+
 #[test]
 fn same_source_revision_with_different_state_is_rejected_without_changing_receiver() {
     let ar = Directory::new();

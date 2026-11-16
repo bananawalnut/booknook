@@ -12,6 +12,8 @@ xcrun swiftc -module-cache-path "$reader_test_build/module-cache" apps/apple/Boo
 "$reader_test_build/coordinates"
 xcrun swiftc -parse-as-library -module-cache-path "$reader_test_build/module-cache" apps/apple/BookNook/NotebookInkGeometry.swift tests/NotebookInkGeometryTests.swift -o "$reader_test_build/notebook-ink-geometry"
 "$reader_test_build/notebook-ink-geometry"
+xcrun swiftc -parse-as-library -module-cache-path "$reader_test_build/module-cache" apps/apple/BookNook/NotebookWhiteboardGeometry.swift apps/apple/BookNook/NotebookWhiteboard.swift tests/NotebookWhiteboardPanTests.swift -o "$reader_test_build/notebook-whiteboard-pan"
+"$reader_test_build/notebook-whiteboard-pan"
 xcrun swiftc -parse-as-library -module-cache-path "$reader_test_build/module-cache" tests/ReaderBridgeTests.swift -o "$reader_test_build/bridge"
 "$reader_test_build/bridge"
 xcrun swiftc -parse-as-library -module-cache-path "$reader_test_build/module-cache" apps/apple/BookNook/NativeNotebookEditor.swift tests/NotebookEditorTests.swift -o "$reader_test_build/editor"

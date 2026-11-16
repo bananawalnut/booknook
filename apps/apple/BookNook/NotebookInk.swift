@@ -6,6 +6,7 @@ import UIKit
 #endif
 
 struct NotebookInkBlockView<Actions: View>: View {
+    @Environment(\.notebookPaneActive) private var paneActive
     @ObservedObject var session: NotebookInkSession
     @Binding var text: String
     @Binding var styles: [InlineStyle]
@@ -49,6 +50,12 @@ struct NotebookInkBlockView<Actions: View>: View {
                         Button("Undo ink") { tools.undo?() }.disabled(!tools.canUndo)
                         Button("Redo ink") { tools.redo?() }.disabled(!tools.canRedo)
                         #endif
+                        Menu("Pan Scribble") {
+                            Button("Pan left") { tools.pan?(.left) }
+                            Button("Pan right") { tools.pan?(.right) }
+                            Button("Pan up") { tools.pan?(.up) }
+                            Button("Pan down") { tools.pan?(.down) }
+                        }.disabled(!paneActive || session.needsVersionChoice)
                         Button("Zoom in") { tools.zoomIn?() }
                         Button("Zoom out") { tools.zoomOut?() }
                         Button("Return to origin") { tools.home?() }
@@ -78,7 +85,7 @@ struct NotebookInkBlockView<Actions: View>: View {
                     NativeNotebookEditor(text: $text, styles: $styles, formatRequest: formatRequest, changed: changed)
                         .environment(\.notebookPaneActive, !whiteboard)
                         .opacity(whiteboard ? 0 : 1).allowsHitTesting(!whiteboard).accessibilityHidden(whiteboard)
-                    NotebookMacWhiteboard(session: session, tools: tools)
+                    NotebookMacWhiteboard(session: session, tools: tools, active: paneActive && whiteboard)
                         .opacity(whiteboard ? 1 : 0).allowsHitTesting(whiteboard).accessibilityHidden(!whiteboard)
                 }.frame(height: whiteboard ? 480 : 210)
                 #endif

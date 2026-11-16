@@ -96,6 +96,7 @@ import PencilKit
                 && board.canvas.pinchGestureRecognizer?.isEnabled == true,
                 "Two-finger navigation lost direct touch or pinch zoom")
     try require(board.canvas.frame.size == faces.bounds.size, "Whiteboard allocates its document extent as a UIView")
+    guard let pan = tools.pan else { throw AuthorizationError.message("Scribble menu has no native pan action") }
 
     let positiveRegion = CGRect(x: 15, y: 20, width: 85, height: 60)
     board.setWorldViewportOrigin(.zero)
@@ -108,6 +109,9 @@ import PencilKit
     try require(!notebookScroll.isScrollEnabled && !board.canvas.panGestureRecognizer.isEnabled
                 && board.canvas.pinchGestureRecognizer?.isEnabled == false,
                 "Writing can move its canvas or enclosing notebook")
+    let strokeOffset = board.canvas.contentOffset
+    pan(.left); pan(.up)
+    try require(board.canvas.contentOffset == strokeOffset, "Menu navigation moved a live stroke's coordinate space")
     board.canvas.drawing = board.rendererDrawing(PKDrawing(strokes: [stroke]))
     board.canvasViewDidEndUsingTool(board.canvas)
     try require(notebookScroll.isScrollEnabled && board.canvas.panGestureRecognizer.isEnabled
@@ -144,9 +148,18 @@ import PencilKit
     board.canvasViewDidEndUsingTool(board.canvas)
     try await session.flush()
     let second = session.currentVersion!
-    board.setWorldViewportOrigin(CGPoint(x: -1540, y: -1840))
-    board.expandVisibleExtent()
+    let outerOffset = notebookScroll.contentOffset
+    let rendererBeforeMenuPan = board.canvas.drawing.dataRepresentation()
+    let writesBeforeMenuPan = writes.count
+    tools.home?()
+    for _ in 0..<6 { pan(.left) }
+    for _ in 0..<5 { pan(.up) }
+    try require(notebookScroll.contentOffset == outerOffset, "Menu pan scrolled the surrounding notebook")
     try await checkViewport(board, name: "negative-world", worldRegion: positiveRegion.offsetBy(dx: -1500, dy: -1800), expectedInk: true)
+    board.capture(); try await session.flush()
+    try require(board.canvas.drawing.dataRepresentation() == rendererBeforeMenuPan
+                && session.currentVersion?.id == second.id && writes.count == writesBeforeMenuPan,
+                "Scribble menu navigation modified or resaved the original drawing")
     try require(notebookDrawing(second).bounds.minX < 0 && second.strokes[1].points[0].x == -1475 && second.strokes[1].points[0].y == -1770,
                 "Native or portable saved drawing contains renderer coordinates instead of signed world coordinates")
     let negativeOnly = NotebookInkVersion(id: "negative-recognition", parents: [], reader: "board-reader", at: 1,
@@ -177,6 +190,9 @@ import PencilKit
     try require(session.currentVersion?.strokes.count == 1 && text == exactText && session.versions.contains { $0.id == second.id },
                 "Board undo changed prose or discarded an immutable drawing")
     faces.showBoard(false, active: true); coordinator.setPaneActive(true, view: editor)
+    let hiddenOffset = board.canvas.contentOffset
+    pan(.right); pan(.down)
+    try require(board.canvas.contentOffset == hiddenOffset, "A hidden Scribble accepted a stale menu action")
     try require(faces.editor === editor && editor.text == exactText && editor.undoManager === textUndo, "Returning to text lost editor identity, prose or undo")
     editor.becomeFirstResponder(); editor.undoManager?.undo(); await Task.yield()
     try require(text == "A separate note: café 日本語.", "Text undo did not survive a board flip")

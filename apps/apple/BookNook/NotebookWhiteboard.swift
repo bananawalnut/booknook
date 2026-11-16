@@ -7,6 +7,23 @@ import PencilKit
 import AppKit
 #endif
 
+enum NotebookWhiteboardPan {
+    case left, right, up, down
+
+    func origin(after viewport: CGRect) -> CGPoint? {
+        guard [viewport.minX, viewport.minY, viewport.width, viewport.height].allSatisfy(\.isFinite),
+              viewport.width > 0, viewport.height > 0 else { return nil }
+        // Overlap adjacent views so keyboard or accessibility navigation can
+        // follow a mark without skipping a strip of the drawing.
+        let horizontal = viewport.width * 0.75, vertical = viewport.height * 0.75
+        let dx: CGFloat = self == .left ? -horizontal : self == .right ? horizontal : 0
+        let dy: CGFloat = self == .up ? -vertical : self == .down ? vertical : 0
+        let limit = NotebookWhiteboardGeometry.limit
+        return CGPoint(x: max(-limit, min(limit - viewport.width, viewport.minX + dx)),
+                       y: max(-limit, min(limit - viewport.height, viewport.minY + dy)))
+    }
+}
+
 @MainActor final class NotebookWhiteboardTools: ObservableObject {
     @Published var tool = "pen"
     @Published var canUndo = false
@@ -17,6 +34,7 @@ import AppKit
     var zoomIn: (() -> Void)?
     var zoomOut: (() -> Void)?
     var home: (() -> Void)?
+    var pan: ((NotebookWhiteboardPan) -> Void)?
 }
 
 func notebookWhiteboardExtent(_ version: NotebookInkVersion?) -> CGRect {
@@ -65,13 +83,14 @@ final class NotebookWhiteboardHost: UIView, PKCanvasViewDelegate {
         canvas.panGestureRecognizer.maximumNumberOfTouches = 2
         canvas.panGestureRecognizer.allowedTouchTypes = [NSNumber(value: UITouch.TouchType.direct.rawValue)]
         canvas.accessibilityLabel = "Scribble canvas for this note"
-        canvas.accessibilityHint = "Draw with a finger or Pencil. Pan with two fingers and pinch to zoom."
+        canvas.accessibilityHint = "Draw with a finger or Pencil. Pan from Note options or with two fingers; pinch to zoom."
         canvas.accessibilityIdentifier = "notebook-whiteboard-\(session.blockID)"
         session.capturePendingStroke = { [weak self] in self?.capture() }
         tools.undo = { [weak self] in self?.undo() }; tools.redo = { [weak self] in self?.redo() }
         tools.zoomIn = { [weak self] in self?.changeZoom(by: 1.25) }
         tools.zoomOut = { [weak self] in self?.changeZoom(by: 0.8) }
         tools.home = { [weak self] in self?.showOriginal() }
+        tools.pan = { [weak self] in self?.panViewport($0) }
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) unavailable") }
     override func layoutSubviews() {
@@ -148,6 +167,14 @@ final class NotebookWhiteboardHost: UIView, PKCanvasViewDelegate {
     }
     func scrollViewDidScroll(_ scrollView: UIScrollView) { expandVisibleExtent() }
     func scrollViewDidZoom(_ scrollView: UIScrollView) { applyExtent(); expandVisibleExtent() }
+    private func panViewport(_ direction: NotebookWhiteboardPan) {
+        guard enabled, !isHidden, !drawing,
+              let visible = NotebookWhiteboardGeometry.visibleWorld(offset: canvas.contentOffset,
+                  zoom: canvas.zoomScale, viewport: canvas.bounds.size),
+              let origin = direction.origin(after: visible.offsetBy(dx: -Self.rendererBias.x, dy: -Self.rendererBias.y))
+        else { return }
+        setWorldViewportOrigin(origin)
+    }
     private func changeZoom(by factor: CGFloat) {
         guard !drawing else { return }
         let center = CGPoint(x: (canvas.contentOffset.x + canvas.bounds.width / 2) / canvas.zoomScale,
@@ -283,21 +310,26 @@ final class NotebookNoteFacesHost: UIView {
 struct NotebookMacWhiteboard: NSViewRepresentable {
     @ObservedObject var session: NotebookInkSession
     @ObservedObject var tools: NotebookWhiteboardTools
+    let active: Bool
     func makeNSView(context: Context) -> NotebookMacBoardView { NotebookMacBoardView(tools: tools) }
-    func updateNSView(_ view: NotebookMacBoardView, context: Context) { view.version = session.currentVersion; view.needsDisplay = true }
+    func updateNSView(_ view: NotebookMacBoardView, context: Context) {
+        view.active = active; view.version = session.currentVersion; view.needsDisplay = true
+    }
 }
 final class NotebookMacBoardView: NSView {
     var version: NotebookInkVersion?
-    private var origin = CGPoint.zero
+    var active = false
+    private(set) var origin = CGPoint.zero
     private var zoom: CGFloat = 1
     private var dragPoint: CGPoint?
     private var geometry = NotebookWhiteboardGeometry()
     init(tools: NotebookWhiteboardTools) {
         super.init(frame: .zero)
         setAccessibilityElement(true); setAccessibilityRole(.image)
-        setAccessibilityLabel("Scribble canvas for this note. Drag or scroll to pan; pinch or use the menu to zoom. Pencil originals are read-only on Mac.")
+        setAccessibilityLabel("Scribble canvas for this note. Use Note options, drag or scroll to pan. Pencil originals are read-only on Mac.")
         tools.zoomIn = { [weak self] in self?.changeZoom(1.25) }; tools.zoomOut = { [weak self] in self?.changeZoom(0.8) }
         tools.home = { [weak self] in self?.origin = .zero; self?.zoom = 1; self?.needsDisplay = true }
+        tools.pan = { [weak self] in self?.panViewport($0) }
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) unavailable") }
     override var isFlipped: Bool { true }
@@ -332,6 +364,13 @@ final class NotebookMacBoardView: NSView {
         origin.x = min(NotebookWhiteboardGeometry.limit, max(-NotebookWhiteboardGeometry.limit, origin.x + delta.width / zoom))
         origin.y = min(NotebookWhiteboardGeometry.limit, max(-NotebookWhiteboardGeometry.limit, origin.y + delta.height / zoom))
         _ = geometry.expand(around: CGRect(origin: origin, size: CGSize(width: bounds.width / zoom, height: bounds.height / zoom)))
+        needsDisplay = true
+    }
+    private func panViewport(_ direction: NotebookWhiteboardPan) {
+        let viewport = CGRect(origin: origin, size: CGSize(width: bounds.width / zoom, height: bounds.height / zoom))
+        guard active, let next = direction.origin(after: viewport) else { return }
+        origin = next
+        _ = geometry.expand(around: CGRect(origin: next, size: viewport.size))
         needsDisplay = true
     }
     private func changeZoom(_ factor: CGFloat) {

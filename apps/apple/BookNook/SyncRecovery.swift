@@ -101,7 +101,10 @@ private struct SyncRecoveryContent: View {
                         Divider()
                         Picker("Transfer with", selection: $authorization.syncDraft.selectedPeer) { Text("Choose device").tag(""); ForEach(status.peers.filter(\.enabled)) { Text($0.label).tag($0.id) } }
                         HStack {
-                            Button("Review encrypted snapshot") { run { try await prepare() } }.buttonStyle(.borderedProminent).disabled(!prerequisites.canApprove)
+                            Button("Review encrypted snapshot") {
+                                guard let recipient = status.peers.first(where: { $0.id == selectedPeer && $0.enabled }) else { return }
+                                run { try await prepare(for: recipient) }
+                            }.buttonStyle(.borderedProminent).disabled(!prerequisites.canApprove)
                             Button("Import encrypted snapshot") { importing = true }.buttonStyle(.bordered).disabled(!identityConfigured)
                         }.disabled(selectedPeer.isEmpty || model.saving)
                         Text("Each approved snapshot includes the library, notebooks, character history, annotations, reading positions, and accessible book files. Credentials and connection settings are excluded. File transfer needs no Book Nook server.").font(.caption).foregroundStyle(.secondary)
@@ -188,15 +191,22 @@ private struct SyncRecoveryContent: View {
             throw error
         }
     }
-    @MainActor func prepare() async throws {
+    @MainActor func prepare(for recipient: SyncPeer) async throws {
         try await model.drainSaves()
-        let prepared = try await model.repository.syncPrepare(peer: selectedPeer)
-        guard let batch = prepared.batch.object, let id = batch["id"] as? String, let revision = batch["revision"] as? NSNumber else { throw CocoaError(.coderReadCorrupt) }
+        let prepared = try await model.repository.syncPrepare(peer: recipient.id)
+        guard let batch = prepared.batch.object, let id = batch["id"] as? String else { throw CocoaError(.coderReadCorrupt) }
         do {
+            guard let recipients = batch["recipients"] as? [String], recipients == [recipient.id],
+                  let revision = batch["revision"] as? NSNumber else { throw CocoaError(.coderReadCorrupt) }
+            let currentStatus = try await model.repository.syncStatus()
+            guard currentStatus.peers.contains(where: { $0.id == recipient.id && $0.version == recipient.version && $0.enabled }) else {
+                status = currentStatus
+                throw AuthorizationError.message("This device’s pairing changed. Create and review a new encrypted snapshot.")
+            }
             let payload = try JSONSerialization.data(withJSONObject: batch)
             let receipt = try await model.authorization.authorize(payload: payload, action: "sync.send", resourceVersion: revision.uint64Value,
-                disclosure: AuthorizationDisclosure(title: "Send a private reading snapshot", statements: ["Transfer \(prepared.books) books, \(prepared.notebooks) notebooks, \(prepared.cards) character cards and \(prepared.annotations) annotations to \(status?.peers.first(where: { $0.id == selectedPeer })?.label ?? selectedPeer).", "Include \(prepared.assets) accessible content files. The snapshot is encrypted with this device pair’s key.", "Only the snapshot at library revision \(revision) is approved; later edits stay local until another approval."]))
-            _ = try await model.repository.syncApprove(id: id, key: savedKey(selectedPeer), receipt: receipt)
+                disclosure: AuthorizationDisclosure(title: "Send a private reading snapshot", statements: ["Transfer \(prepared.books) books, \(prepared.notebooks) notebooks, \(prepared.cards) character cards and \(prepared.annotations) annotations to \(recipient.label) (pairing ID: \(recipient.id)).", "Include \(prepared.assets) accessible content files. The snapshot is encrypted with this device pair’s key.", "Only the snapshot at library revision \(revision) is approved; later edits stay local until another approval."]))
+            _ = try await model.repository.syncApprove(id: id, key: savedKey(recipient.id), receipt: receipt)
             message = "Approved snapshot is ready in the transfer queue. Export it when ready."
         } catch { try? await model.repository.syncCancel(id: id); throw error }
     }

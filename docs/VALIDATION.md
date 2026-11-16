@@ -1,5 +1,11 @@
 # Validation record
 
+## Candidate 1602 source checks — 2026-11-16
+
+On the published Mac 1601 app, the existing Scribble note menu exposed zoom and origin reset with no directional pan. Candidate 1602 adds four standard pan commands to that same menu on Mac and iPad. The viewport moves in overlapping steps at the current zoom; the saved drawing stays unchanged. The AppKit test exercises the actual tool closures, including offscreen ink and hidden boards. Mac and iPad Simulator Swift source typechecks pass, including the updated PencilKit acceptance harness; its runtime and hands-on keyboard navigation are still unverified. The full local reading suite passes, including the caret reflow test and actual WebKit/PDFKit checks. A preflight typecheck stopped after a separate source file changed mid-run; the frozen replay passed on both targets.
+
+Prepared encrypted transfers now require an unchanged pairing through approval and outbox admission. The old native code accepted the three new stale-preparation regressions; the patched code passes all ten sync tests. The full native suite passes 67 tests, with one declared ignore. The tests use temporary SQLite stores and signed test fixtures; real Castalia authority and two physical devices remain separate gates. No public protocol, SDK signature or previously approved packet changed. The source changes are not part of the published or installed 1601 app.
+
 ## App 1601 builds and Mac caret reflow — 2026-11-16
 
 [Current build/runtime evidence](mac-2026111601-evidence.json) binds app **0.2.1 (2026111601)** to exact source `4855537f52c34b01189d182ade4be2d57ac58a67`. All three local arm64 Release targets pass actual settings, executable, platform and bundled ontology inspection; all 355 selected input hashes match frozen Git blobs and remain unchanged before/after each build. The previously qualified 0.2.1 native libraries and ABI remain unchanged. [Exact-source CI](https://github.com/bananawalnut/booknook/actions/runs/43939433025) passes both jobs and all 38 steps, with zero skipped CI steps and five declared ignored test entries.
@@ -10,11 +16,11 @@ This passes the bounded actual-app caret-reflow/reopen scenario and retains the 
 
 The later documentation commit `1047f8c` did not change app inputs, but its Apple CI run failed to measure the test's initial caret before any resize. The focused test repair explicitly settles the initial TextKit 2 layout and keeps the independent geometry check; it adds no post-resize scrolling or other repair. Local editor tests pass with default and forced legacy scrollers. A legacy-scroller negative control using a plain scroll view starts with a valid caret and still fails after resize. This is test-fixture evidence; the exact `4855537` release CI pass above remains separate.
 
-## Normal iPad 1601 update — 2026-11-16
+## Normal iPad 1601 update and launch — 2026-11-16
 
 [Physical installation evidence](ipad-2026111601-install-evidence.json) records a development-signed copy of the qualified iPad bundle, with the same certificate, team, device and app entitlements. The first renewal attempt stopped on an Xcode signing-setting conflict; the corrected attempt renewed the profile through November 23 at 20:38 UTC. The normal app was updated in place without an uninstall, and independent readback verifies version 0.2.1, build 2026111601. The unsigned public bundle remains unchanged.
 
-Before a successful launch, the DB/WAL/SHM bytes match the privately preserved baseline, SQLite quick check passes and all existing fields of the empty library match. The device remained in landscape-left with rotation lock off; no orientation command was sent. Apple rejected the initial launch with a combined signature, entitlement or trust error. Successful launch, populated-library migration, Keychain use and physical input remain unverified.
+Before a successful launch, the DB/WAL/SHM bytes match the privately preserved baseline, SQLite quick check passes and all existing fields of the empty library match. The device remained in landscape-left with rotation lock off; no orientation command was sent. Apple rejected the initial launch with a combined signature, entitlement or trust error. The [separate launch check](ipad-2026111601-launch-evidence.json) passed after the user confirmed Apple developer-profile trust, with no reinstall. The same empty library and its local reader were unchanged after launch; SQLite quick check passed and queues remained empty. The display stayed in landscape-left with rotation lock off. Populated-library migration, Keychain use and physical input remain unverified.
 
 ## SDK 0.2.1 and Mac follow-up — 2026-11-16
 

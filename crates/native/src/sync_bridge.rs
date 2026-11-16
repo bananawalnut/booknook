@@ -10,11 +10,11 @@ use booknook_core::{
     strict_parse,
     sync::{self, ApprovedPacket as Packet, Batch},
 };
-use rusqlite::{OptionalExtension, params};
+use rusqlite::{Connection, OptionalExtension, TransactionBehavior, params};
 use serde::{Deserialize, Serialize};
 use std::{collections::BTreeMap, path::Path};
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 struct Peer {
     schema: String,
@@ -42,6 +42,15 @@ fn invalid(s: &str) -> NativeError {
 }
 fn schema(s: &Store) -> Result<()> {
     s.connection.execute_batch("CREATE TABLE IF NOT EXISTS sync_meta(id INTEGER PRIMARY KEY CHECK(id=1),device_id TEXT NOT NULL); CREATE TABLE IF NOT EXISTS sync_peers(id TEXT PRIMARY KEY,json TEXT NOT NULL); CREATE TABLE IF NOT EXISTS sync_prepared(id TEXT PRIMARY KEY,batch TEXT NOT NULL,content TEXT NOT NULL); CREATE TABLE IF NOT EXISTS sync_outbox(id TEXT PRIMARY KEY,peer TEXT NOT NULL,packet TEXT NOT NULL,exported INTEGER NOT NULL DEFAULT 0); CREATE TABLE IF NOT EXISTS sync_received(id TEXT PRIMARY KEY,digest TEXT NOT NULL); CREATE TABLE IF NOT EXISTS sync_bases(peer TEXT PRIMARY KEY,json TEXT NOT NULL); CREATE TABLE IF NOT EXISTS sync_conflicts(id TEXT PRIMARY KEY,json TEXT NOT NULL);")?;
+    // An additive table leaves legacy prepared rows readable/cancellable, but
+    // never treats them as reviewed against a pairing we cannot recover.
+    s.connection.execute_batch(
+        "CREATE TABLE IF NOT EXISTS sync_prepared_pairings(
+            batch_id TEXT PRIMARY KEY NOT NULL REFERENCES sync_prepared(id) ON DELETE CASCADE,
+            peer_version TEXT NOT NULL,
+            key_id TEXT NOT NULL
+        );",
+    )?;
     s.connection.execute(
         "INSERT OR IGNORE INTO sync_meta VALUES(1,?1)",
         [booknook_core::new_id()],
@@ -55,13 +64,17 @@ fn device(s: &Store) -> Result<String> {
             r.get(0)
         })?)
 }
-fn peer(s: &Store, id: &str) -> Result<Peer> {
-    let raw: String =
-        s.connection
-            .query_row("SELECT json FROM sync_peers WHERE id=?1", [id], |r| {
-                r.get(0)
-            })?;
-    Ok(strict_parse(raw.as_bytes())?)
+fn stored_peer(connection: &Connection, id: &str) -> Result<Option<Peer>> {
+    let raw: Option<String> = connection
+        .query_row("SELECT json FROM sync_peers WHERE id=?1", [id], |r| {
+            r.get(0)
+        })
+        .optional()?;
+    raw.map(|raw| strict_parse(raw.as_bytes()).map_err(Into::into))
+        .transpose()
+}
+fn peer(connection: &Connection, id: &str) -> Result<Peer> {
+    stored_peer(connection, id)?.ok_or_else(|| invalid("This device is no longer paired"))
 }
 fn key(raw: &str) -> Result<[u8; 32]> {
     let bytes =
@@ -192,7 +205,7 @@ impl Desk {
         {
             return Err(invalid("Enter a different device ID and a label"));
         }
-        let previous = peer(&s, &device_id).ok();
+        let previous = stored_peer(&s.connection, &device_id)?;
         let version = previous
             .as_ref()
             .map_or(Some(1), |p| p.version.checked_add(1))
@@ -248,7 +261,10 @@ impl Desk {
         {
             return Err(invalid("Pairing record does not match this device"));
         }
-        let previous = peer(&s, &proposed.device_id).ok();
+        let tx = s
+            .connection
+            .transaction_with_behavior(TransactionBehavior::Immediate)?;
+        let previous = stored_peer(&tx, &proposed.device_id)?;
         let expected = previous
             .as_ref()
             .map_or(Some(1), |p| p.version.checked_add(1))
@@ -260,7 +276,7 @@ impl Desk {
             .as_ref()
             .is_some_and(|p| p.key_id != proposed.key_id)
         {
-            let count: i64 = s.connection.query_row(
+            let count: i64 = tx.query_row(
                 "SELECT count(*) FROM sync_outbox WHERE peer=?1",
                 [&proposed.device_id],
                 |r| r.get(0),
@@ -271,7 +287,6 @@ impl Desk {
                 ));
             }
         }
-        let tx = s.connection.transaction()?;
         tx.execute(
             "INSERT INTO consumed_receipts VALUES(?1,?2)",
             params![receipt.replay_key(), sql_number(at)?],
@@ -288,8 +303,8 @@ impl Desk {
         let mut s = self.lock()?;
         crate::edit_journal::recover(&mut s)?;
         schema(&s)?;
-        let peer = peer(&s, &peer_id)?;
-        if !peer.enabled || peer.owner != policy.actor {
+        let pairing = peer(&s.connection, &peer_id)?;
+        if !pairing.enabled || pairing.owner != policy.actor {
             return Err(invalid("Device is disabled or belongs to another identity"));
         }
         let c = content(&s)?;
@@ -302,16 +317,30 @@ impl Desk {
         let batch = sync::prepare(
             &policy.actor,
             c.state.revision,
-            vec![peer_id],
+            vec![peer_id.clone()],
             plaintext.as_bytes(),
         )?;
-        s.connection.execute(
+        let response = encoded(
+            &serde_json::json!({"batch":batch,"books":c.state.books.len(),"notebooks":c.state.notebooks.len(),"cards":c.state.cards.len(),"annotations":c.state.annotations.len(),"assets":c.assets.len(),"bytes":plaintext.len()}),
+        )?;
+        let tx = s
+            .connection
+            .transaction_with_behavior(TransactionBehavior::Immediate)?;
+        if stored_peer(&tx, &peer_id)?.as_ref() != Some(&pairing) {
+            return Err(invalid(
+                "The device pairing changed during preparation. Create and review a new encrypted snapshot.",
+            ));
+        }
+        tx.execute(
             "INSERT INTO sync_prepared VALUES(?1,?2,?3)",
             params![batch.id, encoded(&batch)?, plaintext],
         )?;
-        encoded(
-            &serde_json::json!({"batch":batch,"books":c.state.books.len(),"notebooks":c.state.notebooks.len(),"cards":c.state.cards.len(),"annotations":c.state.annotations.len(),"assets":c.assets.len(),"bytes":plaintext.len()}),
-        )
+        tx.execute(
+            "INSERT INTO sync_prepared_pairings VALUES(?1,?2,?3)",
+            params![batch.id, pairing.version.to_string(), pairing.key_id],
+        )?;
+        tx.commit()?;
+        Ok(response)
     }
     pub fn sync_approve(
         &self,
@@ -322,20 +351,44 @@ impl Desk {
     ) -> Result<String> {
         let policy = self.policy("sync.send", None)?;
         let key = key(&key_hex)?;
-        let at = now()?;
         let mut s = self.lock()?;
         schema(&s)?;
-        let (raw, plain): (String, String) = s.connection.query_row(
-            "SELECT batch,content FROM sync_prepared WHERE id=?1",
+        // Serialize the pairing check, sealing and outbox admission across Desk
+        // handles. Rekey acquires the same writer lock before checking the outbox.
+        let tx = s
+            .connection
+            .transaction_with_behavior(TransactionBehavior::Immediate)?;
+        let raw: String = tx.query_row(
+            "SELECT batch FROM sync_prepared WHERE id=?1",
             [&batch_id],
-            |r| Ok((r.get(0)?, r.get(1)?)),
+            |r| r.get(0),
         )?;
         let batch: Batch = strict_parse(raw.as_bytes())?;
-        if batch.recipients.len() != 1 {
-            return Err(invalid("Invalid sync audience"));
+        if batch.id != batch_id || batch.recipients.len() != 1 {
+            return Err(invalid("Invalid sync batch or audience"));
         }
-        let peer = peer(&s, &batch.recipients[0])?;
+        let pairing: Option<(String, String)> = tx
+            .query_row(
+                "SELECT peer_version,key_id FROM sync_prepared_pairings WHERE batch_id=?1",
+                [&batch_id],
+                |r| Ok((r.get(0)?, r.get(1)?)),
+            )
+            .optional()?;
+        let (version, key_id) = pairing.ok_or_else(|| {
+            invalid("This snapshot has no saved pairing review. Create and review a new encrypted snapshot.")
+        })?;
+        let peer = stored_peer(&tx, &batch.recipients[0])?
+            .filter(|peer| peer.version.to_string() == version && peer.key_id == key_id)
+            .ok_or_else(|| {
+                invalid("The device pairing changed after this snapshot was prepared. Create and review a new encrypted snapshot.")
+            })?;
         check_peer(&peer, &key, &policy.actor)?;
+        let plain: String = tx.query_row(
+            "SELECT content FROM sync_prepared WHERE id=?1",
+            [&batch_id],
+            |r| r.get(0),
+        )?;
+        let at = now()?;
         let approved = sync::seal_packet(
             batch,
             plain.as_bytes(),
@@ -346,7 +399,6 @@ impl Desk {
             at,
         )?;
         let json = encoded(&approved.packet)?;
-        let tx = s.connection.transaction()?;
         tx.execute(
             "INSERT INTO consumed_receipts VALUES(?1,?2)",
             params![approved.replay_key, sql_number(at)?],
@@ -375,7 +427,7 @@ impl Desk {
             [&batch_id],
             |r| Ok((r.get(0)?, r.get(1)?)),
         )?;
-        let peer = peer(&s, &peer_id)?;
+        let peer = peer(&s.connection, &peer_id)?;
         if !peer.enabled || peer.owner != policy.actor {
             return Err(invalid(
                 "This device was disabled; queued exports are suspended",
@@ -417,7 +469,7 @@ impl Desk {
         let mut s = self.lock()?;
         crate::edit_journal::recover(&mut s)?;
         let local = device(&s)?;
-        let peer = peer(&s, &source_device)?;
+        let peer = peer(&s.connection, &source_device)?;
         check_peer(&peer, &key, &policy.actor)?;
         let opened = sync::open_packet(&packet, &key, &local, &policy, now()?)?;
         let c: Content = strict_parse(&opened.plaintext)?;

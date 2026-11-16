@@ -1,0 +1,46 @@
+{
+  "schema": "booknook.ipad1601-launch-evidence.v1",
+  "status": "PASS_NORMAL_APP_LAUNCH_AFTER_USER_TRUST",
+  "observed_utc": "2026-11-16T20:56:47.311453Z",
+  "source_commit": "4855537f52c34b01189d182ade4be2d57ac58a67",
+  "app": {
+    "bundle_id": "org.booknook.ipad",
+    "installed_version": "0.2.1",
+    "installed_build": "2026111601",
+    "device_os_observed": "18.1.1",
+    "install_evidence": "ipad-2026111601-install-evidence.json",
+    "prior_install_and_initial_launch_failure_evidence_unchanged": true
+  },
+  "launch": {
+    "result": "PASS",
+    "user_confirmed_apple_developer_profile_trusted": true,
+    "verified_app_process_launched": true,
+    "clean_app_environment": true,
+    "verification_receipt_bytes": 513,
+    "verification_receipt_sha256": "cc694665eac17776c8c0499976297cc64f66056a282c13409518ce84cc274dec",
+    "launch_receipt_bytes": 1355,
+    "launch_receipt_sha256": "b92fe56ce5731aa7941a0e6e82d66dfa81bfb259a3eac4eda5c97a7adfcd5fc7",
+    "installed_app_readback_sha256": "e5e8302b9775a879812971f4e10d688eda21fcc8c95079a9f6d9334b98327fc2",
+    "scope": "The same normal app launched after the user confirmed trust, with no intervening reinstall. The initial Apple security rejection remains recorded separately."
+  },
+  "display": {
+    "readback_receipt_bytes": 1248,
+    "readback_receipt_sha256": "2c9751410e62b9af122446201bec9e748d416145d32ecec28ef20197e7b3e7fe",
+    "same_landscape_left_rotation_lock_off": true,
+    "orientation_commands_sent": false
+  },
+  "after_launch": {
+    "sqlite_semantic_receipt_bytes": 633,
+    "sqlite_semantic_receipt_sha256": "a3a34ffbf3ae9218c491759b385163fa1a483b0aecfd1b07b926ea6765c55467",
+    "sqlite_quick_check": "PASS",
+    "all_existing_desk_fields_including_local_reader_unchanged": true,
+    "baseline_library_empty": true,
+    "pending_edits_social_and_sync_outbox": 0,
+    "scope": "Read-only check on a private copy; no fixture was seeded or content edited. This does not establish populated-library migration or Keychain access."
+  },
+  "limits": [
+    "Normal launch on the connected iPad and empty-store preservation only; physical finger/Pencil, keyboard/IME, accessibility, endurance and iPadOS 17 runtime remain unqualified.",
+    "No Kindle/Audible/Castalia account activity, social or device-sync qualification, store distribution, new screenshots or fifth UX round."
+  ],
+  "production_MVP_qualified": false
+}
