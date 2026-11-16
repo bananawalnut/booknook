@@ -1,0 +1,132 @@
+{
+  "schema": "booknook.mac1601-build-runtime-evidence.v1",
+  "status": "PASS_THREE_LOCAL_RELEASE_BUILDS_EXACT_SOURCE_CI_AND_BOUNDED_MAC_CARET_REFLOW_REOPEN",
+  "observed_utc": "2026-11-16T19:49:17.413817+00:00",
+  "version": "0.2.1",
+  "build": "2026111601",
+  "source_commit": "4855537f52c34b01189d182ade4be2d57ac58a67",
+  "change_scope": "AppKit presentation repair only; qualified SDK 0.2.1 libraries, generated ABI, saved-data, provider, authority and ontology contracts remain unchanged.",
+  "source_qualification": {
+    "preflight_receipt_bytes": 4929,
+    "preflight_receipt_sha256": "f6ab6c93f0b4cf127fac805ddfa4154f4ff33081acbcc1e02005d041ee6e1942",
+    "selected_source_inputs": 355,
+    "all_selected_inputs_match_frozen_Git_blobs": true,
+    "selected_map_before_and_after_all_three_builds_sha256": "cdd75d49891b06cb3eb0af7648f2ae4acadfc6c5ca88123883eea9a5c10a7bb2",
+    "unchanged_native_source_inputs": 166,
+    "qualified_native_source_commit": "efec2dd389aa877fc2ceac589d6f7384a1cecf4d",
+    "sdk_evidence": "sdk-021-qualification-evidence.json",
+    "native_editor_harness_evidence": "mac-editor-reflow-evidence.json",
+    "historical_evidence_bytes_preserved": true
+  },
+  "release_builds": {
+    "configuration": "Release",
+    "architecture": "arm64",
+    "result": "PASS_ALL_THREE_TARGETS",
+    "mac": {
+      "build_receipt_bytes": 10817,
+      "build_receipt_sha256": "62f452006d3b8f298785f4c0e9c04c2d76b6c6ad8946d2aa890df3f2493146e2",
+      "executable_bytes": 40658104,
+      "executable_sha256": "9b3d2d80de251542f28abe8f55c390052899b069f41342b1f1a13383e06835c8",
+      "inspection_sha256": "a0626fc0e008dc6df9af5487a731740d17023b42491dac2073bef588d61e2747",
+      "platform": "MACOS",
+      "minimum_os_metadata": "14.0",
+      "signature": "linker-ad-hoc"
+    },
+    "ipad_sim": {
+      "build_receipt_bytes": 11051,
+      "build_receipt_sha256": "26fe97853db7e2234b2788649e47e288412350669e6a2794cc12258d9643093a",
+      "executable_bytes": 30176360,
+      "executable_sha256": "8e93fcc34f579df5b8e62f606af3464828dab8f9cde553c5a3a6b28b69ffb316",
+      "inspection_sha256": "9f41ffc0251a13270f202f82cc8d6d3ab54168ed9cb752bd8e443b21e2ba19ed",
+      "platform": "IOSSIMULATOR",
+      "minimum_os_metadata": "17.0",
+      "signature": "linker-ad-hoc"
+    },
+    "ipad_device": {
+      "build_receipt_bytes": 11068,
+      "build_receipt_sha256": "59ab39f8b3d3d8230991806457bebdc2105cedf8d7a9d49870a969d1a381ede9",
+      "executable_bytes": 30061368,
+      "executable_sha256": "732c0b22f3a0e4efa23d4e99fd68c2953bce6188d222ae085ede7a2cfa5ed71b",
+      "inspection_sha256": "e9de3bdc016ba8207980d7cf4fc0264f38788636c8601c159af041811ae51455",
+      "platform": "IOS",
+      "minimum_os_metadata": "17.0",
+      "signature": "unsigned"
+    },
+    "bundled_ontology": { "current": "0.3.0", "artifacts": 73, "files": 80 },
+    "minimum_os_runtime_qualified": false,
+    "ios_runtime_performed": false
+  },
+  "exact_source_ci": {
+    "result": "PASS",
+    "source_commit": "4855537f52c34b01189d182ade4be2d57ac58a67",
+    "url": "https://github.com/bananawalnut/booknook/actions/runs/43939433025",
+    "receipt_bytes": 7540,
+    "receipt_sha256": "aff99ec98f1a8c826fcb6f874a661bd8f303ecc16fa900f2d0b048d7d63cda48",
+    "jobs": 2,
+    "successful_jobs": 2,
+    "steps": 38,
+    "successful_steps": 38,
+    "skipped_CI_steps": 0,
+    "distinct_declared_ignored_test_entries": 5,
+    "full_log_bytes": 1213713,
+    "full_log_sha256": "b3c9129b06eb4beed496e3c56cc7ffabc624b1f3ddbad4f51d857d1a6b809047",
+    "scope": "Hosted source builds, contracts, native workflow/harness and package consumers; separate from local app artifacts, publication and physical/live qualification."
+  },
+  "actual_mac_runtime": {
+    "result": "PASS_BOUNDED_ACTUAL_GUI_CARET_REFLOW_AND_NORMAL_REOPEN",
+    "receipt_bytes": 5071,
+    "receipt_sha256": "6c8943d5cd606dbdff572aa00da039366ddc2ad0a0b0934e3e44ba3143a9681c",
+    "additional_reopened_process_confirmation": {
+      "receipt_bytes": 595,
+      "receipt_sha256": "7a602a17fa185eb626579cad8d84d47fdefd6e596d3cc11ad671b2e4615eb350"
+    },
+    "observed_utc": "2026-11-16T19:48:00.732544+00:00",
+    "exact_qualified_executable_identity_verified": true,
+    "synthetic_QA_desk_only": true,
+    "personal_default_library_untouched": true,
+    "QA_copy_scope": "Only the QA bundle selects the existing synthetic desk; the pristine Release product remains unchanged.",
+    "gui_checks": [
+      "Warm EPUB and Margin panes render together; Connections shows 0.2.1 (2026111601).",
+      "Focused long-note end remains visible without a restore key through right Margin 50/55/50/45/50 percent and left 50/40/30/21 percent.",
+      "Inline screenshot at 21 percent shows the full focused caret inside the note viewport; restored initial right 21 percent, with intentional focus resignation on side swap.",
+      "Normal Cmd-Q followed durable saved-state proof and verified process absence; reopening the exact QA app restores the EPUB, three notes and the three-version character card.",
+      "Native navigation reaches Passage 360 and the exact long-note ending after reopen. No new 1601 GUI typing or Undo/Redo acceptance is inferred."
+    ],
+    "saved_data": {
+      "before_quit_equals_after_quit_desk": true,
+      "only_baseline_and_reopen_changed_fields": ["revision", "positions"],
+      "all_note_text_CRDT_styles_identity_order_creation_context_and_revision_history_unchanged": true,
+      "cards_character_history_books_lists_and_social_state_unchanged": true,
+      "long_note_utf16_units": 120623,
+      "long_note_utf8_bytes": 123863,
+      "long_note_text_sha256": "1d0e821bc42d6b443e782f1fe041f422a72868ea16e6a50d9f76824fd1e39bb5",
+      "all_pending_queue_counts": 0,
+      "social_revision": 0
+    },
+    "screenshots": "Inline observations only; screenshot-file export remains unavailable. README capture files retain their dated historical scope.",
+    "partial_UX_round": 4,
+    "fifth_round_started": false
+  },
+  "delivery_at_this_observation": {
+    "new1601_packaging": "PENDING",
+    "new1601_publication_and_actual_download_verification": "NOT_PERFORMED",
+    "current_public_app_build": "2026111503",
+    "current_public_app_evidence": "app-2026111503-public-preview-evidence.json",
+    "current_public_app_known_caret_issue": "mac-2026111503-longnote-evidence.json",
+    "existing_public_app_and_SDK_asset_bytes_unchanged": true
+  },
+  "retained_history": {
+    "original_actual_app_nonpass": "mac-2026111503-longnote-evidence.json",
+    "original_actual_app_receipt_sha256": "f7517df4b2f5ae9c2aafb818d241ce77ced620ee83805d7a4c1447a2f6a7050f",
+    "source_harness_negative_controls_and_insufficient_candidates": "mac-editor-reflow-evidence.json",
+    "path_dependent_startup_wait_remains_unresolved": true
+  },
+  "limits": [
+    "Bounded Mac caret-reflow and normal-reopen acceptance; not general startup, latency or endurance qualification.",
+    "No physical iPad/Pencil action; the iPad is unavailable. Generic iOS builds are not runtime, signing, trust or installation acceptance.",
+    "No physical keyboard, real IME, VoiceOver, minimum-OS runtime, forced termination, power-loss or live-source/authority/social/device-sync qualification.",
+    "App archives/publication and downloaded-byte checks remain separate from this build/runtime observation. No production signing, notarization or normal installation is claimed.",
+    "Previous app, SDK and historical evidence remain immutable; this app-only repair changes no saved-data or ontology contract."
+  ],
+  "production_MVP_qualified": false
+}
