@@ -1,0 +1,86 @@
+name: Verify Apple release archives
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  archive:
+    runs-on: macos-latest
+    timeout-minutes: 45
+    env:
+      BOOKNOOK_APP_CONFIGURATION: Release
+      BOOKNOOK_PUBLIC_APP_BUILD: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: "1.96.0"
+          targets: aarch64-apple-ios-sim,aarch64-apple-ios
+      - run: brew install xcodegen
+      - name: Build and inspect the three Release targets
+        shell: bash
+        run: |
+          umask 077
+          export CARGO_TARGET_DIR="$RUNNER_TEMP/booknook-release-cargo"
+          export BOOKNOOK_APP_BUILD_DIR="$RUNNER_TEMP/booknook-release-products"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test -z "$(git status --porcelain)"
+          rustc --version
+          xcodebuild -version
+          for platform in mac ipad-sim ipad-device; do
+            bash scripts/build-apple.sh "$platform"
+            git diff --exit-code -- apps/apple/Generated
+          done
+          test -z "$(git status --porcelain)"
+          mkdir -m 700 "$RUNNER_TEMP/booknook-release-archives"
+          python3 -B - "$BOOKNOOK_APP_BUILD_DIR" "$RUNNER_TEMP/booknook-release-archives/BUILD-PROVENANCE.json" <<'PY'
+          import importlib.util
+          import json
+          import os
+          from pathlib import Path
+          import subprocess
+          import sys
+
+          sys.path.insert(0, "scripts")
+          spec = importlib.util.spec_from_file_location("apple_package", "scripts/package-apple-apps.py")
+          package = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(package)
+          products, destination = map(Path, sys.argv[1:])
+          app_trees = {}
+          versions = set()
+          for platform in package.PRODUCTS:
+              app = package.product_path(products, platform, "Release")
+              inspection = package.inspect(app, platform, "Release")
+              info = inspection["info"]
+              versions.add((info["CFBundleShortVersionString"], info["CFBundleVersion"]))
+              expected_signature = "unsigned" if platform == "ipad-device" else "linker-ad-hoc"
+              for name, binary in inspection["mach_o"].items():
+                  assert binary["signature"] == expected_signature
+                  if expected_signature == "linker-ad-hoc":
+                      subprocess.run(["/usr/bin/codesign", "--verify", "--strict", str(app / name)], check=True)
+              app_trees[platform] = {
+                  "files": {name: {k: v for k, v in entry.items() if k != "mode"}
+                            for name, entry in package.manifest(app).items() if "directory" not in entry}
+              }
+          assert len(versions) == 1 and all(next(iter(versions)))
+          with destination.open("x") as stream:
+              json.dump({"source_commit": os.environ["GITHUB_SHA"],
+                         "workflow_run_id": os.environ["GITHUB_RUN_ID"],
+                         "configuration": "Release",
+                         "app_trees": app_trees}, stream, indent=2)
+              stream.write("\n")
+          PY
+          python3 -B scripts/package-apple-apps.py \
+            --configuration Release --check-public-content \
+            --build-root "$BOOKNOOK_APP_BUILD_DIR" \
+            --output "$RUNNER_TEMP/booknook-release-archives" \
+            --provenance "$RUNNER_TEMP/booknook-release-archives/BUILD-PROVENANCE.json"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: booknook-apple-release-${{ github.sha }}
+          path: ${{ runner.temp }}/booknook-release-archives/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14

@@ -9,7 +9,38 @@ export DEVELOPER_DIR="${DEVELOPER_DIR:-/Applications/Xcode.app/Contents/Develope
 export MACOSX_DEPLOYMENT_TARGET=14.0
 export IPHONEOS_DEPLOYMENT_TARGET=17.0
 platform="${1:-mac}"
+booknook_app_build_dir="${BOOKNOOK_APP_BUILD_DIR:-Build}"
+booknook_app_configuration="${BOOKNOOK_APP_CONFIGURATION:-Debug}"
+public_build="${BOOKNOOK_PUBLIC_APP_BUILD:-0}"
+if [[ "$public_build" == 1 ]]; then
+  if [[ "$booknook_app_configuration" != Release || -z "${CARGO_TARGET_DIR:-}" || -z "${BOOKNOOK_APP_BUILD_DIR:-}" ]]; then
+    echo 'Public Apple builds require Release and explicit CARGO_TARGET_DIR and BOOKNOOK_APP_BUILD_DIR.' >&2
+    exit 2
+  fi
+  if [[ -n "${RUSTFLAGS:-}" || -n "${CARGO_ENCODED_RUSTFLAGS:-}" ]]; then
+    echo 'Public Apple builds need to set their own Rust path remapping flags.' >&2
+    exit 2
+  fi
+fi
 target_directory="$(python3 scripts/cargo_paths.py)"
+if [[ "$public_build" == 1 ]]; then
+  # Resolve a relative DerivedData path the same way as the xcodebuild below.
+  if [[ "$booknook_app_build_dir" != /* ]]; then
+    booknook_app_build_dir="$PWD/apps/apple/$booknook_app_build_dir"
+  fi
+  public_flags="$(python3 scripts/apple-public-build-flags.py "$PWD" "$target_directory" "$booknook_app_build_dir")"
+  {
+    IFS= read -r CARGO_ENCODED_RUSTFLAGS
+    IFS= read -r clang_flags
+    IFS= read -r xcode_clang_flags
+    IFS= read -r xcode_swift_flags
+  } <<< "$public_flags"
+  export CARGO_ENCODED_RUSTFLAGS CARGO_PROFILE_RELEASE_DEBUG=0
+  export CARGO_BUILD_BUILD_DIR="$target_directory"
+  export CC_SHELL_ESCAPED_FLAGS=1
+  export CFLAGS="${CFLAGS:+$CFLAGS }$clang_flags"
+  export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }$clang_flags"
+fi
 cargo build --locked -p booknook-native --release
 cargo run --locked -p booknook-native --features bindgen --bin uniffi-bindgen -- generate --library "$target_directory/release/libbooknook_native.dylib" --language swift --out-dir apps/apple/Generated
 BOOKNOOK_BUILD_PLATFORM="$platform" python3 - "$target_directory" <<'PY'
@@ -52,6 +83,14 @@ case "$platform" in
 esac
 cd apps/apple
 xcodegen generate
-booknook_app_build_dir="${BOOKNOOK_APP_BUILD_DIR:-Build}"
-booknook_app_configuration="${BOOKNOOK_APP_CONFIGURATION:-Debug}"
-xcodebuild -project BookNook.xcodeproj -scheme "$scheme" -sdk "$sdk" -destination "$destination" -configuration "$booknook_app_configuration" -derivedDataPath "$booknook_app_build_dir/$platform" ARCHS=arm64 CODE_SIGNING_ALLOWED=NO "BOOKNOOK_RUST_LIBRARY=$native_library" build
+xcode_args=(-project BookNook.xcodeproj -scheme "$scheme" -sdk "$sdk" -destination "$destination"
+  -configuration "$booknook_app_configuration" -derivedDataPath "$booknook_app_build_dir/$platform"
+  ARCHS=arm64 CODE_SIGNING_ALLOWED=NO "BOOKNOOK_RUST_LIBRARY=$native_library")
+if [[ "$public_build" == 1 ]]; then
+  xcode_args+=(DEBUG_INFORMATION_FORMAT=dwarf GCC_GENERATE_DEBUGGING_SYMBOLS=NO
+    'BOOKNOOK_PUBLIC_LINK_FLAGS=-Wl,-S'
+    "OTHER_CFLAGS=\$(inherited) $xcode_clang_flags"
+    "OTHER_CPLUSPLUSFLAGS=\$(inherited) $xcode_clang_flags"
+    "OTHER_SWIFT_FLAGS=\$(inherited) $xcode_swift_flags")
+fi
+xcodebuild "${xcode_args[@]}" build

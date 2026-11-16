@@ -23,6 +23,49 @@ PRODUCTS = {
     "ipad-device": ("ipad-device/Build/Products/{configuration}-iphoneos/BookNookPad.app", "iPhoneOS", "IOS", "org.booknook.ipad"),
 }
 MINIMUM_OS = {"mac": "14.0", "ipad-sim": "17.0", "ipad-device": "17.0"}
+PUBLIC_CONTENT_CHUNK_BYTES = 1024 * 1024
+PUBLIC_CONTENT_PATH_SIGNATURES = tuple(
+    root.encode(encoding)
+    for root in ("/Users/", "/Volumes/", "/var/folders/", "/private/tmp/", "/tmp/", "/home/")
+    for encoding in ("ascii", "utf-16-le", "utf-16-be")
+)
+PUBLIC_CONTENT_PATH_OVERLAP = max(map(len, PUBLIC_CONTENT_PATH_SIGNATURES)) - 1
+SQLITE_MEMBER_NAME = re.compile(r"\.(?:db|sqlite3?)(?:-(?:wal|shm|journal))?$", re.IGNORECASE)
+
+
+def check_public_content(app, key):
+    """Reject known private content in an existing bundle without printing its contents."""
+    for path in sorted(app.rglob("*")):
+        name = path.relative_to(app).as_posix()
+        if path.name.lower() == "embedded.mobileprovision":
+            raise ValueError(f"{key}: public bundle contains embedded provisioning ({name})")
+        if SQLITE_MEMBER_NAME.search(path.name):
+            raise ValueError(f"{key}: public bundle contains a SQLite or scratch store member ({name})")
+        if path.is_symlink() or not path.is_file():
+            continue
+        with path.open("rb") as stream:
+            chunk = stream.read(PUBLIC_CONTENT_CHUNK_BYTES)
+            if chunk.startswith(b"SQLite format 3\x00"):
+                raise ValueError(f"{key}: public bundle contains a SQLite database ({name})")
+            tail = b""
+            while chunk:
+                window = tail + chunk
+                if any(signature in window for signature in PUBLIC_CONTENT_PATH_SIGNATURES):
+                    raise ValueError(f"{key}: public bundle contains a private absolute path ({name})")
+                tail = window[-PUBLIC_CONTENT_PATH_OVERLAP:]
+                chunk = stream.read(PUBLIC_CONTENT_CHUNK_BYTES)
+
+    info_path = app / ("Contents/Info.plist" if key == "mac" else "Info.plist")
+    if info_path.is_symlink() or not info_path.is_file():
+        raise ValueError(f"{key}: public bundle requires a regular Info.plist")
+    plist_limit = 256 * 1024
+    with info_path.open("rb") as stream:
+        data = stream.read(plist_limit + 1)
+    if len(data) > plist_limit:
+        raise ValueError(f"{key}: public bundle Info.plist exceeds the screening limit")
+    info = plistlib.loads(data)
+    if "BOOKNOOK_DATA_DIR" in info.get("LSEnvironment", {}):
+        raise ValueError(f"{key}: public bundle contains a QA launch-path override")
 
 
 def product_path(build_root, key, configuration):
@@ -153,14 +196,24 @@ def main():
     parser.add_argument("--configuration", choices=("Debug", "Release"), default="Debug")
     parser.add_argument("--provenance", type=Path, required=True,
                         help="Verified build-inputs.json containing app_trees from successful builds")
+    parser.add_argument("--check-public-content", action="store_true",
+                        help="Screen Release input bundles and verified extractions for private content")
     args = parser.parse_args()
+    if args.check_public_content and args.configuration != "Release":
+        parser.error("--check-public-content requires --configuration Release")
+    build_root = args.build_root.resolve()
+    if args.check_public_content:
+        for key in PRODUCTS:
+            check_public_content(product_path(build_root, key, args.configuration), key)
     provenance = json.loads(args.provenance.read_text())
     version = tomllib.loads((ROOT / "Cargo.toml").read_text())["workspace"]["package"]["version"]
     args.output.mkdir(parents=True, exist_ok=True)
     report = {"workspace_version": version, "configuration": args.configuration,
               "build_provenance_sha256": digest(args.provenance), "apps": {}}
+    if args.check_public_content:
+        report["public_content_checked"] = True
     for key in PRODUCTS:
-        app = product_path(args.build_root.resolve(), key, args.configuration)
+        app = product_path(build_root, key, args.configuration)
         before = manifest(app)
         files = {name: {k: v for k, v in entry.items() if k != "mode"}
                  for name, entry in before.items() if "directory" not in entry}
@@ -179,6 +232,8 @@ def main():
                 archive.extractall(temporary, filter="data")
             extracted = Path(temporary) / app.name
             assert manifest(extracted) == before, f"Extracted bundle tree differs: {key}"
+            if args.check_public_content:
+                check_public_content(extracted, key)
             assert inspect(extracted, key, args.configuration) == inspection, f"Extracted executable metadata differs: {key}"
         assert manifest(app) == before, f"Source bundle changed during packaging: {key}"
         report["apps"][key] = {"archive": output.name, "archive_bytes": output.stat().st_size,
@@ -186,6 +241,7 @@ def main():
                                "files": before, "inspection": inspection}
         print(f"{key}: verified {len(files)} files, {len(inspection['mach_o'])} Mach-O binaries, {output.stat().st_size} archive bytes; {digest(output)}")
     (args.output / "VERIFICATION.json").write_text(json.dumps(report, indent=2) + "\n")
+    public_content_option = " --check-public-content" if args.check_public_content else ""
     (args.output / "README.md").write_text(f"""# Book Nook native development apps
 
 These archives preserve the already-built Book Nook {version} {args.configuration}-configuration development bundles. They are not signed/notarized release distributions. Packaging did not rebuild, sign, install or launch any application.
@@ -202,7 +258,7 @@ The archive version is the source workspace version; actual Info.plist marketing
 
 `VERIFICATION.json` records the selected configuration, every bundled file hash/mode, each Mach-O architecture/platform/minimum-OS/dependency, Info.plist fields and comparison to the successful-build provenance. Every archive was independently extracted, its full bundle tree and executable metadata compared, and the temporary copy removed. `SHA256SUMS` covers the three archives and this verification record.
 
-Reproduce from the adjacent source workspace after successful matching builds with `python3 scripts/package-apple-apps.py --configuration {args.configuration} --provenance <matching-build-inputs.json>`. `--build-root <directory>` selects an external build-apple output root; the default is `apps/apple/Build`. The required provenance prevents accidentally packaging stale or changed builds. Outputs default to the adjacent `booknook-apps` directory. The script only reads build products and uses at most one temporary extracted bundle at a time. Source and license boundaries are documented in the adjacent `booknook` workspace; new reference-app code is MPL-2.0 and new core/SDK code is MIT OR Apache-2.0. Dependencies retain their declared licenses.
+Reproduce from the adjacent source workspace after successful matching builds with `python3 scripts/package-apple-apps.py --configuration {args.configuration}{public_content_option} --provenance <matching-build-inputs.json>`. `--build-root <directory>` selects an external build-apple output root; the default is `apps/apple/Build`. The required provenance prevents accidentally packaging stale or changed builds. Outputs default to the adjacent `booknook-apps` directory. The script only reads build products and uses at most one temporary extracted bundle at a time. Source and license boundaries are documented in the adjacent `booknook` workspace; new reference-app code is MPL-2.0 and new core/SDK code is MIT OR Apache-2.0. Dependencies retain their declared licenses.
 """)
     checked = [args.output / app["archive"] for app in report["apps"].values()]
     checked += [args.output / "VERIFICATION.json", args.output / "README.md"]

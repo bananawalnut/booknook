@@ -32,6 +32,12 @@ After successful matching builds, `python3 scripts/package-apple-apps.py --prove
 
 The historical pre-patch [November 14 Release checkpoint](native-release-20261114-evidence.json) rebuilt all three Swift app targets and Rust Release libraries as **0.1.0 (2026111401)**. It records an explicit 362-input snapshot based on `995b36bd` plus the app/build increment, not a claim of a clean release commit. Each app archive independently extracts with 88 files and one arm64 Mach-O, reporting MACOS 14.0, IOSSIMULATOR 17.0 or IOS 17.0 as appropriate. That Swift XCFramework package also passed an independent extracted macOS arm64 consumer using the pre-patch Release Rust slice; its Swift test consumer uses the default Debug configuration. Complete archive-member minimum-OS metadata checks pass. These are local build/package checks, not GUI, minimum-OS runtime, physical installation or public distribution acceptance.
 
+### Public Apple archive verification
+
+Run **Verify Apple release archives** from the repository's Actions tab for the revision being considered for distribution. The workflow builds the three Release targets with source-path remapping, checks their ancestry against the checked-out commit, and verifies the native archive contents and extracted bundle trees. It attaches only the archive directory after those checks pass. The workflow produces candidate development bundles for separate runtime and distribution checks. [Workflow](../.github/workflows/apple-release.yml).
+
+For a local build, set `BOOKNOOK_PUBLIC_APP_BUILD=1` and `BOOKNOOK_APP_CONFIGURATION=Release` with dedicated `CARGO_TARGET_DIR` and `BOOKNOOK_APP_BUILD_DIR` directories before running `scripts/build-apple.sh` for each target. Package the verified outputs with `--configuration Release --check-public-content` and the matching build provenance. The check screens the built bundles and exact extractions for developer-local paths, embedded profiles, local databases and QA launch overrides.
+
 ## Locally consumable SDK packages
 
 The [historical 0.2.0 native/Swift Release evidence](native-020-release-evidence.json) superseded the preceding 0.1.0 checkpoint: all nine phases pass at a945df2, including three Release apps, matching XCFramework slices, the extracted macOS arm64 Swift consumer and synthetic SQLite continuity. Device/Simulator slices are built/packaged/metadata-inspected, not runtime-executed. Metadata checks still do not establish macOS 14/iPadOS 17 execution or a current local installation.

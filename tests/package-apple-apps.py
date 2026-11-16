@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Synthetic Apple-tool metadata regressions; no compiler, signing or runtime claim."""
 import importlib.util
+import json
 from pathlib import Path
 from types import SimpleNamespace
 import plistlib
@@ -127,6 +128,115 @@ class BuildMetadataTests(unittest.TestCase):
         self.assertEqual(PACKAGE.product_path(root, "ipad-device", "Release"), root / "ipad-device/Build/Products/Release-iphoneos/BookNookPad.app")
         with self.assertRaises(AssertionError):
             PACKAGE.product_path(root, "mac", "Profile")
+
+
+class PublicContentTests(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory(prefix="booknook-package-public-")
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        self.app = self.root / "BookNookPad.app"
+        self.app.mkdir()
+        (self.app / "Info.plist").write_bytes(plistlib.dumps({}))
+
+    def test_local_paths_are_refused_in_each_encoding_without_echoing_contents(self):
+        roots = ("/Users/", "/Volumes/", "/var/folders/", "/private/tmp/", "/tmp/", "/home/")
+        for root in roots:
+            for encoding in ("ascii", "utf-16-le", "utf-16-be"):
+                with self.subTest(root=root, encoding=encoding):
+                    (self.app / "BookNookPad").write_bytes(b"\x01" + (root + "private-path-sentinel").encode(encoding))
+                    with self.assertRaisesRegex(ValueError, "private absolute path") as rejected:
+                        PACKAGE.check_public_content(self.app, "ipad-device")
+                    self.assertNotIn("private-path-sentinel", str(rejected.exception))
+                    self.assertNotIn(root, str(rejected.exception))
+
+    def test_path_signatures_are_detected_across_read_boundaries(self):
+        for encoding in ("ascii", "utf-16-le", "utf-16-be"):
+            with self.subTest(encoding=encoding), patch.object(PACKAGE, "PUBLIC_CONTENT_CHUNK_BYTES", 64):
+                (self.app / "BookNookPad").write_bytes(b"x" * 63 + "/var/folders/private".encode(encoding))
+                with self.assertRaisesRegex(ValueError, "private absolute path"):
+                    PACKAGE.check_public_content(self.app, "ipad-sim")
+
+    def test_provisioning_and_sqlite_store_members_are_refused(self):
+        for name, contents in (("embedded.mobileprovision", b"synthetic"),
+                               ("booknook.sqlite-wal", b"synthetic"),
+                               ("feeds.sqlite-shm", b"synthetic"),
+                               ("scratch.db-journal", b"synthetic"),
+                               ("renamed.bin", b"SQLite format 3\x00" + b"synthetic")):
+            with self.subTest(name=name):
+                path = self.app / name
+                path.write_bytes(contents)
+                try:
+                    with self.assertRaisesRegex(ValueError, "provisioning|SQLite"):
+                        PACKAGE.check_public_content(self.app, "ipad-device")
+                finally:
+                    path.unlink()
+
+    def test_qa_launch_override_is_refused_even_without_an_absolute_value(self):
+        plist = self.app / "Info.plist"
+        plist.write_bytes(plistlib.dumps({"LSEnvironment": {"BOOKNOOK_DATA_DIR": "qa-desk"}}, fmt=plistlib.FMT_BINARY))
+        with self.assertRaisesRegex(ValueError, "QA launch-path override"):
+            PACKAGE.check_public_content(self.app, "ipad-device")
+
+    def test_remapped_paths_and_the_executable_environment_key_are_accepted(self):
+        contents = ("/booknook-source/crates/core/lib.rs\x00"
+                    "/booknook-rust/registry/package.rs\x00"
+                    "/usr/lib/libSystem.B.dylib\x00BOOKNOOK_DATA_DIR")
+        (self.app / "BookNookPad").write_bytes(contents.encode("ascii") + contents.encode("utf-16-le"))
+        PACKAGE.check_public_content(self.app, "ipad-device")
+
+    def test_opt_in_requires_release_configuration(self):
+        argv = ["package-apple-apps.py", "--provenance", "unused", "--check-public-content"]
+        with patch.object(sys, "argv", argv), patch("sys.stderr") as stderr, self.assertRaises(SystemExit) as rejected:
+            PACKAGE.main()
+        self.assertEqual(rejected.exception.code, 2)
+        self.assertIn("--check-public-content requires --configuration Release", "".join(
+            call.args[0] for call in stderr.write.call_args_list))
+
+    def test_opt_in_preflights_all_inputs_and_screens_each_verified_extraction(self):
+        source = self.root / "source"
+        (source / "docs").mkdir(parents=True)
+        (source / "Cargo.toml").write_text('[workspace.package]\nversion = "0.0.0"\n')
+        for name in ("LICENSE-MPL-2.0", "LICENSE-MIT", "LICENSE-APACHE", "docs/dependency-licenses.csv"):
+            (source / name).touch()
+        build = (self.root / "build").resolve()
+        apps = {key: PACKAGE.product_path(build, key, "Release") for key in PACKAGE.PRODUCTS}
+        for key, app in apps.items():
+            plist = app / ("Contents/Info.plist" if key == "mac" else "Info.plist")
+            plist.parent.mkdir(parents=True)
+            plist.write_bytes(plistlib.dumps({}))
+        last = apps["ipad-device"] / "BookNookPad"
+        last.write_bytes(b"/home/private-path-sentinel")
+        provenance = self.root / "provenance.json"
+
+        def save_provenance():
+            provenance.write_text(json.dumps({"app_trees": {
+                key: {"files": {name: {field: value for field, value in entry.items() if field != "mode"}
+                                for name, entry in PACKAGE.manifest(app).items() if "directory" not in entry}}
+                for key, app in apps.items()}}))
+
+        output = self.root / "output"
+        argv = ["package-apple-apps.py", "--output", str(output), "--build-root", str(build),
+                "--provenance", str(provenance), "--configuration", "Release"]
+        with patch.object(PACKAGE, "ROOT", source), patch.object(PACKAGE, "inspect", return_value={"mach_o": []}), \
+                patch("builtins.print"):
+            save_provenance()
+            with patch.object(sys, "argv", argv + ["--check-public-content"]), \
+                    self.assertRaisesRegex(ValueError, "private absolute path"):
+                PACKAGE.main()
+            self.assertFalse(output.exists())
+            with patch.object(sys, "argv", argv):
+                PACKAGE.main()
+            self.assertNotIn("public_content_checked", json.loads((output / "VERIFICATION.json").read_text()))
+            last.write_bytes(b"/booknook-source/crates/core/lib.rs")
+            save_provenance()
+            with patch.object(sys, "argv", argv + ["--check-public-content"]), \
+                    patch.object(PACKAGE, "check_public_content", wraps=PACKAGE.check_public_content) as check:
+                PACKAGE.main()
+            self.assertEqual([call.args[0] for call in check.call_args_list[:3]], list(apps.values()))
+            self.assertEqual([call.args[1] for call in check.call_args_list], list(apps) * 2)
+            self.assertTrue(all(call.args[0] != apps[call.args[1]] for call in check.call_args_list[3:]))
+            self.assertTrue(json.loads((output / "VERIFICATION.json").read_text())["public_content_checked"])
 
 
 if __name__ == "__main__":
