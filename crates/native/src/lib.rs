@@ -382,6 +382,13 @@ impl Desk {
         action: &str,
         actor: Option<&str>,
     ) -> Result<booknook_core::authority::AuthorityPolicy> {
+        Self::policy_on(&self.lock()?.connection, action, actor)
+    }
+    fn policy_on(
+        connection: &rusqlite::Connection,
+        action: &str,
+        actor: Option<&str>,
+    ) -> Result<booknook_core::authority::AuthorityPolicy> {
         use booknook_core::authority::{AuthorityPolicy, Caller, TrustPin};
         if ![
             "sync.send",
@@ -395,8 +402,7 @@ impl Desk {
         {
             return Err(booknook_core::Error::Denied("Unsupported Book Nook action".into()).into());
         }
-        let settings: booknook_core::settings::ConnectionSettings =
-            booknook_core::strict_parse(self.connection_settings()?.as_bytes())?;
+        let settings = connection_bridge::load(connection)?;
         let c = settings.castalia.ok_or_else(|| {
             booknook_core::Error::Unavailable("Configure Castalia in Connections".into())
         })?;

@@ -22,6 +22,12 @@ All three 1603 Release apps passed local archive extraction and comparison. Buil
 
 Automatic review stopped the 1603 draft upload because the binaries retain local compiler paths. The next archive qualification includes both live strings and Mach-O debug metadata. The public preview and installed app remain 1601. [Decision log](DECISIONS.md).
 
+## Incoming sync admission and Apple archive retry — 2026-11-16
+
+Build 1605 rechecks Castalia authority and the exact device pairing in the SQLite transaction that admits an incoming encrypted snapshot. The replay record, current desk and source baseline use that same transaction. Signed synthetic transfers across independent handles reproduced all three acceptance gaps in the old implementation. A fresh compile passed the three regressions, all 13 native sync tests and 70 native tests overall. Actual paired-device and live-authority checks remain open. [Decision log](DECISIONS.md).
+
+The first clean hosted run compiled the three 1604 Release targets and stopped when the signature check expected a bundle resource seal. It attached zero artifacts. The amended verification checks the same Mach-O bytes outside the bundle and verifies the bundle resources by exact comparisons. The prior shipping preview remains 1601. [Failed 1604 run](https://github.com/bananawalnut/booknook/actions/runs/43972148701).
+
 ## Historical app-only preview and bounded Mac checks — 2026-11-14
 
 [App build 2026111405](app-2026111405-public-preview-evidence.json), version 0.2.0, is [published](https://github.com/bananawalnut/booknook/releases/tag/v0.2.0-app-preview.20261114.5) from exact source `633f53dcc6d246ba6454b3403bbde10450102ef2`. Three Swift Release builds and all ten local build/archive verification phases pass; [exact-source CI](https://github.com/bananawalnut/booknook/actions/runs/43647644605) passes both jobs and all 38 steps. All 11 public assets were freshly downloaded and hash-checked, totaling 37,558,605 bytes. The app-only correction displays actual app and library-ontology versions in Connections. The six SDK archives and unchanged Rust slices retain their separate source `a945df2`; later documentation changes do not change either published artifact snapshot.

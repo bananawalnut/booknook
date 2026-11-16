@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import plistlib
 import re
+import shutil
 import stat
 import subprocess
 import tarfile
@@ -118,6 +119,15 @@ def manifest(app):
 
 def tool(*args):
     return subprocess.check_output(args, text=True).strip()
+
+
+def verify_linker_signature(executable):
+    """Verify the linker ad-hoc signature without implying a resource seal."""
+    with tempfile.TemporaryDirectory(prefix="booknook-link-signature-") as directory:
+        standalone = Path(directory) / executable.name
+        shutil.copyfile(executable, standalone)
+        assert digest(standalone) == digest(executable)
+        subprocess.run(["/usr/bin/codesign", "--verify", "--strict", str(standalone)], check=True)
 
 
 def inspect(app, key, configuration="Debug"):

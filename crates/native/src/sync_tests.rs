@@ -509,3 +509,187 @@ fn same_source_revision_with_different_state_is_rejected_without_changing_receiv
     );
     assert_eq!(b.snapshot().unwrap(), before);
 }
+
+fn before_receive_admission(change: impl FnOnce() + 'static) {
+    crate::sync_bridge::BEFORE_RECEIVE_ADMISSION.with(|hook| {
+        assert!(hook.borrow_mut().replace(Box::new(change)).is_none());
+    });
+}
+
+fn exported(desk: &Desk, peer: &str, key: &str, path: &std::path::Path) -> String {
+    let path = path.to_str().unwrap().to_owned();
+    desk.sync_export(approved(desk, peer, key), path.clone())
+        .unwrap();
+    path
+}
+
+#[test]
+fn receive_refuses_a_pairing_changed_after_verification() {
+    let ar = Directory::new();
+    let br = Directory::new();
+    let a = setup(&ar);
+    let b = setup(&br);
+    let editor = Desk::new(br.path()).unwrap();
+    let ai = id(&a);
+    let bi = id(&b);
+    let key = "e5".repeat(32);
+    pair(&a, &bi, &key, true);
+    pair(&b, &ai, &key, true);
+    add_book(&a);
+    let state: State = serde_json::from_str(&a.snapshot().unwrap()).unwrap();
+    let book_id = state.books.keys().next().unwrap().clone();
+    let pdf = ar.0.join("synthetic.pdf");
+    let pdf_bytes = b"%PDF-1.4\n1 0 obj\n<<>>\nendobj\n%%EOF\n";
+    std::fs::write(&pdf, pdf_bytes).unwrap();
+    let imported = a
+        .import_content(book_id, pdf.to_str().unwrap().into())
+        .unwrap();
+    let source: State = serde_json::from_str(&imported).unwrap();
+    let path = exported(&a, &bi, &key, &ar.0.join("pairing.json"));
+    let before = b.snapshot().unwrap();
+    let before_status = value(b.sync_status().unwrap());
+    let (race_id, race_key) = (ai.clone(), key.clone());
+    before_receive_admission(move || {
+        pair(&editor, &race_id, &race_key, false);
+        pair(&editor, &race_id, &race_key, true);
+    });
+    let refusal = b
+        .sync_receive(path, ai.clone(), key.clone())
+        .expect_err("a changed pairing must stop already-verified input");
+    assert!(refusal.to_string().contains("Device pairing changed"));
+    assert_eq!(b.snapshot().unwrap(), before);
+    assert_eq!(
+        value(b.sync_status().unwrap())["conflicts"],
+        before_status["conflicts"]
+    );
+    assert!(
+        std::fs::read_dir(br.0.join("assets"))
+            .unwrap()
+            .next()
+            .is_none()
+    );
+    {
+        let store = b.lock().unwrap();
+        for table in ["sync_received", "sync_bases"] {
+            let count: i64 = store
+                .connection
+                .query_row(&format!("SELECT count(*) FROM {table}"), [], |row| {
+                    row.get(0)
+                })
+                .unwrap();
+            assert_eq!(count, 0, "{table} must remain unchanged");
+        }
+    }
+
+    let fresh = exported(&a, &bi, &key, &ar.0.join("fresh-after-pairing.json"));
+    let applied = value(
+        b.sync_receive(fresh.clone(), ai.clone(), key.clone())
+            .unwrap(),
+    );
+    assert_eq!(applied["duplicate"], false);
+    let accepted: State = serde_json::from_str(&b.snapshot().unwrap()).unwrap();
+    assert_eq!(accepted.books, source.books);
+    assert_eq!(accepted.editions, source.editions);
+    let asset = source
+        .editions
+        .values()
+        .find_map(|edition| edition.assets.first())
+        .unwrap();
+    let directory = b.asset_directory(asset.id.clone()).unwrap();
+    assert_eq!(
+        std::fs::read(std::path::Path::new(&directory).join("book.pdf")).unwrap(),
+        pdf_bytes
+    );
+    let before_replay = b.snapshot().unwrap();
+    assert_eq!(
+        value(b.sync_receive(fresh, ai, key).unwrap())["duplicate"],
+        true
+    );
+    assert_eq!(b.snapshot().unwrap(), before_replay);
+}
+
+#[test]
+fn receive_refuses_an_authority_changed_after_verification() {
+    let ar = Directory::new();
+    let br = Directory::new();
+    let a = setup(&ar);
+    let b = setup(&br);
+    let editor = Desk::new(br.path()).unwrap();
+    let ai = id(&a);
+    let bi = id(&b);
+    let key = "e6".repeat(32);
+    pair(&a, &bi, &key, true);
+    pair(&b, &ai, &key, true);
+    add_book(&a);
+    let path = exported(&a, &bi, &key, &ar.0.join("authority.json"));
+    let before = b.snapshot().unwrap();
+    let original = b.connection_settings().unwrap();
+    let mut changed: ConnectionSettings = serde_json::from_str(&original).unwrap();
+    changed.castalia.as_mut().unwrap().policy_digest = "9e".repeat(32);
+    before_receive_admission(move || {
+        editor
+            .save_connection_settings(serde_json::to_string(&changed).unwrap())
+            .unwrap();
+    });
+    let refusal = b
+        .sync_receive(path.clone(), ai.clone(), key.clone())
+        .expect_err("new authority must fence an already-verified packet");
+    assert!(refusal.to_string().contains("Castalia authority changed"));
+    assert_eq!(b.snapshot().unwrap(), before);
+    b.save_connection_settings(original).unwrap();
+    assert_eq!(
+        value(b.sync_receive(path, ai, key).unwrap())["duplicate"],
+        false
+    );
+}
+
+#[test]
+fn receive_cannot_replace_a_newer_baseline_committed_by_another_handle() {
+    let ar = Directory::new();
+    let br = Directory::new();
+    let a = setup(&ar);
+    let b = setup(&br);
+    let other = Desk::new(br.path()).unwrap();
+    let ai = id(&a);
+    let bi = id(&b);
+    let key = "e7".repeat(32);
+    pair(&a, &bi, &key, true);
+    pair(&b, &ai, &key, true);
+    add_book(&a);
+    let old = exported(&a, &bi, &key, &ar.0.join("older.json"));
+    a.execute(
+        json!({"op":"add_book","title":"Newer source book","author":"Writer","at":at()})
+            .to_string(),
+    )
+    .unwrap();
+    let new = exported(&a, &bi, &key, &ar.0.join("newer.json"));
+    let (race_id, race_key) = (ai.clone(), key.clone());
+    let newer_result = std::rc::Rc::new(std::cell::RefCell::new(None));
+    let result_for_hook = newer_result.clone();
+    before_receive_admission(move || {
+        let result = value(other.sync_receive(new, race_id, race_key).unwrap());
+        assert_eq!(result["duplicate"], false);
+        *result_for_hook.borrow_mut() = Some(other.snapshot().unwrap());
+    });
+    let refusal = b
+        .sync_receive(old, ai.clone(), key)
+        .expect_err("an older in-flight packet must not regress the baseline");
+    assert!(refusal.to_string().contains("older device snapshot"));
+    assert_eq!(
+        b.snapshot().unwrap(),
+        newer_result.borrow().as_ref().unwrap().as_str()
+    );
+    let store = b.lock().unwrap();
+    let base: String = store
+        .connection
+        .query_row("SELECT json FROM sync_bases WHERE peer=?1", [&ai], |row| {
+            row.get(0)
+        })
+        .unwrap();
+    assert_eq!(value(base), value(a.snapshot().unwrap()));
+    let count: i64 = store
+        .connection
+        .query_row("SELECT count(*) FROM sync_received", [], |row| row.get(0))
+        .unwrap();
+    assert_eq!(count, 1);
+}

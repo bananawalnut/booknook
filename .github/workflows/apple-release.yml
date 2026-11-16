@@ -40,7 +40,6 @@ jobs:
           import json
           import os
           from pathlib import Path
-          import subprocess
           import sys
 
           sys.path.insert(0, "scripts")
@@ -59,7 +58,7 @@ jobs:
               for name, binary in inspection["mach_o"].items():
                   assert binary["signature"] == expected_signature
                   if expected_signature == "linker-ad-hoc":
-                      subprocess.run(["/usr/bin/codesign", "--verify", "--strict", str(app / name)], check=True)
+                      package.verify_linker_signature(app / name)
               app_trees[platform] = {
                   "files": {name: {k: v for k, v in entry.items() if k != "mode"}
                             for name, entry in package.manifest(app).items() if "directory" not in entry}

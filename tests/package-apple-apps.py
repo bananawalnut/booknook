@@ -95,6 +95,31 @@ class BundleInspectionTests(unittest.TestCase):
             self.inspect_fixture(configuration="Release", main_magic=b"text")
 
 
+class LinkerSignatureTests(unittest.TestCase):
+    def test_verification_uses_standalone_copy_of_exact_bytes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            executable = Path(directory) / "BookNookMac.app/Contents/MacOS/BookNookMac"
+            executable.parent.mkdir(parents=True)
+            binary = b"linker-signed executable bytes"
+            executable.write_bytes(binary)
+            observed = []
+
+            def verify(command, check):
+                self.assertTrue(check)
+                self.assertEqual(command[:-1], ["/usr/bin/codesign", "--verify", "--strict"])
+                copy = Path(command[-1])
+                self.assertEqual(copy.name, executable.name)
+                self.assertFalse(any(parent.suffix == ".app" for parent in copy.parents))
+                self.assertEqual(copy.read_bytes(), binary)
+                observed.append(copy)
+
+            with patch.object(PACKAGE.subprocess, "run", side_effect=verify):
+                PACKAGE.verify_linker_signature(executable)
+            self.assertEqual(len(observed), 1)
+            self.assertFalse(observed[0].exists())
+            self.assertEqual(executable.read_bytes(), binary)
+
+
 class BuildMetadataTests(unittest.TestCase):
     def test_all_platforms_accept_matching_or_lower_minimum(self):
         for platform, floor, minima in (("MACOS", "14.0", ("11.0", "14", "14.0.0")),

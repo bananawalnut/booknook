@@ -134,7 +134,7 @@ fn content(s: &Store) -> Result<Content> {
         assets,
     })
 }
-fn import_assets(s: &Store, c: &Content) -> Result<()> {
+fn import_assets(root: &Path, c: &Content) -> Result<()> {
     for asset in c.state.editions.values().flat_map(|e| &e.assets) {
         let bytes = STANDARD
             .decode(
@@ -147,7 +147,7 @@ fn import_assets(s: &Store, c: &Content) -> Result<()> {
             return Err(invalid("Sync asset checksum mismatch"));
         }
         let actual = content::import(
-            &s.root,
+            root,
             &bytes,
             if asset.media_type == "application/pdf" {
                 "pdf"
@@ -161,6 +161,20 @@ fn import_assets(s: &Store, c: &Content) -> Result<()> {
     }
     Ok(())
 }
+#[cfg(test)]
+thread_local! {
+    pub(crate) static BEFORE_RECEIVE_ADMISSION: std::cell::RefCell<Option<Box<dyn FnOnce()>>> =
+        const { std::cell::RefCell::new(None) };
+}
+
+#[cfg(test)]
+fn run_receive_admission_hook() {
+    let change = BEFORE_RECEIVE_ADMISSION.with(|hook| hook.borrow_mut().take());
+    if let Some(change) = change {
+        change();
+    }
+}
+
 #[uniffi::export]
 impl Desk {
     pub fn sync_status(&self) -> Result<String> {
@@ -469,8 +483,8 @@ impl Desk {
         let mut s = self.lock()?;
         crate::edit_journal::recover(&mut s)?;
         let local = device(&s)?;
-        let peer = peer(&s.connection, &source_device)?;
-        check_peer(&peer, &key, &policy.actor)?;
+        let pairing = peer(&s.connection, &source_device)?;
+        check_peer(&pairing, &key, &policy.actor)?;
         let opened = sync::open_packet(&packet, &key, &local, &policy, now()?)?;
         let c: Content = strict_parse(&opened.plaintext)?;
         if c.schema != "booknook.sync-content.v1"
@@ -480,8 +494,25 @@ impl Desk {
             return Err(invalid("Sync source or revision mismatch"));
         }
         let packet_digest = opened.packet_digest;
-        let previous: Option<String> = s
-            .connection
+        #[cfg(test)]
+        run_receive_admission_hook();
+
+        // Other Desk handles can update policy, pairing, replay, or the baseline.
+        // Keep them stable across acceptance, including before asset import.
+        let Store { connection, root } = &mut *s;
+        let tx = connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
+        let current_policy = Self::policy_on(&tx, "sync.send", None)?;
+        if canonical(&current_policy)? != canonical(&policy)? {
+            return Err(invalid(
+                "Castalia authority changed during sync; review the current settings and retry",
+            ));
+        }
+        if stored_peer(&tx, &source_device)?.as_ref() != Some(&pairing) {
+            return Err(invalid(
+                "Device pairing changed during sync; review the current pairing and retry",
+            ));
+        }
+        let previous: Option<String> = tx
             .query_row(
                 "SELECT digest FROM sync_received WHERE id=?1",
                 [&batch.id],
@@ -492,10 +523,10 @@ impl Desk {
             if previous != packet_digest {
                 return Err(invalid("Sync batch ID was reused"));
             }
-            return encoded(&serde_json::json!({"duplicate":true,"conflicts":0,"state":s.load()?}));
+            let state = Store::load_from(&tx)?;
+            return encoded(&serde_json::json!({"duplicate":true,"conflicts":0,"state":state}));
         }
-        let base: Option<String> = s
-            .connection
+        let base: Option<String> = tx
             .query_row(
                 "SELECT json FROM sync_bases WHERE peer=?1",
                 [&source_device],
@@ -517,11 +548,13 @@ impl Desk {
                 "Device reused a revision for different content; reconcile the source before sending another batch",
             ));
         }
-        let current = s.load()?;
+        let current = Store::load_from(&tx)?;
         let merged = reconcile::reconcile(base.as_ref(), &current, &c.state)?;
-        import_assets(&s, &c)?;
         let json = encoded(&merged.state)?;
-        let tx = s.connection.transaction()?;
+        let response = encoded(
+            &serde_json::json!({"duplicate":false,"conflicts":merged.conflicts.len(),"state":&merged.state}),
+        )?;
+        import_assets(root, &c)?;
         let count = tx.execute(
             "UPDATE desk SET revision=?1,json=?2 WHERE singleton=1 AND revision=?3",
             params![
@@ -545,9 +578,7 @@ impl Desk {
         )?;
         tx.execute("INSERT INTO sync_bases VALUES(?1,?2) ON CONFLICT(peer) DO UPDATE SET json=excluded.json",params![source_device,encoded(&c.state)?])?;
         tx.commit()?;
-        encoded(
-            &serde_json::json!({"duplicate":false,"conflicts":merged.conflicts.len(),"state":merged.state}),
-        )
+        Ok(response)
     }
     pub fn sync_resolve(&self, conflict_id: String, use_incoming: bool) -> Result<String> {
         let mut s = self.lock()?;

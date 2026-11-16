@@ -77,7 +77,15 @@ impl Store {
         Ok(store)
     }
     pub fn load(&self) -> Result<State> {
-        Ok(NotebookStorage::load(self)?)
+        Ok(Self::load_from(&self.connection)?)
+    }
+    pub(crate) fn load_from(connection: &Connection) -> booknook_core::Result<State> {
+        let raw: String = connection
+            .query_row("SELECT json FROM desk WHERE singleton=1", [], |r| r.get(0))
+            .map_err(storage_error)?;
+        let state: State = booknook_core::strict_parse(raw.as_bytes())?;
+        booknook_core::validate(&state)?;
+        Ok(state)
     }
     pub fn save(&mut self, expected: u64, state: &State) -> Result<()> {
         Ok(self.compare_and_save(expected, state)?)
@@ -140,13 +148,7 @@ impl Provider for Store {
 }
 impl NotebookStorage for Store {
     fn load(&self) -> booknook_core::Result<State> {
-        let raw: String = self
-            .connection
-            .query_row("SELECT json FROM desk WHERE singleton=1", [], |r| r.get(0))
-            .map_err(storage_error)?;
-        let state: State = booknook_core::strict_parse(raw.as_bytes())?;
-        booknook_core::validate(&state)?;
-        Ok(state)
+        Self::load_from(&self.connection)
     }
     fn compare_and_save(&self, expected: u64, state: &State) -> booknook_core::Result<()> {
         booknook_core::validate(state)?;
