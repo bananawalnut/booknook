@@ -6,9 +6,24 @@ use std::{
 };
 
 pub fn read_bounded(path: &Path) -> Result<Vec<u8>> {
-    let file = std::fs::File::open(path)?;
+    let mut options = std::fs::OpenOptions::new();
+    options.read(true);
+    // Opening a FIFO must not wait for a writer before we can inspect the opened object.
+    // Follow ordinary file symlinks as before; validate the descriptor, not a racy path stat.
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::OpenOptionsExt;
+        options.custom_flags(libc::O_NONBLOCK | libc::O_CLOEXEC);
+    }
+    let file = options.open(path)?;
+    let metadata = file.metadata()?;
+    if !metadata.is_file() {
+        return Err(NativeError::Failure {
+            message: "Portable input must be a regular file".into(),
+        });
+    }
     let limit = booknook_core::MAX_JSON_BYTES;
-    if file.metadata()?.len() > limit as u64 {
+    if metadata.len() > limit as u64 {
         return Err(too_large());
     }
     let mut bytes = Vec::new();
@@ -87,3 +102,7 @@ mod tests {
         std::fs::remove_dir_all(dir).unwrap();
     }
 }
+
+#[cfg(all(test, unix))]
+#[path = "portable_read_tests.rs"]
+mod read_tests;
