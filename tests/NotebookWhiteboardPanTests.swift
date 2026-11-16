@@ -17,6 +17,63 @@ struct NotebookInkVersion {
 final class NotebookInkSession: ObservableObject { var currentVersion: NotebookInkVersion? }
 
 @main struct NotebookWhiteboardPanTests {
+    @MainActor static func testViewportClipping() {
+        let tools = NotebookWhiteboardTools()
+        let board = NotebookMacBoardView(tools: tools)
+        board.frame = CGRect(x: 0, y: 0, width: 160, height: 140)
+        board.active = true
+        let original = [NotebookInkStroke(points: [NotebookInkPoint(x: -26, y: 70)], color: "#000000", width: 16)]
+        let drawing = NotebookInkVersion(canvasWidth: 256, canvasHeight: 256,
+            canvasSpace: NotebookCanvasSpace(originX: -48, originY: 0), strokes: original)
+        // Translate the real draw callback inside a larger un-clipped bitmap.
+        // The left rail stands in for neighboring note controls, which are not
+        // part of the canvas CGContext clip supplied by this harness.
+        let width = 240, height = 180, left = 48, bottom = 20
+        func render() -> [UInt8] {
+            guard let context = CGContext(data: nil, width: width, height: height,
+                bitsPerComponent: 8, bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Big.rawValue),
+                let data = context.data else { preconditionFailure("Cannot allocate the Scribble viewport witness") }
+            context.setFillColor(red: 0.2, green: 0.6, blue: 0.8, alpha: 1)
+            context.fill(CGRect(x: 0, y: 0, width: width, height: height))
+            context.translateBy(x: CGFloat(left), y: CGFloat(bottom))
+            NSGraphicsContext.saveGraphicsState()
+            NSGraphicsContext.current = NSGraphicsContext(cgContext: context, flipped: true)
+            board.draw(board.bounds)
+            NSGraphicsContext.restoreGraphicsState()
+            return Array(UnsafeRawBufferPointer(start: data, count: width * height * 4))
+        }
+        func railsEqual(_ pixels: [UInt8], _ paper: [UInt8]) -> Bool {
+            for y in 0..<height {
+                for x in 0..<width where x < left || x >= left + 160 || y < bottom || y >= bottom + 140 {
+                    let start = (y * width + x) * 4
+                    if pixels[start..<(start + 4)] != paper[start..<(start + 4)] { return false }
+                }
+            }
+            return true
+        }
+
+        let paper = render()
+        board.version = drawing
+        let before = render()
+        precondition(board.origin == .zero)
+        precondition(railsEqual(before, paper), "Offscreen Scribble ink painted outside its viewport over the note controls")
+        precondition(before == paper, "Ink entirely left of origin must not appear inside the board")
+        guard let pan = tools.pan, let home = tools.home else { preconditionFailure("Missing Scribble navigation") }
+        pan(.left)
+        let after = render()
+        precondition(board.origin == CGPoint(x: -120, y: 0), "Viewport clipping changed the pan step")
+        precondition(railsEqual(after, paper), "Pan must not paint outside the viewport")
+        let center = ((height / 2) * width + left + 94) * 4
+        precondition(after[center..<(center + 4)] == [0, 0, 0, 255] && after[center..<(center + 4)] != paper[center..<(center + 4)],
+                     "The saved circle must become visible in the translated board after one pan")
+        home()
+        precondition(board.origin == .zero && render() == paper, "Return to origin must hide the same ink without painting the rail")
+        precondition(board.bounds.size == CGSize(width: 160, height: 140) && board.version?.strokes == original,
+                     "Clipping must not change viewport size or the saved stroke geometry")
+        print("Scribble viewport pixels: translated unclipped host leaves the note rail intact, reveals ink after Pan left, and hides it after Return to origin.")
+    }
+
     @MainActor static func main() {
         let app = NSApplication.shared; app.setActivationPolicy(.prohibited)
         let tools = NotebookWhiteboardTools()
@@ -51,5 +108,6 @@ final class NotebookInkSession: ObservableObject { var currentVersion: NotebookI
         pan(.left)
         precondition(board.origin == lastOrigin && board.version?.strokes == saved, "Hidden pan or navigation changed the saved original")
         print("Scribble menu pan: actual Mac tool closure, negative ink, zoom-relative movement, origin reset, finite bounds, hidden action refusal and unchanged strokes passed.")
+        testViewportClipping()
     }
 }

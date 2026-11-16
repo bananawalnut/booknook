@@ -338,6 +338,8 @@ final class NotebookMacBoardView: NSView {
         NSColor(readingPaper).setFill(); bounds.fill()
         guard let context = NSGraphicsContext.current?.cgContext, let version else { return }
         context.saveGState(); defer { context.restoreGState() }
+        // Signed world coordinates can lie outside the view's draw bounds.
+        context.clip(to: bounds)
         context.scaleBy(x: zoom, y: zoom); context.translateBy(x: -origin.x, y: -origin.y)
         for stroke in version.strokes {
             guard let first = stroke.points.first else { continue }
