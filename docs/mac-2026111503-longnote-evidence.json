@@ -1,0 +1,68 @@
+{
+  "schema": "booknook.mac1503-longnote-evidence.v1",
+  "status": "PARTIAL_ACCEPTANCE_CONFIRMED_CARET_REFLOW_NONPASS_FIX_CANDIDATE_UNQUALIFIED",
+  "result": "PASS_TEXT_STYLE_HISTORY_AND_NORMAL_REOPEN_WITH_CARET_REFLOW_NONPASS",
+  "observed_utc": "2026-11-16T19:15:36.209102+00:00",
+  "source_commit": "efec2dd389aa877fc2ceac589d6f7384a1cecf4d",
+  "version": "0.2.1",
+  "build": "2026111503",
+  "receipt_bytes": 3843,
+  "receipt_sha256": "f7517df4b2f5ae9c2aafb818d241ce77ced620ee83805d7a4c1447a2f6a7050f",
+  "same_qualified_executable_sha256": "31772387c39a1b56df96459aa3d459f2bf4a2c2ba0fd64e0a4648995ca5f8498",
+  "qualified_QA_process_and_database_descriptor_confirmed": true,
+  "personal_default_library_untouched": true,
+  "corpus": {
+    "initial_utf16_units": 120599,
+    "final_utf16_units": 120623,
+    "final_utf8_bytes": 123863,
+    "final_text_sha256": "1d0e821bc42d6b443e782f1fe041f422a72868ea16e6a50d9f76824fd1e39bb5",
+    "paragraphs": 360,
+    "unicode": "Caf\u00e9 \u2014 \u8aad\u66f8 \ud83d\udcda",
+    "appended_ASCII": "\nEnd of long-note check.",
+    "bold_range": {
+      "start_utf16": 0,
+      "length_utf16": 12
+    }
+  },
+  "passes": [
+    "Native paste of 360 paragraphs and inner TextKit navigation to beginning/end",
+    "Bold formatting, observed Undo/Redo, and appended ASCII sentence Undo/Redo",
+    "Text/Scribble/text switching retains exact prose, style, first context and ordering",
+    "Seven new revisions affect only the third note; earlier notes, character history, books, lists and social records are unchanged",
+    "Normal quit with process absence and exact saved state, then reopen with the EPUB and long-note beginning/end visible; only revision and positions change after reopen",
+    "Pending editor/social/sync queues and peers remain zero"
+  ],
+  "confirmed_nonpass": {
+    "type": "visible_caret_after_width_reflow",
+    "result": "NONPASS",
+    "steps": "The focused end caret was visible before the divider changed Margin from 34% to 39% and back to 34%. The ending and caret then fell outside the visible editor region. Right Arrow at document end restored the exact end without changing text.",
+    "source_fix_required": true,
+    "acceptance_closed": false
+  },
+  "retained_tool_limits": [
+    "Offscreen selection of Passage180 could not be located; selecting visible Passage001 succeeded. No product selection failure is inferred.",
+    "An offscreen accessibility element-center click was refused after reopen. Selecting visible Passage001 and navigating to the end succeeded; no guessed-coordinate fallback was used."
+  ],
+  "fix_candidate": {
+    "app_build": "2026111601",
+    "version": "0.2.1",
+    "scope": "App-only AppKit caret visibility across width reflow; SDK, saved-data and ontology contracts unchanged",
+    "status": "SOURCE_FIX_ACTIVE_NOT_YET_FINAL_ACCEPTANCE"
+  },
+  "UX_round": {
+    "partial": 4,
+    "fifth_round_started": false
+  },
+  "limits": [
+    "Bounded automated native paste, keys and accessibility actions; not physical keyboard, real IME, VoiceOver, endurance, power loss, forced termination, minimum-OS or live-service qualification.",
+    "Mac Scribble is read-only; switching faces does not establish ink input. No iPad, signing, sharing, normal installation or exported screenshot file.",
+    "Exact text/style/history and normal reopen pass separately from the confirmed caret NONPASS. No source fix/build/runtime/publication pass is inferred for candidate 1601."
+  ],
+  "known_issue_publication": {
+    "release_url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261116",
+    "verification_receipt_sha256": "e3d155697e5c7fa7ee19fb09ea5f647cfd36ac550c28155f1501ca7c07fd34e9",
+    "updated_body_sha256": "3df754a3c692ddda84134254dbf91e0aaf64ff3390212f02f5ace1bbcd8aeb86",
+    "known_caret_issue_disclosed": true,
+    "all_11_asset_identities_and_update_times_unchanged": true
+  }
+}

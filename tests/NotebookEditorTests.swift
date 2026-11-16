@@ -4,6 +4,104 @@ import AppKit
 import SwiftUI
 struct InlineStyle: Equatable { var startUtf16: Int; var lengthUtf16: Int; var bold: Bool; var italic: Bool; var underline: Bool }
 @main struct NotebookEditorTests {
+    static func testWidthReflow(in window: NSWindow) {
+        let scroll = NotebookEditorScrollView(frame: NSRect(x: 0, y: 0, width: 460, height: 210))
+        scroll.hasVerticalScroller = true
+        let editor = NotebookTextView(usingTextLayoutManager: true)
+        editor.isRichText = true; editor.allowsUndo = true
+        editor.isVerticallyResizable = true; editor.isHorizontallyResizable = false
+        editor.autoresizingMask = [.width]; editor.textContainer?.widthTracksTextView = true
+        editor.textContainerInset = NSSize(width: 4, height: 10)
+        scroll.documentView = editor; window.contentView = scroll
+        window.setContentSize(NSSize(width: 460, height: 210))
+        func settle() {
+            window.contentView?.layoutSubtreeIfNeeded()
+            RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.05))
+        }
+        func caretRect() -> NSRect {
+            editor.convert(window.convertFromScreen(editor.firstRect(forCharacterRange: editor.selectedRange(), actualRange: nil)), from: nil).standardized
+        }
+        func requireVisible(_ message: String) {
+            let caret = caretRect(), visible = editor.visibleRect
+            precondition(caret.height > 0 && [caret.minX, caret.maxX, caret.minY, caret.maxY].allSatisfy(\.isFinite)
+                         && caret.minX >= visible.minX && caret.maxX <= visible.maxX
+                         && caret.minY >= visible.minY && caret.maxY <= visible.maxY,
+                         "\(message): caret \(caret), viewport \(visible)")
+            print("\(message): caret \(caret), viewport \(visible)")
+        }
+        let paragraph = "café 日本語 😀 e\u{301}. A reader revisits the character and keeps each interpretation. "
+        let original = (1...360).map { String(format: "Passage %03d: ", $0) + String(repeating: paragraph, count: 4) }.joined(separator: "\n")
+        installNotebookContent(original, styles: [], in: editor)
+        precondition(window.makeFirstResponder(editor))
+        editor.setSelectedRange(NSRange(location: 0, length: 12)); editor.toggleStyle("bold")
+        editor.undoManager?.undo(); editor.undoManager?.redo()
+        let richStyles = portableStyles(editor.attributedString())
+        let suffix = "\nEnd of long-note check."
+        editor.setSelectedRange(NSRange(location: (original as NSString).length, length: 0))
+        editor.insertText(suffix, replacementRange: NSRange(location: NSNotFound, length: 0))
+        editor.breakUndoCoalescing()
+        let expected = original + suffix, selection = editor.selectedRange()
+        editor.scrollRangeToVisible(selection); settle()
+        requireVisible("The end caret starts visible")
+        for width: CGFloat in [530, 460, 600, 400, 460] {
+            window.setContentSize(NSSize(width: width, height: 210)); settle()
+            requireVisible("Width reflow must retain the visible active caret at width \(width)")
+            precondition(editor.string == expected && editor.selectedRange() == selection)
+            precondition(portableStyles(editor.attributedString()) == richStyles)
+        }
+        editor.undoManager?.undo()
+        precondition(editor.string == original, "Reflow must not replace the native typing undo")
+        editor.undoManager?.redo()
+        precondition(editor.string == expected && portableStyles(editor.attributedString()) == richStyles)
+        editor.setSelectedRange(selection); editor.scrollRangeToVisible(selection); settle()
+        // Reading earlier material while the insertion point remains at the end
+        // is intentional. Resizing must not pull that viewport back to the caret.
+        scroll.contentView.scroll(to: .zero); scroll.reflectScrolledClipView(scroll.contentView); settle()
+        precondition(caretRect().minY > editor.visibleRect.maxY)
+        window.setContentSize(NSSize(width: 530, height: 210)); settle()
+        precondition(editor.visibleRect.minY == 0 && caretRect().minY > editor.visibleRect.maxY,
+                     "Reflow must not follow an intentionally offscreen caret")
+        precondition(editor.string == expected && editor.selectedRange() == selection)
+        window.makeFirstResponder(nil)
+        window.setContentSize(NSSize(width: 460, height: 210)); settle()
+        precondition(window.firstResponder !== editor && editor.visibleRect.minY == 0 && caretRect().minY > editor.visibleRect.maxY,
+                     "Reflow must not activate or reveal an unfocused editor")
+        precondition(window.makeFirstResponder(editor))
+        editor.notebookPaneActive = false
+        window.setContentSize(NSSize(width: 530, height: 210)); settle()
+        precondition(editor.visibleRect.minY == 0 && caretRect().minY > editor.visibleRect.maxY,
+                     "Reflow must not reveal an inactive note face")
+        editor.notebookPaneActive = true
+        // Nonempty selections and active marked text belong to native TextKit;
+        // the reflow correction must neither collapse nor commit them.
+        editor.setSelectedRange(NSRange(location: 0, length: 12)); editor.scrollRangeToVisible(editor.selectedRange()); settle()
+        window.setContentSize(NSSize(width: 460, height: 210)); settle()
+        precondition(editor.selectedRange() == NSRange(location: 0, length: 12) && editor.string == expected)
+        editor.setSelectedRange(selection)
+        editor.setMarkedText("に", selectedRange: NSRange(location: 1, length: 0), replacementRange: NSRange(location: NSNotFound, length: 0))
+        let markedRange = editor.markedRange(), markedText = editor.string
+        window.setContentSize(NSSize(width: 530, height: 210)); settle()
+        precondition(editor.hasMarkedText() && editor.markedRange() == markedRange && editor.string == markedText)
+        editor.unmarkText()
+        precondition(portableStyles(editor.attributedString()) == richStyles)
+        // The clip view can narrow before its document view is resized. Place
+        // the caret at the old right edge, beyond the next viewport's width.
+        window.setContentSize(NSSize(width: 600, height: 210)); settle()
+        let edgeWidth = ("W" as NSString).size(withAttributes: [.font: notebookBodyFont()]).width
+        let padding = 2 * (editor.textContainerInset.width + (editor.textContainer?.lineFragmentPadding ?? 0))
+        let edgeLine = String(repeating: "W", count: Int((editor.visibleRect.width - padding - edgeWidth) / edgeWidth))
+        let edgeText = original + "\n" + edgeLine
+        installNotebookContent(edgeText, styles: richStyles, in: editor)
+        let edgeSelection = NSRange(location: (edgeText as NSString).length, length: 0)
+        editor.setSelectedRange(edgeSelection); editor.scrollRangeToVisible(edgeSelection); settle()
+        requireVisible("The right-edge caret starts visible")
+        precondition(caretRect().minX > 400, "The adversarial caret must lie beyond the narrower viewport")
+        window.setContentSize(NSSize(width: 400, height: 210)); settle()
+        requireVisible("Shrinking below the old caret X must preserve the visible insertion point")
+        precondition(editor.string == edgeText && editor.selectedRange() == edgeSelection && portableStyles(editor.attributedString()) == richStyles)
+        precondition(editor.textLayoutManager != nil, "Caret measurement must retain TextKit 2")
+        print("Visible-viewport width reflow: \((expected as NSString).length) UTF-16 units, caret containment, unchanged text/styles/selection and native undo/redo; intentional offscreen browsing, unfocused/inactive editor, selection and marked-text protection passed.")
+    }
     static func main() {
         let app = NSApplication.shared; app.setActivationPolicy(.prohibited)
         let window = NSWindow(contentRect: CGRect(x: 0,y: 0,width: 600,height: 500),styleMask: [.titled],backing: .buffered,defer: false)
@@ -125,6 +223,7 @@ struct InlineStyle: Equatable { var startUtf16: Int; var lengthUtf16: Int; var b
         coordinator.setPaneActive(true, editor: editor)
         precondition(window.firstResponder === fieldEditor, "Revealing the notebook must not automatically steal focus")
         precondition(window.makeFirstResponder(editor), "The visible notebook can be focused explicitly again")
+        testWidthReflow(in: window)
         print("TextKit editor: initial/external empty-snapshot first typing matches reopened body font/color, mixed rich styles preserved; 115k-character Unicode document, bold formatting, selection preservation, undo/redo, IME marked-text protection and portable style round-trip, rapid ASCII/Unicode typing with stale autosave echoes, caret stability and external refresh after focus loss; hidden-pane native focus/IME capture, stale-snapshot protection, queued-format cancellation, and unrelated form-field focus passed.")
     }
 }

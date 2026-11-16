@@ -1,0 +1,83 @@
+{
+  "schema": "booknook.mac-editor-reflow-evidence.v1",
+  "status": "PASS_HASH_BOUND_NATIVE_EDITOR_HARNESS_FULL_APP_ACCEPTANCE_PENDING",
+  "observed_finished_utc": "2026-11-16T19:21:07.922313+00:00",
+  "candidate": {
+    "version": "0.2.1",
+    "app_build": "2026111601",
+    "scope": "AppKit presentation only; existing SDK, saved-data and ontology contracts unchanged",
+    "commit_binding": "Exact source file hashes at this observation; no final app artifact identity inferred"
+  },
+  "source_files": {
+    "apps/apple/BookNook/NativeNotebookEditor.swift": "23fc83f3dd7b1155ef6bded532d43a6fe74a0689ee2a932d4fc3d9d7c27f9336",
+    "tests/NotebookEditorTests.swift": "d85f0472daef032ce6eee69e0151c010c66004f129c4caf29566e33a19569adf"
+  },
+  "source_files_unchanged_during_harness": true,
+  "repair": {
+    "owner": "NotebookEditorScrollView.setFrameSize, before the clip/document width changes",
+    "geometry": "TextKit2 native insertion-segment rectangle plus textContainerOrigin; finite full horizontal and vertical containment in the prior document viewport",
+    "eligibility": "Only the active, focused editor with an unmarked, empty insertion caret that was already visible",
+    "reveal": "Native scrollRangeToVisible after synchronous frame change; no queued scrolling or legacy-layout offset conversion",
+    "preserved": "Intentional offscreen browsing, unfocused/inactive editor, nonempty selection, marked text, rich styles, native Undo/Redo and document content"
+  },
+  "final_native_harness": {
+    "result": "PASS",
+    "receipt_bytes": 2965,
+    "receipt_sha256": "05c4d44ed18b75aa13c6919647fdb0e4f08c967d46f0df01640a3203c5f14965",
+    "test_executable_sha256": "b7af198bdbaa11df3e589fb4b078a70becf85de510fb1cacc304b73ad503f625",
+    "compile_exit_code": 0,
+    "execution_exit_code": 0,
+    "log_bytes": 1906,
+    "log_sha256": "b50d1d4263c787b922497979bafed56ee11460f979c3b9bbf11a97014990b73d",
+    "corpus_utf16_units": 118823,
+    "width_sequence_points": [
+      530,
+      460,
+      600,
+      400,
+      460
+    ],
+    "adversarial_right_edge_shrink_points": [
+      600,
+      400
+    ],
+    "checks": [
+      "Native headless AppKit/TextKit2 window and layout with independently measured finite full-X/Y caret containment",
+      "Visible end caret remains in the viewport at every width",
+      "Old right-edge caret beyond the next narrower width is retained after shrink",
+      "Exact text, styles, selection and native formatting/typing Undo/Redo remain intact",
+      "Intentional offscreen browsing, unfocused/inactive editor, nonempty selection and active marked text are preserved",
+      "Existing rapid edit/stale autosave, external refresh, hidden-pane focus/IME and form-field focus scenarios pass"
+    ]
+  },
+  "retained_prior_results": [
+    {
+      "stage": "Original implementation negative control",
+      "result": "NONPASS",
+      "receipt_sha256": "8027d19ff03ac1f847b686e7283e935b32645a4ee59e6402f83e8c955b3e57b5"
+    },
+    {
+      "stage": "Narrower synchronous candidate before adversarial right-edge coverage",
+      "result": "SUPERSEDED_LIMITED_PASS_NOT_FINAL_ACCEPTANCE",
+      "receipt_sha256": "ce94bb2d43744dcf2190c5dc50f1ae6d3c3c1a3dde0bb6fd8a5a94b543163196"
+    },
+    {
+      "stage": "Expanded right-edge test against insufficient synchronous candidate",
+      "result": "NONPASS",
+      "receipt_sha256": "8da6fb3a8fe9fdd2604b25b74d87b185facadaec32bd46ce3900adf2801d606e"
+    }
+  ],
+  "prior_actual_app_nonpass": "mac-2026111503-longnote-evidence.json",
+  "acceptance": {
+    "native_editor_harness": "PASS",
+    "full_candidate_app_build": "PENDING",
+    "actual_candidate_app_UI": "PENDING",
+    "new_app_packaging_publication": "NOT_QUALIFIED",
+    "production_MVP": false
+  },
+  "limits": [
+    "The test executable and native layout ran; this is not a full Book Nook application build or actual reading-desk acceptance.",
+    "No physical keyboard, real IME/user-language behavior, VoiceOver, endurance, power loss, forced termination, minimum-OS, live account or iPad acceptance.",
+    "Existing published app1503 and SDK assets, original actual-app NONPASS and earlier evidence remain unchanged; no fifth UX round."
+  ]
+}

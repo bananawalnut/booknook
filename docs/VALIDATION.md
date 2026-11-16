@@ -8,6 +8,8 @@
 
 A separate [Mac 1503 text-input follow-up](mac-2026111503-keyboard-evidence.json) passes automated ASCII typing/native Unicode paste, observed Undo/Redo and normal reopen with stable note identity/order/context. It does not qualify physical keyboard or real IME input.
 
+The [Mac 1503 long-note result](mac-2026111503-longnote-evidence.json) preserves 120,623 UTF-16 units across formatting/typing Undo/Redo, face switching and normal reopen, with seven revisions confined to the third note. The visible end caret leaves the viewport after 34%→39%→34% pane resizing: **confirmed NONPASS**, restored by Right Arrow without text changes. The two retained offscreen accessibility-tool limits are distinct. The separate [AppKit editor harness](mac-editor-reflow-evidence.json) now passes native full-X/Y caret geometry across five widths and a right-edge shrink, with text/styles/Undo/Redo and browsing/IME/selection intact. Its original negative and insufficient-fix right-edge nonpasses remain preserved. Full candidate app build/UI and distribution are not yet qualified.
+
 Documentation commit [`3be3f2b`](https://github.com/bananawalnut/booknook/commit/3be3f2b50bcac8f29b6f9a345d87630488582e8d) separately passes [both CI jobs and all 38 steps](https://github.com/bananawalnut/booknook/actions/runs/43928658919), with zero skipped CI steps and five declared ignored test entries. This later repository check is distinct from exact `efec2dd` release CI and does not change published artifact identities.
 
 ## Current app-only preview and bounded Mac checks — 2026-11-14

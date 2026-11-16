@@ -84,9 +84,46 @@ func installNotebookContent(_ text: String, styles: [InlineStyle], in view: NSTe
         view.typingAttributes = [.font: font, .foregroundColor: NSColor(red: 41.0 / 255, green: 63.0 / 255, blue: 56.0 / 255, alpha: 1)]
     }
 }
+final class NotebookEditorScrollView: NSScrollView {
+    private var preservingCaretDuringReflow = false
+    override func setFrameSize(_ newSize: NSSize) {
+        guard newSize.width != frame.width, !preservingCaretDuringReflow,
+              let editor = documentView as? NotebookTextView else { super.setFrameSize(newSize); return }
+        preservingCaretDuringReflow = true
+        defer { preservingCaretDuringReflow = false }
+        let range = editor.selectedRange()
+        var retainCaret = false
+        if editor.notebookPaneActive, let window, window.firstResponder === editor, !editor.hasMarkedText(),
+           range.location != NSNotFound, range.length == 0, let caret = editor.insertionRect(at: range.location) {
+            // Ancestors may already have narrowed visibleRect, while the text
+            // and our clip view still have their old width. Measure the old
+            // TextKit segment against our own pre-reflow document viewport.
+            let viewport = documentVisibleRect, clipped = editor.visibleRect
+            retainCaret = caret.height > 0 && [caret.minX, caret.maxX, caret.minY, caret.maxY].allSatisfy(\.isFinite)
+                && caret.minX >= viewport.minX && caret.maxX <= viewport.maxX
+                && caret.minY >= viewport.minY && caret.maxY <= viewport.maxY
+                && caret.minY >= clipped.minY && caret.maxY <= clipped.maxY
+        }
+        super.setFrameSize(newSize)
+        // Let TextKit resolve its new line geometry and perform the native
+        // reveal synchronously, without queuing a later scroll over user input.
+        if retainCaret { editor.scrollRangeToVisible(range) }
+    }
+}
 final class NotebookTextView: NSTextView {
     var changed: (() -> Void)?
     var notebookPaneActive = true
+    func insertionRect(at utf16Offset: Int) -> NSRect? {
+        guard let layout = textLayoutManager, let content = layout.textContentManager,
+              let location = content.location(content.documentRange.location, offsetBy: utf16Offset) else { return nil }
+        var result: NSRect?
+        let options: NSTextLayoutManager.SegmentOptions = selectionAffinity == .upstream ? [.rangeNotRequired, .upstreamAffinity] : [.rangeNotRequired]
+        layout.enumerateTextSegments(in: NSTextRange(location: location), type: .standard, options: options) { _, frame, _, _ in
+            result = frame.offsetBy(dx: self.textContainerOrigin.x, dy: self.textContainerOrigin.y).standardized
+            return false
+        }
+        return result
+    }
     override var acceptsFirstResponder: Bool { notebookPaneActive && super.acceptsFirstResponder }
     override func becomeFirstResponder() -> Bool { notebookPaneActive && super.becomeFirstResponder() }
     override func keyDown(with event: NSEvent) {
@@ -132,7 +169,7 @@ struct NativeNotebookEditor: NSViewRepresentable {
     var changed: (String, [InlineStyle]) -> Void
     func makeCoordinator() -> Coordinator { Coordinator(self) }
     func makeNSView(context: Context) -> NSScrollView {
-        let scroll = NSScrollView(); scroll.hasVerticalScroller = true; scroll.drawsBackground = false
+        let scroll = NotebookEditorScrollView(); scroll.hasVerticalScroller = true; scroll.drawsBackground = false
         let view = NotebookTextView(usingTextLayoutManager: true)
         view.isRichText = true; view.importsGraphics = false; view.allowsUndo = true
         view.isVerticallyResizable = true; view.isHorizontallyResizable = false; view.autoresizingMask = [.width]
