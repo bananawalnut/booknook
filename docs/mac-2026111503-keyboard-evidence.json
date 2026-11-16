@@ -1,0 +1,51 @@
+{
+  "schema": "booknook.mac1503-keyboard-evidence.v1",
+  "result": "PASS_BOUNDED_ACTUAL_NATIVE_TEXT_UNDO_REDO_AND_NORMAL_REOPEN",
+  "observed_utc": "2026-11-16T18:59:53.471470+00:00",
+  "source_commit": "efec2dd389aa877fc2ceac589d6f7384a1cecf4d",
+  "version": "0.2.1",
+  "build": "2026111503",
+  "receipt_bytes": 2791,
+  "receipt_sha256": "393a1a249919cc7e301b4152552a847d6b00683ef28bd9994e15e9bcb8553a9c",
+  "same_qualified_executable_sha256": "31772387c39a1b56df96459aa3d459f2bf4a2c2ba0fd64e0a4648995ca5f8498",
+  "runtime_identity": {
+    "actual_qualified_QA_executable_and_database_descriptor_confirmed": true,
+    "personal_default_library_untouched": true
+  },
+  "interaction": {
+    "surface": "AppKit TextKit note inside native SwiftUI Margin; WKWebView EPUB remains alongside",
+    "ascii_typeText": "Keyboard check: the margin saves this thought.",
+    "ascii_undo_observed": "empty note",
+    "ascii_redo_observed": "original ASCII sentence",
+    "native_paste_suffix": " Caf\u00e9 \u2014 \u8aad\u66f8 \ud83d\udcda",
+    "paste_undo_observed": "ASCII sentence only",
+    "paste_redo_observed": "exact complete Unicode sentence",
+    "save": "second pre-existing empty note; six new revisions; stable id/order/first-capture context",
+    "normal_quit_process_absence_verified": true,
+    "reopen_visible_note_and_real_EPUB_verified": true
+  },
+  "data_comparison": {
+    "after_edit_changed_desk_fields": [
+      "revision",
+      "notebooks"
+    ],
+    "first_note_cards_books_lists_social_state_unchanged": true,
+    "after_quit_exact_data_equal": true,
+    "after_reopen_changed_desk_fields": [
+      "revision",
+      "positions"
+    ],
+    "pending_edits_social_sync_outbox_peers_zero": true,
+    "social_revision": 0
+  },
+  "UX_round": {
+    "partial": 4,
+    "fifth_round_started": false
+  },
+  "limits": [
+    "Automated native ASCII typing and native Unicode paste; no physical keyboard or real IME composition acceptance.",
+    "No VoiceOver, long-document/endurance, forced-termination, Pencil/finger, minimum-OS runtime or live-account qualification.",
+    "No iPad action, signing, sharing, code change, normal installation or new screenshot-file export.",
+    "Separate later follow-up; the original Mac1503 observation and its evidence remain unchanged. Earlier path-dependent startup wait remains unresolved."
+  ]
+}

@@ -1,0 +1,224 @@
+{
+  "schema": "booknook.app-only-public-preview-evidence.v2",
+  "recorded_at": "2026-11-16T18:57:01.239023+00:00",
+  "status": "PASS_PUBLIC_APP_PREVIEW_DELIVERY_WITH_SCOPED_LOCAL_MAC_QA",
+  "observational_scope": "Unsigned build, source, package, runtime and byte observations; not reproducible-build proof, normal installation, production signing or full-MVP acceptance.",
+  "app": {
+    "source_commit": "efec2dd389aa877fc2ceac589d6f7384a1cecf4d",
+    "version": "0.2.1",
+    "build": "2026111503",
+    "manifest_schema": "booknook.app-only-preview-manifest.v2",
+    "manifest_sha256": "e68aa94e8c706d4df9998dd0f0f1dd661b817f7c62d1a4fb41a11ef059015b32",
+    "release_kind": "app-only",
+    "source_snapshot": {
+      "files": 649,
+      "sha256": "d776105fdfa1696a06b8c4801527338296cb3ae1f6a88ea14299be3e5f82bc45",
+      "scope": "Immutable efec Git blob map; all355 selected compiled/native/ABI/resource/build inputs match. Later repository documentation remains separate."
+    }
+  },
+  "native_qualification": {
+    "result": "PASS_THREE_FRESH_RELEASE_APP_TARGETS",
+    "configuration": "Release",
+    "architecture": "arm64",
+    "build_receipts": {
+      "mac": {
+        "name": "mac-release1503-verification.json",
+        "bytes": 10557,
+        "sha256": "b04ab9091eafbf1dfb944f26f5149927503cc89706a2fa285839dc1be7c0a638"
+      },
+      "ipad-sim": {
+        "name": "ipad-sim-release1503-verification.json",
+        "bytes": 10791,
+        "sha256": "9ece7aa426f96549cb5d4bf7522134f546bb43f730ed8cccc274d9b7b87b65fc"
+      },
+      "ipad-device": {
+        "name": "ipad-device-release1503-verification.json",
+        "bytes": 10808,
+        "sha256": "12311f13dc1f9bae5db84d513ac051cba99e1d251bc50283291f9f178d8a894d"
+      }
+    },
+    "selected_source_inputs": 355,
+    "selected_source_map_sha256": "c0be4f0dd5a891893172dde185062a7e6928ea1fb01ff7491b23babfd1901bdb",
+    "git_blob_comparison_receipt_sha256": "1e554399e0398508eca39a76b9f05bc959f178906bf922737e2982239c917ddc",
+    "fresh_sdk_native_receipt_sha256": "85dbff794466132052bc51c90ff850d1134e255777dcbf24e03f4775f091fc2f",
+    "generated_interface_receipt_sha256": "a57ca2043c63270cb0e7bda8344598c2e8961884f2fbfbd99b6d2fbde0d8b2b1",
+    "minimum_os_metadata": {
+      "mac": "14.0",
+      "ipad-sim": "17.0",
+      "ipad-device": "17.0"
+    },
+    "minimum_os_runtime_qualified": false,
+    "ios_runtime_performed": false
+  },
+  "packaging": {
+    "result": "PASS_FULL_EXTRACTED_TREE_MODE_AND_METADATA_COMPARISON",
+    "verification_receipt_sha256": "8d0c9aa0fedc21d5442d857745758b1f13112394c1c1d8d83ec2968086f11a98",
+    "original_existing_packager_report_sha256": "789ebb5ad468431d842100b06fd3c8dd0c851d9ef95734d9a8da5d467391ce0a",
+    "adjusted_archive_report_sha256": "7b791c55901df51b793a62a0fd39e81835cd48702322c6218d6a49996234aa57",
+    "asset_map_sha256": "b2b6117046770e4b3f4754760069665f5f5841598565de0653b6d79af67a87aa",
+    "first_attempt": {
+      "result": "NONPASS",
+      "receipt_sha256": "180717b5c56a1cb5cae4672f4c0b2ad733f6fdfe11c3bdacb30fe0aaacbf2b55",
+      "cause": "Safe tar extraction deliberately leaves directory modes unset. Inherited umask 0022 created 0755 directories while pristine bundles use 0700; full-mode equality refused the Mac archive.",
+      "preserved": true
+    },
+    "new_attempt": {
+      "result": "PASS",
+      "correction": "Explicit umask 0077 before spawning the unchanged packager; a unique output path preserved the first attempt. No source/product permission edits or weakened comparison.",
+      "all_three_archives_independently_extracted": true,
+      "regular_files_per_bundle": 88,
+      "mach_o_binaries_per_bundle": 1,
+      "pristine_product_trees_unchanged": true,
+      "minimum_observed_free_bytes": {
+        "source_volume": 4248186880,
+        "external_cache": 2444513280
+      },
+      "reserve_bytes": 2147483648
+    },
+    "artifacts": [
+      {
+        "name": "booknook-mac-arm64-development-0.2.1-build2026111503.tar.gz",
+        "bytes": 14872769,
+        "sha256": "363edf67179069520160d72df81f9a1a4b0d2a3112114ba95e46aea72347a31e",
+        "target": "mac",
+        "bundle": "BookNookMac.app"
+      },
+      {
+        "name": "booknook-ipad-sim-arm64-development-0.2.1-build2026111503.tar.gz",
+        "bytes": 11395936,
+        "sha256": "b7ca16c347ac5f3732970173659a3e88b5dc232333d4a31821f9cf4241dd35f0",
+        "target": "ipad-sim",
+        "bundle": "BookNookPad.app"
+      },
+      {
+        "name": "booknook-ipad-device-arm64-development-0.2.1-build2026111503.tar.gz",
+        "bytes": 11186023,
+        "sha256": "486e73cdda43886b79262b61a6f63bc433c0b99804b48a8313009b6ca69277df",
+        "target": "ipad-device",
+        "bundle": "BookNookPad.app"
+      }
+    ]
+  },
+  "current_mac": {
+    "evidence": "mac-2026111503-evidence.json",
+    "evidence_sha256": "24407b094e886ea16cc451d7a2a8066f847d7ea96018e82892692ab483e16b3a",
+    "runtime_receipt_sha256": "2844058efbb639a501166906677312b799c105f16d38a0c4c396c3a2f89b619d",
+    "result": "PASS_BOUNDED_ACTUAL_GUI_AND_NORMAL_REOPEN",
+    "scope": "Exact local QA executable/process/database, visible version/ontology, warm EPUB/Margin panes, arrows, Scribble/text, three character versions and normal reopen of synthetic desk. No new typing/physical input or normal installation.",
+    "historical_evidence_bytes_preserved": true,
+    "startup_wait_remains_unresolved": true
+  },
+  "hosted_ci": {
+    "result": "PASS",
+    "url": "https://github.com/bananawalnut/booknook/actions/runs/43798571344",
+    "source_commit": "efec2dd389aa877fc2ceac589d6f7384a1cecf4d",
+    "passed_steps": 38,
+    "skipped_steps": 0,
+    "receipt_sha256": "a6e8f4c0b9b2dfdb784c1040051a5ac76d152db8554d878223d78820edede5c1"
+  },
+  "source_security": {
+    "source_audit_receipt_sha256": "f9b40dc64c18e3c2569f59aebaf218e85505e8ae41f096c38e6028919d18248e",
+    "rustsec_snapshot_commit": "02e2517f457a359fc6d3440ea4560c8ea188fee8",
+    "result": "PASS with maintenance followups retained; exact source/probe audit found no known vulnerability/unsound match; 358 official registry metadata entries verified",
+    "maintenance_followups": [
+      "basic-toml0.1.10",
+      "smallstr0.3.1"
+    ]
+  },
+  "release": {
+    "repository": "https://github.com/bananawalnut/booknook",
+    "tag": "v0.2.1-app-preview.20261116",
+    "url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261116",
+    "release_id": 447442813,
+    "prerelease": true,
+    "draft": false,
+    "status": "PUBLIC_DOWNLOADS_AND_INDEPENDENT_EXTRACTION_PASS",
+    "expected_asset_count": 11,
+    "public_downloads": {
+      "result": "PASS",
+      "receipt_bytes": 7508,
+      "receipt_sha256": "90c52ccb2e631312f3b338f2ecf476dc4abf54f705cd18edf57e7ef3d0613a9c",
+      "asset_count": 11,
+      "downloaded_bytes": 37729663,
+      "unauthenticated": true,
+      "proxy_disabled": true,
+      "tls_verified": true,
+      "server_and_stream_hashes_match": true,
+      "exact_source_ref_schema_and_build_match": true
+    },
+    "downloaded_extraction": {
+      "result": "PASS",
+      "receipt_bytes": 6973,
+      "receipt_sha256": "5df8067a961266a20825ff0c2aaefe50772e4117dec1950386fee1aec0663f78",
+      "phases": [
+        {
+          "phase": "verify-mac",
+          "exit_code": 0
+        },
+        {
+          "phase": "verify-ipad-sim",
+          "exit_code": 0
+        },
+        {
+          "phase": "verify-ipad-device",
+          "exit_code": 0
+        }
+      ],
+      "checks": [
+        "All three downloaded archive identities match the public download receipt and immutable manifest",
+        "Full pristine bundle bytes, file/directory modes, Info.plist and arm64 Mach-O metadata match published manifest and qualified packaging report",
+        "80 bundled ontology files and four root license/inventory files match per archive"
+      ],
+      "owned_temporary_extractions_removed_and_tmp_empty": true,
+      "runtime_installation_signing_network_device_or_Git_actions": false,
+      "minimum_free_bytes": {
+        "source_volume": 4857237504,
+        "external_cache": 2444500992
+      },
+      "reserve_bytes": 2147483648
+    },
+    "manifest_observation": "Prepublication source/build/package evidence retains its pending public-delivery state; future observations do not replace asset bytes.",
+    "published_at": "2026-11-16T18:45:34Z",
+    "server_asset_identities_verified": true,
+    "postpublication_notes": {
+      "verification_receipt_sha256": "d59f0c4502b8f9577a4f903fc1509d540ca970104c8176d95bf648ed39ccfd00",
+      "body_sha256": "73acc2a40365ab2cd96f2fbd997c7198e3037475d65eb3794aa4c210d531b372",
+      "all_asset_identities_and_bytes_unchanged": true
+    }
+  },
+  "unchanged_boundaries": {
+    "sdk": "sdk-021-qualification-evidence.json",
+    "sdk_archives_rebuilt_or_repacked_for_this_release": false,
+    "older_release_assets_unchanged": true,
+    "saved_data_provider_wire_ontology_contracts_unchanged": true,
+    "release_manifest_v2": "Release metadata only; older v1 manifests and application data retain their existing meanings."
+  },
+  "limits": [
+    "Development app archives only; Mac is not Developer ID signed/notarized and physical-iPad bundle is unsigned, not an installable IPA.",
+    "No app install/launch/signing/device action during packaging; actual Mac QA was separately observed before packaging.",
+    "iPad unavailable; current physical input/accessibility/endurance and minimum-OS runtime remain unqualified.",
+    "Live Kindle/Audible/Castalia, deployed Nostr/private-group and multi-device synchronization gates remain open.",
+    "Partial UX round 4 remains partial; no fifth round or broad new workflow/input acceptance is inferred."
+  ],
+  "production_mvp_qualified": false,
+  "repository_documentation_ci": {
+    "result": "PASS",
+    "source_commit": "3be3f2b50bcac8f29b6f9a345d87630488582e8d",
+    "url": "https://github.com/bananawalnut/booknook/actions/runs/43928658919",
+    "qualification_receipt_sha256": "2b5101bb28654e30038d70a8fd30c133d9b55c0ff2e17ac6c04eff0bed7ebca0",
+    "jobs": 2,
+    "successful_jobs": 2,
+    "steps": 38,
+    "successful_steps": 38,
+    "skipped_CI_steps": 0,
+    "declared_ignored_test_entries": 5,
+    "scope": "Later documentation-commit CI; exact efec release CI and published artifact bytes remain independently bound."
+  },
+  "current_mac_keyboard_followup": {
+    "evidence": "mac-2026111503-keyboard-evidence.json",
+    "evidence_sha256": "3e4903bcfe902bb80fcea2f221d9dcc33cda0aa2a5b127d15274d624ea04a419",
+    "receipt_sha256": "393a1a249919cc7e301b4152552a847d6b00683ef28bd9994e15e9bcb8553a9c",
+    "result": "PASS_BOUNDED_ACTUAL_NATIVE_TEXT_UNDO_REDO_AND_NORMAL_REOPEN",
+    "scope": "Separate later automated native ASCII input, Unicode paste, observed Undo/Redo and normal quit/reopen; six revisions in the second note only, stable context/order and empty queues. No physical keyboard/real IME/iPad or broader runtime acceptance."
+  }
+}
