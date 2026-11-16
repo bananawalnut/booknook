@@ -2,7 +2,13 @@
 
 Initial registration was independently read back on **2026-11-13** against Book Nook source `abd2cb1928518be66eda247bea473c98413bb1a2`; the November 14 continuation below records later source and qualification checkpoints. DevGraph is the work tracker; this document is a navigation snapshot, not a replacement tracker or acceptance result.
 
-## Current app and resumed Mac checkpoint — 2026-11-14
+## Startup/import tracking checkpoint — 2026-11-15
+
+Canonical read-back verifies Project/booknook **v46** and Issue/booknook-hands-on-workflows **v4**. Two description-only patches preserve their complete previous descriptions, titles, priorities and lifecycle. Parentage, dependencies, inherited Castalia membership and all **24 Project children** are unchanged. Both unsigned EventReceipts report `pending`: the local mutations committed; external delivery and portable signed attestation are not claimed. Other records retain their separately dated checkpoints below.
+
+[The evidence referenced by these patches](https://github.com/bananawalnut/booknook/blob/b8298f849c11a7a36b772e1cae5a6f4555b948c6/docs/startup-import-evidence.json) separates b07/1501 qualification from later portable-reader source tests. Those graph updates do not attest to subsequent 1502 app results, which are recorded separately in [delivery](DELIVERY.md). Invalidated launch-settings and opening-delay observations remain preserved. Full MVP, current physical iPad/input, accessibility/endurance, minimum-OS execution, live authority/accounts and remote synchronization remain open.
+
+## App and resumed Mac checkpoint — 2026-11-14
 
 Canonical read-back at 22:55 UTC verifies Project/booknook **v45**, Issue/booknook-hands-on-workflows **v3**, Issue/booknook-physical-keyboard-ime **v3**, Issue/booknook-current-packages **v12** and Issue/booknook-ci-evidence **v19**. Five description-only patches prepend concise, record-specific progress and retain every previous description verbatim. Titles, priorities, lifecycle, parentage, dependencies, all **24 Project children** and inherited Castalia membership are unchanged; the existing plan's **46 records and 39 dependency edges** were re-read. SDK-publication **v6**, security **v9** and Castalia-live **v5** remain unchanged. Five unsigned EventReceipts report `pending`: local commit is complete, outbox processing remains pending; external delivery and portable signed attestation are not claimed.
 

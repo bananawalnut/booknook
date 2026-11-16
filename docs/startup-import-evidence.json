@@ -96,11 +96,19 @@
     ],
     "existing_older_location_check": "PASS with a new distinct QA app copy: exact executable/open DB descriptors and visible EPUB URL match intended existing library; normal quit/reopen also ready and renders correct EPUB. Prior edited-in-place launch-settings mismatch remains invalidated.",
     "new_screenshot_files": "None; inline visual checks are not substituted for the dated README captures",
-    "verified_existing_library_reopen_private_receipt_sha256": "19971fbab3cd34ef10a785c11764620a0696a4001738c321747cb7947b6dbd8f"
+    "verified_existing_library_reopen_private_receipt_sha256": "19971fbab3cd34ef10a785c11764620a0696a4001738c321747cb7947b6dbd8f",
+    "build1502": [
+      "Same immutable executable tested in separate synthetic Documents and Application Support stores",
+      "Documents startup waits;92sampled library-open frames end at SQLite journal parent-directory open; main UI thread idle",
+      "Application Support empty store ready on first observation; runtime database descriptors verify actual intended root",
+      "Actual selected-file backup restore preserves every state field except rebased revision and available reader positions; original EPUB bytes match",
+      "Exact Unicode note,3character versions, Scribble/text, left/right arrows and34percent Margin width retained",
+      "Normal quit confirmed exited; reopen preserves writing and renders EPUB from intended Application Support root"
+    ]
   },
   "delivery_boundaries": [
     "Published1405 app and a945 SDK artifacts remain unchanged and predate these fixes",
-    "The b07/1501 app does not contain the later2a567f4 portable reader fix; that later source passes64native tests and awaits its fresh app/SDK delivery.",
+    "The b07/1501 app predates the later2a567f4 portable reader fix. Local1502 now includes it and passes bounded Mac restore/reopen checks; refreshed public app/SDK delivery remains separate.",
     "Current normal iPad installation/signing/trust, physical input/IME/VoiceOver/endurance remain open",
     "Live Kindle/Audible/Castalia, remote Nostr and actual encrypted multi-device exchange remain open",
     "Minimum-OS runtime and two dependency maintenance follow-ups remain open"
@@ -124,8 +132,31 @@
       "Native restore/social restore/sync receive/content refusal preserves existing library/settings/social/sync before and after reopen"
     ],
     "private_receipt_sha256": "9c1ab44fe4489030dc2359caf3be5cf5fc22b66f3b042b585656507315005955",
-    "production_library_and_app": "Fresh production host library rebuilding; no1502 app or SDK archive qualification inferred from units",
-    "hosted_CI": "Not yet observed for this later commit; b07 CI above remains separately scoped"
+    "production_library_and_app": "PASS fresh production host library, actual generated-interface comparison and local Mac1502 Release inspection/runtime; no refreshed public archive or SDK qualification",
+    "hosted_CI": "Not yet observed for this later commit; b07 CI above remains separately scoped",
+    "production_host": {
+      "result": "PASS",
+      "source_files": 166,
+      "static_library_sha256": "28e33b2e47c1953aea0d34cb328620b18a816d85aedcea4409d661e97a10d649",
+      "dynamic_library_sha256": "50b201bedf7b32d2bd049b884e5418ebd2353769530e068ea744d6ece131b49e",
+      "all_three_normalized_generated_interfaces_equal": true,
+      "private_build_receipt_sha256": "2855bd11af9615d57055dee466f9a1a77a112aae25a7d937c8b50661d23a79b4",
+      "private_ABI_receipt_sha256": "822be6b15e1cf9f1bba31ffb2a51da097ca29366c766fab42698675af904051f"
+    },
+    "local_Mac_Release": {
+      "result": "PASS",
+      "build": "2026111502",
+      "version": "0.2.0",
+      "configuration": "Release",
+      "architecture": "arm64",
+      "minimum_OS_metadata": "macOS14",
+      "selected_app_inputs": 355,
+      "source_drift": false,
+      "app_executable_sha256": "5a079319e75e24692a9ad63d81278c93f00b9aaf9739153ce04344a9a090f588",
+      "private_build_receipt_sha256": "c31f36d73cc566757bd0b21e9b996e9d6ec24662630c76813229ce7563ec7264",
+      "actual_application_support_restore_private_receipt_sha256": "1512d1c5ad71c97491b88053eac6a2323d202f1d015be85ba68d5497f439f0a2",
+      "actual_normal_reopen_private_receipt_sha256": "f678db4f4a5a6c1f03fe408fc5d2f66406abcca7dd4114d443a6ed7429715ad9"
+    }
   },
   "latest_device_inventory": {
     "local_date": "2026-11-15",
@@ -133,5 +164,26 @@
     "iPad": "Paired; Developer Mode enabled; tunnel/DDI unavailable",
     "device_or_orientation_actions": false,
     "private_summary_sha256": "b2ba8e5ee83c1a2ebaaf6b513afce3c82cd79e78b3866ab6dc8a3bf2e99121dd"
+  },
+  "startup_path_comparison": {
+    "result": "PATH_DEPENDENT_OBSERVATIONS",
+    "sample_count": 92,
+    "sampled_library_open_path": "Store::open -> PRAGMA journal_mode=WAL -> rollback-journal sync -> openDirectory -> __open",
+    "main_thread": "Idle AppKit event loop",
+    "sample_private_sha256": "4e928a6e822320fd55100f8ea6b092248d4a26e6dca461333df1a1a87ea6bbfa",
+    "application_support_runtime_location_private_receipt_sha256": "e20f2978d0ac98442b1e59a5af59845f9809af63a6aed6c6e5196d58ba741f86",
+    "cause": "OS-level path mediation unproven; no TCC diagnosis or universal performance/fix claim",
+    "settings_changed": "None for privacy grants, locking or durability",
+    "original_personal_default_library": "Not opened or modified; separate synthetic store under the same standard Application Support area"
+  },
+  "SDK_refresh_plan": {
+    "version": "0.2.1",
+    "status": "Planned; no new-version build/archive claim",
+    "requirements": [
+      "Version first-party manifests/locks and npm before freezing source",
+      "Fresh3native slices and2WASM targets",
+      "Fresh6archives and actual extracted/installed consumers",
+      "Qualified Cargo output routing and bounded capacity; preserve old archive identities"
+    ]
   }
 }
