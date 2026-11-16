@@ -1,0 +1,76 @@
+{
+  "schema": "booknook.mac1503-evidence.v1",
+  "status": "PASS_LOCAL_RELEASE_AND_BOUNDED_ACTUAL_GUI_NORMAL_REOPEN",
+  "version": "0.2.1",
+  "build": "2026111503",
+  "source_commit": "efec2dd389aa877fc2ceac589d6f7384a1cecf4d",
+  "observed_utc": "2026-11-16T18:16:46.948049+00:00",
+  "build_qualification": {
+    "configuration": "Release",
+    "architecture": "arm64",
+    "build_receipt_sha256": "b04ab9091eafbf1dfb944f26f5149927503cc89706a2fa285839dc1be7c0a638",
+    "selected_source_input_count": 355,
+    "selected_inputs_unchanged_sha256": "c0be4f0dd5a891893172dde185062a7e6928ea1fb01ff7491b23babfd1901bdb",
+    "all_selected_inputs_match_exact_source_git_blobs": true,
+    "git_blob_comparison_receipt_sha256": "1e554399e0398508eca39a76b9f05bc959f178906bf922737e2982239c917ddc",
+    "executable_sha256": "31772387c39a1b56df96459aa3d459f2bf4a2c2ba0fd64e0a4648995ca5f8498",
+    "native_sdk_version": "0.2.1",
+    "native_sdk_qualification": "sdk-021-qualification-evidence.json",
+    "scope": "New local macOS Release product only; native libraries already qualified separately. No app archive, app publication, normal installation or iOS app acceptance from this check."
+  },
+  "actual_runtime": {
+    "receipt_sha256": "2844058efbb639a501166906677312b799c105f16d38a0c4c396c3a2f89b619d",
+    "running_executable_identity_verified": true,
+    "synthetic_QA_database_descriptor_verified": true,
+    "synthetic_data_only": true,
+    "personal_default_library_untouched": true,
+    "QA_bundle_copy_change": "Only LSEnvironment selects the existing synthetic Application Support desk; original Release product bytes remain unmodified.",
+    "connections": {
+      "app_version": "0.2.1",
+      "app_build": "2026111503",
+      "library_ontology": "0.3.0",
+      "live_device_gates_visible": true
+    },
+    "workspace": [
+      "Warm paper and green ink; original EPUB and both panes visible; Margin width 34%.",
+      "Left/right arrow swap preserves both panes; restored Margin on left.",
+      "Text to Scribble to text retains Unicode prose, note order and creation context. Mac labels original ink read-only.",
+      "Mara history shows all 3 saved versions with their distinct interpretations and reading context."
+    ],
+    "normal_quit_confirmed_by_process_absence": true,
+    "normal_reopen_preserved_unicode_note_unrated_review_and_list": true,
+    "continuity": {
+      "baseline_evidence": "mac-2026111502-workflow-evidence.json",
+      "baseline_evidence_sha256": "4beb9ac7ecfb0b438860ed01dbc8bc28f9357877e06065096ff268a2dd9eb2ad",
+      "only_saved_state_differences_from1502": [
+        "positions",
+        "revision"
+      ],
+      "notebook_character_history_review_and_list_unchanged": true,
+      "pending": {
+        "pending_edits": 0,
+        "social_pending": 0,
+        "sync_outbox": 0,
+        "sync_peers": 0
+      },
+      "social_revision": 0
+    },
+    "left_open_at_reading_desk": true
+  },
+  "retained_tool_observations": [
+    "After normal quit of 1502, an accessibility lookup reported process absence; independent process inventory confirmed no Book Nook executable before 1503 launch.",
+    "One reading-desk transition returned a tool state-change guard; fresh accessibility/screenshot inspection confirmed the intended desk.",
+    "Initial launch accessibility preceded asynchronous EPUB loading; later actual rendered EPUB was observed."
+  ],
+  "UX_round": {
+    "partial": 4,
+    "fifth_round_started": false
+  },
+  "limits": [
+    "Bounded actual use; no new typing, physical keyboard/IME/Pencil/finger/VoiceOver, endurance, forced termination, minimum-OS runtime or live integration pass.",
+    "No iPad device action, credential operation, signing, app packaging/publication, normal installation or new README screenshot export.",
+    "The earlier Documents-path startup wait remains unresolved; a successful normal reopen is not a general startup benchmark.",
+    "The public app preview remains 0.2.0/build 2026111405. SDK 0.2.1 has its own immutable release and downloaded-consumer evidence.",
+    "Earlier 1502 workflows and nonpasses retain their original source and observation scope; this check uses the same synthetic desk."
+  ]
+}

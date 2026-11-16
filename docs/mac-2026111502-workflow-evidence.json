@@ -1,0 +1,50 @@
+{
+  "schema": "booknook.mac1502-workflow-evidence.v1",
+  "status": "PASS_bounded_actual_GUI",
+  "observed_utc": "2026-11-16T17:18:06.304701+00:00",
+  "version": "0.2.0",
+  "build": "2026111502",
+  "compiled_source": "2a567f4f5ca221139d744045a45cae943b1b8afb",
+  "receipt_sha256": "b54a596a1c6122d7733b49d9376db4f677ac6e2e188ef827f4ad8ec6f8e9d363",
+  "data_scope": "Existing isolated synthetic Application Support desk; no personal default library, account setup or credentials operated on.",
+  "normal_quit_confirmed_by_process_absence": true,
+  "only_state_differences_on_reopen": [
+    "positions",
+    "revision"
+  ],
+  "list_title_visible_and_exact": "Quiet weekend \u2014 reread \ud83d\udcda",
+  "review_visible_and_exact": "A quiet story about noticing absence. Caf\u00e9 \u2014 \u8aad\u66f8.",
+  "rating_retained_unrated": true,
+  "sharing_handoff": {
+    "same_review_prefilled": true,
+    "book_retained": true,
+    "rating_no_rating": true,
+    "public_audience_visible": true,
+    "publication_disabled_without_identity": true
+  },
+  "setup_navigation": {
+    "sharing_to_connections": true,
+    "Castalia_configuration_visible": true,
+    "no_BookNook_membership_required": true,
+    "sync_names_three_missing_prerequisites": true,
+    "pairing_controls_disabled_until_setup": true
+  },
+  "pending": {
+    "pending_edits": 0,
+    "social_pending": 0,
+    "sync_outbox": 0,
+    "sync_peers": 0
+  },
+  "social_revision": 0,
+  "card_notebook_and_all_other_fields_preserved": true,
+  "retained_observation_nonpass": "First Review for sharing click returned tool state-change error; refreshed tree remained Library. A second freshly selected attempt completed the handoff. No causal claim.",
+  "helper_nonpass_retained": "Initial read-only inspector treated map collections as arrays; KeyError before any database or application write. Corrected map inspection passes.",
+  "scope": "Continues the partial fourth UX round; does not start or finish a fifth round. Same reviewed local1502 binary, separate from new SDK 0.2.1 and unchanged public app 1405.",
+  "limits": [
+    "Extends partial UX round 4 only; no VoiceOver, physical input, endurance, forced termination, live authority or network pass",
+    "The reviewed 1502 binary is separate from SDK 0.2.1 candidate source and unchanged public app 1405",
+    "No source changes, account setup, network publication, signing, orientation or personal-library operations",
+    "No forced termination, repeatable-startup benchmark or resolution of the earlier Documents-path directory-open wait.",
+    "New observations are inline UI inspection; no newly exported README screenshot files are claimed."
+  ]
+}

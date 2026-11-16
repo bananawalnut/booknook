@@ -1,0 +1,375 @@
+{
+  "schema": "booknook.sdk021-qualification-evidence.v1",
+  "status": "PASS_PUBLIC_DOWNLOADS_AND_EXACT_DOWNLOADED_CONSUMERS",
+  "source_commit": "efec2dd389aa877fc2ceac589d6f7384a1cecf4d",
+  "package_version": "0.2.1",
+  "release": {
+    "url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-sdk-preview.20261116",
+    "tag": "v0.2.1-sdk-preview.20261116",
+    "id": 447397573,
+    "published_at": "2026-11-16T18:02:22Z",
+    "sdk_only": true,
+    "new_app_archives": false,
+    "direct_tag_commit_verified": true
+  },
+  "source_and_local_packages": {
+    "native_release_slices": [
+      "macOS arm64",
+      "iOS device arm64",
+      "iOS Simulator arm64"
+    ],
+    "native_receipt_sha256": "85dbff794466132052bc51c90ff850d1134e255777dcbf24e03f4775f091fc2f",
+    "generated_interface_comparison": "Actual UniFFI generation matches the checked Swift/header/modulemap interface after removing only ASCII trailing horizontal whitespace.",
+    "rust_wasm_target": "wasm32-unknown-unknown",
+    "generated_runtime_outputs": [
+      "nodejs",
+      "web"
+    ],
+    "source_sdk_parity": "PASS",
+    "six_archive_consumers": "PASS_ACTUAL_EXTRACTED_OR_INSTALLED_ARCHIVES",
+    "package_receipt_sha256": "e2f372c81635746491c10933e6e9fbf926d1a66b46751d55c430f40c84010f70",
+    "extracted_rust_tests": {
+      "passed": 303,
+      "failed": 0,
+      "declared_ignored": 5,
+      "ignored_entries": [
+        "test public_https_feed::tests::public_https_acceptance_uses_production_dns_tls_and_no_test_override ... ignored, Opt-in live read-only public HTTPS qualification; set BOOKNOOK_FEED_ACCEPTANCE_URL to a controlled/public XML endpoint",
+        "test social_bridge::relay_acceptance::independent_relay_roundtrip_outage_and_durable_retry ... ignored, requires BOOKNOOK_RELAY_BINARY pointing at the pinned independent relay; localhost sockets only",
+        "test acknowledged_writer_process_helper ... ignored, subprocess fixture; invoked explicitly by the two crash recovery tests",
+        "test public_https_factory_fetch_runs_on_owned_runtime_without_caller_tokio ... ignored, Opt-in live public native factory; runs without a caller Tokio runtime",
+        "test actual_http_issuer_roundtrips_native_consent_and_receiver ... ignored, Starts an actual local HTTP issuer; run scripts/test-issuer.sh in a loopback-enabled environment"
+      ]
+    },
+    "archives": [
+      {
+        "bytes": 178906,
+        "sha256": "846573d35ba5b406ec268b1ca41fc4c0f6f16be8ff4e64346e08fd796791420b",
+        "name": "booknook-core-0.2.1.crate",
+        "kind": "rust-crate",
+        "cargo_vcs_info": {
+          "git": {
+            "sha1": "efec2dd389aa877fc2ceac589d6f7384a1cecf4d"
+          },
+          "path_in_vcs": "crates/core"
+        }
+      },
+      {
+        "bytes": 72673,
+        "sha256": "07a1897700f0738c245d1e86bd96d88cc1d17ad808c28e4f904be70adb2940ce",
+        "name": "booknook-connectors-0.2.1.crate",
+        "kind": "rust-crate",
+        "cargo_vcs_info": {
+          "git": {
+            "sha1": "efec2dd389aa877fc2ceac589d6f7384a1cecf4d"
+          },
+          "path_in_vcs": "crates/connectors"
+        }
+      },
+      {
+        "bytes": 185928,
+        "sha256": "105f586c08d9faff6719a1a325f253174a3d0e3444b5fd0e6169568f34a5b67e",
+        "name": "booknook-native-0.2.1.crate",
+        "kind": "rust-crate",
+        "cargo_vcs_info": {
+          "git": {
+            "sha1": "efec2dd389aa877fc2ceac589d6f7384a1cecf4d"
+          },
+          "path_in_vcs": "crates/native"
+        }
+      },
+      {
+        "bytes": 38331,
+        "sha256": "2b5b5d2612ba5a697a0115a944470fc685cb00e8739f1b4a24638ac3baed369c",
+        "name": "booknook-wasm-0.2.1.crate",
+        "kind": "rust-crate",
+        "cargo_vcs_info": {
+          "git": {
+            "sha1": "efec2dd389aa877fc2ceac589d6f7384a1cecf4d"
+          },
+          "path_in_vcs": "crates/wasm"
+        }
+      },
+      {
+        "bytes": 4578421,
+        "sha256": "f274eb68063c093f446cfea207671eb6e0d455ee25da6eee11c6b0ed22414854",
+        "name": "booknook-sdk-0.2.1.tgz",
+        "kind": "npm"
+      },
+      {
+        "bytes": 142666734,
+        "sha256": "0b78e7491f62f4bc4db6aa60b9ad65449d8f6b270921394bcb81c2cf9932d98a",
+        "name": "booknook-swift-sdk-0.2.1.tar.gz",
+        "kind": "swift-sdk"
+      }
+    ],
+    "native_scope": "Three fresh native Release libraries and deployment metadata; the actual extracted Swift consumer executes macOS arm64. iOS runtime and minimum-supported-OS runtime remain unqualified."
+  },
+  "hosted_ci": {
+    "url": "https://github.com/bananawalnut/booknook/actions/runs/43798571344",
+    "source_commit": "efec2dd389aa877fc2ceac589d6f7384a1cecf4d",
+    "counts": {
+      "jobs": 2,
+      "steps": 38,
+      "successful_jobs": 2,
+      "successful_steps": 38,
+      "skipped_CI_steps": 0
+    },
+    "jobs": [
+      {
+        "name": "apple",
+        "steps": 17,
+        "completed_at": "2026-11-16T03:52:27Z",
+        "url": "https://github.com/bananawalnut/booknook/actions/runs/43798571344/job/133072999623"
+      },
+      {
+        "name": "portable",
+        "steps": 21,
+        "completed_at": "2026-11-16T03:40:10Z",
+        "url": "https://github.com/bananawalnut/booknook/actions/runs/43798571344/job/133072999998"
+      }
+    ],
+    "receipt_sha256": "a6e8f4c0b9b2dfdb784c1040051a5ac76d152db8554d878223d78820edede5c1"
+  },
+  "source_security": {
+    "status": "PASS_WITH_OPEN_MAINTENANCE",
+    "observed_at": "2026-11-16T17:23:24.515798+00:00",
+    "official_advisory_database": {
+      "url": "https://github.com/RustSec/advisory-db.git",
+      "commit": "02e2517f457a359fc6d3440ea4560c8ea188fee8"
+    },
+    "auditor": "cargo-audit 0.22.1",
+    "source_locks": {
+      "Cargo.lock": {
+        "sha256": "359f97396540d6178e0031c115381bf25457965aedb988d13dee4cedfc20ba56",
+        "registry_records": 358,
+        "registry_records_equal_020": true
+      },
+      "tests/relay-read-probe/Cargo.lock": {
+        "sha256": "ccbd25c8bb287adbce6aef84abd06561f3495e6e0b6af3bd2b626cec1aefeeb0",
+        "registry_records": 257,
+        "registry_records_equal_020": true
+      }
+    },
+    "matches": {
+      "root": {
+        "known_vulnerabilities": 0,
+        "unsound_findings": 0,
+        "current_registry_yanked_findings": 0,
+        "exit_code": 0
+      },
+      "relay-read-probe": {
+        "known_vulnerabilities": 0,
+        "unsound_findings": 0,
+        "current_registry_yanked_findings": 0,
+        "exit_code": 0
+      }
+    },
+    "official_registry": {
+      "observed_from": "2026-11-16T17:22:06.429405+00:00",
+      "observed_until": "2026-11-16T17:22:18.958917+00:00",
+      "qualified_versions": 358,
+      "all_exact_checksums_match": true,
+      "all_yanked_false": true,
+      "all_license_expressions_match_inventory": true
+    },
+    "maintenance": {
+      "root": [
+        {
+          "package": "basic-toml",
+          "version": "0.1.10",
+          "id": "RUSTSEC-2026-0374",
+          "kind": "unmaintained",
+          "title": "`basic-toml` is unmaintained",
+          "disposition": "Open maintenance follow-up; retained without advisory ignore, suppression, waiver, vulnerability reclassification or dependency substitution."
+        },
+        {
+          "package": "smallstr",
+          "version": "0.3.1",
+          "id": "RUSTSEC-2026-0215",
+          "kind": "unmaintained",
+          "title": "smallstr is unmaintained",
+          "disposition": "Open maintenance follow-up; retained without advisory ignore, suppression, waiver, vulnerability reclassification or dependency substitution."
+        }
+      ],
+      "relay-read-probe": [
+        {
+          "package": "smallstr",
+          "version": "0.3.1",
+          "id": "RUSTSEC-2026-0215",
+          "kind": "unmaintained",
+          "title": "smallstr is unmaintained",
+          "disposition": "Open maintenance follow-up; retained without advisory ignore, suppression, waiver, vulnerability reclassification or dependency substitution."
+        }
+      ]
+    },
+    "limits": "Point-in-time known-advisory and official exact-version metadata checks; no undisclosed-vulnerability, downstream-lock, exhaustive assurance or signed-attestation claim.",
+    "receipt_sha256": "f9b40dc64c18e3c2569f59aebaf218e85505e8ae41f096c38e6028919d18248e",
+    "receiving_scope": "Independent receiving facts and the complete inventory/notice are recorded separately."
+  },
+  "local_receiving": {
+    "status": "PASS_EXACT_LOCAL_ARCHIVE_CONSUMERS",
+    "receipt_sha256": "59e039a99218c369bed26abedd4fe3a4325dfdc83a4be2282650475962db8bb8",
+    "resolution": "Fresh absent-lock OFFLINE resolution; original receiving lock retained without rewriting, pinning or later re-resolution.",
+    "lock_sha256": "bf8301e9bdc5320b20815ba4ad4152c01aca8b864af3f5ef244cddfb20919bc6",
+    "registry_versions": 333,
+    "source_license_inventory_entries": 362,
+    "installed_npm_exact_file_count": 72,
+    "commands": [
+      {
+        "phase": "rust-consumer",
+        "exit_code": 0
+      },
+      {
+        "phase": "npm-install",
+        "exit_code": 0
+      },
+      {
+        "phase": "npm-commonjs",
+        "exit_code": 0
+      },
+      {
+        "phase": "npm-esm-node-web-wasm",
+        "exit_code": 0
+      },
+      {
+        "phase": "npm-nodenext-types",
+        "exit_code": 0
+      },
+      {
+        "phase": "swift-consumer",
+        "exit_code": 0
+      }
+    ],
+    "full_inventory_and_notice": {
+      "manifest_url": "https://github.com/bananawalnut/booknook/releases/download/v0.2.1-sdk-preview.20261116/RELEASE-MANIFEST.json",
+      "manifest_sha256": "0d05688d4547f61e8730f5145f72485f25dc1269a3da40a63d3063131ffd7b08",
+      "receiving_inventory_entries": 333,
+      "unicode_notice_bytes": 1995,
+      "unicode_notice_sha256": "f7db81051789b729fea528a63ec4c938fdcb93d9d61d97dc8cc2e9df6d47f2a1",
+      "source_unicode_normalization": {
+        "version": "0.1.25",
+        "license": "MIT OR Apache-2.0"
+      },
+      "receiving_unicode_normalization": {
+        "version": "0.1.26",
+        "license": "(MIT OR Apache-2.0) AND Unicode-3.0"
+      },
+      "scope": "Actual SPDX expressions and notice provenance reviewed; no expression-equivalence, waiver, pinning or blanket legal approval. Receiving consumer binaries are not release assets."
+    },
+    "audit_receipt_sha256": "26a0b055a8eb740d8c5cd1a7ce13b25f38124b874a8e4511bb9391dd2fba746b",
+    "notice_provenance_receipt_sha256": "e81fac9922a73dcb7b6864e3ef48745a96babde1aca1ad6e4adc81f321b9f088",
+    "history": "Initial ordering/license-review nonpasses and readiness receipts remain unchanged; later exact review and actual consumer execution qualify only the bound lock."
+  },
+  "public_downloads": {
+    "status": "PASS",
+    "receipt_sha256": "302e28abd3786e27cc274cb06a1aea1083403c9c5c6207ac92b791c5619cd06a",
+    "started_at": "2026-11-16T18:03:25.537208+00:00",
+    "completed_at": "2026-11-16T18:03:40.390758+00:00",
+    "assets": 14,
+    "bytes": 148049974,
+    "unauthenticated_https": true,
+    "proxy_disabled": true,
+    "tls_verification": true,
+    "all_stream_hashes_match": true,
+    "manifest_sha256": "0d05688d4547f61e8730f5145f72485f25dc1269a3da40a63d3063131ffd7b08"
+  },
+  "downloaded_consumers": {
+    "status": "PASS_EXACT_RECORDED_CONSUMERS",
+    "qualified": true,
+    "receipt_sha256": "3fffb4464485b0499e033c53e026d73bf5b9898e433bd7c4cb23b3abacef2a7e",
+    "inputs_sha256": "27e1c8a366c510dcc6f65a172fa0578926ce3ee1bdd8bbf540d3fcbed0814ca1",
+    "actual_download_receipt_sha256": "302e28abd3786e27cc274cb06a1aea1083403c9c5c6207ac92b791c5619cd06a",
+    "resolution": "Fresh absent-lock OFFLINE resolution; original actual public receiving lock retained without rewriting, pinning or re-resolution. No fresh online dependency resolver qualification.",
+    "lock": {
+      "sha256": "eea45f0b4c55a493ec7f535bee7fcc561947a2de620607612b750973b6829651",
+      "bytes": 82796
+    },
+    "registry_versions": 333,
+    "registry_identity_checksum_map_sha256": "dbc227ce6f3e6f6f3573167854e718817653ea24ff174607204b999f36da7bcd",
+    "registry_tuples_identical_to_separately_recorded_local_receiver": true,
+    "audit": {
+      "status": "PASS_WITH_OPEN_MAINTENANCE",
+      "receipt_sha256": "e655fa9df5fd31c52ea14f093560d85d1cfcc79dbd72eaca656dfb8ef8bd45d8",
+      "actual_new_public_lock_independently_audited": true,
+      "maintenance_followups_remain_open": true,
+      "original_registry_observation_timestamps_retained": true,
+      "new_registry_metadata_requests": 0,
+      "license_notice_scope": "Full 333 identity/checksum and license/Unicode notice provenance retained under exact matching tuples. Source 362 inventory remains separate; no expression-equivalence or blanket legal approval."
+    },
+    "execution_review_receipt_sha256": "66b0fbd3afe8934acb2c42d887948a75b3b342ec9ce39db7bb728095b8fcf031",
+    "commands": [
+      {
+        "phase": "rust-consumer",
+        "exit_code": 0,
+        "stdout_sha256": "66c950386210a3b4ea4623dbb4e4ae471241734cfc45ee5bc6347d2814a0dd38",
+        "stderr_sha256": "4fbd5f3d65983a32c261c7912650839b50201444f21717a86b69eff357e3b98d"
+      },
+      {
+        "phase": "npm-install",
+        "exit_code": 0,
+        "stdout_sha256": "f318f2c8c60c7d351d6447152137bef6755f48fb1ae1b76b132a0e2c83d87ded",
+        "stderr_sha256": "6361422743e5135c6cf96002f15ea9c64f88df25ac195e4ec519eae8e632df7a"
+      },
+      {
+        "phase": "npm-commonjs",
+        "exit_code": 0,
+        "stdout_sha256": "3be9b0e6abe53f49eeacdd2737d6d56230febcfd617b42959068baa324d09fbe",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "phase": "npm-esm-node-web-wasm",
+        "exit_code": 0,
+        "stdout_sha256": "9431648b363a55316af8b41dcfbf89228e0ad1adadba227daedbd10b97f8b565",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "phase": "npm-nodenext-types",
+        "exit_code": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "phase": "swift-consumer",
+        "exit_code": 0,
+        "stdout_sha256": "2ec31abfe8194d6a087b24d271c8a90b1adbd31cb18f10617057f2de76f09a72",
+        "stderr_sha256": "9388ce62ba1c77429b792ebae7f7fab8fe91846abc0ac9ebd90925413fde0399"
+      }
+    ],
+    "installed_npm_exact_file_count": 72,
+    "scope": "Actual downloaded four Rust archives, installed npm CJS/ESM, Node and web-target WASM executed in Node, NodeNext declarations and independent macOS arm64 Swift consumer. Minimal receiving acceptance; no repetition of full source suites, browser UI, iOS runtime, physical device or live authority acceptance."
+  },
+  "manifest_observation": "The published manifest preserves its prepublication pending-delivery observation. This later record reports actual publication, all 14 downloads and downloaded-consumer results without replacing those immutable bytes.",
+  "application_identities": {
+    "reviewed_local_release": {
+      "version": "0.2.1",
+      "build": "2026111503",
+      "source_commit": "efec2dd389aa877fc2ceac589d6f7384a1cecf4d",
+      "local_release_built": true,
+      "bounded_actual_GUI_and_normal_reopen": "PASS",
+      "evidence": "mac-2026111503-evidence.json",
+      "normal_installation": false,
+      "app_publication": false
+    },
+    "public_app_preview": {
+      "version": "0.2.0",
+      "build": "2026111405",
+      "source": "633f53dcc6d246ba6454b3403bbde10450102ef2",
+      "evidence": "app-2026111405-public-preview-evidence.json"
+    },
+    "previous_reviewed_local_release": {
+      "version": "0.2.0",
+      "build": "2026111502",
+      "compiled_source": "2a567f4f5ca221139d744045a45cae943b1b8afb",
+      "evidence": "mac-2026111502-workflow-evidence.json"
+    },
+    "app_release_boundary": "Current Mac 1503 is local QA with a separately verified Release product. Public app 1405 and SDK 0.2.1 downloads retain their own immutable release identities; no new app archive or normal installation."
+  },
+  "limits": [
+    "Full native MVP remains unfinished: real Kindle/Audible accounts, operational Castalia custody/authority, deployed relay/private-group/multidevice acceptance, physical input/accessibility/endurance and minimum-OS runtime gates remain open.",
+    "The user has made the iPad unavailable; no new device inventory, control or installation is inferred.",
+    "Web-target WASM ran in Node; browser UI/runtime acceptance remains open.",
+    "GitHub archive delivery is separate from registry publication, App Store/TestFlight/notarization and production-MVP acceptance.",
+    "Checksums, source maps, audit and execution receipts are unsigned observations, not signed or reproducible-build attestations.",
+    "Existing 0.2.0 SDK/app release assets remain unchanged."
+  ]
+}
