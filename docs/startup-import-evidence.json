@@ -1,0 +1,137 @@
+{
+  "schema": "booknook.startup-import-qualification.v1",
+  "local_date": "2026-11-15",
+  "source_commit": "b07a5e58ec2b84b549439c82840f496212c211d5",
+  "production_MVP_complete": false,
+  "changes": [
+    "Exact private-mode checks avoid redundant chmod; required repairs are verified and fail closed",
+    "One dedicated-queue library opening task; visible loading/failure/retry; mutations disabled until ready",
+    "Unreadable ink recovery preserves originals and save-completion barrier until explicit retry",
+    "Opened regular-file validation and nonblocking bounded EOF reads for Castalia recovery and Nostr-binding imports; off-UI reads with cancellation and stale-result fencing"
+  ],
+  "contracts": "Public signatures, accepted ordinary-file symlinks, byte/UTF-8/envelope bounds, saved data, wire formats and ontology unchanged. No new authority or credentials.",
+  "native_tests": {
+    "passed": 60,
+    "failed": 0,
+    "declared_ignored": 1,
+    "ignored_scope": "Opt-in independent external relay; not remote acceptance",
+    "source_files": 165,
+    "unchanged_source_map_sha256": "660e0661f5b663b62be3dc6b73e8dab4733746a0ca12cc5ff68158d3970dfc00",
+    "private_receipt_sha256": "60746e1efc17c143ebdb90d0695203550e3ba5274fc53588cc1be4e8dd20dadb"
+  },
+  "focused_recovery_and_binding_tests": {
+    "result": "PASS",
+    "old_recovery_FIFO_timeout_retained": true,
+    "cases": [
+      "Writerless FIFO/symlink and directory/device refusal",
+      "Exact bounded regular-file and Unicode bytes",
+      "Oversize/encoding/envelope refusals retain storage",
+      "Cancellation and stale-candidate controls"
+    ],
+    "private_receipt_sha256": "c71cf6e989330bac23087bec5b5a396fa8d8c1c58540b354eed1312f50087f7a"
+  },
+  "integrated_Swift_workflows": {
+    "result": "PASS_against_fresh_native_production_library",
+    "startup_recovery_full_workflows_reader_anchors": "PASS",
+    "source_and_library_drift": false,
+    "private_receipt_sha256": "cc9d18e0f69e64c03de8bce460d18bce2dfe0789c87a0537a31dcbaff117a234"
+  },
+  "ipad_Swift_source_typechecks": {
+    "device": "PASS",
+    "simulator": "PASS",
+    "deployment_targets": "iOS17",
+    "qualification": "Typechecks against current generated interface; no local fresh iPad link/install/runtime claim",
+    "private_receipt_sha256": "3870594016c51f2760af359468c1e5a1ae9e56bb91e5d34a499c46ed3baa042c"
+  },
+  "local_Mac_Release": {
+    "version": "0.2.0",
+    "build": "2026111501",
+    "configuration": "Release",
+    "architecture": "arm64",
+    "minimum_OS_metadata": "macOS14",
+    "native_static_library_sha256": "3260792a57cfb9dfe888efa2061dc82bfc821696b3df31d18deb458b1b5062dd",
+    "native_dynamic_library_sha256": "8d26eb7490f98b8d706c55a940429007725259efee5c63891dee94f04ee7a0aa",
+    "actual_UniFFI_generation": "0.32.2; all3 ASCII-EOL-normalized files equal checked Generated",
+    "app_executable_sha256": "4b6988e40c57c10f1fff2ac14d47326e9e4fb8d644830e565cdf9a7c3b7c2969",
+    "selected_app_inputs": 354,
+    "app_files": 88,
+    "qualification": "Local product inspected; no new archive/public preview or production signing inferred",
+    "private_receipt_sha256": "74e3e6e2edd95440f8f1bea3f1ef41b8d09ec0398e0fa533fb48604eb034548c"
+  },
+  "hosted_CI": {
+    "run": 43778414814,
+    "attempt": 1,
+    "source": "b07a5e58ec2b84b549439c82840f496212c211d5",
+    "result": "success",
+    "apple_steps": 17,
+    "portable_steps": 21,
+    "url": "https://github.com/bananawalnut/booknook/actions/runs/43778414814",
+    "local_compile_inputs_match_committed_blobs": true,
+    "selected_distinct_Git_blobs": 367,
+    "private_receipt_sha256": "330b9463964af6df4997718d4c9022dee2db56fada8911df709e1a9edd4fb641"
+  },
+  "actual_Mac_UI": {
+    "scope": "Bounded extension of partial round4 on synthetic desks; no physical input/accessibility/endurance qualification",
+    "build1406": [
+      "Arrow and Margin/Scribble controls",
+      "Private unrated review and list saved/reopened",
+      "Actual backup export",
+      "Paused private Publications settings; cancel and export-selection disclosure"
+    ],
+    "build1501": [
+      "Deliberate ENOTDIR failure displays retry and disables mutations",
+      "Explicit retry eventually opens; sidebar remains responsive while loading",
+      "Actual native backup picker restores into separate empty desk",
+      "All notebook/card/history/list/review fields equal export; original EPUB bytes match; only revision/available reader positions differ",
+      "Scribble/text and left/right arrow roundtrips retain writing",
+      "Three saved Mara interpretations and original reading contexts visible",
+      "Normal quit/reopen retains restored writing and renders EPUB"
+    ],
+    "backup_sha256": "94c798f6bbaa1f14b3387156dc3a6825116583daeec380ce6cd80eab9f9ae2b6",
+    "restore_private_receipt_sha256": "4f2bbd0ac820a66910fce93afa84a849a92d70069bfc87119650625e445b2500",
+    "nonpasses_retained": [
+      "First backup save-panel state guard and unintended-location export retained separately",
+      "One edited-LSEnvironment attempt to an older desk was invalidated by actual reader-path mismatch",
+      "Initial empty-library retry still delayed; opened SQLite DB/journal observed, one sample attempt timed out; cause unresolved"
+    ],
+    "existing_older_location_check": "PASS with a new distinct QA app copy: exact executable/open DB descriptors and visible EPUB URL match intended existing library; normal quit/reopen also ready and renders correct EPUB. Prior edited-in-place launch-settings mismatch remains invalidated.",
+    "new_screenshot_files": "None; inline visual checks are not substituted for the dated README captures",
+    "verified_existing_library_reopen_private_receipt_sha256": "19971fbab3cd34ef10a785c11764620a0696a4001738c321747cb7947b6dbd8f"
+  },
+  "delivery_boundaries": [
+    "Published1405 app and a945 SDK artifacts remain unchanged and predate these fixes",
+    "The b07/1501 app does not contain the later2a567f4 portable reader fix; that later source passes64native tests and awaits its fresh app/SDK delivery.",
+    "Current normal iPad installation/signing/trust, physical input/IME/VoiceOver/endurance remain open",
+    "Live Kindle/Audible/Castalia, remote Nostr and actual encrypted multi-device exchange remain open",
+    "Minimum-OS runtime and two dependency maintenance follow-ups remain open"
+  ],
+  "native_portable_followup": {
+    "source_commit": "2a567f4f5ca221139d744045a45cae943b1b8afb",
+    "candidate_app_build": "2026111502",
+    "changes": "Shared portable reader uses Unix nonblocking CLOEXEC open and opened-descriptor regular-file validation before bounded read; ordinary regular-file symlinks and128MiB cap retained",
+    "native_unit_result": {
+      "passed": 64,
+      "failed": 0,
+      "declared_ignored": 1,
+      "new_tests": 4,
+      "source_files": 166,
+      "unchanged_source_map_sha256": "384385f65601cce8469b6fb31b88739209aa603b1eb672fae22b02ae89572d31"
+    },
+    "tested": [
+      "Exact Unicode/NUL/newline/empty regular and symlink bytes",
+      "Directory and writerless FIFO/symlink rejection; owned child watchdog prevents suite hang",
+      "Sparse oversized file rejected without allocating128MiB content",
+      "Native restore/social restore/sync receive/content refusal preserves existing library/settings/social/sync before and after reopen"
+    ],
+    "private_receipt_sha256": "9c1ab44fe4489030dc2359caf3be5cf5fc22b66f3b042b585656507315005955",
+    "production_library_and_app": "Fresh production host library rebuilding; no1502 app or SDK archive qualification inferred from units",
+    "hosted_CI": "Not yet observed for this later commit; b07 CI above remains separately scoped"
+  },
+  "latest_device_inventory": {
+    "local_date": "2026-11-15",
+    "reachable": 0,
+    "iPad": "Paired; Developer Mode enabled; tunnel/DDI unavailable",
+    "device_or_orientation_actions": false,
+    "private_summary_sha256": "b2ba8e5ee83c1a2ebaaf6b513afce3c82cd79e78b3866ab6dc8a3bf2e99121dd"
+  }
+}
