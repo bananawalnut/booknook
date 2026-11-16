@@ -13,3 +13,6 @@ xcrun swiftc -warnings-as-errors -parse-as-library -module-cache-path "$recovery
 xcrun swiftc -warnings-as-errors -parse-as-library -module-cache-path "$recovery_test_build/module-cache" \
   apps/apple/BookNook/ConnectionSave.swift apps/apple/BookNook/ConnectorFailure.swift apps/apple/BookNook/CompanionContracts.swift tests/ConnectionSaveTests.swift -o "$recovery_test_build/connections"
 "$recovery_test_build/connections"
+xcrun swiftc -warnings-as-errors -parse-as-library -module-cache-path "$recovery_test_build/module-cache" \
+  apps/apple/BookNook/ConnectionSave.swift apps/apple/BookNook/SocialBindingImport.swift tests/SocialBindingImportTests.swift -o "$recovery_test_build/social-binding"
+"$recovery_test_build/social-binding"

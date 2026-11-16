@@ -81,6 +81,8 @@ struct ConnectionSetupView: View {
     @State private var exportingProfile = false
     @State private var profileDocument: ExportDocument?
     @State private var recoveryCandidate: RecoveryImportCandidate?
+    @State private var recoveryRead: Task<Void, Never>?
+    @State private var recoveryReadID = UUID()
     @State private var verifiedRecoveryHolder: String?
     @State private var recoveryStatus = "No encrypted recovery material stored."
     @State private var headersStored = false
@@ -112,7 +114,7 @@ struct ConnectionSetupView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Bring your existing Castalia identity. There is no Book Nook membership or separate account. Your library and private notebook also work offline without signing in.").font(.callout).foregroundStyle(.secondary)
                     Text("1. Bring your identity").font(.headline)
-                    Button("Import encrypted .castalia-recovery file") { chooseFile(.recovery) }
+                    Button(recoveryRead == nil ? "Import encrypted .castalia-recovery file" : "Reading recovery file…") { chooseFile(.recovery) }.disabled(recoveryRead != nil)
                     Text(recoveryStatus).font(.caption).foregroundStyle(.secondary)
                     Text("Check your existing recovery file with its passphrase. Its public identity will be available in the next step; no key needs to be copied by hand.").font(.caption).foregroundStyle(.secondary)
                     Button("Remove this device’s stored recovery material", role: .destructive) { removingRecovery = true }.font(.caption)
@@ -323,6 +325,7 @@ struct ConnectionSetupView: View {
             // independently of the presentation Boolean, which SwiftUI clears.
             receiveImportedFile(result, for: fileImport)
         }
+        .onDisappear { recoveryReadID = UUID(); recoveryRead?.cancel(); recoveryRead = nil }
         .fileExporter(isPresented: $exportingProfile, document: profileDocument, contentType: .json, defaultFilename: "Castalia-public-provider") { result in
             if case .failure(let error) = result, !bookNookOperationWasCancelled(error) { model.error = bookNookErrorMessage(error) }
         }
@@ -345,11 +348,19 @@ struct ConnectionSetupView: View {
             }
         case .recovery:
             if case .failure(let error) = result, bookNookOperationWasCancelled(error) { return }
-            do {
-                let url = try result.get(); let access = url.startAccessingSecurityScopedResource()
-                defer { if access { url.stopAccessingSecurityScopedResource() } }
-                recoveryCandidate = try RecoveryImportCandidate.readFile(url, storage: CustodySecureStorage())
-            } catch { if !bookNookOperationWasCancelled(error) { model.error = bookNookErrorMessage(error) } }
+            recoveryRead?.cancel()
+            let request = UUID(); recoveryReadID = request
+            recoveryRead = Task {
+                defer { if recoveryReadID == request { recoveryRead = nil } }
+                do {
+                    let candidate = try await readRecoveryImportCandidate(result.get()) { CustodySecureStorage() }
+                    try Task.checkCancellation()
+                    guard recoveryReadID == request else { throw CancellationError() }
+                    recoveryCandidate = candidate
+                } catch {
+                    if recoveryReadID == request, !bookNookOperationWasCancelled(error) { model.error = bookNookErrorMessage(error) }
+                }
+            }
         }
     }
     func save() async {

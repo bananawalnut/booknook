@@ -11,6 +11,7 @@ import Foundation
         }
         Task { @MainActor in
             do {
+                if CommandLine.arguments.contains("--startup") { try await testDeskStartup(); exit(0) }
                 if CommandLine.arguments.contains("--publications") { try await testPublicationWorkflow(); exit(0) }
                 if CommandLine.arguments.contains("--ink-recognition") {
                     let root = FileManager.default.temporaryDirectory.appendingPathComponent("ink-recognition-" + UUID().uuidString)
@@ -31,6 +32,7 @@ import Foundation
         app.run()
     }
     @MainActor static func runWorkflows() async throws {
+        try await testDeskStartup()
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("booknook-ui-flow-\(UUID().uuidString)")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 import Foundation
 import Combine
+import Darwin
 
 public struct CastaliaRecoveryCandidate: Identifiable {
     public static let account = "encrypted-recovery"
@@ -26,9 +27,49 @@ public struct CastaliaRecoveryCandidate: Identifiable {
     }
 
     public static func readFile(_ url: URL, storage: any CastaliaSecureMaterialStorage, account: String = Self.account) throws -> Self {
-        let file = try FileHandle(forReadingFrom: url)
-        defer { try? file.close() }
-        let data = try file.read(upToCount: maximumBytes + 1) ?? Data()
+        try Task.checkCancellation()
+        guard url.isFileURL, url.user == nil, url.password == nil,
+              url.host == nil || url.host == "" || url.host?.lowercased() == "localhost",
+              !url.path.utf8.contains(0) else {
+            throw CastaliaRecoveryError.message("Choose a local encrypted Castalia recovery file.")
+        }
+        let access = url.startAccessingSecurityScopedResource()
+        defer { if access { url.stopAccessingSecurityScopedResource() } }
+        try Task.checkCancellation()
+        // A replaceable path is not a type guarantee. Nonblocking open and fstat
+        // reject a FIFO/special-file target, including one reached by symlink.
+        // This does not impose a deadline on regular/network-filesystem I/O.
+        let descriptor = try url.withUnsafeFileSystemRepresentation { path -> Int32 in
+            guard let path else { throw CastaliaRecoveryError.message("Choose a local encrypted Castalia recovery file.") }
+            let descriptor = Darwin.open(path, O_RDONLY | O_NONBLOCK | O_CLOEXEC)
+            guard descriptor >= 0 else { throw NSError(domain: NSPOSIXErrorDomain, code: Int(errno)) }
+            return descriptor
+        }
+        defer { _ = Darwin.close(descriptor) }
+        var metadata = stat()
+        guard Darwin.fstat(descriptor, &metadata) == 0 else { throw NSError(domain: NSPOSIXErrorDomain, code: Int(errno)) }
+        guard metadata.st_mode & mode_t(S_IFMT) == mode_t(S_IFREG),
+              metadata.st_size >= 0, metadata.st_size <= Int64(maximumBytes) else {
+            throw CastaliaRecoveryError.message("Choose an encrypted Castalia recovery file, at most 1 MiB. Your saved recovery file has not changed.")
+        }
+        var data = Data()
+        var buffer = [UInt8](repeating: 0, count: 16_384)
+        while true {
+            try Task.checkCancellation()
+            let count = buffer.withUnsafeMutableBytes { bytes in
+                Darwin.read(descriptor, bytes.baseAddress, min(bytes.count, maximumBytes + 1 - data.count))
+            }
+            if count < 0 {
+                if errno == EINTR { continue }
+                throw NSError(domain: NSPOSIXErrorDomain, code: Int(errno))
+            }
+            if count == 0 { break }
+            data.append(contentsOf: buffer.prefix(count))
+            guard data.count <= maximumBytes else {
+                throw CastaliaRecoveryError.message("Choose an encrypted Castalia recovery file, at most 1 MiB. Your saved recovery file has not changed.")
+            }
+        }
+        try Task.checkCancellation()
         return try Self(data: data, filename: url.lastPathComponent, storage: storage, account: account)
     }
 }

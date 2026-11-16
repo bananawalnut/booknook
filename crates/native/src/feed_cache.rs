@@ -568,15 +568,22 @@ struct OwnerLock(File);
 impl OwnerLock {
     fn acquire(directory: &Path) -> Result<Self> {
         use std::os::unix::{
-            fs::{OpenOptionsExt, PermissionsExt},
+            fs::{DirBuilderExt, OpenOptionsExt},
             io::AsRawFd,
         };
-        fs::create_dir_all(directory)?;
+        fs::DirBuilder::new()
+            .recursive(true)
+            .mode(0o700)
+            .create(directory)?;
         let meta = fs::symlink_metadata(directory)?;
         if !meta.is_dir() || meta.file_type().is_symlink() {
             return Err(fail("Feed cache requires a real host-controlled directory"));
         }
-        fs::set_permissions(directory, fs::Permissions::from_mode(0o700))?;
+        crate::store::ensure_private_permissions(
+            0o700,
+            || fs::metadata(directory).map(|metadata| metadata.permissions()),
+            |permissions| fs::set_permissions(directory, permissions),
+        )?;
         let file = OpenOptions::new()
             .read(true)
             .write(true)
@@ -673,7 +680,7 @@ impl Worker {
         provider: Arc<dyn f::FeedSourceProvider>,
         descriptor: f::FeedSourceDescriptor,
     ) -> Result<Self> {
-        use std::os::unix::fs::{OpenOptionsExt, PermissionsExt};
+        use std::os::unix::fs::OpenOptionsExt;
         let lock = OwnerLock::acquire(directory)?;
         let directory = fs::canonicalize(directory)?;
         let path = directory.join("feeds.sqlite");
@@ -694,7 +701,11 @@ impl Worker {
         if !file.metadata()?.is_file() {
             return Err(fail("Feed database is not a regular file"));
         }
-        fs::set_permissions(&path, fs::Permissions::from_mode(0o600))?;
+        crate::store::ensure_private_permissions(
+            0o600,
+            || file.metadata().map(|metadata| metadata.permissions()),
+            |permissions| file.set_permissions(permissions),
+        )?;
         drop(file);
         let mut db = Connection::open(&path)?;
         db.busy_timeout(std::time::Duration::from_millis(250))?;

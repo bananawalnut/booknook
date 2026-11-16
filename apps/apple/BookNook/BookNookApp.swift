@@ -112,9 +112,9 @@ struct RootView: View {
                             }.buttonStyle(.plain)
                         }
                     }
-                }
+                }.disabled(!model.libraryReady)
                 HStack {
-                    Button { addBook = true } label: { Label("Add a book", systemImage: "plus") }.buttonStyle(.bordered)
+                    Button { addBook = true } label: { Label("Add a book", systemImage: "plus") }.buttonStyle(.bordered).disabled(!model.libraryReady)
                     Spacer(minLength: 4)
                     Menu {
                         Menu {
@@ -130,20 +130,21 @@ struct RootView: View {
                     } label: { Image(systemName: "ellipsis").frame(width: 44, height: 44) }
                     .menuStyle(.button).buttonStyle(.borderless).accessibilityLabel("Import and backup")
                     .accessibilityIdentifier("library-actions")
-                    .help("Import books or export a private backup")
+                    .help("Import books or export a private backup").disabled(!model.libraryReady)
                 }
                 Label(model.saving ? "Saving locally…" : "Your writing stays with you", systemImage: model.saving ? "clock" : "lock").font(.caption2).foregroundStyle(.secondary)
             }.padding(20).background(nookPaper).navigationSplitViewColumnWidth(min: 240, ideal: 270, max: 320)
                 .modifier(BookNookNavigationChrome())
         } detail: {
             Group {
-                switch model.section {
+                if !model.libraryReady { libraryStartup }
+                else { switch model.section {
                 case "library": LibraryView()
                 case "community": CommunityView()
                 case "connections": ConnectionsView()
                 case "sync": SyncRecoveryView()
                 default: if model.book != nil { ReadingDeskView() } else { welcome }
-                }
+                } }
             }.background(nookPaper)
                 .environment(\.bookNookNavigation, BookNookNavigation(sidebarNeedsReveal: sidebarNeedsReveal, showSidebar: showSidebar))
                 .modifier(BookNookNavigationChrome())
@@ -199,7 +200,21 @@ struct RootView: View {
         #endif
     }
     func nav(_ id: String, _ title: String, _ icon: String) -> some View {
-        Button { model.section = id; showDetailInCompact() } label: { Label(title, systemImage: icon).frame(maxWidth: .infinity, alignment: .leading).padding(10).background(model.section == id ? nookAccent.opacity(0.12) : .clear, in: RoundedRectangle(cornerRadius: 8)) }.buttonStyle(.plain)
+        Button { model.section = id; showDetailInCompact() } label: { Label(title, systemImage: icon).frame(maxWidth: .infinity, alignment: .leading).padding(10).background(model.section == id ? nookAccent.opacity(0.12) : .clear, in: RoundedRectangle(cornerRadius: 8)) }.buttonStyle(.plain).disabled(!model.libraryReady)
+    }
+    var libraryStartup: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            SidebarRevealButton()
+            if let error = model.libraryOpenError, !model.openingLibrary {
+                Text("Your library could not open").font(.system(.title2, design: .serif))
+                Text(error).font(.callout).textSelection(.enabled)
+                Button("Try opening again") { Task { await model.open() } }.buttonStyle(.borderedProminent)
+            } else {
+                ProgressView("Opening your library…")
+                Text("Loading your saved books and writing.").font(.callout).foregroundStyle(.secondary)
+            }
+        }.frame(maxWidth: .infinity, maxHeight: .infinity).padding(40)
+            .accessibilityIdentifier("library-startup")
     }
     var welcome: some View {
         VStack(alignment: .leading, spacing: 24) {

@@ -89,6 +89,14 @@ actor DeskRepository {
     private var desk: Desk?
     private var services: BookNookServices?
     private var openedDirectory: URL?
+    private struct Opening {
+        let id: UUID
+        let directory: URL
+        let task: Task<BookNookServices, Error>
+    }
+    private var opening: Opening?
+    private let openingQueue = DispatchQueue(label: "org.booknook.library-open", qos: .userInitiated)
+    private let openServices: @Sendable (URL, [any BookNookProvider]) throws -> BookNookServices
     private let directoryOverride: URL?
     private let additionalProviders: [any BookNookProvider]
     let sourceJobs = AppleProviderJobs()
@@ -97,7 +105,11 @@ actor DeskRepository {
     private let decoder: JSONDecoder = { let d = JSONDecoder(); d.keyDecodingStrategy = .convertFromSnakeCase; return d }()
     init(directory: URL? = nil, providers: [any BookNookProvider] = [],
          recommendationProviderID: String = BookNookServices.localRecommendations,
-         socialProviderID: String = BookNookServices.nostrTransport) {
+         socialProviderID: String = BookNookServices.nostrTransport,
+         openServices: @escaping @Sendable (URL, [any BookNookProvider]) throws -> BookNookServices = {
+             try BookNookServices(directory: $0, providers: $1)
+         }) {
+        self.openServices = openServices
         self.directoryOverride = directory
         self.additionalProviders = providers
         self.recommendationProviderID = recommendationProviderID
@@ -110,12 +122,46 @@ actor DeskRepository {
         else { root = try FileManager.default.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("BookNook", isDirectory: true) }
         return root
     }
-    func open() throws -> (DeskSnapshot, [ReleaseGate]) {
-        let root = try resolvedDirectory()
-        let services = try BookNookServices(directory: root, providers: AppleFileProviders.defaults() + additionalProviders)
-        self.services = services; openedDirectory = root
-        desk = services.desk
-        return (try snapshot(), try decoder.decode([ReleaseGate].self, from: Data(try required().releaseGates().utf8)))
+    func open() async throws -> (DeskSnapshot, [ReleaseGate]) {
+        if services != nil {
+            return (try snapshot(), try decoder.decode([ReleaseGate].self, from: Data(try required().releaseGates().utf8)))
+        }
+        let pending: Opening
+        if let opening { pending = opening }
+        else {
+            let root = try resolvedDirectory()
+            let providers = try AppleFileProviders.defaults() + additionalProviders
+            let openServices = self.openServices, queue = openingQueue
+            // Native construction includes blocking filesystem calls. A dedicated
+            // queue leaves the actor and Swift's cooperative executor available.
+            // The one shared task stays live until that operation actually returns;
+            // cancelling a window must not start a competing open or fake a timeout.
+            let task = Task<BookNookServices, Error> {
+                try await withCheckedThrowingContinuation { continuation in
+                    queue.async {
+                        do { continuation.resume(returning: try openServices(root, providers)) }
+                        catch { continuation.resume(throwing: error) }
+                    }
+                }
+            }
+            pending = Opening(id: UUID(), directory: root, task: task)
+            opening = pending
+        }
+        do {
+            let opened = try await pending.task.value
+            if services == nil {
+                let snapshot = try decoder.decode(DeskSnapshot.self, from: Data(try opened.desk.snapshot().utf8))
+                let gates = try decoder.decode([ReleaseGate].self, from: Data(try opened.desk.releaseGates().utf8))
+                services = opened; desk = opened.desk; openedDirectory = pending.directory
+                if opening?.id == pending.id { opening = nil }
+                return (snapshot, gates)
+            }
+            if opening?.id == pending.id { opening = nil }
+            return (try snapshot(), try decoder.decode([ReleaseGate].self, from: Data(try required().releaseGates().utf8)))
+        } catch {
+            if opening?.id == pending.id { opening = nil }
+            throw error
+        }
     }
     func inkJournal() throws -> InkJournal { guard let openedDirectory else { throw CocoaError(.fileReadUnknown) }; return InkJournal(deskDirectory: openedDirectory) }
     func required() throws -> Desk { guard let desk else { throw CocoaError(.fileReadUnknown) }; return desk }
@@ -155,6 +201,10 @@ actor DeskRepository {
 
 @MainActor final class DeskModel: ObservableObject {
     @Published var state: DeskSnapshot?
+    @Published private(set) var openingLibrary = false
+    @Published private(set) var libraryOpenError: String?
+    private var libraryOpeningTask: Task<Void, Never>?
+    var libraryReady: Bool { state != nil && !openingLibrary }
     @Published var selectedBookId: String?
     @Published var selectedNotebookId: String?
     @Published var notebookScrollTarget: String?
@@ -221,13 +271,25 @@ actor DeskRepository {
         }
     }
     func open() async {
-        do {
-            let (snapshot, gates) = try await repository.open(); state = snapshot; self.gates = gates
-            inkJournal = try await repository.inkJournal()
-            if let first = books.first(where: { $0.shelf == "currently-reading" }) ?? books.first { await select(first.id) }
-            try await recoverInk()
+        if let libraryOpeningTask { await libraryOpeningTask.value; return }
+        guard state == nil else { return }
+        if error == libraryOpenError { error = nil }
+        libraryOpenError = nil; openingLibrary = true
+        let task = Task { @MainActor in
+            do {
+                let (snapshot, gates) = try await repository.open(); state = snapshot; self.gates = gates
+                inkJournal = try await repository.inkJournal()
+                if let first = books.first(where: { $0.shelf == "currently-reading" }) ?? books.first { await select(first.id) }
+                try await recoverInk()
+            } catch {
+                let message = bookNookErrorMessage(error)
+                self.error = message
+                if state == nil { libraryOpenError = message }
+            }
         }
-        catch { self.error = bookNookErrorMessage(error) }
+        libraryOpeningTask = task
+        await task.value
+        libraryOpeningTask = nil; openingLibrary = false
     }
     func accept(_ snapshot: DeskSnapshot) {
         guard snapshot.revision >= (state?.revision ?? 0) else { return }
@@ -347,7 +409,14 @@ actor DeskRepository {
     }
     private func recoverInk() async throws {
         guard let inkJournal else { return }
-        let (records, loadFailures) = try await inkJournal.load()
+        let records: [InkJournalRecord], loadFailures: [String]
+        do { (records, loadFailures) = try await inkJournal.load() }
+        catch {
+            let message = "Ink recovery could not be read: \(bookNookErrorMessage(error))"
+            inkRecoveryFailures = [message]; self.error = message
+            objectWillChange.send()
+            throw InkJournalFailure(message)
+        }
         var failures = loadFailures
         for record in records {
             do {
@@ -385,8 +454,10 @@ actor DeskRepository {
                 }
             } catch { failures.append("Pending ink recovery needs attention: \(bookNookErrorMessage(error))") }
         }
+        let previousRecoveryError = inkRecoveryFailures.joined(separator: "\n")
         inkRecoveryFailures = failures
         if !failures.isEmpty { error = failures.joined(separator: "\n") }
+        else if error == previousRecoveryError { error = nil }
         objectWillChange.send()
     }
     func send(_ command: [String: Any]) async {

@@ -21,7 +21,7 @@ binary = a.binary.resolve(strict=True)
 desk = output / 'synthetic-desk'
 desk.mkdir()
 def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
-inputs = list((repo/'apps/apple/BookNook').glob('*.swift')) + [repo/'tests/InkRecoveryAcceptance.swift', repo/'tests/DeskWorkflowTests.swift', Path(__file__), binary]
+inputs = list((repo/'apps/apple/BookNook').glob('*.swift')) + [repo/'tests/InkRecoveryAcceptance.swift', repo/'tests/DeskWorkflowTests.swift', repo/'tests/DeskStartupAcceptance.swift', Path(__file__), binary]
 manifest = {'schema': 'booknook.ink-recovery-process-test.v1', 'command': [str(binary), '--ink-journal-child', str(desk)],
             'inputs': {str(f.relative_to(repo)): sha(f) for f in inputs if f.is_relative_to(repo)},
             'limits': 'Synthetic task-only desk. SIGKILL after acknowledged file+directory fsync; not a power-loss guarantee or physical Pencil test.'}

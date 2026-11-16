@@ -29,6 +29,8 @@ struct SocialCommunityView: View {
     @State private var bindingText = ""
     @State private var importing = false
     @State private var fileImport: SocialFileImport = .identity
+    @State private var fileRead: Task<Void, Never>?
+    @State private var fileReadID = UUID()
     @State private var exporting = false
     @State private var exportDocument = SocialFileDocument(text: "")
     @State private var exportName = "booknook-transport-identity.json"
@@ -66,6 +68,7 @@ struct SocialCommunityView: View {
         .onChange(of: model.sharingDraftId) { _, _ in applySharingIntent() }
         .onChange(of: tab) { _, selected in if selected == "Discover" { Task { await social.recommend(model) } } }
         .onChange(of: social.revealSpoilers) { _, _ in Task { await social.reload(model) } }
+        .onDisappear { fileReadID = UUID(); fileRead?.cancel(); fileRead = nil }
         .fileImporter(isPresented: $importing, allowedContentTypes: [.json]) { result in
             receiveImportedFile(result, for: fileImport)
         }
@@ -76,21 +79,26 @@ struct SocialCommunityView: View {
         importing = true
     }
     private func receiveImportedFile(_ result: Result<URL, Error>, for kind: SocialFileImport) {
-        Task {
+        fileRead?.cancel()
+        let request = UUID(); fileReadID = request
+        fileRead = Task {
+            defer { if fileReadID == request { fileRead = nil } }
             do {
                 let url = try result.get()
                 let accessed = url.startAccessingSecurityScopedResource()
                 defer { if accessed { url.stopAccessingSecurityScopedResource() } }
                 switch kind {
                 case .identity:
-                    guard (try url.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? 0) < 300_000 else { throw AuthorizationError.message("Identity file exceeds 300 KB") }
-                    try await model.repository.socialImportBinding(String(contentsOf: url, encoding: .utf8))
+                    let binding = try await SocialBindingImport.readFile(url)
+                    try Task.checkCancellation()
+                    guard fileReadID == request else { throw CancellationError() }
+                    try await model.repository.socialImportBinding(binding)
                 case .history:
                     try await model.repository.socialRestore(url)
                 }
                 await social.reload(model)
             } catch {
-                if !bookNookOperationWasCancelled(error) { social.error = bookNookErrorMessage(error) }
+                if fileReadID == request, !bookNookOperationWasCancelled(error) { social.error = bookNookErrorMessage(error) }
             }
         }
     }

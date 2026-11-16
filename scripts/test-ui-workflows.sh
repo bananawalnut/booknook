@@ -15,7 +15,7 @@ xcrun swiftc -parse-as-library -D BOOKNOOK_TEST -swift-version 5 \
   -import-objc-header apps/apple/Generated/booknook_nativeFFI.h \
   -I apps/apple/Generated apps/apple/Generated/booknook_native.swift \
   sdk/swift/Sources/BookNookServices/*.swift sdk/swift/Sources/CastaliaNative/*.swift \
-  apps/apple/BookNook/*.swift tests/DeskWorkflowTests.swift tests/CompanionCatalogImportTests.swift tests/CastaliaProfileImportTests.swift tests/InkRecoveryAcceptance.swift tests/NotebookInkAcceptance.swift tests/ReaderInkAcceptance.swift tests/ReaderInkAnchorAcceptance.swift tests/ReaderContextAcceptance.swift tests/PackagedProviderSmoke.swift tests/ProviderWorkflowTests.swift tests/PublicationWorkflowTests.swift \
+  apps/apple/BookNook/*.swift tests/DeskWorkflowTests.swift tests/DeskStartupAcceptance.swift tests/CompanionCatalogImportTests.swift tests/CastaliaProfileImportTests.swift tests/InkRecoveryAcceptance.swift tests/NotebookInkAcceptance.swift tests/ReaderInkAcceptance.swift tests/ReaderInkAnchorAcceptance.swift tests/ReaderContextAcceptance.swift tests/PackagedProviderSmoke.swift tests/ProviderWorkflowTests.swift tests/PublicationWorkflowTests.swift \
   "$workflow_native_library" -lsqlite3 -lc++ -framework Security \
   -o "$workflow_test_build/desk"
 if [ "${BOOKNOOK_WORKFLOW_BUILD_ONLY:-0}" = "1" ]; then exit 0; fi
