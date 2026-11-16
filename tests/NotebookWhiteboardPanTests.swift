@@ -16,7 +16,77 @@ struct NotebookInkVersion {
 }
 final class NotebookInkSession: ObservableObject { var currentVersion: NotebookInkVersion? }
 
+private final class ForwardingProbe: NSView {
+    var keys: [NSEvent] = []
+    override var acceptsFirstResponder: Bool { true }
+    override func keyDown(with event: NSEvent) { keys.append(event) }
+}
+
 @main struct NotebookWhiteboardPanTests {
+    @MainActor static func testFocusedArrowKeys() {
+        // An actual native responder chain, without ordering a window onscreen
+        // or posting events to the application or machine event queues.
+        let window = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 320, height: 240),
+                              styleMask: [.titled], backing: .buffered, defer: false)
+        let probe = ForwardingProbe(frame: CGRect(x: 0, y: 0, width: 320, height: 240))
+        let board = NotebookMacBoardView(tools: NotebookWhiteboardTools())
+        board.frame = CGRect(x: 12, y: 12, width: 160, height: 140)
+        probe.addSubview(board); window.contentView = probe
+        board.active = true
+        let mark = NotebookInkPoint(x: -26, y: 70)
+        let saved = [NotebookInkStroke(points: [mark], color: "#000000", width: 16)]
+        board.version = NotebookInkVersion(canvasWidth: 256, canvasHeight: 256,
+            canvasSpace: NotebookCanvasSpace(originX: -48, originY: 0), strokes: saved)
+        func visible() -> Bool {
+            CGRect(origin: board.origin, size: board.bounds.size).contains(CGPoint(x: mark.x, y: mark.y))
+        }
+        func key(_ scalar: Int, code: UInt16, flags: NSEvent.ModifierFlags = [.numericPad, .function]) -> NSEvent {
+            let character = String(UnicodeScalar(scalar)!)
+            return NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: flags, timestamp: 0,
+                windowNumber: window.windowNumber, context: nil, characters: character,
+                charactersIgnoringModifiers: character, isARepeat: false, keyCode: code)!
+        }
+        let left = key(NSLeftArrowFunctionKey, code: 123), right = key(NSRightArrowFunctionKey, code: 124)
+        let up = key(NSUpArrowFunctionKey, code: 126), down = key(NSDownArrowFunctionKey, code: 125)
+        precondition(window.makeFirstResponder(board) && window.firstResponder === board && !visible())
+        window.sendEvent(left)
+        precondition(board.origin == CGPoint(x: -120, y: 0) && visible(),
+                     "A focused Scribble Left key must reveal the offscreen mark")
+        window.sendEvent(right)
+        precondition(board.origin == .zero && !visible())
+        window.sendEvent(up)
+        precondition(board.origin == CGPoint(x: 0, y: -105))
+        window.sendEvent(down)
+        precondition(board.origin == .zero)
+        precondition(probe.keys.isEmpty, "Consumed arrows leaked into the surrounding note/reader responder")
+
+        let other = [key(NSLeftArrowFunctionKey, code: 123, flags: [.numericPad,.function,.shift]),
+                     key(NSRightArrowFunctionKey, code: 124, flags: [.numericPad,.function,.option]),
+                     key(NSUpArrowFunctionKey, code: 126, flags: [.numericPad,.function,.control]),
+                     key(NSDownArrowFunctionKey, code: 125, flags: [.numericPad,.function,.command]),
+                     key(NSHomeFunctionKey, code: 115), key(97, code: 0, flags: [])]
+        for event in other { window.sendEvent(event) }
+        precondition(board.origin == .zero && probe.keys.map(\.characters) == other.map(\.characters)
+                     && probe.keys.map(\.modifierFlags) == other.map(\.modifierFlags),
+                     "Modified or non-arrow keys must continue through the native responder chain")
+
+        precondition(window.makeFirstResponder(probe) && window.firstResponder === probe)
+        window.sendEvent(left)
+        precondition(board.origin == .zero && probe.keys.last === left, "A different responder owns its arrows")
+        board.keyDown(with: right)
+        precondition(board.origin == .zero && probe.keys.last === right, "An unfocused Scribble must forward a stray key")
+        precondition(window.makeFirstResponder(board))
+        board.active = false
+        precondition(window.firstResponder !== board && !board.acceptsFirstResponder,
+                     "A hidden Scribble must relinquish its own focus")
+        board.keyDown(with: left)
+        precondition(board.origin == .zero && probe.keys.last === left && board.version?.strokes == saved,
+                     "Inactive keys must not change viewport or stored strokes")
+        precondition(board.focusRingType == .exterior && board.focusRingMaskBounds.minX > board.bounds.minX
+                     && board.focusRingMaskBounds.maxX < board.bounds.maxX, "Native ring mask must stay inside the viewport")
+        print("Focused Scribble keys: real hidden-window routing, offscreen reveal/reset, modifiers/notebook forwarding, inactive focus release and unchanged strokes passed.")
+    }
+
     @MainActor static func testViewportClipping() {
         let tools = NotebookWhiteboardTools()
         let board = NotebookMacBoardView(tools: tools)
@@ -109,5 +179,6 @@ final class NotebookInkSession: ObservableObject { var currentVersion: NotebookI
         precondition(board.origin == lastOrigin && board.version?.strokes == saved, "Hidden pan or navigation changed the saved original")
         print("Scribble menu pan: actual Mac tool closure, negative ink, zoom-relative movement, origin reset, finite bounds, hidden action refusal and unchanged strokes passed.")
         testViewportClipping()
+        testFocusedArrowKeys()
     }
 }

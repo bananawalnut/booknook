@@ -318,22 +318,48 @@ struct NotebookMacWhiteboard: NSViewRepresentable {
 }
 final class NotebookMacBoardView: NSView {
     var version: NotebookInkVersion?
-    var active = false
+    var active = false {
+        didSet {
+            if !active, let window, window.firstResponder === self {
+                window.makeFirstResponder(nil)
+            }
+        }
+    }
     private(set) var origin = CGPoint.zero
     private var zoom: CGFloat = 1
     private var dragPoint: CGPoint?
     private var geometry = NotebookWhiteboardGeometry()
     init(tools: NotebookWhiteboardTools) {
         super.init(frame: .zero)
+        focusRingType = .exterior
         setAccessibilityElement(true); setAccessibilityRole(.image)
-        setAccessibilityLabel("Scribble canvas for this note. Use Note options, drag or scroll to pan. Pencil originals are read-only on Mac.")
+        setAccessibilityLabel("Scribble canvas for this note. Use arrow keys when focused, or Note options, drag or scroll to pan. Pencil originals are read-only on Mac.")
         tools.zoomIn = { [weak self] in self?.changeZoom(1.25) }; tools.zoomOut = { [weak self] in self?.changeZoom(0.8) }
         tools.home = { [weak self] in self?.origin = .zero; self?.zoom = 1; self?.needsDisplay = true }
         tools.pan = { [weak self] in self?.panViewport($0) }
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) unavailable") }
     override var isFlipped: Bool { true }
-    override var acceptsFirstResponder: Bool { true }
+    override var acceptsFirstResponder: Bool { active && !isHiddenOrHasHiddenAncestor }
+    // Leave space for the system ring within the SwiftUI canvas's clipping.
+    override var focusRingMaskBounds: NSRect { bounds.insetBy(dx: 4, dy: 4) }
+    override func drawFocusRingMask() { focusRingMaskBounds.fill() }
+    override func keyDown(with event: NSEvent) {
+        // AppKit can mark ordinary arrows as both numeric-pad and function
+        // events. Inspect their actual characters so Fn navigation stays native.
+        let modifiers = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+            .subtracting([.numericPad, .function, .capsLock])
+        guard acceptsFirstResponder, window?.firstResponder === self, modifiers.isEmpty,
+              let characters = event.characters?.utf16, characters.count == 1,
+              let character = characters.first else { super.keyDown(with: event); return }
+        switch Int(character) {
+        case NSLeftArrowFunctionKey: panViewport(.left)
+        case NSRightArrowFunctionKey: panViewport(.right)
+        case NSUpArrowFunctionKey: panViewport(.up)
+        case NSDownArrowFunctionKey: panViewport(.down)
+        default: super.keyDown(with: event)
+        }
+    }
     override func draw(_ dirtyRect: NSRect) {
         NSColor(readingPaper).setFill(); bounds.fill()
         guard let context = NSGraphicsContext.current?.cgContext, let version else { return }
