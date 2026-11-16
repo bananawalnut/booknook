@@ -1,0 +1,56 @@
+{
+  "schema": "booknook.mac-scribble-viewport-evidence.v1",
+  "observation_utc": "2026-11-16T21:29:55.551867+00:00",
+  "app": {
+    "version": "0.2.1",
+    "build": "2026111603",
+    "source": "2a65e2ee7e29c0002055b2b69f1067110f6540e5",
+    "native_source": "96b337baee03dbe64f0b2a7a6fb726b90896ae22",
+    "native_inputs_verified_against_both_sources": 166,
+    "unchanged_selected_build_inputs": 355,
+    "target": "Mac arm64 Release",
+    "build_receipt_sha256": "553a64f732d63d1dc19b20ea2559c6b923c105dba52f115456309dc3db727ab8",
+    "executable_sha256": "c99144163065cbb11172b210b915999f6bcd2deb19863f71f94739780416b5c5",
+    "runtime": "macOS 26.4.1",
+    "isolation": "Only Info.plist language-independent launch environment differed in the QA copy. Synthetic data used a separate Application Support directory."
+  },
+  "baseline_nonpass": {
+    "build": "2026111602",
+    "source": "96b337baee03dbe64f0b2a7a6fb726b90896ae22",
+    "visual": "The real app drew a negative-coordinate mark over the adjacent note controls before pan and again after Return to origin.",
+    "keyboard_only": "Menu actions could be invoked through accessibility clicks. Keyboard-only traversal did not establish activation."
+  },
+  "regression": {
+    "previous_renderer": "FAIL outside-viewport pixel assertion",
+    "fixed_renderer": "PASS outside pixels unchanged, set-in-view pixels after pan, origin reset, geometry and saved stroke equality",
+    "reading_suite": "PASS",
+    "reading_log_sha256": "8110d76eef518c4f1616835f8dd12ebc6591c8c2990d469f61febd07f469528f"
+  },
+  "actual_mac_workflow": {
+    "fixture_sha256": "67c07432647f57685068493265a5b9694534405c746e990ff40571f75bb1e4c1",
+    "restore": "PASS portable SDK export opened through the native restore picker. One original EPUB and two synthetic notes.",
+    "visual": [
+      "Blank viewport at origin and clean adjacent controls",
+      "One Pan left action reveals the original mark inside Scribble",
+      "Return to origin hides the mark and leaves the rail clean"
+    ],
+    "strict_comparison": "The EPUB and complete saved desk, revision and observed queues are identical before pan, after pan and after reset.",
+    "text_and_ink": "Both original text notes, order, creation context and stroke bytes survive the flip from Scribble back to text and normal process exit/reopen. Only reader positions and revision are permitted to differ on reopen.",
+    "observed_change_on_reopen": [
+      "positions",
+      "revision"
+    ],
+    "snapshot_sha256": {
+      "before": "0522a1ba1d4b1242dc40f20a21c680fb8ddada7117c69547f37030d60b8b7d55",
+      "panned": "1c75f4799cb5a3a40c17e0365100ed6a01599543122503ea5b10731145457cf6",
+      "reset": "23600a18eab084726d43ab7a68ec71920b6ec3b681e3e84e19e72aa08564e761",
+      "text-restored": "3ac60778b538ce611fc298ce2f2af715c7c0c82c0b43ce624c2c4efc00224359",
+      "reopened": "b083a33ef9c615e01ec1c49311c98faca7d4a0ffb812a09ed8939e3ddae4e617"
+    }
+  },
+  "limits": [
+    "Scoped continuation of UX round 4",
+    "Keyboard-only menu traversal, physical input, VoiceOver, endurance and forced termination remain separate",
+    "No current iPad candidate install, macOS 14/iPadOS 17 runtime, live service acceptance or archive publication in this check"
+  ]
+}
