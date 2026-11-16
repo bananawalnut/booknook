@@ -4,14 +4,15 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+const {targetPath}=require('./sdk-target.cjs');
 const {execFileSync,spawnSync} = require('node:child_process');
 const core = require('../sdk/typescript/pkg/nodejs/booknook_wasm.js');
-const sdk = require(path.resolve(process.argv[2] ?? 'target/sdk-check/index.js'));
+const sdk = require(path.resolve(process.argv[2] ?? targetPath('sdk-check','index.js')));
 const root=path.resolve(__dirname,'..');
 const temp=fs.mkdtempSync(path.join(os.tmpdir(),'booknook-full-archive-'));
-const cli=(desk,...args)=>execFileSync(path.join(root,'target/debug/booknook'),[desk,...args],{encoding:'utf8',maxBuffer:16*1024*1024});
+const cli=(desk,...args)=>execFileSync(targetPath('debug','booknook'),[desk,...args],{encoding:'utf8',maxBuffer:16*1024*1024});
 try {
-  const fixturePath=execFileSync(path.join(root,'target/debug/examples/portable-fixture'),[temp],{encoding:'utf8'}).trim();
+  const fixturePath=execFileSync(targetPath('debug','examples','portable-fixture'),[temp],{encoding:'utf8'}).trim();
   const original=fs.readFileSync(fixturePath,'utf8');
   const value=JSON.parse(original);
   assert.equal(value.state.schema,'booknook.archive.v2');
@@ -58,7 +59,7 @@ try {
     assert.throws(()=>sdk.roundtripPortableArchive(core,bad),undefined,name);
     const dir=path.join(temp,'rejected-'+name), file=path.join(temp,name+'.json');fs.writeFileSync(file,bad);
     const before=cli(dir,'snapshot');
-    const result=spawnSync(path.join(root,'target/debug/booknook'),[dir,'restore',file],{encoding:'utf8'});
+    const result=spawnSync(targetPath('debug','booknook'),[dir,'restore',file],{encoding:'utf8'});
     assert.notEqual(result.status,0,name);assert.equal(cli(dir,'snapshot'),before,name+' rejection must not change native state');
   }
   const fixture=fs.readFileSync(path.join(root,'ontology/portable/v1/conformance.json'),'utf8');

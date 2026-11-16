@@ -14,9 +14,10 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = [
     "cargo_paths.py", "package-rust.sh", "package-typescript.sh",
-    "package-swift.sh", "stage-sdk-deliverables.py", "build-apple.sh", "build-wasm.sh",
+    "package-swift.sh", "stage-sdk-deliverables.py", "build-apple.sh", "build-wasm.sh", "test-sdk.sh",
 ]
 VERSION = "1.2.3"
+NODE = shutil.which("node")
 FAKE_TOOL = r'''
 import io, json, os
 from pathlib import Path
@@ -72,9 +73,11 @@ if name == "cargo":
         for file in ["booknook_native.swift", "booknook_nativeFFI.h", "booknook_nativeFFI.modulemap"]:
             create(output / file, b"synthetic generated text  \n")
     elif args[0] == "build":
-        if "--example" in args:
-            executable(target / "debug/examples/castalia-fixture",
-                       f"#!{sys.executable}\n" + Path(__file__).read_text().split("\n", 1)[1])
+        if "--example" in args or "--bin" in args:
+            for flag, folder in [("--example", "debug/examples"), ("--bin", "debug")]:
+                if flag in args:
+                    executable(target / folder / argument(flag),
+                               f"#!{sys.executable}\n" + Path(__file__).read_text().split("\n", 1)[1])
         elif "--target" in args and argument("--target") == "wasm32-unknown-unknown":
             create(target / "wasm32-unknown-unknown/release/booknook_wasm.wasm")
         else:
@@ -87,6 +90,7 @@ elif name == "wasm-bindgen":
     assert Path(args[0]) == target / "wasm32-unknown-unknown/release/booknook_wasm.wasm"
     assert Path(args[0]).is_file()
     create(Path(argument("--out-dir")) / "booknook_wasm.d.ts", b"export const fixture: number;\n")
+    create(Path(argument("--out-dir")) / "booknook_wasm.js", b"// synthetic fixture\n")
 elif name == "npm":
     if "pack" in args:
         destination = Path(argument("--pack-destination"))
@@ -98,13 +102,29 @@ elif name == "npm":
         assert Path(args[-1]) == target / "packages/booknook-sdk-1.2.3.tgz"
         assert Path(args[-1]).is_file()
     else:
-        assert args == ["--prefix", "sdk/typescript", "run", "build"], args
+        assert args[:3] == ["--prefix", "sdk/typescript", "run"] and args[3] in ["build", "check"], args
 elif name == "node":
     assert Path(args[0]).is_file()
-    assert Path(args[0]).parent == target / "sdk-package-check/npm"
+    if Path(args[0]).resolve().parent == root / "tests":
+        no_facade = ["wasm-parity.cjs", "test-conformance.cjs"]
+        feed = ["feed-sdk-parity.cjs", "feed-source-sdk.cjs", "feed-xml-sdk.cjs"]
+        if Path(args[0]).name not in no_facade:
+            assert Path(args[-1]) == target / "sdk-check/index.js", args
+            assert Path(args[-1]).is_file()
+        if Path(args[0]).name in feed:
+            assert Path(args[1]).is_file()
+    else:
+        assert Path(args[0]).parent == target / "sdk-package-check/npm"
 elif name == "tsc":
-    assert all(Path(p).parent == target / "sdk-package-check/npm" for p in args[-2:])
-    assert all(Path(p).is_file() for p in args[-2:])
+    if "--outDir" in args:
+        assert Path(argument("--outDir")) == target / "sdk-check", args
+        create(target / "sdk-check/index.js", b"// synthetic facade\n")
+    elif Path(args[-1]).resolve().parent == root / "tests":
+        assert Path(args[-1]).name in ["FeedSDKTypes.mts", "FeedSourceSDKTypes.mts", "FeedXMLSDKTypes.mts"]
+        assert "--noEmit" in args and Path(args[-1]).is_file()
+    else:
+        assert all(Path(p).parent == target / "sdk-package-check/npm" for p in args[-2:])
+        assert all(Path(p).is_file() for p in args[-2:])
 elif name == "xcrun":
     if args[:2] == ["xcodebuild", "-create-xcframework"]:
         libraries = [Path(args[i+1]) for i, item in enumerate(args) if item == "-library"]
@@ -137,6 +157,10 @@ elif name == "xcodegen":
     assert args == ["generate"]
 elif name == "Smoke":
     create(Path(os.environ["BOOKNOOK_SMOKE_FIXTURES"]) / "castalia-swift-receipt.json", b"{}")
+elif name == "contract-probe":
+    print(json.dumps({"executable": str(Path(__file__)), "input": json.loads(sys.stdin.read())}))
+elif name == "booknook":
+    print(json.dumps({"executable": str(Path(__file__)), "args": args, "input": sys.stdin.read()}))
 elif name == "castalia-fixture":
     if args:
         assert args == ["verify"]
@@ -150,6 +174,7 @@ else:
 
 class RoutingFixture:
     def __init__(self, directory, mode="default"):
+        directory = Path(directory).resolve()
         self.root = Path(directory) / "workspace with spaces"
         self.bin = Path(directory) / "fake tools"
         self.root.mkdir()
@@ -165,13 +190,20 @@ class RoutingFixture:
             self.env["CARGO_TARGET_DIR"] = "relative output 🌿"
         elif mode == "absolute":
             self.env["CARGO_TARGET_DIR"] = str(Path(directory) / "external output 🌿")
+        elif mode == "edge-space":
+            self.env["CARGO_TARGET_DIR"] = str(Path(directory) / " external output 🌿 ")
         elif mode == "config":
             self.write(".cargo/config.toml", '[build]\ntarget-dir = "configured output 🌿"\n')
         self.target = {"default": self.root / "target", "relative": self.root / "relative output 🌿",
                        "absolute": Path(directory) / "external output 🌿",
-                       "config": self.root / "configured output 🌿"}[mode]
+                       "config": self.root / "configured output 🌿",
+                       "edge-space": Path(directory) / " external output 🌿 "}[mode]
         for script in SCRIPTS:
             self.write("scripts/" + script, (ROOT / "scripts" / script).read_text())
+        for name in ["sdk-native.cjs", "sdk-target.cjs"]:
+            source = ROOT / "tests" / name
+            if source.exists():
+                self.write("tests/" + name, source.read_text())
         self.write("scripts/sync-package-resources.py",
                    'import sys\nassert sys.argv[1:] == ["--check"]\n')
         self.write("Cargo.toml", '[workspace.package]\nversion = "1.2.3"\n')
@@ -188,7 +220,11 @@ class RoutingFixture:
         for name in ["PackagedSDKSmoke.cjs","PackagedSDKSmoke.mjs","PackagedSDKTypes.mts",
                      "PackagedSDKTypes.cts","castalia-generic-fixture.cjs","provider-service-acceptance.cjs",
                      "PackagedCastaliaSmoke.swift","PackagedProviderSmoke.swift",
-                     "PackagedNotebookSmoke.swift","PackagedFeedSmoke.swift","fixtures/provider-sample.epub"]:
+                     "PackagedNotebookSmoke.swift","PackagedFeedSmoke.swift","fixtures/provider-sample.epub",
+                     "sdk-storage.cjs","wasm-parity.cjs","test-conformance.cjs","castalia-generic-parity.cjs",
+                     "provider-runtime.cjs","portable-archive-parity.cjs","feed-sdk-parity.cjs",
+                     "feed-source-sdk.cjs","feed-xml-sdk.cjs","FeedSDKTypes.mts",
+                     "FeedSourceSDKTypes.mts","FeedXMLSDKTypes.mts"]:
             self.write("tests/" + name, "synthetic fixture\n")
         for name in ["Package.swift","Sources/BookNookServices/BookNookProvider.swift",
                      "Sources/BookNookServices/BookNookNotebook.swift",
@@ -210,7 +246,7 @@ class RoutingFixture:
                               env=self.env, cwd=cwd or self.root, capture_output=True, text=True, timeout=20)
 
     def commands(self):
-        return [json.loads(line) for line in self.log.read_text().splitlines()]
+        return [json.loads(line) for line in self.log.read_text().splitlines()] if self.log.exists() else []
 
 
 class TargetRoutingTests(unittest.TestCase):
@@ -304,7 +340,7 @@ class TargetRoutingTests(unittest.TestCase):
                    '{"target_directory":"relative"}', '{"target_directory":"/tmp/not-used\\u0000"}']
         invalid.append(json.dumps({"target_directory": "/tmp/not-used" + chr(10)}))
         scripts = [("package-rust.sh",()),("package-typescript.sh",()),("package-swift.sh",("--use-built",)),
-                   ("build-apple.sh",()),("build-wasm.sh",()),
+                   ("build-apple.sh",()),("build-wasm.sh",()),("test-sdk.sh",()),
                    ("stage-sdk-deliverables.py",("--output", "not-created"))]
         for metadata in [*invalid, None]:
             for script, args in scripts:
@@ -320,6 +356,70 @@ class TargetRoutingTests(unittest.TestCase):
                     self.assertFalse((f.root / "target").exists())
                     self.assertFalse((f.root / "not-created").exists())
                     self.assertTrue(all(c["tool"] == "cargo" and c["args"][0] == "metadata" for c in f.commands()))
+
+    def test_source_sdk_driver_routes_all_outputs_without_repository_target(self):
+        for mode in ["default", "relative", "absolute", "config", "edge-space"]:
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory(prefix="booknook-routing-") as directory:
+                f = RoutingFixture(directory, mode)
+                r = f.run("test-sdk.sh", cwd=Path(directory))
+                self.assertEqual(r.returncode, 0, r.stderr)
+                self.assertTrue((f.target / "sdk-check/index.js").is_file())
+                self.assertTrue((f.target / "debug/booknook").is_file())
+                self.assertTrue((f.target / "debug/examples/contract-probe").is_file())
+                self.assertTrue((f.target / "debug/examples/portable-fixture").is_file())
+                if mode != "default":
+                    self.assertFalse((f.root / "target").exists())
+
+    @unittest.skipUnless(NODE, "A Node interpreter is required for actual helper routing, not SDK execution")
+    def test_actual_node_native_helpers_use_authoritative_cargo_paths(self):
+        for mode in ["default", "relative", "absolute", "config", "edge-space"]:
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory(prefix="booknook-routing-") as directory:
+                f = RoutingFixture(directory, mode)
+                source = f.bin / "cargo"
+                for name in ["debug/booknook", "debug/examples/contract-probe"]:
+                    p = f.target / name
+                    p.parent.mkdir(parents=True, exist_ok=True)
+                    p.write_bytes(source.read_bytes())
+                    p.chmod(0o755)
+                code = """const assert=require('node:assert/strict');
+const native=require(process.argv[1]);const expected=process.argv[2];
+assert.deepEqual(native.nativeProbe({op:'route'}),{executable:expected+'/debug/examples/contract-probe',input:{op:'route'}});
+const cli=JSON.parse(native.nativeCli('desk with spaces',['snapshot'],{unicode:'🌿'}));
+assert.equal(cli.executable,expected+'/debug/booknook');
+assert.deepEqual(cli.args,['desk with spaces','snapshot']);
+assert.equal(cli.input,JSON.stringify({unicode:'🌿'}));
+const {targetPath}=require(process.argv[3]);
+assert.equal(targetPath('sdk-check','index.js'),expected+'/sdk-check/index.js');
+"""
+                r = subprocess.run([NODE, "-e", code, str(f.root/"tests/sdk-native.cjs"),
+                                    str(f.target), str(f.root/"tests/sdk-target.cjs")],
+                                   env=f.env, cwd=Path(directory), capture_output=True, text=True, timeout=10)
+                self.assertEqual(r.returncode, 0, r.stderr)
+                metadata = [c for c in f.commands() if c["tool"] == "cargo"]
+                self.assertEqual(len(metadata), 1, "One authoritative metadata query is reused per Node process")
+                self.assertEqual(metadata[0]["cwd"], str(f.root))
+                if mode != "default":
+                    self.assertFalse((f.root / "target").exists())
+
+    @unittest.skipUnless(NODE, "A Node interpreter is required for actual helper routing, not SDK execution")
+    def test_actual_node_native_helpers_reject_bad_metadata_before_native_execution(self):
+        invalid = ["not json", "{}", '{"target_directory":null}', '{"target_directory":17}',
+                   '{"target_directory":"relative"}', '{"target_directory":"/tmp/not-used\\u0000"}',
+                   json.dumps({"target_directory":"/tmp/not-used\n"})]
+        for metadata in [*invalid, None]:
+            with self.subTest(metadata=metadata), tempfile.TemporaryDirectory(prefix="booknook-routing-") as directory:
+                f = RoutingFixture(directory, "absolute")
+                if metadata is None:
+                    f.env["FIXTURE_METADATA_EXIT"] = "9"
+                else:
+                    f.env["FIXTURE_METADATA_JSON"] = metadata
+                code = "require(process.argv[1]).nativeProbe({op:'must-not-execute'})"
+                r = subprocess.run([NODE, "-e", code, str(f.root/"tests/sdk-native.cjs")],
+                                   env=f.env, cwd=Path(directory), capture_output=True, text=True, timeout=10)
+                self.assertNotEqual(r.returncode, 0)
+                self.assertFalse(f.target.exists())
+                self.assertFalse((f.root/"target").exists())
+                self.assertEqual([(c["tool"],c["args"][0]) for c in f.commands()], [("cargo","metadata")])
 
     def test_staging_help_and_module_import_have_no_cargo_side_effect(self):
         with tempfile.TemporaryDirectory(prefix="booknook-routing-") as directory:

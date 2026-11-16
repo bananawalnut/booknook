@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 // Real native Rust contract probe; no mocked core or signatures.
-const path = require("node:path");
+const {targetPath} = require("./sdk-target.cjs");
 const {execFileSync} = require("node:child_process");
 const {createPrivateKey, createPublicKey} = require("node:crypto");
 function nativeProbe(input) {
-  return JSON.parse(execFileSync(path.resolve(__dirname, "../target/debug/examples/contract-probe"), [], {
+  return JSON.parse(execFileSync(targetPath("debug", "examples", "contract-probe"), [], {
     input: JSON.stringify(input), encoding: "utf8", maxBuffer: 16 * 1024 * 1024,
   }));
 }
 function nativeCli(directory, args, input) {
-  return execFileSync(path.resolve(__dirname, "../target/debug/booknook"), [directory, ...args], {
+  return execFileSync(targetPath("debug", "booknook"), [directory, ...args], {
     input: input === undefined ? undefined : JSON.stringify(input),
     encoding: "utf8", maxBuffer: 16 * 1024 * 1024,
   });

@@ -5,6 +5,7 @@ export CARGO_PROFILE_DEV_DEBUG=0
 export CARGO_PROFILE_TEST_DEBUG=0
 export CARGO_INCREMENTAL=0
 cd "$(dirname "$0")/.."
+target_directory="$(python3 scripts/cargo_paths.py)"
 if ! command -v wasm-bindgen >/dev/null; then
   echo "Install the matching tool first: cargo install wasm-bindgen-cli --version 0.2.127 --locked" >&2
   exit 1
@@ -18,24 +19,24 @@ bash scripts/build-wasm.sh nodejs
 bash scripts/build-wasm.sh web
 npm --prefix sdk/typescript run check
 sdk/typescript/node_modules/.bin/tsc --target es2022 --module commonjs --moduleResolution node --strict \
-  --outDir target/sdk-check sdk/typescript/index.ts
-node tests/sdk-storage.cjs target/sdk-check/index.js
+  --outDir "$target_directory/sdk-check" sdk/typescript/index.ts
+node tests/sdk-storage.cjs "$target_directory/sdk-check/index.js"
 node tests/wasm-parity.cjs
 node tests/test-conformance.cjs
-node tests/castalia-generic-parity.cjs target/sdk-check/index.js
-node tests/provider-runtime.cjs target/sdk-check/index.js
+node tests/castalia-generic-parity.cjs "$target_directory/sdk-check/index.js"
+node tests/provider-runtime.cjs "$target_directory/sdk-check/index.js"
 
-node tests/portable-archive-parity.cjs target/sdk-check/index.js
+node tests/portable-archive-parity.cjs "$target_directory/sdk-check/index.js"
 
 # Actual opaque feed review objects: original bytes, lifecycle and origin closure.
-node tests/feed-sdk-parity.cjs sdk/typescript/pkg/nodejs/booknook_wasm.js target/sdk-check/index.js
-node tests/feed-sdk-parity.cjs sdk/typescript/pkg/web/booknook_wasm.js target/sdk-check/index.js
+node tests/feed-sdk-parity.cjs sdk/typescript/pkg/nodejs/booknook_wasm.js "$target_directory/sdk-check/index.js"
+node tests/feed-sdk-parity.cjs sdk/typescript/pkg/web/booknook_wasm.js "$target_directory/sdk-check/index.js"
 sdk/typescript/node_modules/.bin/tsc --noEmit --strict --target es2022 --module nodenext --moduleResolution nodenext tests/FeedSDKTypes.mts
 
 # Actual async source provider, conditional-cache and guarded final-CAS runtime.
-node tests/feed-source-sdk.cjs sdk/typescript/pkg/nodejs/booknook_wasm.js target/sdk-check/index.js
+node tests/feed-source-sdk.cjs sdk/typescript/pkg/nodejs/booknook_wasm.js "$target_directory/sdk-check/index.js"
 sdk/typescript/node_modules/.bin/tsc --noEmit --strict --target es2022 --module nodenext --moduleResolution nodenext tests/FeedSourceSDKTypes.mts
 
 # Pure bounded XML normalization through actual WASM and generated declarations.
-node tests/feed-xml-sdk.cjs sdk/typescript/pkg/nodejs/booknook_wasm.js target/sdk-check/index.js
+node tests/feed-xml-sdk.cjs sdk/typescript/pkg/nodejs/booknook_wasm.js "$target_directory/sdk-check/index.js"
 sdk/typescript/node_modules/.bin/tsc --noEmit --strict --target es2022 --module nodenext --moduleResolution nodenext tests/FeedXMLSDKTypes.mts

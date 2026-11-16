@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 const path=require('node:path');
-const sdk=require(path.resolve(process.argv[2]??'target/sdk-check/index.js'));
+const {targetPath}=require('./sdk-target.cjs');
+const sdk=require(path.resolve(process.argv[2]??targetPath('sdk-check','index.js')));
 const core=require('../sdk/typescript/pkg/nodejs/booknook_wasm.js');
 const {nativeProbe}=require('./sdk-native.cjs');
 const {runProviderAcceptance}=require('./provider-service-acceptance.cjs');

@@ -4,11 +4,12 @@ const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
 const {execFileSync} = require("node:child_process");
+const {targetPath} = require("./sdk-target.cjs");
 const core = require("../sdk/typescript/pkg/nodejs/booknook_wasm.js");
 const {nativeProbe, nativeCli, inkCommand, actor} = require("./sdk-native.cjs");
 const root = path.resolve(__dirname,"..");
 const temp = fs.mkdtempSync(path.join(os.tmpdir(),"booknook-parity-"));
-const cli = (...args) => execFileSync(path.join(root,"target/debug/booknook"),[temp,...args],{encoding:"utf8"});
+const cli = (...args) => execFileSync(targetPath("debug", "booknook"),[temp,...args],{encoding:"utf8"});
 try {
   require('./portable-services-parity.cjs')(core, nativeProbe, actor);
   require('./note-whiteboard-parity.cjs')(core);
@@ -35,17 +36,17 @@ try {
   core.validate_archive(JSON.stringify(wasm));
   const commands = [{op:"import_goodreads",csv:fs.readFileSync(path.join(root,"fixtures/goodreads.csv"),"utf8"),at:100}];
   for (const command of commands) {
-    native = JSON.parse(execFileSync(path.join(root,"target/debug/booknook"),[temp,"command"],{input:JSON.stringify(command),encoding:"utf8"})).state;
+    native = JSON.parse(execFileSync(targetPath("debug", "booknook"),[temp,"command"],{input:JSON.stringify(command),encoding:"utf8"})).state;
     wasm = JSON.parse(core.execute(JSON.stringify(wasm),JSON.stringify(command))).state;
     assert.deepEqual(wasm,native);
   }
   const book = Object.values(native.books)[0];
   const update = {op:"update_book",book_id:book.id,title:book.title,shelf:"read",rating:5,review:"Unicode 🌿 こんにちは"};
-  native = JSON.parse(execFileSync(path.join(root,"target/debug/booknook"),[temp,"command"],{input:JSON.stringify(update),encoding:"utf8"})).state;
+  native = JSON.parse(execFileSync(targetPath("debug", "booknook"),[temp,"command"],{input:JSON.stringify(update),encoding:"utf8"})).state;
   wasm = JSON.parse(core.execute(JSON.stringify(wasm),JSON.stringify(update))).state;
   assert.deepEqual(wasm,native);
   const subjectUpdate = {op:"set_book_subjects", book_id:book.id, subjects:[" Literature ", "literature", "History"]};
-  native = JSON.parse(execFileSync(path.join(root,"target/debug/booknook"),[temp,"command"],{input:JSON.stringify(subjectUpdate),encoding:"utf8"})).state;
+  native = JSON.parse(execFileSync(targetPath("debug", "booknook"),[temp,"command"],{input:JSON.stringify(subjectUpdate),encoding:"utf8"})).state;
   wasm = JSON.parse(core.execute(JSON.stringify(wasm),JSON.stringify(subjectUpdate))).state;
   assert.deepEqual(wasm,native);
   assert.deepEqual(new Set(wasm.books[book.id].subjects), new Set(["literature", "history"]));
