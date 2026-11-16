@@ -214,7 +214,7 @@ dependencies = [
 
 [[package]]
 name = "booknook-connectors"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "booknook-core",
  "nostr",
@@ -228,7 +228,7 @@ dependencies = [
 
 [[package]]
 name = "booknook-core"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "base64 0.22.1",
  "chacha20poly1305",

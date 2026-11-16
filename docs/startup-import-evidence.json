@@ -133,7 +133,18 @@
     ],
     "private_receipt_sha256": "9c1ab44fe4489030dc2359caf3be5cf5fc22b66f3b042b585656507315005955",
     "production_library_and_app": "PASS fresh production host library, actual generated-interface comparison and local Mac1502 Release inspection/runtime; no refreshed public archive or SDK qualification",
-    "hosted_CI": "Not yet observed for this later commit; b07 CI above remains separately scoped",
+    "hosted_CI": {
+      "run": 43782042110,
+      "source": "b8298f849c11a7a36b772e1cae5a6f4555b948c6",
+      "result": "success",
+      "jobs": 2,
+      "apple_steps": 17,
+      "portable_steps": 21,
+      "skipped_workflow_steps": 0,
+      "url": "https://github.com/bananawalnut/booknook/actions/runs/43782042110",
+      "scope": "Actual hosted native/portable tests,3Apple builds and extracted Swift/Rust/installed npm consumers; not local public archive delivery, physical input or minimumOS runtime qualification",
+      "private_receipt_sha256": "8439a458ddb45feb2ffe15a810be78509de2512e9f08d64624f2b11db77319ed"
+    },
     "production_host": {
       "result": "PASS",
       "source_files": 166,
@@ -178,12 +189,14 @@
   },
   "SDK_refresh_plan": {
     "version": "0.2.1",
-    "status": "Planned; no new-version build/archive claim",
+    "status": "Versioned source prepared, external dependency records unchanged; fresh0.2.1 libraries/archives/consumers pending",
     "requirements": [
       "Version first-party manifests/locks and npm before freezing source",
       "Fresh3native slices and2WASM targets",
       "Fresh6archives and actual extracted/installed consumers",
       "Qualified Cargo output routing and bounded capacity; preserve old archive identities"
-    ]
+    ],
+    "app_candidate": "0.2.1/build2026111503; source metadata only, not built or installed",
+    "output_routing": "Cargo metadata resolver and9isolated routing regressions pass; source version preparation checks do not qualify artifacts"
   }
 }

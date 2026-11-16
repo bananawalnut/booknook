@@ -5,6 +5,7 @@ export CARGO_PROFILE_TEST_DEBUG=0
 export CARGO_INCREMENTAL=0
 cd "$(dirname "$0")/.."
 python3 scripts/sync-package-resources.py --check
+python3 -B tests/sdk-target-routing.py
 cargo fmt --all --check
 cargo test --workspace --locked
 cargo clippy --workspace --all-targets --locked -- -D warnings

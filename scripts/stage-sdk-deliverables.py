@@ -6,26 +6,31 @@ import hashlib
 import shutil
 import tomllib
 
+from cargo_paths import cargo_target_directory
+
 ROOT = Path(__file__).resolve().parents[1]
-parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument('--output', type=Path, default=ROOT.parent / 'booknook-sdk')
-args = parser.parse_args()
-version = tomllib.loads((ROOT / 'Cargo.toml').read_text())['workspace']['package']['version']
-sources = [ROOT / f'target/package/booknook-{name}-{version}.crate'
-           for name in ['core', 'connectors', 'native', 'wasm']]
-sources += [ROOT / f'target/packages/booknook-sdk-{version}.tgz',
-            ROOT / f'target/packages/booknook-swift-sdk-{version}.tar.gz']
-for source in sources:
-    if not source.is_file():
-        raise SystemExit(f'Missing package {source}; complete the package scripts first')
-args.output.mkdir(parents=True, exist_ok=True)
-lines = []
-for source in sources:
-    destination = args.output / source.name
-    shutil.copy2(source, destination)
-    lines.append(f'{hashlib.sha256(destination.read_bytes()).hexdigest()}  {destination.name}')
-(args.output / 'SHA256SUMS').write_text('\n'.join(lines) + '\n')
-(args.output / 'README.md').write_text(f'''# Book Nook SDKs {version}
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--output', type=Path, default=ROOT.parent / 'booknook-sdk')
+    args = parser.parse_args()
+    version = tomllib.loads((ROOT / 'Cargo.toml').read_text())['workspace']['package']['version']
+    target = cargo_target_directory(ROOT)
+    sources = [target / f'package/booknook-{name}-{version}.crate'
+               for name in ['core', 'connectors', 'native', 'wasm']]
+    sources += [target / f'packages/booknook-sdk-{version}.tgz',
+                target / f'packages/booknook-swift-sdk-{version}.tar.gz']
+    for source in sources:
+        if not source.is_file():
+            raise SystemExit(f'Missing package {source}; complete the package scripts first')
+    args.output.mkdir(parents=True, exist_ok=True)
+    lines = []
+    for source in sources:
+        destination = args.output / source.name
+        shutil.copy2(source, destination)
+        lines.append(f'{hashlib.sha256(destination.read_bytes()).hexdigest()}  {destination.name}')
+    (args.output / 'SHA256SUMS').write_text('\n'.join(lines) + '\n')
+    (args.output / 'README.md').write_text(f'''# Book Nook SDKs {version}
 
 These local package artifacts were created without publishing to npm, crates.io, GitHub, or an Apple distribution service. Verify file integrity with `shasum -a 256 -c SHA256SUMS`.
 
@@ -35,4 +40,8 @@ These local package artifacts were created without publishing to npm, crates.io,
 
 The source workspace, build scripts, SDK guide and decision/validation logs are in the adjacent `booknook` directory. SDK code is MIT OR Apache-2.0; dependencies retain their declared licenses. Each package includes license texts and the reviewed inventory boundaries. Provider account qualification and physical-device acceptance remain distinct from package compilation and installation.
 ''')
-print(f'Staged {len(sources)} local SDK packages at {args.output}')
+    print(f'Staged {len(sources)} local SDK packages at {args.output}')
+
+
+if __name__ == "__main__":
+    main()

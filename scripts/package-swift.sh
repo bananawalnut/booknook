@@ -4,20 +4,24 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 export DEVELOPER_DIR="${DEVELOPER_DIR:-/Applications/Xcode.app/Contents/Developer}"
 export CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0
-export CLANG_MODULE_CACHE_PATH="$PWD/target/swift-sdk-module-cache"
-export SWIFTPM_MODULECACHE_OVERRIDE="$PWD/target/swift-sdk-module-cache"
 case "${1:-}" in
-  --use-built) ;;
-  '') for platform in mac ipad-sim ipad-device; do bash scripts/build-apple.sh "$platform"; done ;;
+  --use-built|'') ;;
   *) echo 'Use no arguments to build, or --use-built after matching final Apple builds' >&2; exit 2 ;;
 esac
+target_directory="$(python3 scripts/cargo_paths.py)"
+export CLANG_MODULE_CACHE_PATH="$target_directory/swift-sdk-module-cache"
+export SWIFTPM_MODULECACHE_OVERRIDE="$target_directory/swift-sdk-module-cache"
+if [ "${1:-}" != --use-built ]; then
+  for platform in mac ipad-sim ipad-device; do bash scripts/build-apple.sh "$platform"; done
+fi
 python3 scripts/sync-package-resources.py --check
-python3 - <<'PY'
+python3 - "$target_directory" <<'PY'
 from pathlib import Path
-import shutil, tomllib
+import shutil, sys, tomllib
 root=Path.cwd()
+target=Path(sys.argv[1])
 version=tomllib.loads((root/'Cargo.toml').read_text())['workspace']['package']['version']
-output=root/'target/sdk-package-check/swift'
+output=target/'sdk-package-check/swift'
 if output.exists(): shutil.rmtree(output)
 headers=output/'headers'
 headers.mkdir(parents=True)
@@ -76,18 +80,19 @@ fixtures.mkdir()
 shutil.copy2(root/'tests/fixtures/provider-sample.epub',fixtures/'provider-sample.epub')
 (output/'version').write_text(version)
 PY
-headers=target/sdk-package-check/swift/headers
+headers="$target_directory/sdk-package-check/swift/headers"
 xcrun xcodebuild -create-xcframework \
-  -library target/release/libbooknook_native.a -headers "$headers" \
-  -library target/aarch64-apple-ios-sim/release/libbooknook_native.a -headers "$headers" \
-  -library target/aarch64-apple-ios/release/libbooknook_native.a -headers "$headers" \
+  -library "$target_directory/release/libbooknook_native.a" -headers "$headers" \
+  -library "$target_directory/aarch64-apple-ios-sim/release/libbooknook_native.a" -headers "$headers" \
+  -library "$target_directory/aarch64-apple-ios/release/libbooknook_native.a" -headers "$headers" \
   -output sdk/swift/BookNookNative.xcframework
-python3 - <<'PY'
+python3 - "$target_directory" <<'PY'
 from pathlib import Path
-import gzip, os, tarfile
+import gzip, os, sys, tarfile
 root=Path.cwd()
-version=(root/'target/sdk-package-check/swift/version').read_text()
-output=root/'target/packages'
+target=Path(sys.argv[1])
+version=(target/'sdk-package-check/swift/version').read_text()
+output=target/'packages'
 output.mkdir(parents=True,exist_ok=True)
 name=f'booknook-swift-sdk-{version}'
 # Stable metadata makes repeated archives reproducible for the same compiled inputs.
@@ -101,7 +106,7 @@ with (output/f'{name}.tar.gz').open('wb') as raw:
                 if child.name.startswith('.'): continue
                 archive.add(child,arcname=f'{name}/{child.name}',filter=normalized)
 print(f'Self-contained Swift package: {output/name}.tar.gz; nothing published.')
-extracted=root/'target/sdk-package-check/swift/extracted'
+extracted=target/'sdk-package-check/swift/extracted'
 extracted.mkdir(parents=True,exist_ok=True)
 with tarfile.open(output/f'{name}.tar.gz') as archive:
     archive.extractall(extracted,filter='data')
@@ -120,15 +125,15 @@ for platform in ['macos-arm64','ios-arm64','ios-arm64-simulator']:
     for required in ['Headers/module.modulemap','Headers/booknook_nativeFFI.h','libbooknook_native.a']:
         assert (package/'BookNookNative.xcframework'/platform/required).is_file(), (platform,required)
 PY
-xcrun swift build --package-path target/sdk-package-check/swift/consumer \
-  --scratch-path target/swift-sdk-build --cache-path target/swift-sdk-cache \
-  --config-path target/swift-sdk-config --security-path target/swift-sdk-security
+xcrun swift build --package-path "$target_directory/sdk-package-check/swift/consumer" \
+  --scratch-path "$target_directory/swift-sdk-build" --cache-path "$target_directory/swift-sdk-cache" \
+  --config-path "$target_directory/swift-sdk-config" --security-path "$target_directory/swift-sdk-security"
 # Compile first so the public synthetic 120-second credential is fresh when used.
 cargo build --locked -p booknook-native --example castalia-fixture
-target/debug/examples/castalia-fixture > target/sdk-package-check/swift/fixtures/castalia-generic-fixture.json
-swift_consumer_bin="$(xcrun swift build --show-bin-path --package-path target/sdk-package-check/swift/consumer \
-  --scratch-path target/swift-sdk-build --cache-path target/swift-sdk-cache \
-  --config-path target/swift-sdk-config --security-path target/swift-sdk-security)"
-BOOKNOOK_SMOKE_FIXTURES="$PWD/target/sdk-package-check/swift/fixtures" "$swift_consumer_bin/Smoke"
-target/debug/examples/castalia-fixture verify < target/sdk-package-check/swift/fixtures/castalia-swift-receipt.json
+"$target_directory/debug/examples/castalia-fixture" > "$target_directory/sdk-package-check/swift/fixtures/castalia-generic-fixture.json"
+swift_consumer_bin="$(xcrun swift build --show-bin-path --package-path "$target_directory/sdk-package-check/swift/consumer" \
+  --scratch-path "$target_directory/swift-sdk-build" --cache-path "$target_directory/swift-sdk-cache" \
+  --config-path "$target_directory/swift-sdk-config" --security-path "$target_directory/swift-sdk-security")"
+BOOKNOOK_SMOKE_FIXTURES="$target_directory/sdk-package-check/swift/fixtures" "$swift_consumer_bin/Smoke"
+"$target_directory/debug/examples/castalia-fixture" verify < "$target_directory/sdk-package-check/swift/fixtures/castalia-swift-receipt.json"
 echo 'The extracted Swift archive passed independent feed/cache/import/export, provider, standalone notebook storage, Castalia custody and native persistence acceptance.'
