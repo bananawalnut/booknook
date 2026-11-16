@@ -1,16 +1,12 @@
 # Current app screenshots
 
-The main README uses `macos-current.jpg` and `ipad-current.png`, captured on October 16, 2026 (America/Vancouver) from version **0.1.0, build 2026101603**, at source revision `53256f58592648a47794c9ef75d61726f3d203cd`.
+The main README uses captures from the locally verified native **0.2.1 Release build 2026111603**, made on November 16, 2026 in America/Vancouver.
 
-| Screenshot | App target | Build | Capture environment |
-|---|---|---|---|
-| [macOS reading desk](macos-current.jpg) | `BookNookMac` / `org.booknook.desktop` | Release | Native macOS app window |
-| [iPad reading desk](ipad-current.png) | `BookNookPad` / `org.booknook.ipad` | Release | iPad Air 13-inch (M3), iPadOS 18.6 Simulator, landscape |
+| Screenshot | App target | Capture environment |
+|---|---|---|
+| [macOS reading desk](macos-current.jpg) | `BookNookMac` / `org.booknook.desktop` | Native app window on macOS 26.4.1 |
+| [iPad reading desk](ipad-current.png) | `BookNookPad` / `org.booknook.ipad` | iPad Air 13-inch (M2), iPadOS 18.6 Simulator, portrait |
 
-These are captures of the normal app targets, including their current pixel-art mark and inline sidebar controls. No alternate layout, UI test host or image-generated interface was used. Both Release builds succeeded before capture. The build number matches the version installed on the physical iPad; the published iPad image is a Simulator capture.
+Both images show the original synthetic EPUB *The Quiet Library* and two notes in the Margin. The Mac app uses a separate QA library. The dedicated iPad Simulator uses a verified copy of that synthetic desk. The Mac JPEG is the original window capture and the iPad PNG is the original `simctl io screenshot` framebuffer.
 
-The isolated libraries were created with [`seed-preview.py`](../../scripts/seed-preview.py). The books, prose and character interpretation are original sample content. No personal library, private note, commercial ebook, connection setting or credential is included.
-
-The macOS image is an unaltered app-window capture. The iPad image comes from `simctl io screenshot`; its portrait framebuffer was turned 90 degrees clockwise to match the observed landscape display. The app interface and text were not retouched or composited. Capture hashes and build identities are recorded in [current.json](current.json).
-
-These images document current rendering. They do not establish physical Pencil input, accessibility acceptance, integration qualification or a qualified production release. Files named `*-preview.png` remain historical evidence linked from the validation and UX records; they are no longer the README's current screenshots.
+[Capture metadata](current.json) records the exact executables, source revisions and image hashes. The [normal iPad installation](../ipad-2026111601-launch-evidence.json) and [public preview](../app-2026111601-public-preview-evidence.json) are build 2026111601. Physical input and live integration checks remain open.

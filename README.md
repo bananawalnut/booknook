@@ -24,17 +24,17 @@ Bounded Mac checks on build **1404** passed ASCII typing plus native Unicode pas
 
 The [profile-file repair](docs/profile-import-file-evidence.json) originated at `995bf0df36f3a638fd185f704c19f41af4269cd6`: nonblocking open and validation of the opened regular-file descriptor reject blocking special files. Its old FIFO timeout, 14 fixed cases, native workflow and iPad typechecks remain separate source-bound evidence. The new build includes the fix; the immutable a945 app archives do not. SDK/signing contracts, wire/saved data and ontology are unchanged.
 
-The normal iPad app was [updated in place to 0.2.1 (2026111601)](docs/ipad-2026111601-install-evidence.json) on the connected iPad. The existing local database was unchanged before launch, and no orientation commands were sent. [Normal launch passed](docs/ipad-2026111601-launch-evidence.json) after Apple developer-profile trust was confirmed. The existing empty library remained unchanged; hands-on iPad checks are still open. The captures below retain their dated October 16 scope.
+The normal iPad app was [updated in place to 0.2.1 (2026111601)](docs/ipad-2026111601-install-evidence.json) on the connected iPad. The existing local database was unchanged before launch, and no orientation commands were sent. [Normal launch passed](docs/ipad-2026111601-launch-evidence.json) after Apple developer-profile trust was confirmed. The existing empty library remained unchanged; hands-on iPad checks are still open.
 
 **macOS — reading desk**
 
-![Book Nook macOS reading desk captured on October 16, with warm colors, a text note, character card and EPUB side by side](docs/screenshots/macos-current.jpg)
+![Book Nook macOS reading desk with two separate Margin notes alongside an EPUB on warm paper](docs/screenshots/macos-current.jpg)
 
 **iPad — reading desk**
 
-![Book Nook iPad native Release app captured on October 16 in landscape, with inline sidebar controls, note margin, character card and ebook](docs/screenshots/ipad-current.png)
+![Book Nook iPad Release app in portrait, with two text notes in the Margin alongside the book](docs/screenshots/ipad-current.png)
 
-Last recorded reading-desk captures, from the normal native Release app targets, version **0.1.0 (2026101603)**. The iPad capture uses an iPad Air 13-inch Simulator running iPadOS 18.6. Both use original sample books and notes in isolated local libraries. See [capture details](docs/screenshots/README.md).
+These captures show the locally verified native Release build **0.2.1 (2026111603)** with an original sample EPUB and two notes. The iPad image was captured on an iPad Air 13-inch Simulator running iPadOS 18.6. [Capture details](docs/screenshots/README.md).
 
 ## Run the native apps
 

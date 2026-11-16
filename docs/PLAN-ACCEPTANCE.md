@@ -16,6 +16,12 @@ The [normal iPad installation check](ipad-2026111601-install-evidence.json) veri
 
 Mac Release build **0.2.1 (2026111603)** restored an original EPUB and two synthetic notes from a portable SDK export. The offscreen test mark stayed hidden at origin, appeared inside Scribble after Pan left, and disappeared on reset. The saved desk remained byte-identical across the pan and reset. Both original notes, their order, creation context and ink survived the flip back to text and normal quit/reopen. The [Mac build and runtime evidence](mac-2026111603-scribble-evidence.json) preserves the reproduced 1602 clipping failure, the pixel regression and the narrower menu activation evidence. Keyboard-only traversal and the remaining production gates above stay open. [Candidate CI](https://github.com/bananawalnut/booknook/actions/runs/43959462821).
 
+## 1603 native archives and current screenshots — 2026-11-16
+
+All three 1603 Release apps passed local archive extraction and comparison. Build 1603 opened the synthetic EPUB and both saved notes on an isolated iPadOS 18.6 Simulator. The new [README captures](screenshots/README.md) use the actual Release app surfaces. The private development-signed iPad copy verified against the same profile and entitlements used for 1601. The paired iPad was disconnected at the next availability check.
+
+Automatic review stopped the 1603 draft upload because the binaries retain local compiler paths. The next archive qualification includes both live strings and Mach-O debug metadata. The public preview and installed app remain 1601. [Decision log](DECISIONS.md).
+
 ## Historical app-only preview and bounded Mac checks — 2026-11-14
 
 [App build 2026111405](app-2026111405-public-preview-evidence.json), version 0.2.0, is [published](https://github.com/bananawalnut/booknook/releases/tag/v0.2.0-app-preview.20261114.5) from exact source `633f53dcc6d246ba6454b3403bbde10450102ef2`. Three Swift Release builds and all ten local build/archive verification phases pass; [exact-source CI](https://github.com/bananawalnut/booknook/actions/runs/43647644605) passes both jobs and all 38 steps. All 11 public assets were freshly downloaded and hash-checked, totaling 37,558,605 bytes. The app-only correction displays actual app and library-ontology versions in Connections. The six SDK archives and unchanged Rust slices retain their separate source `a945df2`; later documentation changes do not change either published artifact snapshot.

@@ -1,43 +1,48 @@
 {
   "schema": "booknook.current-app-screenshots.v1",
-  "captured_on": "2026-10-16",
+  "captured_on": "2026-11-16",
   "timezone": "America/Vancouver",
-  "source_revision": "53256f58592648a47794c9ef75d61726f3d203cd",
-  "app_version": "0.1.0",
-  "build": "2026101603",
+  "source_revision": "071832e35d898833c854f24d52ba1060c345555e",
+  "app_version": "0.2.1",
+  "build": "2026111603",
   "normal_app_targets": true,
   "alternate_ui_host": false,
-  "sample_data": "Original sample books and notes from scripts/seed-preview.py in isolated local libraries",
+  "sample_data": "The Quiet Library original synthetic EPUB and two text notes in isolated QA libraries",
   "private_user_data_published": false,
   "physical_ipad_capture": false,
-  "raw_ipad_framebuffer_sha256": "c11154b9991ea17e6a1e703396ce68a97a07ad4ece2121fb4dd3c0191989defa",
+  "raw_ipad_framebuffer_sha256": "a1cc27ee6821f92b0a1067534d23304df151d3f90303c54b74335e799898ae0b",
   "captures": [
     {
       "platform": "macOS",
       "image": "macos-current.jpg",
       "format": "JPEG",
-      "sha256": "7e504a1c4d36c423ba887c6e4053a9f53fcf51d8719a27624fe9f8eec22e4338",
+      "sha256": "9b33d0b5e54d5933a6c457b99b96f01787e5a432c7aa356bd1f31b0f17339ee7",
       "width": 2640,
       "height": 1720,
       "bundle_id": "org.booknook.desktop",
       "configuration": "Release",
-      "executable_sha256": "c5015392266c3fbd0aa8ef73792f2ff6b074b46f913aa02ea9179626fe2507f5",
+      "executable_sha256": "c99144163065cbb11172b210b915999f6bcd2deb19863f71f94739780416b5c5",
       "environment": "macOS 26.4.1, native app window",
-      "image_processing": "Unaltered window capture"
+      "app_source_revision": "2a65e2ee7e29c0002055b2b69f1067110f6540e5",
+      "build_receipt_sha256": "553a64f732d63d1dc19b20ea2559c6b923c105dba52f115456309dc3db727ab8",
+      "image_processing": "Original capture bytes; no retouching, compositing or rotation"
     },
     {
       "platform": "iPad",
       "image": "ipad-current.png",
       "format": "PNG",
-      "sha256": "f56d53981fb7e79dc176f96cf3f7e7ccfe5f2be77488dfd5900247a1fe03753e",
-      "width": 2732,
-      "height": 2048,
+      "sha256": "a1cc27ee6821f92b0a1067534d23304df151d3f90303c54b74335e799898ae0b",
+      "width": 2048,
+      "height": 2732,
       "bundle_id": "org.booknook.ipad",
       "configuration": "Release",
-      "executable_sha256": "645239bc685fd37e94e8165f2891d19f227571c5d0fb2efb1bb48b728f894dfc",
-      "environment": "iPad Air 13-inch (M3), iPadOS 18.6 Simulator, landscape",
-      "image_processing": "Framebuffer rotated 90 degrees clockwise to match display; no retouching"
+      "executable_sha256": "0257e98c76ffd3c2028f8d2e62141e152464e4358c907cfedc3ae52ea8cc07ca",
+      "environment": "iPad Air 13-inch (M2), iPadOS 18.6 Simulator, portrait",
+      "app_source_revision": "071832e35d898833c854f24d52ba1060c345555e",
+      "build_receipt_sha256": "04aec4a7fb634678862f448c57e54496d1e0c8409d90899dca7df09aaf8e95e6",
+      "image_processing": "Original capture bytes; no retouching, compositing or rotation"
     }
   ],
-  "scope": "Rendering documentation only; no new release, physical-input or live-integration qualification"
+  "source_equivalence": "The Mac and iPad source revisions have byte-identical 355 selected app inputs, including all 166 native inputs.",
+  "scope": "Actual locally built Release targets. The installed iPad and public preview remain separately identified as build 2026111601."
 }
