@@ -29,6 +29,20 @@ struct InlineStyle: Equatable { var startUtf16: Int; var lengthUtf16: Int; var b
                          "\(message): caret \(caret), viewport \(visible)")
             print("\(message): caret \(caret), viewport \(visible)")
         }
+        func establishVisibleBaseline(_ message: String) {
+            // The hidden window may have laid out its clip view but not the
+            // end of the newly edited document. Prepare that geometry before
+            // precondition checks; the width changes below get no such help.
+            guard let layout = editor.textLayoutManager, let content = layout.textContentManager else {
+                preconditionFailure("The reflow fixture must use TextKit 2")
+            }
+            window.contentView?.layoutSubtreeIfNeeded()
+            layout.ensureLayout(for: content.documentRange)
+            editor.scrollRangeToVisible(editor.selectedRange())
+            layout.textViewportLayoutController.layoutViewport()
+            settle()
+            requireVisible(message)
+        }
         let paragraph = "café 日本語 😀 e\u{301}. A reader revisits the character and keeps each interpretation. "
         let original = (1...360).map { String(format: "Passage %03d: ", $0) + String(repeating: paragraph, count: 4) }.joined(separator: "\n")
         installNotebookContent(original, styles: [], in: editor)
@@ -41,8 +55,7 @@ struct InlineStyle: Equatable { var startUtf16: Int; var lengthUtf16: Int; var b
         editor.insertText(suffix, replacementRange: NSRange(location: NSNotFound, length: 0))
         editor.breakUndoCoalescing()
         let expected = original + suffix, selection = editor.selectedRange()
-        editor.scrollRangeToVisible(selection); settle()
-        requireVisible("The end caret starts visible")
+        establishVisibleBaseline("The end caret starts visible")
         for width: CGFloat in [530, 460, 600, 400, 460] {
             window.setContentSize(NSSize(width: width, height: 210)); settle()
             requireVisible("Width reflow must retain the visible active caret at width \(width)")
@@ -93,8 +106,8 @@ struct InlineStyle: Equatable { var startUtf16: Int; var lengthUtf16: Int; var b
         let edgeText = original + "\n" + edgeLine
         installNotebookContent(edgeText, styles: richStyles, in: editor)
         let edgeSelection = NSRange(location: (edgeText as NSString).length, length: 0)
-        editor.setSelectedRange(edgeSelection); editor.scrollRangeToVisible(edgeSelection); settle()
-        requireVisible("The right-edge caret starts visible")
+        editor.setSelectedRange(edgeSelection)
+        establishVisibleBaseline("The right-edge caret starts visible")
         precondition(caretRect().minX > 400, "The adversarial caret must lie beyond the narrower viewport")
         window.setContentSize(NSSize(width: 400, height: 210)); settle()
         requireVisible("Shrinking below the old caret X must preserve the visible insertion point")

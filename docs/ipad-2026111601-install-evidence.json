@@ -1,0 +1,82 @@
+{
+  "schema": "booknook.ipad1601-install-evidence.v1",
+  "status": "PASS_IN_PLACE_INSTALL_AND_PRELAUNCH_DATA_PRESERVATION_LAUNCH_UNQUALIFIED",
+  "observed_utc": "2026-11-16T20:41:15.472562+00:00",
+  "source_commit": "4855537f52c34b01189d182ade4be2d57ac58a67",
+  "app": {
+    "bundle_id": "org.booknook.ipad",
+    "previous_version": "0.1.0",
+    "previous_build": "2026101603",
+    "installed_version": "0.2.1",
+    "installed_build": "2026111601",
+    "device_os_observed": "18.1.1",
+    "public_unsigned_release_evidence": "app-2026111601-public-preview-evidence.json"
+  },
+  "development_signing": {
+    "first_attempt": {
+      "result": "NONPASS",
+      "receipt_bytes": 2560,
+      "receipt_sha256": "c15a74350f404d79969dd53dd49d4df0de2073abe378f79665f87db42668ae6a",
+      "reason": "Automatic provisioning rejected a manually specified certificate fingerprint before compilation."
+    },
+    "renewal": {
+      "result": "PASS",
+      "receipt_bytes": 3023,
+      "receipt_sha256": "1c3ec9b091ca779466bc1e072cf4b61f5711043325714852d95fbe14d37bbc2b",
+      "profile_expires_utc": "2026-11-23T20:38:41Z",
+      "method": "Use the Apple Development identity category required by automatic signing, then verify the exact existing certificate, team, bundle, registered device and predecessor entitlement set.",
+      "same_certificate_and_signed_entitlements_verified": true
+    },
+    "install_candidate": {
+      "result": "PASS_SIGNED_EXACT_QUALIFIED_COPY",
+      "receipt_bytes": 1304,
+      "receipt_sha256": "795797040f2320eec8d29d3c4aee1b352f826638f851d7507fcfe7274a9d44a7",
+      "unsigned_executable_sha256": "732c0b22f3a0e4efa23d4e99fd68c2953bce6188d222ae085ede7a2cfa5ed71b",
+      "signed_executable_sha256": "e646474134b5b63ce5a531f3bd91020d1df9af9bf39ea6d6ad19ecfb3a595521",
+      "unsigned_original_tree_unchanged": true,
+      "other_existing_bundle_files_unchanged": true,
+      "signed_candidate_is_local_only": true
+    }
+  },
+  "installation": {
+    "result": "PASS",
+    "receipt_bytes": 520,
+    "receipt_sha256": "302e4189dc3f67fe6b52fb486bd324990c42bcf844ca0b21621c28675b8da0b0",
+    "observed_utc": "2026-11-16T20:40:12.084785Z",
+    "same_bundle_updated_in_place": true,
+    "uninstall_or_reset_performed": false,
+    "version_readback_receipt_bytes": 1362,
+    "version_readback_receipt_sha256": "c6552b9080fbb8c4ecb3284ffe03a4e9269930ad489450a9c7f743baeb824004",
+    "qa_app_untouched": true
+  },
+  "preservation_before_successful_launch": {
+    "private_baseline_manifest_sha256": "d5284ff2df73483d39d8d2d12aaa56ef32a9077db70d04cf7bdee8a797dae386",
+    "private_post_install_copy_receipt_sha256": "6092eed41edc2678b7f755fef37f8510b4d73a440bcf3f5d21ef327d23f024e4",
+    "sqlite_semantic_receipt_bytes": 633,
+    "sqlite_semantic_receipt_sha256": "d8570f2a186d8f971f428e6251b33be5dc9e282e702daddb0a0333eb6209ad46",
+    "raw_database_wal_and_shm_unchanged": true,
+    "sqlite_quick_check": "PASS",
+    "all_existing_desk_fields_including_local_reader_unchanged": true,
+    "baseline_library_empty": true,
+    "pending_edits_social_and_sync_outbox": 0,
+    "scope": "The existing empty normal-app library was preserved at install. This does not qualify opening or migrating a populated library, access to Keychain contents or subsequent app activity. Private copies and store contents are not published."
+  },
+  "display": {
+    "before_readback_sha256": "3f08c8a27f8e89f9692bf9b090f9ed155debcfe344b52e45a864ccb0bbd25658",
+    "after_readback_sha256": "0da1f30bc3bdf877b7b94d878575dffad8af849eab39917ae60da2412bcd4374",
+    "same_landscape_left_rotation_lock_off_before_and_after": true,
+    "orientation_commands_sent": false
+  },
+  "launch": {
+    "initial_result": "NONPASS_APPLE_SECURITY_REJECTION",
+    "initial_receipt_bytes": 2324,
+    "initial_receipt_sha256": "3ee7dc12e394d7456059f031214c52494413f96e24864fb56b9c186f76723e90",
+    "scope": "Apple reported a combined signature, entitlement or trust restriction without isolating one cause. Installation and host signature verification passed separately. The user was asked to open the app normally and respond to any Apple trust prompt; no successful launch or cause is established here."
+  },
+  "remaining": [
+    "Normal launch and physical hands-on acceptance, including finger/Pencil input, keyboard/IME, accessibility and prolonged use.",
+    "macOS 14/iPadOS 17 minimum-OS runtime and live Kindle/Audible/Castalia and remote social or device exchange.",
+    "This was a local Apple development install, with no store distribution, Castalia signing or fifth UX round."
+  ],
+  "production_MVP_qualified": false
+}
