@@ -6,7 +6,9 @@ A native reading notebook for macOS and iPad, backed by open Rust, Swift and WAS
 
 The implementation includes an offline reading desk, rich TextKit editing, EPUB, PDF, and legacy MOBI6 reading and annotation, character interpretation history, imports, Castalia consent, approved encrypted device transfers, Nostr social workflows, and reviewed RSS/Atom settings with offline publications. **It is not a qualified production release:** live Kindle/Audible/Castalia access, current physical input/accessibility, remote social/device sync and minimum-OS runtime checks remain open. Unavailable integrations return explicit errors. See [delivery status](docs/DELIVERY.md), the [full-plan acceptance matrix](docs/PLAN-ACCEPTANCE.md), [validation](docs/VALIDATION.md), the [decision log](docs/DECISIONS.md), the [UX review](docs/UX-REVIEW.md), and [DevGraph work tracking](docs/DEVGRAPH.md).
 
-**[App preview 0.2.1, build 2026111705](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.5)** preserves the passage, reading pass, and available book and audio positions when you save a character-card revision. The normal iPad app is running 1705 with its saved finger-drawn Scribble preserved. All eight public downloads matched their checksums. [Build 1705 evidence](docs/app-2026111705-public-preview-evidence.json)
+**[App preview 0.2.1, build 2026111707](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.7)** gives short Character History labels their surrounding text and preserves the book order in reviewed shared-list edits. All eight public downloads matched their checksums. The locally signed update is running on the normal iPad app with prior finger Scribble preserved. Concurrent offline Margin additions can still appear in different orders after sync. [Build 1707 evidence](docs/app-2026111707-public-preview-evidence.json)
+
+**[App preview 0.2.1, build 2026111705](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.5)** preserves the passage, reading pass, and available book and audio positions when you save a character-card revision. The normal iPad app updated to 1705 with its saved finger-drawn Scribble preserved. All eight public downloads matched their checksums. [Build 1705 evidence](docs/app-2026111705-public-preview-evidence.json)
 
 **[App preview 0.2.1, build 2026111704](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.4)** improves reading-position recovery in long EPUB and MOBI passages and adds replies in reading groups. All eight public downloads passed checksum verification. The normal iPad app updated in place and reopened with its library and previously saved finger-drawn Scribble preserved. [Build 1704 evidence](docs/app-2026111704-public-preview-evidence.json)
 
@@ -48,7 +50,7 @@ The earlier iPad acceptance check [updated the normal app in place to 0.2.1 (202
 
 ![Book Nook iPad reading desk in portrait, with three text notes alongside an EPUB](docs/screenshots/ipad-current.png)
 
-Both images show native Release build **2026111705** using sample EPUBs. The iPad image comes from an iPad Air 13-inch Simulator. [Capture details](docs/screenshots/README.md)
+The iPad Simulator image shows published Release build **2026111707**. The Mac image shows the earlier published build **2026111705**. Both use sample EPUBs. [Capture details](docs/screenshots/README.md)
 
 ## Run the native apps
 

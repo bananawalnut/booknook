@@ -7,7 +7,7 @@
   "sample_data": "Mac uses The Pocket Orchard EPUB and two synthetic notes. iPad uses The Quiet Library EPUB and three synthetic notes.",
   "private_user_data_published": false,
   "physical_ipad_capture": false,
-  "raw_ipad_framebuffer_sha256": "0e78a59095373cca126a53df099749333883ae4bedf5f1e57c92aa602252f5ad",
+  "raw_ipad_framebuffer_sha256": "8865a5bdf67f7b764ca8b96146f7c839fa22917736cdeceabde51687f4daffca",
   "captures": [
     {
       "platform": "macOS",
@@ -31,22 +31,22 @@
       "platform": "iPad",
       "image": "ipad-current.png",
       "format": "PNG",
-      "sha256": "0e78a59095373cca126a53df099749333883ae4bedf5f1e57c92aa602252f5ad",
+      "sha256": "8865a5bdf67f7b764ca8b96146f7c839fa22917736cdeceabde51687f4daffca",
       "width": 2048,
       "height": 2732,
       "bundle_id": "org.booknook.ipad",
       "configuration": "Release",
-      "executable_sha256": "7caa114b99f78559bef2d5945628eceb2e1b25d6b96b4cf4b2b2a05480f26b31",
+      "executable_sha256": "01e09cc7daa393cb0e5ea076600dd3ba85b0a95183b65c9ceb57e4559ba3521f",
       "environment": "iPad Air 13-inch (M2), iPadOS 18.6 Simulator, portrait",
-      "app_source_revision": "74ddbf0f706ac342a46c8afeddc339aeca7e1156",
-      "capture_receipt_sha256": "b9ecae40b1914e6b5fda610a88f00581ebbdcb9c5a053db653472ea0b2931513",
+      "app_source_revision": "08a29fa698717827e1d583135baafb072e2e068c",
+      "capture_receipt_sha256": "8abfbc7ba7f2f7ab7a68ac871e56c3bd03d96b654f95097745a4e968a3a42935",
       "image_processing": "Original simctl framebuffer bytes.",
-      "app_build": "2026111705",
+      "app_build": "2026111707",
       "captured_on": "2026-11-17"
     }
   ],
-  "source_equivalence": "Both executables match the public Release archives for the same app source revision.",
+  "source_equivalence": "Each executable matches the public Release archive for the build recorded with its capture.",
   "scope": "Actual Release apps using isolated synthetic workspaces. Physical install and hardware qualification have separate evidence.",
-  "latest_public_build": "2026111705",
-  "latest_public_source_revision": "74ddbf0f706ac342a46c8afeddc339aeca7e1156"
+  "latest_public_build": "2026111707",
+  "latest_public_source_revision": "08a29fa698717827e1d583135baafb072e2e068c"
 }

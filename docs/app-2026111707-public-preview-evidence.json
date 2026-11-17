@@ -1,0 +1,177 @@
+{
+  "schema": "booknook.app-only-public-preview-evidence.v2",
+  "status": "PASS_PUBLIC_ARCHIVES_AND_SEPARATE_LOCAL_IPAD_UPDATE",
+  "observed_at": "2026-11-17T18:30:17.532219+00:00",
+  "app": {
+    "version": "0.2.1",
+    "build": "2026111707",
+    "source_commit": "08a29fa698717827e1d583135baafb072e2e068c",
+    "release_url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.7",
+    "release_id": 449035037,
+    "tag": "v0.2.1-app-preview.20261117.7",
+    "published_at": "2026-11-17T18:29:47Z"
+  },
+  "source_validation": {
+    "archive_ci": "https://github.com/bananawalnut/booknook/actions/runs/44139086629",
+    "archive_steps_passed": 9,
+    "archive_runner": "macos-15 arm64",
+    "archive_xcode": "26.3",
+    "ordinary_ci": "https://github.com/bananawalnut/booknook/actions/runs/44139036165",
+    "ordinary_jobs": {
+      "portable": {
+        "conclusion": "success",
+        "steps_passed": 21
+      },
+      "apple": {
+        "conclusion": "success",
+        "steps_passed": 17
+      }
+    },
+    "artifact_id": 14356925060,
+    "artifact": {
+      "bytes": 37964035,
+      "sha256": "9b6175726850e8001cd7ef14090197e11c9d106f8302359ccf55607beb27fa56"
+    },
+    "cargo_workspace_version": "0.2.3",
+    "independent_archive_verification_receipt_sha256": "e1fc895f46ef44f54aec0ebcc0d51414fda9c65f0623f7fb9bd5acee788299fd"
+  },
+  "archive_verification": {
+    "mac": {
+      "archive": {
+        "bytes": 15016180,
+        "sha256": "18908411d72e7458b8a4b06fae7a98e5a585c814558ad858efecea68583fafbb"
+      },
+      "tar_members": 110,
+      "bundle_files": 91,
+      "ontology_files": 83,
+      "build": "2026111707",
+      "signature": "linker-ad-hoc",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "byte-identical standalone Mach-O"
+    },
+    "ipad-sim": {
+      "archive": {
+        "bytes": 11487617,
+        "sha256": "aa5ad07ff568e398f9e877a115259b1eccad788ad1a860a765ca59848e66b89e"
+      },
+      "tar_members": 107,
+      "bundle_files": 91,
+      "ontology_files": 83,
+      "build": "2026111707",
+      "signature": "linker-ad-hoc",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "byte-identical standalone Mach-O"
+    },
+    "ipad-device": {
+      "archive": {
+        "bytes": 11285115,
+        "sha256": "a2d22076f40ff1d073d1fc736f03cc7af9c7fb30bf82194b3a9dd66dec0f4064"
+      },
+      "tar_members": 107,
+      "bundle_files": 91,
+      "ontology_files": 83,
+      "build": "2026111707",
+      "signature": "unsigned",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "unsigned"
+    }
+  },
+  "public_https": {
+    "assets": {
+      "booknook-ipad-device-arm64-development-0.2.1.tar.gz": {
+        "bytes": 11285115,
+        "sha256": "a2d22076f40ff1d073d1fc736f03cc7af9c7fb30bf82194b3a9dd66dec0f4064"
+      },
+      "booknook-ipad-sim-arm64-development-0.2.1.tar.gz": {
+        "bytes": 11487617,
+        "sha256": "aa5ad07ff568e398f9e877a115259b1eccad788ad1a860a765ca59848e66b89e"
+      },
+      "booknook-mac-arm64-development-0.2.1.tar.gz": {
+        "bytes": 15016180,
+        "sha256": "18908411d72e7458b8a4b06fae7a98e5a585c814558ad858efecea68583fafbb"
+      },
+      "BUILD-PROVENANCE.json": {
+        "bytes": 49793,
+        "sha256": "ee23815f46b1463782ebd903b30e4bab486c3bb1bee623e1a1b1dd07ba9cdd9c"
+      },
+      "README.md": {
+        "bytes": 3628,
+        "sha256": "9ceedcd48fd86edbf945e1b0efd81a6ad868fcc0f359259dbcdc72e609b963bc"
+      },
+      "RELEASE-MANIFEST.json": {
+        "bytes": 2113,
+        "sha256": "0bea9da2db038636c2e9d1fe319bf404a87a475449417e172d26502fe9419e83"
+      },
+      "SHA256SUMS": {
+        "bytes": 503,
+        "sha256": "1e455cdfe4785bd6d74fce171be76daf14e5849a8ba7715ceb071a5c10fbbddb"
+      },
+      "VERIFICATION.json": {
+        "bytes": 120135,
+        "sha256": "0199056b9690c62e183b26e0c871f32030a6ee8dc58b44f19b05273e9825c1fb"
+      }
+    },
+    "count": 8,
+    "bytes": 37965084,
+    "earlier_releases_with_unchanged_asset_identities": 16
+  },
+  "normal_physical_ipad": {
+    "source_commit": "678ae6bcfdd265e9c2064a66ed3cd018c6588867",
+    "build_provenance": "Separate local Release build and Apple development signature",
+    "previous_build": "2026111705",
+    "current_build": "2026111707",
+    "in_place": true,
+    "app_running": true,
+    "database_bytes_matched_after_install": true,
+    "desk_and_assets_preserved": true,
+    "orientation_unchanged_in_observations": true,
+    "orientation_commands": false,
+    "only_top_level_database_fields_changed_after_launch": [
+      "revision"
+    ],
+    "prior_build_finger_scribble_confirmed": true,
+    "receipt_sha256": "1f9bd4a3074dfb8499da9d1bc00e2d5c4298c2d942fabc2dee75927e1334140a",
+    "ink_receipt_sha256": "114a44e1cc67748c3f36280560fc21675191be9855fa2e777b492658db05a430",
+    "scope": "Prior finger Scribble survives update and relaunch. No new Pencil or keyboard input was collected."
+  },
+  "mac_character_history": {
+    "source_commit": "678ae6bcfdd265e9c2064a66ed3cd018c6588867",
+    "build_provenance": "Separate local Release app",
+    "receipt_sha256": "00dbaa5af0e7f4b60a474c19967433330994d50365a713d816a02de45f07cd0c",
+    "local_actual_ui_readback": "Book passage: At the Stairs",
+    "saved_card_history_identical_to_1705": true,
+    "exact_source_anchor_preserved": true
+  },
+  "unresolved_acceptance": {
+    "concurrent_margin_note_order": {
+      "sdk_tag": "v0.2.3-sdk-preview.20261117",
+      "sdk_source_commit": "51c6a54108940fe0a4c715a344f66f7b691e1be5",
+      "reproduction_receipt_sha256": "6ce31b419b479951b5f13ff98776efd57f5c201ae844f01d7389657777f44b67",
+      "native_encrypted_regression_receipt_sha256": "e179ee6462c60678d1356e3e9d6f738482a4ba7b1fdeb30158136932b58ca74a",
+      "native_scope": "Separate synthetic Desk stores exchanged approved encrypted packets. The mismatch survived reopen and duplicate replay. No live authority used.",
+      "observation": "Two independently edited replicas retain different orders after a second merge. Every note persists. The current SDK reports no conflict."
+    },
+    "other_open_checks": [
+      "physical Pencil, keyboard composition and VoiceOver",
+      "minimum-OS runtime",
+      "live Kindle, Audible and Castalia",
+      "remote social delivery and private device exchange"
+    ]
+  },
+  "screenshots": {
+    "ipad": {
+      "build": "2026111707",
+      "environment": "iPad Air 13-inch (M2), iPadOS 18.6 Simulator",
+      "original_framebuffer_sha256": "8865a5bdf67f7b764ca8b96146f7c839fa22917736cdeceabde51687f4daffca",
+      "executable_sha256": "01e09cc7daa393cb0e5ea076600dd3ba85b0a95183b65c9ceb57e4559ba3521f",
+      "receipt_sha256": "8abfbc7ba7f2f7ab7a68ac871e56c3bd03d96b654f95097745a4e968a3a42935"
+    },
+    "mac": {
+      "build": "2026111705",
+      "scope": "Previous published capture until the hosted 1707 Mac capture is complete."
+    }
+  }
+}

@@ -2,6 +2,12 @@
 
 This audit keeps the original native MVP and SDK scope intact. A passing source test is evidence for the behavior it exercises, not evidence of a production account, physical device, remote deployment, or hands-on interaction. The requested production release is not complete while essential integration and physical-device gates remain open. [Validation](VALIDATION.md) records the final check results; [delivery](DELIVERY.md) names the remaining gates.
 
+## Native app 1707 delivery and offline note ordering
+
+[Build 1707 evidence](app-2026111707-public-preview-evidence.json) records 38 passing source checks, nine successful archive steps, independent verification of all three Apple archives and eight public downloads. The exact public iPad Simulator app opened a synthetic library and produced the current iPad screenshot. The separate locally signed physical iPad update preserved the library and saved finger Scribble.
+
+Two devices can still retain different Margin note orders after offline appends. The divergence reproduced in released WASM and in an approved encrypted transfer between local native desks using synthetic consent. Every note and capture survived reopen and replay. The repair remains under implementation. Physical Pencil, broader input and accessibility, minimum-OS runtime, live integrations and remote exchange remain open.
+
 ## SDK 0.2.3 public and cross-runtime checkpoint
 
 [SDK 0.2.3 delivery evidence](sdk-023-public-preview-evidence.json) binds the four Rust crates, npm package and Swift SDK to their exact build source and 15 matching public downloads. The independently extracted Mac Swift SDK retained the card context and rejected a conflicting pass before reopening the same desk. Node and Chromium agreed with the underlying native results. iPad SDK slices were inspected separately from macOS execution.
