@@ -17,6 +17,50 @@ struct SocialBinding: Decodable, Identifiable { let holder: String; let nostrPub
 struct SocialSnapshot: Decodable { let state: SocialStateModel; let actor: String; let feed: [SocialFeedItem]; let bindings: [SocialBinding]; let pending: Int }
 struct SocialRecommendation: Decodable, Identifiable { let bookId: String; let score: Int; let reasons: [String]; var id: String { bookId } }
 struct SocialExchangeReport: Decodable { let sent: Int; let received: Int; let messages: [String] }
+struct SocialGroupReplyTarget: Hashable {
+    let actor: String
+    let groupID: String
+    let postID: String
+
+    func permitsVisibleParent(_ post: SocialFeedItem, in snapshot: SocialSnapshot?) -> Bool {
+        guard let snapshot, !actor.isEmpty, snapshot.actor == actor,
+              let group = snapshot.state.groups[groupID],
+              !group.closed, group.members.contains(actor), !group.banned.contains(actor) else { return false }
+        return post.id == postID && post.groupId == groupID
+            && !snapshot.state.blocked.contains(post.actor) && !snapshot.state.retracted.contains(post.id)
+    }
+    func parent(in snapshot: SocialSnapshot?) -> SocialFeedItem? {
+        guard let parent = snapshot?.feed.first(where: { $0.id == postID }),
+              permitsVisibleParent(parent, in: snapshot) else { return nil }
+        return parent
+    }
+}
+
+struct SocialGroupReplyDraft {
+    var text = ""
+    var containsSpoilers = false
+    var savedDraftID: String?
+
+    func action(for target: SocialGroupReplyTarget, in snapshot: SocialSnapshot?) -> [String: Any]? {
+        guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+              target.parent(in: snapshot) != nil else { return nil }
+        return [
+            "op": "publish",
+            "group_id": target.groupID,
+            "post": [
+                "kind": "discussion", "book": NSNull(), "body": text, "stars": NSNull(),
+                "reading_status": NSNull(), "spoiler": containsSpoilers, "reply_to": target.postID
+            ]
+        ]
+    }
+}
+
+enum SocialPublicationOutcome: Equatable {
+    case notSaved
+    case savedDraft(String)
+    case approved
+}
+
 private func socialDecode<T: Decodable>(_ type: T.Type, _ value: String) throws -> T { let decoder = JSONDecoder(); decoder.keyDecodingStrategy = .convertFromSnakeCase; return try decoder.decode(type, from: Data(value.utf8)) }
 func socialJSON(_ value: [String: Any]) throws -> String { String(decoding: try JSONSerialization.data(withJSONObject: value, options: [.sortedKeys]), as: UTF8.self) }
 func socialObject<T: Encodable>(_ value: T) throws -> [String: Any] { let encoder = JSONEncoder(); encoder.keyEncodingStrategy = .convertToSnakeCase; return try JSONSerialization.jsonObject(with: encoder.encode(value)) as? [String: Any] ?? [:] }
@@ -72,28 +116,50 @@ extension DeskRepository {
             await reload(model)
         } catch { self.error = bookNookErrorMessage(error) }
     }
-    func publish(_ action: [String: Any], title: String, _ model: DeskModel, replacingDraftID: String? = nil) async {
-        guard !busy else { return }; busy = true; error = nil; defer { busy = false }
+    @discardableResult
+    func publish(_ action: [String: Any], title: String, _ model: DeskModel, replacingDraftID: String? = nil) async -> SocialPublicationOutcome {
+        guard !busy else { return .notSaved }
+        busy = true; error = nil; defer { busy = false }
+        var outcome = SocialPublicationOutcome.notSaved
         do {
             let eventJSON = try await model.repository.socialPrepare(JSONSerialization.data(withJSONObject: action))
             let event = try socialDecode(SocialEventModel.self, eventJSON)
             let rawEvent = try JSONSerialization.jsonObject(with: Data(eventJSON.utf8))
             try await model.repository.socialLocal(JSONSerialization.data(withJSONObject: ["op": "save_draft", "event": rawEvent]))
+            outcome = .savedDraft(event.id)
             // Keep the original recoverable until its replacement is durably saved.
             // A preparation/save failure retains the original; consent failure retains the new draft.
             if let replacingDraftID, replacingDraftID != event.id {
                 try await model.repository.socialLocal(JSONSerialization.data(withJSONObject: ["op": "delete_draft", "id": replacingDraftID]))
             }
-            await reload(model)
+            let preparedAction = event.action.object ?? action
+            if let groupID = preparedAction["group_id"] as? String,
+               let post = preparedAction["post"] as? [String: Any],
+               let postID = post["reply_to"] as? String {
+                let current = try await model.repository.socialSnapshot(reveal: revealSpoilers)
+                snapshot = current
+                let target = SocialGroupReplyTarget(actor: event.actor, groupID: groupID, postID: postID)
+                guard target.parent(in: current) != nil else {
+                    throw AuthorizationError.message("The discussion you’re replying to is no longer visible.")
+                }
+            } else {
+                await reload(model)
+            }
             let delivery = event.delivery.object
             let audience = socialAudience(isPublic: delivery?["kind"] as? String == "public", recipientCount: (delivery?["recipients"] as? [String])?.count)
             var statements = [audience, "Only this reviewed record leaves Book Nook. Your surrounding notebook and private history stay private."]
-            statements += socialDisclosure(action: event.action.object ?? action, event: event, state: snapshot?.state)
+            statements += socialDisclosure(action: preparedAction, event: event, state: snapshot?.state)
             let receipt = try await model.authorization.authorize(payload: Data(eventJSON.utf8), action: "social.execute", resourceVersion: event.resourceVersion, disclosure: AuthorizationDisclosure(title: title, statements: statements))
             try await model.repository.socialApprove(event: eventJSON, receipt: receipt)
+            outcome = .approved
             status = "Approved and waiting in your outbox. Choose Send & refresh when you are ready to deliver it."
             await reload(model)
-        } catch { if !bookNookOperationWasCancelled(error) { self.error = bookNookErrorMessage(error) }; await reload(model) }
+        } catch {
+            if !bookNookOperationWasCancelled(error) { self.error = bookNookErrorMessage(error) }
+            else if case .savedDraft = outcome { status = "Review canceled. Your private draft is saved in the Outbox." }
+            await reload(model)
+        }
+        return outcome
     }
     func retryDraft(_ event: SocialEventModel, _ model: DeskModel) async {
         guard let action = event.action.object else { return }
@@ -162,7 +228,7 @@ private func disclosureChunks(_ label: String, _ text: String) -> [String] {
     if chunk != label + ": " { result.append(chunk) }
     return result
 }
-private func socialDisclosure(action: [String: Any], event: SocialEventModel, state: SocialStateModel?) -> [String] {
+func socialDisclosure(action: [String: Any], event: SocialEventModel, state: SocialStateModel?) -> [String] {
     var fields: [(String, String)] = []
     func add(_ label: String, _ text: String?) { if let text, !text.isEmpty { fields.append((label, text)) } }
     let op = action["op"] as? String ?? ""
@@ -179,6 +245,7 @@ private func socialDisclosure(action: [String: Any], event: SocialEventModel, st
             add("Reading status", (post["reading_status"] as? String)?.replacingOccurrences(of: "-", with: " "))
             add("Spoilers", post["spoiler"] as? Bool == true ? "Marked as containing spoilers" : "No spoiler warning")
             if let id = action["group_id"] as? String { add("Group", state?.groups[id]?.name ?? id) }
+            add("Reply to discussion", post["reply_to"] as? String)
         }
     case "create_list", "update_list":
         add("List", action["name"] as? String); add("Description", action["description"] as? String)

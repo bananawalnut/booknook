@@ -14,6 +14,8 @@ struct Annotation { let id: String; let anchor: JSONValue; let inkGeometry: JSON
     var status = ""
     var navigationMessages: [String] = []
     var cancelledProgrammaticBlank = false
+    var holdFinishedNavigation = false
+    var heldNavigation: WKNavigation?
     let spine = ["one.xhtml", "two.xhtml", "three.xhtml"]
     func webView(_ webView: WKWebView, decidePolicyFor action: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         coordinator.webView(webView, decidePolicyFor: action) { policy in
@@ -24,14 +26,15 @@ struct Annotation { let id: String; let anchor: JSONValue; let inkGeometry: JSON
         }
     }
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        coordinator.webView(webView, didFinish: navigation)
+        if holdFinishedNavigation { heldNavigation = navigation }
+        else { coordinator.webView(webView, didFinish: navigation) }
     }
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         coordinator.webView(webView, didFailProvisionalNavigation: navigation, withError: error)
     }
-    func load(_ resource: String, destination: ReaderDestination? = nil) {
+    func load(_ resource: String, destination: ReaderDestination? = nil, restorePosition: [String: Any]? = nil) {
         current = resource
-        updateWeb(web, coordinator: coordinator, root: root, resource: resource, annotations: [], fontSize: 19, restorePosition: nil, spine: spine, destination: destination)
+        updateWeb(web, coordinator: coordinator, root: root, resource: resource, annotations: [], fontSize: 19, restorePosition: restorePosition, spine: spine, destination: destination)
     }
     func evaluate(_ code: String) async throws -> Any? {
         try await withCheckedThrowingContinuation { continuation in
@@ -56,7 +59,7 @@ struct Annotation { let id: String; let anchor: JSONValue; let inkGeometry: JSON
         defer { try? FileManager.default.removeItem(at: root) }
         for (index, name) in spine.enumerated() {
             let next = index < 2 ? "<a id='next' href='\(spine[index + 1])#target'>Next chapter</a>" : ""
-            let html = "<html xmlns='http://www.w3.org/1999/xhtml'><body data-chapter='\(name)'>\(next)<a id='external' href='https://example.invalid/'>External</a><a id='escape' href='../outside.xhtml'>Outside asset</a><a id='unknown' href='not-in-spine.xhtml'>Unlisted file</a><a id='missing' href='#missing-target'>Missing fragment</a>" + String(repeating: "<p>A long synthetic paragraph gives this chapter a real scroll position.</p>", count: 45) + "<p id='target'>Unique passage in \(name)</p></body></html>"
+            let html = "<html xmlns='http://www.w3.org/1999/xhtml'><body data-chapter='\(name)'>\(next)<a id='external' href='https://example.invalid/'>External</a><a id='escape' href='../outside.xhtml'>Outside asset</a><a id='unknown' href='not-in-spine.xhtml'>Unlisted file</a><a id='missing' href='#missing-target'>Missing fragment</a>" + (0..<45).map { "<p>Synthetic paragraph \($0) gives this chapter a real scroll position.</p>" }.joined() + "<p id='target'>Unique passage in \(name)</p></body></html>"
             try html.write(to: root.appendingPathComponent(name), atomically: true, encoding: .utf8)
         }
         coordinator = ReaderCoordinator { [weak self] message in
@@ -124,6 +127,54 @@ struct Annotation { let id: String; let anchor: JSONValue; let inkGeometry: JSON
         let another = ReaderHighlightRequest(anchor: ["quote": "café 日本語", "kind": "text", "edition_id": "edition", "resource": "two.xhtml"], geometry: nil, context: "café 日本語")
         precondition(one.key == reordered.key && one.key != another.key)
         print("Reader navigation: actual three-chapter EPUB links/fragments, native selection attribution, annotation return, explicit external/escape/non-spine rejection feedback, missing-target feedback, and stable highlight deduplication keys passed.")
+        try await verifyInitialPositionRestore()
+    }
+
+    private func verifyInitialPositionRestore() async throws {
+        let resource = spine[1]
+        let quote = "Unique passage in \(resource)"
+        let saved: [String: Any] = ["resource": resource, "quote": quote]
+        var measured = 0
+        var recordedViewports: [Double] = []
+        coordinator.onMessage = { message in
+            guard message["type"] as? String == "geometry" else { return }
+            measured += 1
+            if message["position"] is [String: Any],
+               let y = (message["viewport"] as? [String: Any])?["y"] as? Double {
+                recordedViewports.append(y)
+            }
+        }
+        // Hold the native restore callback and deliver a geometry message
+        // through the actual WebKit channel before the stored position is applied.
+        holdFinishedNavigation = true
+        load(resource, restorePosition: saved)
+        try await wait("finished chapter before the native restore callback") { self.heldNavigation != nil }
+        try await reportViewport()
+        try await wait("initial measured chapter before restore") { measured > 0 }
+        guard recordedViewports.isEmpty else {
+            throw NSError(domain: "ReaderNavigationTests", code: 2,
+                          userInfo: [NSLocalizedDescriptionKey: "Provisional viewport replaced the stored reading position"])
+        }
+        guard let heldNavigation else { throw CocoaError(.coderReadCorrupt) }
+        holdFinishedNavigation = false
+        coordinator.webView(web, didFinish: heldNavigation)
+        try await wait("stored position restored by native WebKit coordinator") {
+            (try await self.evaluate("scrollY") as? Double ?? 0) > 0
+        }
+        try await reportViewport()
+        try await wait("post-restore position is admitted") { !recordedViewports.isEmpty }
+        guard recordedViewports.allSatisfy({ $0 > 0 }) else {
+            throw CocoaError(.coderReadCorrupt)
+        }
+        print("Reader navigation: initial geometry arrives without a provisional persisted position, then the stored native position restores.")
+    }
+
+    private func reportViewport() async throws {
+        _ = try await evaluate("""
+            window.webkit.messageHandlers.booknook.postMessage({
+                type: 'geometry', viewport: {y: scrollY}, position: {quote: 'test viewport position'}
+            }); true
+            """)
     }
 }
 @main struct ReaderNavigationTests {

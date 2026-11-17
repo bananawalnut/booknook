@@ -17,19 +17,32 @@
   const textContext = () => cachedContext || (cachedContext = (() => { const nodes = textNodes(); return { nodes, text: nodes.map(n => n.textContent).join("") }; })());
   const viewport = () => ({x: visualViewport?.pageLeft ?? scrollX, y: visualViewport?.pageTop ?? scrollY, width: visualViewport?.width ?? innerWidth, height: visualViewport?.height ?? innerHeight});
   const docRect = r => ({x: r.x + scrollX, y: r.y + scrollY, width:r.width, height:r.height});
-  const position = (range, context) => {
+  const scalarBoundary = (text, offset) => {
+    const char = text.charCodeAt(offset), previous = text.charCodeAt(offset - 1);
+    return char >= 0xdc00 && char <= 0xdfff && previous >= 0xd800 && previous <= 0xdbff ? offset - 1 : offset;
+  };
+  const position = (range, context, preserveScalars = false) => {
     let start = 0, end = 0, offset = 0;
     for (const node of context.nodes) { if (node === range.startContainer) start = offset + range.startOffset; if (node === range.endContainer) end = offset + range.endOffset; offset += node.textContent.length; }
-    return end > start ? {quote: context.text.slice(start,end), prefix: context.text.slice(Math.max(0,start-64),start), suffix: context.text.slice(end,end+64)} : null;
+    if (end <= start) return null;
+    let prefixStart = Math.max(0, start - 64), suffixEnd = end + 64;
+    if (preserveScalars) {
+      prefixStart = scalarBoundary(context.text, prefixStart);
+      suffixEnd = scalarBoundary(context.text, suffixEnd);
+    }
+    return {quote:context.text.slice(start,end), prefix:context.text.slice(prefixStart,start), suffix:context.text.slice(end,suffixEnd)};
   };
   const resolve = anchor => {
-    const {nodes,text} = textContext(), matches = [];
+    const {nodes,text} = textContext();
     if (!anchor.quote) return {status:"missing"};
+    let start = -1;
     for (let at = text.indexOf(anchor.quote); at >= 0; at = text.indexOf(anchor.quote, at + 1)) {
-      if (text.slice(0,at).endsWith(anchor.prefix || "") && text.slice(at+anchor.quote.length).startsWith(anchor.suffix || "")) matches.push(at);
+      if (!text.endsWith(anchor.prefix || "",at) || !text.startsWith(anchor.suffix || "",at+anchor.quote.length)) continue;
+      if (start >= 0) return {status:"ambiguous",context:anchor.quote};
+      start = at;
     }
-    if (matches.length !== 1) return {status:matches.length ? "ambiguous" : "missing",context:anchor.quote};
-    const start = matches[0], end = start + anchor.quote.length; let offset = 0; const range = document.createRange();
+    if (start < 0) return {status:"missing",context:anchor.quote};
+    const end = start + anchor.quote.length; let offset = 0; const range = document.createRange();
     for (const node of nodes) { const next = offset + node.textContent.length; if (start >= offset && start < next) range.setStart(node,start-offset); if (end > offset && end <= next) range.setEnd(node,end-offset); offset = next; }
     return {status:"resolved",range,rects:Array.from(range.getClientRects(),docRect).filter(r=>r.width>0 && r.height>0)};
   };
@@ -38,24 +51,70 @@
     const found = resolve(anchor); if (found.status !== "resolved") return {status:found.status};
     return {status:"resolved",geometry:{space:"epub_document",resource,page:null,content_fingerprint:hash(textContext().text),width:document.documentElement.scrollWidth,height:document.documentElement.scrollHeight,origin_x:0,origin_y:0,text_quote:anchor.quote,text_prefix:anchor.prefix || "",text_suffix:anchor.suffix || "",text_rects:found.rects}};
   };
-  const nearestText = (x, y) => {
+  const nearestText = (x, y, visible) => {
     // Selection ranges provide glyph bounds, including for non-Latin and RTL text.
-    const context = textContext(); let best, distance = Infinity;
-    for (const node of context.nodes) {
+    let best, distance = Infinity;
+    for (const node of textContext().nodes) {
       if (!node.textContent.trim()) continue;
       const range = document.createRange(); range.selectNodeContents(node);
-      for (const r of range.getClientRects()) {
-        const dx = Math.max(r.left - x, 0, x - r.right), dy = Math.max(r.top - y, 0, y - r.bottom), d = dx * dx + dy * dy;
-        if (d < distance) { distance = d; best = {node, range}; }
+      for (const rect of range.getClientRects()) {
+        if (visible && (rect.width <= 0 || rect.height <= 0 || rect.right <= visible.left ||
+            rect.bottom <= visible.top || rect.left >= visible.right || rect.top >= visible.bottom)) continue;
+        const dx = Math.max(rect.left - x, 0, x - rect.right);
+        const dy = Math.max(rect.top - y, 0, y - rect.bottom);
+        const candidateDistance = dx * dx + dy * dy;
+        if (candidateDistance < distance) {
+          distance = candidateDistance;
+          best = {node, range, rect};
+        }
       }
     }
-    if (!best) return null;
-    // Anchor an individual text run. This is deliberately conservative when the
-    // run reflows: its saved line geometry is retained as an unresolved marker.
-    return position(best.range, context);
+    return best;
+  };
+  const readingInset = height => Math.min(80, height / 4);
+  const readingPosition = v => {
+    const left = v.x - scrollX, top = v.y - scrollY;
+    const visible = {left, top, right:left + v.width, bottom:top + v.height};
+    const x = left + v.width / 2;
+    const nearest = nearestText(x, top + readingInset(v.height), visible);
+    if (!nearest) return null;
+    const {node, rect} = nearest;
+    const lineLeft = Math.max(rect.left, visible.left), lineRight = Math.min(rect.right, visible.right);
+    const padding = Math.min(1, (lineRight - lineLeft) / 2);
+    const probeX = Math.max(lineLeft + padding, Math.min(x, lineRight - padding));
+    const probeY = (Math.max(rect.top, visible.top) + Math.min(rect.bottom, visible.bottom)) / 2;
+    const caret = document.caretRangeFromPoint?.(probeX, probeY);
+    if (caret?.startContainer !== node) return null;
+
+    const data = node.data, start = scalarBoundary(data, caret.startOffset);
+    // WebKit may put a caret inside several source spaces that render as one.
+    let forward = start, backward = start - 1;
+    while (forward < data.length && forward - start < 72 && !data[forward].trim()) forward++;
+    while (backward >= 0 && start - backward < 72 && !data[backward].trim()) backward--;
+    for (const offset of [forward, scalarBoundary(data, backward)]) {
+      if (offset < 0 || offset >= data.length) continue;
+      const length = data.codePointAt(offset) > 0xffff ? 2 : 1;
+      if (!data.slice(offset, offset + length).trim()) continue;
+      const range = document.createRange();
+      range.setStart(node, offset);
+      range.setEnd(node, offset + length);
+      if (![...range.getClientRects()].some(r => r.width > 0 && r.height > 0 &&
+          r.bottom > Math.max(rect.top, visible.top) && r.top < Math.min(rect.bottom, visible.bottom) &&
+          r.right > lineLeft && r.left < lineRight)) continue;
+
+      range.setEnd(node, scalarBoundary(data, Math.min(data.length, offset + 72)));
+      // Keep exact source whitespace and never split a surrogate pair in the context.
+      const exact = position(range, textContext(), true);
+      if (!exact) continue;
+      const resolved = resolve(exact);
+      if (resolved.status === "resolved" && resolved.rects.length) return exact;
+    }
+    return null;
   };
   window.booknookInkAnchor = (bounds, resource) => {
-    const anchor = nearestText(bounds.x + bounds.width / 2 - scrollX, bounds.y + bounds.height / 2 - scrollY);
+    // The full text run still defines the captured layout for portable ink.
+    const match = nearestText(bounds.x + bounds.width / 2 - scrollX, bounds.y + bounds.height / 2 - scrollY);
+    const anchor = match && position(match.range, textContext());
     if (!anchor) return {status:"missing"};
     return {...geometryFor(anchor, resource), anchor};
   };
@@ -136,7 +195,11 @@
     const found = resolve(anchor);
     const status = textPlacement(found);
     if (status === "resolved") {
-      scrollTo({top:Math.max(0,found.rects[0].y-40),behavior:"instant"});
+      const v = viewport();
+      const top = found.rects[0].y + found.rects[0].height / 2 - readingInset(v.height) - (v.y - scrollY);
+      scrollTo({top:Math.max(0,top),behavior:"instant"});
+      lastPositionAt = 0;
+      currentPosition = null;
       measure();
     }
     return {status};
@@ -152,7 +215,7 @@
   let lastPositionAt = 0, currentPosition = null;
   const geometry = () => {
     const text = textContext().text, v = viewport();
-    if (Date.now() - lastPositionAt > 750) { currentPosition = nearestText(v.width/2,Math.min(80,v.height/4)); lastPositionAt = Date.now(); }
+    if (Date.now() - lastPositionAt > 750) { currentPosition = readingPosition(v); lastPositionAt = Date.now(); }
     post({type:"geometry",fingerprint:[location.pathname,innerWidth,innerHeight,getComputedStyle(document.body).fontSize,document.documentElement.scrollHeight,hash(text)].join("|"),contentFingerprint:hash(text),viewport:v,position:currentPosition,width:document.documentElement.scrollWidth,height:document.documentElement.scrollHeight});
     renderAnnotations();
   };

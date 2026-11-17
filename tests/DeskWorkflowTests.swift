@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 import AppKit
+import CryptoKit
 import Foundation
 
 @main struct DeskWorkflowTests {
@@ -11,6 +12,7 @@ import Foundation
         }
         Task { @MainActor in
             do {
+                if CommandLine.arguments.contains("--group-replies") { try await testGroupReplies(); exit(0) }
                 if CommandLine.arguments.contains("--startup") { try await testDeskStartup(); exit(0) }
                 if CommandLine.arguments.contains("--publications") { try await testPublicationWorkflow(); exit(0) }
                 if CommandLine.arguments.contains("--source-reading-history") { try await testSourceReadingHistory(); exit(0) }
@@ -188,6 +190,139 @@ import Foundation
         try await testCastaliaProfileImportWorkflow()
         try await testPublicProviderRepositoryWorkflow()
         try await testPublicationWorkflow()
+        try await testGroupReplies()
         print("Native desk workflows: duplicate-title identity, failed navigation, explicit sessions, private earlier-character-version drafts, thrown save rejection, unrated Unicode review, list edit/conflict retention, failed social retry with durable draft recovery, reopen and cancellation distinctions passed.")
+    }
+
+    @MainActor static func testGroupReplies() async throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("booknook-group-reply-" + UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let model = DeskModel(repository: DeskRepository(directory: directory))
+        await model.open()
+        let issuer = try Curve25519.Signing.PrivateKey(rawRepresentation: Data(repeating: 1, count: 32))
+        let holder = try Curve25519.Signing.PrivateKey(rawRepresentation: Data(repeating: 2, count: 32))
+        var connections = ConnectionConfiguration()
+        let config = CastaliaConfiguration(issuer: "synthetic-issuer", keyId: "test",
+            issuerPublicKey: hex(issuer.publicKey.rawRepresentation), audience: "booknook-test",
+            terminalCaller: "synthetic-booknook-test", holderPublicKey: hex(holder.publicKey.rawRepresentation),
+            policyDigest: hex(SHA256.hash(data: Data("synthetic policy".utf8))),
+            credentialEndpoint: "http://127.0.0.1:65500/credential")
+        connections.castalia = config
+        try await model.repository.saveConnections(connections)
+        let groupID = try await model.repository.socialOwnedID()
+        try await approveFixture(["op": "create_group", "id": groupID, "name": "Synthetic reading group",
+            "description": "", "private": true], model: model, config: config, issuer: issuer, holder: holder)
+        let hiddenExcerpt = "Original spoiler text stays within its own post."
+        let parentID = try await approveFixture(["op": "publish", "group_id": groupID, "post": [
+            "kind": "discussion", "book": NSNull(), "body": hiddenExcerpt, "stars": NSNull(),
+            "reading_status": NSNull(), "spoiler": true, "reply_to": NSNull()
+        ]], model: model, config: config, issuer: issuer, holder: holder).id
+
+        let controller = SocialController()
+        await controller.reload(model)
+        let initial = controller.snapshot!
+        let target = SocialGroupReplyTarget(actor: initial.actor, groupID: groupID, postID: parentID)
+        let parent = target.parent(in: initial)
+        precondition(parent?.spoilerHidden == true && parent?.post.body.isEmpty == true)
+        var draft = SocialGroupReplyDraft(text: "  Reply from the café 日本語.  ", containsSpoilers: true)
+        let action = draft.action(for: target, in: initial)!
+        let post = action["post"] as! [String: Any]
+        precondition(action["group_id"] as? String == groupID && post["reply_to"] as? String == parentID)
+        precondition(post["body"] as? String == draft.text && post["spoiler"] as? Bool == true && post["book"] is NSNull)
+        precondition(!((try? socialJSON(action)) ?? "").contains(hiddenExcerpt))
+        let wrongGroup = SocialGroupReplyTarget(actor: initial.actor, groupID: "another-group", postID: parentID)
+        let wrongActor = SocialGroupReplyTarget(actor: "another-reader", groupID: groupID, postID: parentID)
+        precondition(draft.action(for: wrongGroup, in: initial) == nil && draft.action(for: wrongActor, in: initial) == nil)
+        precondition(SocialGroupReplyDraft(text: "  ").action(for: target, in: initial) == nil)
+
+        // The app uses the real native draft store. The signer stays locked, so
+        // there is no Keychain access, consent dialog, issuer call, or relay.
+        let result = await controller.publish(action, title: "Publish this group reply", model)
+        guard case .savedDraft(let draftID) = result else { preconditionFailure("A denied reply must stay private and recoverable") }
+        precondition(controller.error?.contains("Unlock your Castalia identity") == true)
+        let event = controller.snapshot!.state.drafts[draftID]!
+        let disclosure = socialDisclosure(action: event.action.object!, event: event, state: controller.snapshot?.state)
+        precondition(disclosure.contains { $0.contains(parentID) } && disclosure.contains { $0.contains("Synthetic reading group") })
+        precondition(!disclosure.contains { $0.contains(hiddenExcerpt) })
+        precondition(event.delivery.object?["recipients"] as? [String] == [initial.actor])
+        precondition(Set(controller.snapshot!.state.outbox.keys) == Set(initial.state.outbox.keys))
+
+        try await model.repository.socialLocal(Data(try socialJSON(["op": "hide", "event_id": parentID, "hidden": true]).utf8))
+        await controller.reload(model)
+        precondition(draft.action(for: target, in: controller.snapshot) == nil)
+        try await model.repository.socialLocal(Data(try socialJSON(["op": "hide", "event_id": parentID, "hidden": false]).utf8))
+        try await model.repository.socialLocal(Data(try socialJSON(["op": "block", "actor": initial.actor, "blocked": true]).utf8))
+        await controller.reload(model)
+        precondition(draft.action(for: target, in: controller.snapshot) == nil)
+        try await model.repository.socialLocal(Data(try socialJSON(["op": "block", "actor": initial.actor, "blocked": false]).utf8))
+        await controller.reload(model)
+
+        draft.savedDraftID = draftID
+        draft.text += "Edited before another review."
+        let retry = await controller.publish(draft.action(for: target, in: controller.snapshot)!, title: "Publish this group reply",
+                                             model, replacingDraftID: draft.savedDraftID)
+        guard case .savedDraft(let retryID) = retry else { preconditionFailure("An edited reply must remain recoverable") }
+        let reopened = DeskModel(repository: DeskRepository(directory: directory))
+        await reopened.open()
+        let recovered = try await reopened.repository.socialSnapshot(reveal: false)
+        let recoveredAction = recovered.state.drafts[retryID]?.action.object
+        let recoveredPost = recoveredAction?["post"] as? [String: Any]
+        precondition(retryID != draftID && recovered.state.drafts[draftID] == nil)
+        precondition(recoveredAction?["group_id"] as? String == groupID && recoveredPost?["reply_to"] as? String == parentID)
+        precondition(recoveredPost?["body"] as? String == draft.text && recoveredPost?["spoiler"] as? Bool == true)
+        precondition(Set(recovered.state.publications.keys) == Set(initial.state.publications.keys))
+        precondition(Set(recovered.state.outbox.keys) == Set(initial.state.outbox.keys))
+        try await approveFixture(["op": "close_group", "group_id": groupID],
+                                 model: reopened, config: config, issuer: issuer, holder: holder)
+        await controller.reload(reopened)
+        precondition(!target.permitsVisibleParent(parent!, in: controller.snapshot))
+        precondition(controller.snapshot?.state.drafts[retryID] != nil)
+        print("Native group replies: exact parent, hidden/blocked/closed refusal, spoiler-safe consent, and denied draft retry after SQLite reopen passed.")
+    }
+
+    private static func hex(_ bytes: some Sequence<UInt8>) -> String { bytes.map { String(format: "%02x", $0) }.joined() }
+
+    @MainActor @discardableResult private static func approveFixture(_ action: [String: Any], model: DeskModel,
+        config: CastaliaConfiguration, issuer: Curve25519.Signing.PrivateKey, holder: Curve25519.Signing.PrivateKey) async throws -> SocialEventModel {
+        // Public synthetic fixture keys are restricted to this isolated desk.
+        func canonical(_ value: [String: Any]) throws -> Data {
+            try JSONSerialization.data(withJSONObject: value, options: [.sortedKeys, .withoutEscapingSlashes])
+        }
+        func digest(_ bytes: Data) -> String { hex(SHA256.hash(data: bytes)) }
+        func signature(_ key: Curve25519.Signing.PrivateKey, _ domain: String, _ value: [String: Any]) throws -> String {
+            try hex(key.signature(for: Data(domain.utf8) + canonical(value)))
+        }
+        let raw = try await model.repository.socialPrepare(canonical(action))
+        let decoder = JSONDecoder(); decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let event = try decoder.decode(SocialEventModel.self, from: Data(raw.utf8))
+        let request = try await model.repository.authorizedAction(payload: Data(raw.utf8), action: "social.execute",
+            resourceVersion: event.resourceVersion, idempotencyKey: event.id)
+        let requestBytes = Data(request.utf8)
+        let disclosure: [String: Any] = ["title": "Synthetic group setup", "statements": ["Synthetic test data only"]]
+        let nonce = String(digest(requestBytes).prefix(32))
+        let common: [String: Any] = [
+            "holder_public_key": config.holderPublicKey, "issuer": config.issuer, "key_id": config.keyId,
+            "audience": config.audience, "caller": ["kind": "terminal", "id": config.terminalCaller],
+            "request_digest_sha256": digest(requestBytes), "disclosure_digest_sha256": digest(try canonical(disclosure)),
+            "nonce": nonce
+        ]
+        var claims = common
+        claims["schema"] = "castalia.request-credential.v1"
+        claims["policy_digest_sha256"] = config.policyDigest
+        claims["issued_at"] = event.at - 1
+        claims["expires_at"] = event.at + 119
+        let credential: [String: Any] = ["claims": claims, "signature": try signature(issuer, "castalia.request-credential.v1/signature\0", claims)]
+        var presentation = common
+        presentation["schema"] = "castalia.credential-presentation.v2"
+        presentation["credential_digest_sha256"] = digest(try canonical(credential))
+        presentation["issued_at"] = event.at
+        presentation["expires_at"] = event.at + 60
+        presentation["signature"] = try signature(holder, "castalia.credential-presentation.v2/signature\0", presentation)
+        let receiptRequest = try canonical(["schema": "castalia.credential-presentation-request.v2",
+            "request_bytes_base64": requestBytes.base64EncodedString(), "disclosure": disclosure, "credential": credential])
+        try await model.repository.socialApprove(event: raw, receipt: AuthorizationReceipt(
+            requestJSON: String(decoding: receiptRequest, as: UTF8.self),
+            presentationJSON: String(decoding: try canonical(presentation), as: UTF8.self)))
+        return event
     }
 }

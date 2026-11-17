@@ -11,7 +11,7 @@ final class ReaderCoordinator: NSObject, WKScriptMessageHandler, WKNavigationDel
     var submittedPayload = ""
     var fontSize = 19
     var submittedFontSize = 0
-    var restorePosition = "null"
+    private var initialRestore: (id: UUID, anchorJSON: String)?
     var spine: [String] = []
     var destination: ReaderDestination?
     var appliedDestination: UUID?
@@ -20,7 +20,15 @@ final class ReaderCoordinator: NSObject, WKScriptMessageHandler, WKNavigationDel
         guard let body = message.body as? [String: Any], message.frameInfo.isMainFrame,
               message.frameInfo.request.url?.standardizedFileURL.path == loaded?.standardizedFileURL.path else { return }
         if body["type"] as? String == "reader_link", let href = body["href"] as? String, let url = URL(string: href) { navigateLink(url) }
-        else { onMessage(body) }
+        else if initialRestore != nil, body["type"] as? String == "geometry" {
+            // Layout and ink still need dimensions while the saved scroll target is pending.
+            var geometry = body
+            geometry.removeValue(forKey: "position")
+            onMessage(geometry)
+        } else { onMessage(body) }
+    }
+    func prepareInitialRestore(_ anchorJSON: String?) {
+        initialRestore = anchorJSON.map { (UUID(), $0) }
     }
     func navigateLink(_ url: URL) {
         guard let root else { return }
@@ -39,13 +47,23 @@ final class ReaderCoordinator: NSObject, WKScriptMessageHandler, WKNavigationDel
         webView.evaluateJavaScript("window.booknookAnnotations?.(\(annotationPayload.isEmpty ? "[]" : annotationPayload))", completionHandler: nil); submittedPayload = annotationPayload
         webView.evaluateJavaScript("window.booknookSetFontSize?.(\(fontSize))", completionHandler: nil); submittedFontSize = fontSize
         if destination != nil { applyDestination(in: webView) }
-        else { webView.evaluateJavaScript("window.booknookRestorePosition?.(\(restorePosition))", completionHandler: nil) }
+        else if let restore = initialRestore {
+            let receiver = onMessage
+            webView.evaluateJavaScript("window.booknookRestorePosition?.(\(restore.anchorJSON))") { [weak self] result, error in
+                guard let self, self.initialRestore?.id == restore.id else { return }
+                self.initialRestore = nil
+                if error != nil || (result as? [String: Any])?["status"] as? String != "resolved" {
+                    receiver(["type": "navigation_status", "message": "Your last reading position could not be located in this chapter."])
+                }
+            }
+        }
     }
     func applyDestination(in web: WKWebView) {
         guard let destination, destination.id != appliedDestination, let root,
               root.appendingPathComponent(destination.resource).standardizedFileURL.path == loaded?.standardizedFileURL.path else { return }
         let argument: Any = destination.anchor as Any? ?? (destination.fragment ?? "")
         guard let data = try? JSONSerialization.data(withJSONObject: [argument]), let json = String(data: data, encoding: .utf8) else { return }
+        initialRestore = nil
         appliedDestination = destination.id
         let receiver = onMessage
         let source = loaded
@@ -120,7 +138,10 @@ func updateWeb(_ web: WKWebView, coordinator: ReaderCoordinator, root: URL, reso
     coordinator.annotationPayload = data.flatMap { String(data: $0, encoding: .utf8) } ?? "[]"
     if coordinator.loaded != url {
         coordinator.loaded = url; coordinator.submittedPayload = ""
-        if let restorePosition, restorePosition["resource"] as? String == resource, let data = try? JSONSerialization.data(withJSONObject: restorePosition), let json = String(data: data, encoding: .utf8) { coordinator.restorePosition = json } else { coordinator.restorePosition = "null" }
+        if destination == nil, let restorePosition, restorePosition["resource"] as? String == resource,
+           let data = try? JSONSerialization.data(withJSONObject: restorePosition) {
+            coordinator.prepareInitialRestore(String(data: data, encoding: .utf8))
+        } else { coordinator.prepareInitialRestore(nil) }
         let load = { [weak web] in web?.loadFileURL(url, allowingReadAccessTo: root); return () }
         if coordinator.networkRulesReady { load() } else { coordinator.pendingLoad = load }
         return

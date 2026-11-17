@@ -17,6 +17,8 @@ struct SocialCommunityView: View {
     @State private var composerExpanded = false
     @State private var readingStatus = "currently-reading"
     @State private var spoiler = false
+    @State private var activeReply: SocialGroupReplyTarget?
+    @State private var replyDrafts: [SocialGroupReplyTarget: SocialGroupReplyDraft] = [:]
     @State private var peer = ""
     @State private var name = ""
     @State private var description = ""
@@ -40,6 +42,23 @@ struct SocialCommunityView: View {
     private var publicGroups: [SocialGroup] { groups.filter { !$0.private && state?.blocked.contains($0.owner) != true } }
     private var sharedLists: [SocialList] { (state?.lists.values.map { $0 } ?? []).filter { !$0.deleted }.sorted { $0.name < $1.name } }
     var body: some View {
+        ScrollViewReader { scroll in
+            scrollContent.onChange(of: activeReply) { _, target in
+                if let target { scroll.scrollTo(target.postID, anchor: .top) }
+            }
+        }
+        .task { await social.reload(model); interests = social.snapshot?.state.preferredSubjects.joined(separator: ", ") ?? ""; applySharingIntent(); await social.recommend(model) }
+        .onChange(of: model.sharingBookId) { _, _ in applySharingIntent() }
+        .onChange(of: model.sharingDraftId) { _, _ in applySharingIntent() }
+        .onChange(of: tab) { _, selected in if selected == "Discover" { Task { await social.recommend(model) } } }
+        .onChange(of: social.revealSpoilers) { _, _ in Task { await social.reload(model) } }
+        .onDisappear { fileReadID = UUID(); fileRead?.cancel(); fileRead = nil }
+        .fileImporter(isPresented: $importing, allowedContentTypes: [.json]) { result in
+            receiveImportedFile(result, for: fileImport)
+        }
+        .fileExporter(isPresented: $exporting, document: exportDocument, contentType: .json, defaultFilename: exportName) { result in if case .failure(let error) = result, !bookNookOperationWasCancelled(error) { social.error = bookNookErrorMessage(error) } }
+    }
+    private var scrollContent: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
                 HStack(alignment: .top) {
@@ -63,16 +82,6 @@ struct SocialCommunityView: View {
                 }
             }.padding(30).frame(maxWidth: 1100, alignment: .leading).frame(maxWidth: .infinity)
         }
-        .task { await social.reload(model); interests = social.snapshot?.state.preferredSubjects.joined(separator: ", ") ?? ""; applySharingIntent(); await social.recommend(model) }
-        .onChange(of: model.sharingBookId) { _, _ in applySharingIntent() }
-        .onChange(of: model.sharingDraftId) { _, _ in applySharingIntent() }
-        .onChange(of: tab) { _, selected in if selected == "Discover" { Task { await social.recommend(model) } } }
-        .onChange(of: social.revealSpoilers) { _, _ in Task { await social.reload(model) } }
-        .onDisappear { fileReadID = UUID(); fileRead?.cancel(); fileRead = nil }
-        .fileImporter(isPresented: $importing, allowedContentTypes: [.json]) { result in
-            receiveImportedFile(result, for: fileImport)
-        }
-        .fileExporter(isPresented: $exporting, document: exportDocument, contentType: .json, defaultFilename: exportName) { result in if case .failure(let error) = result, !bookNookOperationWasCancelled(error) { social.error = bookNookErrorMessage(error) } }
     }
     private func chooseFile(_ kind: SocialFileImport) {
         fileImport = kind
@@ -135,7 +144,7 @@ struct SocialCommunityView: View {
             HStack { Text("Newest first").font(.headline); Spacer(); Toggle("Reveal spoilers", isOn: $social.revealSpoilers).toggleStyle(.switch).fixedSize(); networkButton }
             DisclosureGroup("Write a review, rating, update, or selected note", isExpanded: $composerExpanded) { composer(groupID: nil) }.padding(18).background(nookAccent.opacity(0.04), in: RoundedRectangle(cornerRadius: 12))
             if social.snapshot?.feed.isEmpty != false { Text("When you and a friend both accept, their published activity appears here. Group conversations also appear while you are a member.").foregroundStyle(.secondary).padding(.vertical, 24) }
-            ForEach(social.snapshot?.feed ?? []) { item in SocialFeedCard(item: item, social: social, model: model) }
+            discussionCards(social.snapshot?.feed ?? [])
         }
     }
     private func canPublish(groupID: String?) -> Bool {
@@ -240,7 +249,7 @@ struct SocialCommunityView: View {
             Label("\(group.private ? "Private group" : "Public group") · \(group.members.count) members", systemImage: group.private ? "lock" : "globe").font(.caption)
             if group.members.contains(social.actor) && !group.banned.contains(social.actor) {
                 DisclosureGroup("Write to this group") { composer(groupID: group.id) }
-                ForEach((social.snapshot?.feed ?? []).filter { $0.groupId == group.id }) { SocialFeedCard(item: $0, social: social, model: model) }
+                discussionCards((social.snapshot?.feed ?? []).filter { $0.groupId == group.id })
             } else if !group.private && !group.closed && !group.banned.contains(social.actor) {
                 let requested = state?.joinRequests.values.contains { $0.groupId == group.id && $0.reader == social.actor && $0.epoch == group.epoch && $0.expiresAt > UInt64(Date().timeIntervalSince1970) } ?? false
                 Text(requested ? "Your public membership request is waiting for the owner to admit you." : "Request membership to join this public discussion. Your request and membership will be public.").font(.callout).foregroundStyle(.secondary)
@@ -270,6 +279,75 @@ struct SocialCommunityView: View {
                 Button("Close group", role: .destructive) { Task { await social.publish(["op": "close_group", "group_id": group.id], title: "Close this reading group", model) } }.disabled(social.busy)
             }
         }.padding(18).background(nookAccent.opacity(0.04), in: RoundedRectangle(cornerRadius: 12))
+    }
+    private func discussionCards(_ items: [SocialFeedItem]) -> some View {
+        let visiblePosts = Dictionary(uniqueKeysWithValues: items.map { ($0.id, $0) })
+        return ForEach(items) { item in
+            let target = replyTarget(for: item)
+            VStack(alignment: .leading, spacing: 10) {
+                SocialFeedCard(item: item, social: social, model: model, replyParent: replyParent(of: item, in: visiblePosts),
+                               onReply: target.map { target in { openReply(target) } })
+                if let target, target == activeReply, let group = state?.groups[target.groupID], let draft = replyDrafts[target] {
+                    groupReplyComposer(group: group, target: target, draft: draft, parent: item)
+                }
+            }.id(item.id)
+        }
+    }
+    private func replyParent(of item: SocialFeedItem, in visiblePosts: [String: SocialFeedItem]) -> SocialFeedItem? {
+        guard let parentID = item.post.replyTo, let parent = visiblePosts[parentID], parent.groupId == item.groupId else { return nil }
+        return parent
+    }
+    private func replyTarget(for item: SocialFeedItem) -> SocialGroupReplyTarget? {
+        guard let groupID = item.groupId else { return nil }
+        let target = SocialGroupReplyTarget(actor: social.actor, groupID: groupID, postID: item.id)
+        return target.permitsVisibleParent(item, in: social.snapshot) ? target : nil
+    }
+    private func openReply(_ target: SocialGroupReplyTarget) {
+        guard target.parent(in: social.snapshot) != nil else { return }
+        closeReply()
+        if replyDrafts[target] == nil { replyDrafts[target] = SocialGroupReplyDraft() }
+        activeReply = target
+    }
+    private func closeReply() {
+        if let target = activeReply, replyDrafts[target]?.text.isEmpty == true, replyDrafts[target]?.savedDraftID == nil {
+            replyDrafts.removeValue(forKey: target)
+        }
+        activeReply = nil
+    }
+    private func groupReplyComposer(group: SocialGroup, target: SocialGroupReplyTarget, draft: SocialGroupReplyDraft,
+                                    parent: SocialFeedItem) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Reply to \(socialShort(parent.actor))").font(.headline)
+            Label(socialAudience(isPublic: !group.private, recipientCount: Set(group.members).subtracting(group.banned).count),
+                  systemImage: group.private ? "lock.fill" : "globe").font(.callout)
+            TextEditor(text: Binding(get: { replyDrafts[target]?.text ?? "" }, set: { replyDrafts[target]?.text = $0 }))
+                .frame(minHeight: 100).accessibilityLabel("Reply text")
+                .overlay(RoundedRectangle(cornerRadius: 5).stroke(.secondary.opacity(0.2)))
+            Toggle("Contains spoilers", isOn: Binding(get: { replyDrafts[target]?.containsSpoilers ?? false },
+                                                     set: { replyDrafts[target]?.containsSpoilers = $0 }))
+            HStack {
+                Button("Close reply", action: closeReply)
+                Spacer()
+                Button("Review reply") { Task { await submitReply(target) } }.buttonStyle(.borderedProminent)
+                    .disabled(draft.action(for: target, in: social.snapshot) == nil)
+            }
+        }
+        .disabled(social.busy)
+        .padding(16)
+        .background(nookAccent.opacity(0.04), in: RoundedRectangle(cornerRadius: 12))
+    }
+    private func submitReply(_ target: SocialGroupReplyTarget) async {
+        guard activeReply == target, let draft = replyDrafts[target],
+              let action = draft.action(for: target, in: social.snapshot) else { return }
+        switch await social.publish(action, title: "Publish this group reply", model, replacingDraftID: draft.savedDraftID) {
+        case .notSaved:
+            break
+        case .savedDraft(let id):
+            replyDrafts[target]?.savedDraftID = id
+        case .approved:
+            replyDrafts.removeValue(forKey: target)
+            if activeReply == target { activeReply = nil }
+        }
     }
     private func acceptInvitation(_ invitation: SocialInvitation) async {
         if state?.groups[invitation.groupId]?.private == false {
@@ -419,14 +497,24 @@ private struct SocialFeedCard: View {
     let item: SocialFeedItem
     @ObservedObject var social: SocialController
     let model: DeskModel
+    let replyParent: SocialFeedItem?
+    let onReply: (() -> Void)?
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack { Text(socialShort(item.actor)).font(.caption.monospaced()); Text(item.post.kind.replacingOccurrences(of: "_", with: " ")).font(.caption).foregroundStyle(.secondary); Spacer(); Text(Date(timeIntervalSince1970: TimeInterval(item.at)).formatted()).font(.caption).foregroundStyle(.secondary) }
+            if item.post.replyTo != nil {
+                if let replyParent {
+                    Text("Reply to \(socialShort(replyParent.actor))").font(.caption).foregroundStyle(.secondary)
+                } else {
+                    Text("Reply to an earlier post").font(.caption).foregroundStyle(.secondary)
+                }
+            }
             if let book = item.post.book { Text(book.title).font(.system(.title3, design: .serif)) }
             if let stars = item.post.stars { Text(String(repeating: "★", count: stars)).foregroundStyle(nookAccent) }
             if item.spoilerHidden { Label("Spoiler hidden", systemImage: "eye.slash").foregroundStyle(.secondary) } else { Text(item.post.body).textSelection(.enabled) }
             if let reading = item.post.readingStatus { Text(reading.replacingOccurrences(of: "-", with: " ")).font(.caption) }
             HStack {
+                if let onReply { Button("Reply", action: onReply) }
                 Button("Hide for me") { Task { await social.local(["op": "hide", "event_id": item.id, "hidden": true], model) } }
                 if item.actor == social.actor { Button("Retract", role: .destructive) { Task { await social.publish(["op": "retract", "event_id": item.id], title: "Retract this published selection", model) } } }
                 if let id = item.groupId, let group = social.snapshot?.state.groups[id], group.owner == social.actor || group.moderators.contains(social.actor) {

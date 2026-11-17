@@ -6,6 +6,12 @@ This audit keeps the original native MVP and SDK scope intact. A passing source 
 
 [SDK 0.2.2 delivery evidence](sdk-022-public-preview-evidence.json) records independent Rust archive export, installed Node and Chrome WASM validation, and Swift restore and reopen against the exact released packages. The test covers a synthetic legacy MOBI6 and compares the original source and regenerated XHTML. All 17 public checksums passed. The macOS runtime acceptance and the iPadOS library slices have distinct evidence.
 
+## Native app 1704 source checkpoint
+
+Actual WebKit tests reproduce long EPUB and MOBI text runs losing their interior reading position in 1703. Two distinct visible lines now produce independent bounded quotes and reopen at the right text, including after font reflow. A separate native bridge test holds the initial restore to verify that provisional geometry cannot overwrite the saved location. Existing full-run locations remain readable, and ambiguous new positions leave the last saved location intact.
+
+The native group reply workflow now binds the draft to an eligible parent in the same group and shows that parent in the consent request. The linked Swift and SQLite test verifies exact reply content, eligibility for visible discussions, denied approval and replacement draft recovery after reopening. Physical app interaction, live consent, relay delivery and build 1704 packaging have separate acceptance checks.
+
 ## Native app 1703 attached editions
 
 [Build 1703 evidence](app-2026111703-public-preview-evidence.json) records a hands-on Mac edition switch, an actual WebKit EPUB check, and SQLite recovery of placements and highlights for both editions. All three exact archives, eight public downloads, and the in-place physical iPad update passed. Both [reading desk screenshots](screenshots/README.md) use the released build. Current physical input and minimum-OS execution remain open.

@@ -9,6 +9,8 @@ final class ReaderBridgeCheck: NSObject, WKNavigationDelegate, WKScriptMessageHa
     private var highlightSnapshots: [[String: String]] = []
     private var checkpoints: [String: Int] = [:]
     private var domChecks: [String]?
+    private var latestGeometry: [String: Any]?
+    private var checkingResume = false
     func run() throws {
         let config = WKWebViewConfiguration()
         config.websiteDataStore = .nonPersistent()
@@ -20,14 +22,19 @@ final class ReaderBridgeCheck: NSObject, WKNavigationDelegate, WKScriptMessageHa
         }
         web = WKWebView(frame: CGRect(x: 0,y: 0,width: 640,height: 800),configuration: config)
         web.navigationDelegate = self
-        let html = "<html><head><meta name='viewport' content='width=device-width, initial-scale=1'></head><body><script>window.untrustedBookScriptRan = true;</script><p>Before 😀 café: the quiet library welcomed Mara with open doors and many stories to discover in the late afternoon light.</p><p>Duplicate passage.</p><p>Duplicate passage.</p><p hidden>Unique hidden quote.</p><p>Distinct ending.</p>" + String(repeating: "<p>A synthetic paragraph for reading-position restoration.</p>", count: 80) + "<p>Last chapter marker.</p></body></html>"
+        let html = "<html><head><meta name='viewport' content='width=device-width, initial-scale=1'></head><body><script>window.untrustedBookScriptRan = true;</script><p>Before 😀 café: the quiet library welcomed Mara with open doors and many stories to discover in the late afternoon light.</p><p>Duplicate passage.</p><p>Duplicate passage.</p><p hidden>Unique hidden quote.</p><p>Distinct ending.</p>" + String(repeating: "<p>A synthetic paragraph for reading-position restoration.</p>", count: 80) + "<p>Last chapter marker.</p>" +
+            "<p id='long-run'>" + (0..<440).map { "Cairn-\($0): 😀 café   stones rest beneath the window, 日本語." }.joined(separator: " ") +
+            "</p><p id='repeated-run'>" + String(repeating: "Répété 😀 sous le même ciel. ", count: 2200) +
+            "</p></body></html>"
         web.loadHTMLString(html,baseURL: nil)
         DispatchQueue.main.asyncAfter(deadline: .now()+15) { fputs("Reader bridge timed out\n",stderr); exit(1) }
     }
     func userContentController(_ controller: WKUserContentController, didReceive message: WKScriptMessage) {
         guard let body = message.body as? [String: Any] else { return }
         switch body["type"] as? String {
-        case "geometry": measurements += 1
+        case "geometry":
+            measurements += 1
+            latestGeometry = body
         case "highlight_placements":
             guard let placements = body["placements"] as? [String: String] else {
                 fputs("Expected a dictionary of highlight placement statuses\n", stderr); exit(1)
@@ -42,7 +49,7 @@ final class ReaderBridgeCheck: NSObject, WKNavigationDelegate, WKScriptMessageHa
     }
 
     private func finishIfReady() {
-        guard let domChecks, checkpoints["cleared"] != nil else { return }
+        guard let domChecks, checkpoints["cleared"] != nil, !checkingResume else { return }
         let expected = ["opening": "resolved", "ending": "resolved", "ambiguous": "ambiguous",
                         "missing": "missing", "hidden": "not_visible"]
         let expectedCheckpoints = ["registry": 1, "fallback": 3, "reflow": 3,
@@ -53,8 +60,88 @@ final class ReaderBridgeCheck: NSObject, WKNavigationDelegate, WKScriptMessageHa
         }
         print("WKWebView reader bridge: \(domChecks.joined(separator: "; ")).")
         print("Native bridge received exact per-ID placement dictionaries for both render paths, no repeats after reflow/reorder/scroll, and one empty snapshot on removal.")
-        exit(0)
+        checkingResume = true
+        scrollAndCapture("Cairn-100:") { first in
+            self.scrollAndCapture("Cairn-280:") { second in
+                self.verifyResume(first, second)
+            }
+        }
     }
+
+    private func scrollAndCapture(_ token: String, receive: @escaping ([String: Any]) -> Void) {
+        web.callAsyncJavaScript("""
+            const rect = booknookResolve({quote: token}).rects[0];
+            if (!rect) throw new Error("Missing fixture token: " + token);
+            scrollTo({top: rect.y - 80, behavior: "instant"});
+            dispatchEvent(new Event("scroll"));
+            return scrollY;
+            """, arguments: ["token": token], in: nil, in: .page) { result in
+            guard case .success(let value) = result, let target = value as? Double else {
+                fputs("Could not scroll to fixture token \(token): \(result)\n", stderr); exit(1)
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
+                guard let y = (self.latestGeometry?["viewport"] as? [String: Any])?["y"] as? Double,
+                      abs(y - target) < 2,
+                      let anchor = self.latestGeometry?["position"] as? [String: Any] else {
+                    fputs("Expected native position for fixture token \(token) at \(target)\n", stderr); exit(1)
+                }
+                receive(["anchor": anchor, "scroll": target])
+            }
+        }
+    }
+
+    private func verifyResume(_ first: [String: Any], _ second: [String: Any]) {
+        let script = #"""
+        const check = (ok, name) => { if (!ok) throw new Error(name); };
+        const validUTF16 = text => Array.from(text).every(char => {
+          const cp = char.codePointAt(0);
+          return cp < 0xd800 || cp > 0xdfff;
+        });
+        check(first.anchor.quote !== second.anchor.quote, 'two interior viewports must produce distinct quotes');
+        for (const sample of [first, second]) {
+          const {anchor, scroll} = sample;
+          check(anchor.quote.length <= 72 && anchor.quote.trim().length > 0 &&
+            [anchor.quote,anchor.prefix,anchor.suffix].every(validUTF16),
+            'passive position is a bounded valid Unicode quote with exact context');
+          const match = booknookResolve(anchor);
+          check(match.status === 'resolved' && Math.abs(match.rects[0].y - scroll) < 120,
+            'the quote starts at the measured viewport of the original long text node');
+          check(match.range.startContainer.parentElement.id === 'long-run', 'both positions are in the same text node');
+          scrollTo(0, 0);
+          check(booknookRestorePosition(anchor).status === 'resolved' && Math.abs(scrollY - scroll) < 80,
+            'reopening returns to the captured interior line');
+        }
+        booknookSetFontSize(29);
+        const beforeReflowRestore = booknookResolve(second.anchor);
+        check(beforeReflowRestore.status === 'resolved', 'the saved quote survives font reflow');
+        scrollTo(0, 0);
+        check(booknookRestorePosition(second.anchor).status === 'resolved' &&
+          Math.abs(beforeReflowRestore.rects[0].y - scrollY) < 120, 'reopening after reflow returns to the saved text');
+        const fullRun = document.querySelector('#long-run').textContent;
+        scrollTo(0, 0);
+        check(booknookRestorePosition({quote:fullRun}).status === 'resolved' &&
+          Math.abs(booknookResolve({quote:fullRun}).rects[0].y - scrollY) < 120,
+          'legacy full-node positions still restore');
+        const repeated = document.querySelector('#repeated-run').getBoundingClientRect();
+        scrollTo({top:scrollY + repeated.top + repeated.height/2,behavior:'instant'});
+        dispatchEvent(new Event('scroll'));
+        return scrollY;
+        """#
+        web.callAsyncJavaScript(script, arguments: ["first": first, "second": second], in: nil, in: .page) { result in
+            guard case .success(let value) = result, let target = value as? Double else {
+                fputs("Reading resume checks failed: \(result)\n", stderr); exit(1)
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
+                guard let y = (self.latestGeometry?["viewport"] as? [String: Any])?["y"] as? Double,
+                      abs(y - target) < 2, self.latestGeometry?["position"] is NSNull else {
+                    fputs("Repeated text must not replace the last useful saved position\n", stderr); exit(1)
+                }
+                print("WKWebView reading resume: two distinct positions within one Unicode text node, exact context, reflow, legacy anchor restore and ambiguous position rejection passed.")
+                exit(0)
+            }
+        }
+    }
+
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let script = #"""
         return await (async()=>{
