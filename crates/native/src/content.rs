@@ -3,7 +3,8 @@ use booknook_core::model::{ContentAsset, MOBI6_MEDIA_TYPE};
 
 mod mobi6;
 use std::{
-    io::{Read, Write},
+    fs::{self, File},
+    io::{ErrorKind, Read, Write},
     path::{Component, Path},
 };
 const MAX: u64 = 128 * 1024 * 1024;
@@ -64,6 +65,60 @@ pub fn safe_relative(s: &str) -> Result<&Path> {
     Ok(path)
 }
 
+fn file_matches(path: &Path, expected: &[u8]) -> Result<bool> {
+    let metadata = match fs::symlink_metadata(path) {
+        Ok(metadata) => metadata,
+        Err(err) if err.kind() == ErrorKind::NotFound => return Ok(false),
+        Err(err) => return Err(err.into()),
+    };
+    if !metadata.is_file() {
+        return Err(error("Stored MOBI content must use regular files"));
+    }
+    if metadata.len() != expected.len() as u64 {
+        return Ok(false);
+    }
+    let mut file = File::open(path)?;
+    let mut buffer = [0; 8192];
+    for chunk in expected.chunks(buffer.len()) {
+        let read = &mut buffer[..chunk.len()];
+        file.read_exact(read)?;
+        if read != chunk {
+            return Ok(false);
+        }
+    }
+    Ok(file.read(&mut buffer[..1])? == 0)
+}
+
+fn refresh_mobi_reader(
+    folder: &Path,
+    staging: &Path,
+    original: &str,
+    bytes: &[u8],
+    xhtml: &[u8],
+) -> Result<()> {
+    if !fs::symlink_metadata(folder)?.is_dir() || !file_matches(&folder.join(original), bytes)? {
+        return Err(error(
+            "Stored MOBI original does not match the imported file",
+        ));
+    }
+    let target = folder.join(MOBI6_SPINE);
+    let parent = target.parent().unwrap();
+    match fs::create_dir(parent) {
+        Ok(()) => {}
+        Err(err) if err.kind() == ErrorKind::AlreadyExists => {
+            if !fs::symlink_metadata(parent)?.is_dir() {
+                return Err(error("Stored MOBI reader path is not a directory"));
+            }
+        }
+        Err(err) => return Err(err.into()),
+    }
+    if !file_matches(&target, xhtml)? {
+        // The freshly rendered file was synced in staging on the same volume.
+        fs::rename(staging.join(MOBI6_SPINE), target)?;
+    }
+    Ok(())
+}
+
 pub(crate) fn import(root: &Path, bytes: &[u8], kind: ContentKind) -> Result<ContentAsset> {
     if bytes.len() as u64 > MAX {
         return Err(error("Content exceeds 128 MiB"));
@@ -75,6 +130,7 @@ pub(crate) fn import(root: &Path, bytes: &[u8], kind: ContentKind) -> Result<Con
         .join(format!(".{}", booknook_core::new_id()));
     std::fs::create_dir_all(&staging)?;
     let result = (|| {
+        let mut rendered_mobi = None;
         let (media_type, spine) = match kind {
             ContentKind::Pdf => {
                 if !bytes.starts_with(b"%PDF-") {
@@ -173,6 +229,7 @@ pub(crate) fn import(root: &Path, bytes: &[u8], kind: ContentKind) -> Result<Con
                 let mut file = std::fs::File::create(target)?;
                 file.write_all(&xhtml)?;
                 file.sync_all()?;
+                rendered_mobi = Some(xhtml);
                 (MOBI6_MEDIA_TYPE, vec![MOBI6_SPINE.into()])
             }
         };
@@ -181,11 +238,12 @@ pub(crate) fn import(root: &Path, bytes: &[u8], kind: ContentKind) -> Result<Con
         file.write_all(bytes)?;
         file.sync_all()?;
         if folder.exists() {
-            // A digest already admitted under a different format (e.g. a
-            // multi-format file) must not refer to a missing source or spine.
-            if !folder.join(original).is_file()
+            if let Some(xhtml) = rendered_mobi {
+                refresh_mobi_reader(&folder, &staging, original, bytes, &xhtml)?;
+            } else if !folder.join(original).is_file()
                 || spine.iter().any(|path| !folder.join(path).is_file())
             {
+                // An existing digest must identify a complete asset of this format.
                 return Err(error("Stored book files do not match this content format"));
             }
             std::fs::remove_dir_all(&staging)?;

@@ -140,6 +140,7 @@ fn legacy_mobi_import_and_restore_keep_original_bytes_and_stable_reader_resource
         .as_str()
         .unwrap()
         .to_owned();
+    let catalog_editions = snapshot(&desk).books[&book].edition_ids.clone();
     let original = include_bytes!("fixtures/mobi6-reader.mobi");
     let asset_id = booknook_core::digest(original);
     for extension in ["mobi", "AZW"] {
@@ -151,8 +152,9 @@ fn legacy_mobi_import_and_restore_keep_original_bytes_and_stable_reader_resource
     }
     let state = snapshot(&desk);
     let editions = &state.books[&book].edition_ids;
-    assert_eq!(editions.len(), 1, "same original is not a new edition");
-    let asset = &state.editions[&editions[0]].assets[0];
+    let (edition_id, earlier_editions) = editions.split_last().unwrap();
+    assert_eq!(earlier_editions, catalog_editions.as_slice());
+    let asset = &state.editions[edition_id].assets[0];
     assert_eq!(asset.id, asset_id);
     assert_eq!(asset.storage_key, asset_id);
     assert_eq!(asset.sha256, asset_id);
@@ -171,16 +173,57 @@ fn legacy_mobi_import_and_restore_keep_original_bytes_and_stable_reader_resource
             .any(|n| n.is_text() && n.text().is_some_and(|s| s.contains("Café, 日本語, 🌿.")))
     );
 
+    let rendered = folder.join(&asset.spine[0]);
+    let reimport = || {
+        desk.import_content(
+            book.clone(),
+            root.0.join("reader.mobi").to_string_lossy().into_owned(),
+        )
+    };
+    std::fs::write(&rendered, vec![b'X'; xhtml.len()]).unwrap();
+    reimport().unwrap();
+    assert_eq!(std::fs::read_to_string(&rendered).unwrap(), xhtml);
+    std::fs::remove_file(&rendered).unwrap();
+    reimport().unwrap();
+    assert_eq!(std::fs::read_to_string(&rendered).unwrap(), xhtml);
+    let repaired_state = snapshot(&desk);
+    let mut expected_state = state.clone();
+    expected_state.revision = repaired_state.revision;
+    assert_eq!(repaired_state, expected_state);
+
+    let original_path = folder.join("original.mobi");
+    std::fs::write(&original_path, vec![0; original.len()]).unwrap();
+    assert!(
+        reimport()
+            .unwrap_err()
+            .to_string()
+            .contains("Stored MOBI original does not match")
+    );
+    assert_eq!(
+        std::fs::read(&original_path).unwrap(),
+        vec![0; original.len()]
+    );
+    assert_eq!(std::fs::read_to_string(&rendered).unwrap(), xhtml);
+    assert_eq!(snapshot(&desk), repaired_state);
+    std::fs::write(original_path, original).unwrap();
+
     let receiver = Root::new();
     let restored = receiver.open();
     let archive = root.0.join("mobi-backup.json");
     desk.export_archive(archive.to_string_lossy().into_owned())
         .unwrap();
+
+    // A failed previous restore can leave valid originals with stale caches.
+    let previous = receiver.0.join("assets").join(&asset_id);
+    let previous_rendered = previous.join(&asset.spine[0]);
+    std::fs::create_dir_all(previous_rendered.parent().unwrap()).unwrap();
+    std::fs::write(previous.join("original.mobi"), original).unwrap();
+    std::fs::write(&previous_rendered, b"stale derived data").unwrap();
     restored
         .restore_archive(archive.to_string_lossy().into_owned())
         .unwrap();
     let received = snapshot(&restored);
-    assert_eq!(received.editions[&editions[0]].assets, [asset.clone()]);
+    assert_eq!(received.editions[edition_id].assets, [asset.clone()]);
     let received_folder = PathBuf::from(restored.asset_directory(asset_id).unwrap());
     assert_eq!(
         std::fs::read(received_folder.join("original.mobi")).unwrap(),
@@ -209,7 +252,7 @@ fn legacy_mobi_import_and_restore_keep_original_bytes_and_stable_reader_resource
             "{name}"
         );
         assert_eq!(std::fs::read(source).unwrap(), bytes);
-        assert_eq!(snapshot(&desk), state);
+        assert_eq!(snapshot(&desk), repaired_state);
     }
     assert_eq!(std::fs::read_dir(root.0.join("assets")).unwrap().count(), 1);
 }

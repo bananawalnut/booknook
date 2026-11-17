@@ -418,6 +418,41 @@ impl Xhtml {
         }
     }
 
+    // The supported block tags follow HTML's optional paragraph and list-item
+    // end tags. The nearest list boundary keeps a nested item's open tag from
+    // closing an item in its parent list.
+    fn close_implied(&mut self, name: &str) {
+        if name == "li"
+            && let Some(index) = self
+                .open
+                .iter()
+                .rposition(|tag| matches!(*tag, "li" | "ol" | "ul"))
+            && self.open[index] == "li"
+        {
+            self.close_from(index);
+        }
+        if matches!(
+            name,
+            "p" | "div"
+                | "h1"
+                | "h2"
+                | "h3"
+                | "h4"
+                | "h5"
+                | "h6"
+                | "blockquote"
+                | "pre"
+                | "ul"
+                | "ol"
+                | "li"
+                | "hr"
+                | "mbp:pagebreak"
+        ) && let Some(index) = self.open.iter().rposition(|tag| *tag == "p")
+        {
+            self.close_from(index);
+        }
+    }
+
     fn opening(&mut self, name: &str, self_closing: bool) -> TokenSinkResult<()> {
         if let Some((hidden, raw)) = discarded(name) {
             // Only foreign elements honor this flag here. Raw-text HTML
@@ -432,6 +467,7 @@ impl Xhtml {
             }
         }
         if self.hidden.is_empty() {
+            self.close_implied(name);
             match name {
                 "br" => self.write("<br/>"),
                 "hr" | "mbp:pagebreak" => self.write("<hr/>"),
@@ -637,6 +673,55 @@ mod tests {
                 .iter()
                 .any(|bad| text.contains(bad))
         );
+    }
+
+    #[test]
+    fn omitted_paragraph_end_tags_keep_shallow_siblings() {
+        let count = MAX_DEPTH + 2;
+        let markup: String = (0..count)
+            .map(|index| format!("<p>Paragraph {index}"))
+            .collect();
+        let raw = book(markup.as_bytes(), 65001);
+        let first = render_mobi6(&raw).unwrap();
+        assert_eq!(first, render_mobi6(&raw).unwrap());
+        let parsed = roxmltree::Document::parse(std::str::from_utf8(&first).unwrap()).unwrap();
+        let body = parsed
+            .descendants()
+            .find(|node| node.has_tag_name("body"))
+            .unwrap();
+        let paragraphs: Vec<_> = body
+            .children()
+            .filter(|node| node.has_tag_name("p"))
+            .collect();
+        assert_eq!(paragraphs.len(), count);
+        for (index, paragraph) in paragraphs.iter().enumerate() {
+            assert_eq!(
+                paragraph.text(),
+                Some(format!("Paragraph {index}").as_str())
+            );
+        }
+    }
+
+    #[test]
+    fn omitted_list_item_end_tags_preserve_nested_list_scope() {
+        let markup =
+            b"<ol><li>First<p>Details<li>Second<ol><li>Nested one<li>Nested two</ol><li>Last</ol>";
+        let generated = render_mobi6(&book(markup, 65001)).unwrap();
+        let xhtml = std::str::from_utf8(&generated).unwrap();
+        assert!(
+            xhtml.contains(
+                "<ol><li>First<p>Details</p></li><li>Second<ol><li>Nested one</li><li>Nested two</li></ol></li><li>Last</li></ol>"
+            ),
+            "{xhtml}"
+        );
+    }
+
+    #[test]
+    fn genuine_deep_nesting_remains_bounded() {
+        let markup =
+            |depth: usize| format!("{}text{}", "<div>".repeat(depth), "</div>".repeat(depth));
+        assert!(render_mobi6(&book(markup(MAX_DEPTH).as_bytes(), 65001)).is_ok());
+        assert!(message(&book(markup(MAX_DEPTH + 1).as_bytes(), 65001)).contains("limits"));
     }
 
     #[test]

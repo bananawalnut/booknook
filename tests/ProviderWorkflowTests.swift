@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 import Foundation
+import WebKit
 
 @MainActor func testPublicProviderRepositoryWorkflow() async throws {
     let root = FileManager.default.temporaryDirectory.appendingPathComponent("booknook-provider-app-\(UUID().uuidString)")
@@ -82,13 +83,79 @@ import Foundation
         .appendingPathComponent("crates/native/tests/fixtures/mobi6-reader.mobi")
     let original = try Data(contentsOf: mobiURL)
     let accepted = try await reopened.importContent(book: bookID, url: mobiURL)
-    guard let mobi = accepted.editions.values.flatMap(\.assets).first(where: \.isMobi6) else {
-        preconditionFailure("The normal selected-file provider did not attach MOBI")
+    model.accept(accepted)
+    guard let passID = model.notebook?.passId, let editionID = model.book?.editionIds.last,
+          let mobi = accepted.editions[editionID]?.assets.last, mobi.isMobi6 else {
+        preconditionFailure("The normal selected-file provider did not attach MOBI to the active edition")
     }
     precondition(mobi.supportsTextSize && mobi.spine == ["mobi6-v1/book.xhtml"])
     let mobiFolder = try await reopened.assetDirectory(mobi.id)
     let stored = try Data(contentsOf: mobiFolder.appendingPathComponent("original.mobi"))
     let body = try String(contentsOf: mobiFolder.appendingPathComponent(mobi.spine[0]), encoding: .utf8)
     precondition(stored == original && body.contains("A window opened above the reading desk."))
-    print("Normal selected-file provider accepted original MOBI bytes and the stable XHTML resource.")
+    let source = ReaderSourceContext(passID: passID, editionID: editionID, assetID: mobi.id,
+        fingerprint: mobi.sha256, resource: mobi.spine[0])
+    try await testAttachedMobiReader(model: model, source: source, folder: mobiFolder, spine: mobi.spine)
+    print("Normal selected-file provider preserved MOBI bytes; the contained WKWebView rendered the stable resource and delivered its selected passage.")
+}
+
+@MainActor private func testAttachedMobiReader(model: DeskModel, source: ReaderSourceContext, folder: URL, spine: [String]) async throws {
+    let scripts = try ["reader-geometry", "reader"].map {
+        try String(contentsOfFile: "apps/apple/Resources/\($0).js", encoding: .utf8)
+    }
+    let passage = "A window opened above the reading desk."
+    var readerError: String?
+    var selectedQuote: String?
+    let receive = model.readerMessages(from: source, currentResource: { source.resource }) { message in
+        if message["type"] as? String == "selection" { selectedQuote = message["quote"] as? String }
+    }
+    let coordinator = ReaderCoordinator { message in
+        if message["type"] as? String == "error" { readerError = message["message"] as? String ?? "Reader error" }
+        receive(message)
+    }
+    let web = makeWebView(coordinator, scriptSources: scripts)
+    web.frame = CGRect(x: 0, y: 0, width: 640, height: 480)
+    defer {
+        web.stopLoading()
+        web.configuration.userContentController.removeScriptMessageHandler(forName: "booknook")
+    }
+    let clock = ContinuousClock()
+    let deadline = clock.now + .seconds(10)
+    func failure(_ message: String) -> NSError {
+        NSError(domain: "BookNookMobiReaderAcceptance", code: 1, userInfo: [NSLocalizedDescriptionKey: message])
+    }
+    func wait(for phase: String, until ready: () -> Bool) async throws {
+        while clock.now < deadline {
+            if let readerError { throw failure(readerError) }
+            if ready() { return }
+            try await Task.sleep(for: .milliseconds(25))
+        }
+        throw failure("Timed out waiting for attached MOBI \(phase)")
+    }
+
+    let expectedPath = folder.appendingPathComponent(source.resource).standardizedFileURL.path
+    let fontSize = 19
+    updateWeb(web, coordinator: coordinator, root: folder, resource: source.resource, annotations: [],
+        fontSize: fontSize, restorePosition: nil, spine: spine, destination: nil)
+    try await wait(for: "file navigation") {
+        web.url?.standardizedFileURL.path == expectedPath && !web.isLoading && coordinator.submittedFontSize == fontSize
+    }
+    var evaluation: String?
+    web.evaluateJavaScript("""
+        (() => {
+          const prose = document.body?.textContent ?? "";
+          if (!prose.includes("\(passage)") || !prose.includes("Café, 日本語, 🌿.")) return "Missing decoded MOBI prose";
+          const resolved = booknookResolve({quote: "\(passage)"});
+          if (resolved.status !== "resolved" || !resolved.rects.length) return "MOBI passage has no rendered text bounds";
+          const selection = getSelection();
+          selection.removeAllRanges();
+          selection.addRange(resolved.range);
+          return selection.toString() === "\(passage)" ? "selected" : "Wrong DOM selection";
+        })()
+        """) { value, error in
+        evaluation = error?.localizedDescription ?? (value as? String) ?? "No JavaScript result"
+    }
+    try await wait(for: "DOM prose and text bounds") { evaluation != nil }
+    guard evaluation == "selected" else { throw failure(evaluation ?? "No JavaScript result") }
+    try await wait(for: "selection through the native reader source gate") { selectedQuote == passage }
 }
