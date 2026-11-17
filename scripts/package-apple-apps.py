@@ -216,12 +216,9 @@ def main():
         for key in PRODUCTS:
             check_public_content(product_path(build_root, key, args.configuration), key)
     provenance = json.loads(args.provenance.read_text())
-    version = tomllib.loads((ROOT / "Cargo.toml").read_text())["workspace"]["package"]["version"]
-    args.output.mkdir(parents=True, exist_ok=True)
-    report = {"workspace_version": version, "configuration": args.configuration,
-              "build_provenance_sha256": digest(args.provenance), "apps": {}}
-    if args.check_public_content:
-        report["public_content_checked"] = True
+    workspace_version = tomllib.loads((ROOT / "Cargo.toml").read_text())["workspace"]["package"]["version"]
+    inspected = {}
+    app_identity = None
     for key in PRODUCTS:
         app = product_path(build_root, key, args.configuration)
         before = manifest(app)
@@ -229,7 +226,26 @@ def main():
                  for name, entry in before.items() if "directory" not in entry}
         assert files == provenance["app_trees"][key]["files"], f"Build provenance differs: {key}"
         inspection = inspect(app, key, args.configuration)
-        output = args.output / f"booknook-{key}-arm64-development-{version}.tar.gz"
+        fields = ("CFBundleShortVersionString", "CFBundleVersion")
+        identity = tuple(inspection["info"].get(field) for field in fields)
+        for field, value in zip(fields, identity):
+            if not isinstance(value, str) or not re.fullmatch(r"[0-9]+(?:\.[0-9]+){0,2}", value):
+                raise ValueError(f"{key}: invalid {field} for the app archive label")
+        if app_identity is None:
+            app_identity = identity
+        elif app_identity != identity:
+            raise ValueError(f"{key}: expected app version {app_identity[0]} build {app_identity[1]}, "
+                             f"found {identity[0]} build {identity[1]}")
+        inspected[key] = (app, before, len(files), inspection)
+
+    app_version, app_build = app_identity
+    args.output.mkdir(parents=True, exist_ok=True)
+    report = {"workspace_version": workspace_version, "configuration": args.configuration,
+              "build_provenance_sha256": digest(args.provenance), "apps": {}}
+    if args.check_public_content:
+        report["public_content_checked"] = True
+    for key, (app, before, file_count, inspection) in inspected.items():
+        output = args.output / f"booknook-{key}-arm64-development-{app_version}.tar.gz"
         with output.open("wb") as raw, gzip.GzipFile(filename="", mode="wb", fileobj=raw, mtime=0) as compressed:
             with tarfile.open(fileobj=compressed, mode="w") as archive:
                 archive.add(app, arcname=app.name, filter=normalized)
@@ -249,22 +265,22 @@ def main():
         report["apps"][key] = {"archive": output.name, "archive_bytes": output.stat().st_size,
                                "archive_sha256": digest(output), "bundle": app.name,
                                "files": before, "inspection": inspection}
-        print(f"{key}: verified {len(files)} files, {len(inspection['mach_o'])} Mach-O binaries, {output.stat().st_size} archive bytes; {digest(output)}")
+        print(f"{key}: verified {file_count} files, {len(inspection['mach_o'])} Mach-O binaries, {output.stat().st_size} archive bytes; {digest(output)}")
     (args.output / "VERIFICATION.json").write_text(json.dumps(report, indent=2) + "\n")
     public_content_option = " --check-public-content" if args.check_public_content else ""
     (args.output / "README.md").write_text(f"""# Book Nook native development apps
 
-These archives preserve the already-built Book Nook {version} {args.configuration}-configuration development bundles. They are not signed/notarized release distributions. Packaging did not rebuild, sign, install or launch any application.
+These archives preserve the already-built Book Nook {app_version} (build {app_build}) {args.configuration}-configuration development bundles. They are not signed/notarized release distributions. Packaging did not rebuild, sign, install or launch any application.
 
 | Archive | Intended environment | Limitations |
 | --- | --- | --- |
-| `booknook-mac-arm64-development-{version}.tar.gz` | Apple Silicon Mac, macOS 14 or newer | Launchable-format native development app with linker ad-hoc Mach-O signatures; no Developer ID, sealed resource signature or notarization. Local execution remains subject to macOS security and compatibility checks. No launch was performed during packaging. |
-| `booknook-ipad-sim-arm64-development-{version}.tar.gz` | arm64 iPad Simulator in Xcode, iOS 17 or newer runtime | Simulator build only; cannot run on a physical iPad. Requires a compatible installed simulator runtime and separate developer installation. |
-| `booknook-ipad-device-arm64-development-{version}.tar.gz` | arm64 physical iPad build target, iPadOS 17 or newer | Unsigned app bundle, not an installable IPA. Proper developer signing/provisioning and device qualification are still required. |
+| `booknook-mac-arm64-development-{app_version}.tar.gz` | Apple Silicon Mac, macOS 14 or newer | Launchable-format native development app with linker ad-hoc Mach-O signatures; no Developer ID, sealed resource signature or notarization. Local execution remains subject to macOS security and compatibility checks. No launch was performed during packaging. |
+| `booknook-ipad-sim-arm64-development-{app_version}.tar.gz` | arm64 iPad Simulator in Xcode, iOS 17 or newer runtime | Simulator build only; cannot run on a physical iPad. Requires a compatible installed simulator runtime and separate developer installation. |
+| `booknook-ipad-device-arm64-development-{app_version}.tar.gz` | arm64 physical iPad build target, iPadOS 17 or newer | Unsigned app bundle, not an installable IPA. Proper developer signing/provisioning and device qualification are still required. |
 
 Check `shasum -a 256 -c SHA256SUMS`, then extract the appropriate tarball. Each archive contains the entire `.app`, reader JavaScript, offline ontology resources and license inventory. Debug bundles must include their `.debug.dylib`; Release bundles may contain a single main binary. Existing binary signatures are recorded per Mach-O; packaging does not add or renew them. There are no third-party dynamic dependencies outside the bundles: remaining dynamic links are Apple system libraries/frameworks. The Rust implementation is statically linked into the app's binaries.
 
-The archive version is the source workspace version; actual Info.plist marketing/build fields are recorded separately. Every bundled Mach-O must declare the expected platform and a minimum OS no newer than the app's declared macOS 14.0 or iPadOS 17.0 floor. This metadata check does not establish execution on those OS versions. Physical Pencil input, current OS/device compatibility and live account qualification are not established by compilation or archive checks. The apps use their normal application identifiers and storage locations; the archives contain no user library, account credentials or test desk database.
+The archive filenames use the marketing version shared by all three Info.plists. The verification record also includes the Rust workspace version and each bundle’s build number. Every bundled Mach-O must declare the expected platform and a minimum OS no newer than the app's declared macOS 14.0 or iPadOS 17.0 floor. This metadata check does not establish execution on those OS versions. Physical Pencil input, current OS/device compatibility and live account qualification are not established by compilation or archive checks. The apps use their normal application identifiers and storage locations; the archives contain no user library, account credentials or test desk database.
 
 `VERIFICATION.json` records the selected configuration, every bundled file hash/mode, each Mach-O architecture/platform/minimum-OS/dependency, Info.plist fields and comparison to the successful-build provenance. Every archive was independently extracted, its full bundle tree and executable metadata compared, and the temporary copy removed. `SHA256SUMS` covers the three archives and this verification record.
 
