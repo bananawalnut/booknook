@@ -221,17 +221,21 @@ class PublicContentTests(unittest.TestCase):
     def test_opt_in_preflights_all_inputs_and_screens_each_verified_extraction(self):
         source = self.root / "source"
         (source / "docs").mkdir(parents=True)
-        (source / "Cargo.toml").write_text('[workspace.package]\nversion = "0.0.0"\n')
+        (source / "Cargo.toml").write_text('[workspace.package]\nversion = "0.2.2"\n')
         for name in ("LICENSE-MPL-2.0", "LICENSE-MIT", "LICENSE-APACHE", "docs/dependency-licenses.csv"):
             (source / name).touch()
         build = (self.root / "build").resolve()
         apps = {key: PACKAGE.product_path(build, key, "Release") for key in PACKAGE.PRODUCTS}
+        def info_path(app, key):
+            return app / ("Contents/Info.plist" if key == "mac" else "Info.plist")
+
+        app_info = {"CFBundleShortVersionString": "0.2.1", "CFBundleVersion": "2026111607"}
         for key, app in apps.items():
-            plist = app / ("Contents/Info.plist" if key == "mac" else "Info.plist")
+            plist = info_path(app, key)
             plist.parent.mkdir(parents=True)
-            plist.write_bytes(plistlib.dumps({}))
+            plist.write_bytes(plistlib.dumps(app_info))
         last = apps["ipad-device"] / "BookNookPad"
-        last.write_bytes(b"/home/private-path-sentinel")
+        last.write_bytes(b"/booknook-source/synthetic")
         provenance = self.root / "provenance.json"
 
         def save_provenance():
@@ -243,8 +247,28 @@ class PublicContentTests(unittest.TestCase):
         output = self.root / "output"
         argv = ["package-apple-apps.py", "--output", str(output), "--build-root", str(build),
                 "--provenance", str(provenance), "--configuration", "Release"]
-        with patch.object(PACKAGE, "ROOT", source), patch.object(PACKAGE, "inspect", return_value={"mach_o": []}), \
+        def inspect_fixture(app, key, _configuration):
+            return {"info": plistlib.loads(info_path(app, key).read_bytes()), "mach_o": {}}
+
+        with patch.object(PACKAGE, "ROOT", source), patch.object(PACKAGE, "inspect", side_effect=inspect_fixture), \
                 patch("builtins.print"):
+            device_info = info_path(apps["ipad-device"], "ipad-device")
+            for field, value, diagnostic in [
+                ("CFBundleShortVersionString", "0.2.0", "ipad-device: expected app version"),
+                ("CFBundleVersion", "2026111606", "ipad-device: expected app version"),
+                ("CFBundleVersion", "1/2", "ipad-device: invalid CFBundleVersion"),
+            ]:
+                with self.subTest(field=field, value=value):
+                    device_info.write_bytes(plistlib.dumps({**app_info, field: value}))
+                    save_provenance()
+                    with patch.object(sys, "argv", argv + ["--check-public-content"]), \
+                            patch.object(PACKAGE.tarfile, "open", wraps=PACKAGE.tarfile.open) as tar_open, \
+                            self.assertRaisesRegex(ValueError, diagnostic):
+                        PACKAGE.main()
+                    self.assertFalse(output.exists())
+                    tar_open.assert_not_called()
+            device_info.write_bytes(plistlib.dumps(app_info))
+            last.write_bytes(b"/home/private-path-sentinel")
             save_provenance()
             with patch.object(sys, "argv", argv + ["--check-public-content"]), \
                     self.assertRaisesRegex(ValueError, "private absolute path"):
@@ -261,7 +285,17 @@ class PublicContentTests(unittest.TestCase):
             self.assertEqual([call.args[0] for call in check.call_args_list[:3]], list(apps.values()))
             self.assertEqual([call.args[1] for call in check.call_args_list], list(apps) * 2)
             self.assertTrue(all(call.args[0] != apps[call.args[1]] for call in check.call_args_list[3:]))
-            self.assertTrue(json.loads((output / "VERIFICATION.json").read_text())["public_content_checked"])
+            report = json.loads((output / "VERIFICATION.json").read_text())
+            self.assertTrue(report["public_content_checked"])
+            self.assertEqual(report["workspace_version"], "0.2.2")
+            expected = {f"booknook-{key}-arm64-development-0.2.1.tar.gz" for key in apps}
+            self.assertEqual({app["archive"] for app in report["apps"].values()}, expected)
+            self.assertEqual({path.name for path in output.glob("*.tar.gz")}, expected)
+            readme = (output / "README.md").read_text()
+            self.assertIn("Book Nook 0.2.1 (build 2026111607)", readme)
+            for name in expected:
+                self.assertIn(f"`{name}`", readme)
+            self.assertNotIn("0.2.2", readme)
 
 
 if __name__ == "__main__":

@@ -2,15 +2,15 @@
 
 This standalone Swift Package exposes three products: `BookNookNative` for the UniFFI bridge, `BookNookServices` for injectable source workflows, and `CastaliaNative` for reusable custody, secure storage and consent. It contains generated Swift, handwritten public facades, a static XCFramework, SDK license texts and the dependency inventory. It does not include the MPL reference application's SwiftUI views. It supports macOS 14+, iPadOS 17+, and the arm64 Mac, iOS device and iOS Simulator slices built by this workspace. Intel Mac/simulator slices are not supplied.
 
-Generate it from source with `bash scripts/package-swift.sh`. Full Xcode, Rust Apple targets and XcodeGen are prerequisites. The script builds all three targets, generates the package, runs an independent Swift consumer against a temporary desk, and creates `target/packages/booknook-swift-sdk-0.2.1.tar.gz`. After running all three matching Apple builds already, `--use-built` skips rebuilding. Do not use that option with stale native libraries. Nothing is signed or remotely published.
+Generate it from source with `bash scripts/package-swift.sh`. Full Xcode, Rust Apple targets and XcodeGen are prerequisites. The script builds all three targets, generates the package, runs an independent Swift consumer against a temporary desk, and creates `target/packages/booknook-swift-sdk-0.2.2.tar.gz`. After running all three matching Apple builds already, `--use-built` skips rebuilding. Do not use that option with stale native libraries. Nothing is signed or remotely published.
 
 Extract the archive and use Xcode's local package option, or add:
 
 ```swift
-.package(path: "/path/to/booknook-swift-sdk-0.2.1")
+.package(path: "/path/to/booknook-swift-sdk-0.2.2")
 ```
 
-Depend on `.product(name: "BookNookNative", package: "booknook-swift-sdk-0.2.1")`, then:
+Depend on `.product(name: "BookNookNative", package: "booknook-swift-sdk-0.2.2")`, then:
 
 ```swift
 import BookNookNative

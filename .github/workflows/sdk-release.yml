@@ -1,0 +1,95 @@
+name: Build SDK release archives
+on:
+  workflow_dispatch:
+  push:
+    branches: ["validation/sdk-*"]
+permissions:
+  contents: read
+env:
+  CARGO_PROFILE_DEV_DEBUG: "0"
+  CARGO_PROFILE_TEST_DEBUG: "0"
+  CARGO_PROFILE_RELEASE_DEBUG: "0"
+  CARGO_INCREMENTAL: "0"
+jobs:
+  portable:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@39008827e6b4319a349e9a42dfc90579dd25f1ca # stable action
+        with:
+          toolchain: "1.96.0"
+          targets: wasm32-unknown-unknown
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22.23.4"
+      - name: Install the WebAssembly C toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang llvm
+      - name: Package and exercise the installed Rust and npm SDKs
+        env:
+          CC: clang
+          CXX: clang++
+          CC_wasm32_unknown_unknown: clang
+          AR_wasm32_unknown_unknown: llvm-ar
+        run: |
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test -z "$(git status --porcelain)"
+          export CARGO_TARGET_DIR="$RUNNER_TEMP/booknook-sdk-cargo"
+          cargo fetch --locked
+          cargo install wasm-bindgen-cli --version 0.2.127 --locked
+          flags="$(python3 -B scripts/apple-public-build-flags.py "$PWD" "$CARGO_TARGET_DIR" "$RUNNER_TEMP/booknook-sdk-unused-derived-data")"
+          {
+            IFS= read -r CARGO_ENCODED_RUSTFLAGS
+            IFS= read -r clang_flags
+          } <<< "$flags"
+          export CARGO_ENCODED_RUSTFLAGS CC_SHELL_ESCAPED_FLAGS=1
+          export CFLAGS="$clang_flags" CXXFLAGS="$clang_flags"
+          bash scripts/package-rust.sh
+          bash scripts/package-typescript.sh
+          python3 -B scripts/stage-hosted-sdk.py portable
+      - uses: actions/upload-artifact@v7
+        with:
+          name: booknook-sdk-portable-${{ github.sha }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/booknook-sdk-archives/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
+  apple:
+    runs-on: macos-26
+    timeout-minutes: 45
+    env:
+      BOOKNOOK_APP_CONFIGURATION: Release
+      BOOKNOOK_PUBLIC_APP_BUILD: "1"
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@39008827e6b4319a349e9a42dfc90579dd25f1ca # stable action
+        with:
+          toolchain: "1.96.0"
+          targets: aarch64-apple-ios-sim,aarch64-apple-ios
+      - run: brew install xcodegen
+      - name: Package and exercise the extracted Swift SDK
+        run: |
+          test "$(uname -m)" = arm64
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test -z "$(git status --porcelain)"
+          export CARGO_TARGET_DIR="$RUNNER_TEMP/booknook-sdk-cargo"
+          export BOOKNOOK_APP_BUILD_DIR="$RUNNER_TEMP/booknook-sdk-apple-products"
+          for platform in mac ipad-sim ipad-device; do
+            bash scripts/build-apple.sh "$platform"
+            git diff --exit-code -- apps/apple/Generated
+          done
+          bash scripts/package-swift.sh --use-built
+          python3 -B scripts/stage-hosted-sdk.py apple
+      - uses: actions/upload-artifact@v7
+        with:
+          name: booknook-sdk-apple-${{ github.sha }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/booknook-sdk-archives/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
