@@ -1,0 +1,162 @@
+{
+  "cross_runtime_consumer": {
+    "checks": {
+      "ordinary_ci_steps_passed": 38,
+      "package_ci_steps_passed": 18,
+      "receiving_ci_steps_passed": 28
+    },
+    "package_version": "0.2.2",
+    "portable": {
+      "archive_sha256_rust_node_chrome": "8407655b89e6db9de0f575571c4678ec0ef29df565e5839319f0bb571487b397",
+      "browser": "Headless Chrome 157.0.8103.50 on Ubuntu 24.04",
+      "node": "22.23.4",
+      "reader_xhtml_sha256": "55e2c2d6ac0f9a2c0cc1b486e116dafd93a41ab01754432ea359fd89dbb48c51",
+      "result": "Exact extracted Rust crates wrote the MOBI archive. Installed npm verified both WASM targets in Node and the web target in Chrome. Original bytes and generated XHTML were checked.",
+      "rust": "1.96.0"
+    },
+    "receiving": {
+      "advisory_and_registry_snapshot_sha256": "8a78a5c9471adcdf6795266ac4de8f0ba850566b361eb9a69ad03136fc22a206",
+      "audit": "Zero vulnerabilities, unsound advisories or reported yanked packages in audited data and two maintenance notices. Official current registry checks cover 25 changed selections. The other 321 match the previous inventory and cached sparse metadata.",
+      "local_packages": 5,
+      "lock_sha256": "808e6ffb13f95521f7927668a89708762f5c81acf003535fd373fc73974ee469",
+      "rustsec_comparison": "https://github.com/RustSec/advisory-db/compare/4ef2df8e806a65e2f1ecc14f56f51249062b23d6...02e2517f457a359fc6d3440ea4560c8ea188fee8",
+      "verified_registry_archives": 346,
+      "version_selections_changed_from_source_lock": 25
+    },
+    "runs": {
+      "build_attempt": 1,
+      "consumer_attempt": 1,
+      "independent_consumer": 44027106785,
+      "ordinary_checks": 44021875655,
+      "portable_build": 44021875758,
+      "validation_harness_source": "4ec24424b86b51de0d6ec2935170293556813330"
+    },
+    "schema": "booknook.sdk-mobi-consumer-verification.v1",
+    "scope": "Synthetic DRM-free legacy MOBI6. Native runtime evidence covers arm64 macOS for Swift. iPadOS slices have separate build verification. Live integrations and minimum-OS runtime checks are tracked independently.",
+    "source_commit": "2d91bc0d5e07097f9e07aacd0e935b9de97b5e8b",
+    "swift": {
+      "platform": "arm64 macOS runtime",
+      "reexport_sha256": "8cc84ac4fedefd5285afba6458d160c2a092d2e50357268461970712462151ae",
+      "result": "Exact extracted Swift archive restored the browser archive, reopened the desk and reexported preserved content and metadata.",
+      "xcframework_slices": [
+        "arm64 macOS",
+        "arm64 iPadOS device",
+        "arm64 iPadOS Simulator"
+      ]
+    },
+    "synthetic_proof_transport": {
+      "portable_zip_sha256": "6f2328456467a24df4791987aa22a20cb3e6e0c8cff79e1efe4aec2b8457761b",
+      "run_id": 44027106785,
+      "swift_zip_sha256": "954ee3fd95cdc36351ddbd9e5fd20dbe439897284c7135e8414f9068edf1a025"
+    }
+  },
+  "open_acceptance": [
+    "Live Kindle and Audible accounts",
+    "Existing Castalia operational authority and approved remote/two-device exchange",
+    "Physical iPad finger, Pencil, keyboard and VoiceOver",
+    "Oldest supported macOS and iPadOS runtime"
+  ],
+  "package_version": "0.2.2",
+  "promoted_source_merge": "5200298e4e70bb2b673ed2bfdbe98b4245fd830f",
+  "public_assets_verified_utc": "2026-11-17T06:23:37.258633+00:00",
+  "public_downloads": {
+    "asset_count": 17,
+    "assets": {
+      "BUILD-PROVENANCE-apple.json": {
+        "bytes": 990,
+        "id": 757898204,
+        "sha256": "c4034639d09c464162ff3455399b3cf25408dfbcda320e790f2b5e49a52f2277"
+      },
+      "BUILD-PROVENANCE-portable.json": {
+        "bytes": 1669,
+        "id": 757898201,
+        "sha256": "a2a834581e2d9024279df50198a087dcc5dd8bfe9aa9e23206928af29a2a69b4"
+      },
+      "CONSUMER-VERIFICATION.json": {
+        "bytes": 2707,
+        "id": 757898203,
+        "sha256": "152d50ddd73e6c4f5a46534053eaebaa97d7a9fd66e943162efd5656b927b8fd"
+      },
+      "DEPENDENCY-LICENSES.csv": {
+        "bytes": 45827,
+        "id": 757898211,
+        "sha256": "ae73fa895de73dc19f6213dd1f8619c8977c55db78220e33ee22c18a783e650d"
+      },
+      "LICENSE-APACHE": {
+        "bytes": 11326,
+        "id": 757898207,
+        "sha256": "fabba0cb7d00a4b3211fdc13699223ab2d22f88678ccd608494cf2b332b903e9"
+      },
+      "LICENSE-BOUNDARIES.md": {
+        "bytes": 8505,
+        "id": 757898236,
+        "sha256": "01c939c88f854cf460b2141b4adeb833378932ed907c02574a4de84d21644991"
+      },
+      "LICENSE-MIT": {
+        "bytes": 1079,
+        "id": 757898239,
+        "sha256": "e4c16e07e31d3fdbba827f245f39f51ee0871898f1585653129bcbe3c63a7410"
+      },
+      "LICENSE-MPL-2.0": {
+        "bytes": 16727,
+        "id": 757898233,
+        "sha256": "66a3107d5ad6a058aab753eaac2047ccb2ed0e39465dd0fe5844da3e300d5172"
+      },
+      "RECEIVING-CARGO.lock": {
+        "bytes": 85988,
+        "id": 757898238,
+        "sha256": "808e6ffb13f95521f7927668a89708762f5c81acf003535fd373fc73974ee469"
+      },
+      "RELEASE-MANIFEST.json": {
+        "bytes": 3147,
+        "id": 757898242,
+        "sha256": "895b6bc738d194c2310ab9b1b6b00a55696b72d1f154e51d2a7c93eb6dcafb31"
+      },
+      "SHA256SUMS": {
+        "bytes": 1441,
+        "id": 757898262,
+        "sha256": "30515b8d90405e16efc22498e14f98a05792522ad275049dfdd7e60fa2d77aeb"
+      },
+      "booknook-connectors-0.2.2.crate": {
+        "bytes": 72897,
+        "id": 757898261,
+        "sha256": "7306268acab54cf1352a9789459adffa5199cf0462d4827bf001264204317794"
+      },
+      "booknook-core-0.2.2.crate": {
+        "bytes": 180415,
+        "id": 757898260,
+        "sha256": "4b201fd712ed3f5d53188911612ae638ff13ab02871b70c7f046c7a24ae1e8dc"
+      },
+      "booknook-native-0.2.2.crate": {
+        "bytes": 200726,
+        "id": 757898266,
+        "sha256": "60b74c609a53585a310e82098a48555efcfa887225a5bd918633839e3ccc64a4"
+      },
+      "booknook-sdk-0.2.2.tgz": {
+        "bytes": 4581418,
+        "id": 757898267,
+        "sha256": "f83a4366ddde417b0f76547bfd768312e2d8412535cbdc333b6cab68b108cf3d"
+      },
+      "booknook-swift-sdk-0.2.2.tar.gz": {
+        "bytes": 146724050,
+        "id": 757898310,
+        "sha256": "558f289c046e8b8990363b5398d881a3154141df673358bf86c05ce57512fac3"
+      },
+      "booknook-wasm-0.2.2.crate": {
+        "bytes": 38562,
+        "id": 757898335,
+        "sha256": "cc634673776bef78637318b127da98399ed523dae636e7dc75c7e6c2ff6c3915"
+      }
+    },
+    "bytes": 151977474,
+    "prior_release_identities_preserved": 9
+  },
+  "published_utc": "2026-11-17T06:23:01Z",
+  "release_id": 448233443,
+  "released_url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.2-sdk-preview.20261117",
+  "schema": "booknook.sdk-only-public-preview-evidence.v1",
+  "source_commit": "2d91bc0d5e07097f9e07aacd0e935b9de97b5e8b",
+  "status": "PASS_PUBLIC_SDK_DELIVERY_WITH_CROSS_RUNTIME_MOBI6_CONSUMER",
+  "tag": "v0.2.2-sdk-preview.20261117",
+  "unchanged_app_preview": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261116.7"
+}

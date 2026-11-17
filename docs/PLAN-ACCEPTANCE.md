@@ -2,6 +2,10 @@
 
 This audit keeps the original native MVP and SDK scope intact. A passing source test is evidence for the behavior it exercises, not evidence of a production account, physical device, remote deployment, or hands-on interaction. The requested production release is not complete while essential integration and physical-device gates remain open. [Validation](VALIDATION.md) records the final check results; [delivery](DELIVERY.md) names the remaining gates.
 
+## SDK 0.2.2 public and cross-runtime checkpoint
+
+[SDK 0.2.2 delivery evidence](sdk-022-public-preview-evidence.json) records independent Rust archive export, installed Node and Chrome WASM validation, and Swift restore and reopen against the exact released packages. The test covers a synthetic legacy MOBI6 and compares the original source and regenerated XHTML. All 17 public checksums passed. The macOS runtime acceptance and the iPadOS library slices have distinct evidence.
+
 ## Native app 1607 and iPad input checkpoint
 
 [Build 1607 delivery evidence](app-2026111607-public-preview-evidence.json) binds the exact source, three Apple Release archives, eight verified public downloads, and the Mac test that opened a legacy MOBI6 file, rendered its Unicode text, and saved a notebook entry. Original bytes and the generated reading resource were verified in the isolated store. Live Kindle catalog import and the downloads of the separately published SDK retain their own acceptance scope.
