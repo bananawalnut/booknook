@@ -329,18 +329,27 @@ actor DeskRepository {
             if let saved = observations[id], saved.observedAt > value.observedAt { continue }
             observations[id] = value
         }
-        var latest: [String: PositionObservation] = [:]
+        var latest: [[Data]: PositionObservation] = [:]
         for value in observations.values where value.passId == passID {
-            guard let location = value.location.object else { continue }
-            let key: String
-            switch location["kind"] as? String {
-            case "text", "page": key = "edition:\(location["edition_id"] as? String ?? "")"
-            default: key = "\(location["provider"] as? String ?? ""):\(location["source_id"] as? String ?? "")"
+            guard let location = value.location.object, let kind = location["kind"] as? String else { continue }
+            let fields: [String]
+            switch kind {
+            case "text", "page":
+                guard let edition = location["edition_id"] as? String else { continue }
+                fields = ["edition:\(edition)", "edition", "", edition, ""]
+            case "audio", "provider":
+                guard let provider = location["provider"] as? String, let source = location["source_id"] as? String else { continue }
+                fields = ["\(provider):\(source)", kind, provider, source, value.providerConnectionId ?? ""]
+            default: continue
             }
+            // Preserve source identifiers byte for byte, including distinct Unicode spellings.
+            let key = fields.map { Data($0.utf8) }
             if let old = latest[key], (old.observedAt, old.id) >= (value.observedAt, value.id) { continue }
             latest[key] = value
         }
-        let values = latest.keys.sorted().compactMap { latest[$0] }
+        let values = latest.keys.sorted { left, right in
+            left.lexicographicallyPrecedes(right) { $0.lexicographicallyPrecedes($1) }
+        }.compactMap { latest[$0] }
         return NotebookCaptureContext(passId: passID, positions: values.map(\.location), positionObservations: values)
     }
     private func captureNoteCreation(notebook: String, block: String, capture: NotebookInkCapture) -> NotebookNoteCreation? {

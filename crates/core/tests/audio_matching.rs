@@ -231,3 +231,202 @@ fn unqualified_metadata_cannot_force_a_match_or_confirm_an_audio_offset() {
             .is_err()
     );
 }
+
+#[test]
+fn history_preserves_latest_observation_for_each_exact_reading_source() {
+    let mut state = State::default();
+    let (book_id, earlier_pass) = book(
+        &mut state,
+        "Source history",
+        "Writer",
+        "edition",
+        vec![],
+        None,
+    );
+    let (_, other_pass) = book(&mut state, "Other book", "Writer", "other", vec![], None);
+    let notebook: Notebook =
+        serde_json::from_value(apply(&mut state, Command::StartPass { book_id, at: 200 }).unwrap())
+            .unwrap();
+    let pass = &notebook.pass_id;
+    let audio = |milliseconds| Location::Audio {
+        provider: "audible".into(),
+        source_id: "B012345678".into(),
+        milliseconds,
+        chapter: None,
+    };
+    let observe = |state: &mut State,
+                   pass_id: &str,
+                   id: &str,
+                   connection: Option<&str>,
+                   location: Location,
+                   (observed_at, received_at)| {
+        apply(
+            state,
+            Command::ObservePosition {
+                observation: ProgressObservation {
+                    provider_connection_id: connection.map(str::to_owned),
+                    id: id.into(),
+                    pass_id: pass_id.into(),
+                    location,
+                    observed_at,
+                    received_at,
+                    alignment: Alignment::Unmatched,
+                    audio_metadata: None,
+                },
+            },
+        )
+        .unwrap();
+    };
+    observe(
+        &mut state,
+        pass,
+        "legacy-before",
+        None,
+        audio(1000),
+        (209, 220),
+    );
+    let character = apply(
+        &mut state,
+        Command::AddCharacter {
+            notebook_id: notebook.id.clone(),
+            block_id: notebook.blocks[0].id.clone(),
+            name: "Character".into(),
+            at: 221,
+            capture_context: None,
+            note_creation: None,
+        },
+    )
+    .unwrap();
+    let card_id = character["card_id"].as_str().unwrap().to_owned();
+    let initial = state.cards[&card_id].versions[0].clone();
+    assert_eq!(initial.position_observations[0].id, "legacy-before");
+    observe(
+        &mut state,
+        pass,
+        "legacy-new",
+        None,
+        audio(2000),
+        (230, 300),
+    );
+    observe(
+        &mut state,
+        pass,
+        "a-old",
+        Some("audible.a"),
+        audio(3000),
+        (240, 400),
+    );
+    observe(
+        &mut state,
+        pass,
+        "a-tie",
+        Some("audible.a"),
+        audio(4000),
+        (250, 390),
+    );
+    observe(
+        &mut state,
+        pass,
+        "a-winner",
+        Some("audible.a"),
+        audio(5000),
+        (250, 260),
+    );
+    observe(
+        &mut state,
+        pass,
+        "b-only",
+        Some("audible.b"),
+        audio(6000),
+        (210, 220),
+    );
+    observe(
+        &mut state,
+        pass,
+        "other-kind",
+        Some("audible.a"),
+        Location::Provider {
+            provider: "audible".into(),
+            source_id: "B012345678".into(),
+            value: "opaque location".into(),
+        },
+        (230, 240),
+    );
+    observe(
+        &mut state,
+        pass,
+        "earlier-page",
+        None,
+        Location::Page {
+            edition_id: "edition".into(),
+            page: 3,
+        },
+        (250, 260),
+    );
+    observe(
+        &mut state,
+        pass,
+        "current-text",
+        None,
+        Location::Text {
+            edition_id: "edition".into(),
+            resource: "chapter.xhtml".into(),
+            quote: "A real passage".into(),
+            prefix: String::new(),
+            suffix: String::new(),
+        },
+        (251, 260),
+    );
+    observe(
+        &mut state,
+        &earlier_pass,
+        "different-pass",
+        Some("audible.a"),
+        audio(9100),
+        (310, 320),
+    );
+    observe(
+        &mut state,
+        &other_pass,
+        "different-book",
+        Some("audible.a"),
+        audio(9200),
+        (320, 330),
+    );
+
+    apply(
+        &mut state,
+        Command::SaveCard {
+            card_id: card_id.clone(),
+            parents: vec![initial.id.clone()],
+            interpretation: CharacterInterpretation::default(),
+            positions: vec![],
+            at: 450,
+        },
+    )
+    .unwrap();
+    let versions = &state.cards[&card_id].versions;
+    assert_eq!(
+        serde_json::to_value(&versions[0]).unwrap(),
+        serde_json::to_value(&initial).unwrap()
+    );
+    let current = &versions[1];
+    assert_eq!(current.pass_id, *pass);
+    assert_eq!(
+        current
+            .position_observations
+            .iter()
+            .map(|p| (p.id.as_str(), p.provider_connection_id.as_deref()))
+            .collect::<Vec<_>>(),
+        vec![
+            ("legacy-new", None),
+            ("a-winner", Some("audible.a")),
+            ("b-only", Some("audible.b")),
+            ("other-kind", Some("audible.a")),
+            ("current-text", None)
+        ]
+    );
+    assert_eq!(current.position_observations[1].received_at, 260);
+    assert_eq!(current.position_observations[2].observed_at, 210);
+    assert_eq!(state.positions.len(), 11);
+}

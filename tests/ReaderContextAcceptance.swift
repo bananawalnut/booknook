@@ -153,3 +153,61 @@ private func readerContextEPUB(in directory: URL, label: String) throws -> URL {
     precondition(!reopened.state!.positions.values.contains { ($0.location.object?["quote"] as? String)?.hasPrefix("Stale") == true })
     print("Reader callback context: actual native EPUB import, delayed callbacks rejected after book/pass/chapter/asset switches, selection/error/navigation preserved, valid current callbacks and SQLite position reopen passed. Headless callback boundary; no device or renderer interaction.")
 }
+
+/// Exercise the production first-input context and persist it through the actual
+/// native Desk. All timestamps, account references and EPUB bytes are synthetic.
+@MainActor func testSourceReadingHistory() async throws {
+    let root = FileManager.default.temporaryDirectory.appendingPathComponent("booknook-source-history-\(UUID().uuidString)")
+    try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: root) }
+    let desk = root.appendingPathComponent("desk")
+    let model = DeskModel(repository: DeskRepository(directory: desk)); await model.open()
+    precondition(model.error == nil)
+    let added = try await model.perform(["op": "add_book", "title": "Source history", "author": "Writer", "at": 100])
+    let book = added!.object!["book_id"] as! String
+    let earlier = model.state!.passes.values.first { $0.bookId == book }!.id
+    let epub = try readerContextEPUB(in: root, label: "position-history")
+    model.accept(try await model.repository.importContent(book: book, url: epub))
+    let edition = model.state!.books[book]!.editionIds.last!
+    let next = try await model.perform(["op": "start_pass", "book_id": book, "at": 200])
+    let notebook = next!.object!["id"] as! String
+    let pass = model.state!.notebooks[notebook]!.passId
+
+    func observe(_ id: String, _ location: [String: Any], at: UInt64, received: UInt64,
+                 connection: String? = nil, passID: String? = nil) async throws {
+        var observation: [String: Any] = ["id": id, "pass_id": passID ?? pass, "location": location,
+            "observed_at": at, "received_at": received, "alignment": ["status": "unmatched"]]
+        if let connection { observation["provider_connection_id"] = connection }
+        try await model.perform(["op": "observe_position", "observation": observation])
+    }
+    func audio(_ time: UInt64) -> [String: Any] {
+        ["kind": "audio", "provider": "audible", "source_id": "B012345678", "milliseconds": time]
+    }
+    try await observe("legacy-before", audio(1000), at: 209, received: 220)
+    let initial = try await model.createNote(notebook: notebook)
+    try await observe("legacy-new", audio(2000), at: 230, received: 300)
+    try await observe("a-tie", audio(4000), at: 250, received: 390, connection: "audible.a")
+    try await observe("a-winner", audio(5000), at: 250, received: 260, connection: "audible.a")
+    try await observe("b-only", audio(6000), at: 210, received: 220, connection: "audible.b")
+    try await observe("other-kind", ["kind": "provider", "provider": "audible", "source_id": "B012345678",
+        "value": "opaque location"], at: 230, received: 240, connection: "audible.a")
+    try await observe("earlier-page", ["kind": "page", "edition_id": edition, "page": 3], at: 250, received: 260)
+    try await observe("current-text", ["kind": "text", "edition_id": edition, "resource": "one.xhtml",
+        "quote": "position-history first café passage.", "prefix": "", "suffix": ""], at: 251, received: 260)
+    try await observe("different-pass", audio(9100), at: 310, received: 320, connection: "audible.a", passID: earlier)
+
+    let expected = ["legacy-new", "a-winner", "b-only", "other-kind", "current-text"]
+    let context = try model.captureReadingContext(passID: pass)
+    precondition(context.positionObservations.map(\.id) == expected, "Each connection must preserve its own latest source observation")
+    let saved = try await model.createNote(notebook: notebook)
+    let reopened = DeskModel(repository: DeskRepository(directory: desk)); await reopened.open()
+    precondition(reopened.error == nil)
+    let blocks = reopened.state!.notebooks[notebook]!.blocks
+    let original = blocks.first { $0.id == initial }!.note!.created.positionObservations
+    let observations = blocks.first { $0.id == saved }!.note!.created.positionObservations
+    precondition(original.map(\.id) == ["legacy-before"] && original[0].providerConnectionId == nil)
+    precondition(observations.map(\.id) == expected)
+    precondition(observations.map(\.providerConnectionId) == [nil, "audible.a", "audible.b", "audible.a", nil])
+    precondition(observations[1].receivedAt == 260 && observations[2].observedAt == 210)
+    print("Source reading history: per-connection audio/provider provenance, source-time tie order, edition and pass isolation, and exact native reopen passed.")
+}

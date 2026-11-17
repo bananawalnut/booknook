@@ -1062,10 +1062,24 @@ fn latest_positions(state: &State, pass_id: &str) -> Vec<ProgressObservation> {
                 provider,
                 source_id,
                 ..
-            } => format!("{provider}:{source_id}"),
-            Location::Text { edition_id, .. } | Location::Page { edition_id, .. } => {
-                format!("edition:{edition_id}")
-            }
+            } => (
+                format!("{provider}:{source_id}"),
+                if matches!(observation.location, Location::Audio { .. }) {
+                    "audio"
+                } else {
+                    "provider"
+                },
+                provider.as_str(),
+                source_id.as_str(),
+                observation.provider_connection_id.as_deref().unwrap_or(""),
+            ),
+            Location::Text { edition_id, .. } | Location::Page { edition_id, .. } => (
+                format!("edition:{edition_id}"),
+                "edition",
+                "",
+                edition_id.as_str(),
+                "",
+            ),
         };
         let current: &mut &ProgressObservation = latest.entry(key).or_insert(observation);
         if (observation.observed_at, &observation.id) > (current.observed_at, &current.id) {

@@ -13,6 +13,7 @@ import Foundation
             do {
                 if CommandLine.arguments.contains("--startup") { try await testDeskStartup(); exit(0) }
                 if CommandLine.arguments.contains("--publications") { try await testPublicationWorkflow(); exit(0) }
+                if CommandLine.arguments.contains("--source-reading-history") { try await testSourceReadingHistory(); exit(0) }
                 if CommandLine.arguments.contains("--ink-recognition") {
                     let root = FileManager.default.temporaryDirectory.appendingPathComponent("ink-recognition-" + UUID().uuidString)
                     defer { try? FileManager.default.removeItem(at: root) }
@@ -182,6 +183,7 @@ import Foundation
         try await testTranscriptionCancellation(model)
         try await testReaderInkWorkflow(model)
         try await testReaderContextWorkflow(model)
+        try await testSourceReadingHistory()
         try await testCompanionCatalogImportWorkflow()
         try await testCastaliaProfileImportWorkflow()
         try await testPublicProviderRepositoryWorkflow()
