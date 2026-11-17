@@ -150,6 +150,43 @@ fn approved_outbox_and_two_replica_data_survive_reopen_duplicate_receive_and_cor
     assert_eq!(b.snapshot().unwrap(), before);
 }
 #[test]
+fn approved_sync_transfers_original_mobi_and_regenerates_the_same_reader_resource() {
+    let ar = Directory::new();
+    let br = Directory::new();
+    let a = setup(&ar);
+    let b = setup(&br);
+    let ai = id(&a);
+    let bi = id(&b);
+    let key = "12".repeat(32);
+    pair(&a, &bi, &key, true);
+    pair(&b, &ai, &key, true);
+    add_book(&a);
+    let state: State = serde_json::from_str(&a.snapshot().unwrap()).unwrap();
+    let book = state.books.keys().next().unwrap();
+    let original = include_bytes!("../tests/fixtures/mobi6-reader.mobi");
+    let file = ar.0.join("source.mobi");
+    std::fs::write(&file, original).unwrap();
+    a.import_content(book.clone(), file.to_string_lossy().into_owned())
+        .unwrap();
+    let packet_path = exported(&a, &bi, &key, &ar.0.join("mobi-sync.json"));
+    assert_eq!(
+        value(b.sync_receive(packet_path, ai, key).unwrap())["duplicate"],
+        false
+    );
+    let asset = digest(original);
+    let source = PathBuf::from(a.asset_directory(asset.clone()).unwrap());
+    let received = PathBuf::from(b.asset_directory(asset).unwrap());
+    assert_eq!(
+        std::fs::read(received.join("original.mobi")).unwrap(),
+        original.as_slice()
+    );
+    assert_eq!(
+        std::fs::read(received.join("mobi6-v1/book.xhtml")).unwrap(),
+        std::fs::read(source.join("mobi6-v1/book.xhtml")).unwrap()
+    );
+}
+
+#[test]
 fn native_transfer_wire_opens_in_portable_core_and_core_packets_keep_native_replay_guards() {
     use booknook_core::sync;
     let ar = Directory::new();

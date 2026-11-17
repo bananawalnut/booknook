@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 //! The complete, existing native export envelope. Validation conveys no identity trust.
 //! Assets retain their original base64 strings; signed requests and relay JSON are opaque
-//! strings, never rewritten. Native restore additionally validates EPUB/PDF content.
+//! strings, never rewritten. Native restore additionally validates EPUB, PDF and legacy MOBI content.
 use crate::{
     Error, Result,
     model::State,

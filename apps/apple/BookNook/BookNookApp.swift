@@ -225,7 +225,7 @@ struct RootView: View {
             Text("Make room for\nyour next thought.").font(.system(size: 42, weight: .regular, design: .serif))
             Text("Bring a book. Keep a notebook. Follow an idea from its first impression to everything it becomes.").font(.title3).foregroundStyle(.secondary).frame(maxWidth: 470, alignment: .leading)
             Button("Start your reading desk") { addBook = true }.buttonStyle(.borderedProminent).controlSize(.large)
-            Text("EPUB · PDF · Goodreads CSV · Kindle catalog").font(.caption).foregroundStyle(.secondary)
+            Text("EPUB · PDF · DRM-free MOBI · Goodreads CSV · Kindle catalog").font(.caption).foregroundStyle(.secondary)
         }.frame(maxWidth: .infinity, maxHeight: .infinity).padding(40)
     }
     func prepareExport() async {
@@ -252,7 +252,7 @@ struct AddBookView: View {
             Text("A new reading desk").font(.system(.title, design: .serif))
             TextField("Book title", text: $title).textFieldStyle(.roundedBorder)
             TextField("Author", text: $author).textFieldStyle(.roundedBorder)
-            Text("You can attach an accessible EPUB or PDF next. Your notebook works with any catalog entry.").font(.callout).foregroundStyle(.secondary)
+            Text("You can attach an EPUB, PDF, or DRM-free legacy MOBI file next. Your notebook works with any catalog entry.").font(.callout).foregroundStyle(.secondary)
             if let failure { Text(failure).foregroundStyle(.red) }
             HStack {
                 Button("Cancel", role: .cancel) { dismiss() }.keyboardShortcut(.cancelAction)

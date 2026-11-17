@@ -57,6 +57,9 @@ pub struct Edition {
     pub assets: Vec<ContentAsset>,
 }
 
+/// Original MIME for DRM-free legacy MOBI, not the MIME of its generated XHTML.
+pub const MOBI6_MEDIA_TYPE: &str = "application/x-mobipocket-ebook";
+
 #[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct ContentAsset {

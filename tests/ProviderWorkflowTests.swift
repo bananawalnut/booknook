@@ -75,4 +75,20 @@ import Foundation
     precondition(reopenedState.notebooks[notebook.id]!.blocks[0].text == privateText)
     precondition(reopenedState.editions.values.flatMap(\.assets).contains { $0.sha256 == asset.sha256 })
     print("Actual app repository + public alternate provider: catalog/content/recommendation routing, private field preservation, minimized recommendation input, cancellation, generation race and durable reopen passed.")
+
+    // The shipped file picker calls this exact URL entry point, not the
+    // generic alternate-provider helper exercised above.
+    let mobiURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+        .appendingPathComponent("crates/native/tests/fixtures/mobi6-reader.mobi")
+    let original = try Data(contentsOf: mobiURL)
+    let accepted = try await reopened.importContent(book: bookID, url: mobiURL)
+    guard let mobi = accepted.editions.values.flatMap(\.assets).first(where: \.isMobi6) else {
+        preconditionFailure("The normal selected-file provider did not attach MOBI")
+    }
+    precondition(mobi.supportsTextSize && mobi.spine == ["mobi6-v1/book.xhtml"])
+    let mobiFolder = try await reopened.assetDirectory(mobi.id)
+    let stored = try Data(contentsOf: mobiFolder.appendingPathComponent("original.mobi"))
+    let body = try String(contentsOf: mobiFolder.appendingPathComponent(mobi.spine[0]), encoding: .utf8)
+    precondition(stored == original && body.contains("A window opened above the reading desk."))
+    print("Normal selected-file provider accepted original MOBI bytes and the stable XHTML resource.")
 }

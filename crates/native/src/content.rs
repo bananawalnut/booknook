@@ -1,10 +1,52 @@
 use crate::{NativeError, Result};
-use booknook_core::model::ContentAsset;
+use booknook_core::model::{ContentAsset, MOBI6_MEDIA_TYPE};
+
+mod mobi6;
 use std::{
     io::{Read, Write},
     path::{Component, Path},
 };
 const MAX: u64 = 128 * 1024 * 1024;
+// Imported positions and annotations store this resource identifier. Keep it
+// stable for the v1 transformation, including when rehydrating old backups.
+const MOBI6_SPINE: &str = "mobi6-v1/book.xhtml";
+
+#[derive(Clone, Copy)]
+pub(crate) enum ContentKind {
+    Epub,
+    Pdf,
+    Mobi6,
+}
+
+impl ContentKind {
+    pub(crate) fn from_extension(extension: &str) -> Result<Self> {
+        match extension {
+            "epub" => Ok(Self::Epub),
+            "pdf" => Ok(Self::Pdf),
+            "mobi" | "azw" => Ok(Self::Mobi6),
+            _ => Err(error(
+                "Choose an EPUB, PDF, or DRM-free legacy MOBI (.mobi or .azw) file",
+            )),
+        }
+    }
+
+    pub(crate) fn from_media_type(media_type: &str) -> Result<Self> {
+        match media_type {
+            "application/epub+zip" => Ok(Self::Epub),
+            "application/pdf" => Ok(Self::Pdf),
+            MOBI6_MEDIA_TYPE => Ok(Self::Mobi6),
+            _ => Err(error("Unsupported book content media type")),
+        }
+    }
+
+    pub(crate) fn original_name(self) -> &'static str {
+        match self {
+            Self::Epub => "original.epub",
+            Self::Pdf => "book.pdf",
+            Self::Mobi6 => "original.mobi",
+        }
+    }
+}
 fn error(s: impl Into<String>) -> NativeError {
     NativeError::Failure { message: s.into() }
 }
@@ -22,7 +64,7 @@ pub fn safe_relative(s: &str) -> Result<&Path> {
     Ok(path)
 }
 
-pub fn import(root: &Path, bytes: &[u8], kind: &str) -> Result<ContentAsset> {
+pub(crate) fn import(root: &Path, bytes: &[u8], kind: ContentKind) -> Result<ContentAsset> {
     if bytes.len() as u64 > MAX {
         return Err(error("Content exceeds 128 MiB"));
     }
@@ -34,13 +76,13 @@ pub fn import(root: &Path, bytes: &[u8], kind: &str) -> Result<ContentAsset> {
     std::fs::create_dir_all(&staging)?;
     let result = (|| {
         let (media_type, spine) = match kind {
-            "pdf" => {
+            ContentKind::Pdf => {
                 if !bytes.starts_with(b"%PDF-") {
                     return Err(error("Invalid PDF header"));
                 }
                 ("application/pdf", vec!["book.pdf".into()])
             }
-            "epub" => {
+            ContentKind::Epub => {
                 let mut zip = zip::ZipArchive::new(std::io::Cursor::new(bytes))
                     .map_err(|e| error(e.to_string()))?;
                 if zip.len() > 10000 {
@@ -124,21 +166,28 @@ pub fn import(root: &Path, bytes: &[u8], kind: &str) -> Result<ContentAsset> {
                 }
                 ("application/epub+zip", spine)
             }
-            _ => {
-                return Err(error(
-                    "Choose an accessible EPUB or PDF; protected Kindle content cannot be rendered",
-                ));
+            ContentKind::Mobi6 => {
+                let xhtml = mobi6::render_mobi6(bytes)?;
+                let target = staging.join(MOBI6_SPINE);
+                std::fs::create_dir_all(target.parent().unwrap())?;
+                let mut file = std::fs::File::create(target)?;
+                file.write_all(&xhtml)?;
+                file.sync_all()?;
+                (MOBI6_MEDIA_TYPE, vec![MOBI6_SPINE.into()])
             }
         };
-        let original = if kind == "pdf" {
-            "book.pdf"
-        } else {
-            "original.epub"
-        };
+        let original = kind.original_name();
         let mut file = std::fs::File::create(staging.join(original))?;
         file.write_all(bytes)?;
         file.sync_all()?;
         if folder.exists() {
+            // A digest already admitted under a different format (e.g. a
+            // multi-format file) must not refer to a missing source or spine.
+            if !folder.join(original).is_file()
+                || spine.iter().any(|path| !folder.join(path).is_file())
+            {
+                return Err(error("Stored book files do not match this content format"));
+            }
             std::fs::remove_dir_all(&staging)?;
         } else {
             std::fs::rename(&staging, &folder)?;

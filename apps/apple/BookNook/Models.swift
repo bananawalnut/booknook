@@ -13,7 +13,12 @@ struct LibraryBook: Decodable, Identifiable {
     let review: String
 }
 struct Edition: Decodable, Identifiable { let id: String; let bookId: String; let assets: [Asset] }
-struct Asset: Decodable, Identifiable { let id: String; let mediaType: String; let storageKey: String; let sha256: String; let spine: [String] }
+struct Asset: Decodable, Identifiable {
+    static let mobi6MediaType = "application/x-mobipocket-ebook"
+    let id: String; let mediaType: String; let storageKey: String; let sha256: String; let spine: [String]
+    var isMobi6: Bool { mediaType == Self.mobi6MediaType }
+    var supportsTextSize: Bool { mediaType == "application/epub+zip" || isMobi6 }
+}
 struct Notebook: Decodable, Identifiable { let id: String; let bookId: String; let passId: String; let blocks: [NoteBlock]; let revisions: [NoteRevision] }
 struct NoteBlock: Decodable, Identifiable { let id: String; let kind: String; let text: String; let update: String; let styles: [InlineStyle]?; var ink: NotebookInk? = nil; var note: NoteMetadata? = nil }
 struct InlineStyle: Codable, Equatable {
@@ -181,7 +186,8 @@ actor DeskRepository {
         switch url.pathExtension.lowercased() {
         case "epub": media = "application/epub+zip"
         case "pdf": media = "application/pdf"
-        default: throw BookNookServiceError.message("Choose an accessible EPUB or PDF file.")
+        case "mobi", "azw": media = Asset.mobi6MediaType
+        default: throw BookNookServiceError.message("Choose an EPUB, PDF, or DRM-free legacy MOBI (.mobi or .azw) file.")
         }
         return try await importContent(providerID: AppleProviderIDs.contentFile, book: book, sourceID: url.path, mediaType: media)
     }

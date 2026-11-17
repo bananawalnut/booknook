@@ -145,9 +145,10 @@ export class BookNookServices {
       return response;
     } finally { this.activeCommits -= 1; }
   }
-  /** Validates source/media/hash only. The host must parse and validate EPUB/PDF bytes
-   * and commit assets atomically before representing content as locally accessible. */
-  async acquireContent(providerID: string, sourceID: string, mediaType: "application/epub+zip" | "application/pdf",
+  /** Validates source/media/hash only. The host must parse and validate EPUB, PDF
+   * or legacy MOBI bytes and commit assets before representing content as accessible. */
+  async acquireContent(providerID: string, sourceID: string,
+    mediaType: "application/epub+zip" | "application/pdf" | "application/x-mobipocket-ebook",
     signal?: AbortSignal): Promise<ValidatedProviderReply> {
     return this.fetch(providerID, {kind:"content",source_id:sourceID,media_type:mediaType}, signal);
   }

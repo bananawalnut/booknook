@@ -130,6 +130,91 @@ fn assert_archive_roundtrip(desk: &Desk, expected: &State, assets: &[(String, Ve
 }
 
 #[test]
+fn legacy_mobi_import_and_restore_keep_original_bytes_and_stable_reader_resource() {
+    let root = Root::new();
+    let desk = root.open();
+    let book = command(
+        &desk,
+        json!({"op":"add_book", "title":"The Quiet Margin", "author":"Fixture", "at":1}),
+    )["book_id"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let original = include_bytes!("fixtures/mobi6-reader.mobi");
+    let asset_id = booknook_core::digest(original);
+    for extension in ["mobi", "AZW"] {
+        let source = root.0.join(format!("reader.{extension}"));
+        std::fs::write(&source, original).unwrap();
+        desk.import_content(book.clone(), source.to_string_lossy().into_owned())
+            .unwrap();
+        assert_eq!(std::fs::read(source).unwrap(), original.as_slice());
+    }
+    let state = snapshot(&desk);
+    let editions = &state.books[&book].edition_ids;
+    assert_eq!(editions.len(), 1, "same original is not a new edition");
+    let asset = &state.editions[&editions[0]].assets[0];
+    assert_eq!(asset.id, asset_id);
+    assert_eq!(asset.storage_key, asset_id);
+    assert_eq!(asset.sha256, asset_id);
+    assert_eq!(asset.media_type, MOBI6_MEDIA_TYPE);
+    assert_eq!(asset.spine, ["mobi6-v1/book.xhtml"]);
+    let folder = PathBuf::from(desk.asset_directory(asset_id.clone()).unwrap());
+    assert_eq!(
+        std::fs::read(folder.join("original.mobi")).unwrap(),
+        original.as_slice()
+    );
+    let xhtml = std::fs::read_to_string(folder.join(&asset.spine[0])).unwrap();
+    let parsed = roxmltree::Document::parse(&xhtml).unwrap();
+    assert!(
+        parsed
+            .descendants()
+            .any(|n| n.is_text() && n.text().is_some_and(|s| s.contains("Café, 日本語, 🌿.")))
+    );
+
+    let receiver = Root::new();
+    let restored = receiver.open();
+    let archive = root.0.join("mobi-backup.json");
+    desk.export_archive(archive.to_string_lossy().into_owned())
+        .unwrap();
+    restored
+        .restore_archive(archive.to_string_lossy().into_owned())
+        .unwrap();
+    let received = snapshot(&restored);
+    assert_eq!(received.editions[&editions[0]].assets, [asset.clone()]);
+    let received_folder = PathBuf::from(restored.asset_directory(asset_id).unwrap());
+    assert_eq!(
+        std::fs::read(received_folder.join("original.mobi")).unwrap(),
+        original.as_slice()
+    );
+    assert_eq!(
+        std::fs::read_to_string(received_folder.join(&asset.spine[0])).unwrap(),
+        xhtml
+    );
+
+    // Merely marking the synthetic fixture as encrypted is enough to reject the
+    // selection; no secret, protected book or byte conversion is attempted.
+    let mut protected = original.to_vec();
+    let header = u32::from_be_bytes(protected[78..82].try_into().unwrap()) as usize;
+    protected[header + 12..header + 14].copy_from_slice(&1u16.to_be_bytes());
+    for (name, bytes) in [
+        ("protected.azw", protected.as_slice()),
+        ("renamed.azw", b"not a book".as_slice()),
+        ("unsupported.azw3", original.as_slice()),
+    ] {
+        let source = root.0.join(name);
+        std::fs::write(&source, bytes).unwrap();
+        assert!(
+            desk.import_content(book.clone(), source.to_string_lossy().into_owned())
+                .is_err(),
+            "{name}"
+        );
+        assert_eq!(std::fs::read(source).unwrap(), bytes);
+        assert_eq!(snapshot(&desk), state);
+    }
+    assert_eq!(std::fs::read_dir(root.0.join("assets")).unwrap().count(), 1);
+}
+
+#[test]
 fn native_archive_preserves_branched_character_history_rich_notes_positions_and_ink() {
     let root = Root::new();
     let desk = root.open();

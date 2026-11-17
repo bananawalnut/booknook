@@ -208,6 +208,7 @@ impl Desk {
             .and_then(|v| v.to_str())
             .unwrap_or("")
             .to_lowercase();
+        let kind = content::ContentKind::from_extension(&kind)?;
         let mut store = self.lock()?;
         let mut state = store.load()?;
         let revision = state.revision;
@@ -216,7 +217,7 @@ impl Desk {
                 message: "Book/edition missing".into(),
             });
         }
-        let asset = content::import(&store.root, &bytes, &kind)?;
+        let asset = content::import(&store.root, &bytes, kind)?;
         if !state
             .editions
             .values()
@@ -273,11 +274,7 @@ impl Desk {
             if assets.contains_key(&asset.id) {
                 continue;
             }
-            let name = if asset.media_type == "application/pdf" {
-                "book.pdf"
-            } else {
-                "original.epub"
-            };
+            let name = content::ContentKind::from_media_type(&asset.media_type)?.original_name();
             let source = store
                 .root
                 .join("assets")
@@ -339,11 +336,7 @@ impl Desk {
                     message: "Export asset checksum mismatch".into(),
                 });
             }
-            let kind = if asset.media_type == "application/pdf" {
-                "pdf"
-            } else {
-                "epub"
-            };
+            let kind = content::ContentKind::from_media_type(&asset.media_type)?;
             let actual = content::import(&store.root, &bytes, kind)?;
             if &actual != asset {
                 return Err(NativeError::Failure {

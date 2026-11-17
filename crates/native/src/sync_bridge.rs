@@ -108,11 +108,7 @@ fn content(s: &Store) -> Result<Content> {
         if assets.contains_key(&asset.id) {
             continue;
         }
-        let name = if asset.media_type == "application/pdf" {
-            "book.pdf"
-        } else {
-            "original.epub"
-        };
+        let name = content::ContentKind::from_media_type(&asset.media_type)?.original_name();
         let path = s.root.join("assets").join(&asset.storage_key).join(name);
         let len = std::fs::metadata(&path)?.len();
         size = size.saturating_add((len as usize).div_ceil(3) * 4);
@@ -146,15 +142,8 @@ fn import_assets(root: &Path, c: &Content) -> Result<()> {
         if digest(&bytes) != asset.sha256 {
             return Err(invalid("Sync asset checksum mismatch"));
         }
-        let actual = content::import(
-            root,
-            &bytes,
-            if asset.media_type == "application/pdf" {
-                "pdf"
-            } else {
-                "epub"
-            },
-        )?;
+        let kind = content::ContentKind::from_media_type(&asset.media_type)?;
+        let actual = content::import(root, &bytes, kind)?;
         if actual != *asset {
             return Err(invalid("Sync asset metadata mismatch"));
         }

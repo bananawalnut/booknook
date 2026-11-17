@@ -318,11 +318,7 @@ impl Desk {
         if !state.books.contains_key(&book_id) {
             return Err(Error::NotFound("Book/edition missing".into()).into());
         }
-        let kind = if media_type == "application/pdf" {
-            "pdf"
-        } else {
-            "epub"
-        };
+        let kind = crate::content::ContentKind::from_media_type(media_type)?;
         let asset = crate::content::import(&store.root, &content_bytes, kind)?;
         if !state
             .editions

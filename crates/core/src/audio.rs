@@ -239,6 +239,13 @@ pub fn edition_candidates(
         {
             labels.push("PDF".into());
         }
+        if edition
+            .assets
+            .iter()
+            .any(|a| a.media_type == crate::model::MOBI6_MEDIA_TYPE)
+        {
+            labels.push("MOBI".into());
+        }
         if labels.is_empty() {
             labels.push("Catalog edition; no accessible text".into());
         }

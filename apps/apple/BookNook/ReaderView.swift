@@ -45,7 +45,7 @@ struct ReaderPane: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
                 ViewThatFits(in: .horizontal) {
-                    Text("Book").font(.system(.subheadline, design: .serif)).foregroundStyle(.secondary).fixedSize()
+                    Text(asset?.isMobi6 == true ? "MOBI text" : "Book").font(.system(.subheadline, design: .serif)).foregroundStyle(.secondary).fixedSize()
                     Color.clear.frame(width: 0, height: 0)
                 }
                 Spacer(minLength: 0)
@@ -53,7 +53,7 @@ struct ReaderPane: View {
                     Button { saveHighlight() } label: { Image(systemName: selectionAlreadyHighlighted ? "checkmark" : "highlighter").accessibilityLabel(selectionAlreadyHighlighted ? "Selection already highlighted" : "Save selected highlight") }.disabled(savingHighlight || highlightRequests.isEmpty || selectionAlreadyHighlighted).help(selectionAlreadyHighlighted ? "This selection is already highlighted" : "Save selected highlight")
                 }
                 Menu {
-                    if asset?.mediaType == "application/epub+zip" {
+                    if asset?.supportsTextSize == true {
                         Button("Larger text") { fontSize = min(34, fontSize + 2) }
                         Button("Smaller text") { fontSize = max(13, fontSize - 2) }
                         Button("Default text size") { fontSize = 19 }
@@ -63,7 +63,7 @@ struct ReaderPane: View {
                     if asset != nil { Toggle("Pencil markup", isOn: $markup) }
                     #endif
                     Button("Saved annotations (\(annotations.count))") { showingAnnotations = true }.disabled(annotations.isEmpty)
-                    Button("Attach EPUB or PDF…") { importing = true }
+                    Button("Attach book file…") { importing = true }
                 } label: { Image(systemName: "ellipsis").frame(width: 32, height: 32).accessibilityLabel("Book options") }
             }.buttonStyle(.borderless).padding(.horizontal, 12).padding(.vertical, 10)
             if let status = highlightStatus ?? navigationStatus {
@@ -83,39 +83,41 @@ struct ReaderPane: View {
                 }
                 else {
                     EPUBView(root: root, resource: currentResource, markup: markup, annotations: annotations, geometry: geometry, fontSize: fontSize, restorePosition: savedPosition, spine: asset.spine, destination: destination, onMessage: messageReceiver, onInk: inkReceiver, inkSession: inkSession)
-                    ViewThatFits(in: .horizontal) {
-                      HStack {
-                        Button { openChapter(chapter - 1) } label: { Image(systemName: "chevron.left").frame(width: 32, height: 32).accessibilityLabel("Previous chapter") }.disabled(chapter == 0)
-                        Spacer()
-                        Menu {
-                            ForEach(Array(asset.spine.enumerated()), id: \.offset) { index, resource in
-                                Button { openChapter(index) } label: {
-                                    if index == chapter { Label(chapterLabel(resource), systemImage: "checkmark") }
-                                    else { Text(chapterLabel(resource)) }
+                    if !asset.isMobi6 {
+                        ViewThatFits(in: .horizontal) {
+                          HStack {
+                            Button { openChapter(chapter - 1) } label: { Image(systemName: "chevron.left").frame(width: 32, height: 32).accessibilityLabel("Previous chapter") }.disabled(chapter == 0)
+                            Spacer()
+                            Menu {
+                                ForEach(Array(asset.spine.enumerated()), id: \.offset) { index, resource in
+                                    Button { openChapter(index) } label: {
+                                        if index == chapter { Label(chapterLabel(resource), systemImage: "checkmark") }
+                                        else { Text(chapterLabel(resource)) }
+                                    }
                                 }
-                            }
-                        } label: { Text("Chapter \(chapter + 1) of \(asset.spine.count)").font(.caption).fixedSize() }
-                        .accessibilityLabel("Choose chapter, currently \(chapter + 1) of \(asset.spine.count)")
-                        Spacer()
-                        Button { openChapter(chapter + 1) } label: { Image(systemName: "chevron.right").frame(width: 32, height: 32).accessibilityLabel("Next chapter") }.disabled(chapter + 1 >= asset.spine.count)
-                      }
-                      Menu {
-                          Button("Previous chapter") { openChapter(chapter - 1) }.disabled(chapter == 0)
-                          ForEach(Array(asset.spine.enumerated()), id: \.offset) { index, resource in
-                              Button { openChapter(index) } label: {
-                                  if index == chapter { Label(chapterLabel(resource), systemImage: "checkmark") }
-                                  else { Text(chapterLabel(resource)) }
-                              }
+                            } label: { Text("Chapter \(chapter + 1) of \(asset.spine.count)").font(.caption).fixedSize() }
+                            .accessibilityLabel("Choose chapter, currently \(chapter + 1) of \(asset.spine.count)")
+                            Spacer()
+                            Button { openChapter(chapter + 1) } label: { Image(systemName: "chevron.right").frame(width: 32, height: 32).accessibilityLabel("Next chapter") }.disabled(chapter + 1 >= asset.spine.count)
                           }
-                          Button("Next chapter") { openChapter(chapter + 1) }.disabled(chapter + 1 >= asset.spine.count)
-                      } label: { Text("\(chapter + 1) / \(asset.spine.count)").font(.caption).frame(maxWidth: .infinity) }
-                      .accessibilityLabel("Choose chapter, currently \(chapter + 1) of \(asset.spine.count)")
-                    }.buttonStyle(.borderless).padding(.horizontal, 14).padding(.vertical, 6)
+                          Menu {
+                              Button("Previous chapter") { openChapter(chapter - 1) }.disabled(chapter == 0)
+                              ForEach(Array(asset.spine.enumerated()), id: \.offset) { index, resource in
+                                  Button { openChapter(index) } label: {
+                                      if index == chapter { Label(chapterLabel(resource), systemImage: "checkmark") }
+                                      else { Text(chapterLabel(resource)) }
+                                  }
+                              }
+                              Button("Next chapter") { openChapter(chapter + 1) }.disabled(chapter + 1 >= asset.spine.count)
+                          } label: { Text("\(chapter + 1) / \(asset.spine.count)").font(.caption).frame(maxWidth: .infinity) }
+                          .accessibilityLabel("Choose chapter, currently \(chapter + 1) of \(asset.spine.count)")
+                        }.buttonStyle(.borderless).padding(.horizontal, 14).padding(.vertical, 6)
+                    }
                 }
             } else {
                 VStack(alignment: .leading, spacing: 18) {
                     Text("Your book goes here.").font(.system(.title2, design: .serif))
-                    Text("Open an EPUB or PDF when you’re ready.").font(.callout).foregroundStyle(.secondary)
+                    Text("Open an EPUB, PDF, or DRM-free legacy MOBI file.").font(.callout).foregroundStyle(.secondary)
                     Button("Choose a book file") { importing = true }.buttonStyle(.bordered)
                 }.padding(24).frame(maxWidth: .infinity, maxHeight: .infinity)
             }
@@ -143,7 +145,9 @@ struct ReaderPane: View {
                 } catch { if !bookNookOperationWasCancelled(error) { model.error = bookNookErrorMessage(error) } }
             }
         }
-        .fileImporter(isPresented: $importing, allowedContentTypes: [.pdf, UTType(filenameExtension: "epub") ?? .data]) { result in
+        .fileImporter(isPresented: $importing, allowedContentTypes: [.pdf] + ["epub", "mobi", "azw"].compactMap {
+            UTType(filenameExtension: $0, conformingTo: .data)
+        }) { result in
             Task { do { let url = try result.get(); let access = url.startAccessingSecurityScopedResource(); defer { if access { url.stopAccessingSecurityScopedResource() } }; if let book = model.book { try await model.drainSaves(); model.accept(try await model.repository.importContent(book: book.id, url: url)) } } catch { if !bookNookOperationWasCancelled(error) { model.error = bookNookErrorMessage(error) } } }
         }
     }

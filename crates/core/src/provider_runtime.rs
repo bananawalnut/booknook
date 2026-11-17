@@ -250,7 +250,12 @@ impl ProviderOperation {
                 media_type,
             } => {
                 text(source_id, 4096)
-                    && ["application/epub+zip", "application/pdf"].contains(&media_type.as_str())
+                    && [
+                        "application/epub+zip",
+                        "application/pdf",
+                        crate::model::MOBI6_MEDIA_TYPE,
+                    ]
+                    .contains(&media_type.as_str())
             }
             Self::Positions { source_ids } | Self::SourcePositions { source_ids } => {
                 !source_ids.is_empty() && source_ids.len() <= 1000 && unique_text(source_ids, 4096)
