@@ -5,6 +5,7 @@ import hashlib
 import importlib.util
 import json
 import os
+import shutil
 from pathlib import Path
 import sys
 import tempfile
@@ -45,6 +46,9 @@ class StagingTests(unittest.TestCase):
         self.directory = Path(self.temporary.name).resolve()
         self.source = self.directory / "ontology"
         fixture(self.source)
+        issued_manifests = patch.object(PAGES, "ISSUED_MANIFESTS", {})
+        issued_manifests.start()
+        self.addCleanup(issued_manifests.stop)
         self.output = self.directory / "site"
 
     def test_only_recursive_closure_is_copied_from_arbitrary_private_cwd(self):
@@ -170,6 +174,62 @@ class StagingTests(unittest.TestCase):
             PAGES.stage(self.source, self.output)
         self.assertFalse(self.output.exists())
         self.assertFalse(list(self.directory.glob(".booknook-ontology-*")))
+
+
+class IssuedManifestTests(unittest.TestCase):
+    def setUp(self):
+        self.temporary = tempfile.TemporaryDirectory(prefix="booknook-issued-ontology-")
+        self.addCleanup(self.temporary.cleanup)
+        root = Path(self.temporary.name).resolve()
+        self.source = root / "ontology"
+        self.output = root / "site"
+        shutil.copytree(ROOT / "ontology", self.source)
+
+    def test_new_release_can_be_discovered_without_rewriting_issued_manifests(self):
+        folder = self.source / "future-release"
+        artifact = folder / "test.json"
+        write_json(artifact, {"future": True})
+        write_json(folder / "manifest.json", {"schema": "fixture.manifest.v1", "version": "future",
+                   "artifacts": [{"path": artifact.name, "sha256": hashlib.sha256(artifact.read_bytes()).hexdigest()}]})
+        path = self.source / "discovery.json"
+        discovery = json.loads(path.read_text())
+        discovery["releases"].append({"version": "future", "manifest": "future-release/manifest.json"})
+        discovery["current"] = "future"
+        write_json(path, discovery)
+        report = PAGES.stage(self.source, self.output)
+        self.assertEqual(report["inventory"]["current"], "future")
+
+    def test_consistent_rewrite_of_issued_manifest_and_artifact_is_refused(self):
+        path = self.source / "commands/v1/manifest.json"
+        manifest = json.loads(path.read_text())
+        artifact = manifest["artifacts"][0]
+        changed = path.parent / artifact["path"]
+        changed.write_bytes(changed.read_bytes() + b" ")
+        artifact["sha256"] = hashlib.sha256(changed.read_bytes()).hexdigest()
+        write_json(path, manifest)
+        PAGES.directory_inventory(self.source)
+        with self.assertRaisesRegex(ValueError, "issued ontology manifest: commands/v1/manifest.json"):
+            PAGES.stage(self.source, self.output)
+        self.assertFalse(self.output.exists())
+
+    def test_removing_issued_discovery_link_leaves_no_output(self):
+        path = self.source / "discovery.json"
+        discovery = json.loads(path.read_text())
+        discovery["releases"] = [entry for entry in discovery["releases"] if entry["version"] != "0.1.0"]
+        write_json(path, discovery)
+        with self.assertRaisesRegex(ValueError, "issued ontology manifest: v0.1.0/manifest.json"):
+            PAGES.stage(self.source, self.output)
+        self.assertFalse(self.output.exists())
+
+
+    def test_moving_issued_discovery_link_to_a_different_group_is_refused(self):
+        path = self.source / "discovery.json"
+        discovery = json.loads(path.read_text())
+        discovery["retired_contracts"] = discovery.pop("command_contracts")
+        write_json(path, discovery)
+        with self.assertRaisesRegex(ValueError, "issued ontology manifest: commands/v1/manifest.json"):
+            PAGES.stage(self.source, self.output)
+        self.assertFalse(self.output.exists())
 
 
 if __name__ == "__main__":
