@@ -6,7 +6,9 @@ A native reading notebook for macOS and iPad, backed by open Rust, Swift and WAS
 
 The implementation includes an offline reading desk, rich TextKit editing, EPUB, PDF, and legacy MOBI6 reading and annotation, character interpretation history, imports, Castalia consent, approved encrypted device transfers, Nostr social workflows, and reviewed RSS/Atom settings with offline publications. **It is not a qualified production release:** live Kindle/Audible/Castalia access, current physical input/accessibility, remote social/device sync and minimum-OS runtime checks remain open. Unavailable integrations return explicit errors. See [delivery status](docs/DELIVERY.md), the [full-plan acceptance matrix](docs/PLAN-ACCEPTANCE.md), [validation](docs/VALIDATION.md), the [decision log](docs/DECISIONS.md), the [UX review](docs/UX-REVIEW.md), and [DevGraph work tracking](docs/DEVGRAPH.md).
 
-**[App preview 0.2.1, build 2026111607](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261116.7)** opens DRM-free legacy MOBI6 books and keeps the original files for backup and paired transfer. All three Apple archives passed independent verification, and all eight public downloads matched their SHA-256 digests. The Mac app opened a synthetic MOBI through the native file picker, rendered Unicode text, and saved a note alongside it. The normal physical iPad app was updated in place to build 2026111607. Its library and orientation matched before and after launch. [Delivery evidence](docs/app-2026111607-public-preview-evidence.json)
+**[App preview 0.2.1, build 2026111701](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.1)** keeps saved EPUB highlights visible on older WebKit and shows unplaced PDF annotations alongside their original context. All three Apple archives and all eight public downloads passed verification. The normal iPad app was updated in place and launched with its library and orientation preserved. [Build 1701 evidence](docs/app-2026111701-public-preview-evidence.json)
+
+The earlier [build 1607 preview](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261116.7) added DRM-free legacy MOBI6 reading. The exact Mac app opened a synthetic MOBI, rendered Unicode text, and saved a Margin note. [Build 1607 evidence](docs/app-2026111607-public-preview-evidence.json)
 
 The earlier [Mac build 2026111601 check](docs/mac-2026111601-evidence.json) confirmed that the long-note caret stayed visible through pane resizing on either side and that reopen preserved notes, styles, and character history.
 
@@ -36,7 +38,7 @@ The earlier iPad acceptance check [updated the normal app in place to 0.2.1 (202
 
 ![Book Nook iPad reading desk in portrait, with three text notes alongside an EPUB](docs/screenshots/ipad-current.png)
 
-Both captures show native Release build **0.2.1 (2026111607)**. The Mac uses a synthetic MOBI and the iPad Air 13-inch Simulator uses a synthetic EPUB. [Capture details](docs/screenshots/README.md).
+The Mac image shows native Release build **2026111607** with a synthetic MOBI. The iPad Air 13-inch Simulator image shows build **2026111701** with a synthetic EPUB. [Capture details](docs/screenshots/README.md)
 
 ## Run the native apps
 

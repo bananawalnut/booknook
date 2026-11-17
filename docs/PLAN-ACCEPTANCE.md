@@ -6,6 +6,10 @@ This audit keeps the original native MVP and SDK scope intact. A passing source 
 
 [SDK 0.2.2 delivery evidence](sdk-022-public-preview-evidence.json) records independent Rust archive export, installed Node and Chrome WASM validation, and Swift restore and reopen against the exact released packages. The test covers a synthetic legacy MOBI6 and compares the original source and regenerated XHTML. All 17 public checksums passed. The macOS runtime acceptance and the iPadOS library slices have distinct evidence.
 
+## Native app 1701 annotations and iPad update
+
+[Build 1701 evidence](app-2026111701-public-preview-evidence.json) records two actual rendering regressions, all 38 exact-source CI steps, three independently verified Release archives, eight public downloads, and an in-place update and launch preserving the physical iPad library. The EPUB fallback ran in a current WKWebView with its newer highlight API disabled. The exact iPadOS 17.0 execution gate remains open after the hosted simulator stalled at data migration. Physical Pencil, finger, keyboard and VoiceOver qualification still requires hands-on testing. [Hosted simulator run](https://github.com/bananawalnut/booknook/actions/runs/44040952454)
+
 ## Native app 1607 and iPad input checkpoint
 
 [Build 1607 delivery evidence](app-2026111607-public-preview-evidence.json) binds the exact source, three Apple Release archives, eight verified public downloads, and the Mac test that opened a legacy MOBI6 file, rendered its Unicode text, and saved a notebook entry. Original bytes and the generated reading resource were verified in the isolated store. Live Kindle catalog import and the downloads of the separately published SDK retain their own acceptance scope.

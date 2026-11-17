@@ -1,0 +1,145 @@
+{
+  "schema": "booknook.app-only-public-preview-evidence.v2",
+  "status": "PASS_PUBLIC_ARCHIVES_AND_NORMAL_IPAD_UPDATE",
+  "observed_at": "2026-11-17T08:34:04.378594+00:00",
+  "app": {
+    "version": "0.2.1",
+    "build": "2026111701",
+    "source_commit": "f3b2c7b15419159042137f9124aac030bc73c108",
+    "release_url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.1",
+    "release_id": 448317509,
+    "tag": "v0.2.1-app-preview.20261117.1",
+    "published_at": "2026-11-17T08:11:27Z"
+  },
+  "source_validation": {
+    "ordinary_ci": "https://github.com/bananawalnut/booknook/actions/runs/44041221787",
+    "ordinary_steps_passed": 38,
+    "archive_ci": "https://github.com/bananawalnut/booknook/actions/runs/44041253184",
+    "archive_steps_passed": 8,
+    "artifact_id": 14309314205,
+    "artifact": {
+      "bytes": 37635750,
+      "sha256": "3977b87ecd6e471da7c60341dfe41f2dc885f9ac42b2bf2ddebbcda87fa6f9b1"
+    },
+    "application_version": "0.2.1",
+    "cargo_workspace_version": "0.2.2"
+  },
+  "reader_validation": {
+    "epub": "Actual macOS WKWebView passed anchored geometry, disappearance of ambiguous/missing marks, font reflow, scrolling, and removal with the Custom Highlight constructor disabled. The modern registry path also passed.",
+    "pdf": "Actual PDFKit passed matching highlight and ink rendering, absent overlay on wrong fingerprint or missing page, deduplicated placement results, and unchanged source bytes.",
+    "exact_assets_all_three_targets": {
+      "reader.js": {
+        "bytes": 13151,
+        "sha256": "c5f243ecf66e692c986bbfc2034a6f7c0539521c6a54e9437b82e86c33fd79a5"
+      },
+      "reader-geometry.js": {
+        "bytes": 2180,
+        "sha256": "bb648f42b1fb6893ee10833559756e9016ee5ec7423442643cb62cab34345c81"
+      }
+    },
+    "minimum_ipados_probe": "https://github.com/bananawalnut/booknook/actions/runs/44040952454",
+    "minimum_ipados_probe_scope": "Exact 17.0 runtime registered. Simulator data migration and app registry did not complete. App installation did not start."
+  },
+  "archive_verification": {
+    "mac": {
+      "archive": {
+        "bytes": 14895729,
+        "sha256": "3e8e973d722137f02a6c494f8e9a98b9c171a77011b6516ae979849aa74ad1d3"
+      },
+      "tar_members": 105,
+      "bundle_files": 88,
+      "ontology_files": 80,
+      "build": "2026111701",
+      "signature": "linker-ad-hoc",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "byte-identical standalone Mach-O"
+    },
+    "ipad-sim": {
+      "archive": {
+        "bytes": 11388420,
+        "sha256": "5f05600e7edff3cd0a2615b794a7b826436afdc370a917d8ec5099c13a999574"
+      },
+      "tar_members": 102,
+      "bundle_files": 88,
+      "ontology_files": 80,
+      "build": "2026111701",
+      "signature": "linker-ad-hoc",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "byte-identical standalone Mach-O"
+    },
+    "ipad-device": {
+      "archive": {
+        "bytes": 11182822,
+        "sha256": "fd7ea8a0ded68978631b1e37d52c4c342bdd67d25ac8961ad6c56eabade15d12"
+      },
+      "tar_members": 102,
+      "bundle_files": 88,
+      "ontology_files": 80,
+      "build": "2026111701",
+      "signature": "unsigned",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "unsigned"
+    }
+  },
+  "public_https": {
+    "assets": {
+      "booknook-ipad-device-arm64-development-0.2.1.tar.gz": {
+        "bytes": 11182822,
+        "sha256": "fd7ea8a0ded68978631b1e37d52c4c342bdd67d25ac8961ad6c56eabade15d12"
+      },
+      "booknook-ipad-sim-arm64-development-0.2.1.tar.gz": {
+        "bytes": 11388420,
+        "sha256": "5f05600e7edff3cd0a2615b794a7b826436afdc370a917d8ec5099c13a999574"
+      },
+      "booknook-mac-arm64-development-0.2.1.tar.gz": {
+        "bytes": 14895729,
+        "sha256": "3e8e973d722137f02a6c494f8e9a98b9c171a77011b6516ae979849aa74ad1d3"
+      },
+      "BUILD-PROVENANCE.json": {
+        "bytes": 48134,
+        "sha256": "913c4908adc691ad9cf8c86f3971fa6632fdf8c84ab32818c21486b3fab6596a"
+      },
+      "README.md": {
+        "bytes": 3628,
+        "sha256": "88010179c0aa86c3cfd423ac69d0f4d53ba976afc4545941f20c831ff83d603f"
+      },
+      "RELEASE-MANIFEST.json": {
+        "bytes": 2113,
+        "sha256": "48f85d10bbb2759c962755762f64537050325f1d31455696c2aaca829ce99cba"
+      },
+      "SHA256SUMS": {
+        "bytes": 503,
+        "sha256": "558ce4a634ba48f364fd800d6d023ce55ebc67878d103ad6afa6925ac3c62823"
+      },
+      "VERIFICATION.json": {
+        "bytes": 115450,
+        "sha256": "08a533c904d84849baea2d9537c5a1ec01e70c7876e113d3ee7b30a14341b65d"
+      }
+    },
+    "count": 8,
+    "bytes": 37636799,
+    "earlier_releases_with_unchanged_asset_identities": 10
+  },
+  "normal_physical_ipad": {
+    "previous_build": "2026111607",
+    "current_build": "2026111701",
+    "in_place": true,
+    "app_running": true,
+    "database_bytes_matched_after_install": true,
+    "database_state_equal_after_launch": true,
+    "desk_and_assets_preserved": true,
+    "orientation_unchanged_in_observations": true,
+    "orientation_commands": false,
+    "receipt_sha256": "6a421cd032ca913611b2a6bde3e11d749349d73824ccc4e7aa754fb280b876bc"
+  },
+  "screenshots": {
+    "ipad_build": "2026111701",
+    "ipad_simulator": "iPadOS 18.6",
+    "ipad_framebuffer_sha256": "83e8247c22117ee0fe8e643fabbe2d04b1283b538931fa559e083b176411ca9e",
+    "mac_capture_build": "2026111607",
+    "mac_1701_capture": "Window inaccessible during the isolated capture attempt."
+  }
+}

@@ -1,16 +1,13 @@
 {
-  "schema": "booknook.current-app-screenshots.v1",
-  "captured_on": "2026-11-16",
+  "schema": "booknook.current-app-screenshots.v2",
   "timezone": "America/Vancouver",
-  "source_revision": "fe5384ac90b3afd74269e998ac8fa2fd886a9d23",
   "app_version": "0.2.1",
-  "build": "2026111607",
   "normal_app_targets": true,
   "alternate_ui_host": false,
   "sample_data": "Mac uses The Pocket Orchard with a synthetic legacy MOBI and one note. iPad uses the synthetic EPUB The Quiet Library with three notes.",
   "private_user_data_published": false,
   "physical_ipad_capture": false,
-  "raw_ipad_framebuffer_sha256": "d7bc81a20d6140e7a49318e82bdbf0d6070f9890cb460b9794c51785f6860568",
+  "raw_ipad_framebuffer_sha256": "83e8247c22117ee0fe8e643fabbe2d04b1283b538931fa559e083b176411ca9e",
   "captures": [
     {
       "platform": "macOS",
@@ -26,24 +23,30 @@
       "app_source_revision": "fe5384ac90b3afd74269e998ac8fa2fd886a9d23",
       "capture_receipt_sha256": "febd838ee4f3bccb30070181681021360b64257a2198f0de3421dd024229e6bd",
       "original_image_sha256": "b1347d2169d96159b03659cfdefe3c7d88f4e3a4f8929485fcadcf0f44b0814e",
-      "image_processing": "Lossless 80-pixel top crop removes macOS sharing chrome and cursor."
+      "image_processing": "Lossless 80-pixel top crop removes macOS sharing chrome and cursor.",
+      "app_build": "2026111607",
+      "captured_on": "2026-11-16"
     },
     {
       "platform": "iPad",
       "image": "ipad-current.png",
       "format": "PNG",
-      "sha256": "d7bc81a20d6140e7a49318e82bdbf0d6070f9890cb460b9794c51785f6860568",
+      "sha256": "83e8247c22117ee0fe8e643fabbe2d04b1283b538931fa559e083b176411ca9e",
       "width": 2048,
       "height": 2732,
       "bundle_id": "org.booknook.ipad",
       "configuration": "Release",
-      "executable_sha256": "d90e0b975b5cb91d86846b8cac381c300dbf409217cc6fab27678512dedfba4e",
+      "executable_sha256": "a3f39d3996f09ef1055d5c5f3546251899648d7ca8ed9cbae18af280c670c9f9",
       "environment": "iPad Air 13-inch (M2), iPadOS 18.6 Simulator, portrait",
-      "app_source_revision": "fe5384ac90b3afd74269e998ac8fa2fd886a9d23",
-      "capture_receipt_sha256": "6ec82b15731a437b00612c6d7de8d5bb4132b5372621c55fa0dab2a6e64f27ea",
-      "image_processing": "Original simctl framebuffer bytes."
+      "app_source_revision": "f3b2c7b15419159042137f9124aac030bc73c108",
+      "capture_receipt_sha256": "050fa497b225357294b4172450a3a3dadf3ddf14ddaf2d37d485a88640697cff",
+      "image_processing": "Original simctl framebuffer bytes.",
+      "app_build": "2026111701",
+      "captured_on": "2026-11-17"
     }
   ],
-  "source_equivalence": "Both executables match the exact published 1607 archives from the same source commit.",
-  "scope": "Actual Release apps using isolated synthetic workspaces. Physical install and hardware qualification have separate evidence."
+  "source_equivalence": "Each executable matches its own published native Release archive.",
+  "scope": "Actual Release apps using isolated synthetic workspaces. Physical install and hardware qualification have separate evidence.",
+  "latest_public_build": "2026111701",
+  "latest_public_source_revision": "f3b2c7b15419159042137f9124aac030bc73c108"
 }
