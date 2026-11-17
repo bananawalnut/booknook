@@ -3,6 +3,14 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+    inputs:
+      apple_runner:
+        description: GitHub-hosted arm64 macOS image
+        type: choice
+        default: macos-latest
+        options:
+          - macos-latest
+          - macos-15
 permissions:
   contents: read
 env:
@@ -59,12 +67,20 @@ jobs:
       - name: Verify Apple bundle deployment metadata checks
         run: python3 -B tests/package-apple-apps.py
   apple:
-    runs-on: macos-latest
+    runs-on: ${{ inputs.apple_runner || 'macos-latest' }}
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: aarch64-apple-ios-sim,aarch64-apple-ios
+      - name: Select Xcode 26.3 on macOS 15
+        if: inputs.apple_runner == 'macos-15'
+        shell: bash
+        run: |
+          test "$(uname -m)" = arm64
+          developer=/Applications/Xcode_26.3.app/Contents/Developer
+          test -x "$developer/usr/bin/xcodebuild"
+          echo "DEVELOPER_DIR=$developer" >> "$GITHUB_ENV"
       - run: brew install xcodegen
       - run: bash scripts/build-apple.sh mac
       - run: bash scripts/build-apple.sh ipad-sim

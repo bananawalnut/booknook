@@ -1,11 +1,19 @@
 name: Verify Apple release archives
 on:
   workflow_dispatch:
+    inputs:
+      apple_runner:
+        description: GitHub-hosted arm64 macOS image
+        type: choice
+        default: macos-latest
+        options:
+          - macos-latest
+          - macos-15
 permissions:
   contents: read
 jobs:
   archive:
-    runs-on: macos-latest
+    runs-on: ${{ inputs.apple_runner || 'macos-latest' }}
     timeout-minutes: 45
     env:
       BOOKNOOK_APP_CONFIGURATION: Release
@@ -18,6 +26,14 @@ jobs:
         with:
           toolchain: "1.96.0"
           targets: aarch64-apple-ios-sim,aarch64-apple-ios
+      - name: Select Xcode 26.3 on macOS 15
+        if: inputs.apple_runner == 'macos-15'
+        shell: bash
+        run: |
+          test "$(uname -m)" = arm64
+          developer=/Applications/Xcode_26.3.app/Contents/Developer
+          test -x "$developer/usr/bin/xcodebuild"
+          echo "DEVELOPER_DIR=$developer" >> "$GITHUB_ENV"
       - run: brew install xcodegen
       - name: Build and inspect the three Release targets
         shell: bash
