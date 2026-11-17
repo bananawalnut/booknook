@@ -2,6 +2,10 @@
 
 This audit keeps the original native MVP and SDK scope intact. A passing source test is evidence for the behavior it exercises, not evidence of a production account, physical device, remote deployment, or hands-on interaction. The requested production release is not complete while essential integration and physical-device gates remain open. [Validation](VALIDATION.md) records the final check results; [delivery](DELIVERY.md) names the remaining gates.
 
+## Native app 1712 delivery
+
+After you confirm in Amazon’s device list that an Audible registration was removed, Book Nook can clear the matching local connection and leave a newer replacement intact. Recovery requires the updated optional library companion and Audible adapter. Headless and synthetic loopback checks passed. Live Audible recovery and physical Keychain behavior remain unverified. The normal development-signed iPad app updated in place and reopened with its library, assets, saved finger Scribble, and observed orientation preserved. [Build 1712 evidence](app-2026111712-public-preview-evidence.json)
+
 ## Native app 1711 delivery
 
 Discover keeps offline recommendations available when imported titles are long or contain control characters. Your library keeps the original titles. The optional self-hosted companion rejects a Kindle catalog that grows beyond the size limit during normalization and keeps the previous selection readable after restart. The normal development-signed iPad app updated in place and reopened with its library, assets, saved finger Scribble, and observed orientation preserved. [Build 1711 evidence](app-2026111711-public-preview-evidence.json)
@@ -17,6 +21,8 @@ The focused AppKit test reproduces a zero-width editor in a 445-point viewport o
 ## SDK 0.3.0 and ontology 0.4.0
 
 Exact hosted checks passed on the released source. Extracted Rust Core, installed npm in Node and Chrome, and an extracted Swift consumer on arm64 macOS passed notebook-order and archive checks. The three-peer native regression exercised refusal, covering history, exact encrypted retry, durable reopen, and duplicate handling in isolated test desks. Pages served 91 matching artifacts and preserved 82 previously issued files. [SDK 0.3.0 evidence](sdk-030-public-preview-evidence.json)
+
+The exact Swift SDK 0.3.0 simulator slice ran the packaged notebook test on arm64 iPadOS 18.6. A separate process reopened the same SQLite witness, and an independent read-only check matched its revision and stored data. Physical iPad SDK execution and exact iPadOS 17 runtime remain open. [iPadOS Simulator SDK evidence](sdk-030-ipados-simulator-evidence.json)
 
 ## Native app 1708 delivery
 

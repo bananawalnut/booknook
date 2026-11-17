@@ -1,0 +1,53 @@
+{
+  "schema": "booknook.sdk.ipados-simulator-evidence.v1",
+  "result": "PASS",
+  "sdk": {
+    "version": "0.3.0",
+    "source_commit": "38586425733adff62073a190228352a0754e7139",
+    "archive": "booknook-swift-sdk-0.3.0.tar.gz",
+    "archive_sha256": "9bcd24e8997860e55a750be0c4b6b64c10a64f9fe0d897b1318009f0d4bfc974",
+    "slice": "ios-arm64-simulator",
+    "slice_sha256": "9280b15e3fc6d3b3e07d34b37a6720d83d626925a105409225a4b2c78ec068c9"
+  },
+  "runtime": {
+    "device_model": "iPad Air 13-inch (M2) Simulator",
+    "os": "iPadOS 18.6",
+    "runtime_build": "22G86",
+    "architecture": "arm64"
+  },
+  "consumer": {
+    "harness_executable_sha256": "20a760d8ccdd07c3a699a9ee0620abbcad09050c01104d0a2dd6d6f32d92cd2f",
+    "installed_executable_matches_signed_build": true,
+    "tested_source_sha256": "d8c6c1d4842f2a12d49efb2a9fce6ee160a2ce926dadbb13e8880b9e393c3116",
+    "fixture_sha256": "5c08f68c3a61bf7901c7bd4f3cb1a72103b1e7a0674166827474b41298461258",
+    "linked_native_symbols": [
+      "_uniffi_booknook_native_fn_method_notebookengine_notebook_order_reviews",
+      "_uniffi_booknook_native_checksum_method_notebookengine_notebook_order_reviews"
+    ],
+    "covers": [
+      "Unicode writes",
+      "replaceable storage and compare-and-save conflicts",
+      "native SQLite and reopen",
+      "archive v1 and v4 validation",
+      "canonical notebook order review"
+    ]
+  },
+  "sqlite": {
+    "independent_read_only_quick_check": "ok",
+    "separate_write_and_reopen_processes": true,
+    "revision": 1,
+    "matching_stored_json_sha256": "642d9608bf7ba6a6198243b7e24bbe42b9b6fb252b9079c51cee61b5adbf7394"
+  },
+  "cleanup": {
+    "dedicated_simulator_returned_to_shutdown": true,
+    "synthetic_harness_bundle_and_data_removed": true,
+    "existing_booknook_bundle_and_container_registration_metadata_matched": true
+  },
+  "retained_attempts": [
+    "The standalone process exceeded its test bound before producing a runtime marker.",
+    "The first UIKit harness wrote its SQLite witness. A host assertion checked an incorrect field and prevented independent reopen.",
+    "A fresh UIKit harness completed the write, independent reopen and scoped removal."
+  ],
+  "scope": "Packaged SDK execution in an isolated simulator. Physical iPad SDK execution and exact iPadOS 17 runtime remain open.",
+  "receipt_sha256": "42b65b5795adb91937ef6c189b3c02e2963ab9b0cf1f3ba3d9470b24dc415ff8"
+}

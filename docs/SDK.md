@@ -4,7 +4,7 @@ The portable document and social contracts live in Rust. The reference apps use 
 
 ## Development preview and Rust compatibility
 
-The **[0.3.0 SDK preview](https://github.com/bananawalnut/booknook/releases/tag/v0.3.0-sdk-preview.20261117)** ships durable Margin order and explicit review in archive v4. The four Rust archives, npm package, and Swift XCFramework passed independent qualification. Swift ran on arm64 macOS, and the npm package ran in Node and Chrome. [SDK 0.3.0 evidence](sdk-030-public-preview-evidence.json)
+The **[0.3.0 SDK preview](https://github.com/bananawalnut/booknook/releases/tag/v0.3.0-sdk-preview.20261117)** ships durable Margin order and explicit review in archive v4. The four Rust archives, npm package, and Swift XCFramework passed independent qualification. Swift ran on arm64 macOS and the iPadOS 18.6 simulator. The npm package ran in Node and Chrome. [SDK 0.3.0 evidence](sdk-030-public-preview-evidence.json) · [iPadOS Simulator evidence](sdk-030-ipados-simulator-evidence.json)
 
 The initial `v0.1.0-preview.20261114` release is withdrawn to draft, with its tag and 17 assets preserved as historical evidence. Its archives are not recommended for new installations. [The publication record](public-preview-publication-evidence.json) retains the initial timestamps and hashes alongside the current withdrawal status.
 
