@@ -233,9 +233,12 @@ actor DeskRepository {
     @Published private var readerChoiceID = UUID()
     private var readerEditionChoices: [String: String] = [:]
     private var readerIntentID = UUID()
+    private var readingPassIntentID = UUID()
     private var deferredReaderEditions: Set<String> = []
     @Published var notebookScrollTarget: String?
-    @Published var section = "desk"
+    @Published var section = "desk" {
+        didSet { if oldValue != section { readingPassIntentID = UUID() } }
+    }
     @Published var sharingBookId: String?
     @Published var sharingDraftId: String?
     @Published var error: String?
@@ -337,6 +340,7 @@ actor DeskRepository {
     }
     private func readerScopeDidChange() {
         readerIntentID = UUID()
+        readingPassIntentID = UUID()
         deferredReaderEditions.removeAll()
         resetReaderContext()
     }
@@ -667,10 +671,59 @@ actor DeskRepository {
         do { try await selectBook(id) } catch { self.error = bookNookErrorMessage(error) }
     }
     func selectBook(_ id: String) async throws {
+        // A new book request supersedes a pending pass change before either save completes.
+        readingPassIntentID = UUID()
         try await drainSaves(allowJournaledInk: true)
         let result = try await perform(["op": "open_notebook", "book_id": id, "at": Int(Date().timeIntervalSince1970)])
         guard let notebookID = result?.object?["id"] as? String else { throw CocoaError(.coderReadCorrupt) }
         selectedBookId = id; selectedNotebookId = notebookID; selection = nil
+    }
+    struct ReadingPassIntent {
+        fileprivate let id: UUID
+        fileprivate let bookID: String
+        fileprivate let notebookID: String
+    }
+    enum ReadingPassAction {
+        case select(String)
+        case begin(at: Int)
+    }
+    func captureReadingPassIntent() -> ReadingPassIntent? {
+        guard section == "desk", let bookID = book?.id, let notebook, notebook.bookId == bookID else { return nil }
+        let id = UUID()
+        readingPassIntentID = id
+        return ReadingPassIntent(id: id, bookID: bookID, notebookID: notebook.id)
+    }
+    func changeReadingPass(_ action: ReadingPassAction, intent: ReadingPassIntent) async throws {
+        func isCurrent() -> Bool {
+            !Task.isCancelled && readingPassIntentID == intent.id && section == "desk" &&
+                book?.id == intent.bookID && notebook?.id == intent.notebookID && notebook?.bookId == intent.bookID
+        }
+        guard isCurrent() else { throw CancellationError() }
+        if case .select(let id) = action, id == intent.notebookID { return }
+        do {
+            try await drainSaves(allowJournaledInk: true)
+            guard isCurrent() else { throw CancellationError() }
+
+            let notebookID: String
+            switch action {
+            case .select(let id):
+                notebookID = id
+            case .begin(let at):
+                let result = try await perform(["op": "start_pass", "book_id": intent.bookID, "at": at])
+                // The pass may already be saved. Navigation only cancels taking focus.
+                guard isCurrent() else { throw CancellationError() }
+                guard let id = result?.object?["id"] as? String else { throw CocoaError(.coderReadCorrupt) }
+                notebookID = id
+            }
+            guard state?.notebooks[notebookID]?.bookId == intent.bookID else {
+                throw BookNookServiceError.message("This reading pass is no longer available in the current book.")
+            }
+            selectedNotebookId = notebookID
+            reloadEditorSessions()
+        } catch {
+            guard isCurrent() else { throw CancellationError() }
+            throw error
+        }
     }
     func saveText(notebook: String, block: String, session: String, baseUpdate: String, text: String, styles: [InlineStyle]) {
         guard editSequence < UInt64.max else { error = "Edit sequence exhausted. Reopen the desk."; return }

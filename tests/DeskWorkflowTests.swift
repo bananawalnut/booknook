@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MPL-2.0
 import AppKit
 import CryptoKit
+import Combine
 import Foundation
 
 @main struct DeskWorkflowTests {
@@ -14,6 +15,7 @@ import Foundation
             do {
                 if CommandLine.arguments.contains("--group-replies") { try await testGroupReplies(); exit(0) }
                 if CommandLine.arguments.contains("--shared-list-review") { try await testSharedListReview(); exit(0) }
+                if CommandLine.arguments.contains("--reading-pass-navigation") { try await testReadingPassNavigation(); exit(0) }
                 if CommandLine.arguments.contains("--startup") { try await testDeskStartup(); exit(0) }
                 if CommandLine.arguments.contains("--publications") { try await testPublicationWorkflow(); exit(0) }
                 if CommandLine.arguments.contains("--source-reading-history") { try await testSourceReadingHistory(); exit(0) }
@@ -35,8 +37,104 @@ import Foundation
         }
         app.run()
     }
+    @MainActor static func testReadingPassNavigation() async throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("booknook-pass-navigation-" + UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let model = DeskModel(repository: DeskRepository(directory: root))
+        await model.open()
+        func addBook(_ title: String) async throws -> String {
+            let result = try await model.perform(["op": "add_book", "title": title, "author": "Fixture", "at": 1])
+            guard let id = result?.object?["book_id"] as? String else { throw CocoaError(.coderReadCorrupt) }
+            return id
+        }
+        func intent() throws -> DeskModel.ReadingPassIntent {
+            guard let intent = model.captureReadingPassIntent() else { throw CocoaError(.coderReadCorrupt) }
+            return intent
+        }
+        func expectCancellation(_ action: DeskModel.ReadingPassAction, intent: DeskModel.ReadingPassIntent) async throws {
+            do {
+                try await model.changeReadingPass(action, intent: intent)
+                preconditionFailure("A stale reading-pass request must be canceled")
+            } catch is CancellationError {}
+        }
+        let first = try await addBook("First pass fixture"), second = try await addBook("Second pass fixture")
+        try await model.selectBook(second)
+        let secondNotebook = model.notebook!
+        try await model.selectBook(first)
+        let firstNotebook = model.notebook!
+        let ink = model.inkSession(notebook: firstNotebook, block: firstNotebook.blocks[0])
+        defer { ink.capturePendingStroke = nil }
+
+        let native = try Desk(directory: root.path)
+        var captures = 0
+        var competingNotebookID: String?
+        var competingFailure: Error?
+        // Another real store handle commits during the final ink checkpoint,
+        // after the pending operation has received its flushed desk snapshot.
+        ink.capturePendingStroke = {
+            captures += 1
+            guard captures == 2 else { return }
+            do {
+                let data = try JSONSerialization.data(withJSONObject: ["op": "start_pass", "book_id": first, "at": 41])
+                let json = try native.execute(commandJson: String(decoding: data, as: UTF8.self))
+                let response = try JSONDecoder().decode(JSONValue.self, from: Data(json.utf8)).object
+                competingNotebookID = (response?["result"] as? [String: Any])?["id"] as? String
+            } catch { competingFailure = error }
+        }
+        try await model.changeReadingPass(.begin(at: 42), intent: intent())
+        ink.capturePendingStroke = nil
+        if let competingFailure { throw competingFailure }
+        guard let created = model.notebook, let competingNotebookID else { throw CocoaError(.coderReadCorrupt) }
+        precondition(captures == 2 && model.state?.notebooks[competingNotebookID]?.bookId == first)
+        precondition(model.state?.passes[created.passId]?.startedAt == 42 && created.id != competingNotebookID,
+                     "Select the exact notebook returned by the command, even with a concurrent pass on the same book")
+        let currentGeneration = model.editorGeneration
+
+        ink.capturePendingStroke = {
+            model.selectedBookId = second; model.selectedNotebookId = secondNotebook.id
+            model.selectedBookId = first; model.selectedNotebookId = created.id
+            ink.capturePendingStroke = nil
+        }
+        try await expectCancellation(.select(firstNotebook.id), intent: intent())
+        precondition(model.selectedNotebookId == created.id && model.editorGeneration == currentGeneration,
+                     "A round trip to the same book and pass must invalidate a stale selection")
+
+        let before = model.state!.notebooks.count
+        ink.capturePendingStroke = { model.section = "library"; ink.capturePendingStroke = nil }
+        try await expectCancellation(.begin(at: 43), intent: intent())
+        precondition(model.state?.notebooks.count == before && model.selectedNotebookId == created.id,
+                     "Leaving before command dispatch must not create or select a pass")
+        model.section = "desk"
+
+        var lateNotebookID: String?
+        let observation = model.$state.sink { snapshot in
+            guard lateNotebookID == nil, let snapshot,
+                  let notebook = snapshot.notebooks.values.first(where: { snapshot.passes[$0.passId]?.startedAt == 44 }) else { return }
+            lateNotebookID = notebook.id; model.section = "library"
+        }
+        defer { observation.cancel() }
+        try await expectCancellation(.begin(at: 44), intent: intent())
+        precondition(lateNotebookID != nil && model.selectedNotebookId == created.id &&
+                     model.editorGeneration == currentGeneration && model.section == "library")
+        let reopened = try await DeskRepository(directory: root).open().0
+        precondition(reopened.notebooks[lateNotebookID!]?.bookId == first,
+                     "After commit a stale request keeps its pass in SQLite without changing the active desk")
+
+        model.section = "desk"
+        do {
+            try await model.changeReadingPass(.select(secondNotebook.id), intent: intent())
+            preconditionFailure("A different book's pass must not become the active notebook")
+        } catch let error as BookNookServiceError {
+            precondition(bookNookErrorMessage(error).contains("current book"))
+        }
+        precondition(model.selectedBookId == first && model.selectedNotebookId == created.id)
+        try await model.changeReadingPass(.select(firstNotebook.id), intent: intent())
+        precondition(model.selectedNotebookId == firstNotebook.id && model.editorGeneration != currentGeneration)
+        print("Native reading passes selected the exact command result with a concurrent pass and preserved navigation intent across canceled, committed, and reopened operations.")
+    }
     @MainActor static func runWorkflows() async throws {
         try await testDeskStartup()
+        try await testReadingPassNavigation()
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("booknook-ui-flow-\(UUID().uuidString)")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }

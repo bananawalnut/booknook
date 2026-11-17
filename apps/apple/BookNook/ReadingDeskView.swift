@@ -42,14 +42,14 @@ struct ReadingDeskView: View {
                 Menu {
                     Menu("Reading passes") {
                     ForEach(Array(readingPasses.enumerated()), id: \.element.id) { index, notebook in
-                        Button { selectPass(notebook.id) } label: {
+                        Button { changePass(.select(notebook.id)) } label: {
                             let date = Date(timeIntervalSince1970: Double(model.state?.passes[notebook.passId]?.startedAt ?? 0)).formatted(date: .abbreviated, time: .shortened)
                             if notebook.id == model.selectedNotebookId { Label("Pass \(index + 1) · \(date)", systemImage: "checkmark") }
                             else { Text("Pass \(index + 1) · \(date)") }
                         }
                     }
                     Divider()
-                    Button("Begin a new reading pass") { beginPass() }
+                    Button("Begin a new reading pass") { changePass(.begin(at: Int(Date().timeIntervalSince1970))) }
                     }
                     Button("Reading session…") { showingSession = true }.disabled(model.notebook == nil)
                     Button("Equal pane widths") { notebookFraction = 0.5 }
@@ -112,27 +112,13 @@ struct ReadingDeskView: View {
             catch { model.error = bookNookErrorMessage(error) }
         }
     }
-    func selectPass(_ id: String) {
-        guard !changingPass, id != model.selectedNotebookId else { return }
+    private func changePass(_ action: DeskModel.ReadingPassAction) {
+        guard !changingPass, let intent = model.captureReadingPassIntent() else { return }
         changingPass = true
         Task {
             defer { changingPass = false }
-            do { try await model.drainSaves(allowJournaledInk: true); model.selectedNotebookId = id; model.reloadEditorSessions() }
-            catch { model.error = bookNookErrorMessage(error) }
-        }
-    }
-    func beginPass() {
-        guard !changingPass, let book = model.selectedBookId else { return }
-        changingPass = true
-        Task {
-            defer { changingPass = false }
-            do {
-                try await model.drainSaves(allowJournaledInk: true)
-                let existing = Set(model.state?.notebooks.keys.map { $0 } ?? [])
-                try await model.perform(["op": "start_pass", "book_id": book, "at": Int(Date().timeIntervalSince1970)])
-                guard let created = model.state?.notebooks.values.first(where: { $0.bookId == book && !existing.contains($0.id) }) else { throw CocoaError(.fileReadUnknown) }
-                model.selectedNotebookId = created.id; model.reloadEditorSessions()
-            } catch { model.error = bookNookErrorMessage(error) }
+            do { try await model.changeReadingPass(action, intent: intent) }
+            catch { if !bookNookOperationWasCancelled(error) { model.error = bookNookErrorMessage(error) } }
         }
     }
 
