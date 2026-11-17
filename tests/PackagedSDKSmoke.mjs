@@ -13,6 +13,7 @@ await initWeb({module_or_path: await readFile(require.resolve('@booknook/sdk/was
 const {runNotebookOrderSmoke}=require('./notebook-order-sdk.cjs');
 const notebookOrderCorpus = require('./notebook-order.json');
 for (const core of [nodeCore, webCore]) {
+  assert.deepEqual(sdk.publicGroupPreviews(core, JSON.parse(core.new_social_state()), 'ab'.repeat(32)), []);
   await runNotebookOrderSmoke(core, sdk, notebookOrderCorpus);
   console.log(await runProviderAcceptance(sdk,core));
   const f=genericFixture();

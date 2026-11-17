@@ -1,6 +1,6 @@
 import {BookNook, type NotebookStorage, type Command, type NotebookInk} from '@booknook/sdk';
 import * as core from '@booknook/sdk/wasm/node';
-import {socialRecommendations, type CatalogCandidate, type Recommendation, type Social} from '@booknook/sdk';
+import {publicGroupPreviews, socialRecommendations, type CatalogCandidate, type PublicGroupPreview, type Recommendation, type Social} from '@booknook/sdk';
 const command: Command = {op:'create_literary_entity',book_id:'known-book',kind:'place',name:'The library'};
 declare const storage: NotebookStorage;
 BookNook.open(core, storage).then(desk => desk.execute(command));
@@ -13,6 +13,8 @@ declare const policy: Social.AuthorityPolicy;
 const candidates: CatalogCandidate[] = [{book_id:'catalog:one',title:'Forest',subjects:[]}];
 const suggestions: Recommendation[] = socialRecommendations(core,social,candidates,[],policy,1000n);
 void suggestions;
+const previews: PublicGroupPreview[] = publicGroupPreviews(core, social, 'ab'.repeat(32));
+void previews;
 import {validateCastaliaRequest, type CastaliaTrustPolicy, type CastaliaDisclosure, type CastaliaPresentationRequest} from '@booknook/sdk';
 declare const castaliaPolicy: CastaliaTrustPolicy;
 declare const disclosure: CastaliaDisclosure;

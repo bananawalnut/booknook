@@ -1,7 +1,7 @@
 import {BookNook, type NotebookStorage, type Command} from '@booknook/sdk';
 import initWeb, * as core from '@booknook/sdk/wasm/web';
-import {recommendations, prepareSyncBatch, sealSyncBatch, openSyncBatch,
-  type CatalogCandidate, type SyncBatch, type ApprovedSyncPacket, type Social} from '@booknook/sdk';
+import {recommendations, prepareSyncBatch, sealSyncBatch, openSyncBatch, publicGroupPreviews,
+  type CatalogCandidate, type SyncBatch, type ApprovedSyncPacket, type PublicGroupPreview, type Social} from '@booknook/sdk';
 const command: Command = {op:'start_session',pass_id:'known-pass',at:1};
 declare const storage: NotebookStorage;
 await initWeb();
@@ -15,6 +15,9 @@ const candidates: CatalogCandidate[] = [{book_id:'catalog:one',title:'Forest',su
 recommendations(core,{candidates,preferred_subjects:['nature'],shared_ratings:[],friends:[],excluded:[]});
 const batch: SyncBatch = prepareSyncBatch(core,'holder',7n,['device'],new Uint8Array([0,255]));
 declare const policy: Social.AuthorityPolicy;
+declare const social: Social.SocialState;
+const previews: PublicGroupPreview[] = publicGroupPreviews(core, social, 'ab'.repeat(32));
+void previews;
 declare const key: Uint8Array;
 const packet: ApprovedSyncPacket = sealSyncBatch(core,batch,new Uint8Array([0,255]),key,'request','presentation',policy,110n).packet;
 const plaintext: Uint8Array = openSyncBatch(core,packet,key,'device',policy,10000n).plaintext;

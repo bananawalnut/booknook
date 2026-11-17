@@ -28,6 +28,7 @@ const core = require('@booknook/sdk/wasm');
     preferred_subjects:['nature'],shared_ratings:[],friends:[],excluded:[]})[0].score,2);
   assert.equal(prepareSyncBatch(core,'holder',7n,['device'],new Uint8Array([0,255])).schema,'booknook.sync-batch.v1');
   const archiveSDK=require('@booknook/sdk');
+  assert.deepEqual(archiveSDK.publicGroupPreviews(core, JSON.parse(core.new_social_state()), 'ab'.repeat(32)), []);
   const archive={schema:'booknook.portable-export.v1',state,assets:{}};
   assert.deepEqual(archiveSDK.validatePortableArchive(core,JSON.stringify(archive)),archive);
   assert.deepEqual(JSON.parse(archiveSDK.roundtripPortableArchive(core,archiveSDK.encodePortableArchive(core,archive))),archive);
