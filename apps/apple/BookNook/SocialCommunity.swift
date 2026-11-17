@@ -168,7 +168,11 @@ struct SocialCommunityView: View {
                 Picker("Stars", selection: $stars) { Text(kind == "review" ? "No rating" : "Choose a rating").tag(0); ForEach(1...5, id: \.self) { Text(String(repeating: "★", count: $0)).tag($0) } }
             }
             if groupID == nil && kind == "reading_update" { Picker("Progress", selection: $readingStatus) { Text("Want to read").tag("to-read"); Text("Reading").tag("currently-reading"); Text("Finished").tag("read"); Text("Paused").tag("paused"); Text("Stopped").tag("abandoned") } }
-            TextEditor(text: $bodyText).frame(minHeight: 120).accessibilityLabel("Text to publish").overlay(RoundedRectangle(cornerRadius: 5).stroke(.secondary.opacity(0.2)))
+            TextEditor(text: $bodyText)
+                .scrollContentBackground(.hidden)
+                .background(readingPaper, in: RoundedRectangle(cornerRadius: 5))
+                .frame(minHeight: 120).accessibilityLabel("Text to publish")
+                .overlay(RoundedRectangle(cornerRadius: 5).stroke(.secondary.opacity(0.2)).allowsHitTesting(false))
             Toggle("Contains spoilers", isOn: $spoiler)
             Text("You will review this exact text and its audience before approving. Your notebook and earlier drafts stay private.").font(.caption).foregroundStyle(.secondary)
             Button("Review & approve publication") { Task { await publishPost(groupID: groupID) } }.buttonStyle(.borderedProminent).disabled(!canPublish(groupID: groupID))
@@ -317,12 +321,14 @@ struct SocialCommunityView: View {
     private func groupReplyComposer(group: SocialGroup, target: SocialGroupReplyTarget, draft: SocialGroupReplyDraft,
                                     parent: SocialFeedItem) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Reply to \(socialShort(parent.actor))").font(.headline)
+            Text("Reply to \(socialShort(parent.actor)) in \(group.name)").font(.headline)
             Label(socialAudience(isPublic: !group.private, recipientCount: Set(group.members).subtracting(group.banned).count),
                   systemImage: group.private ? "lock.fill" : "globe").font(.callout)
             TextEditor(text: Binding(get: { replyDrafts[target]?.text ?? "" }, set: { replyDrafts[target]?.text = $0 }))
+                .scrollContentBackground(.hidden)
+                .background(readingPaper, in: RoundedRectangle(cornerRadius: 5))
                 .frame(minHeight: 100).accessibilityLabel("Reply text")
-                .overlay(RoundedRectangle(cornerRadius: 5).stroke(.secondary.opacity(0.2)))
+                .overlay(RoundedRectangle(cornerRadius: 5).stroke(.secondary.opacity(0.2)).allowsHitTesting(false))
             Toggle("Contains spoilers", isOn: Binding(get: { replyDrafts[target]?.containsSpoilers ?? false },
                                                      set: { replyDrafts[target]?.containsSpoilers = $0 }))
             HStack {

@@ -67,6 +67,7 @@ func socialObject<T: Encodable>(_ value: T) throws -> [String: Any] { let encode
 func socialShort(_ actor: String) -> String { String(actor.prefix(8)) + "…" + String(actor.suffix(6)) }
 func socialAudience(isPublic: Bool, recipientCount: Int? = nil) -> String {
     if isPublic { return "Public — anyone can read this." }
+    if recipientCount == 1 { return "Private — encrypted for 1 approved recipient." }
     if let recipientCount { return "Private — encrypted for \(recipientCount) approved recipients." }
     return "Private — encrypted for approved recipients only."
 }

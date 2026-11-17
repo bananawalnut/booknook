@@ -10,7 +10,7 @@ This audit keeps the original native MVP and SDK scope intact. A passing source 
 
 Actual WebKit tests reproduce long EPUB and MOBI text runs losing their interior reading position in 1703. Two distinct visible lines now produce independent bounded quotes and reopen at the right text, including after font reflow. A separate native bridge test holds the initial restore to verify that provisional geometry cannot overwrite the saved location. Existing full-run locations remain readable, and ambiguous new positions leave the last saved location intact.
 
-The native group reply workflow now binds the draft to an eligible parent in the same group and shows that parent in the consent request. The linked Swift and SQLite test verifies exact reply content, eligibility for visible discussions, denied approval and replacement draft recovery after reopening. Physical app interaction, live consent, relay delivery and build 1704 packaging have separate acceptance checks.
+The native group reply workflow binds the draft to an eligible parent in the same group and identifies that parent in the consent request. The Swift and SQLite workflow verifies exact reply content, eligibility, denied approval and draft recovery after reopening. A separate Mac Release walkthrough used a synthetic group to enter Unicode, mark spoilers, switch between Feed and Groups, and recover the exact unpublished draft after the locked signer refused approval. The polished composer uses the desk’s warm paper and names the group. Physical iPad interaction, live consent, relay delivery and public app archives have separate acceptance checks.
 
 ## Native app 1703 attached editions
 
