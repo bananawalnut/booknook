@@ -1,0 +1,144 @@
+{
+  "schema": "booknook.app-only-public-preview-evidence.v2",
+  "status": "PASS_PUBLIC_ARCHIVES_AND_NORMAL_IPAD_UPDATE",
+  "observed_at": "2026-11-17T16:36:26.782185+00:00",
+  "app": {
+    "version": "0.2.1",
+    "build": "2026111705",
+    "source_commit": "74ddbf0f706ac342a46c8afeddc339aeca7e1156",
+    "release_url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.5",
+    "release_id": 448909035,
+    "tag": "v0.2.1-app-preview.20261117.5",
+    "published_at": "2026-11-17T16:36:12Z"
+  },
+  "source_validation": {
+    "ordinary_ci": "https://github.com/bananawalnut/booknook/actions/runs/44122105135",
+    "ordinary_steps_passed": 38,
+    "archive_ci": "https://github.com/bananawalnut/booknook/actions/runs/44121679187",
+    "archive_steps_passed": 8,
+    "artifact_id": 14348031066,
+    "artifact": {
+      "bytes": 37907297,
+      "sha256": "9b3eabbdf2e7c7869216bebb340b34638cbeb8d73945d2d2ab06bef575874116"
+    },
+    "application_version": "0.2.1",
+    "cargo_workspace_version": "0.2.3",
+    "independent_archive_verification_receipt_sha256": "0592ff27d0baaa5396bc6d4b9bb8ae82ed19412cf3da330bb22c71012683fe85"
+  },
+  "archive_verification": {
+    "mac": {
+      "archive": {
+        "bytes": 14992214,
+        "sha256": "8fc25fa2f155c97646fe4cf978cd8512eaca0a4b3cb29f166cb8e729303446b8"
+      },
+      "tar_members": 110,
+      "bundle_files": 91,
+      "ontology_files": 83,
+      "build": "2026111705",
+      "signature": "linker-ad-hoc",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "byte-identical standalone Mach-O"
+    },
+    "ipad-sim": {
+      "archive": {
+        "bytes": 11473902,
+        "sha256": "630ce68aeab07d3a62f3dcb68679e5a560fea789c7293aa32dce6135f4e8aa68"
+      },
+      "tar_members": 107,
+      "bundle_files": 91,
+      "ontology_files": 83,
+      "build": "2026111705",
+      "signature": "linker-ad-hoc",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "byte-identical standalone Mach-O"
+    },
+    "ipad-device": {
+      "archive": {
+        "bytes": 11266058,
+        "sha256": "a06c7f5d388fbb8d49fc3fb4837852b64ea976f38ef36112f5211f5542d5e86e"
+      },
+      "tar_members": 107,
+      "bundle_files": 91,
+      "ontology_files": 83,
+      "build": "2026111705",
+      "signature": "unsigned",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "unsigned"
+    }
+  },
+  "public_https": {
+    "assets": {
+      "booknook-ipad-device-arm64-development-0.2.1.tar.gz": {
+        "bytes": 11266058,
+        "sha256": "a06c7f5d388fbb8d49fc3fb4837852b64ea976f38ef36112f5211f5542d5e86e"
+      },
+      "booknook-ipad-sim-arm64-development-0.2.1.tar.gz": {
+        "bytes": 11473902,
+        "sha256": "630ce68aeab07d3a62f3dcb68679e5a560fea789c7293aa32dce6135f4e8aa68"
+      },
+      "booknook-mac-arm64-development-0.2.1.tar.gz": {
+        "bytes": 14992214,
+        "sha256": "8fc25fa2f155c97646fe4cf978cd8512eaca0a4b3cb29f166cb8e729303446b8"
+      },
+      "BUILD-PROVENANCE.json": {
+        "bytes": 49793,
+        "sha256": "d35e21a987d6b423a8a875c5ace93b2328bd4ba104c590ac3a56d3af7b10d7e8"
+      },
+      "README.md": {
+        "bytes": 3628,
+        "sha256": "da26c7f7ea59cd9035e5c208f8dae8abf7ea7368327211ff37c4cd2105312d4d"
+      },
+      "RELEASE-MANIFEST.json": {
+        "bytes": 2113,
+        "sha256": "ae08f2b6922c4abdc27d02009b612244b2469736591810c0ea621e7bcb1c73b5"
+      },
+      "SHA256SUMS": {
+        "bytes": 503,
+        "sha256": "e07c76f0899c74655a8cfbd4d831df0cbcf4ab8fe424ff460cc71bfddd6a65d3"
+      },
+      "VERIFICATION.json": {
+        "bytes": 120135,
+        "sha256": "0803bf1bdb7eddaa5c568cc8ad72a9d34036978ce96bc50f235c45447a595fff"
+      }
+    },
+    "count": 8,
+    "bytes": 37908346,
+    "earlier_releases_with_unchanged_asset_identities": 14
+  },
+  "normal_physical_ipad": {
+    "previous_build": "2026111704",
+    "current_build": "2026111705",
+    "in_place": true,
+    "app_running": true,
+    "database_bytes_matched_after_install": true,
+    "desk_and_assets_preserved": true,
+    "only_top_level_database_fields_changed_after_launch": [
+      "revision"
+    ],
+    "orientation_unchanged_in_observations": true,
+    "orientation_commands": false,
+    "receipt_sha256": "9d48d659ca3a891973d608669e453e3154ba09da255473808111f43c723508a7",
+    "prior_build_finger_scribble_confirmed": true,
+    "ink_receipt_sha256": "97f45b299cf173ea8ca9064d9bd4c80e2031a99a3d705e4f44c09d76d21587ab",
+    "scope": "Finger input was exercised on 1703. The 1704 and 1705 checks cover update, launch and persistence. Pencil, hardware Undo/Redo, IME and VoiceOver remain open.",
+    "finger_ink_records_preserved_after_1705_launch": 1
+  },
+  "screenshots": {
+    "ipad_build": "2026111705",
+    "ipad_simulator": "iPadOS 18.6",
+    "ipad_framebuffer_sha256": "0e78a59095373cca126a53df099749333883ae4bedf5f1e57c92aa602252f5ad",
+    "mac_capture_build": "2026111705",
+    "mac_image_sha256": "748fec7c8453763607f791b0309c8c5986f5b6e87c2b437c5cef7e6de5e9068f",
+    "scope": "Actual macOS window and original iPad Simulator framebuffer from the same released build, using isolated synthetic libraries."
+  },
+  "character_card_validation": {
+    "linked_swift_and_native_portable": "Capture selected passage, time, reviewed parents, pass, ebook and audio at save time. Later observations and branches preserve earlier context after SQLite reopen and portable archive restore.",
+    "independent_native_sync": "Two Desk instances backed by separate SQLite stores exchanged actual ciphertext approved with synthetic signing receipts. Both branches, three versions and their reading context survived reopen. Duplicate replay was idempotent.",
+    "focused_test_log_sha256": "785044cfd41ab8ef055273b69e6d1d08cf7ad12a2279fe9761ef3c810e24408c",
+    "focused_test_source_commit": "46a7c9a530fef6d5f00351db650b559efa121ff2",
+    "scope": "The encrypted test linked the unchanged 0.2.3 production Native library. Live Castalia approval and remote device exchange remain open."
+  }
+}

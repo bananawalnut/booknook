@@ -59,7 +59,7 @@ jobs:
           compression-level: 0
           retention-days: 14
   apple:
-    runs-on: macos-26
+    runs-on: macos-latest
     timeout-minutes: 45
     env:
       BOOKNOOK_APP_CONFIGURATION: Release
