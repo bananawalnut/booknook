@@ -2,7 +2,10 @@
 use crate::Desk;
 use booknook_core::{
     canonical, digest,
-    model::State,
+    model::{
+        Alignment, CapturedReadingContext, CharacterInterpretation, Location, ProgressObservation,
+        State,
+    },
     settings::{CastaliaSettings, ConnectionSettings},
 };
 use serde_json::{Value, json};
@@ -149,6 +152,180 @@ fn approved_outbox_and_two_replica_data_survive_reopen_duplicate_receive_and_cor
     );
     assert_eq!(b.snapshot().unwrap(), before);
 }
+#[test]
+fn approved_sync_preserves_divergent_card_captures_and_replay_after_reopen() {
+    let sender_root = Directory::new();
+    let receiver_root = Directory::new();
+    let sender = setup(&sender_root);
+    let receiver = setup(&receiver_root);
+    let sender_id = id(&sender);
+    let receiver_id = id(&receiver);
+    assert_ne!(sender_id, receiver_id);
+    let key = "19".repeat(32);
+    pair(&sender, &receiver_id, &key, true);
+    pair(&receiver, &sender_id, &key, true);
+
+    let execute = |desk: &Desk, command: Value| {
+        value(desk.execute(command.to_string()).unwrap())["result"].clone()
+    };
+    let snapshot = |desk: &Desk| serde_json::from_str::<State>(&desk.snapshot().unwrap()).unwrap();
+    add_book(&sender);
+    let state = snapshot(&sender);
+    let notebook = state.notebooks.values().next().unwrap();
+    let edition_id = state.editions.keys().next().unwrap();
+    let added = execute(
+        &sender,
+        json!({
+            "op":"add_character", "notebook_id":notebook.id, "block_id":notebook.blocks[0].id,
+            "name":"Mara", "at":at(),
+        }),
+    );
+    let card_id = added["card_id"].as_str().unwrap();
+    let original = snapshot(&sender).cards[card_id].clone();
+    let parent = &original.versions[0].id;
+    let baseline = exported(
+        &sender,
+        &receiver_id,
+        &key,
+        &sender_root.0.join("baseline.json"),
+    );
+    let received = value(
+        receiver
+            .sync_receive(baseline, sender_id.clone(), key.clone())
+            .unwrap(),
+    );
+    assert_eq!(received["duplicate"], false);
+    assert_eq!(snapshot(&receiver).cards[card_id], original);
+
+    let capture = |chapter, quote: &str, milliseconds, observed_at| {
+        let positions = vec![
+            Location::Text {
+                edition_id: edition_id.clone(),
+                resource: format!("OPS/chapter-{chapter}.xhtml"),
+                quote: quote.into(),
+                prefix: "Before ".into(),
+                suffix: " after.".into(),
+            },
+            Location::Audio {
+                provider: "audible".into(),
+                source_id: "sync-fixture".into(),
+                milliseconds,
+                chapter: None,
+            },
+        ];
+        let position_observations = positions
+            .iter()
+            .enumerate()
+            .map(|(index, location)| ProgressObservation {
+                id: format!("chapter-{chapter}-source-{index}"),
+                pass_id: notebook.pass_id.clone(),
+                location: location.clone(),
+                observed_at,
+                received_at: observed_at,
+                alignment: Alignment::Unmatched,
+                provider_connection_id: (index == 1).then(|| "audible-fixture".into()),
+                audio_metadata: None,
+            })
+            .collect();
+        CapturedReadingContext {
+            pass_id: notebook.pass_id.clone(),
+            positions,
+            position_observations,
+        }
+    };
+    let first_time = at();
+    let early = capture(3, "Mara's café 日本語", 5_000, first_time);
+    let independent = capture(7, "Mara changes her mind", 9_000, first_time + 2);
+    let later = capture(12, "Mara revisits the room", 12_000, first_time + 4);
+    for observation in &later.position_observations {
+        execute(
+            &sender,
+            json!({"op":"observe_position","observation":observation}),
+        );
+    }
+
+    let save = |desk: &Desk, context: &CapturedReadingContext, description: &str, saved_at| {
+        let interpretation = CharacterInterpretation {
+            description: description.into(),
+            passages: vec![context.positions[0].clone()],
+            ..Default::default()
+        };
+        let response = execute(
+            desk,
+            json!({
+                "op":"save_card_with_context", "card_id":card_id, "parents":[parent],
+                "at":saved_at, "interpretation":interpretation, "capture_context":context,
+            }),
+        );
+        let state = snapshot(desk);
+        let version = state.cards[card_id].versions[1].clone();
+        assert_eq!(Some(version.id.as_str()), response["version_id"].as_str());
+        assert_eq!(version.parents.as_slice(), std::slice::from_ref(parent));
+        assert_eq!(version.pass_id, context.pass_id);
+        assert_eq!(version.at, saved_at);
+        assert_eq!(version.interpretation, interpretation);
+        assert_eq!(version.positions, context.positions);
+        assert_eq!(version.position_observations, context.position_observations);
+        version
+    };
+    let sender_version = save(
+        &sender,
+        &early,
+        "Earlier private interpretation",
+        first_time + 1,
+    );
+    let receiver_version = save(
+        &receiver,
+        &independent,
+        "Independent interpretation",
+        first_time + 3,
+    );
+
+    let path = exported(
+        &sender,
+        &receiver_id,
+        &key,
+        &sender_root.0.join("branches.json"),
+    );
+    let wire = std::fs::read_to_string(&path).unwrap();
+    let packet: Value = serde_json::from_str(&wire).unwrap();
+    assert!(
+        packet["envelope"]["ciphertext"]
+            .as_str()
+            .is_some_and(|s| !s.is_empty())
+    );
+    assert!(!wire.contains(&sender_version.interpretation.description));
+    assert!(!wire.contains("Mara's café 日本語"));
+
+    let received = value(
+        receiver
+            .sync_receive(path.clone(), sender_id.clone(), key.clone())
+            .unwrap(),
+    );
+    assert_eq!(received["duplicate"], false);
+    assert_eq!(received["conflicts"], 0);
+    let merged = snapshot(&receiver);
+    let card = &merged.cards[card_id];
+    assert_eq!(card.versions.len(), 3);
+    assert!(card.versions.contains(&original.versions[0]));
+    let heads = card.heads();
+    assert_eq!(heads.len(), 2);
+    assert!(heads.contains(&&sender_version));
+    assert!(heads.contains(&&receiver_version));
+    for observation in &later.position_observations {
+        assert_eq!(merged.positions.get(&observation.id), Some(observation));
+    }
+
+    drop(receiver);
+    let reopened = Desk::new(receiver_root.path()).unwrap();
+    assert_eq!(snapshot(&reopened), merged);
+    assert_eq!(
+        value(reopened.sync_receive(path, sender_id, key).unwrap())["duplicate"],
+        true,
+    );
+    assert_eq!(snapshot(&reopened), merged);
+}
+
 #[test]
 fn approved_sync_transfers_original_mobi_and_regenerates_the_same_reader_resource() {
     let ar = Directory::new();

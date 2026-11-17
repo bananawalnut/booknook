@@ -10,6 +10,8 @@ This audit keeps the original native MVP and SDK scope intact. A passing source 
 
 Saving a character-card revision now captures the selected passage, time, reading pass, and available ebook and audio observations at the same point. The linked Swift workflow checks an unacknowledged reader observation, fresher ebook and audio updates, and a late branch outside the reviewed parents. The original context and independent branch survive SQLite reopen. The native portable archive regression also verifies export and restore. Older save commands and stored card versions use their existing contracts. [Versioned command schema and fixture](../ontology/commands/v1/manifest.json)
 
+A focused Native 0.2.3 check opened two separate SQLite libraries, created independent revisions of the same card, and sent the approved encrypted transfer with synthetic signing receipts. The receiving library kept both branches with their original reading positions after newer progress arrived. Reopening preserved the merged state and a duplicate transfer made no changes. Physical device exchange and live transport remain open.
+
 ## Native app 1704 public preview and iPad update
 
 [Build 1704 evidence](app-2026111704-public-preview-evidence.json) records three independently verified archives, eight matching public downloads, and the normal iPad update. A reader drew with a finger on 1703, and the saved stroke survived the update and relaunch. Pencil, hardware Undo/Redo, IME, VoiceOver, and minimum-OS execution remain open.
