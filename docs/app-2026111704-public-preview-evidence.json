@@ -1,0 +1,151 @@
+{
+  "schema": "booknook.app-only-public-preview-evidence.v2",
+  "status": "PASS_PUBLIC_ARCHIVES_AND_NORMAL_IPAD_UPDATE",
+  "observed_at": "2026-11-17T16:21:55.417045+00:00",
+  "app": {
+    "version": "0.2.1",
+    "build": "2026111704",
+    "source_commit": "d9f7e2efc9165fe776d5d577d607113f5fe5a526",
+    "release_url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.4",
+    "release_id": 448890789,
+    "tag": "v0.2.1-app-preview.20261117.4",
+    "published_at": "2026-11-17T16:21:46Z"
+  },
+  "source_validation": {
+    "ordinary_ci": "https://github.com/bananawalnut/booknook/actions/runs/44118023590",
+    "ordinary_steps_passed": 38,
+    "archive_ci": "https://github.com/bananawalnut/booknook/actions/runs/44118075191",
+    "archive_steps_passed": 8,
+    "artifact_id": 14345284811,
+    "artifact": {
+      "bytes": 37903373,
+      "sha256": "60293ce37f86f42693f96bf384f49f35631a2953acb9d446967dd24231f80f46"
+    },
+    "application_version": "0.2.1",
+    "cargo_workspace_version": "0.2.2",
+    "independent_archive_verification_receipt_sha256": "a79391a422d771888309bd2b351aaf9b035a915ccae0f9031c1755218f31a41d"
+  },
+  "reader_validation": {
+    "actual_wkwebview": "Restores distinct interior quotes within long EPUB and MOBI text runs, including after font reflow.",
+    "native_regression": "Holds initial position restore while provisional WebKit geometry arrives, then preserves the useful saved position.",
+    "exact_assets_all_three_targets": {
+      "reader.js": {
+        "bytes": 17039,
+        "sha256": "8c9800b6e18001a49035bb28d076a089607f789071858112ec7edc8483854054"
+      },
+      "reader-geometry.js": {
+        "bytes": 2180,
+        "sha256": "bb648f42b1fb6893ee10833559756e9016ee5ec7423442643cb62cab34345c81"
+      }
+    }
+  },
+  "archive_verification": {
+    "mac": {
+      "archive": {
+        "bytes": 14985767,
+        "sha256": "f56bdad301f2ed54d41c40ed40647fc39b01ae1099cf3fc5cb9b19dd3b8760e1"
+      },
+      "tar_members": 105,
+      "bundle_files": 88,
+      "ontology_files": 80,
+      "build": "2026111704",
+      "signature": "linker-ad-hoc",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "byte-identical standalone Mach-O"
+    },
+    "ipad-sim": {
+      "archive": {
+        "bytes": 11477652,
+        "sha256": "7bf38992a7dc2b40ab766510dc3da358f7549cce6dae7c7a5ec6161549c871d1"
+      },
+      "tar_members": 102,
+      "bundle_files": 88,
+      "ontology_files": 80,
+      "build": "2026111704",
+      "signature": "linker-ad-hoc",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "byte-identical standalone Mach-O"
+    },
+    "ipad-device": {
+      "archive": {
+        "bytes": 11271175,
+        "sha256": "75e78b5f967f80e1d10aacd986a3a8e49a4c2746c7b287a62b7a4c2a57faee65"
+      },
+      "tar_members": 102,
+      "bundle_files": 88,
+      "ontology_files": 80,
+      "build": "2026111704",
+      "signature": "unsigned",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "unsigned"
+    }
+  },
+  "public_https": {
+    "assets": {
+      "booknook-ipad-device-arm64-development-0.2.1.tar.gz": {
+        "bytes": 11271175,
+        "sha256": "75e78b5f967f80e1d10aacd986a3a8e49a4c2746c7b287a62b7a4c2a57faee65"
+      },
+      "booknook-ipad-sim-arm64-development-0.2.1.tar.gz": {
+        "bytes": 11477652,
+        "sha256": "7bf38992a7dc2b40ab766510dc3da358f7549cce6dae7c7a5ec6161549c871d1"
+      },
+      "booknook-mac-arm64-development-0.2.1.tar.gz": {
+        "bytes": 14985767,
+        "sha256": "f56bdad301f2ed54d41c40ed40647fc39b01ae1099cf3fc5cb9b19dd3b8760e1"
+      },
+      "BUILD-PROVENANCE.json": {
+        "bytes": 48134,
+        "sha256": "441a598d85abcd7f799cffd5661c4ec3b2655547ed4e1b1dbc145c301aa8c9ba"
+      },
+      "README.md": {
+        "bytes": 3628,
+        "sha256": "0af5210f689373ae96f0a73d8db87d7f6b4daf279ac7acbd9901611b63aa65d8"
+      },
+      "RELEASE-MANIFEST.json": {
+        "bytes": 2113,
+        "sha256": "415c28a17fa1a85904b78ea15b3318f2aeb0b353c67ffe034ab68a3281182f94"
+      },
+      "SHA256SUMS": {
+        "bytes": 503,
+        "sha256": "7a9a2b252118275e43b5a4c3455f917f815a1da3ea316756fc0bdee4f8c008a1"
+      },
+      "VERIFICATION.json": {
+        "bytes": 115450,
+        "sha256": "bab9129001751ee03931c54228e06bd17ace0baca58a648a981351e04142e570"
+      }
+    },
+    "count": 8,
+    "bytes": 37904422,
+    "earlier_releases_with_unchanged_asset_identities": 13
+  },
+  "normal_physical_ipad": {
+    "previous_build": "2026111703",
+    "current_build": "2026111704",
+    "in_place": true,
+    "app_running": true,
+    "database_bytes_matched_after_install": true,
+    "desk_and_assets_preserved": true,
+    "only_top_level_database_fields_changed_after_launch": [
+      "revision"
+    ],
+    "orientation_unchanged_in_observations": true,
+    "orientation_commands": false,
+    "receipt_sha256": "1c1c3e75ae0f919181fc83a5c22067d414da10cfcbfb874d5257826c8be38a7f",
+    "prior_build_finger_scribble_confirmed": true,
+    "finger_ink_records_preserved_after_1704_launch": 1,
+    "ink_receipt_sha256": "667bd87e0f197001760692aaa5a498b0119aa428902790f5c310d4886bbded3b",
+    "scope": "Finger input was exercised on 1703. The 1704 check covers update, launch and persistence. Pencil, hardware Undo/Redo, IME and VoiceOver remain open."
+  },
+  "screenshots": {
+    "ipad_build": "2026111704",
+    "ipad_simulator": "iPadOS 18.6",
+    "ipad_framebuffer_sha256": "da8fdac79a558d0602d54ddad150aaa8d6d43bb0a0e0478c979aa2764eeab562",
+    "mac_capture_build": "2026111704",
+    "mac_image_sha256": "15a1954fa644f56abb37dcf0e8594c0f9e0e5542a32a11257eeb2b9a1bbbcf7a",
+    "scope": "Actual macOS window and original iPad Simulator framebuffer from the same released build, using isolated synthetic libraries."
+  }
+}
