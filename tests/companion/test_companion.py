@@ -6,6 +6,7 @@ import threading
 import sys
 import tempfile
 import unittest
+from contextlib import contextmanager
 from unittest.mock import patch
 from pathlib import Path
 spec = importlib.util.spec_from_file_location("companion", Path(__file__).parents[2] / "services/library-companion/booknook_companion.py")
@@ -170,6 +171,79 @@ class CompanionHTTPTests(unittest.TestCase):
                 self.assertEqual(call("GET","/v1/capabilities",headers=headers)[0],401)
             finally:
                 server.shutdown();server.server_close();worker.join();service.db.close()
+
+
+    def test_catalog_rejects_oversized_normalized_bytes_and_preserves_last_upload(self):
+        limit = 1024
+        route = "/v1/kindle/catalog"
+
+        def catalog(title):
+            return {"schema": "booknook.kindle-catalog.v1",
+                    "items": [{"asin": "B012345678", "title": title, "authors": ["Example"]}]}
+
+        def encode(value, *, ensure_ascii=True):
+            return json.dumps(value, ensure_ascii=ensure_ascii, separators=(",", ":"), sort_keys=True).encode()
+
+        @contextmanager
+        def serve(root, *, catalog_path=None):
+            service = m.Companion(root, catalog=catalog_path)
+            server = m.http.server.ThreadingHTTPServer(("127.0.0.1", 0), m.Handler)
+            server.companion = service
+            worker = threading.Thread(target=server.serve_forever, daemon=True)
+            worker.start()
+
+            def call(method, path, body=b"", headers=None):
+                client = http.client.HTTPConnection("127.0.0.1", server.server_port, timeout=5)
+                try:
+                    client.request(method, path, body, headers or {})
+                    response = client.getresponse()
+                    return response.status, response.read()
+                finally:
+                    client.close()
+
+            try:
+                status, raw = call("POST", "/v1/pair", encode({
+                    "schema": "booknook.companion-pair.v1", "code": service.code, "device_name": "Catalog test",
+                }))
+                self.assertEqual(status, 200)
+                yield call, {"Authorization": "Bearer " + json.loads(raw)["token"]}
+            finally:
+                server.shutdown()
+                server.server_close()
+                worker.join()
+                service.db.close()
+
+        title = "Café 日本語"
+        prior = catalog(title + "x" * (limit - len(encode(catalog(title)))))
+        expected = encode(prior)
+        self.assertEqual(len(expected), limit)
+        excess = catalog("é" * 200)
+        incoming = encode(excess, ensure_ascii=False)
+        self.assertLess(len(incoming), limit)
+        self.assertGreater(len(encode(excess)), limit)
+        with tempfile.TemporaryDirectory() as temporary, patch.object(m, "MAX_BYTES", limit):
+            root = Path(temporary)
+            selected = root / "paired" / "kindle-catalog.json"
+            with serve(selected.parent) as (call, headers):
+                status, raw = call("PUT", route, encode(prior, ensure_ascii=False), headers)
+                self.assertEqual((status, json.loads(raw)), (200, {"imported": 1}))
+                original = selected.read_bytes()
+                status, raw = call("PUT", route, incoming, headers)
+                self.assertEqual(status, 413)
+                self.assertEqual(json.loads(raw)["code"], "payload_too_large")
+                self.assertEqual(selected.read_bytes(), original)
+                self.assertEqual(list(selected.parent.glob("catalog-*.tmp")), [])
+                self.assertEqual(original, expected)
+                self.assertEqual(call("GET", route, headers=headers), (200, expected))
+            with serve(selected.parent) as (call, _):
+                self.assertEqual(call("GET", route, headers=headers), (200, expected))
+
+            source = root / "operator.json"
+            source.write_bytes(incoming)
+            with serve(root / "operator", catalog_path=source) as (call, headers):
+                status, raw = call("GET", route, headers=headers)
+                self.assertEqual(status, 413)
+                self.assertEqual(json.loads(raw)["code"], "payload_too_large")
 
 if __name__ == '__main__': unittest.main()
 

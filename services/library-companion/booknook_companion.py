@@ -304,6 +304,9 @@ def normalize_catalog(raw):
         value = {"schema": "booknook.kindle-catalog.v1", "items": items}
     else:
         value = strict_json(raw)
+    return validate_catalog(value)
+
+def validate_catalog(value):
     if not isinstance(value, dict) or set(value) != {"schema", "items"} or value["schema"] != "booknook.kindle-catalog.v1" or not isinstance(value["items"], list):
         raise ClosedError(422, "Unsupported catalog schema")
     seen = set()
@@ -318,6 +321,20 @@ def normalize_catalog(raw):
         if item.get("observed_at") is not None and (type(item["observed_at"]) is not int or item["observed_at"] < 0 or not isinstance(item["position"], str)):
             raise ClosedError(422, "Invalid position evidence")
     return value
+
+def encode_catalog(catalog, *, newline=False):
+    """Use the same bounded, stable JSON bytes for storage and the HTTP catalog."""
+    encoder = json.JSONEncoder(ensure_ascii=True, allow_nan=False, separators=(",", ":"), sort_keys=True)
+    encoded = bytearray()
+    limit = MAX_BYTES - int(newline)
+    for chunk in encoder.iterencode(catalog):
+        # ASCII escaping makes the size of each text chunk its on-wire size.
+        if len(chunk) > limit - len(encoded):
+            raise ClosedError(413, "Normalized catalog exceeds 32 MiB")
+        encoded.extend(chunk.encode("ascii"))
+    if newline:
+        encoded.append(10)
+    return bytes(encoded)
 
 class Companion:
     def __init__(self, root: Path, provider=None, catalog=None):
@@ -511,12 +528,19 @@ class Companion:
             if body.startswith(SQLITE_MAGIC) and not raw_sqlite_allowed:
                 raise ClosedError(403, "Raw Kindle databases are accepted only by a loopback-bound companion from a loopback client. Export normalized JSON locally for a remote companion.", "kindle_snapshot_local_only")
             catalog = normalize_catalog(body)
+            encoded = encode_catalog(catalog)
             target = self.root / "kindle-catalog.json"
             staging = self.root / ("catalog-" + secrets.token_hex(8) + ".tmp")
             descriptor = os.open(staging, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
-            with os.fdopen(descriptor, "w") as output:
-                json.dump(catalog, output); output.flush(); os.fsync(output.fileno())
-            staging.replace(target)
+            try:
+                with os.fdopen(descriptor, "wb") as output:
+                    output.write(encoded)
+                    output.flush()
+                    os.fsync(output.fileno())
+                staging.replace(target)
+            except BaseException:
+                staging.unlink(missing_ok=True)
+                raise
             self.selected_upload = True
             return {"imported": len(catalog["items"])}
         if path == "/v1/kindle/catalog" and method == "GET":
@@ -529,7 +553,7 @@ class Companion:
             if not self.catalog and not source.exists() and self.provider:
                 provided, _qualified = self.provider_capabilities()
                 if "kindle.catalog" in provided:
-                    return normalize_catalog(json.dumps(self.adapter("kindle.catalog")).encode())
+                    return validate_catalog(self.adapter("kindle.catalog"))
             if not source.exists():
                 raise ClosedError(503, "Select a Kindle catalog export in Book Nook or configure a live adapter")
             with source.open("rb") as file:
@@ -593,6 +617,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
     def log_message(self, *_):
         pass  # Account payloads, pairing codes, device tokens, and paths are never logged.
     def run_request(self):
+        encoded = None
         try:
             if self.headers.get("Origin") or self.headers.get("Transfer-Encoding"):
                 raise ClosedError(403, "Browser cross-origin and chunked requests are not accepted")
@@ -607,6 +632,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 raise ClosedError(400, "Truncated request")
             local_source = ipaddress.ip_address(self.server.server_address[0]).is_loopback and ipaddress.ip_address(self.client_address[0]).is_loopback
             result = self.server.companion.handle(self.command, self.path, self.headers, body, raw_sqlite_allowed=local_source)
+            if self.command == "GET" and self.path == "/v1/kindle/catalog":
+                encoded = encode_catalog(result)
             status = 200
         except ClosedError as error:
             status, result = error.status, {"error": error.message, "code": error.code}
@@ -614,7 +641,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
             status, result = 400, {"error": "Invalid request or unavailable source", "code": "invalid_request"}
         except Exception:
             status, result = 500, {"error": "Companion operation failed", "code": "internal_error"}
-        encoded = json.dumps(result, separators=(",", ":"), allow_nan=False).encode()
+        if encoded is None:
+            encoded = json.dumps(result, separators=(",", ":"), allow_nan=False).encode()
         self.send_response(status)
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(encoded)))
@@ -645,9 +673,7 @@ def main():
         try:
             with args.export_kindle_catalog.open("rb") as source_file:
                 catalog = normalize_catalog(source_file.read(MAX_BYTES + 1))
-            encoded = json.dumps(catalog, separators=(",", ":"), ensure_ascii=True, allow_nan=False).encode() + b"\n"
-            if len(encoded) > MAX_BYTES:
-                raise ClosedError(413, "Normalized catalog exceeds 32 MiB")
+            encoded = encode_catalog(catalog, newline=True)
             descriptor = os.open(args.output, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
             try:
                 with os.fdopen(descriptor, "wb") as output:
