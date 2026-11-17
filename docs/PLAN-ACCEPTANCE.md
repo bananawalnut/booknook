@@ -6,7 +6,7 @@ This audit keeps the original native MVP and SDK scope intact. A passing source 
 
 [Build 1607 delivery evidence](app-2026111607-public-preview-evidence.json) binds the exact source, three Apple Release archives, eight verified public downloads, and the Mac test that opened a legacy MOBI6 file, rendered its Unicode text, and saved a notebook entry. Original bytes and the generated reading resource were verified in the isolated store. Live Kindle catalog import and the downloads of the separately published SDK retain their own acceptance scope.
 
-The physical iPad passed normal install, launch, and library preservation on build 1605. The [source-backed iPadOS 18.6 Simulator test](https://github.com/bananawalnut/booknook/actions/runs/44015697360) passed a continuous input drag, a tap control, and same-store Scribble reopen. Physical finger, Pencil, hardware keyboard, and VoiceOver remain unqualified.
+The physical iPad passed normal install, launch, and library preservation on build 1607. The [source-backed iPadOS 18.6 Simulator test](https://github.com/bananawalnut/booknook/actions/runs/44015697360) passed a continuous input drag, a tap control, and same-store Scribble reopen. Physical finger, Pencil, hardware keyboard, and VoiceOver remain unqualified.
 
 ## SDK 0.2.1 and earlier hands-on checkpoint — 2026-11-16
 
