@@ -2,7 +2,13 @@
 
 This audit keeps the original native MVP and SDK scope intact. A passing source test is evidence for the behavior it exercises, not evidence of a production account, physical device, remote deployment, or hands-on interaction. The requested production release is not complete while essential integration and physical-device gates remain open. [Validation](VALIDATION.md) records the final check results; [delivery](DELIVERY.md) names the remaining gates.
 
-## Current SDK and hands-on checkpoint — 2026-11-16
+## Native app 1607 and iPad input checkpoint
+
+[Build 1607 delivery evidence](app-2026111607-public-preview-evidence.json) binds the exact source, three Apple Release archives, eight verified public downloads, and the Mac test that opened a legacy MOBI6 file, rendered its Unicode text, and saved a notebook entry. Original bytes and the generated reading resource were verified in the isolated store. Live Kindle catalog import and the downloads of the separately published SDK retain their own acceptance scope.
+
+The physical iPad passed normal install, launch, and library preservation on build 1605. The [source-backed iPadOS 18.6 Simulator test](https://github.com/bananawalnut/booknook/actions/runs/44015697360) passed a continuous input drag, a tap control, and same-store Scribble reopen. Physical finger, Pencil, hardware keyboard, and VoiceOver remain unqualified.
+
+## SDK 0.2.1 and earlier hands-on checkpoint — 2026-11-16
 
 [SDK 0.2.1 qualification](sdk-021-qualification-evidence.json) passes three fresh native slices, actual local archive/receiving consumers, 303 extracted Rust tests with five declared ignored entries, all 38 exact-source CI steps and 14 actual public downloads. Actual downloaded Rust/npm/macOS Swift consumers pass all six phases under their separately audited unchanged offline receiving lock, with 72 exact npm files. The separately resolved offline 333-version receiving closure has its own advisory/registry and license-notice review; source inventory 362 and the receiving Unicode term remain distinct.
 

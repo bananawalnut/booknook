@@ -1,0 +1,135 @@
+{
+  "schema": "booknook.app-only-public-preview-evidence.v2",
+  "status": "PASS_PUBLIC_APP_PREVIEW_DELIVERY_WITH_SCOPED_LOCAL_MAC_QA",
+  "observed_at": "2026-11-17T04:48:46.687180+00:00",
+  "app": {
+    "version": "0.2.1",
+    "build": "2026111607",
+    "source_commit": "fe5384ac90b3afd74269e998ac8fa2fd886a9d23",
+    "release_url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261116.7",
+    "release_id": 448148115,
+    "tag": "v0.2.1-app-preview.20261116.7",
+    "published_at": "2026-11-17T04:46:39Z"
+  },
+  "source_validation": {
+    "ordinary_main": "https://github.com/bananawalnut/booknook/actions/runs/44014767867",
+    "archive_build": "https://github.com/bananawalnut/booknook/actions/runs/44013315411",
+    "hosted_archive_sha256": "bdf372d06119f11f88f4ea76fbf294df2cd548aad2db700fcdd44f43fda9720c",
+    "hosted_archive_bytes": 37622967
+  },
+  "archive_verification": {
+    "mac": {
+      "archive": {
+        "bytes": 14887975,
+        "sha256": "82dab77f13de163f6a2b624c6246be5b122e93239c0c609f4279272782391c24"
+      },
+      "tar_members": 105,
+      "bundle_files": 88,
+      "ontology_files": 80,
+      "signature": "linker-ad-hoc",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true
+    },
+    "ipad-sim": {
+      "archive": {
+        "bytes": 11387168,
+        "sha256": "15ab9456721f360c0b88342a1706e6e2bb1fc2f3f0c065eef7e683594398eeb0"
+      },
+      "tar_members": 102,
+      "bundle_files": 88,
+      "ontology_files": 80,
+      "signature": "linker-ad-hoc",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true
+    },
+    "ipad-device": {
+      "archive": {
+        "bytes": 11179125,
+        "sha256": "1a61b841465c09731c1829a9c0c0bdaf4b4f96415503daab33103fd6e376ae70"
+      },
+      "tar_members": 102,
+      "bundle_files": 88,
+      "ontology_files": 80,
+      "signature": "unsigned",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true
+    }
+  },
+  "public_transfer": {
+    "unauthenticated_https_files": 8,
+    "total_bytes": 37624016,
+    "earlier_release_identities_unchanged": 8,
+    "draft_and_public_asset_ids_equal": true,
+    "assets": {
+      "booknook-ipad-device-arm64-development-0.2.1.tar.gz": {
+        "id": 757663178,
+        "bytes": 11179125,
+        "sha256": "1a61b841465c09731c1829a9c0c0bdaf4b4f96415503daab33103fd6e376ae70"
+      },
+      "booknook-ipad-sim-arm64-development-0.2.1.tar.gz": {
+        "id": 757663179,
+        "bytes": 11387168,
+        "sha256": "15ab9456721f360c0b88342a1706e6e2bb1fc2f3f0c065eef7e683594398eeb0"
+      },
+      "booknook-mac-arm64-development-0.2.1.tar.gz": {
+        "id": 757663180,
+        "bytes": 14887975,
+        "sha256": "82dab77f13de163f6a2b624c6246be5b122e93239c0c609f4279272782391c24"
+      },
+      "BUILD-PROVENANCE.json": {
+        "id": 757663068,
+        "bytes": 48134,
+        "sha256": "2a1ef80056511239714e880e2c6a93bfa402c8a62854ad9c3a2981e0e1054985"
+      },
+      "README.md": {
+        "id": 757663065,
+        "bytes": 3548,
+        "sha256": "0633f142f40044808217c091909f411bd7999bf6c9bb9bba3c5901ec87d67e13"
+      },
+      "RELEASE-MANIFEST.json": {
+        "id": 757663112,
+        "bytes": 2113,
+        "sha256": "b65f24a283c511ba34b4efb668cde3dbafcc034282445e3af739e209187b1823"
+      },
+      "SHA256SUMS": {
+        "id": 757663116,
+        "bytes": 503,
+        "sha256": "aa3ef09ce994dab50aee0212da96014033d552f5f45a5752ebc474fa427d2bf8"
+      },
+      "VERIFICATION.json": {
+        "id": 757663111,
+        "bytes": 115450,
+        "sha256": "6de55bdaf6b58ad36099ae05ec00ce875ab56ad5f8c1de265a21daf057e085cb"
+      }
+    }
+  },
+  "mac_observation": {
+    "macos": "26.4.1",
+    "exact_executable_sha256": "650b8d365f22f9da2ecbfea9d7b50727f3078f3af4135318f4cdb8ba39713502",
+    "checks": [
+      "exact unmodified Mac app launched with isolated synthetic SQLite library",
+      "native file picker selected a checked-in DRM-free MOBI fixture",
+      "actual Unicode book prose and notebook were visible",
+      "actual note entry persisted to SQLite",
+      "actual MOBI source bytes and rendered resource verified",
+      "reader text size increased and restored to 19"
+    ],
+    "file_picker_retry": "The macOS Go to Folder sheet did not complete in the automation session. Restarted only the isolated test process and used the visible fixture row in the normal file picker.",
+    "scope": "Local Mac isolated test desk. No account, physical iPad or minimum-OS qualification."
+  },
+  "separate_evidence": {
+    "physical_ipad_build": "2026111605",
+    "physical_ipad_update": "Normal development-signed app installed in place and launched with library and orientation preserved. Physical input checks remain open.",
+    "source_backed_scribble_simulator_test": "https://github.com/bananawalnut/booknook/actions/runs/44015697360",
+    "public_sdk_version": "0.2.1",
+    "public_sdk_release": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-sdk-preview.20261116",
+    "public_sdk_contains_the_1607_mobi6_change": false
+  },
+  "open_acceptance": [
+    "Live Kindle and Audible accounts",
+    "Existing operational Castalia authority and remote relay exchange",
+    "Actual two-device synchronization",
+    "Physical iPad finger, Pencil, hardware keyboard and VoiceOver",
+    "Minimum supported OS runtime"
+  ]
+}
