@@ -391,7 +391,7 @@ class Companion:
                 raise ClosedError(502, "Source adapter failed; reconnect the source account")
             result = strict_json(output)
             if isinstance(result, dict) and result.get("schema") == "booknook.source-error.v1":
-                messages = {"invalid_request": "Invalid source account request", "capability_unavailable": "This source capability is unavailable", "secure_storage_unavailable": "The source adapter needs a native OS credential store", "account_exists": "Renew or disconnect this device's existing source account first", "account_missing": "Connect this device's source account first", "session_expired": "Login session expired or was already used; start again", "registration_uncertain": "Registration outcome is uncertain; check Amazon's device list before restarting", "source_failure": "Source operation failed", "renewal_failed": "Account renewal failed; existing credentials were preserved", "invalid_source_data": "Source response does not match the inspected contract", "reset_denied": "Only an unfinished registration without credentials can be reset after Amazon-device review"}
+                messages = {"invalid_request": "Invalid source account request", "capability_unavailable": "This source capability is unavailable", "secure_storage_unavailable": "The source adapter needs a native OS credential store", "account_exists": "Renew or disconnect this device's existing source account first", "account_missing": "Connect this device's source account first", "session_expired": "Login session expired or was already used; start again", "registration_uncertain": "Registration outcome is uncertain; check Amazon's device list before restarting", "source_failure": "Source operation failed", "renewal_failed": "Account renewal failed; existing credentials were preserved", "invalid_source_data": "Source response does not match the inspected contract", "reset_denied": "Only an unfinished registration without credentials can be reset after Amazon-device review", "recovery_denied": "Recovery requires confirmation and the current Audible registration for this paired device and marketplace"}
                 code = result.get("code")
                 raise ClosedError(502, messages.get(code, "Source operation failed"), code if code in messages else "source_failure")
             return result
@@ -416,7 +416,7 @@ class Companion:
                 or not isinstance(result.get("capabilities"), list) or len(result["capabilities"]) > 100
                 or not all(isinstance(cap, str) for cap in result["capabilities"])):
             raise ClosedError(502, "Optional source adapter returned an invalid capability contract; check its protocol version", "invalid_source_data")
-        known = {"kindle.catalog", "audible.positions", "kindle.authorize", "audible.authorize", "account.renew", "account.authorize.complete", "account.authorize.cancel", "account.disconnect", "account.registration.reset", "audible.positions.probe", "provider.connections.list"}
+        known = {"kindle.catalog", "audible.positions", "kindle.authorize", "audible.authorize", "account.renew", "account.authorize.complete", "account.authorize.cancel", "account.disconnect", "account.registration.reset", "account.registration.recover", "audible.positions.probe", "provider.connections.list"}
         return [cap for cap in result["capabilities"] if cap in known], result.get("qualified") is True
 
     def manifest(self):
@@ -585,6 +585,25 @@ class Companion:
             result = self.adapter(operation, value)
             if not isinstance(result, dict) or result.get("schema") != schema or result.get(flag) is not True:
                 raise ClosedError(502, "Source did not confirm the account operation")
+            return result
+        if path == "/v1/accounts/registration/recover" and method == "POST":
+            if len(body) > 65536:
+                raise ClosedError(413, "Account request exceeds 64 KiB")
+            value = strict_json(body)
+            if (not isinstance(value, dict) or set(value) != {"provider", "marketplace", "expected_connection_id", "confirmed_amazon_device_removal"}
+                    or value["provider"] != "audible" or value["marketplace"] not in ("us", "uk", "de", "ca", "au")):
+                raise ClosedError(400, "Invalid Audible registration recovery request")
+            expected = value["expected_connection_id"]
+            if (value["confirmed_amazon_device_removal"] is not True or not isinstance(expected, str)
+                    or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._:-]{0,127}", expected)):
+                raise ClosedError(400, "Recovery requires confirmation and the current Audible registration reference", "recovery_denied")
+            operation = "account.registration.recover"
+            self.require_capability(operation)
+            result = self.adapter(operation, dict(value, device_id=device))
+            if (result != {"schema": "booknook.account-registration-recovered.v1", "provider": "audible",
+                           "connection_id": expected, "recovered": True}
+                    or result["recovered"] is not True):
+                raise ClosedError(502, "Source adapter returned an invalid registration recovery receipt", "invalid_source_data")
             return result
         if path == "/v1/accounts/renew" and method == "POST":
             value = strict_json(body)

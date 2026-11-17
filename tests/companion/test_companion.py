@@ -269,18 +269,27 @@ class Backend:
   return {"refresh_token":"synthetic-credential"}
  def renew(self,credential): return credential
  def disconnect(self,credential): pass
-try: result=m.Adapter(root,Backend(),Vault()).handle(m.strict_json(sys.stdin.buffer.read()))
+request=m.strict_json(sys.stdin.buffer.read())
+legacy=(root/"legacy").exists()
+try:
+ if request["operation"]=="account.registration.recover" and legacy: raise AssertionError("Legacy adapter received unsupported operation")
+ if request["operation"]=="account.registration.recover" and (root/"wrong-receipt").exists():
+  result={"schema":"booknook.account-registration-recovered.v1","provider":"audible","connection_id":"audible."+"f"*64,"recovered":True}
+ else:
+  result=m.Adapter(root,Backend(),Vault()).handle(request)
+  if request["operation"]=="capabilities" and legacy: result["capabilities"].remove("account.registration.recover")
 except m.AdapterError as error: result={"schema":"booknook.source-error.v1","code":error.code,"raw":"raw secret must not escape"}
 print(json.dumps(result))
 ''')
             service=m.Companion(root / "companion", provider=[sys.executable, str(script), str(adapter), str(root / "adapter")])
             server=m.http.server.ThreadingHTTPServer(("127.0.0.1",0),m.Handler);server.companion=service
             worker=threading.Thread(target=server.serve_forever,daemon=True);worker.start()
-            def call(path, value, token=None):
+            def call(path, value=None, token=None, *, method="POST"):
                 client=http.client.HTTPConnection("127.0.0.1",server.server_port,timeout=5)
                 try:
                     headers={"Authorization":"Bearer "+token} if token else {}
-                    client.request("POST",path,json.dumps(value).encode(),headers)
+                    body = json.dumps(value).encode() if value is not None else None
+                    client.request(method,path,body,headers)
                     response=client.getresponse();raw=response.read();self.assertNotIn(b"raw secret",raw);return response.status,json.loads(raw)
                 finally: client.close()
             try:
@@ -308,6 +317,56 @@ print(json.dumps(result))
                 reset=dict(provider="audible",marketplace="us",confirmed_amazon_device_review=True)
                 self.assertEqual(call("/v1/accounts/registration/reset",dict(reset,confirmed_amazon_device_review=False),token)[1]["code"],"reset_denied")
                 self.assertTrue(call("/v1/accounts/registration/reset",reset,token)[1]["reset"])
-                self.assertEqual(call("/v1/accounts/authorize",dict(provider="audible",marketplace="us"),token)[0],200)
+                params = dict(provider="audible", marketplace="us")
+                status, first_login = call("/v1/accounts/authorize", params, token)
+                self.assertEqual(status, 200)
+                status, second_login = call("/v1/accounts/authorize", params, two["token"])
+                self.assertEqual(status, 200)
+                for slot, session in ((token, first_login), (two["token"], second_login)):
+                    self.assertTrue(call("/v1/accounts/authorize/complete", dict(complete, session_id=session["session_id"]), slot)[1]["connected"])
+
+                def reference(slot):
+                    status, found = call("/v1/provider-connections/us", token=slot, method="GET")
+                    self.assertEqual(status, 200)
+                    return found
+
+                expected = reference(token)[0]["connection_id"]
+                other = reference(two["token"])
+                recover_path = "/v1/accounts/registration/recover"
+                recovery = dict(params, expected_connection_id=expected, confirmed_amazon_device_removal=True)
+                self.assertEqual(call(recover_path, recovery)[0], 401)
+                self.assertEqual(call(recover_path, dict(recovery, device_id="a" * 64), token)[0], 400)
+                denied = call(recover_path, dict(recovery, confirmed_amazon_device_removal=1), token)
+                self.assertEqual((denied[0], denied[1]["code"]), (400, "recovery_denied"))
+                self.assertEqual(call(recover_path, recovery, two["token"])[1]["code"], "recovery_denied")
+                self.assertEqual(call(recover_path, dict(recovery, marketplace="ca"), token)[1]["code"], "recovery_denied")
+
+                legacy = root / "adapter" / "legacy"
+                legacy.touch()
+                self.assertNotIn("account.registration.recover", call("/v1/capabilities", token=token, method="GET")[1]["capabilities"])
+                unsupported = call(recover_path, recovery, token)
+                self.assertEqual((unsupported[0], unsupported[1]["code"]), (503, "capability_unavailable"))
+                legacy.unlink()
+                self.assertIn("account.registration.recover", call("/v1/capabilities", token=token, method="GET")[1]["capabilities"])
+                wrong_receipt = root / "adapter" / "wrong-receipt"
+                wrong_receipt.touch()
+                self.assertEqual(call(recover_path, recovery, token)[1]["code"], "invalid_source_data")
+                wrong_receipt.unlink()
+                self.assertEqual(reference(token)[0]["connection_id"], expected)
+
+                receipt = {"schema": "booknook.account-registration-recovered.v1", "provider": "audible",
+                           "connection_id": expected, "recovered": True}
+                self.assertEqual(call(recover_path, recovery, token), (200, receipt))
+                self.assertEqual(call(recover_path, recovery, token), (200, receipt))
+                self.assertEqual(reference(token), [])
+                self.assertEqual(reference(two["token"]), other)
+                status, login = call("/v1/accounts/authorize", params, token)
+                self.assertEqual(status, 200)
+                self.assertEqual(call(recover_path, recovery, token)[1]["code"], "recovery_denied")
+                self.assertTrue(call("/v1/accounts/authorize/complete", dict(complete, session_id=login["session_id"]), token)[1]["connected"])
+                new_id = reference(token)[0]["connection_id"]
+                self.assertNotEqual(new_id, expected)
+                self.assertEqual(call(recover_path, recovery, token)[1]["code"], "recovery_denied")
+                self.assertEqual(reference(token)[0]["connection_id"], new_id)
             finally:
                 server.shutdown();server.server_close();worker.join();service.db.close()

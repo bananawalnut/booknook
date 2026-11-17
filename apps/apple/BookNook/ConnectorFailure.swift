@@ -21,6 +21,7 @@ enum ConnectorFailure {
         case "session_expired": return "This login session expired or was already used. Cancel it and start a new login."
         case "registration_uncertain": return "Registration may have reached Amazon but could not be saved safely. Check Amazon’s device list and remove any new virtual Audible device before resetting this adapter. Do not repeatedly register."
         case "reset_denied": return "Only an unfinished registration without saved account credentials can be reset. Check the selected marketplace; use Disconnect account for a connected registration."
+        case "recovery_denied": return "The reviewed Audible registration is no longer available for recovery. Refresh the companion and review the current device before trying again."
         case "source_failure", "renewal_failed": return "Source account access failed. Try Renew account access if available, or reconnect the account through its provider."
         case "invalid_source_data": return "The selected source data does not match the supported format. Check the catalog export or source adapter."
         case "kindle_snapshot_wal": return "This snapshot uses a journaling format that cannot be imported safely. Quit Kindle, then follow the companion’s local export instructions to create a complete standalone backup or catalog JSON. Keep Kindle’s live database unchanged."

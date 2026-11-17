@@ -51,6 +51,11 @@ struct PendingCompanionLogin: Codable {
     let authorization: CompanionAuthorization
 }
 
+private struct AudibleRecoveryTarget {
+    let endpoint: String
+    let marketplace: String
+    let connectionID: String
+}
 private enum ConnectionFileImport {
     case recovery, profile, catalog
     var contentTypes: [UTType] {
@@ -107,6 +112,7 @@ struct ConnectionSetupView: View {
     @State private var registrationConsent = false
     @State private var disconnectingAudible = false
     @State private var resettingAudibleRegistration = false
+    @State private var audibleRecoveryTarget: AudibleRecoveryTarget?
     @State private var importingKindleWeb = false
     var body: some View {
         VStack(alignment: .leading, spacing: 22) {
@@ -232,6 +238,9 @@ struct ConnectionSetupView: View {
                     Button("Probe companion account access") { Task { await probeCompanionAccount() } }.disabled(testing || !supports("audible.positions.probe") || configuration.audibleTestAsin.isEmpty)
                     Button("Disconnect companion Audible account", role: .destructive) { disconnectingAudible = true }.disabled(testing || !supports("account.disconnect"))
                     Button("Resolve unfinished Audible registration") { resettingAudibleRegistration = true }.disabled(testing || !supports("account.registration.reset"))
+                    if supports("account.registration.recover") {
+                        Button("Recover a removed Audible registration…") { Task { await prepareAudibleRecovery() } }.disabled(testing)
+                    }
                     Button("Test position access") { Task { await probeAudible() } }.disabled(testing || configuration.audibleTestAsin.isEmpty)
                     if headersStored { Button("Disconnect stored Audible access", role: .destructive) { do { try CustodySecureStorage().remove(account: "audible-request-headers"); headersStored = false; audibleHeaders = ""; status = "Stored Audible access removed from this device." } catch { if !bookNookOperationWasCancelled(error) { model.error = bookNookErrorMessage(error) } } } }
                 }.padding(.top, 14)
@@ -266,6 +275,13 @@ struct ConnectionSetupView: View {
         }
         .confirmationDialog("First check Amazon’s device list and remove the unfinished virtual Audible device if it exists. This clears only this paired device’s local uncertainty marker so you can try login again; it does not remove or verify any Amazon device. Saved account credentials cannot be reset here.", isPresented: $resettingAudibleRegistration, titleVisibility: .visible) {
             Button("I checked and removed the unfinished Amazon device") { Task { await resetCompanionRegistration() } }
+        }
+        .confirmationDialog("Clear the local Audible registration?",
+                            isPresented: Binding(get: { audibleRecoveryTarget != nil }, set: { if !$0 { audibleRecoveryTarget = nil } }),
+                            titleVisibility: .visible, presenting: audibleRecoveryTarget) { target in
+            Button("I removed the Amazon device", role: .destructive) { Task { await recoverAudibleRegistration(target) } }
+        } message: { target in
+            Text("Check Amazon’s device list first. Continue after the virtual Audible device for this connection has been removed. This clears local account access for this pairing and the \(target.marketplace.uppercased()) marketplace so you can sign in again. Amazon device removal happens in Amazon.")
         }
         .confirmationDialog("Remove stored recovery material from this device? Keep your original recovery file to recover the wallet later.", isPresented: $removingRecovery, titleVisibility: .visible) {
             Button("Remove from this device", role: .destructive) { Task { await model.authorization.lock(); do { try CustodySecureStorage().remove(account: "encrypted-recovery"); verifiedRecoveryHolder = nil; recoveryStatus = "No encrypted recovery material stored." } catch { if !bookNookOperationWasCancelled(error) { model.error = bookNookErrorMessage(error) } } } }
@@ -497,7 +513,7 @@ struct ConnectionSetupView: View {
         return matching[0].connectionId
     }
     func capabilityName(_ capability: String) -> String {
-        ["provider_connections_v1": "Public source connection references", "provider.connections.list": "Source connection list", "kindle.catalog.import": "Kindle file import", "kindle.catalog": "Kindle catalog", "kindle.authorize": "Kindle account login", "audible.positions": "Audible positions", "audible.authorize": "Audible account login", "account.renew": "account renewal", "account.authorize.complete": "login completion", "account.authorize.cancel": "login cancellation", "account.disconnect": "account disconnection", "account.registration.reset": "unfinished registration recovery", "audible.positions.probe": "Audible access diagnostic"][capability] ?? "additional source capability"
+        ["provider_connections_v1": "Public source connection references", "provider.connections.list": "Source connection list", "kindle.catalog.import": "Kindle file import", "kindle.catalog": "Kindle catalog", "kindle.authorize": "Kindle account login", "audible.positions": "Audible positions", "audible.authorize": "Audible account login", "account.renew": "account renewal", "account.authorize.complete": "login completion", "account.authorize.cancel": "login cancellation", "account.disconnect": "account disconnection", "account.registration.reset": "unfinished registration recovery", "account.registration.recover": "removed Audible registration recovery", "audible.positions.probe": "Audible access diagnostic"][capability] ?? "additional source capability"
     }
     func renewCompanionAccount(_ provider: String) async {
         testing = true; defer { testing = false }
@@ -573,6 +589,39 @@ struct ConnectionSetupView: View {
             try await LibraryCompanion(endpoint: endpoint).resetUnfinishedRegistration(provider: "audible", marketplace: marketplace)
             if let pending = pendingLogin, pending.endpoint == endpoint, pending.marketplace == marketplace, pending.provider == "audible" { try clearCompanionLogin() }
             status = "The unfinished local registration was cleared after your Amazon-device review. You can start a new login. No remote removal was performed."
+        } catch { if !bookNookOperationWasCancelled(error) { model.error = bookNookErrorMessage(error) } }
+    }
+    private func prepareAudibleRecovery() async {
+        guard !testing else { return }
+        let endpoint = companionURL, marketplace = configuration.audibleMarketplace
+        testing = true; defer { testing = false }
+        do {
+            let connections = try await LibraryCompanion(endpoint: endpoint).providerConnections(marketplace: marketplace)
+            guard endpoint == companionURL, marketplace == configuration.audibleMarketplace else { return }
+            let matches = connections.filter {
+                $0.providerId == "com.audible" && $0.capabilities.contains("account.registration.recover")
+            }
+            guard matches.count == 1, let connection = matches.first else {
+                throw AuthorizationError.message("No single recoverable Audible registration was found for this pairing and marketplace. Refresh the companion to check its access.")
+            }
+            audibleRecoveryTarget = AudibleRecoveryTarget(endpoint: endpoint, marketplace: marketplace, connectionID: connection.connectionId)
+        } catch { if !bookNookOperationWasCancelled(error) { model.error = bookNookErrorMessage(error) } }
+    }
+    private func recoverAudibleRegistration(_ target: AudibleRecoveryTarget) async {
+        guard !testing else { return }
+        guard target.endpoint == companionURL, target.marketplace == configuration.audibleMarketplace else {
+            model.error = "The companion or marketplace changed. Review the current Audible registration before clearing access."
+            return
+        }
+        testing = true; defer { testing = false }
+        do {
+            try await LibraryCompanion(endpoint: target.endpoint)
+                .recoverAudibleRegistration(marketplace: target.marketplace, expectedConnectionID: target.connectionID)
+            guard target.endpoint == companionURL, target.marketplace == configuration.audibleMarketplace else { return }
+            status = "This pairing’s local Audible registration was cleared. You can start a new Audible sign-in."
+            if let pending = pendingLogin, pending.endpoint == target.endpoint,
+               pending.marketplace == target.marketplace, pending.provider == "audible" { try clearCompanionLogin() }
+            await updateProviderRegistryStatus()
         } catch { if !bookNookOperationWasCancelled(error) { model.error = bookNookErrorMessage(error) } }
     }
     func probeCompanionAccount() async {

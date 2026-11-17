@@ -25,7 +25,7 @@ import urllib.parse
 
 MAX_INPUT = 65536
 DOMAINS = {"us": "com", "uk": "co.uk", "de": "de", "ca": "ca", "au": "com.au"}
-CAPABILITIES = ["audible.authorize", "account.authorize.complete", "account.authorize.cancel", "account.renew", "account.disconnect", "account.registration.reset", "audible.positions.probe", "audible.positions", "provider.connections.list"]
+CAPABILITIES = ["audible.authorize", "account.authorize.complete", "account.authorize.cancel", "account.renew", "account.disconnect", "account.registration.reset", "account.registration.recover", "audible.positions.probe", "audible.positions", "provider.connections.list"]
 ERRORS = {
     "invalid_request": "Invalid source request.",
     "capability_unavailable": "This source capability is not implemented or qualified.",
@@ -38,6 +38,7 @@ ERRORS = {
     "renewal_failed": "Account renewal failed; stored credentials were preserved.",
     "invalid_source_data": "Audible position data does not match the inspected source contract.",
     "reset_denied": "Only an unfinished registration without saved credentials can be reset after explicit Amazon-device review.",
+    "recovery_denied": "Recovery requires confirmation and the current Audible registration for this paired device and marketplace.",
 }
 
 
@@ -272,6 +273,14 @@ class Adapter:
         finally:
             os.close(fd)
 
+    def connection_id(self, key, state):
+        # Preserve legacy references and use a fresh generation for new registrations.
+        generation = state.get("connection_generation", "legacy")
+        if not isinstance(generation, str) or (generation != "legacy" and not re.fullmatch(r"[0-9a-f]{32}", generation)):
+            raise AdapterError("invalid_source_data")
+        handle = hashlib.sha256(("castalia.provider-connection.v1:audible:" + str(self.root.resolve()) + ":" + key + ":" + generation).encode()).hexdigest()
+        return "audible." + handle
+
     def handle(self, request):
         if not isinstance(request, dict) or set(request) != {"schema", "operation", "parameters"} or request["schema"] != "booknook.source-request.v1" or not isinstance(request["parameters"], dict):
             raise AdapterError("invalid_request")
@@ -290,20 +299,15 @@ class Adapter:
                     state = self.vault.read(key)
                     if not state.get("credential"):
                         continue
-                    # Existing stores retain a stable legacy reference. Every new
-                    # registration gets a fresh generation, even in the same slot.
-                    generation = state.get("connection_generation", "legacy")
-                    if not isinstance(generation, str) or (generation != "legacy" and not re.fullmatch(r"[0-9a-f]{32}", generation)):
-                        raise AdapterError("invalid_source_data")
-                    handle = hashlib.sha256(("castalia.provider-connection.v1:audible:" + str(self.root.resolve()) + ":" + key + ":" + generation).encode()).hexdigest()
+                    reference = self.connection_id(key, state)
                     connections.append({
                         "schema": "castalia.provider-connection.v1",
-                        "connection_id": "audible." + handle,
+                        "connection_id": reference,
                         "provider_id": "com.audible",
                         "display_name": "Audible (" + marketplace.upper() + ")",
-                        "capabilities": ["audible.positions", "account.renew", "account.disconnect"],
+                        "capabilities": ["audible.positions", "account.renew", "account.disconnect", "account.registration.recover"],
                         "status": "available",
-                        "credential": {"reference": "audible." + handle, "storage": "secure_local", "portability": "reauthorization_required"},
+                        "credential": {"reference": reference, "storage": "secure_local", "portability": "reauthorization_required"},
                     })
             return connections
         required = {
@@ -313,6 +317,7 @@ class Adapter:
             "account.renew": {"provider", "marketplace", "device_id"},
             "account.disconnect": {"provider", "marketplace", "device_id"},
             "account.registration.reset": {"provider", "marketplace", "device_id", "confirmed_amazon_device_review"},
+            "account.registration.recover": {"provider", "marketplace", "device_id", "expected_connection_id", "confirmed_amazon_device_removal"},
             "audible.positions.probe": {"provider", "marketplace", "device_id", "asins"},
             "audible.positions": {"provider", "marketplace", "device_id", "asins"},
         }
@@ -324,6 +329,20 @@ class Adapter:
         with self.locked():
             state = self.vault.read(key)
             now = int(self.clock())
+            if operation == "account.registration.recover":
+                expected = p["expected_connection_id"]
+                if (p["confirmed_amazon_device_removal"] is not True or not isinstance(expected, str)
+                        or not re.fullmatch(r"audible\.[0-9a-f]{64}", expected)):
+                    raise AdapterError("recovery_denied")
+                marker = {"recovered_connection_id": expected}
+                if state != marker:
+                    if (not state.get("credential") or state.get("session") or state.get("registration_in_progress")
+                            or not secrets.compare_digest(self.connection_id(key, state), expected)):
+                        raise AdapterError("recovery_denied")
+                    # The marker supports an exact retry until a new login replaces it.
+                    self.vault.write(key, marker)
+                return {"schema": "booknook.account-registration-recovered.v1", "provider": "audible",
+                        "connection_id": expected, "recovered": True}
             if operation == "account.registration.reset":
                 if p["confirmed_amazon_device_review"] is not True or state.get("credential") or state.get("registration_in_progress") is not True:
                     raise AdapterError("reset_denied")

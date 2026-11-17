@@ -16,6 +16,7 @@ import Foundation
                 if CommandLine.arguments.contains("--group-replies") { try await testGroupReplies(); exit(0) }
                 if CommandLine.arguments.contains("--shared-list-review") { try await testSharedListReview(); exit(0) }
                 if CommandLine.arguments.contains("--reading-pass-navigation") { try await testReadingPassNavigation(); exit(0) }
+                if CommandLine.arguments.contains("--audible-recovery-contract") { try testAudibleRecoveryContract(); exit(0) }
                 if CommandLine.arguments.contains("--recommendation-titles") { try await testRecommendationTitleProjection(); exit(0) }
                 if CommandLine.arguments.contains("--startup") { try await testDeskStartup(); exit(0) }
                 if CommandLine.arguments.contains("--publications") { try await testPublicationWorkflow(); exit(0) }
@@ -287,6 +288,7 @@ import Foundation
         try await testReaderContextWorkflow(model)
         try await testSourceReadingHistory()
         try await testCompanionCatalogImportWorkflow()
+        try testAudibleRecoveryContract()
         try await testCastaliaProfileImportWorkflow()
         try await testPublicProviderRepositoryWorkflow()
         try await testRecommendationTitleProjection()
@@ -294,6 +296,30 @@ import Foundation
         try await testGroupReplies()
         try await testSharedListReview()
         print("Native desk workflows: duplicate-title identity, failed navigation, explicit sessions, private earlier-character-version drafts, thrown save rejection, unrated Unicode review, list edit/conflict retention, failed social retry with durable draft recovery, reopen and cancellation distinctions passed.")
+    }
+
+    static func testAudibleRecoveryContract() throws {
+        let reviewed = "audible." + String(repeating: "a", count: 64)
+        let replacement = "audible." + String(repeating: "b", count: 64)
+        let reply: [String: Any] = [
+            "schema": "booknook.account-registration-recovered.v1", "provider": "audible",
+            "connection_id": reviewed, "recovered": true
+        ]
+        try LibraryCompanion.validateAudibleRecovery(JSONSerialization.data(withJSONObject: reply), expectedConnectionID: reviewed)
+        let invalid: [[String: Any]] = [
+            ["connection_id": replacement], ["provider": "kindle"], ["recovered": false],
+            ["recovered": 1], ["schema": "booknook.account-registration-reset.v1"], ["extra": true]
+        ]
+        for fields in invalid {
+            let bytes = try JSONSerialization.data(withJSONObject: reply.merging(fields) { _, value in value })
+            do {
+                try LibraryCompanion.validateAudibleRecovery(bytes, expectedConnectionID: reviewed)
+                preconditionFailure("A mismatched Audible recovery acknowledgment was accepted")
+            } catch let error as AuthorizationError {
+                precondition(bookNookErrorMessage(error).contains("reviewed Audible registration"))
+            }
+        }
+        print("Native Audible recovery acknowledgment requires the reviewed connection and exact response contract.")
     }
 
     @MainActor static func testGroupReplies() async throws {

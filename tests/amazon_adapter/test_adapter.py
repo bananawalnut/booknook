@@ -119,6 +119,67 @@ class AdapterTests(unittest.TestCase):
         with patch.object(self.backend, "renew", side_effect=RuntimeError("raw-refresh-token")):
             with self.assertRaises(m.AdapterError) as error: self.call("account.renew")
         self.assertEqual(error.exception.code, "renewal_failed"); self.assertEqual(before, self.vault.data)
+    def test_revoked_registration_recovery_is_confirmed_bound_and_retryable(self):
+        self.complete(self.begin())
+        device = "a" * 64
+        key = device + ":us"
+        before = self.vault.read(key)
+        legacy = dict(before)
+        del legacy["connection_generation"]
+        self.vault.write(key, legacy)
+        references = self.connections()
+        expected = references[0]["connection_id"]
+        origin = "castalia.provider-connection.v1:audible:" + str(Path(self.tmp.name).resolve()) + ":" + key + ":legacy"
+        self.assertEqual(expected, "audible." + m.hashlib.sha256(origin.encode()).hexdigest())
+        self.assertIn("account.registration.recover", references[0]["capabilities"])
+        different_key = "b" * 64 + ":us"
+        other_market = device + ":ca"
+        self.vault.write(different_key, before)
+        self.vault.write(other_market, before)
+
+        def recover(**overrides):
+            params = dict(expected_connection_id=expected, confirmed_amazon_device_removal=True)
+            return self.call("account.registration.recover", **(params | overrides))
+
+        with (patch.object(self.backend, "renew", side_effect=RuntimeError("revoked upstream")),
+              patch.object(self.backend, "disconnect", side_effect=RuntimeError("revoked upstream")) as remote_disconnect):
+            with self.assertRaises(m.AdapterError) as failed:
+                self.call("account.renew")
+            self.assertEqual(failed.exception.code, "renewal_failed")
+            with self.assertRaises(RuntimeError):
+                self.call("account.disconnect")
+            for overrides in (
+                dict(confirmed_amazon_device_removal=False), dict(confirmed_amazon_device_removal=1),
+                dict(expected_connection_id="audible." + "f" * 64),
+                dict(device_id="b" * 64), dict(marketplace="ca"),
+            ):
+                with self.subTest(overrides=overrides), self.assertRaises(m.AdapterError) as denied:
+                    recover(**overrides)
+                self.assertEqual(denied.exception.code, "recovery_denied")
+            self.assertEqual(self.vault.read(key), legacy)
+            receipt = {"schema": "booknook.account-registration-recovered.v1", "provider": "audible",
+                       "connection_id": expected, "recovered": True}
+            self.assertEqual(recover(), receipt)
+            self.assertEqual(remote_disconnect.call_count, 1)
+
+        self.assertEqual(self.vault.read(key), {"recovered_connection_id": expected})
+        self.assertEqual(self.connections(), [])
+        self.assertEqual(self.vault.read(different_key), before)
+        self.assertEqual(self.vault.read(other_market), before)
+        self.adapter = m.Adapter(Path(self.tmp.name), self.backend, self.vault, lambda: self.now)
+        self.assertEqual(recover(), receipt)
+        pending = self.begin()
+        with self.assertRaises(m.AdapterError) as during_login:
+            recover()
+        self.assertEqual(during_login.exception.code, "recovery_denied")
+        self.complete(pending)
+        replacement = self.connections()[0]["connection_id"]
+        self.assertNotEqual(replacement, expected)
+        with self.assertRaises(m.AdapterError) as stale:
+            recover()
+        self.assertEqual(stale.exception.code, "recovery_denied")
+        self.assertEqual(self.connections()[0]["connection_id"], replacement)
+
     def test_explicit_uncertain_reset_is_isolated_and_never_erases_valid_credentials(self):
         params = dict(confirmed_amazon_device_review=True)
         with self.assertRaises(m.AdapterError): self.call("account.registration.reset", **params)

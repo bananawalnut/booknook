@@ -95,6 +95,34 @@ struct LibraryCompanion {
         let reply = try decoder.decode(Reply.self, from: data)
         guard reply.schema == "booknook.account-registration-reset.v1", reply.provider == provider, reply.reset else { throw AuthorizationError.message("The source did not confirm clearing its unfinished registration.") }
     }
+    func recoverAudibleRegistration(marketplace: String, expectedConnectionID: String) async throws {
+        guard ["us", "uk", "de", "ca", "au"].contains(marketplace),
+              expectedConnectionID.range(of: #"\A[A-Za-z0-9][A-Za-z0-9._:-]{0,127}\z"#, options: .regularExpression) != nil else {
+            throw AuthorizationError.message("Review the current Audible registration first.")
+        }
+        let data = try await ConnectorHTTP.send(request("v1/accounts/registration/recover", method: "POST", body: [
+            "provider": "audible", "marketplace": marketplace,
+            "expected_connection_id": expectedConnectionID, "confirmed_amazon_device_removal": true
+        ]), limit: 16_384)
+        try Self.validateAudibleRecovery(data, expectedConnectionID: expectedConnectionID)
+    }
+    static func validateAudibleRecovery(_ data: Data, expectedConnectionID: String) throws {
+        struct Reply: Decodable {
+            let schema: String
+            let provider: String
+            let connectionId: String
+            let recovered: Bool
+        }
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        guard let fields = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+              Set(fields.keys) == ["schema", "provider", "connection_id", "recovered"],
+              let reply = try? decoder.decode(Reply.self, from: data),
+              reply.schema == "booknook.account-registration-recovered.v1", reply.provider == "audible",
+              reply.connectionId == expectedConnectionID, reply.recovered else {
+            throw AuthorizationError.message("The companion did not confirm recovery for the reviewed Audible registration.")
+        }
+    }
     func probeAudibleAccount(marketplace: String, asin: String) async throws {
         let data = try await ConnectorHTTP.send(request("v1/audible/positions/probe", method: "POST", body: ["provider": "audible", "marketplace": marketplace, "asins": [asin]]), limit: 16384)
         struct Reply: Decodable { let schema: String; let receivedJson: Bool; let positionsQualified: Bool }
