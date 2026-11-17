@@ -24,17 +24,17 @@ Bounded Mac checks on build **1404** passed ASCII typing plus native Unicode pas
 
 The [profile-file repair](docs/profile-import-file-evidence.json) originated at `995bf0df36f3a638fd185f704c19f41af4269cd6`: nonblocking open and validation of the opened regular-file descriptor reject blocking special files. Its old FIFO timeout, 14 fixed cases, native workflow and iPad typechecks remain separate source-bound evidence. The new build includes the fix; the immutable a945 app archives do not. SDK/signing contracts, wire/saved data and ontology are unchanged.
 
-The normal iPad app was [updated in place to 0.2.1 (2026111601)](docs/ipad-2026111601-install-evidence.json) on the connected iPad. The existing local database was unchanged before launch, and no orientation commands were sent. [Normal launch passed](docs/ipad-2026111601-launch-evidence.json) after Apple developer-profile trust was confirmed. The existing empty library remained unchanged; hands-on iPad checks are still open.
+The earlier iPad acceptance check [updated the normal app in place to 0.2.1 (2026111601)](docs/ipad-2026111601-install-evidence.json) on the connected iPad. The existing local database was unchanged before launch, and no orientation commands were sent. [Normal launch passed](docs/ipad-2026111601-launch-evidence.json) after Apple developer-profile trust was confirmed. The existing empty library remained unchanged; hands-on iPad checks are still open.
 
 **macOS — reading desk**
 
-![Book Nook macOS reading desk with two separate Margin notes alongside an EPUB on warm paper](docs/screenshots/macos-current.jpg)
+![Book Nook macOS reading desk with a legacy MOBI book and its Margin note on warm paper](docs/screenshots/macos-current.jpg)
 
 **iPad — reading desk**
 
-![Book Nook iPad Release app in portrait, with two text notes in the Margin alongside the book](docs/screenshots/ipad-current.png)
+![Book Nook iPad reading desk in portrait, with three text notes alongside an EPUB](docs/screenshots/ipad-current.png)
 
-These captures show the locally verified native Release build **0.2.1 (2026111603)** with an original sample EPUB and two notes. The iPad image was captured on an iPad Air 13-inch Simulator running iPadOS 18.6. [Capture details](docs/screenshots/README.md).
+Both captures show native Release build **0.2.1 (2026111607)**. The Mac uses a synthetic MOBI and the iPad Air 13-inch Simulator uses a synthetic EPUB. [Capture details](docs/screenshots/README.md).
 
 ## Run the native apps
 

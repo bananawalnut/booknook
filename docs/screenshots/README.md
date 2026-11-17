@@ -1,12 +1,12 @@
 # Native app screenshots
 
-The main README uses captures from the locally verified native **0.2.1 Release build 2026111603**, made on November 16, 2026 in America/Vancouver.
+Both captures use the verified Book Nook **0.2.1 Release build 2026111607** from the published native archives.
 
-| Screenshot | App target | Capture environment |
+| Screenshot | Workspace | Capture environment |
 |---|---|---|
-| [macOS reading desk](macos-current.jpg) | `BookNookMac` / `org.booknook.desktop` | Native app window on macOS 26.4.1 |
-| [iPad reading desk](ipad-current.png) | `BookNookPad` / `org.booknook.ipad` | iPad Air 13-inch (M2), iPadOS 18.6 Simulator, portrait |
+| [macOS reading desk](macos-current.jpg) | A legacy MOBI passage and its Margin note | Native app window on macOS 26.4.1 |
+| [iPad reading desk](ipad-current.png) | The original synthetic EPUB *The Quiet Library* and three Margin notes | iPad Air 13-inch (M2), iPadOS 18.6 Simulator, portrait |
 
-Both images show the original synthetic EPUB *The Quiet Library* and two notes in the Margin. The Mac app uses a separate QA library. The dedicated iPad Simulator uses a verified copy of that synthetic desk. The Mac JPEG is the original window capture and the iPad PNG is the original `simctl io screenshot` framebuffer.
+Both desks use synthetic data. The Mac image is an actual window capture with an 80-pixel crop of the operating-system title strip. The iPad image preserves the original Simulator framebuffer, including a synthetic note from the earlier recovery test.
 
-[Capture metadata](current.json) records the exact executables, source revisions and image hashes. The [latest delivery evidence](../app-2026111607-public-preview-evidence.json) records the native development preview and the separately signed physical iPad installation at build 2026111607. The screenshots above retain their original build identities. Physical input and live integration checks remain open.
+[Capture metadata](current.json) identifies the exact executables, source revision, and image hashes. The [delivery evidence](../app-2026111607-public-preview-evidence.json) records the independently verified installation of build 2026111607 on the physical iPad.
