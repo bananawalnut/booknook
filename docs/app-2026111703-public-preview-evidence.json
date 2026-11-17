@@ -1,0 +1,156 @@
+{
+  "schema": "booknook.app-only-public-preview-evidence.v2",
+  "status": "PASS_PUBLIC_ARCHIVES_AND_NORMAL_IPAD_UPDATE",
+  "observed_at": "2026-11-17T15:18:06.369899+00:00",
+  "app": {
+    "version": "0.2.1",
+    "build": "2026111703",
+    "source_commit": "ad6089cb19f8222c2f98188ba55ce2dfe771f553",
+    "release_url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.3",
+    "release_id": 448796742,
+    "tag": "v0.2.1-app-preview.20261117.3",
+    "published_at": "2026-11-17T15:08:27Z"
+  },
+  "source_validation": {
+    "ordinary_ci": "https://github.com/bananawalnut/booknook/actions/runs/44103947306",
+    "ordinary_steps_passed": 38,
+    "archive_ci": "https://github.com/bananawalnut/booknook/actions/runs/44104003812",
+    "archive_steps_passed": 8,
+    "artifact_id": 14338746029,
+    "artifact": {
+      "bytes": 37760653,
+      "sha256": "edf500efe297ef7a0e3dd9e11c1e0859d166483c060e686f3c5828c20f30cc84"
+    },
+    "application_version": "0.2.1",
+    "cargo_workspace_version": "0.2.2",
+    "independent_archive_verification_receipt_sha256": "a717ad934df95476a75fc225ebccf4071a982f1102ab556b8323e4f8d3043a47"
+  },
+  "reader_validation": {
+    "native_regression": "Real EPUBs with the same chapter path went through the app attachment flow. Both editions retained independent locations and highlights after SQLite reopen. The test checked exact duplicates and rejected a delayed callback after switching away from an edition and back.",
+    "actual_wkwebview": "The native reading suite reopened an earlier EPUB and rendered its text and selection in WebKit.",
+    "released_mac_ui": [
+      "Original MOBI rendered",
+      "System picker attached the synthetic EPUB and it rendered",
+      "Attached editions switched back to MOBI and checked it",
+      "Switching back to EPUB rendered the original EPUB chapter"
+    ],
+    "mac_capture_receipt_sha256": "1ffe9350bcedac12806e10e31f44f1cae05c61748abb2b28afd104c51c8e0821",
+    "native_workflows_log_sha256": "8488e3e49ed582a263b7ed9ba87b9cb139ccabb97d106576c11c5320bd736f0e",
+    "reading_log_sha256": "36126ce01a6a8adaa335246c4f63133722ec4bf2cb478908ad97910a7a9775f8",
+    "startup_observation": "An isolated store override under Documents paused while opening a directory. The exact app opened the same synthetic library from Application Support. The cause of the Documents-path wait is unresolved.",
+    "scope": "Mac hands-on edition switching, native source tests, released iPad Simulator rendering, and physical iPad install and launch. Exact minimum-OS runtime and current physical iPad input remain open.",
+    "exact_assets_all_three_targets": {
+      "reader.js": {
+        "bytes": 13860,
+        "sha256": "da84f15bd86325e39ae6d71a27ab51b0dd63418ba40af34d4255d9e45b3fe982"
+      },
+      "reader-geometry.js": {
+        "bytes": 2180,
+        "sha256": "bb648f42b1fb6893ee10833559756e9016ee5ec7423442643cb62cab34345c81"
+      }
+    }
+  },
+  "archive_verification": {
+    "mac": {
+      "archive": {
+        "bytes": 14936598,
+        "sha256": "8bfc4e07e514ce4573df287eebe8454a843ec9041eaab5f0902ee3f2bbdc1b55"
+      },
+      "tar_members": 105,
+      "bundle_files": 88,
+      "ontology_files": 80,
+      "build": "2026111703",
+      "signature": "linker-ad-hoc",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "byte-identical standalone Mach-O"
+    },
+    "ipad-sim": {
+      "archive": {
+        "bytes": 11428446,
+        "sha256": "712e285e52815bbca99bc42f7bee3aedc8f068605bc1262c751951e7a9a068a9"
+      },
+      "tar_members": 102,
+      "bundle_files": 88,
+      "ontology_files": 80,
+      "build": "2026111703",
+      "signature": "linker-ad-hoc",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "byte-identical standalone Mach-O"
+    },
+    "ipad-device": {
+      "archive": {
+        "bytes": 11226830,
+        "sha256": "6fac8b10d75acb2042c1bcd2fdd7dc30de1d822dca59e6b0562a7e85947f7a68"
+      },
+      "tar_members": 102,
+      "bundle_files": 88,
+      "ontology_files": 80,
+      "build": "2026111703",
+      "signature": "unsigned",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "unsigned"
+    }
+  },
+  "public_https": {
+    "assets": {
+      "booknook-ipad-device-arm64-development-0.2.1.tar.gz": {
+        "bytes": 11226830,
+        "sha256": "6fac8b10d75acb2042c1bcd2fdd7dc30de1d822dca59e6b0562a7e85947f7a68"
+      },
+      "booknook-ipad-sim-arm64-development-0.2.1.tar.gz": {
+        "bytes": 11428446,
+        "sha256": "712e285e52815bbca99bc42f7bee3aedc8f068605bc1262c751951e7a9a068a9"
+      },
+      "booknook-mac-arm64-development-0.2.1.tar.gz": {
+        "bytes": 14936598,
+        "sha256": "8bfc4e07e514ce4573df287eebe8454a843ec9041eaab5f0902ee3f2bbdc1b55"
+      },
+      "BUILD-PROVENANCE.json": {
+        "bytes": 48134,
+        "sha256": "00b9f47d5883d17cb72911acd7e34dd846f8f21f8d659a16c4ce36b1cd1a4fd8"
+      },
+      "README.md": {
+        "bytes": 3628,
+        "sha256": "01b6482d7fc041fff890e0daf6986b99b54fb21ef3bc72cf465305bba45510ca"
+      },
+      "RELEASE-MANIFEST.json": {
+        "bytes": 2113,
+        "sha256": "004b34a812141a5b497e2c6ac147a59e165daadba479c5cdafd2d7286a8ae7cc"
+      },
+      "SHA256SUMS": {
+        "bytes": 503,
+        "sha256": "5b05b4cda2d5c3236ad121f8ca3ed3af56e49457b01cce1c8e0bd446140bae25"
+      },
+      "VERIFICATION.json": {
+        "bytes": 115450,
+        "sha256": "5b913839d0b1e466f8cdbf86bc3a93ef2480eac173e1abe0029ca045dd47322c"
+      }
+    },
+    "count": 8,
+    "bytes": 37761702,
+    "earlier_releases_with_unchanged_asset_identities": 12
+  },
+  "normal_physical_ipad": {
+    "previous_build": "2026111702",
+    "current_build": "2026111703",
+    "in_place": true,
+    "app_running": true,
+    "database_bytes_matched_after_install": true,
+    "database_state_equal_after_launch": true,
+    "desk_and_assets_preserved": true,
+    "orientation_unchanged_in_observations": true,
+    "orientation_commands": false,
+    "receipt_sha256": "e69c820e40d4a921029a1322558f82568747ea5872150edb8a4d7aeb67e8b9be"
+  },
+  "screenshots": {
+    "ipad_build": "2026111703",
+    "ipad_simulator": "iPadOS 18.6",
+    "ipad_framebuffer_sha256": "c6abe63e4b6cbb090c96c033a1de207fbf9851133ccf4a51f6de6c74b330e233",
+    "mac_capture_build": "2026111703",
+    "mac_image_sha256": "1abf17315c322773fd69891a272e5a5d05194b80dda3339affa156ab53a44c2b",
+    "scope": "Actual macOS window and original iPad Simulator framebuffer from the same released build, using isolated synthetic libraries."
+  }
+}
