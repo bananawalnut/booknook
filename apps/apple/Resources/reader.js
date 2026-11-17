@@ -5,6 +5,7 @@
   const post = body => window.webkit?.messageHandlers?.booknook?.postMessage(body);
   const svgNamespace = "http://www.w3.org/2000/svg";
   let annotations = [], markerLayer, highlightLayer;
+  let reportedHighlightPlacements = new Map();
   const textNodes = () => {
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
       acceptNode: node => node.parentElement?.closest("script,style,noscript,[data-booknook-overlay]") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
@@ -32,6 +33,7 @@
     for (const node of nodes) { const next = offset + node.textContent.length; if (start >= offset && start < next) range.setStart(node,start-offset); if (end > offset && end <= next) range.setEnd(node,end-offset); offset = next; }
     return {status:"resolved",range,rects:Array.from(range.getClientRects(),docRect).filter(r=>r.width>0 && r.height>0)};
   };
+  const textPlacement = found => found.status === "resolved" && !found.rects.length ? "not_visible" : found.status;
   const geometryFor = (anchor, resource) => {
     const found = resolve(anchor); if (found.status !== "resolved") return {status:found.status};
     return {status:"resolved",geometry:{space:"epub_document",resource,page:null,content_fingerprint:hash(textContext().text),width:document.documentElement.scrollWidth,height:document.documentElement.scrollHeight,origin_x:0,origin_y:0,text_quote:anchor.quote,text_prefix:anchor.prefix || "",text_suffix:anchor.suffix || "",text_rects:found.rects}};
@@ -90,13 +92,18 @@
     markerLayer.replaceChildren();
     const nativeHighlights = window.CSS?.highlights && typeof window.Highlight === "function";
     const ranges = [], highlightRects = [], placements = [];
+    const highlightPlacements = new Map();
     for (const item of annotations) {
       const resolved = resolve(item.anchor);
       if (!item.ink_geometry) {
         if (item.legacy_ink) placements.push({id:item.id,status:"legacy_layout"});
-        else if (resolved.status === "resolved") {
-          if (nativeHighlights) ranges.push(resolved.range);
-          else highlightRects.push(...resolved.rects);
+        else {
+          const status = textPlacement(resolved);
+          highlightPlacements.set(item.id, status);
+          if (status === "resolved") {
+            if (nativeHighlights) ranges.push(resolved.range);
+            else highlightRects.push(...resolved.rects);
+          }
         }
       } else {
         const current = geometryFor(item.anchor, item.ink_geometry.resource);
@@ -116,10 +123,24 @@
     if (nativeHighlights) window.CSS.highlights.set("booknook", new window.Highlight(...ranges));
     else renderFallbackHighlights(highlightRects);
     post({type:"ink_placements",placements});
+    if (highlightPlacements.size !== reportedHighlightPlacements.size ||
+        [...highlightPlacements].some(([id, status]) => reportedHighlightPlacements.get(id) !== status)) {
+      reportedHighlightPlacements = highlightPlacements;
+      post({type:"highlight_placements",placements:Object.fromEntries(highlightPlacements)});
+    }
   };
   window.booknookResolve = resolve;
   window.booknookSetFontSize = size => { if (Number.isFinite(size) && size>=13 && size<=34) {document.body.style.setProperty("font-size",`${size}px`,"important");measure();} };
-  window.booknookRestorePosition = anchor => { if (!anchor) return {status:"missing"}; const found=resolve(anchor); if (found.status==="resolved" && found.rects[0]) {scrollTo({top:Math.max(0,found.rects[0].y-40),behavior:"instant"});measure();} return {status:found.status}; };
+  window.booknookRestorePosition = anchor => {
+    if (!anchor) return {status:"missing"};
+    const found = resolve(anchor);
+    const status = textPlacement(found);
+    if (status === "resolved") {
+      scrollTo({top:Math.max(0,found.rects[0].y-40),behavior:"instant"});
+      measure();
+    }
+    return {status};
+  };
   window.booknookNavigateFragment = fragment => {
     if (!fragment) {scrollTo({top:0,behavior:"instant"});measure();return {status:"resolved"};}
     const target=document.getElementById(fragment) || document.getElementsByName(fragment)[0];

@@ -7,6 +7,20 @@ import UniformTypeIdentifiers
 import PencilKit
 #endif
 
+private enum ReaderTextHighlightPlacement: String {
+    case resolved, ambiguous, missing
+    case notVisible = "not_visible"
+
+    var marker: String? {
+        switch self {
+        case .resolved: nil
+        case .ambiguous: "Unplaced highlight. More than one passage matches."
+        case .missing: "Unplaced highlight. The saved passage could not be found."
+        case .notVisible: "Unplaced highlight. The saved passage is hidden in this layout."
+        }
+    }
+}
+
 struct ReaderPane: View {
     @EnvironmentObject var model: DeskModel
     @State var importing = false
@@ -24,6 +38,7 @@ struct ReaderPane: View {
     @State private var savingHighlight = false
     @State private var highlightStatus: String?
     @State private var showingAnnotations = false
+    @State private var textHighlightPlacements: [String: [String: ReaderTextHighlightPlacement]] = [:]
     var edition: Edition? { model.book?.editionIds.last.flatMap { model.state?.editions[$0] } }
     var asset: Asset? { edition?.assets.last }
     var annotations: [Annotation] { model.state?.annotations.values.filter { $0.passId == model.notebook?.passId && (($0.anchor.object?["edition_id"] as? String) == edition?.id || ReaderUnplacedInkLocation.matches($0, editionID: edition?.id ?? "")) } ?? [] }
@@ -136,6 +151,7 @@ struct ReaderPane: View {
         }
         .task(id: "\(asset?.id ?? ""):\(model.notebook?.passId ?? "")") {
             chapter = 0; root = nil; destination = nil; resetGeometry()
+            textHighlightPlacements = [:]
             if let asset {
                 if let resource = savedPosition?["resource"] as? String, let restored = asset.spine.firstIndex(of: resource) { chapter = restored }
                 do {
@@ -171,6 +187,7 @@ struct ReaderPane: View {
         let unplaced = ink && annotation.inkGeometry == nil
         let unplacedPDF = page != nil && asset?.mediaType == "application/pdf"
             && placements[annotation.id].map { $0 != "resolved" } == true
+        let highlightMarker = ink ? nil : textHighlightPlacements[resource]?[annotation.id]?.marker
         VStack(alignment: .leading, spacing: 3) {
             if let page {
                 Label(annotation.originalContext, systemImage: ink ? "pencil.tip" : "highlighter")
@@ -179,10 +196,14 @@ struct ReaderPane: View {
                     .font(.caption2).foregroundStyle(.secondary)
             } else {
                 Button {
-                    if let index { openChapter(index, anchor: unplacedResource == nil ? annotation.anchor.object : nil); showingAnnotations = false }
+                    if let index {
+                        let anchor = unplacedResource == nil && highlightMarker == nil ? annotation.anchor.object : nil
+                        openChapter(index, anchor: anchor)
+                        showingAnnotations = false
+                    }
                 } label: {
                     Label(annotation.originalContext, systemImage: ink ? "pencil.tip" : "highlighter").lineLimit(3).frame(maxWidth: .infinity, alignment: .leading)
-                }.buttonStyle(.borderless).disabled(index == nil).help(unplaced ? "Open the original chapter" : "Return to this saved passage")
+                }.buttonStyle(.borderless).disabled(index == nil).help(unplaced || highlightMarker != nil ? "Open the original chapter" : "Return to this saved passage")
                 Text(index == nil ? "Original source is not in this attached book" : "Saved in \(chapterLabel(resource))").font(.caption2).foregroundStyle(.secondary)
             }
             if unplaced {
@@ -190,6 +211,9 @@ struct ReaderPane: View {
                 ReaderSavedInkPreview(annotation: annotation).frame(height: 120)
             } else if unplacedPDF {
                 Label("Unplaced on this PDF. Original context is saved.", systemImage: "exclamationmark.circle")
+                    .font(.caption2).foregroundStyle(.secondary)
+            } else if let highlightMarker {
+                Label(highlightMarker, systemImage: "exclamationmark.circle")
                     .font(.caption2).foregroundStyle(.secondary)
             } else if ink && resource == currentResource && placements[annotation.id] != "resolved" {
                 Text("Markup is retained with its original context. Its text layout has changed or its passage cannot be uniquely located.").font(.caption2).foregroundStyle(.secondary)
@@ -211,6 +235,13 @@ struct ReaderPane: View {
             if var position = message["position"] as? [String: Any] { position["kind"] = "text"; position["edition_id"] = edition.id; position["resource"] = currentResource; recordPosition(position) }
         case "ink_placements":
             for placement in message["placements"] as? [[String: Any]] ?? [] { if let id = placement["id"] as? String { placements[id] = placement["status"] as? String ?? "missing" } }
+        case "highlight_placements":
+            guard asset?.supportsTextSize == true, !currentResource.isEmpty,
+                  let values = message["placements"] as? [String: String] else { return }
+            let latest = values.compactMapValues(ReaderTextHighlightPlacement.init(rawValue:))
+            if textHighlightPlacements[currentResource] != latest {
+                textHighlightPlacements[currentResource] = latest
+            }
         case "pdf_placements":
             if asset?.mediaType == "application/pdf",
                let latest = message["placements"] as? [String: String], latest != placements {

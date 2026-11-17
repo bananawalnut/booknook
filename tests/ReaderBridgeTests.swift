@@ -6,6 +6,9 @@ import WebKit
 final class ReaderBridgeCheck: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
     var web: WKWebView!
     var measurements = 0
+    private var highlightSnapshots: [[String: String]] = []
+    private var checkpoints: [String: Int] = [:]
+    private var domChecks: [String]?
     func run() throws {
         let config = WKWebViewConfiguration()
         config.websiteDataStore = .nonPersistent()
@@ -17,11 +20,41 @@ final class ReaderBridgeCheck: NSObject, WKNavigationDelegate, WKScriptMessageHa
         }
         web = WKWebView(frame: CGRect(x: 0,y: 0,width: 640,height: 800),configuration: config)
         web.navigationDelegate = self
-        let html = "<html><head><meta name='viewport' content='width=device-width, initial-scale=1'></head><body><script>window.untrustedBookScriptRan = true;</script><p>Before 😀 café: the quiet library welcomed Mara with open doors and many stories to discover in the late afternoon light.</p><p>Duplicate passage.</p><p>Duplicate passage.</p><p>Distinct ending.</p>" + String(repeating: "<p>A synthetic paragraph for reading-position restoration.</p>", count: 80) + "<p>Last chapter marker.</p></body></html>"
+        let html = "<html><head><meta name='viewport' content='width=device-width, initial-scale=1'></head><body><script>window.untrustedBookScriptRan = true;</script><p>Before 😀 café: the quiet library welcomed Mara with open doors and many stories to discover in the late afternoon light.</p><p>Duplicate passage.</p><p>Duplicate passage.</p><p hidden>Unique hidden quote.</p><p>Distinct ending.</p>" + String(repeating: "<p>A synthetic paragraph for reading-position restoration.</p>", count: 80) + "<p>Last chapter marker.</p></body></html>"
         web.loadHTMLString(html,baseURL: nil)
         DispatchQueue.main.asyncAfter(deadline: .now()+15) { fputs("Reader bridge timed out\n",stderr); exit(1) }
     }
-    func userContentController(_ controller: WKUserContentController, didReceive message: WKScriptMessage) { if let body = message.body as? [String: Any], body["type"] as? String == "geometry" { measurements += 1 } }
+    func userContentController(_ controller: WKUserContentController, didReceive message: WKScriptMessage) {
+        guard let body = message.body as? [String: Any] else { return }
+        switch body["type"] as? String {
+        case "geometry": measurements += 1
+        case "highlight_placements":
+            guard let placements = body["placements"] as? [String: String] else {
+                fputs("Expected a dictionary of highlight placement statuses\n", stderr); exit(1)
+            }
+            highlightSnapshots.append(placements)
+        case "bridge_test_checkpoint":
+            guard let name = body["name"] as? String else { return }
+            checkpoints[name] = highlightSnapshots.count
+            finishIfReady()
+        default: break
+        }
+    }
+
+    private func finishIfReady() {
+        guard let domChecks, checkpoints["cleared"] != nil else { return }
+        let expected = ["opening": "resolved", "ending": "resolved", "ambiguous": "ambiguous",
+                        "missing": "missing", "hidden": "not_visible"]
+        let expectedCheckpoints = ["registry": 1, "fallback": 3, "reflow": 3,
+                                   "reordered": 3, "scrolled": 3, "cleared": 4]
+        guard highlightSnapshots == [expected, [:], expected, [:]], checkpoints == expectedCheckpoints else {
+            fputs("Unexpected highlight placement snapshots: \(highlightSnapshots); checkpoints: \(checkpoints)\n", stderr)
+            exit(1)
+        }
+        print("WKWebView reader bridge: \(domChecks.joined(separator: "; ")).")
+        print("Native bridge received exact per-ID placement dictionaries for both render paths, no repeats after reflow/reorder/scroll, and one empty snapshot on removal.")
+        exit(0)
+    }
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let script = #"""
         return await (async()=>{
@@ -61,17 +94,28 @@ final class ReaderBridgeCheck: NSObject, WKNavigationDelegate, WKScriptMessageHa
           scrollTo(0,0);
           const opening = {quote:'the quiet library welcomed Mara with open doors and many stories to discover in the late afternoon light.'};
           const ending = {quote:'Last chapter marker.'};
+          const hidden = {quote:'Unique hidden quote.'};
+          const hiddenMatch = booknookResolve(hidden);
+          check(hiddenMatch.range?.toString()===hidden.quote && hiddenMatch.rects.length===0 &&
+            booknookRestorePosition(hidden).status==='not_visible' && scrollY===0,
+            'uniquely identified text without rectangles cannot report a successful jump');
+          const highlights = [
+            {id:'opening',anchor:opening},{id:'ending',anchor:ending},
+            {id:'ambiguous',anchor:{quote:'Duplicate passage.'}},
+            {id:'missing',anchor:{quote:'No annotation match.'}},
+            {id:'hidden',anchor:hidden}
+          ];
+          const checkpoint = name => window.webkit.messageHandlers.booknook.postMessage({type:'bridge_test_checkpoint',name});
           const hasCustomHighlights = Boolean(window.CSS?.highlights && window.Highlight);
-          booknookAnnotations([{id:'opening',anchor:opening}]);
-          check(!hasCustomHighlights || window.CSS.highlights.get('booknook')?.size===1,'native custom highlight still renders when supported');
+          booknookAnnotations(highlights);
+          check(!hasCustomHighlights || window.CSS.highlights.get('booknook')?.size===2,
+            hasCustomHighlights ? 'native custom highlight paints only two resolved ranges' : 'native highlight registry unavailable on this host');
+          checkpoint('registry');
           booknookAnnotations([]);
           Object.defineProperty(window,'Highlight',{value:undefined,configurable:true});
           const originalHeight = document.documentElement.scrollHeight;
-          booknookAnnotations([
-            {id:'opening',anchor:opening},{id:'ending',anchor:ending},
-            {id:'ambiguous',anchor:{quote:'Duplicate passage.'}},
-            {id:'missing',anchor:{quote:'No annotation match.'}}
-          ]);
+          booknookAnnotations(highlights);
+          checkpoint('fallback');
           const overlay = () => document.querySelector('[data-booknook-highlight-fallback]');
           const aligned = anchor => {
             const layer = overlay();
@@ -95,10 +139,15 @@ final class ReaderBridgeCheck: NSObject, WKNavigationDelegate, WKScriptMessageHa
           booknookSetFontSize(34);
           check(await waitFor(()=>aligned(opening)) &&
             JSON.stringify(beforeReflow)!==JSON.stringify(booknookResolve(opening).rects),'fallback follows the anchored text through font reflow');
+          checkpoint('reflow');
+          booknookAnnotations([...highlights].reverse());
+          checkpoint('reordered');
           booknookRestorePosition(ending);
           check(await waitFor(()=>aligned(ending)) && scrollY>0,'fallback follows an offscreen highlight after restoring its passage');
+          checkpoint('scrolled');
           booknookAnnotations([]);
           check(!overlay()?.children.length,'removing saved highlights clears the fallback');
+          checkpoint('cleared');
           return checks;
         })()
         """#
@@ -108,9 +157,9 @@ final class ReaderBridgeCheck: NSObject, WKNavigationDelegate, WKScriptMessageHa
             case .success(let value): result = value
             case .failure(let error): fputs("Reader bridge failed: \(error)\n",stderr); exit(1)
             }
-            guard let checks = result as? [String], checks.count == 22 else { fputs("Reader bridge returned an unexpected result: \(String(describing: result))\n",stderr); exit(1) }
-            print("WKWebView reader bridge: \(checks.joined(separator: "; ")).")
-            exit(0)
+            guard let checks = result as? [String], checks.count == 23 else { fputs("Reader bridge returned an unexpected result: \(String(describing: result))\n",stderr); exit(1) }
+            self.domChecks = checks
+            self.finishIfReady()
         }
     }
 }
