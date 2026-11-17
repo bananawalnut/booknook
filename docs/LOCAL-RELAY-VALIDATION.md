@@ -52,3 +52,7 @@ The network operation is bounded to 25 seconds overall, including an eight-secon
 Output is one JSON summary of connection status, protocol message counts and result count. Raw relay records are neither logged nor saved. Success requires a completed fetch, zero SDK errors, a connection, exactly one outgoing `REQ` and `CLOSE`, and incoming `EOSE`; every other outgoing Nostr message type fails acceptance. An initial scratch run established a connection but its local trace parser missed message types and correctly reported failure. The parser was corrected before these successful delivered-script runs; the initial result is not counted as protocol-completion evidence.
 
 Results describe that endpoint at the time of the probe; availability and policies can change. This evidence qualifies the default TLS/WebSocket connection and read exchange only. Remote publication acknowledgments, encrypted delivery, Castalia authority, account custody and full social operation remain separate acceptance requirements.
+
+## Local issuer and relay composition
+
+The reference HTTP issuer, native custody, and independent loopback relay ran together on exact source `953c297`. Two synthetic readers shared a selected Unicode excerpt. The raw relay event and receiver’s store contained the excerpt and excluded surrounding notes, private history and local IDs. A denied grant preserved the draft without queueing it. The reopened receiver accepted no new records on a duplicate fetch. [Composition evidence](reference-issuer-relay-composition-evidence.json)

@@ -1,0 +1,23 @@
+{
+  "schema": "booknook.reference-issuer-relay-composition.v1",
+  "result": "PASS",
+  "source_commit": "953c297d24495323e1cc1ca7c3b3e0d21fe1fb65",
+  "independent_relay": {
+    "commit": "b5c1f642e4f4c3b9c54f5d18d66f4c53642076b4",
+    "binary_sha256": "dd921a430dc2115ba655cf77c24c3faafae26a664b65947db6e4ad8f84a91a7c",
+    "source_archive_sha256": "5debc36966f86ce012394bcb35d831ea3f792aeef7999780e8a77f9cf37ec1f0"
+  },
+  "native_runner_sha256": "394cdd2c8c9f26ac6bcbf30dd0d0f41627fc4d81e7731348610c59e25bf769a0",
+  "reference_issuer_binary_sha256": "c956b02da87bd83e74b891bf13d6c8c3968c14446df7d54757dcb785e101768a",
+  "test_source_sha256": "28f8de2677dd6a425ac0a00d78cccdc642222beeef6a5ab73c26d9bd1521e8f5",
+  "observations": [
+    "Two synthetic readers used native custody and a real local HTTP reference issuer.",
+    "Both signed transport bindings and mutual friendship traversed the independent loopback relay.",
+    "The raw public event and receiving store contained the approved Unicode excerpt. Private surrounding text, private history, and the local book and notebook IDs were absent.",
+    "A denied grant preserved the exact SQLite state and draft without an outbox entry.",
+    "A separate receiving desk reopen and duplicate delivery accepted no new records and preserved the exact SQLite state."
+  ],
+  "scope": "Local reference composition with synthetic identities and isolated SQLite. Live issuer, remote TLS relays, native hardware credential store and physical devices remain open.",
+  "closed_owned_processes_and_removed_temporary_work": true,
+  "receipt_sha256": "ec46507c75ccb7c6914302205cc706cb32ea9233ab3b1829f15ce447b73e79c2"
+}
