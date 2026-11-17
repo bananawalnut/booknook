@@ -191,6 +191,24 @@ pub fn social_feed(
     })())
 }
 
+/// Read-only previews over admitted social state kept by the host.
+#[wasm_bindgen]
+pub fn social_public_group_previews(
+    state_json: &str,
+    viewer: &str,
+    reveal_spoilers: bool,
+) -> Result<String, JsValue> {
+    bridge((|| {
+        let state = booknook_core::strict_parse(state_json.as_bytes())?;
+        booknook_core::social_protocol::validate(&state)?;
+        Ok(booknook_core::social_protocol::public_group_previews(
+            &state,
+            viewer,
+            reveal_spoilers,
+        ))
+    })())
+}
+
 /// Conservative source-metadata matches; no selection or position mapping is implied.
 #[wasm_bindgen]
 pub fn audio_edition_candidates(

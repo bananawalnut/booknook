@@ -63,7 +63,7 @@ export class BookNook {
 
 /** The portable social contract is a separate namespace from private notebook records. */
 export type * as Social from "./social-types.js";
-import type { SocialState, SocialAction, LocalSocialCommand, SocialEvent, ApprovedPublication, AuthorityPolicy } from "./social-types.js";
+import type { SocialState, SocialAction, LocalSocialCommand, SocialEvent, ApprovedPublication, AuthorityPolicy, Post } from "./social-types.js";
 export interface SyncConflict {
   id: string; collection: string; record_id: string; field: string; local: unknown; incoming: unknown;
 }
@@ -82,6 +82,16 @@ export function reconcile(core: PortableCore, base: State | null, local: State, 
 }
 export function resolveConflict(core: PortableCore, state: State, conflict: SyncConflict, useIncoming: boolean): State {
   return parseContract(core.resolve_conflict(encodeContract(state), encodeContract(conflict), useIncoming));
+}
+export interface PublicGroupPreview {
+  id: string; actor: string; at: number; group_id: string; post: Post; spoiler_hidden: boolean;
+}
+export interface PublicGroupPreviewCore {
+  social_public_group_previews(state: string, viewer: string, revealSpoilers: boolean): string;
+}
+/** Read-only projection over social state already admitted by the host. */
+export function publicGroupPreviews(core: PublicGroupPreviewCore, state: SocialState, viewer: string, revealSpoilers = false): PublicGroupPreview[] {
+  return parseContract(core.social_public_group_previews(encodeContract(state), viewer, revealSpoilers));
 }
 export interface SocialStorage {
   load(): Promise<SocialState | null>;

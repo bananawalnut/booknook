@@ -217,20 +217,56 @@ fn store_binding(
 #[uniffi::export]
 impl Desk {
     pub fn social_snapshot(&self, reveal_spoilers: bool) -> Result<String> {
-        let actor = self
-            .policy(social::ACTION, None)
-            .map(|p| p.actor)
-            .unwrap_or_default();
-        let store = self.lock()?;
-        let state = load(&store.connection)?;
-        let bindings=documents(&store.connection)?.into_iter().map(|(d,min)|json!({"holder":d.binding.castalia_holder,"nostr_public_key":d.binding.nostr_public_key,"version":d.binding.version,"minimum_version":min,"valid_until":d.binding.valid_until})).collect::<Vec<_>>();
-        let pending: i64 =
-            store
-                .connection
-                .query_row("SELECT count(*) FROM social_pending", [], |r| r.get(0))?;
-        Ok(serde_json::to_string(
-            &json!({"state":state,"actor":actor,"feed":social::feed(&state,&actor,reveal_spoilers),"bindings":bindings,"pending":pending}),
-        )?)
+        let (state, bindings, pending, policy) = {
+            let store = self.lock()?;
+            let state = load(&store.connection)?;
+            let policy = Self::policy_on(&store.connection, social::ACTION, None).ok();
+            let bindings = documents(&store.connection)?
+                .into_iter()
+                .map(|(document, minimum)| {
+                    json!({
+                        "holder": document.binding.castalia_holder,
+                        "nostr_public_key": document.binding.nostr_public_key,
+                        "version": document.binding.version,
+                        "minimum_version": minimum,
+                        "valid_until": document.binding.valid_until,
+                    })
+                })
+                .collect::<Vec<_>>();
+            let pending: i64 =
+                store
+                    .connection
+                    .query_row("SELECT count(*) FROM social_pending", [], |row| row.get(0))?;
+            (state, bindings, pending, policy)
+        };
+        let actor = policy.as_ref().map_or("", |policy| policy.actor.as_str());
+        let previews = social::public_group_previews(&state, actor, reveal_spoilers);
+        // Audit with the independent policy read alongside the journal. No store
+        // lock is held during replay, and restored data never supplies trust.
+        let verified = previews.is_empty()
+            || policy.as_ref().is_some_and(|policy| {
+                now().is_ok_and(|at| {
+                    social::audit(
+                        &state,
+                        |who| {
+                            let mut author = policy.clone();
+                            author.actor = who.into();
+                            Ok(author)
+                        },
+                        at,
+                    )
+                    .is_ok()
+                })
+            });
+        let verified_previews = verified.then_some(previews);
+        Ok(serde_json::to_string(&json!({
+            "state": state,
+            "actor": actor,
+            "feed": social::feed(&state, actor, reveal_spoilers),
+            "public_group_previews": verified_previews,
+            "bindings": bindings,
+            "pending": pending,
+        }))?)
     }
     pub fn social_prepare(&self, action_json: String) -> Result<String> {
         let who = self.policy(social::ACTION, None)?.actor;

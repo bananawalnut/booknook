@@ -14,7 +14,23 @@ struct SocialFriendIntent: Decodable { let requested: Bool; let version: UInt64 
 struct SocialStateModel: Decodable { let revision: UInt64; let drafts: [String: SocialEventModel]; let outbox: [String: SocialOutbox]; let publications: [String: SocialPublication]; let friendshipIntents: [String: SocialFriendIntent]; let lists: [String: SocialList]; let groups: [String: SocialGroup]; let invitations: [String: SocialInvitation]; let joinRequests: [String: SocialJoinRequest]; let blocked: [String]; let retracted: [String]; let preferredSubjects: [String] }
 struct SocialFeedItem: Decodable, Identifiable { let id: String; let actor: String; let at: UInt64; let groupId: String?; let post: SocialPost; let spoilerHidden: Bool }
 struct SocialBinding: Decodable, Identifiable { let holder: String; let nostrPublicKey: String; let version: UInt64; let minimumVersion: UInt64; let validUntil: UInt64; var id: String { holder }; var active: Bool { version >= minimumVersion && validUntil > UInt64(Date().timeIntervalSince1970) } }
-struct SocialSnapshot: Decodable { let state: SocialStateModel; let actor: String; let feed: [SocialFeedItem]; let bindings: [SocialBinding]; let pending: Int }
+struct SocialSnapshot: Decodable {
+    let state: SocialStateModel
+    let actor: String
+    let feed: [SocialFeedItem]
+    let publicGroupPreviews: [SocialFeedItem]?
+    let bindings: [SocialBinding]
+    let pending: Int
+
+    func discussion(in group: SocialGroup) -> [SocialFeedItem] {
+        guard !group.closed, !group.banned.contains(actor) else { return [] }
+        if group.members.contains(actor) {
+            return feed.filter { $0.groupId == group.id }
+        }
+        guard !group.private, !state.blocked.contains(group.owner) else { return [] }
+        return (publicGroupPreviews ?? []).filter { $0.groupId == group.id }
+    }
+}
 struct SocialRecommendation: Decodable, Identifiable { let bookId: String; let score: Int; let reasons: [String]; var id: String { bookId } }
 struct SocialExchangeReport: Decodable { let sent: Int; let received: Int; let messages: [String] }
 struct SocialListReview {

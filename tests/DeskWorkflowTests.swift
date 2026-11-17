@@ -13,6 +13,7 @@ import Foundation
         }
         Task { @MainActor in
             do {
+                if CommandLine.arguments.contains("--public-group-preview") { try await testPublicGroupPreview(); exit(0) }
                 if CommandLine.arguments.contains("--group-replies") { try await testGroupReplies(); exit(0) }
                 if CommandLine.arguments.contains("--shared-list-review") { try await testSharedListReview(); exit(0) }
                 if CommandLine.arguments.contains("--reading-pass-navigation") { try await testReadingPassNavigation(); exit(0) }
@@ -294,6 +295,7 @@ import Foundation
         try await testRecommendationTitleProjection()
         try await testPublicationWorkflow()
         try await testGroupReplies()
+        try await testPublicGroupPreview()
         try await testSharedListReview()
         print("Native desk workflows: duplicate-title identity, failed navigation, explicit sessions, private earlier-character-version drafts, thrown save rejection, unrated Unicode review, list edit/conflict retention, failed social retry with durable draft recovery, reopen and cancellation distinctions passed.")
     }
@@ -406,6 +408,59 @@ import Foundation
         precondition(!target.permitsVisibleParent(parent!, in: controller.snapshot))
         precondition(controller.snapshot?.state.drafts[retryID] != nil)
         print("Native group replies: exact parent, hidden/blocked/closed refusal, spoiler-safe consent, and denied draft retry after SQLite reopen passed.")
+    }
+
+    @MainActor static func testPublicGroupPreview() async throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("booknook-group-preview-" + UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let owner = DeskModel(repository: DeskRepository(directory: directory.appendingPathComponent("owner")))
+        let guest = DeskModel(repository: DeskRepository(directory: directory.appendingPathComponent("guest")))
+        await owner.open()
+        await guest.open()
+        let issuer = try Curve25519.Signing.PrivateKey(rawRepresentation: Data(repeating: 1, count: 32))
+        let holder = try Curve25519.Signing.PrivateKey(rawRepresentation: Data(repeating: 2, count: 32))
+        let visitor = try Curve25519.Signing.PrivateKey(rawRepresentation: Data(repeating: 3, count: 32))
+        var connections = ConnectionConfiguration()
+        let config = CastaliaConfiguration(issuer: "synthetic-issuer", keyId: "test",
+            issuerPublicKey: hex(issuer.publicKey.rawRepresentation), audience: "booknook-test",
+            terminalCaller: "synthetic-booknook-test", holderPublicKey: hex(holder.publicKey.rawRepresentation),
+            policyDigest: hex(SHA256.hash(data: Data("synthetic policy".utf8))),
+            credentialEndpoint: "http://127.0.0.1:65500/credential")
+        connections.castalia = config
+        try await owner.repository.saveConnections(connections)
+        let discussion = "A public reading question from the café."
+        var ids: [String] = []
+        for isPrivate in [false, true] {
+            let id = try await owner.repository.socialOwnedID()
+            ids.append(id)
+            try await approveFixture(["op": "create_group", "id": id, "name": isPrivate ? "Private readers" : "Public readers",
+                "description": "", "private": isPrivate], model: owner, config: config, issuer: issuer, holder: holder)
+            try await approveFixture(["op": "publish", "group_id": id, "post": [
+                "kind": "discussion", "book": NSNull(), "body": isPrivate ? "Invited readers only" : discussion,
+                "stars": NSNull(), "reading_status": NSNull(), "spoiler": true, "reply_to": NSNull()
+            ]], model: owner, config: config, issuer: issuer, holder: holder)
+        }
+        let archive = directory.appendingPathComponent("synthetic-social.json")
+        try await owner.repository.socialExport(archive)
+        try await guest.repository.socialRestore(archive)
+        let untrusted = try await guest.repository.socialSnapshot(reveal: true)
+        precondition(untrusted.publicGroupPreviews == nil && untrusted.feed.isEmpty)
+        connections.castalia?.holderPublicKey = hex(visitor.publicKey.rawRepresentation)
+        try await guest.repository.saveConnections(connections)
+        let hidden = try await guest.repository.socialSnapshot(reveal: false)
+        let publicGroup = hidden.state.groups[ids[0]]!
+        precondition(hidden.feed.isEmpty && !publicGroup.members.contains(hidden.actor))
+        let item = hidden.discussion(in: publicGroup).first!
+        precondition(item.spoilerHidden && item.post.body.isEmpty)
+        precondition(hidden.discussion(in: hidden.state.groups[ids[1]]!).isEmpty)
+        let visible = try await guest.repository.socialSnapshot(reveal: true)
+        precondition(visible.discussion(in: publicGroup).map(\.post.body) == [discussion])
+        let target = SocialGroupReplyTarget(actor: visible.actor, groupID: publicGroup.id, postID: item.id)
+        precondition(!target.permitsVisibleParent(item, in: visible))
+        let ownerSnapshot = try await owner.repository.socialSnapshot(reveal: true)
+        precondition(ownerSnapshot.publicGroupPreviews?.isEmpty == true)
+        precondition(ownerSnapshot.discussion(in: publicGroup).map(\.post.body) == [discussion])
+        print("Verified public reading group previews, spoiler redaction, retained private membership, and reply gating passed.")
     }
 
     @MainActor static func testSharedListReview() async throws {

@@ -277,14 +277,19 @@ struct SocialCommunityView: View {
         VStack(alignment: .leading, spacing: 16) {
             Text(group.name).font(.system(.title2, design: .serif)); Text(group.description).foregroundStyle(.secondary)
             Label("\(group.private ? "Private group" : "Public group") · \(group.members.count) members", systemImage: group.private ? "lock" : "globe").font(.caption)
-            if group.members.contains(social.actor) && !group.banned.contains(social.actor) {
+            if group.closed {
+                Text("This group is closed.").font(.callout).foregroundStyle(.secondary)
+            } else if group.members.contains(social.actor) && !group.banned.contains(social.actor) {
                 DisclosureGroup("Write to this group") { composer(groupID: group.id) }
-                discussionCards((social.snapshot?.feed ?? []).filter { $0.groupId == group.id })
-            } else if !group.private && !group.closed && !group.banned.contains(social.actor) {
+                discussionCards(social.snapshot?.discussion(in: group) ?? [])
+            } else if !group.private && !group.banned.contains(social.actor) && state?.blocked.contains(group.owner) != true {
                 let requested = state?.joinRequests.values.contains { $0.groupId == group.id && $0.reader == social.actor && $0.epoch == group.epoch && $0.expiresAt > UInt64(Date().timeIntervalSince1970) } ?? false
-                Text(requested ? "Your public membership request is waiting for the owner to admit you." : "Request membership to join this public discussion. Your request and membership will be public.").font(.callout).foregroundStyle(.secondary)
-                Button(requested ? "Request pending" : "Review & request membership") { Task { await social.publish(["op": "request_join", "group_id": group.id], title: "Request public group membership", model) } }.disabled(requested || social.busy)
-            } else { Text("Accept a current invitation and wait for the owner to admit you before joining the discussion.").font(.callout).foregroundStyle(.secondary) }
+                Text(requested ? "Your public membership request is waiting for the owner to admit you." : "Request membership to post or reply. Your request and membership will be public.").font(.callout).foregroundStyle(.secondary)
+                Button(requested ? "Request pending" : "Review & request membership") { Task { await social.publish(["op": "request_join", "group_id": group.id], title: "Request public group membership", model) } }.disabled(requested || social.busy || social.actor.isEmpty)
+                discussionCards(social.snapshot?.discussion(in: group) ?? [])
+            } else if group.private && !group.banned.contains(social.actor) {
+                Text("Accept a current invitation and wait for the owner to admit you before joining the discussion.").font(.callout).foregroundStyle(.secondary)
+            }
             if group.owner == social.actor {
                 HStack { TextField("Reader identity code to invite", text: $invitee).textFieldStyle(.roundedBorder); Button("Invite") { Task { do { await social.publish(["op": "invite", "id": UUID().uuidString.lowercased(), "group": try socialObject(group), "invitee": invitee.trimmingCharacters(in: .whitespacesAndNewlines), "expires_at": UInt64(Date().timeIntervalSince1970) + 7 * 86400], title: "Invite a reader to this group", model) } catch { social.error = bookNookErrorMessage(error) } } }.disabled(social.busy) }
                 let waiting = waitingReaders(group)

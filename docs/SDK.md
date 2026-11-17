@@ -66,6 +66,12 @@ The package scripts and `scripts/stage-sdk-deliverables.py` resolve the output d
 
 The facade validates JavaScript's exact integer boundary. Raw JSON preserves Rust integer values, and WASM time arguments use unsigned 64-bit `bigint` values. Private document state and social state have separate schemas. Audio matching APIs return explainable edition candidates; confirmed association does not convert narration time into an ebook location.
 
+### Public group discussion previews
+
+For a reader outside the membership roster, Core’s `social_protocol::public_group_previews` and the TypeScript `publicGroupPreviews` helper project public discussions from social history the host has admitted. The existing feed still uses friend and group membership filters. Preview items carry the same post and spoiler fields as feed items.
+
+The native `social_snapshot` response adds an optional `public_group_previews` array. The preview can be unavailable if current authority cannot verify restored history. Older snapshots still decode in the native app. Hosts rendering a public view should use only the preview rows. The full native snapshot is a local application read. Membership remains required for posting and replying.
+
 ### Recommendations and approved encrypted transfer
 
 `recommendations(core, input)` runs the shared Rust recommendation provider with catalog candidates, chosen interests, exclusions and independently verified shared ratings. Its input has no notebook, annotation, character-card or handwriting fields. `socialRecommendations(core, socialState, candidates, excluded, policy, now)` additionally rebuilds signed history under the host's current issuer pins and rejects forged friendship/group projections, invalid receipts or revoked trust before scoring. The policy actor is the viewer; other authors are checked using the same trusted pins, audience/caller and `social.execute` policy. Private group ratings and blocked readers do not contribute. Use the local API with no shared ratings when no identity is configured; verification failures do not silently turn untrusted social data into evidence.

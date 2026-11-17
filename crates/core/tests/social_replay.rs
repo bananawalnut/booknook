@@ -5,12 +5,21 @@ use std::collections::BTreeMap;
 mod receipts;
 use receipts::{actor, proof};
 
-// All receipts deliberately share one second; identifiers run opposite causal order.
+// Replay fixtures deliberately share one second; identifiers run opposite causal order.
 fn approved(s: &mut SocialState, seed: u8, id: &str, action: SocialAction) -> ApprovedPublication {
-    let mut event = prepare(s, &actor(seed), action, 100).unwrap();
+    approved_at(s, seed, id, action, 100)
+}
+fn approved_at(
+    s: &mut SocialState,
+    seed: u8,
+    id: &str,
+    action: SocialAction,
+    at: u64,
+) -> ApprovedPublication {
+    let mut event = prepare(s, &actor(seed), action, at).unwrap();
     event.id = id.into();
     let (r, p, policy) = proof(&event, seed);
-    approve(s, event, r, p, &policy, 100).unwrap()
+    approve(s, event, r, p, &policy, at).unwrap()
 }
 fn post(group: &str, parent: Option<&str>) -> SocialAction {
     SocialAction::Publish {
@@ -329,4 +338,169 @@ fn repeated_public_join_requests_converge_without_accepting_stale_epochs() {
         ));
         assert_eq!(base, before);
     }
+}
+
+#[test]
+fn public_group_previews_are_chronological_and_read_only_before_joining() {
+    let mut publisher = SocialState::default();
+    let public = format!("{}:public", actor(2));
+    let history = [
+        approved(
+            &mut publisher,
+            2,
+            "public-create",
+            SocialAction::CreateGroup {
+                id: public.clone(),
+                name: "Public readers".into(),
+                description: String::new(),
+                private: false,
+            },
+        ),
+        approved(
+            &mut publisher,
+            3,
+            "public-request",
+            SocialAction::RequestJoin {
+                group_id: public.clone(),
+            },
+        ),
+        approved(
+            &mut publisher,
+            2,
+            "public-admit",
+            SocialAction::SetMembers {
+                group_id: public.clone(),
+                members: [actor(2), actor(3)].into(),
+                moderators: Default::default(),
+                admission_proofs: Vec::new(),
+            },
+        ),
+        approved(&mut publisher, 2, "b-owner", post(&public, None)),
+        approved(
+            &mut publisher,
+            3,
+            "a-member",
+            post(&public, Some("b-owner")),
+        ),
+        approved_at(&mut publisher, 3, "z-newest", post(&public, None), 101),
+    ];
+    let mut reader = SocialState::default();
+    for publication in &history {
+        assert_eq!(publication.event.delivery, Delivery::Public);
+        assert!(receive(&mut reader, publication.clone(), &policy(publication), 101).unwrap());
+    }
+    let private = group(&mut reader);
+    let private_post = approved(&mut reader, 2, "private-post", post(&private, None));
+    assert!(matches!(
+        private_post.event.delivery,
+        Delivery::Direct { .. }
+    ));
+
+    let viewer = actor(4);
+    let previews = public_group_previews(&reader, &viewer, false);
+    assert_eq!(
+        previews.iter().map(|p| p.id.as_str()).collect::<Vec<_>>(),
+        ["z-newest", "a-member", "b-owner"]
+    );
+    assert!(previews.iter().all(|p| p.group_id.as_ref() == Some(&public)
+        && p.spoiler_hidden
+        && p.post.body.is_empty()));
+    assert_eq!(previews[1].post.reply_to.as_deref(), Some("b-owner"));
+    assert!(
+        public_group_previews(&reader, &viewer, true)
+            .iter()
+            .all(|p| !p.spoiler_hidden && p.post.body == "Synthetic reply")
+    );
+    assert!(feed(&reader, &viewer, true).is_empty());
+    assert!(public_group_previews(&reader, &actor(2), true).is_empty());
+    assert_eq!(feed(&reader, &actor(2), true).len(), 4);
+    assert!(prepare(&reader, &viewer, post(&public, None), 101).is_err());
+    assert!(prepare(&reader, &viewer, post(&public, Some("b-owner")), 101).is_err());
+
+    // The view rejects addressed posts even if a caller supplies inconsistent state.
+    let mut addressed = reader.clone();
+    addressed
+        .publications
+        .get_mut("z-newest")
+        .unwrap()
+        .event
+        .delivery = Delivery::Direct {
+        recipients: [viewer.clone()].into(),
+    };
+    assert_eq!(public_group_previews(&addressed, &viewer, true).len(), 2);
+
+    let mut blocked = reader.clone();
+    local(
+        &mut blocked,
+        LocalSocialCommand::Block {
+            actor: actor(3),
+            blocked: true,
+        },
+    )
+    .unwrap();
+    let previews = public_group_previews(&blocked, &viewer, true);
+    assert_eq!(previews.len(), 1);
+    assert_eq!(previews[0].id, "b-owner");
+    local(
+        &mut reader,
+        LocalSocialCommand::Block {
+            actor: actor(2),
+            blocked: true,
+        },
+    )
+    .unwrap();
+    assert!(public_group_previews(&reader, &viewer, true).is_empty());
+    local(
+        &mut reader,
+        LocalSocialCommand::Block {
+            actor: actor(2),
+            blocked: false,
+        },
+    )
+    .unwrap();
+    local(
+        &mut reader,
+        LocalSocialCommand::Hide {
+            event_id: "z-newest".into(),
+            hidden: true,
+        },
+    )
+    .unwrap();
+    approved(
+        &mut reader,
+        2,
+        "public-moderate",
+        SocialAction::Moderate {
+            group_id: public.clone(),
+            event_id: Some("a-member".into()),
+            ban_actor: None,
+        },
+    );
+    let previews = public_group_previews(&reader, &viewer, true);
+    assert_eq!(previews.len(), 1);
+    assert_eq!(previews[0].id, "b-owner");
+
+    approved(
+        &mut reader,
+        2,
+        "public-ban",
+        SocialAction::Moderate {
+            group_id: public.clone(),
+            event_id: None,
+            ban_actor: Some(viewer.clone()),
+        },
+    );
+    assert!(public_group_previews(&reader, &viewer, true).is_empty());
+    let unbanned_viewer = actor(5);
+    assert_eq!(
+        public_group_previews(&reader, &unbanned_viewer, true).len(),
+        1
+    );
+    approved(
+        &mut reader,
+        2,
+        "public-close",
+        SocialAction::CloseGroup { group_id: public },
+    );
+    assert!(public_group_previews(&reader, &unbanned_viewer, true).is_empty());
 }

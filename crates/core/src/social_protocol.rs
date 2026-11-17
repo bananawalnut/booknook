@@ -1351,6 +1351,38 @@ pub struct FeedItem {
     pub spoiler_hidden: bool,
 }
 pub fn feed(s: &SocialState, viewer: &str, reveal_spoilers: bool) -> Vec<FeedItem> {
+    visible_feed_items(s, reveal_spoilers, |event, group_id| {
+        if let Some(id) = group_id {
+            s.groups.get(id).is_some_and(|g| {
+                !g.closed && !g.banned.contains(viewer) && g.members.contains(viewer)
+            })
+        } else {
+            event.actor == viewer || friends(s, viewer, &event.actor)
+        }
+    })
+}
+/// Public discussion previews for viewers who have not joined the group.
+pub fn public_group_previews(
+    s: &SocialState,
+    viewer: &str,
+    reveal_spoilers: bool,
+) -> Vec<FeedItem> {
+    visible_feed_items(s, reveal_spoilers, |event, group_id| {
+        matches!(event.delivery, Delivery::Public)
+            && group_id.and_then(|id| s.groups.get(id)).is_some_and(|g| {
+                !g.private
+                    && !g.closed
+                    && !g.members.contains(viewer)
+                    && !g.banned.contains(viewer)
+                    && !s.blocked.contains(&g.owner)
+            })
+    })
+}
+fn visible_feed_items(
+    s: &SocialState,
+    reveal_spoilers: bool,
+    visible: impl Fn(&SocialEvent, Option<&str>) -> bool,
+) -> Vec<FeedItem> {
     let mut items = Vec::new();
     for p in s.publications.values() {
         let e = &p.event;
@@ -1360,14 +1392,7 @@ pub fn feed(s: &SocialState, viewer: &str, reveal_spoilers: bool) -> Vec<FeedIte
         if s.blocked.contains(&e.actor) || s.hidden.contains(&e.id) || s.retracted.contains(&e.id) {
             continue;
         }
-        let visible = if let Some(id) = group_id {
-            s.groups.get(id).is_some_and(|g| {
-                !g.closed && !g.banned.contains(viewer) && g.members.contains(viewer)
-            })
-        } else {
-            e.actor == viewer || friends(s, viewer, &e.actor)
-        };
-        if !visible {
+        if !visible(e, group_id.as_deref()) {
             continue;
         }
         let spoiler_hidden = post.spoiler && !reveal_spoilers;
