@@ -19,10 +19,12 @@ ISSUED_MANIFESTS = {
     "commands/v1/manifest.json": ("command_contracts", "4b06dd67ed1ac43e55b66524eceef739deb7f43cb9f73df5ee39f19f9d86a7a9"),
     "portable/v1/manifest.json": ("portable_contracts", "c9ae6fbf19e1dfe5dab30c7f70b15a238c9b7089eba4c7d1a8c0ec0662d77c1a"),
     "portable/v2/manifest.json": ("portable_contracts", "d63ded55dd4415c0dc2b3f4e3017d84206c66421b8e08492afb98fc212aab4de"),
+    "portable/v3/manifest.json": ("portable_contracts", "260eb9b0b6c6b47d0d9efcc3f21154720d8f8b45aed3b8c9b1a2157a5963b303"),
     "providers/v1/manifest.json": ("provider_contracts", "1df9f744a1b5aea265078ea7dc33c76e55d64deff23c2aefc92fd4706caa5fb8"),
     "v0.1.0/manifest.json": ("releases", "1280c588363ecb240a8f439f835a336b84e1fc961b8f44ab264c3f34296812b4"),
     "v0.2.0/manifest.json": ("releases", "ad6e81bbafabfb4f8226b8af9a26aebf4ae1c6d686bbad53fba3d3b71bc4ea39"),
     "v0.3.0/manifest.json": ("releases", "49191c6f497cb57fab41d0dfce9fcceb7642ad4c937eaeef38f93321e0511059"),
+    "v0.4.0/manifest.json": ("releases", "6c9bac5c91b5c11782178e7a2d45dcea9c4ffa9ea918515da208c89e775dcf94"),
 }
 INDEX = b'''<!doctype html>
 <html lang="en">

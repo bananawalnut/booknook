@@ -86,6 +86,21 @@ func installNotebookContent(_ text: String, styles: [InlineStyle], in view: NSTe
 }
 final class NotebookEditorScrollView: NSScrollView {
     private var preservingCaretDuringReflow = false
+
+    override var documentView: NSView? {
+        didSet {
+            if let editor = documentView as? NotebookTextView { alignEditorWidth(editor) }
+        }
+    }
+
+    private func alignEditorWidth(_ editor: NotebookTextView) {
+        // AppKit can apply only the change in clip width to a newly attached
+        // zero-width TextKit view, leaving the text container too narrow.
+        let width = contentView.bounds.width
+        guard width.isFinite, width > 0, editor.frame.width != width else { return }
+        editor.setFrameSize(NSSize(width: width, height: editor.frame.height))
+    }
+
     override func setFrameSize(_ newSize: NSSize) {
         guard newSize.width != frame.width, !preservingCaretDuringReflow,
               let editor = documentView as? NotebookTextView else { super.setFrameSize(newSize); return }
@@ -105,6 +120,7 @@ final class NotebookEditorScrollView: NSScrollView {
                 && caret.minY >= clipped.minY && caret.maxY <= clipped.maxY
         }
         super.setFrameSize(newSize)
+        alignEditorWidth(editor)
         // Let TextKit resolve its new line geometry and perform the native
         // reveal synchronously, without queuing a later scroll over user input.
         if retainCaret { editor.scrollRangeToVisible(range) }

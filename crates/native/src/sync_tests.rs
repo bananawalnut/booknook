@@ -1230,3 +1230,183 @@ fn sync_status_projects_restored_notebook_order_reviews_without_writing_conflict
     check_prepared(&legacy, &v4_peer, "booknook.archive.v1");
     check_prepared(&v4, &legacy_peer, "booknook.archive.v4");
 }
+
+#[test]
+fn encrypted_order_overflow_is_atomic_and_the_original_packet_retries_after_covering_history() {
+    use booknook_core::{
+        Command,
+        model::{ORDER_ARCHIVE_SCHEMA, ORDER_ONTOLOGY},
+        notebook_order::NotebookOrder,
+        sync::ApprovedPacket,
+    };
+    use rusqlite::OptionalExtension;
+    use std::{collections::BTreeMap, ops::Range};
+
+    let ar = Directory::new();
+    let br = Directory::new();
+    let cr = Directory::new();
+    let a = setup(&ar);
+    let b = setup(&br);
+    let c = setup(&cr);
+    let ai = id(&a);
+    let bi = id(&b);
+    let ci = id(&c);
+    let ab_key = "7c".repeat(32);
+    let ac_key = "7d".repeat(32);
+    pair(&a, &bi, &ab_key, true);
+    pair(&b, &ai, &ab_key, true);
+    pair(&a, &ci, &ac_key, true);
+    pair(&c, &ai, &ac_key, true);
+
+    let mut seed = State::default();
+    booknook_core::apply(
+        &mut seed,
+        Command::AddBook {
+            title: "Three synthetic ordered histories".into(),
+            author: "Fixture".into(),
+            at: 1,
+        },
+    )
+    .unwrap();
+    let notebook_id = seed.notebooks.keys().next().unwrap().clone();
+    let template = &seed.notebooks[&notebook_id].blocks[0];
+    let base_id = &template.id;
+    let note_id = |index| format!("overflow-note-{index:02}");
+    let ordered_ids: Vec<_> = std::iter::once(base_id.clone())
+        .chain((0..34).map(note_id))
+        .collect();
+    let blocks: BTreeMap<_, _> = ordered_ids
+        .iter()
+        .map(|id| {
+            let mut block = template.clone();
+            block.id = id.clone();
+            block.text = format!("Text for {id}");
+            block.update = booknook_core::notebook::edit("", &block.text).unwrap();
+            (id.clone(), block)
+        })
+        .collect();
+
+    // Each side carries 17 individually admissible legacy paths. Only their
+    // pairwise union exceeds the 32-path budget. C covers all 34 paths.
+    let fork = |indices: Range<usize>| {
+        indices.fold(NotebookOrder::default(), |history, index| {
+            let branch = NotebookOrder::from_legacy(vec![base_id.clone(), note_id(index)]).unwrap();
+            history.join(&branch).unwrap()
+        })
+    };
+    let prepare_state = |order: NotebookOrder| {
+        let mut state = seed.clone();
+        state.schema = ORDER_ARCHIVE_SCHEMA.into();
+        state.ontology_version = ORDER_ONTOLOGY.into();
+        let notebook = state.notebooks.get_mut(&notebook_id).unwrap();
+        notebook.blocks = order
+            .view()
+            .unwrap()
+            .ids
+            .iter()
+            .map(|id| blocks[id].clone())
+            .collect();
+        notebook.order = Some(order);
+        booknook_core::validate(&state).unwrap();
+        state
+    };
+    let local = prepare_state(fork(0..17));
+    let incoming = prepare_state(fork(17..34));
+    let covering = prepare_state(NotebookOrder::from_legacy(ordered_ids).unwrap());
+    for (desk, root, state) in [
+        (&a, &ar, &local),
+        (&b, &br, &incoming),
+        (&c, &cr, &covering),
+    ] {
+        let path = root.0.join("seed-order.json");
+        std::fs::write(
+            &path,
+            canonical(&json!({"schema":"booknook.portable-export.v1","state":state,"assets":{}}))
+                .unwrap(),
+        )
+        .unwrap();
+        desk.restore_archive(path.to_str().unwrap().into()).unwrap();
+    }
+
+    let packet_path = exported(&b, &ai, &ab_key, &br.0.join("original-b.json"));
+    let packet_bytes = std::fs::read(&packet_path).unwrap();
+    let packet: ApprovedPacket = booknook_core::strict_parse(&packet_bytes).unwrap();
+    let batch_id = &packet.envelope.batch.id;
+    let packet_digest = digest(&canonical(&packet).unwrap());
+    let records = |desk: &Desk, peer: &str, batch: &str| {
+        let store = desk.lock().unwrap();
+        let received: Option<String> = store
+            .connection
+            .query_row(
+                "SELECT digest FROM sync_received WHERE id=?1",
+                [batch],
+                |row| row.get(0),
+            )
+            .optional()
+            .unwrap();
+        let baseline: Option<String> = store
+            .connection
+            .query_row("SELECT json FROM sync_bases WHERE peer=?1", [peer], |row| {
+                row.get(0)
+            })
+            .optional()
+            .unwrap();
+        (received, baseline.map(value))
+    };
+
+    let before = a.snapshot().unwrap();
+    let before_status = a.sync_status().unwrap();
+    let consumed = receipt_count(&a);
+    assert_eq!(records(&a, &bi, batch_id), (None, None));
+    let error = a
+        .sync_receive(packet_path.clone(), bi.clone(), ab_key.clone())
+        .expect_err("Both authenticated inputs fit, but their first union must exceed the budget");
+    assert!(error.to_string().contains("LegacyBudget"), "{error}");
+    assert_eq!(a.snapshot().unwrap(), before);
+    assert_eq!(a.sync_status().unwrap(), before_status);
+    assert_eq!(receipt_count(&a), consumed);
+    assert_eq!(records(&a, &bi, batch_id), (None, None));
+
+    drop(a);
+    let a = Desk::new(ar.path()).unwrap();
+    assert_eq!(a.snapshot().unwrap(), before);
+    assert_eq!(records(&a, &bi, batch_id), (None, None));
+    let cover_path = exported(&c, &ai, &ac_key, &cr.0.join("covering-c.json"));
+    let covering_packet: ApprovedPacket =
+        booknook_core::strict_parse(&std::fs::read(&cover_path).unwrap()).unwrap();
+    let cover_batch_id = &covering_packet.envelope.batch.id;
+    let cover_digest = digest(&canonical(&covering_packet).unwrap());
+    assert_ne!(batch_id, cover_batch_id);
+
+    let learned = value(a.sync_receive(cover_path, ci.clone(), ac_key).unwrap());
+    assert_eq!(learned["duplicate"], false);
+    assert_eq!(learned["conflicts"], 0);
+    assert_eq!(learned["state"]["notebooks"], json!(covering.notebooks));
+    let c_records = (Some(cover_digest), Some(value(c.snapshot().unwrap())));
+    assert_eq!(records(&a, &ci, cover_batch_id), c_records);
+    assert_eq!(records(&a, &bi, batch_id), (None, None));
+
+    assert_eq!(std::fs::read(&packet_path).unwrap(), packet_bytes);
+    let retried = value(
+        a.sync_receive(packet_path.clone(), bi.clone(), ab_key.clone())
+            .unwrap(),
+    );
+    assert_eq!(retried["duplicate"], false);
+    assert_eq!(retried["conflicts"], 0);
+    assert_eq!(retried["state"]["notebooks"], json!(covering.notebooks));
+    let b_records = (Some(packet_digest), Some(value(b.snapshot().unwrap())));
+    assert_eq!(records(&a, &bi, batch_id), b_records);
+    assert_eq!(records(&a, &ci, cover_batch_id), c_records);
+
+    let durable = a.snapshot().unwrap();
+    drop(a);
+    let a = Desk::new(ar.path()).unwrap();
+    assert_eq!(a.snapshot().unwrap(), durable);
+    assert_eq!(records(&a, &bi, batch_id), b_records);
+    assert_eq!(records(&a, &ci, cover_batch_id), c_records);
+    assert_eq!(receipt_count(&a), consumed);
+    assert_eq!(std::fs::read(&packet_path).unwrap(), packet_bytes);
+    let duplicate = value(a.sync_receive(packet_path, bi, ab_key).unwrap());
+    assert_eq!(duplicate["duplicate"], true);
+    assert_eq!(a.snapshot().unwrap(), durable);
+}

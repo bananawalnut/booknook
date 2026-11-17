@@ -23,11 +23,19 @@ struct InlineStyle: Equatable { var startUtf16: Int; var lengthUtf16: Int; var b
         }
         func requireVisible(_ message: String) {
             let caret = caretRect(), visible = editor.visibleRect
+            precondition(abs(editor.frame.width - scroll.contentView.bounds.width) < 0.5,
+                         "The TextKit document must track the clip width: \(editor.frame), \(scroll.contentView.bounds)")
             precondition(caret.height > 0 && [caret.minX, caret.maxX, caret.minY, caret.maxY].allSatisfy(\.isFinite)
                          && caret.minX >= visible.minX && caret.maxX <= visible.maxX
                          && caret.minY >= visible.minY && caret.maxY <= visible.maxY,
                          "\(message): caret \(caret), viewport \(visible)")
             print("\(message): caret \(caret), viewport \(visible)")
+        }
+        func frameDescription() -> String {
+            let range = editor.selectedRange()
+            let first = editor.firstRect(forCharacterRange: range, actualRange: nil)
+            let segment = editor.insertionRect(at: range.location)
+            return "offset \(range.location), editor \(editor.frame), clip \(scroll.contentView.bounds), firstRect \(first), segment \(String(describing: segment))"
         }
         func establishVisibleBaseline(_ message: String) {
             // The hidden window may have laid out its clip view but not the
@@ -36,11 +44,38 @@ struct InlineStyle: Equatable { var startUtf16: Int; var lengthUtf16: Int; var b
             guard let layout = editor.textLayoutManager, let content = layout.textContentManager else {
                 preconditionFailure("The reflow fixture must use TextKit 2")
             }
+            let selection = editor.selectedRange(), text = editor.string as NSString
+            precondition(text.length > 0 && selection == NSRange(location: text.length, length: 0))
+            let finalCharacter = text.rangeOfComposedCharacterSequence(at: text.length - 1)
             window.contentView?.layoutSubtreeIfNeeded()
             layout.ensureLayout(for: content.documentRange)
-            editor.scrollRangeToVisible(editor.selectedRange())
+            editor.scrollRangeToVisible(finalCharacter)
             layout.textViewportLayoutController.layoutViewport()
             settle()
+            if caretRect().height <= 0 || editor.visibleRect.minY == 0 {
+                // A hidden window can lay out the last fragment but leave the
+                // document frame too short for its clip view to reach it.
+                var fragment: NSRect?
+                layout.enumerateTextLayoutFragments(from: content.documentRange.endLocation,
+                                                    options: [.reverse, .ensuresLayout]) { item in
+                    fragment = item.layoutFragmentFrame
+                    return false
+                }
+                guard let fragment, fragment.height > 0, fragment.maxY.isFinite else {
+                    preconditionFailure("Missing final TextKit geometry: \(frameDescription())")
+                }
+                let bottom = fragment.maxY + editor.textContainerOrigin.y + editor.textContainerInset.height
+                if editor.frame.height < bottom {
+                    editor.setFrameSize(NSSize(width: editor.frame.width, height: ceil(bottom)))
+                }
+                let clip = scroll.contentView
+                clip.scroll(to: NSPoint(x: clip.bounds.minX, y: max(0, bottom - clip.bounds.height)))
+                scroll.reflectScrolledClipView(clip)
+                layout.textViewportLayoutController.layoutViewport()
+                settle()
+            }
+            precondition(editor.selectedRange() == selection)
+            fputs("Hidden-window caret baseline: \(frameDescription())\n", stderr)
             requireVisible(message)
         }
         let paragraph = "café 日本語 😀 e\u{301}. A reader revisits the character and keeps each interpretation. "
