@@ -1,0 +1,153 @@
+{
+  "schema": "booknook.app-only-public-preview-evidence.v2",
+  "status": "PASS_PUBLIC_ARCHIVES_AND_SIGNED_IPAD_UPDATE",
+  "observed_at": "2026-11-17T19:11:18.723243+00:00",
+  "app": {
+    "version": "0.2.1",
+    "build": "2026111708",
+    "source_commit": "7ce100326ad7d4fa480dcdefc029f9d17f220741",
+    "release_url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.8",
+    "release_id": 449077027,
+    "tag": "v0.2.1-app-preview.20261117.8",
+    "published_at": "2026-11-17T19:09:56Z"
+  },
+  "source_validation": {
+    "archive_ci": "https://github.com/bananawalnut/booknook/actions/runs/44151830535",
+    "archive_steps_passed": 9,
+    "archive_runner": "macos-15 arm64",
+    "archive_xcode": "26.3",
+    "ordinary_ci": "https://github.com/bananawalnut/booknook/actions/runs/44151787333",
+    "ordinary_job_steps_passed": {
+      "apple": 17,
+      "portable": 21
+    },
+    "artifact_id": 14360871603,
+    "artifact": {
+      "bytes": 37966730,
+      "sha256": "17c30f2d2d5ea4edfdc485ea1f8c71b5d45a2fdf12b7e17dd78a4b89f77c6ae4"
+    },
+    "independent_archive_verification_receipt_sha256": "1a0287be48810b7d17ad56aee531392d0753fde8281cb02e8b5be26246bc48ca"
+  },
+  "archive_verification": {
+    "mac": {
+      "archive": {
+        "bytes": 15016826,
+        "sha256": "d39bc11d4802fa1ab23d67fc9698cf91c3404c63a1ee9fec36b573cc7c4a40a1"
+      },
+      "tar_members": 110,
+      "bundle_files": 91,
+      "ontology_files": 83,
+      "build": "2026111708",
+      "signature": "linker-ad-hoc",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "byte-identical standalone Mach-O"
+    },
+    "ipad-sim": {
+      "archive": {
+        "bytes": 11488663,
+        "sha256": "be44f43c254e2551766ad3183f75126a665c394a5a82c6e8803c7ced21858a5b"
+      },
+      "tar_members": 107,
+      "bundle_files": 91,
+      "ontology_files": 83,
+      "build": "2026111708",
+      "signature": "linker-ad-hoc",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "byte-identical standalone Mach-O"
+    },
+    "ipad-device": {
+      "archive": {
+        "bytes": 11286118,
+        "sha256": "c72e0962d77695a5dd86e6e33d82cfd40ab66c8ae1dc87344b58a5280a5d1d7f"
+      },
+      "tar_members": 107,
+      "bundle_files": 91,
+      "ontology_files": 83,
+      "build": "2026111708",
+      "signature": "unsigned",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "unsigned"
+    }
+  },
+  "public_https": {
+    "assets": {
+      "booknook-ipad-device-arm64-development-0.2.1.tar.gz": {
+        "bytes": 11286118,
+        "sha256": "c72e0962d77695a5dd86e6e33d82cfd40ab66c8ae1dc87344b58a5280a5d1d7f"
+      },
+      "booknook-ipad-sim-arm64-development-0.2.1.tar.gz": {
+        "bytes": 11488663,
+        "sha256": "be44f43c254e2551766ad3183f75126a665c394a5a82c6e8803c7ced21858a5b"
+      },
+      "booknook-mac-arm64-development-0.2.1.tar.gz": {
+        "bytes": 15016826,
+        "sha256": "d39bc11d4802fa1ab23d67fc9698cf91c3404c63a1ee9fec36b573cc7c4a40a1"
+      },
+      "BUILD-PROVENANCE.json": {
+        "bytes": 49793,
+        "sha256": "3fac60f4f373e66bb402883f88c1d242c7915d6fb782ab799bc591a34f7175c6"
+      },
+      "README.md": {
+        "bytes": 3628,
+        "sha256": "5d9220603aa126b3205f8c232757cdc6ead66cf72d197d4815823a172ce0618c"
+      },
+      "RELEASE-MANIFEST.json": {
+        "bytes": 2113,
+        "sha256": "fa524365f6ef85b29f23e36bc26e38e8580859dd61fdd528abad25815e4e08ea"
+      },
+      "SHA256SUMS": {
+        "bytes": 503,
+        "sha256": "1793a3ab5206b97bf0a3514424c5019a4caf8515dec9fc8ec43bea52cbdb323d"
+      },
+      "VERIFICATION.json": {
+        "bytes": 120135,
+        "sha256": "a6c13934d37149f603882557d7e7d7981cbe11db98e34d82bafe93fb00817813"
+      }
+    },
+    "count": 8,
+    "bytes": 37967779,
+    "earlier_releases_with_unchanged_asset_identities": 17,
+    "receipt_sha256": "a9ac045963d7a79f461ddc85cf51e77af83c1159febb2018a15947682cd1719b"
+  },
+  "normal_physical_ipad": {
+    "previous_build": "2026111707",
+    "current_build": "2026111708",
+    "build_provenance": "Development-signed local copy of the exact verified public device archive",
+    "app_running": true,
+    "database_bytes_matched_after_install": true,
+    "desk_and_assets_preserved": true,
+    "orientation_commands": false,
+    "orientation_unchanged_in_observations": true,
+    "prior_finger_scribble_preserved": true,
+    "only_top_level_database_fields_changed_after_launch": [
+      "revision"
+    ],
+    "receipt_sha256": "afa2ab96792cfb1b20d1834f6017eb6eb16c584d69369882bd275b2dc3eb98e4",
+    "ink_receipt_sha256": "e644db0637fddfe37faa2fd2318ebd58ee24dff7a2208d8d390e4055821a03f9",
+    "scope": "In-place update and launch. No new hardware input was collected."
+  },
+  "reading_pass_validation": {
+    "linked_headless_scope": "Focused model and ordinary headless desk workflows with real local SQLite. No app windows or paired devices.",
+    "scratch_base": "08a29fa698717827e1d583135baafb072e2e068c",
+    "patch_sha256": "e88fa384a90424ded3c2a25cccbf41628c707564e1c1a8474d40411ef036579e",
+    "native_library_sha256": "f832c7a340943064b9c3c7cf7f94e83e1c33f38e9e69e75783ee0883f6c2db15",
+    "focused_and_ordinary_workflows_passed": true,
+    "receipt_sha256": "1679f1f53923da51bd8272319ada5fdbeb24c8b0142c4df3dbc33d46120b565e",
+    "observation": "The active desk selects the returned notebook ID even if another pass starts. Navigation that changes after commit keeps the created pass on disk without retargeting the reader."
+  },
+  "screenshots": {
+    "ipad_build": "2026111707",
+    "mac_build": "2026111705",
+    "scope": "Historical captures from the exact public builds named in the README."
+  },
+  "remaining_qualification": [
+    "Offline Margin order divergence",
+    "Physical Pencil, attached-keyboard composition and VoiceOver",
+    "Minimum-OS runtime",
+    "Live Kindle, Audible, and Castalia",
+    "Remote social delivery and approved device exchange"
+  ]
+}

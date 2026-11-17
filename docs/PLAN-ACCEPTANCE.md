@@ -2,6 +2,10 @@
 
 This audit keeps the original native MVP and SDK scope intact. A passing source test is evidence for the behavior it exercises, not evidence of a production account, physical device, remote deployment, or hands-on interaction. The requested production release is not complete while essential integration and physical-device gates remain open. [Validation](VALIDATION.md) records the final check results; [delivery](DELIVERY.md) names the remaining gates.
 
+## Native app 1708 delivery
+
+[Build 1708 evidence](app-2026111708-public-preview-evidence.json) records the exact public archives and downloads, the linked reading-pass checks, and an in-place physical iPad update that preserved the desk and previously saved finger Scribble. The iPad and Mac screenshots retain their separately verified capture builds.
+
 ## Reading-pass navigation
 
 The linked macOS workflow uses a real SQLite desk to start a pass while another repository handle starts a second pass. The app selects the notebook returned by its own request. Leaving the desk before command dispatch prevents the stale request. Leaving after commit keeps the new pass on reopen and preserves the current selection. The focused test and ordinary headless workflow passed with isolated stores.
