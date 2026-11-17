@@ -513,10 +513,10 @@ impl TokenSink for XhtmlSink {
                     if *hidden == name {
                         doc.hidden.pop();
                     }
-                } else if let Some(name) = allowed(name) {
-                    if let Some(index) = doc.open.iter().rposition(|tag| *tag == name) {
-                        doc.close_from(index);
-                    }
+                } else if let Some(name) = allowed(name)
+                    && let Some(index) = doc.open.iter().rposition(|tag| *tag == name)
+                {
+                    doc.close_from(index);
                 }
             }
             Token::CharacterTokens(text) if doc.hidden.is_empty() => doc.text(&text),
