@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MPL-2.0
 import SwiftUI
 
-struct SocialBook: Codable, Identifiable { let id: String; let title: String; let author: String }
+struct SocialBook: Codable, Equatable, Identifiable { let id: String; let title: String; let author: String }
 struct SocialPost: Codable { let kind: String; let book: SocialBook?; let body: String; let stars: Int?; let readingStatus: String?; let spoiler: Bool; let replyTo: String? }
 struct SocialEventModel: Decodable, Identifiable { let id: String; let actor: String; let at: UInt64; let resourceVersion: UInt64; let action: JSONValue; let delivery: JSONValue }
 struct SocialPublication: Decodable { let event: SocialEventModel; let approvedAt: UInt64 }
@@ -17,6 +17,72 @@ struct SocialBinding: Decodable, Identifiable { let holder: String; let nostrPub
 struct SocialSnapshot: Decodable { let state: SocialStateModel; let actor: String; let feed: [SocialFeedItem]; let bindings: [SocialBinding]; let pending: Int }
 struct SocialRecommendation: Decodable, Identifiable { let bookId: String; let score: Int; let reasons: [String]; var id: String { bookId } }
 struct SocialExchangeReport: Decodable { let sent: Int; let received: Int; let messages: [String] }
+struct SocialListReview {
+    let id: String
+    let owner: String
+    let version: UInt64
+
+    init(_ list: SocialList) {
+        id = list.id; owner = list.owner; version = list.version
+    }
+
+    init?(retrying event: SocialEventModel) {
+        guard let action = event.action.object, Self.requiresVersion(action),
+              let id = action["id"] as? String else { return nil }
+        self.id = id; owner = event.actor; version = event.resourceVersion
+    }
+
+    static func requiresVersion(_ action: [String: Any]) -> Bool {
+        let operation = action["op"] as? String
+        return operation == "update_list" || operation == "delete_list"
+    }
+
+    func matches(_ snapshot: SocialSnapshot) -> Bool {
+        guard let list = snapshot.state.lists[id], !list.deleted else { return false }
+        return snapshot.actor == owner && list.owner == owner && list.version == version
+    }
+
+    func matches(_ event: SocialEventModel) -> Bool {
+        event.actor == owner && event.resourceVersion == version && event.action.object?["id"] as? String == id
+    }
+}
+
+struct SocialListDraft {
+    let review: SocialListReview?
+    var name: String
+    var description: String
+    private(set) var books: [SocialBook]
+    private let originalBooks: [SocialBook]
+
+    init(_ list: SocialList? = nil) {
+        review = list.map(SocialListReview.init)
+        name = list?.name ?? ""
+        description = list?.description ?? ""
+        books = list?.books ?? []
+        originalBooks = books
+    }
+
+    func contains(_ book: SocialBook) -> Bool { books.contains { $0.id == book.id } }
+
+    func choices(local: [SocialBook]) -> [SocialBook] {
+        var seen = Set<String>()
+        return (books + originalBooks + local).filter { seen.insert($0.id).inserted }
+    }
+
+    mutating func select(_ book: SocialBook, _ selected: Bool) {
+        if selected && !contains(book) {
+            books.append(originalBooks.first { $0.id == book.id } ?? book)
+        } else if !selected {
+            books.removeAll { $0.id == book.id }
+        }
+    }
+
+    func action(id: String) throws -> [String: Any] {
+        ["op": review == nil ? "create_list" : "update_list", "id": id, "name": name,
+         "description": description, "books": try books.map { try socialObject($0) }]
+    }
+}
+
 struct SocialGroupReplyTarget: Hashable {
     let actor: String
     let groupID: String
@@ -118,13 +184,31 @@ extension DeskRepository {
         } catch { self.error = bookNookErrorMessage(error) }
     }
     @discardableResult
-    func publish(_ action: [String: Any], title: String, _ model: DeskModel, replacingDraftID: String? = nil) async -> SocialPublicationOutcome {
+    func publish(_ action: [String: Any], title: String, _ model: DeskModel, replacingDraftID: String? = nil,
+                 listReview: SocialListReview? = nil) async -> SocialPublicationOutcome {
         guard !busy else { return .notSaved }
         busy = true; error = nil; defer { busy = false }
         var outcome = SocialPublicationOutcome.notSaved
         do {
+            func listConflict() -> AuthorizationError {
+                let instruction = "Open the current list before reviewing changes again."
+                if replacingDraftID != nil || outcome != .notSaved {
+                    return .message("This shared list changed. Your saved draft was kept. " + instruction)
+                }
+                if action["op"] as? String == "delete_list" {
+                    return .message("This shared list changed. Open the current list before reviewing deletion again.")
+                }
+                return .message("This shared list changed. Your edits are still in the editor. " + instruction)
+            }
+            if SocialListReview.requiresVersion(action) {
+                guard let listReview, action["id"] as? String == listReview.id else { throw listConflict() }
+                let current = try await model.repository.socialSnapshot(reveal: revealSpoilers)
+                guard listReview.matches(current) else { throw listConflict() }
+            }
             let eventJSON = try await model.repository.socialPrepare(JSONSerialization.data(withJSONObject: action))
             let event = try socialDecode(SocialEventModel.self, eventJSON)
+            // Preparation stamps the latest native version; it must not rebase a draft.
+            if let listReview, !listReview.matches(event) { throw listConflict() }
             let rawEvent = try JSONSerialization.jsonObject(with: Data(eventJSON.utf8))
             try await model.repository.socialLocal(JSONSerialization.data(withJSONObject: ["op": "save_draft", "event": rawEvent]))
             outcome = .savedDraft(event.id)
@@ -143,6 +227,10 @@ extension DeskRepository {
                 guard target.parent(in: current) != nil else {
                     throw AuthorizationError.message("The discussion you’re replying to is no longer visible.")
                 }
+            } else if let listReview {
+                let current = try await model.repository.socialSnapshot(reveal: revealSpoilers)
+                snapshot = current
+                guard listReview.matches(current) else { throw listConflict() }
             } else {
                 await reload(model)
             }
@@ -164,7 +252,8 @@ extension DeskRepository {
     }
     func retryDraft(_ event: SocialEventModel, _ model: DeskModel) async {
         guard let action = event.action.object else { return }
-        await publish(action, title: "Publish reviewed record", model, replacingDraftID: event.id)
+        await publish(action, title: "Publish reviewed record", model, replacingDraftID: event.id,
+                      listReview: SocialListReview(retrying: event))
     }
     func bind(_ model: DeskModel) async {
         guard !busy else { return }; busy = true; error = nil; defer { busy = false }

@@ -24,8 +24,7 @@ struct SocialCommunityView: View {
     @State private var description = ""
     @State private var privateGroup = true
     @State private var selectedGroup = ""
-    @State private var selectedList = ""
-    @State private var selectedBooks = Set<String>()
+    @State private var listDraft = SocialListDraft()
     @State private var invitee = ""
     @State private var interests = ""
     @State private var bindingText = ""
@@ -212,24 +211,51 @@ struct SocialCommunityView: View {
                     HStack { Text(list.name).font(.headline); Spacer(); Text("v\(list.version)").font(.caption).foregroundStyle(.secondary) }
                     Text(list.description).foregroundStyle(.secondary)
                     ForEach(list.books) { book in Text("\(book.title) · \(book.author)").font(.callout) }
-                    if list.owner == social.actor { HStack { Button("Edit list") { selectedList = list.id; name = list.name; description = list.description; selectedBooks = Set(list.books.map(\.id)) }; Button("Delete shared list", role: .destructive) { Task { await social.publish(["op": "delete_list", "id": list.id], title: "Delete this shared reading list", model) } } }.disabled(social.busy) }
+                    if list.owner == social.actor {
+                        HStack {
+                            Button("Edit list") { listDraft = SocialListDraft(list) }
+                            Button("Delete shared list", role: .destructive) {
+                                Task {
+                                    await social.publish(["op": "delete_list", "id": list.id],
+                                                         title: "Delete this shared reading list", model,
+                                                         listReview: SocialListReview(list))
+                                }
+                            }
+                        }.disabled(social.busy)
+                    }
                     else { Text("Managed by \(socialShort(list.owner))").font(.caption) }
                 }.padding(18).background(nookAccent.opacity(0.04), in: RoundedRectangle(cornerRadius: 12))
             }
-            DisclosureGroup(selectedList.isEmpty ? "Create a shared list" : "Edit your selected list") {
+            DisclosureGroup(listDraft.review == nil ? "Create a shared list" : "Edit your selected list") {
                 VStack(alignment: .leading, spacing: 12) {
-                    TextField("List name", text: $name).textFieldStyle(.roundedBorder); TextField("Description", text: $description).textFieldStyle(.roundedBorder)
-                    ForEach(model.books) { book in Toggle(book.title, isOn: Binding(get: { selectedBooks.contains(book.id) }, set: { if $0 { selectedBooks.insert(book.id) } else { selectedBooks.remove(book.id) } })) }
-                    HStack { Button("New list instead") { selectedList = ""; name = ""; description = ""; selectedBooks = [] }; Spacer(); Button("Review & publish list") { Task { await publishList() } }.buttonStyle(.borderedProminent).disabled(social.busy || name.isEmpty || social.actor.isEmpty) }
-                }.padding(.top, 12)
+                    TextField("List name", text: $listDraft.name).textFieldStyle(.roundedBorder)
+                    TextField("Description", text: $listDraft.description).textFieldStyle(.roundedBorder)
+                    Text("Selected books keep their order. Adding a book puts it at the end.").font(.caption).foregroundStyle(.secondary)
+                    let catalog = model.books.map { SocialBook(id: $0.id, title: $0.title, author: $0.authors.joined(separator: ", ")) }
+                    ForEach(listDraft.choices(local: catalog)) { book in
+                        Toggle(book.title, isOn: Binding(get: { listDraft.contains(book) }, set: { listDraft.select(book, $0) }))
+                    }
+                    HStack {
+                        Button("New list instead") { listDraft = SocialListDraft() }
+                        Spacer()
+                        Button("Review & publish list") { Task { await publishList() } }
+                            .buttonStyle(.borderedProminent).disabled(listDraft.name.isEmpty || social.actor.isEmpty)
+                    }
+                }.padding(.top, 12).disabled(social.busy)
             }
         }
     }
     private func publishList() async {
+        let draft = listDraft
         do {
-            let id = selectedList.isEmpty ? try await model.repository.socialOwnedID() : selectedList
-            let books = model.books.filter { selectedBooks.contains($0.id) }.map { ["id": $0.id, "title": $0.title, "author": $0.authors.joined(separator: ", ")] }
-            await social.publish(["op": selectedList.isEmpty ? "create_list" : "update_list", "id": id, "name": name, "description": description, "books": books], title: "Publish this shared reading list", model)
+            let id: String
+            if let review = draft.review { id = review.id }
+            else { id = try await model.repository.socialOwnedID() }
+            let result = await social.publish(try draft.action(id: id), title: "Publish this shared reading list", model,
+                                              listReview: draft.review)
+            if result == .approved, let updated = social.snapshot?.state.lists[id] {
+                listDraft = SocialListDraft(updated)
+            }
         } catch { social.error = bookNookErrorMessage(error) }
     }
     private var groupsView: some View {

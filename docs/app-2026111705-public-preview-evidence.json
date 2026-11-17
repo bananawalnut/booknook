@@ -151,5 +151,26 @@
       "receipt_sha256": "629e8e474880cd16dbc6a817f54b4bc14cd396b26f40c50d8a0a290484668b9c",
       "scope": "Exact 1705 Release macOS native UI and SQLite readback. No publication or live audio used."
     }
+  },
+  "mac_forced_termination_recovery": {
+    "status": "PASS",
+    "build": "2026111705",
+    "source_commit": "74ddbf0f706ac342a46c8afeddc339aeca7e1156",
+    "executable_sha256": "a19d0f68f8e3e627944c8f03659bb5318c44f78b19ac9679b9cc857b39ec6dcc",
+    "test": "SIGKILL after durable edit journal write, before desk merge",
+    "read_only_observer_verified_stable_sqlite_descriptor": true,
+    "first_open_visible_unicode_exact": true,
+    "exact_persisted_text_sha256": "0590eb81f6b0bc7b1cf2be3ab5ca45f93d577fb0cebe4365118b370c2095c876",
+    "original_history_count": 1,
+    "recovered_history_count": 2,
+    "original_history_unchanged": true,
+    "new_revision_matches_exact_block_update": true,
+    "pending_edit_count_after_merge": 0,
+    "second_process_reopen_is_idempotent": true,
+    "signal_receipt_sha256": "4a50adecd9c3c6d40bf6d06bae9dbce9341e190e6a1a9cc0d7a4f58a1f2e3244",
+    "scope": "Exact released macOS app using a synthetic store. The force-kill happened after durable SQL staging. Input before staging and physical storage failures are outside the tested window.",
+    "observed_at": "2026-11-17T17:14:03.329090+00:00",
+    "verification_receipt_sha256": "554db17312117a4916e690ada107dd2ffab930f82f3ad3d4ab220d5f13fa8a6c",
+    "restart_confirmation": "The recovery instance was launched with the synthetic store explicitly selected and verified by process and database descriptor."
   }
 }

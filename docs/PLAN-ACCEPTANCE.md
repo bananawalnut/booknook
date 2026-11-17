@@ -18,6 +18,12 @@ Saving a character-card revision now captures the selected passage, time, readin
 
 A focused Native 0.2.3 check opened two separate SQLite libraries, created independent revisions of the same card, and sent the approved encrypted transfer with synthetic signing receipts. The receiving library kept both branches with their original reading positions after newer progress arrived. Reopening preserved the merged state and a duplicate transfer made no changes. Physical device exchange and live transport remain open.
 
+A forced-termination test used the exact released 1705 Mac app and a synthetic desk. The live editor journaled a Unicode edit, and a read-only observer stopped only the isolated process before the edit merged into the desk. The actual app restored the text on reopen and committed one history entry. A second reopen preserved the same text and history with an empty journal. [Mac recovery evidence](app-2026111705-public-preview-evidence.json)
+
+## Shared reading-list edits
+
+The native editor keeps the version the owner opened, alongside the original ordered book references. Changing just the name or description preserves references to books absent from the local library. Explicit additions append to the list. If another desk updates the list, the stale editor and any saved retry stop before consent. The owner can review the current version without the app silently rebasing the previous draft. A stale delete also stops before consent. The native workflow exercises these cases with two SQLite repository handles and synthetic receipts. Live relay delivery remains open.
+
 ## Native app 1704 public preview and iPad update
 
 [Build 1704 evidence](app-2026111704-public-preview-evidence.json) records three independently verified archives, eight matching public downloads, and the normal iPad update. A reader drew with a finger on 1703, and the saved stroke survived the update and relaunch. Pencil, hardware Undo/Redo, IME, VoiceOver, and minimum-OS execution remain open.

@@ -13,6 +13,7 @@ import Foundation
         Task { @MainActor in
             do {
                 if CommandLine.arguments.contains("--group-replies") { try await testGroupReplies(); exit(0) }
+                if CommandLine.arguments.contains("--shared-list-review") { try await testSharedListReview(); exit(0) }
                 if CommandLine.arguments.contains("--startup") { try await testDeskStartup(); exit(0) }
                 if CommandLine.arguments.contains("--publications") { try await testPublicationWorkflow(); exit(0) }
                 if CommandLine.arguments.contains("--source-reading-history") { try await testSourceReadingHistory(); exit(0) }
@@ -191,6 +192,7 @@ import Foundation
         try await testPublicProviderRepositoryWorkflow()
         try await testPublicationWorkflow()
         try await testGroupReplies()
+        try await testSharedListReview()
         print("Native desk workflows: duplicate-title identity, failed navigation, explicit sessions, private earlier-character-version drafts, thrown save rejection, unrated Unicode review, list edit/conflict retention, failed social retry with durable draft recovery, reopen and cancellation distinctions passed.")
     }
 
@@ -278,6 +280,88 @@ import Foundation
         precondition(!target.permitsVisibleParent(parent!, in: controller.snapshot))
         precondition(controller.snapshot?.state.drafts[retryID] != nil)
         print("Native group replies: exact parent, hidden/blocked/closed refusal, spoiler-safe consent, and denied draft retry after SQLite reopen passed.")
+    }
+
+    @MainActor static func testSharedListReview() async throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("booknook-shared-list-" + UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let model = DeskModel(repository: DeskRepository(directory: directory))
+        await model.open()
+        let issuer = try Curve25519.Signing.PrivateKey(rawRepresentation: Data(repeating: 1, count: 32))
+        let holder = try Curve25519.Signing.PrivateKey(rawRepresentation: Data(repeating: 2, count: 32))
+        var connections = ConnectionConfiguration()
+        let config = CastaliaConfiguration(issuer: "synthetic-issuer", keyId: "test",
+            issuerPublicKey: hex(issuer.publicKey.rawRepresentation), audience: "booknook-test",
+            terminalCaller: "synthetic-booknook-test", holderPublicKey: hex(holder.publicKey.rawRepresentation),
+            policyDigest: hex(SHA256.hash(data: Data("synthetic policy".utf8))),
+            credentialEndpoint: "http://127.0.0.1:65500/credential")
+        connections.castalia = config
+        try await model.repository.saveConnections(connections)
+        let id = try await model.repository.socialOwnedID()
+        let local = SocialBook(id: "local-title", title: "Z Published title", author: "Published author")
+        let missing = SocialBook(id: "external-title", title: "A External title", author: "External author")
+        let references = try [local, missing].map { try socialObject($0) }
+        try await approveFixture(["op": "create_list", "id": id, "name": "Original list", "description": "Original description",
+                                  "books": references], model: model, config: config, issuer: issuer, holder: holder)
+
+        let controller = SocialController()
+        await controller.reload(model)
+        let original = controller.snapshot!.state.lists[id]!
+        precondition(original.version == 1)
+        var draft = SocialListDraft(original)
+        draft.name = "Draft title: café 日本語"
+        draft.description = "Draft description"
+        let changedLocal = SocialBook(id: local.id, title: "Local metadata changed", author: "Local author")
+        let added = SocialBook(id: "new-title", title: "New selection", author: "New author")
+        precondition(draft.choices(local: [added, changedLocal]) == [local, missing, added])
+        let action = try draft.action(id: id)
+        let actionJSON = try socialJSON(action)
+        let expectedBooks = try socialJSON(["books": references])
+        let actualBooks = try socialJSON(["books": action["books"] as! [[String: Any]]])
+        precondition(actualBooks == expectedBooks, "A text-only edit must keep exact published references in order")
+        var changed = draft
+        changed.select(changedLocal, false); changed.select(added, true); changed.select(changedLocal, true)
+        changed.select(added, true)
+        precondition(changed.books == [missing, added, local], "Explicit changes keep survivors and append selections once")
+
+        // Real native preparation saves an unapproved v1 draft while the signer is locked.
+        let first = await controller.publish(action, title: "Review this shared list", model, listReview: draft.review)
+        guard case .savedDraft(let draftID) = first else { preconditionFailure("Current shared-list draft must be saved") }
+        precondition(controller.error?.contains("Unlock your Castalia identity") == true)
+        let stored = controller.snapshot!.state.drafts[draftID]!
+        let storedActionJSON = try socialJSON(stored.action.object!)
+        precondition(stored.resourceVersion == 1 && storedActionJSON == actionJSON)
+
+        // A different actual repository handle commits v2 before the first reader reviews again.
+        let second = DeskModel(repository: DeskRepository(directory: directory))
+        await second.open()
+        try await approveFixture(["op": "update_list", "id": id, "name": "Current list", "description": "Current description",
+                                  "books": references.reversed().map { $0 }], model: second, config: config, issuer: issuer, holder: holder)
+        let latest = try await second.repository.socialSnapshot(reveal: false)
+        precondition(latest.state.lists[id]?.version == 2)
+        let stale = await controller.publish(action, title: "Review this shared list", model, listReview: draft.review)
+        precondition(stale == .notSaved && controller.error?.contains("This shared list changed") == true)
+        precondition(controller.error?.contains("Your edits are still in the editor") == true)
+        let retainedActionJSON = try socialJSON(draft.action(id: id))
+        precondition(retainedActionJSON == actionJSON && draft.books == [local, missing])
+        await controller.retryDraft(stored, model)
+        precondition(controller.error?.contains("This shared list changed") == true)
+        precondition(controller.error?.contains("Your saved draft was kept") == true)
+        let staleDelete = await controller.publish(["op": "delete_list", "id": id], title: "Delete this shared list", model,
+                                                   listReview: SocialListReview(original))
+        precondition(staleDelete == .notSaved && controller.error?.contains("This shared list changed") == true)
+        precondition(controller.error?.contains("reviewing deletion again") == true && controller.error?.contains("draft") == false)
+        let final = try await second.repository.socialSnapshot(reveal: false)
+        precondition(final.state.revision == latest.state.revision)
+        precondition(final.state.lists[id]?.name == "Current list" && final.state.lists[id]?.books == [missing, local])
+        precondition(Set(final.state.publications.keys) == Set(latest.state.publications.keys))
+        precondition(Set(final.state.outbox.keys) == Set(latest.state.outbox.keys))
+        precondition(Set(final.state.drafts.keys) == Set(latest.state.drafts.keys))
+        let retained = final.state.drafts[draftID]!
+        let retryActionJSON = try socialJSON(retained.action.object!)
+        precondition(retained.resourceVersion == 1 && retryActionJSON == actionJSON)
+        precondition(model.authorization.pending == nil)
+        print("Native shared lists: ordered public references, explicit selection, stale edit/delete/retry refusal, and exact durable draft retention passed.")
     }
 
     private static func hex(_ bytes: some Sequence<UInt8>) -> String { bytes.map { String(format: "%02x", $0) }.joined() }
