@@ -4,10 +4,10 @@
   "app_version": "0.2.1",
   "normal_app_targets": true,
   "alternate_ui_host": false,
-  "sample_data": "Mac uses The Pocket Orchard EPUB and two synthetic notes. iPad uses The Quiet Library EPUB and three synthetic notes.",
+  "sample_data": "Mac uses The Pocket Orchard EPUB and two synthetic notes. iPad uses The Quiet Library EPUB, a Margin note and a character card.",
   "private_user_data_published": false,
   "physical_ipad_capture": false,
-  "raw_ipad_framebuffer_sha256": "8865a5bdf67f7b764ca8b96146f7c839fa22917736cdeceabde51687f4daffca",
+  "raw_ipad_framebuffer_sha256": "d50456fc4edf14ea955b0de1d2917288852524e07b1beb0b3345df595c239af4",
   "captures": [
     {
       "platform": "macOS",
@@ -31,22 +31,22 @@
       "platform": "iPad",
       "image": "ipad-current.png",
       "format": "PNG",
-      "sha256": "8865a5bdf67f7b764ca8b96146f7c839fa22917736cdeceabde51687f4daffca",
+      "sha256": "d50456fc4edf14ea955b0de1d2917288852524e07b1beb0b3345df595c239af4",
       "width": 2048,
       "height": 2732,
       "bundle_id": "org.booknook.ipad",
       "configuration": "Release",
-      "executable_sha256": "01e09cc7daa393cb0e5ea076600dd3ba85b0a95183b65c9ceb57e4559ba3521f",
+      "executable_sha256": "c8bb2b9646aff3e8e35fa7c35dde7d18cdb3ec27e8832b8e64f7dccc172da31c",
       "environment": "iPad Air 13-inch (M2), iPadOS 18.6 Simulator, portrait",
-      "app_source_revision": "08a29fa698717827e1d583135baafb072e2e068c",
-      "capture_receipt_sha256": "8abfbc7ba7f2f7ab7a68ac871e56c3bd03d96b654f95097745a4e968a3a42935",
+      "app_source_revision": "0fc3deb127258e5ef712f24c6d4d3e4fc954d125",
+      "capture_receipt_sha256": "cd1a0b04cb15143c399a8ca37ada9180d15ba4a3f68f4e647793e4b73e05809f",
       "image_processing": "Original simctl framebuffer bytes.",
-      "app_build": "2026111707",
+      "app_build": "2026111710",
       "captured_on": "2026-11-17"
     }
   ],
   "source_equivalence": "Each executable matches the public Release archive for the build recorded with its capture.",
   "scope": "Actual Release apps using isolated synthetic workspaces. Physical install and hardware qualification have separate evidence.",
-  "latest_public_build": "2026111708",
-  "latest_public_source_revision": "7ce100326ad7d4fa480dcdefc029f9d17f220741"
+  "latest_public_build": "2026111710",
+  "latest_public_source_revision": "0fc3deb127258e5ef712f24c6d4d3e4fc954d125"
 }

@@ -6,9 +6,11 @@ A native reading notebook for macOS and iPad, backed by open Rust, Swift and WAS
 
 The implementation includes an offline reading desk, rich TextKit editing, EPUB, PDF, and legacy MOBI6 reading and annotation, character interpretation history, imports, Castalia consent, approved encrypted device transfers, Nostr social workflows, and reviewed RSS/Atom settings with offline publications. **It is not a qualified production release:** live Kindle/Audible/Castalia access, current physical input/accessibility, remote social/device sync and minimum-OS runtime checks remain open. Unavailable integrations return explicit errors. See [delivery status](docs/DELIVERY.md), the [full-plan acceptance matrix](docs/PLAN-ACCEPTANCE.md), [validation](docs/VALIDATION.md), the [decision log](docs/DECISIONS.md), the [UX review](docs/UX-REVIEW.md), and [DevGraph work tracking](docs/DEVGRAPH.md).
 
+**[App preview 0.2.1, build 2026111710](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.10)** preserves Margin order across offline edits and keeps the Mac insertion caret visible when resizing the notebook. The normal iPad update kept its existing library and saved finger Scribble. All eight public downloads matched their checksums. [Build 1710 evidence](docs/app-2026111710-public-preview-evidence.json)
+
 **[App preview 0.2.1, build 2026111708](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.8)** keeps a newly created reading pass tied to its original book, even if you switch desks while saving. The normal iPad update preserved the library and prior finger Scribble. All eight public downloads matched their checksums. [Build 1708 evidence](docs/app-2026111708-public-preview-evidence.json)
 
-**[App preview 0.2.1, build 2026111707](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.7)** gives short Character History labels their surrounding text and preserves the book order in reviewed shared-list edits. All eight public downloads matched their checksums. The locally signed 1707 update preserved prior finger Scribble on the normal iPad app. Concurrent offline Margin additions can still appear in different orders after sync. [Build 1707 evidence](docs/app-2026111707-public-preview-evidence.json)
+**[App preview 0.2.1, build 2026111707](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.7)** gives short Character History labels their surrounding text and preserves the book order in reviewed shared-list edits. All eight public downloads matched their checksums. The locally signed 1707 update preserved prior finger Scribble on the normal iPad app. Concurrent offline Margin additions could appear in different orders after sync in that build. [Build 1707 evidence](docs/app-2026111707-public-preview-evidence.json)
 
 **[App preview 0.2.1, build 2026111705](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.5)** preserves the passage, reading pass, and available book and audio positions when you save a character-card revision. The normal iPad app updated to 1705 with its saved finger-drawn Scribble preserved. All eight public downloads matched their checksums. [Build 1705 evidence](docs/app-2026111705-public-preview-evidence.json)
 
@@ -52,9 +54,9 @@ The earlier iPad acceptance check [updated the normal app in place to 0.2.1 (202
 
 **iPad — reading desk**
 
-![Book Nook iPad reading desk in portrait, with three text notes alongside an EPUB](docs/screenshots/ipad-current.png)
+![Book Nook iPad reading desk with a Margin note and character card alongside an EPUB](docs/screenshots/ipad-current.png)
 
-The iPad Simulator image shows published Release build **2026111707**. The Mac image shows the earlier published build **2026111705**. Both use sample EPUBs. [Capture details](docs/screenshots/README.md)
+The iPad Simulator image shows published Release build **2026111710**. The Mac image shows the earlier published build **2026111705**. Both use sample EPUBs. [Capture details](docs/screenshots/README.md)
 
 ## Run the native apps
 
