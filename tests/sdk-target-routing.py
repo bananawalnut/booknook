@@ -220,7 +220,7 @@ class RoutingFixture:
         tsc.chmod(0o755)
         for name in ["PackagedSDKSmoke.cjs","PackagedSDKSmoke.mjs","PackagedSDKTypes.mts",
                      "PackagedSDKTypes.cts","castalia-generic-fixture.cjs","provider-service-acceptance.cjs",
-                     "notebook-order-sdk.cjs",
+                     "notebook-order-sdk.cjs","public-group-preview-sdk.cjs",
                      "PackagedCastaliaSmoke.swift","PackagedProviderSmoke.swift",
                      "PackagedNotebookSmoke.swift","PackagedFeedSmoke.swift","fixtures/provider-sample.epub",
                      "sdk-storage.cjs","wasm-parity.cjs","test-conformance.cjs","castalia-generic-parity.cjs",
