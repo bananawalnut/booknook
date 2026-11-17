@@ -47,6 +47,23 @@ func bookNookErrorMessage(_ error: Error) -> String { error.localizedDescription
         precondition(fields[2].values == ["The librarian: Uncertain trust"])
         precondition(fields[3].values == original.observations && fields[4].values == original.questions)
         precondition(fields[5].values == [quote + "\nchapter-3.xhtml"], "History must not truncate a supporting passage")
+        let stairs = JSONValue(object: ["kind": "text", "quote": "s", "prefix": "At the Stair",
+                                       "suffix": "Jon carried the old map upstairs.By dusk, the windows hid more t",
+                                       "resource": "stairs.xhtml"])
+        precondition(readingPositionDescription(stairs) == "Book passage: At the Stairs",
+                     "A precise anchor at the end of a heading needs readable local context")
+        var selectedStairs = Interpretation(); selectedStairs.passages = [stairs]
+        precondition(characterHistoryFields(selectedStairs, nameForCharacter: { $0 }).last?.values == ["s\nstairs.xhtml"],
+                     "A selected supporting quote remains the exact selection")
+        let shortUnicode = JSONValue(object: ["kind": "text", "quote": "🌿", "prefix": "Before ", "suffix": " café 日本語"])
+        precondition(readingPositionDescription(shortUnicode) == "Book passage: Before 🌿 café 日本語")
+        let mature = JSONValue(object: ["kind": "text", "quote": quote, "prefix": "Excluded ", "suffix": " excluded"])
+        precondition(readingPositionDescription(mature) == "Book passage: \(quote.prefix(120))")
+        let noContext = JSONValue(object: ["kind": "text", "quote": "s"])
+        precondition(readingPositionDescription(noContext) == "Book passage: s")
+        let longContext = String(repeating: "日", count: 140)
+        let bounded = JSONValue(object: ["kind": "text", "quote": "🌿", "prefix": "近", "suffix": longContext])
+        precondition(readingPositionDescription(bounded).dropFirst("Book passage: ".count).count <= 120)
         var newer = original; newer.questions = ["What changed?"]
         _ = characterHistoryFields(newer, nameForCharacter: { $0 })
         precondition(fields[4].values == ["Why did she return?"], "An earlier interpretation remains independently readable")
@@ -63,6 +80,6 @@ func bookNookErrorMessage(_ error: Error) -> String { error.localizedDescription
         precondition(allPassages.count == 2)
         precondition(allPassages.contains { $0.object?["quote"] as? String == quote })
         precondition(allPassages.contains { $0.object?["quote"] as? String == "Other reader's evidence" })
-        print("Notebook workflows: failed-save draft retention, busy duplicate suppression, retry acknowledgement, all character-history fields, untruncated Unicode passages, and independent earlier versions, explicit conflict starting-version choice, reviewed-parent isolation and all-source passage preservation passed.")
+        print("Notebook workflows: failed-save draft retention, busy duplicate suppression, retry acknowledgement, all character-history fields, bounded position excerpts, untruncated Unicode passages, and independent earlier versions, explicit conflict starting-version choice, reviewed-parent isolation and all-source passage preservation passed.")
     }
 }

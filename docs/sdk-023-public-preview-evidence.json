@@ -1,0 +1,179 @@
+{
+  "schema": "booknook.sdk-public-preview-evidence.v2",
+  "status": "PASS_PUBLIC_DOWNLOADS_AND_SDK_CONSUMERS",
+  "observed_at": "2026-11-17T17:02:18.186697+00:00",
+  "sdk_version": "0.2.3",
+  "release": {
+    "id": 448940775,
+    "source_commit": "51c6a54108940fe0a4c715a344f66f7b691e1be5",
+    "tag": "v0.2.3-sdk-preview.20261117",
+    "url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.3-sdk-preview.20261117",
+    "published_at": "2026-11-17T17:02:01Z"
+  },
+  "hosted": {
+    "run_id": 44128399968,
+    "run_attempt": 1,
+    "url": "https://github.com/bananawalnut/booknook/actions/runs/44128399968",
+    "jobs": {
+      "portable": {
+        "job_id": 134198426397,
+        "steps_passed": 10,
+        "artifact_id": 14348787704,
+        "transport": {
+          "bytes": 5075080,
+          "sha256": "4d13c88f925346b724dd43ec9fafb82f6390140be44c2807cfd5e92fe9cb9287"
+        },
+        "independent_receipt_sha256": "58bee8ff17cbd35eb8085de2af6171ea73fb0efa0cec1cdd2538c42821f9661a"
+      },
+      "apple": {
+        "job_id": 134198426015,
+        "steps_passed": 8,
+        "artifact_id": 14348759773,
+        "transport": {
+          "bytes": 146808066,
+          "sha256": "4f91d55dd487fe924f4cc98b16c99097d1c8b41060ff55d4ad67f3d7524c6f9e"
+        },
+        "independent_receipt_sha256": "0d53790747178dc9bffd13e5d900bbf2a60239aed47f12e2d7eba0536c30ab62"
+      }
+    },
+    "portable": "Exact archive extraction, Rust workspace tests and examples, and installed npm smoke/type checks.",
+    "rust_test_counts": {
+      "passed": 325,
+      "failed": 0,
+      "ignored": 5
+    },
+    "apple": "Exact extracted arm64 Swift runtime consumer and three arm64 XCFramework slices."
+  },
+  "packages": {
+    "booknook-connectors-0.2.3.crate": {
+      "bytes": 72897,
+      "sha256": "8a5f8706886b6b5e9897c758ef153230e1512b65d4e922a64f67ec750bcefc69"
+    },
+    "booknook-core-0.2.3.crate": {
+      "bytes": 182980,
+      "sha256": "84ece76b5260a57a60351135be8b0d4855861729a55210afa4744cb53a1e2dd2"
+    },
+    "booknook-native-0.2.3.crate": {
+      "bytes": 203466,
+      "sha256": "31c352049e521b6d628cfe135e233e18cda8a3592f5f089f7e90aacf01f8e29c"
+    },
+    "booknook-sdk-0.2.3.tgz": {
+      "bytes": 4574590,
+      "sha256": "a490c96a8c468188d4ad2f47173eab5098e610b2a6b45e26e57315c0a5af283b"
+    },
+    "booknook-swift-sdk-0.2.3.tar.gz": {
+      "bytes": 146806754,
+      "sha256": "0d12c1c563f472124f4374d09ab9958d38a182542c8987b9950cd78ab431f593"
+    },
+    "booknook-wasm-0.2.3.crate": {
+      "bytes": 38584,
+      "sha256": "8c46755186331198698787c6478bc1d0ad79a358c0e5fdcaf2320628c9f19924"
+    }
+  },
+  "independent_consumers": {
+    "npm_node_log_sha256": "9f51b1d7e06bc290d08d6cc551a13dd593651d1826e349d7c93036f0586f978f",
+    "npm_web_target_log_sha256": "d12964373575630f514bd9f30aa9c102c3fd0fb0b738a47bed35a2cecc57cfbd",
+    "chromium_case_count": 2,
+    "chromium_rejections": 2,
+    "chromium_fixture_source": "74ddbf0f706ac342a46c8afeddc339aeca7e1156",
+    "chromium_receipt_sha256": "a9d27382df00ab958a72b893b268d1f4f246db3833346fe7d141a1508179cc0e",
+    "chromium_verified_runtime_sha256": {
+      "package/pkg/web/booknook_wasm.js": "ef18f6529e9100b57e3e570113f871b47d6d9c69c2d2243777430adca091ecce",
+      "package/pkg/web/booknook_wasm_bg.wasm": "469edfae71ac6839f35c2c7ab1fbc9cbb42308a6e29169dd15f2301ee67eca36",
+      "package/pkg/nodejs/booknook_wasm.js": "3fbb45d3ace8db0ff50e6aeacbe7ddacdced010041a6f350b548505d8a036f50",
+      "package/pkg/nodejs/booknook_wasm_bg.wasm": "469edfae71ac6839f35c2c7ab1fbc9cbb42308a6e29169dd15f2301ee67eca36"
+    },
+    "npm_archive_comparison_receipt_sha256": "2cba725773ca515634fda1dbfa8bdb32f84c6e82abc75153b9d66854c6b145d1",
+    "native_card_sync_test_log_sha256": "785044cfd41ab8ef055273b69e6d1d08cf7ad12a2279fe9761ef3c810e24408c",
+    "swift_mac_consumer_sha256": "0eeee29e67c1862f047eb9c4c5ee7b0bcc1ba7d4007950d9577dd2d9799cf558",
+    "swift_mac_consumer": "PASS exact extracted Swift SDK preserved card context, rejected a mismatched pass, and reopened its SQLite desk.",
+    "swift_arm64_slices": {
+      "macos-arm64": {
+        "bytes": 149858264,
+        "sha256": "f832c7a340943064b9c3c7cf7f94e83e1c33f38e9e69e75783ee0883f6c2db15"
+      },
+      "ios-arm64": {
+        "bytes": 149433968,
+        "sha256": "dc5cb177d44b810b177cc635e98b5c6421fa3a3f3e7cb35033f7ad8c3f8906be"
+      },
+      "ios-arm64-simulator": {
+        "bytes": 149397984,
+        "sha256": "8d88d669095d959fe808015b3d1dee6df7a7068c1923247a91834a2d291c867b"
+      }
+    }
+  },
+  "public_https": {
+    "count": 15,
+    "bytes": 151964093,
+    "earlier_releases_preserved": 15,
+    "assets": {
+      "booknook-connectors-0.2.3.crate": {
+        "bytes": 72897,
+        "sha256": "8a5f8706886b6b5e9897c758ef153230e1512b65d4e922a64f67ec750bcefc69"
+      },
+      "booknook-core-0.2.3.crate": {
+        "bytes": 182980,
+        "sha256": "84ece76b5260a57a60351135be8b0d4855861729a55210afa4744cb53a1e2dd2"
+      },
+      "booknook-native-0.2.3.crate": {
+        "bytes": 203466,
+        "sha256": "31c352049e521b6d628cfe135e233e18cda8a3592f5f089f7e90aacf01f8e29c"
+      },
+      "booknook-sdk-0.2.3.tgz": {
+        "bytes": 4574590,
+        "sha256": "a490c96a8c468188d4ad2f47173eab5098e610b2a6b45e26e57315c0a5af283b"
+      },
+      "booknook-swift-sdk-0.2.3.tar.gz": {
+        "bytes": 146806754,
+        "sha256": "0d12c1c563f472124f4374d09ab9958d38a182542c8987b9950cd78ab431f593"
+      },
+      "booknook-wasm-0.2.3.crate": {
+        "bytes": 38584,
+        "sha256": "8c46755186331198698787c6478bc1d0ad79a358c0e5fdcaf2320628c9f19924"
+      },
+      "BUILD-PROVENANCE-apple.json": {
+        "bytes": 990,
+        "sha256": "daf97506fce24de6dd79c89088f7cdc4c40130fa4c6f52984da85cf9b01e158b"
+      },
+      "BUILD-PROVENANCE-portable.json": {
+        "bytes": 1669,
+        "sha256": "097c4c806c58e95e4a3d6cf4980b61528c4e74310fea32577126589f84d21ffc"
+      },
+      "CONSUMER-VERIFICATION.json": {
+        "bytes": 3555,
+        "sha256": "aeb7203221fa762c056da04e87969113501b8aa82ffa015698ec63e8b59f2b53"
+      },
+      "DEPENDENCY-LICENSES.csv": {
+        "bytes": 45827,
+        "sha256": "a74d9a967ea063e59977de2313f2fe8c34c63bc2448eea5af1a19f9deeb13b5c"
+      },
+      "LICENSE-APACHE": {
+        "bytes": 11326,
+        "sha256": "fabba0cb7d00a4b3211fdc13699223ab2d22f88678ccd608494cf2b332b903e9"
+      },
+      "LICENSE-MIT": {
+        "bytes": 1079,
+        "sha256": "e4c16e07e31d3fdbba827f245f39f51ee0871898f1585653129bcbe3c63a7410"
+      },
+      "LICENSE-MPL-2.0": {
+        "bytes": 16727,
+        "sha256": "66a3107d5ad6a058aab753eaac2047ccb2ed0e39465dd0fe5844da3e300d5172"
+      },
+      "RELEASE-MANIFEST.json": {
+        "bytes": 2383,
+        "sha256": "0ed7427d48fede4af2728c07ad91fb9cf6cbdc35cd55789f725a429393f54dcd"
+      },
+      "SHA256SUMS": {
+        "bytes": 1266,
+        "sha256": "390d64428086a87671959c8a36d7cd32aa2f81b130f7c25a549129b81bb575e3"
+      }
+    }
+  },
+  "related_app": {
+    "version": "0.2.1",
+    "build": "2026111705",
+    "source_commit": "74ddbf0f706ac342a46c8afeddc339aeca7e1156",
+    "release_url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.5"
+  },
+  "scope": "Independent browser cases used byte-identical WebAssembly from the earlier package, which differs only in README. The native encrypted transfer used synthetic signing receipts. Live authority, remote physical-device exchange and exact minimum-OS runtime remain open."
+}

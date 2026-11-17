@@ -2,13 +2,17 @@
 
 This audit keeps the original native MVP and SDK scope intact. A passing source test is evidence for the behavior it exercises, not evidence of a production account, physical device, remote deployment, or hands-on interaction. The requested production release is not complete while essential integration and physical-device gates remain open. [Validation](VALIDATION.md) records the final check results; [delivery](DELIVERY.md) names the remaining gates.
 
+## SDK 0.2.3 public and cross-runtime checkpoint
+
+[SDK 0.2.3 delivery evidence](sdk-023-public-preview-evidence.json) binds the four Rust crates, npm package and Swift SDK to their exact build source and 15 matching public downloads. The independently extracted Mac Swift SDK retained the card context and rejected a conflicting pass before reopening the same desk. Node and Chromium agreed with the underlying native results. iPad SDK slices were inspected separately from macOS execution.
+
 ## SDK 0.2.2 public and cross-runtime checkpoint
 
 [SDK 0.2.2 delivery evidence](sdk-022-public-preview-evidence.json) records independent Rust archive export, installed Node and Chrome WASM validation, and Swift restore and reopen against the exact released packages. The test covers a synthetic legacy MOBI6 and compares the original source and regenerated XHTML. All 17 public checksums passed. The macOS runtime acceptance and the iPadOS library slices have distinct evidence.
 
 ## Native app 1705 and SDK 0.2.3 checkpoint
 
-[Build 1705 evidence](app-2026111705-public-preview-evidence.json) records the three verified Apple archives, eight public downloads, current native screenshots and the normal iPad update. The original finger-drawn Scribble remained intact through both updates.
+[Build 1705 evidence](app-2026111705-public-preview-evidence.json) records the three verified Apple archives, eight public downloads, current native screenshots and the normal iPad update. The original finger-drawn Scribble remained intact through both updates. A later hands-on Mac check saved distinct card interpretations in successive chapters and recovered their original positions in SQLite. The released app showed a one-character position label. The 1706 source now uses surrounding text for short labels, with a focused regression for the observed anchor.
 
 Saving a character-card revision now captures the selected passage, time, reading pass, and available ebook and audio observations at the same point. The linked Swift workflow checks an unacknowledged reader observation, fresher ebook and audio updates, and a late branch outside the reviewed parents. The original context and independent branch survive SQLite reopen. The native portable archive regression also verifies export and restore. Older save commands and stored card versions use their existing contracts. [Versioned command schema and fixture](../ontology/commands/v1/manifest.json)
 

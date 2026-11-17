@@ -139,6 +139,17 @@
     "independent_native_sync": "Two Desk instances backed by separate SQLite stores exchanged actual ciphertext approved with synthetic signing receipts. Both branches, three versions and their reading context survived reopen. Duplicate replay was idempotent.",
     "focused_test_log_sha256": "785044cfd41ab8ef055273b69e6d1d08cf7ad12a2279fe9761ef3c810e24408c",
     "focused_test_source_commit": "46a7c9a530fef6d5f00351db650b559efa121ff2",
-    "scope": "The encrypted test linked the unchanged 0.2.3 production Native library. Live Castalia approval and remote device exchange remain open."
+    "scope": "The encrypted test linked the unchanged 0.2.3 production Native library. Live Castalia approval and remote device exchange remain open.",
+    "released_mac_followup": {
+      "observed_at": "2026-11-17T16:58:05.441971+00:00",
+      "observations": [
+        "Opened the EPUB on the actual app and added a character card from the Margin.",
+        "Saved two distinct interpretations in successive chapters and expanded both history entries.",
+        "Read SQLite independently and verified parent links, one reading pass and distinct saved chapter locations."
+      ],
+      "short_label_defect": "One history row displays only the single-character anchor quote s, while the saved prefix completes the phrase At the Stairs.",
+      "receipt_sha256": "629e8e474880cd16dbc6a817f54b4bc14cd396b26f40c50d8a0a290484668b9c",
+      "scope": "Exact 1705 Release macOS native UI and SQLite readback. No publication or live audio used."
+    }
   }
 }

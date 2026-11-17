@@ -224,17 +224,6 @@ struct CardEditor: View {
 }
 
 
-func readingPositionDescription(_ value: JSONValue) -> String {
-    guard let location = value.object else { return "Saved position" }
-    switch location["kind"] as? String {
-    case "text": return "Book passage: \((location["quote"] as? String ?? "").prefix(120))"
-    case "page": return "PDF page \((location["page"] as? NSNumber)?.stringValue ?? "—")"
-    case "audio":
-        let seconds = ((location["milliseconds"] as? NSNumber)?.intValue ?? 0) / 1000
-        return "Audio \(seconds / 3600):\(String(format: "%02d", (seconds / 60) % 60)):\(String(format: "%02d", seconds % 60))\((location["chapter"] as? String).map { " · " + $0 } ?? "")"
-    default: return "\(location["provider"] as? String ?? "Source"): \(location["value"] as? String ?? "Saved location")"
-    }
-}
 func readingAlignmentDescription(_ value: JSONValue) -> String {
     switch value.object?["status"] as? String {
     case "confirmed": return "edition alignment confirmed"

@@ -37,6 +37,32 @@ private func characterHistoryPassage(_ value: JSONValue) -> String {
     }
 }
 
+func readingPositionDescription(_ value: JSONValue) -> String {
+    guard let location = value.object else { return "Saved position" }
+    switch location["kind"] as? String {
+    case "text":
+        let quote = location["quote"] as? String ?? ""
+        let minimumExcerptLength = 12
+        let quoteLength = quote.prefix(minimumExcerptLength).count
+        guard (1..<minimumExcerptLength).contains(quoteLength) else { return "Book passage: \(quote.prefix(120))" }
+        // Saved context can run across text nodes without a space. Use the
+        // ending of the leading text alone when it already makes an excerpt.
+        let contextLimit = (120 - quoteLength) / 2
+        let before = (location["prefix"] as? String ?? "").suffix(contextLimit)
+        let leading = "\(before)\(quote)"
+        let leadingExcerpt = leading.trimmingCharacters(in: .whitespacesAndNewlines)
+        if leadingExcerpt.count >= minimumExcerptLength { return "Book passage: \(leadingExcerpt)" }
+        let after = (location["suffix"] as? String ?? "").prefix(contextLimit)
+        let excerpt = "\(leading)\(after)".trimmingCharacters(in: .whitespacesAndNewlines)
+        return "Book passage: \(excerpt.isEmpty ? quote : excerpt)"
+    case "page": return "PDF page \((location["page"] as? NSNumber)?.stringValue ?? "—")"
+    case "audio":
+        let seconds = ((location["milliseconds"] as? NSNumber)?.intValue ?? 0) / 1000
+        return "Audio \(seconds / 3600):\(String(format: "%02d", (seconds / 60) % 60)):\(String(format: "%02d", seconds % 60))\((location["chapter"] as? String).map { " · " + $0 } ?? "")"
+    default: return "\(location["provider"] as? String ?? "Source"): \(location["value"] as? String ?? "Saved location")"
+    }
+}
+
 /// The reviewed parent set is fixed when the editor opens. A later incoming
 /// interpretation remains a conflict until it is separately reviewed.
 struct CharacterReconciliation {
