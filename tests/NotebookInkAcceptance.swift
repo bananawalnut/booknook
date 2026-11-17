@@ -3,7 +3,7 @@ import Foundation
 
 @MainActor func testNotebookInkWorkflow(_ model: DeskModel) async throws {
     try await testNotebookCaptureContextJournal()
-    try await testNoteFacesAndOrigins(model)
+    let ordered = try await testNoteFacesAndOrigins(model)
     let strokes: [[String: Any]] = [["color": "#234e45", "width": 3.0,
         "points": [["x": 40.0, "y": 50.0, "pressure": 0.5, "time": 0.0],
                    ["x": 120.0, "y": 90.0, "pressure": 0.8, "time": 0.1]]]]
@@ -90,16 +90,33 @@ import Foundation
     defer { try? FileManager.default.removeItem(at: exported) }
     try await model.repository.export(to: exported)
     let archive = try JSONSerialization.jsonObject(with: Data(contentsOf: exported)) as! [String: Any]
-    precondition((archive["state"] as? [String: Any])?["schema"] as? String == "booknook.archive.v3")
+    guard let archivedState = archive["state"] as? [String: Any],
+          let archivedNotebooks = archivedState["notebooks"] as? [String: [String: Any]],
+          let archivedOrder = archivedNotebooks[ordered.notebookID]?["order"] as? NSDictionary else {
+        throw CocoaError(.coderReadCorrupt)
+    }
+    precondition(archive["schema"] as? String == "booknook.portable-export.v1")
+    precondition(archivedState["schema"] as? String == "booknook.archive.v4")
+    precondition(archivedState["ontology_version"] as? String == "0.4.0")
     let restoredDirectory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
     defer { try? FileManager.default.removeItem(at: restoredDirectory) }
     let restoreDesk = try Desk(directory: restoredDirectory.path)
     let decoder = JSONDecoder(); decoder.keyDecodingStrategy = .convertFromSnakeCase
-    let restored = try decoder.decode(DeskSnapshot.self, from: Data(try restoreDesk.restoreArchive(path: exported.path).utf8))
+    let restoredBytes = Data(try restoreDesk.restoreArchive(path: exported.path).utf8)
+    let restored = try decoder.decode(DeskSnapshot.self, from: restoredBytes)
+    let restoredState = try JSONSerialization.jsonObject(with: restoredBytes) as? [String: Any]
+    let restoredNotebooks = restoredState?["notebooks"] as? [String: [String: Any]]
+    precondition((restoredNotebooks?[ordered.notebookID]?["order"] as? NSDictionary) == archivedOrder)
+    let orderedBlocks = restored.notebooks[ordered.notebookID]?.blocks
+    precondition(orderedBlocks?.map(\.id) == ordered.blockIDs)
+    precondition(orderedBlocks?.last?.face == "whiteboard")
     let restoredBlock = restored.notebooks[notebook.id]!.blocks[0]
     precondition(restoredBlock.ink!.versions.map(\.id) == after.ink!.versions.map(\.id))
     precondition(restoredBlock.text == after.text && restoredBlock.ink!.transcriptions[0].inkVersionId == inkID)
-    print("Notebook ink: failed async save/retry, ordered snapshots, erasure history, stable row session, drain capture, separate reviewed transcript, bounded OCR raster, durable reopen and portable v3 export/reimport passed. Synthetic strokes; actual Pencil and handwriting recognition not qualified.")
+    precondition(restoredBlock.ink!.versions[0].strokes == after.ink!.versions[0].strokes &&
+                 restoredBlock.ink!.versions[0].nativeDrawing == after.ink!.versions[0].nativeDrawing)
+    precondition(restoredBlock.ink!.transcriptions[0].text == after.ink!.transcriptions[0].text)
+    print("Notebook ink: failed async save/retry, ordered snapshots, erasure history, stable row session, drain capture, separate reviewed transcript, bounded OCR raster, durable reopen and portable v4 export/reimport with exact order history passed. Synthetic strokes; actual Pencil and handwriting recognition not qualified.")
 }
 
 /// A real journal round trip must replay capture-time context, even if the same
@@ -177,7 +194,7 @@ import Foundation
     print("Notebook capture context: immutable page/audio observations and audio metadata, signed whiteboard origin, erasure parents and native bytes survive failed write, exact-ID retry and private-journal reopen; old empty context remains unavailable.")
 }
 
-@MainActor func testNoteFacesAndOrigins(_ model: DeskModel) async throws {
+@MainActor func testNoteFacesAndOrigins(_ model: DeskModel) async throws -> (notebookID: String, blockIDs: [String]) {
     let result = try await model.perform(["op": "add_book", "title": "A note in context", "author": "Synthetic QA", "at": 100])
     let bookID = result!.object!["book_id"] as! String
     try await model.selectBook(bookID)
@@ -237,4 +254,5 @@ import Foundation
     precondition(restored[0].ink!.versions[0].canvasSpace == space && restored[0].ink!.versions[0].nativeDrawing == "AQID")
     precondition(restored[0].note!.created.positions.contains { ($0.object?["page"] as? NSNumber)?.intValue == 3 })
     print("Note model: empty flips stay pending, first Unicode input origin survives coalescing/page changes, independent audiobook context preserved, tool-start drawing context immutable, world-origin ink/prose/order retained through flip and reopen, explicit new whiteboard creation recorded.")
+    return (notebook.id, ids + [added])
 }
