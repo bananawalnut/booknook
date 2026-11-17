@@ -287,16 +287,42 @@ extension DeskRepository {
         do {
             var candidates: [String: [String: Any]] = [:]
             var display: [String: SocialBook] = [:]
-            for book in model.books { candidates[book.id] = ["book_id": book.id, "title": book.title, "subjects": book.subjects]; display[book.id] = SocialBook(id: book.id, title: book.title, author: book.authors.joined(separator: ", ")) }
+            for book in model.books {
+                let subjects = book.subjects.lazy.compactMap { recommendationRequestText($0, byteLimit: 1_000) }
+                candidates[book.id] = ["book_id": book.id, "title": recommendationRequestText(book.title, byteLimit: 4_000) ?? "Untitled book",
+                                       "subjects": Array(subjects.prefix(100))]
+                display[book.id] = SocialBook(id: book.id, title: book.title, author: book.authors.joined(separator: ", "))
+            }
             for record in snapshot?.state.publications.values ?? Dictionary<String, SocialPublication>().values {
                 guard record.event.delivery.object?["kind"] as? String == "public", snapshot?.state.retracted.contains(record.event.id) != true, snapshot?.state.blocked.contains(record.event.actor) != true else { continue }
-                if let post = record.event.action.object?["post"] as? [String: Any], let book = post["book"] as? [String: Any], let id = book["id"] as? String { if candidates[id] == nil { candidates[id] = ["book_id": id, "title": book["title"] as? String ?? id, "subjects": []]; display[id] = SocialBook(id: id, title: book["title"] as? String ?? id, author: book["author"] as? String ?? "") } }
+                guard let post = record.event.action.object?["post"] as? [String: Any],
+                      let book = post["book"] as? [String: Any],
+                      let id = book["id"] as? String, candidates[id] == nil else { continue }
+                let title = book["title"] as? String ?? id
+                candidates[id] = ["book_id": id, "title": recommendationRequestText(title, byteLimit: 4_000) ?? "Untitled book", "subjects": []]
+                display[id] = SocialBook(id: id, title: title, author: book["author"] as? String ?? "")
             }
             catalog = display
             recommendations = try await model.repository.socialRecommendations(candidates: JSONSerialization.data(withJSONObject: Array(candidates.values)), excluded: JSONSerialization.data(withJSONObject: model.books.filter { $0.shelf == "read" }.map(\.id)))
             recommendationsLoaded = true
         } catch { recommendationError = bookNookErrorMessage(error); recommendations = [] }
     }
+}
+
+// The provider accepts nonblank, control-free text under a field-specific UTF-8 limit.
+private func recommendationRequestText(_ text: String, byteLimit: Int) -> String? {
+    var projected = ""
+    var byteCount = 0
+    for scalar in text.unicodeScalars {
+        let allowed: Unicode.Scalar = scalar.properties.generalCategory == .control ? " " : scalar
+        if byteCount == 0 && allowed.properties.isWhitespace { continue }
+        let nextByteCount = byteCount + String(allowed).utf8.count
+        guard nextByteCount <= byteLimit else { break }
+        projected.unicodeScalars.append(allowed)
+        byteCount = nextByteCount
+    }
+    let trimmed = projected.trimmingCharacters(in: .whitespacesAndNewlines)
+    return trimmed.isEmpty ? nil : trimmed
 }
 
 /// Castalia's display contract excludes control/bidi characters. Render them visibly and

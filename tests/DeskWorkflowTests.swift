@@ -16,6 +16,7 @@ import Foundation
                 if CommandLine.arguments.contains("--group-replies") { try await testGroupReplies(); exit(0) }
                 if CommandLine.arguments.contains("--shared-list-review") { try await testSharedListReview(); exit(0) }
                 if CommandLine.arguments.contains("--reading-pass-navigation") { try await testReadingPassNavigation(); exit(0) }
+                if CommandLine.arguments.contains("--recommendation-titles") { try await testRecommendationTitleProjection(); exit(0) }
                 if CommandLine.arguments.contains("--startup") { try await testDeskStartup(); exit(0) }
                 if CommandLine.arguments.contains("--publications") { try await testPublicationWorkflow(); exit(0) }
                 if CommandLine.arguments.contains("--source-reading-history") { try await testSourceReadingHistory(); exit(0) }
@@ -288,6 +289,7 @@ import Foundation
         try await testCompanionCatalogImportWorkflow()
         try await testCastaliaProfileImportWorkflow()
         try await testPublicProviderRepositoryWorkflow()
+        try await testRecommendationTitleProjection()
         try await testPublicationWorkflow()
         try await testGroupReplies()
         try await testSharedListReview()

@@ -2,6 +2,64 @@
 import Foundation
 import WebKit
 
+@MainActor func testRecommendationTitleProjection() async throws {
+    let root = FileManager.default.temporaryDirectory.appendingPathComponent("booknook-recommendation-titles-\(UUID().uuidString)")
+    try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: root) }
+
+    let multiline = "First line\nSecond line\tby the lake"
+    let oversized = String(repeating: "é", count: 1_999) + "🌿 over the provider limit"
+    let controlOnly = "\u{0001}"
+    let expected = "The Green Wood"
+    let csv = """
+        Book Id,Title,Author,Exclusive Shelf
+        1,"\(multiline)",A,read
+        2,\(expected),B,to-read
+        3,\(oversized),C,read
+        4,\(controlOnly),D,read
+
+        """
+    let fixture = root.appendingPathComponent("catalog.csv")
+    try csv.write(to: fixture, atomically: true, encoding: .utf8)
+    let repository = DeskRepository(directory: root.appendingPathComponent("desk"))
+    let model = DeskModel(repository: repository)
+    await model.open()
+    model.accept(try await repository.importCatalogFile(fixture, format: "goodreads"))
+    precondition(Set(model.books.map(\.title)) == Set([multiline, oversized, controlOnly, expected]))
+    let match = model.books.first { $0.title == expected }!
+    try await model.perform(["op": "set_book_subjects", "book_id": match.id, "subjects": ["nature"]])
+
+    let social = SocialController()
+    await social.local(["op": "set_subjects", "subjects": ["nature"]], model)
+    precondition(social.error == nil)
+    let readIDs = try JSONSerialization.data(withJSONObject: model.books.filter { $0.shelf == "read" }.map(\.id))
+    for title in [multiline, oversized, controlOnly] {
+        let candidates = model.books.filter { $0.title == title || $0.id == match.id }.map {
+            ["book_id": $0.id, "title": $0.title, "subjects": $0.subjects]
+        }
+        let raw = try JSONSerialization.data(withJSONObject: candidates)
+        do {
+            _ = try await repository.socialRecommendations(candidates: raw, excluded: readIDs)
+            preconditionFailure("Unprojected title unexpectedly passed the provider")
+        } catch {
+            precondition(bookNookErrorMessage(error).contains("Invalid provider operation"))
+        }
+    }
+
+    let subjects = ["nature", "wood\tgrain", "\u{0001}"]
+    try await model.perform(["op": "set_book_subjects", "book_id": match.id, "subjects": subjects])
+    await social.recommend(model)
+    precondition(social.recommendationError == nil && social.recommendations.map(\.bookId) == [match.id])
+    precondition(social.recommendations[0].reasons == ["Matches your interest in nature"])
+    let originalTitles = Set([multiline, oversized, controlOnly, expected])
+    precondition(Set(social.catalog.values.map(\.title)) == originalTitles)
+    let reopened = DeskRepository(directory: root.appendingPathComponent("desk"))
+    let (state, _) = try await reopened.open()
+    precondition(Set(state.books.values.map(\.title)) == originalTitles)
+    precondition(Set(state.books[match.id]!.subjects) == Set(subjects))
+    print("Goodreads metadata projection preserves original titles and subjects and restores unrelated offline recommendations with reasons.")
+}
+
 @MainActor func testPublicProviderRepositoryWorkflow() async throws {
     let root = FileManager.default.temporaryDirectory.appendingPathComponent("booknook-provider-app-\(UUID().uuidString)")
     try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
