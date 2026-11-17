@@ -31,6 +31,8 @@ jobs:
           sudo apt-get install -y clang llvm
       - name: Package and exercise the installed Rust and npm SDKs
         env:
+          CC: clang
+          CXX: clang++
           CC_wasm32_unknown_unknown: clang
           AR_wasm32_unknown_unknown: llvm-ar
         run: |
