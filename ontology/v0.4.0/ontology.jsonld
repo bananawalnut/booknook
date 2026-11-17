@@ -1,0 +1,35 @@
+{
+  "@context": {
+    "bn": "urn:booknook:ontology:",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+  },
+  "@id": "urn:booknook:ontology:release:0.4.0",
+  "@type": "owl:Ontology",
+  "owl:versionInfo": "0.4.0",
+  "owl:imports": [
+    {
+      "@id": "urn:booknook:ontology:release:0.3.0"
+    },
+    {
+      "@id": "https://zenith-research.ca/ontology/v0.6.0/ontology.jsonld"
+    }
+  ],
+  "@graph": [
+    {
+      "@id": "bn:NotebookOrder",
+      "@type": "owl:Class",
+      "rdfs:comment": "Private ordering evidence for stable blocks in one notebook, separate from the current projection and capture observations."
+    },
+    {
+      "@id": "bn:NotebookAppend",
+      "@type": "owl:Class",
+      "rdfs:comment": "An immutable placement anchor and captured predecessor frontier for a stable new block."
+    },
+    {
+      "@id": "bn:NotebookOrderReview",
+      "@type": "owl:Class",
+      "rdfs:comment": "An explicit choice over complete checked historical legacy-order evidence and the reviewed heads. Other interpretations remain recoverable."
+    }
+  ]
+}

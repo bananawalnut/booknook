@@ -2,7 +2,7 @@
 use crate::{Error, Result, canonical, digest, history, model::*};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -117,11 +117,8 @@ pub fn reconcile(base: Option<&State>, local: &State, incoming: &State) -> Resul
         crate::validate(base)?;
     }
     let mut state = local.clone();
-    if incoming.schema == NOTE_ARCHIVE_SCHEMA {
-        crate::notes::promote(&mut state);
-    } else if incoming.schema == INK_ARCHIVE_SCHEMA && state.schema != NOTE_ARCHIVE_SCHEMA {
-        state.schema = INK_ARCHIVE_SCHEMA.into();
-        state.ontology_version = INK_ONTOLOGY.into();
+    if let Some(version) = incoming.archive_version() {
+        state.promote_archive(version);
     }
     let mut conflicts = vec![];
     macro_rules! records {
@@ -185,11 +182,40 @@ pub fn reconcile(base: Option<&State>, local: &State, incoming: &State) -> Resul
             }
         }
     }
+    let mut provenance_materialized = false;
     for (id, b) in &incoming.notebooks {
         if let Some(a) = state.notebooks.get_mut(id) {
             if a.book_id != b.book_id || a.pass_id != b.pass_id {
                 return Err(Error::Conflict("Notebook identity changed".into()));
             }
+            let versioned = a.order.is_some() || b.order.is_some();
+            let left =
+                crate::notebook_order::snapshot(a).map_err(crate::notebook_order::invalid_order)?;
+            let right =
+                crate::notebook_order::snapshot(b).map_err(crate::notebook_order::invalid_order)?;
+            let mut order = left
+                .join(&right)
+                .map_err(crate::notebook_order::invalid_order)?;
+            // A genuinely common prior legacy order is evidence too, provided no payload
+            // would need to be resurrected to materialize it.
+            let old = base.and_then(|s| s.notebooks.get(id));
+            if !versioned && let Some(old) = old.filter(|notebook| notebook.order.is_none()) {
+                let available: BTreeSet<_> = a
+                    .blocks
+                    .iter()
+                    .chain(&b.blocks)
+                    .map(|block| &block.id)
+                    .collect();
+                if old.blocks.iter().all(|block| available.contains(&block.id)) {
+                    order = order
+                        .join(
+                            &crate::notebook_order::snapshot(old)
+                                .map_err(crate::notebook_order::invalid_order)?,
+                        )
+                        .map_err(crate::notebook_order::invalid_order)?;
+                }
+            }
+            let retain = versioned || crate::notebook_order::requires_provenance(&order);
             for block in &b.blocks {
                 match a.blocks.iter_mut().find(|known| known.id == block.id) {
                     Some(known) => {
@@ -203,6 +229,9 @@ pub fn reconcile(base: Option<&State>, local: &State, incoming: &State) -> Resul
                     None => a.blocks.push(block.clone()),
                 }
             }
+            crate::notebook_order::materialize(a, order, retain)
+                .map_err(crate::notebook_order::invalid_order)?;
+            provenance_materialized |= retain;
             for revision in &b.revisions {
                 if let Some(known) = a.revisions.iter().find(|known| known.id == revision.id) {
                     if known != revision {
@@ -217,6 +246,9 @@ pub fn reconcile(base: Option<&State>, local: &State, incoming: &State) -> Resul
         } else {
             state.notebooks.insert(id.clone(), b.clone());
         }
+    }
+    if provenance_materialized {
+        state.promote_archive(ArchiveVersion::Order);
     }
     for (id, b) in &incoming.cards {
         let merged = match state.cards.get(id) {

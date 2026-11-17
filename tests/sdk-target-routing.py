@@ -107,11 +107,12 @@ elif name == "node":
     assert Path(args[0]).is_file()
     if Path(args[0]).resolve().parent == root / "tests":
         no_facade = ["wasm-parity.cjs", "test-conformance.cjs"]
-        feed = ["feed-sdk-parity.cjs", "feed-source-sdk.cjs", "feed-xml-sdk.cjs"]
+        direct_wasm = ["notebook-order-sdk.cjs", "feed-sdk-parity.cjs",
+                       "feed-source-sdk.cjs", "feed-xml-sdk.cjs"]
         if Path(args[0]).name not in no_facade:
             assert Path(args[-1]) == target / "sdk-check/index.js", args
             assert Path(args[-1]).is_file()
-        if Path(args[0]).name in feed:
+        if Path(args[0]).name in direct_wasm:
             assert Path(args[1]).is_file()
     else:
         assert Path(args[0]).parent == target / "sdk-package-check/npm"
@@ -219,6 +220,7 @@ class RoutingFixture:
         tsc.chmod(0o755)
         for name in ["PackagedSDKSmoke.cjs","PackagedSDKSmoke.mjs","PackagedSDKTypes.mts",
                      "PackagedSDKTypes.cts","castalia-generic-fixture.cjs","provider-service-acceptance.cjs",
+                     "notebook-order-sdk.cjs",
                      "PackagedCastaliaSmoke.swift","PackagedProviderSmoke.swift",
                      "PackagedNotebookSmoke.swift","PackagedFeedSmoke.swift","fixtures/provider-sample.epub",
                      "sdk-storage.cjs","wasm-parity.cjs","test-conformance.cjs","castalia-generic-parity.cjs",
@@ -226,6 +228,7 @@ class RoutingFixture:
                      "feed-source-sdk.cjs","feed-xml-sdk.cjs","FeedSDKTypes.mts",
                      "FeedSourceSDKTypes.mts","FeedXMLSDKTypes.mts"]:
             self.write("tests/" + name, "synthetic fixture\n")
+        self.write("crates/core/tests/fixtures/notebook-order.json", "synthetic fixture\n")
         for name in ["Package.swift","Sources/BookNookServices/BookNookProvider.swift",
                      "Sources/BookNookServices/BookNookNotebook.swift",
                      "Sources/CastaliaNative/CastaliaSession.swift",
@@ -291,6 +294,9 @@ class TargetRoutingTests(unittest.TestCase):
                 r = f.run("package-typescript.sh")
                 self.assertEqual(r.returncode, 0, r.stderr)
                 self.assertTrue((f.target / f"packages/booknook-sdk-{VERSION}.tgz").is_file())
+                installed_check = f.target / "sdk-package-check/npm"
+                self.assertTrue((installed_check / "notebook-order-sdk.cjs").is_file())
+                self.assertTrue((installed_check / "notebook-order.json").is_file())
                 npm = [c for c in f.commands() if c["tool"] == "npm"]
                 self.assertTrue(all(c["npm_cache"] == str(f.target / "npm-package-cache") for c in npm))
                 if mode != "default":
@@ -306,6 +312,8 @@ class TargetRoutingTests(unittest.TestCase):
             r = f.run("package-swift.sh", "--use-built")
             self.assertEqual(r.returncode, 0, r.stderr)
             self.assertTrue((f.target / f"packages/booknook-swift-sdk-{VERSION}.tar.gz").is_file())
+            fixtures = f.target / "sdk-package-check/swift/fixtures"
+            self.assertTrue((fixtures / "notebook-order.json").is_file())
             self.assertFalse(any(c["tool"] == "xcodebuild" for c in f.commands()))
             self.assertFalse((f.root / "target").exists())
 
@@ -367,6 +375,12 @@ class TargetRoutingTests(unittest.TestCase):
                 self.assertTrue((f.target / "debug/booknook").is_file())
                 self.assertTrue((f.target / "debug/examples/contract-probe").is_file())
                 self.assertTrue((f.target / "debug/examples/portable-fixture").is_file())
+                order_checks = [c["args"][1] for c in f.commands() if c["tool"] == "node"
+                                and c["args"][0] == "tests/notebook-order-sdk.cjs"]
+                self.assertEqual(order_checks, [
+                    "sdk/typescript/pkg/nodejs/booknook_wasm.js",
+                    "sdk/typescript/pkg/web/booknook_wasm.js",
+                ])
                 if mode != "default":
                     self.assertFalse((f.root / "target").exists())
 

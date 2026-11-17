@@ -10,7 +10,10 @@ const require = createRequire(import.meta.url);
 const {genericFixture}=require('./castalia-generic-fixture.cjs');
 const {runProviderAcceptance}=require('./provider-service-acceptance.cjs');
 await initWeb({module_or_path: await readFile(require.resolve('@booknook/sdk/wasm/booknook_wasm_bg.wasm'))});
+const {runNotebookOrderSmoke}=require('./notebook-order-sdk.cjs');
+const notebookOrderCorpus = require('./notebook-order.json');
 for (const core of [nodeCore, webCore]) {
+  await runNotebookOrderSmoke(core, sdk, notebookOrderCorpus);
   console.log(await runProviderAcceptance(sdk,core));
   const f=genericFixture();
   assert.equal(verifyCastaliaReceipt(core,f.request,f.presentation,f.expectedRequest,f.disclosure,f.policy,f.now).holder_public_key,f.policy.holder_public_key);

@@ -290,3 +290,37 @@ fn foreign_json_is_strictly_parsed_and_semantically_validated() {
     assert_eq!(host.controls.lock().unwrap().saves, 0);
     assert_eq!(host.stored().revision, 0);
 }
+
+#[test]
+fn ordered_notebook_review_reads_the_host_without_mutating_it() {
+    let host = FileHost::new();
+    let engine = NotebookEngine::with_storage(Box::new(host.clone())).unwrap();
+    assert_eq!(engine.notebook_order_reviews().unwrap(), "[]");
+    engine.execute(command("Two readings")).unwrap();
+    let created = host.stored();
+    let id = created.notebooks.keys().next().unwrap().clone();
+    engine
+        .execute(serde_json::json!({"op":"add_block","notebook_id":id,"at":2}).to_string())
+        .unwrap();
+    let left = host.stored();
+    let mut right = left.clone();
+    right.notebooks.get_mut(&id).unwrap().blocks.reverse();
+    let merged = booknook_core::reconcile::reconcile(None, &left, &right)
+        .unwrap()
+        .state;
+    host.write(&merged).unwrap();
+    let before = std::fs::read(host.directory.join("state.json")).unwrap();
+    let saves = host.controls.lock().unwrap().saves;
+    let reviews: serde_json::Value =
+        serde_json::from_str(&engine.notebook_order_reviews().unwrap()).unwrap();
+    let reviews = reviews.as_array().unwrap();
+    assert_eq!(reviews.len(), 1);
+    assert_eq!(reviews[0]["notebook_id"], id);
+    assert_eq!(reviews[0]["heads"], serde_json::json!([]));
+    assert_eq!(reviews[0]["choices"].as_array().unwrap().len(), 2);
+    assert_eq!(
+        std::fs::read(host.directory.join("state.json")).unwrap(),
+        before
+    );
+    assert_eq!(host.controls.lock().unwrap().saves, saves);
+}

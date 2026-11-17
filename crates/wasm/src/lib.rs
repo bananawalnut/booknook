@@ -45,6 +45,23 @@ fn bridge<T: serde::Serialize>(result: booknook_core::Result<T>) -> Result<Strin
         .and_then(|value| Ok(serde_json::to_string(&value)?))
         .map_err(|e| JsValue::from_str(&e.to_string()))
 }
+/// Read complete, current note-order choices without changing the portable state.
+#[wasm_bindgen]
+pub fn notebook_order_reviews(state_json: &str) -> Result<String, JsValue> {
+    let run = || -> booknook_core::Result<String> {
+        let state = booknook_core::strict_parse(state_json.as_bytes())?;
+        booknook_core::validate(&state)?;
+        let reviews = booknook_core::notebook_order::unresolved_reviews(&state)?;
+        let json = serde_json::to_string(&reviews)?;
+        if json.len() > booknook_core::MAX_JSON_BYTES {
+            return Err(booknook_core::Error::Invalid(
+                "Notebook order reviews exceed the 128 MiB response limit".into(),
+            ));
+        }
+        Ok(json)
+    };
+    run().map_err(|e| JsValue::from_str(&e.to_string()))
+}
 /// Same three-way private reconciliation used by the native encrypted transport.
 #[wasm_bindgen]
 pub fn reconcile_states(

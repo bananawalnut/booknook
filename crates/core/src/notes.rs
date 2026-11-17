@@ -2,8 +2,7 @@
 use crate::{Error, Result, model::*};
 
 pub fn promote(state: &mut State) {
-    state.schema = NOTE_ARCHIVE_SCHEMA.into();
-    state.ontology_version = NOTE_ONTOLOGY.into();
+    state.promote_archive(ArchiveVersion::Notes);
 }
 pub fn capture(state: &State, notebook: &Notebook) -> CapturedReadingContext {
     let observations = crate::latest_positions(state, &notebook.pass_id);

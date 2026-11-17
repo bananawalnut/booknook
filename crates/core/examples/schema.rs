@@ -15,6 +15,8 @@ fn main() {
         "state": schemars::schema_for!(booknook_core::model::State),
         "command": schemars::schema_for!(booknook_core::Command),
         "card-context-command": schemars::schema_for!(booknook_core::notebook_command::CardContextCommand),
+        "notebook-order-command": schemars::schema_for!(booknook_core::notebook_command::NotebookOrderCommand),
+        "pending-notebook-order-review": schemars::schema_for!(booknook_core::notebook_order::PendingNotebookOrderReview),
         "castalia-provider-connection": schemars::schema_for!(booknook_core::castalia_connections::ProviderConnection),
         "castalia-native-authority-profile": schemars::schema_for!(booknook_core::castalia_connections::NativeAuthorityProfile),
         "connections": schemars::schema_for!(booknook_core::settings::ConnectionSettings),

@@ -81,12 +81,9 @@ fn require(ok: bool, message: &str) -> Result<()> {
     }
 }
 pub fn validate(state: &State) -> Result<()> {
-    require(
-        (state.schema == SCHEMA && state.ontology_version == ONTOLOGY)
-            || (state.schema == INK_ARCHIVE_SCHEMA && state.ontology_version == INK_ONTOLOGY)
-            || (state.schema == NOTE_ARCHIVE_SCHEMA && state.ontology_version == NOTE_ONTOLOGY),
-        "Unsupported archive/ontology version",
-    )?;
+    let version = state
+        .archive_version()
+        .ok_or_else(|| Error::Invalid("Unsupported archive/ontology version".into()))?;
     require(!state.local_reader.is_empty(), "Missing local attribution")?;
     for (id, b) in &state.books {
         require(id == &b.id && !b.title.trim().is_empty(), "Invalid book")?;
@@ -168,11 +165,11 @@ pub fn validate(state: &State) -> Result<()> {
             require(ids.insert(&b.id) && !b.id.is_empty(), "Duplicate block ID")?;
             if let Some(ink) = &b.ink {
                 require(
-                    state.schema == INK_ARCHIVE_SCHEMA || state.schema == NOTE_ARCHIVE_SCHEMA,
+                    version >= ArchiveVersion::Ink,
                     "Notebook ink requires archive.v2 / ontology 0.2.0",
                 )?;
                 require(
-                    state.schema == NOTE_ARCHIVE_SCHEMA
+                    version >= ArchiveVersion::Notes
                         || ink.versions.iter().all(|v| v.canvas_space.is_none()),
                     "Whiteboard coordinates require archive.v3 / ontology 0.3.0",
                 )?;
@@ -180,7 +177,7 @@ pub fn validate(state: &State) -> Result<()> {
             }
             if let Some(note) = &b.note {
                 require(
-                    state.schema == NOTE_ARCHIVE_SCHEMA,
+                    version >= ArchiveVersion::Notes,
                     "Note metadata requires archive.v3 / ontology 0.3.0",
                 )?;
                 crate::notes::validate(state, n, note)?;
@@ -190,6 +187,15 @@ pub fn validate(state: &State) -> Result<()> {
                     && crate::notebook::styles(&b.update)? == b.styles,
                 "Notebook text disagrees with CRDT state",
             )?;
+        }
+        if let Some(order) = &n.order {
+            require(
+                version == ArchiveVersion::Order,
+                "Notebook order requires archive.v4 / ontology 0.4.0",
+            )?;
+            order
+                .validate_projection(n.blocks.iter().map(|block| &block.id))
+                .map_err(crate::notebook_order::invalid_order)?;
         }
         for r in &n.revisions {
             require(ids.contains(&r.block_id), "Revision has no block")?;

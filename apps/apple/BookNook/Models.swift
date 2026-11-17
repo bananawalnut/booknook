@@ -251,6 +251,12 @@ actor DeskRepository {
     private var observedReadingPositions: [String: PositionObservation] = [:]
     private var positionRequests: [String: UUID] = [:]
     private var pendingNoteCreations: [String: NotebookNoteCreation] = [:]
+    private struct OrderedNoteAppend {
+        let blockID: String
+        let command: [String: Any]
+    }
+    private var pendingNoteAppends: [String: OrderedNoteAppend] = [:]
+    private var noteAppendTasks: [String: Task<String, Error>] = [:]
     var readerRecoverySessions: [ReaderInkSession] { readerInkSessions.values.filter { $0.pendingCount > 0 && $0.error != nil }.sorted { ($0.passID, $0.assetFingerprint) < ($1.passID, $1.assetFingerprint) } }
     @Published var gates: [ReleaseGate] = []
     @Published var selection: [String: Any]?
@@ -523,16 +529,36 @@ actor DeskRepository {
         return creation
     }
     @discardableResult func createNote(notebook: String, face: String = "text") async throws -> String {
-        guard let pass = state?.notebooks[notebook]?.passId else { throw CocoaError(.fileReadUnknown) }
-        let at = UInt64(Date().timeIntervalSince1970)
-        let context = try captureReadingContext(passID: pass)
-        let command: [String: Any] = ["op": "add_block", "notebook_id": notebook, "face": face,
-            "at": at, "capture_context": try context.dictionary]
-        try await drainSaves(allowJournaledInk: true)
-        let result = try await perform(command)
-        guard let id = result?.object?["block_id"] as? String else { throw CocoaError(.coderReadCorrupt) }
-        notebookScrollTarget = id
-        return id
+        let key = editorKey(notebook, face)
+        if let active = noteAppendTasks[key] { return try await active.value }
+        let intent: OrderedNoteAppend
+        if let pending = pendingNoteAppends[key] {
+            intent = pending
+        } else {
+            guard let visible = state?.notebooks[notebook] else { throw CocoaError(.fileReadUnknown) }
+            let context = try captureReadingContext(passID: visible.passId)
+            let blockID = UUID().uuidString.lowercased().replacingOccurrences(of: "-", with: "")
+            let command: [String: Any] = [
+                "op": "append_ordered_note", "notebook_id": notebook, "block_id": blockID,
+                "visible_block_ids": visible.blocks.map(\.id), "at": Int(Date().timeIntervalSince1970),
+                "face": face, "capture_context": try context.dictionary,
+            ]
+            intent = OrderedNoteAppend(blockID: blockID, command: command)
+            pendingNoteAppends[key] = intent
+        }
+        let append = Task { @MainActor in
+            defer { self.noteAppendTasks.removeValue(forKey: key) }
+            try await self.drainSaves(allowJournaledInk: true)
+            let result = try await self.perform(intent.command)
+            guard result?.object?["block_id"] as? String == intent.blockID else {
+                throw CocoaError(.coderReadCorrupt)
+            }
+            self.pendingNoteAppends.removeValue(forKey: key)
+            if self.selectedNotebookId == notebook { self.notebookScrollTarget = intent.blockID }
+            return intent.blockID
+        }
+        noteAppendTasks[key] = append
+        return try await append.value
     }
     func setNoteFace(notebook: String, block: String, face: String) async throws {
         let at = UInt64(Date().timeIntervalSince1970)

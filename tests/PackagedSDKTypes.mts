@@ -38,6 +38,15 @@ const archive: PortableArchive = validatePortableArchive(core, '{"schema":"bookn
 const portableJSON: string = roundtripPortableArchive(core, encodePortableArchive(core,archive));
 void portableJSON;
 
+import {notebookOrderReviews, type NotebookOrderCommand, type PendingNotebookOrderReview} from '@booknook/sdk';
+const reviews: PendingNotebookOrderReview[] = notebookOrderReviews(core, archive.state);
+declare const review: PendingNotebookOrderReview;
+const settleOrder: NotebookOrderCommand = {
+  op:'review_notebook_order', notebook_id:review.notebook_id, review_id:'review',
+  evidence:review.evidence, heads:review.heads, selected:reviews[0].choices[0],
+};
+await desk.execute(settleOrder);
+
 import {type CapturedReadingContext, type NoteCreation, type NoteMetadata, type CanvasSpace} from '@booknook/sdk';
 const captured: CapturedReadingContext = {pass_id:'known-pass',positions:[],position_observations:[]};
 const firstInput: NoteCreation = {at:3,capture_context:captured};

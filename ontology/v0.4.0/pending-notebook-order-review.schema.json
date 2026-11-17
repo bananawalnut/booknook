@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "choices": {
+      "items": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "evidence": {
+      "type": "string"
+    },
+    "heads": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "legacy_orders": {
+      "items": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "notebook_id": {
+      "type": "string"
+    },
+    "provisional_legacy_order": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "notebook_id",
+    "evidence",
+    "heads",
+    "legacy_orders",
+    "choices",
+    "provisional_legacy_order"
+  ],
+  "title": "PendingNotebookOrderReview",
+  "type": "object",
+  "$id": "urn:booknook:schema:0.4.0:pending-notebook-order-review"
+}

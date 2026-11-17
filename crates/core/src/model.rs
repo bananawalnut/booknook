@@ -9,6 +9,46 @@ pub const INK_ARCHIVE_SCHEMA: &str = "booknook.archive.v2";
 pub const INK_ONTOLOGY: &str = "0.2.0";
 pub const NOTE_ARCHIVE_SCHEMA: &str = "booknook.archive.v3";
 pub const NOTE_ONTOLOGY: &str = "0.3.0";
+pub const ORDER_ARCHIVE_SCHEMA: &str = "booknook.archive.v4";
+pub const ORDER_ONTOLOGY: &str = "0.4.0";
+
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+pub(crate) enum ArchiveVersion {
+    Base,
+    Ink,
+    Notes,
+    Order,
+}
+
+impl ArchiveVersion {
+    const fn names(self) -> (&'static str, &'static str) {
+        match self {
+            Self::Base => (SCHEMA, ONTOLOGY),
+            Self::Ink => (INK_ARCHIVE_SCHEMA, INK_ONTOLOGY),
+            Self::Notes => (NOTE_ARCHIVE_SCHEMA, NOTE_ONTOLOGY),
+            Self::Order => (ORDER_ARCHIVE_SCHEMA, ORDER_ONTOLOGY),
+        }
+    }
+}
+impl State {
+    pub(crate) fn archive_version(&self) -> Option<ArchiveVersion> {
+        use ArchiveVersion::*;
+        [Base, Ink, Notes, Order].into_iter().find(|version| {
+            version.names() == (self.schema.as_str(), self.ontology_version.as_str())
+        })
+    }
+
+    pub(crate) fn promote_archive(&mut self, requested: ArchiveVersion) {
+        if self
+            .archive_version()
+            .is_some_and(|current| current < requested)
+        {
+            let (schema, ontology) = requested.names();
+            self.schema = schema.into();
+            self.ontology_version = ontology.into();
+        }
+    }
+}
 pub const NOTE_SCHEMA: &str = "booknook.note.v1";
 pub const NOTEBOOK_INK_SCHEMA: &str = "booknook.notebook-ink.v1";
 
@@ -294,6 +334,14 @@ pub struct Notebook {
     pub pass_id: String,
     pub blocks: Vec<Block>,
     pub revisions: Vec<NotebookRevision>,
+
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::notebook_order::deserialize_optional_order"
+    )]
+    #[schemars(with = "crate::notebook_order::NotebookOrder")]
+    pub order: Option<crate::notebook_order::NotebookOrder>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema, PartialEq)]

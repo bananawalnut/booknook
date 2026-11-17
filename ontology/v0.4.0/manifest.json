@@ -1,0 +1,32 @@
+{
+  "schema": "booknook.ontology-manifest.v1",
+  "version": "0.4.0",
+  "namespace": "urn:booknook:ontology:",
+  "castalia": {
+    "version": "0.6.0",
+    "canonical_base_url": "https://zenith-research.ca/ontology/v0.6.0",
+    "bundle_digest": "11d670a57b2052b4de00509559d081b524bf953c6da2544a25f33976857f8f4f"
+  },
+  "artifacts": [
+    {
+      "path": "conformance.json",
+      "sha256": "5c08f68c3a61bf7901c7bd4f3cb1a72103b1e7a0674166827474b41298461258"
+    },
+    {
+      "path": "notebook-order-command.schema.json",
+      "sha256": "75e4282427dc2f21f6c198b63462f2040a43d605b1e76d5208606dc757f35b34"
+    },
+    {
+      "path": "ontology.jsonld",
+      "sha256": "f095c2163e367df52f646624224e195c1ca527783c1f442dd075768340cdf401"
+    },
+    {
+      "path": "pending-notebook-order-review.schema.json",
+      "sha256": "4fbc6b0920ed9ab713ec8142dbdd0d82725f787336af88c305af313184d2f3af"
+    },
+    {
+      "path": "state.schema.json",
+      "sha256": "3285dbc996ccfbb4663a2b4614958b7da37b48e34e031299d46a862e2da6b169"
+    }
+  ]
+}

@@ -22,6 +22,8 @@ sdk/typescript/node_modules/.bin/tsc --target es2022 --module commonjs --moduleR
   --outDir "$target_directory/sdk-check" sdk/typescript/index.ts
 node tests/sdk-storage.cjs "$target_directory/sdk-check/index.js"
 node tests/wasm-parity.cjs
+node tests/notebook-order-sdk.cjs sdk/typescript/pkg/nodejs/booknook_wasm.js "$target_directory/sdk-check/index.js"
+node tests/notebook-order-sdk.cjs sdk/typescript/pkg/web/booknook_wasm.js "$target_directory/sdk-check/index.js"
 node tests/test-conformance.cjs
 node tests/castalia-generic-parity.cjs "$target_directory/sdk-check/index.js"
 node tests/provider-runtime.cjs "$target_directory/sdk-check/index.js"

@@ -19,6 +19,7 @@ for package in ["core", "connectors", "native"]:
 copies["crates/core/tests/fixtures/conformance.json"] = "ontology/v0.1.0/conformance.json"
 copies["crates/core/tests/fixtures/notebook-ink.json"] = "ontology/v0.2.0/notebook-ink.json"
 copies["crates/core/tests/fixtures/note-whiteboard.json"] = "ontology/v0.3.0/note-whiteboard.json"
+copies["crates/core/tests/fixtures/notebook-order.json"] = "ontology/v0.4.0/conformance.json"
 copies["crates/core/tests/fixtures/portable-archive.json"] = "ontology/portable/v1/conformance.json"
 copies["crates/native/tests/fixtures/castalia-custody-vector.json"] = "fixtures/castalia-custody-vector.json"
 copies["crates/native/tests/fixtures/castalia-native-authority-profile-v1.json"] = "crates/core/tests/fixtures/castalia/native-authority-profile-v1.json"

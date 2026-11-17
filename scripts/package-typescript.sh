@@ -21,8 +21,9 @@ output=target/'sdk-package-check/npm'
 if output.exists(): shutil.rmtree(output)
 output.mkdir(parents=True)
 (output/'package.json').write_text('{"name":"booknook-installed-sdk-check","private":true,"type":"module"}\n')
-for name in ['PackagedSDKSmoke.cjs','PackagedSDKSmoke.mjs','PackagedSDKTypes.mts','PackagedSDKTypes.cts','castalia-generic-fixture.cjs','provider-service-acceptance.cjs']:
+for name in ['PackagedSDKSmoke.cjs','PackagedSDKSmoke.mjs','PackagedSDKTypes.mts','PackagedSDKTypes.cts','castalia-generic-fixture.cjs','provider-service-acceptance.cjs','notebook-order-sdk.cjs']:
     shutil.copy2(root/'tests'/name, output/name)
+shutil.copy2(root/'crates/core/tests/fixtures/notebook-order.json',output/'notebook-order.json')
 pack=json.loads((target/'packages/npm-pack.json').read_text())[0]
 (target/'packages/npm-package-path.txt').write_text(str(target/'packages'/pack['filename']))
 PY

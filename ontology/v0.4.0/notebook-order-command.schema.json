@@ -1,0 +1,411 @@
+{
+  "$defs": {
+    "Alignment": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "const": "unmatched",
+              "type": "string"
+            }
+          },
+          "required": [
+            "status"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "edition_id": {
+              "type": "string"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "status": {
+              "const": "candidate",
+              "type": "string"
+            }
+          },
+          "required": [
+            "status",
+            "edition_id",
+            "reason"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "edition_id": {
+              "type": "string"
+            },
+            "evidence": {
+              "type": "string"
+            },
+            "status": {
+              "const": "confirmed",
+              "type": "string"
+            }
+          },
+          "required": [
+            "status",
+            "edition_id",
+            "evidence"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "AudioMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "authors": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "ebook_identifiers": {
+          "description": "Explicit ebook identifiers reported by the source, with their namespaces.\nThe audiobook ASIN is not implicitly a Kindle ASIN or an ebook ISBN.",
+          "items": {
+            "$ref": "#/$defs/SourceRef"
+          },
+          "type": "array"
+        },
+        "language": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "title": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "CapturedReadingContext": {
+      "additionalProperties": false,
+      "properties": {
+        "pass_id": {
+          "type": "string"
+        },
+        "position_observations": {
+          "items": {
+            "$ref": "#/$defs/ProgressObservation"
+          },
+          "type": "array"
+        },
+        "positions": {
+          "items": {
+            "$ref": "#/$defs/Location"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "pass_id",
+        "positions",
+        "position_observations"
+      ],
+      "type": "object"
+    },
+    "Location": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "edition_id": {
+              "type": "string"
+            },
+            "kind": {
+              "const": "text",
+              "type": "string"
+            },
+            "prefix": {
+              "type": "string"
+            },
+            "quote": {
+              "type": "string"
+            },
+            "resource": {
+              "type": "string"
+            },
+            "suffix": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "edition_id",
+            "resource",
+            "quote",
+            "prefix",
+            "suffix"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "chapter": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "kind": {
+              "const": "audio",
+              "type": "string"
+            },
+            "milliseconds": {
+              "format": "uint64",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "provider": {
+              "type": "string"
+            },
+            "source_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "provider",
+            "source_id",
+            "milliseconds"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "provider",
+              "type": "string"
+            },
+            "provider": {
+              "type": "string"
+            },
+            "source_id": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "provider",
+            "source_id",
+            "value"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "edition_id": {
+              "type": "string"
+            },
+            "kind": {
+              "const": "page",
+              "type": "string"
+            },
+            "page": {
+              "format": "uint32",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "kind",
+            "edition_id",
+            "page"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "NoteFace": {
+      "enum": [
+        "text",
+        "whiteboard"
+      ],
+      "type": "string"
+    },
+    "ProgressObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "alignment": {
+          "$ref": "#/$defs/Alignment"
+        },
+        "audio_metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AudioMetadata"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "location": {
+          "$ref": "#/$defs/Location"
+        },
+        "observed_at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "pass_id": {
+          "type": "string"
+        },
+        "provider_connection_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "received_at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "pass_id",
+        "location",
+        "observed_at",
+        "received_at",
+        "alignment"
+      ],
+      "type": "object"
+    },
+    "SourceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "provider",
+        "id"
+      ],
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "block_id": {
+          "type": "string"
+        },
+        "capture_context": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CapturedReadingContext"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "face": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NoteFace"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "notebook_id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "append_ordered_note",
+          "type": "string"
+        },
+        "visible_block_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "op",
+        "notebook_id",
+        "block_id",
+        "visible_block_ids",
+        "at"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "evidence": {
+          "type": "string"
+        },
+        "heads": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "notebook_id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "review_notebook_order",
+          "type": "string"
+        },
+        "review_id": {
+          "type": "string"
+        },
+        "selected": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "op",
+        "notebook_id",
+        "review_id",
+        "evidence",
+        "heads",
+        "selected"
+      ],
+      "type": "object"
+    }
+  ],
+  "title": "NotebookOrderCommand",
+  "$id": "urn:booknook:schema:0.4.0:notebook-order-command"
+}

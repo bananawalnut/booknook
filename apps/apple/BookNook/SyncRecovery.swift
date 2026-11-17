@@ -10,8 +10,22 @@ struct SyncConflict: Decodable, Identifiable {
     let id: String; let collection: String; let recordId: String; let field: String; let local: JSONValue; let incoming: JSONValue
 }
 struct SyncOutbox: Decodable, Identifiable { let id: String; let peer: String; let exported: Bool }
-struct SyncStatus: Decodable { let deviceId: String; let peers: [SyncPeer]; let conflicts: [SyncConflict]; let outbox: [SyncOutbox] }
-struct SyncPrepared: Decodable { let batch: JSONValue; let books: Int; let notebooks: Int; let cards: Int; let annotations: Int; let assets: Int; let bytes: Int }
+struct NotebookOrderReview: Decodable, Identifiable {
+    let notebookId: String
+    let evidence: String
+    let heads: [String]
+    let choices: [[Int]]
+    var id: String { notebookId }
+}
+struct SyncStatus: Decodable {
+    let deviceId: String; let peers: [SyncPeer]; let conflicts: [SyncConflict]; let outbox: [SyncOutbox]
+    let noteOrderReviews: [NotebookOrderReview]?
+    let noteOrderReviewsRevision: UInt64?
+}
+struct SyncPrepared: Decodable {
+    let batch: JSONValue; let books: Int; let notebooks: Int; let cards: Int
+    let annotations: Int; let assets: Int; let bytes: Int; let archiveSchema: String?
+}
 private func syncDecode<T: Decodable>(_ type: T.Type, _ raw: String) throws -> T { let d = JSONDecoder(); d.keyDecodingStrategy = .convertFromSnakeCase; return try d.decode(type, from: Data(raw.utf8)) }
 extension DeskRepository {
     func syncStatus() throws -> SyncStatus { try syncDecode(SyncStatus.self, required().syncStatus()) }
@@ -39,6 +53,7 @@ private struct SyncRecoveryContent: View {
     @EnvironmentObject var model: DeskModel
     @ObservedObject var authorization: AuthorizationCoordinator
     @State private var status: SyncStatus?
+    @State private var orderReviewSnapshot: DeskSnapshot?
     @State private var identityConfigured = false
     @State private var expectedHolder: String?
     @State private var recoveryStored = false
@@ -120,6 +135,22 @@ private struct SyncRecoveryContent: View {
                             }
                         }
                     }
+                    if let reviews = status.noteOrderReviews, !reviews.isEmpty {
+                        Divider()
+                        Text("Notebook order to review").font(.title2)
+                        if let snapshot = orderReviewSnapshot, snapshot.revision == status.noteOrderReviewsRevision {
+                            ForEach(reviews) { review in
+                                if let notebook = snapshot.notebooks[review.notebookId] {
+                                    NotebookOrderReviewPanel(review: review, notebook: notebook,
+                                        title: snapshot.books[notebook.bookId]?.title ?? "Notebook") { order in
+                                        resolveOrder(review, choosing: order)
+                                    }
+                                }
+                            }
+                        } else {
+                            Button("Refresh notebook order review") { Task { await refresh() } }
+                        }
+                    }
                     if !status.conflicts.isEmpty {
                         Divider(); Text("Conflicting edits").font(.title2)
                         Text("Both interpretations are preserved until you choose. Character-card branches remain independently recoverable in card history.").font(.callout).foregroundStyle(.secondary)
@@ -165,8 +196,26 @@ private struct SyncRecoveryContent: View {
             expectedHolder = config?.holderPublicKey
             identityConfigured = config != nil && !(config?.policyDigest.isEmpty ?? true) && !(config?.credentialEndpoint.isEmpty ?? true)
             recoveryStored = try CustodySecureStorage().read(account: RecoveryImportCandidate.account) != nil
-            status = try await model.repository.syncStatus()
+            try await refreshSyncStatus()
         } catch { if !bookNookOperationWasCancelled(error) { model.error = bookNookErrorMessage(error) } }
+    }
+    @MainActor private func refreshSyncStatus() async throws {
+        for _ in 0..<2 {
+            let next = try await model.repository.syncStatus()
+            status = next
+            orderReviewSnapshot = nil
+            guard let reviews = next.noteOrderReviews, !reviews.isEmpty,
+                  let revision = next.noteOrderReviewsRevision else { return }
+            if let current = model.state, current.revision == revision {
+                orderReviewSnapshot = current
+                return
+            }
+            let snapshot = try await model.repository.snapshot()
+            if snapshot.revision == revision {
+                orderReviewSnapshot = snapshot
+                return
+            }
+        }
     }
     func prerequisite(_ title: String, complete: Bool) -> some View {
         Label(title, systemImage: complete ? "checkmark.circle.fill" : "circle").font(.callout).foregroundStyle(complete ? nookAccent : .secondary)
@@ -204,8 +253,16 @@ private struct SyncRecoveryContent: View {
                 throw AuthorizationError.message("This device’s pairing changed. Create and review a new encrypted snapshot.")
             }
             let payload = try JSONSerialization.data(withJSONObject: batch)
+            var statements = [
+                "Transfer \(prepared.books) books, \(prepared.notebooks) notebooks, \(prepared.cards) character cards and \(prepared.annotations) annotations to \(recipient.label) (pairing ID: \(recipient.id)).",
+                "Include \(prepared.assets) accessible content files. The snapshot is encrypted with this device pair’s key.",
+                "Only the snapshot at library revision \(revision) is approved. Later edits stay local until another approval.",
+            ]
+            if prepared.archiveSchema == "booknook.archive.v4" {
+                statements.append("The receiving device needs a Book Nook version that supports notebook-order snapshots.")
+            }
             let receipt = try await model.authorization.authorize(payload: payload, action: "sync.send", resourceVersion: revision.uint64Value,
-                disclosure: AuthorizationDisclosure(title: "Send a private reading snapshot", statements: ["Transfer \(prepared.books) books, \(prepared.notebooks) notebooks, \(prepared.cards) character cards and \(prepared.annotations) annotations to \(recipient.label) (pairing ID: \(recipient.id)).", "Include \(prepared.assets) accessible content files. The snapshot is encrypted with this device pair’s key.", "Only the snapshot at library revision \(revision) is approved; later edits stay local until another approval."]))
+                disclosure: AuthorizationDisclosure(title: "Send a private reading snapshot", statements: statements))
             _ = try await model.repository.syncApprove(id: id, key: savedKey(recipient.id), receipt: receipt)
             message = "Approved snapshot is ready in the transfer queue. Export it when ready."
         } catch { try? await model.repository.syncCancel(id: id); throw error }
@@ -216,6 +273,68 @@ private struct SyncRecoveryContent: View {
         try await model.repository.syncExport(id: id, url: url)
         document = ExportDocument(data: try Data(contentsOf: url)); exporting = true
     }
+    func resolveOrder(_ review: NotebookOrderReview, choosing order: [String]) {
+        let reviewID = UUID().uuidString.lowercased().replacingOccurrences(of: "-", with: "")
+        run {
+            do {
+                try await model.drainSaves()
+                let result = try await model.perform([
+                    "op": "review_notebook_order", "notebook_id": review.notebookId,
+                    "review_id": reviewID, "evidence": review.evidence,
+                    "heads": review.heads, "selected": order,
+                ])
+                guard result?.object?["review_id"] as? String == reviewID else { throw CocoaError(.coderReadCorrupt) }
+                model.reloadEditorSessions()
+            } catch {
+                await refresh()
+                throw error
+            }
+        }
+    }
     func resolve(_ conflict: SyncConflict, incoming: Bool) { run { try await model.drainSaves(); model.accept(try await model.repository.syncResolve(id: conflict.id, incoming: incoming)); model.reloadEditorSessions() } }
     func display(_ value: JSONValue) -> String { if case .string(let text) = value { return text }; guard let data = try? JSONSerialization.data(withJSONObject: value.any, options: [.prettyPrinted, .sortedKeys, .fragmentsAllowed]) else { return "Unavailable" }; return String(decoding: data, as: UTF8.self) }
+}
+
+
+private struct NotebookOrderReviewPanel: View {
+    let review: NotebookOrderReview
+    let notebook: Notebook
+    let title: String
+    let choose: ([String]) -> Void
+
+    var body: some View {
+        let notes = notebook.blocks
+        VStack(alignment: .leading, spacing: 12) {
+            Text(title).font(.headline)
+            Text("Choose the order for these earlier notes.")
+                .font(.callout).foregroundStyle(.secondary)
+            ForEach(Array(review.choices.enumerated()), id: \.offset) { index, order in
+                DisclosureGroup("Order \(index + 1)") {
+                    ScrollView {
+                        LazyVStack(alignment: .leading, spacing: 10) {
+                            ForEach(Array(order.enumerated()), id: \.offset) { _, position in
+                                if notes.indices.contains(position) {
+                                    let note = notes[position]
+                                    let first = note.text.split(whereSeparator: \.isNewline).first.map(String.init) ?? ""
+                                    let excerpt = String(first.prefix(100))
+                                    let name = note.ink != nil || note.face == "whiteboard"
+                                        ? "Scribble \(position + 1)" : "Note \(position + 1)"
+                                    VStack(alignment: .leading, spacing: 3) {
+                                        Text(excerpt.isEmpty ? name : "\(name) · \(excerpt)")
+                                        if !note.contextLabel.isEmpty {
+                                            Text(note.contextLabel).font(.caption).foregroundStyle(.secondary)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }.frame(maxHeight: 240)
+                    let valid = order.allSatisfy { notes.indices.contains($0) }
+                    Button("Use this order") {
+                        if valid { choose(order.map { notes[$0].id }) }
+                    }.disabled(!valid)
+                }
+            }
+        }.padding(18).background(.white.opacity(0.6), in: RoundedRectangle(cornerRadius: 12))
+    }
 }

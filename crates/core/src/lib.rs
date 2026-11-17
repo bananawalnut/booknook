@@ -13,6 +13,7 @@ pub mod model;
 pub mod notebook;
 pub mod notebook_command;
 pub mod notebook_ink;
+pub mod notebook_order;
 pub mod notes;
 pub mod portable_archive;
 pub mod provider_runtime;
@@ -289,6 +290,7 @@ fn start_pass(state: &mut State, book_id: &str, at: u64) -> Result<Notebook> {
             note: None,
         }],
         revisions: vec![],
+        order: None,
     };
     state.passes.insert(pass.id.clone(), pass);
     state
@@ -320,6 +322,47 @@ fn apply_atomic(
     validate(&next)?;
     *state = next;
     Ok(result)
+}
+
+fn append_block(
+    state: &mut State,
+    notebook: &str,
+    block: &str,
+    at: u64,
+    capture: Option<CapturedReadingContext>,
+    face: Option<NoteFace>,
+    order: Option<notebook_order::NotebookOrder>,
+) -> Result<()> {
+    let target = state
+        .notebooks
+        .get_mut(notebook)
+        .ok_or_else(|| Error::NotFound(notebook.into()))?;
+    target.blocks.push(Block {
+        id: block.into(),
+        kind: "paragraph".into(),
+        text: String::new(),
+        update: notebook::edit("", "")?,
+        styles: vec![],
+        ink: None,
+        note: None,
+    });
+    if let Some(order) = order {
+        notebook_order::materialize(target, order, true).map_err(notebook_order::invalid_order)?;
+        state.promote_archive(ArchiveVersion::Order);
+    }
+    if capture.is_some() || face.is_some() {
+        notes::initialize(
+            state,
+            notebook,
+            block,
+            at,
+            capture.as_ref(),
+            None,
+            true,
+            face,
+        )?;
+    }
+    Ok(())
 }
 
 fn execute(state: &mut State, command: Command) -> Result<serde_json::Value> {
@@ -507,32 +550,22 @@ fn execute(state: &mut State, command: Command) -> Result<serde_json::Value> {
             capture_context,
             face,
         } => {
-            let n = state
-                .notebooks
-                .get_mut(&notebook_id)
-                .ok_or(Error::NotFound(notebook_id.clone()))?;
             let id = new_id();
-            n.blocks.push(Block {
-                id: id.clone(),
-                kind: "paragraph".into(),
-                text: String::new(),
-                update: notebook::edit("", "")?,
-                styles: vec![],
-                ink: None,
-                note: None,
-            });
-            if capture_context.is_some() || face.is_some() {
-                notes::initialize(
-                    state,
-                    &notebook_id,
-                    &id,
-                    at,
-                    capture_context.as_ref(),
-                    None,
-                    true,
-                    face,
-                )?;
-            }
+            let notebook = state
+                .notebooks
+                .get(&notebook_id)
+                .ok_or_else(|| Error::NotFound(notebook_id.clone()))?;
+            let order = notebook
+                .order
+                .as_ref()
+                .map(|order| {
+                    order
+                        .prepare_append(id.clone())
+                        .and_then(|intent| order.apply(intent))
+                })
+                .transpose()
+                .map_err(notebook_order::invalid_order)?;
+            append_block(state, &notebook_id, &id, at, capture_context, face, order)?;
             Ok(json!({"block_id":id}))
         }
         Command::EditBlock {

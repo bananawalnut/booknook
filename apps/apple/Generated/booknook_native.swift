@@ -3433,6 +3433,11 @@ public protocol NotebookEngineProtocol: AnyObject, Sendable {
 
     func execute(commandJson: String) throws  -> String
 
+    /**
+     * Read complete, current note-order choices without writing to the host store.
+     */
+    func notebookOrderReviews() throws  -> String
+
     func snapshot() throws  -> String
 
 }
@@ -3523,6 +3528,18 @@ open func execute(commandJson: String)throws  -> String  {
     uniffi_booknook_native_fn_method_notebookengine_execute(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(commandJson),uniffiCallStatus
+    )
+})
+}
+
+    /**
+     * Read complete, current note-order choices without writing to the host store.
+     */
+open func notebookOrderReviews()throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_notebookengine_notebook_order_reviews(
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -5250,6 +5267,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_booknook_native_checksum_method_notebookengine_execute() != 63772) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_notebookengine_notebook_order_reviews() != 62205) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_booknook_native_checksum_method_notebookengine_snapshot() != 21301) {

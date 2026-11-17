@@ -3,8 +3,10 @@ const assert = require('node:assert/strict');
 const {BookNook, validateProviderConnections, validateNativeAuthorityProfile, recommendations, prepareSyncBatch, verifyCastaliaReceipt} = require('@booknook/sdk');
 const {genericFixture} = require('./castalia-generic-fixture.cjs');
 const {runProviderAcceptance} = require('./provider-service-acceptance.cjs');
+const {runNotebookOrderSmoke} = require('./notebook-order-sdk.cjs');
 const core = require('@booknook/sdk/wasm');
 (async () => {
+  await runNotebookOrderSmoke(core, require('@booknook/sdk'), require('./notebook-order.json'));
   console.log(await runProviderAcceptance(require('@booknook/sdk'),core));
   const f=genericFixture();
   assert.equal(verifyCastaliaReceipt(core,f.request,f.presentation,f.expectedRequest,f.disclosure,f.policy,f.now).holder_public_key,f.policy.holder_public_key);

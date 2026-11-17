@@ -53,7 +53,7 @@ guard let fixtures = ProcessInfo.processInfo.environment["BOOKNOOK_SMOKE_FIXTURE
 let fixtureRoot = URL(fileURLWithPath: fixtures)
 try await runPackagedCastaliaSmoke(fixtureRoot: fixtureRoot)
 try await runPackagedProviderSmoke(fixtureRoot: fixtureRoot)
-try runPackagedNotebookSmoke()
+try runPackagedNotebookSmoke(fixtureRoot: fixtureRoot)
 try await runPackagedFeedSmoke()
 let root = FileManager.default.temporaryDirectory.appendingPathComponent("booknook-sdk-consumer-\\(UUID().uuidString)")
 defer { try? FileManager.default.removeItem(at: root) }
@@ -78,6 +78,7 @@ for name in ['PackagedCastaliaSmoke.swift','PackagedProviderSmoke.swift','Packag
 fixtures=output/'fixtures'
 fixtures.mkdir()
 shutil.copy2(root/'tests/fixtures/provider-sample.epub',fixtures/'provider-sample.epub')
+shutil.copy2(root/'crates/core/tests/fixtures/notebook-order.json',fixtures/'notebook-order.json')
 (output/'version').write_text(version)
 PY
 headers="$target_directory/sdk-package-check/swift/headers"

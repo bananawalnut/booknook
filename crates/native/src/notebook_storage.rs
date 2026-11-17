@@ -61,6 +61,23 @@ impl NotebookEngine {
         self.with_storage_port(|storage| Ok(serde_json::to_string(&providers::snapshot(storage)?)?))
     }
 
+    /// Read complete, current note-order choices without writing to the host store.
+    pub fn notebook_order_reviews(&self) -> Result<String> {
+        self.with_storage_port(|storage| {
+            let state = providers::snapshot(storage)?;
+            let reviews = booknook_core::notebook_order::unresolved_reviews(&state)?;
+            let max_bytes = booknook_core::MAX_JSON_BYTES;
+            let json = serde_json::to_string(&reviews)?;
+            if json.len() > max_bytes {
+                return Err(Error::Invalid(
+                    "Notebook order reviews exceed the 128 MiB response limit".into(),
+                )
+                .into());
+            }
+            Ok(json)
+        })
+    }
+
     pub fn execute(&self, command_json: String) -> Result<String> {
         let command = NotebookCommand::parse(command_json.as_bytes())?;
         self.with_storage_port(|storage| {

@@ -31,6 +31,7 @@ public final class BookNookNotebook: Sendable {
         native = try NotebookEngine.local(directory: localDirectory.path)
     }
     public func snapshotJSON() throws -> String { try native.snapshot() }
+    public func orderReviewsJSON() throws -> String { try native.notebookOrderReviews() }
     public func execute(commandJSON: String) throws -> String { try native.execute(commandJson: commandJSON) }
 }
 

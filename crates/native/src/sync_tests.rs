@@ -907,3 +907,326 @@ fn receive_cannot_replace_a_newer_baseline_committed_by_another_handle() {
         .unwrap();
     assert_eq!(count, 1);
 }
+
+#[test]
+fn encrypted_two_replica_margin_notes_converge_after_offline_appends() {
+    let ar = Directory::new();
+    let br = Directory::new();
+    let a = setup(&ar);
+    let b = setup(&br);
+    let ai = id(&a);
+    let bi = id(&b);
+    assert_ne!(ai, bi);
+    let key = "7b".repeat(32);
+    pair(&a, &bi, &key, true);
+    pair(&b, &ai, &key, true);
+
+    let state = |desk: &Desk| serde_json::from_str::<State>(&desk.snapshot().unwrap()).unwrap();
+    add_book(&a);
+    let initial = state(&a);
+    let notebook = initial.notebooks.values().next().unwrap();
+    let notebook_id = &notebook.id;
+    let edition_id = initial.editions.keys().next().unwrap();
+    let order = |desk: &Desk| {
+        state(desk).notebooks[notebook_id]
+            .blocks
+            .iter()
+            .map(|block| block.id.clone())
+            .collect::<Vec<_>>()
+    };
+    let append = |desk: &Desk, chapter, text: &str, observed_at| {
+        // Same add_block shape as the app's explicit Margin note creation.
+        let context = CapturedReadingContext {
+            pass_id: notebook.pass_id.clone(),
+            positions: vec![Location::Text {
+                edition_id: edition_id.clone(),
+                resource: format!("OPS/chapter-{chapter}.xhtml"),
+                quote: text.into(),
+                prefix: String::new(),
+                suffix: String::new(),
+            }],
+            position_observations: vec![],
+        };
+        let created = value(
+            desk.execute(
+                json!({"op":"add_block", "notebook_id":notebook_id, "face":"text",
+                    "at":observed_at, "capture_context":context})
+                .to_string(),
+            )
+            .unwrap(),
+        );
+        let block_id = created["result"]["block_id"].as_str().unwrap();
+        let added = state(desk);
+        let block = added.notebooks[notebook_id]
+            .blocks
+            .iter()
+            .find(|block| block.id == block_id)
+            .unwrap();
+        desk.execute(
+            json!({"op":"edit_block", "notebook_id":notebook_id, "block_id":block_id,
+                "text":text, "base_update":block.update, "at":observed_at})
+            .to_string(),
+        )
+        .unwrap();
+        let saved = state(desk).notebooks[notebook_id]
+            .blocks
+            .iter()
+            .find(|block| block.id == block_id)
+            .unwrap()
+            .clone();
+        assert_eq!(saved.text, text);
+        let origin = &saved.note.as_ref().unwrap().created;
+        assert_eq!(origin.at, Some(observed_at));
+        assert_eq!(origin.positions, context.positions);
+        saved
+    };
+    let receive = |desk: &Desk, path: String, peer: &str, duplicate| {
+        let result = value(desk.sync_receive(path, peer.into(), key.clone()).unwrap());
+        assert_eq!(result["duplicate"], duplicate);
+        assert_eq!(result["conflicts"], 0);
+    };
+
+    let touched_at = at();
+    let anchor = append(&a, 1, "Shared synthetic baseline", touched_at - 1);
+    let baseline = order(&a);
+    receive(
+        &b,
+        exported(&a, &bi, &key, &ar.0.join("baseline-a.json")),
+        &ai,
+        false,
+    );
+    receive(
+        &a,
+        exported(&b, &ai, &key, &br.0.join("baseline-b.json")),
+        &bi,
+        false,
+    );
+    assert_eq!(order(&a), baseline);
+    assert_eq!(order(&b), baseline);
+    assert_eq!(baseline.last(), Some(&anchor.id));
+
+    // Both append independently at the same second. Neither sees the other's row
+    // until both approved snapshots have been exported.
+    let left = append(&a, 2, "Replica A: café", touched_at);
+    let right = append(&b, 3, "Replica B: 日本語", touched_at);
+    assert_ne!(left.id, right.id);
+    assert_eq!(
+        order(&a),
+        [baseline.clone(), vec![left.id.clone()]].concat()
+    );
+    assert_eq!(
+        order(&b),
+        [baseline.clone(), vec![right.id.clone()]].concat()
+    );
+    let from_a = exported(&a, &bi, &key, &ar.0.join("offline-a.json"));
+    let from_b = exported(&b, &ai, &key, &br.0.join("offline-b.json"));
+    for (path, text) in [(&from_a, &left.text), (&from_b, &right.text)] {
+        assert!(!std::fs::read_to_string(path).unwrap().contains(text));
+    }
+    receive(&a, from_b.clone(), &bi, false);
+    receive(&b, from_a.clone(), &ai, false);
+    let before_reopen_a = a.snapshot().unwrap();
+    let before_reopen_b = b.snapshot().unwrap();
+    drop((a, b));
+    let a = Desk::new(ar.path()).unwrap();
+    let b = Desk::new(br.path()).unwrap();
+    assert_eq!(a.snapshot().unwrap(), before_reopen_a);
+    assert_eq!(b.snapshot().unwrap(), before_reopen_b);
+    receive(&a, from_b, &bi, true);
+    receive(&b, from_a, &ai, true);
+    assert_eq!(a.snapshot().unwrap(), before_reopen_a);
+    assert_eq!(b.snapshot().unwrap(), before_reopen_b);
+
+    for desk in [&a, &b] {
+        let snapshot = state(desk);
+        let blocks = &snapshot.notebooks[notebook_id].blocks;
+        assert_eq!(blocks.len(), baseline.len() + 2);
+        for expected in [&left, &right] {
+            assert_eq!(
+                blocks.iter().find(|block| block.id == expected.id),
+                Some(expected),
+                "An independent Margin note and its first capture must survive byte-for-byte",
+            );
+        }
+        assert!(order(desk).starts_with(&baseline));
+    }
+    assert_eq!(
+        order(&a),
+        order(&b),
+        "Durable Margin note order must converge across opposite approved encrypted receives",
+    );
+}
+
+#[test]
+fn sync_status_projects_restored_notebook_order_reviews_without_writing_conflicts() {
+    let source_root = Directory::new();
+    let target_root = Directory::new();
+    let source = Desk::new(source_root.path()).unwrap();
+    let target = Desk::new(target_root.path()).unwrap();
+    assert_eq!(
+        value(target.sync_status().unwrap())["note_order_reviews"],
+        json!([])
+    );
+    add_book(&source);
+    let created: State = serde_json::from_str(&source.snapshot().unwrap()).unwrap();
+    let notebook_id = created.notebooks.keys().next().unwrap().clone();
+    for stamp in [2, 3] {
+        source
+            .execute(json!({"op":"add_block","notebook_id":notebook_id,"at":stamp}).to_string())
+            .unwrap();
+    }
+    let left: State = serde_json::from_str(&source.snapshot().unwrap()).unwrap();
+    let mut right = left.clone();
+    right
+        .notebooks
+        .get_mut(&notebook_id)
+        .unwrap()
+        .blocks
+        .swap(1, 2);
+    let ids = |state: &State| {
+        state.notebooks[&notebook_id]
+            .blocks
+            .iter()
+            .map(|block| block.id.clone())
+            .collect::<Vec<_>>()
+    };
+    let expected_paths = std::collections::BTreeSet::from([ids(&left), ids(&right)]);
+    let merged = booknook_core::reconcile::reconcile(None, &left, &right).unwrap();
+    assert!(merged.conflicts.is_empty());
+    let path = source_root.0.join("unresolved-order-archive.json");
+    std::fs::write(
+        &path,
+        canonical(&json!({
+            "schema":"booknook.portable-export.v1", "state":merged.state,"assets":{}
+        }))
+        .unwrap(),
+    )
+    .unwrap();
+    target
+        .restore_archive(path.to_str().unwrap().into())
+        .unwrap();
+    drop(target);
+    let target = Desk::new(target_root.path()).unwrap();
+
+    // Keep one unrelated, ordinary conflict to prove both payloads stay separate.
+    let normal = json!({"id":"ordinary","collection":"books","record_id":"example",
+        "field":"review","local":"Local draft","incoming":"Incoming draft"});
+    {
+        let store = target.lock().unwrap();
+        store
+            .connection
+            .execute(
+                "INSERT INTO sync_conflicts VALUES(?1,?2)",
+                ["ordinary", &normal.to_string()],
+            )
+            .unwrap();
+    }
+    let changes = |desk: &Desk| {
+        desk.lock()
+            .unwrap()
+            .connection
+            .query_row("SELECT total_changes()", [], |row| row.get::<_, i64>(0))
+            .unwrap()
+    };
+    let before = target.snapshot().unwrap();
+    let changed_rows = changes(&target);
+    let status = value(target.sync_status().unwrap());
+    assert_eq!(changes(&target), changed_rows);
+    assert_eq!(target.snapshot().unwrap(), before);
+    assert_eq!(status["conflicts"], json!([normal]));
+    assert_eq!(status["peers"], json!([]));
+    assert_eq!(status["outbox"], json!([]));
+    let reviews = status["note_order_reviews"].as_array().unwrap();
+    assert_eq!(reviews.len(), 1);
+    let review = &reviews[0];
+    assert_eq!(review["notebook_id"], notebook_id);
+    assert_eq!(review["evidence"].as_str().unwrap().len(), 64);
+    assert_eq!(review["heads"], json!([]));
+    assert_eq!(review.as_object().unwrap().len(), 4);
+    let snapshot: State = serde_json::from_str(&before).unwrap();
+    assert_eq!(status["note_order_reviews_revision"], snapshot.revision);
+    let visible = ids(&snapshot);
+    let choices = review["choices"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|choice| {
+            choice
+                .as_array()
+                .unwrap()
+                .iter()
+                .map(|index| visible[usize::try_from(index.as_u64().unwrap()).unwrap()].clone())
+                .collect::<Vec<_>>()
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(choices.len(), 2);
+    assert_eq!(
+        choices
+            .iter()
+            .cloned()
+            .collect::<std::collections::BTreeSet<_>>(),
+        expected_paths
+    );
+    assert_eq!(value(target.sync_status().unwrap()), status);
+    assert_eq!(changes(&target), changed_rows);
+
+    target
+        .execute(
+            json!({"op":"review_notebook_order","notebook_id":notebook_id,
+                "review_id":"settled-archive-review","evidence":review["evidence"],
+                "heads":review["heads"],"selected":choices[0]
+            })
+            .to_string(),
+        )
+        .unwrap();
+    drop(target);
+    let reopened = Desk::new(target_root.path()).unwrap();
+    let completed = value(reopened.sync_status().unwrap());
+    assert_eq!(completed["note_order_reviews"], json!([]));
+    assert_eq!(
+        completed["note_order_reviews_revision"],
+        snapshot.revision + 1
+    );
+    for field in ["device_id", "peers", "conflicts", "outbox"] {
+        assert_eq!(
+            completed[field], status[field],
+            "Changed existing {field} status"
+        );
+    }
+
+    // Preview metadata is from the exact hashed plaintext, outside the approval batch.
+    // Constants and wrapped batch fields remain unchanged for legacy clients.
+    drop((reopened, source));
+    let legacy = setup(&source_root);
+    let v4 = setup(&target_root);
+    let legacy_peer = id(&legacy);
+    let v4_peer = id(&v4);
+    let key = "4f".repeat(32);
+    pair(&legacy, &v4_peer, &key, true);
+    pair(&v4, &legacy_peer, &key, true);
+    let check_prepared = |desk: &Desk, peer: &str, schema: &str| {
+        let preview = value(desk.sync_prepare(peer.into()).unwrap());
+        assert_eq!(preview["archive_schema"], schema);
+        let id = preview["batch"]["id"].as_str().unwrap();
+        let plaintext: String = desk
+            .lock()
+            .unwrap()
+            .connection
+            .query_row(
+                "SELECT content FROM sync_prepared WHERE id=?1",
+                [id],
+                |row| row.get(0),
+            )
+            .unwrap();
+        assert_eq!(value(plaintext.clone())["state"]["schema"], schema);
+        assert_eq!(preview["bytes"], plaintext.len());
+        assert_eq!(
+            preview["batch"]["content_digest"],
+            digest(plaintext.as_bytes())
+        );
+        assert!(preview["batch"].get("archive_schema").is_none());
+        desk.sync_cancel_prepared(id.into()).unwrap();
+    };
+    check_prepared(&legacy, &v4_peer, "booknook.archive.v1");
+    check_prepared(&v4, &legacy_peer, "booknook.archive.v4");
+}

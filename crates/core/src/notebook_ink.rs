@@ -130,10 +130,7 @@ pub fn save(
         .find(|b| b.id == block_id)
         .unwrap()
         .ink = Some(ink);
-    if state.schema != NOTE_ARCHIVE_SCHEMA {
-        state.schema = INK_ARCHIVE_SCHEMA.into();
-        state.ontology_version = INK_ONTOLOGY.into();
-    }
+    state.promote_archive(ArchiveVersion::Ink);
     Ok(result)
 }
 

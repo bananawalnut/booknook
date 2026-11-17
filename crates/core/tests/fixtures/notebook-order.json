@@ -1,0 +1,3401 @@
+{
+  "cases": [
+    {
+      "contract": "state",
+      "id": "legacy-v1-readable-without-order",
+      "input": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "authors": [
+              "Book Nook test author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "provenance": [],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "currently-reading",
+            "sources": [],
+            "subjects": [],
+            "title": "An Original Conformance Book"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "versions": [
+              {
+                "at": 102,
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "interpretation": {
+                  "description": "",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [],
+                  "relationships": [],
+                  "traits": []
+                },
+                "parents": [],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              },
+              {
+                "at": 103,
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "interpretation": {
+                  "description": "First impression",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "relationships": [],
+                  "traits": [
+                    "curious"
+                  ]
+                },
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              }
+            ]
+          }
+        },
+        "drafts": {},
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "assets": [],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "identifiers": [],
+            "language": null
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-concept": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-concept",
+            "kind": "concept",
+            "name": "Original concept"
+          },
+          "conformance-event": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-event",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-place": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-place",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-theme",
+            "kind": "theme",
+            "name": "Original theme"
+          }
+        },
+        "friendship_requests": [],
+        "groups": {},
+        "lists": {},
+        "local_reader": "conformance-reader",
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-text",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-scribble",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "revisions": [
+              {
+                "at": 101,
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "ontology_version": "0.1.0",
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "finished_at": null,
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "reader": "conformance-reader",
+            "started_at": 100
+          }
+        },
+        "positions": {},
+        "revision": 4,
+        "schema": "booknook.archive.v1",
+        "sessions": {
+          "conformance-session": {
+            "ended_at": 104,
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "contract": "state",
+      "id": "v4-unresolved-legacy-order",
+      "input": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "authors": [
+              "Book Nook test author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "provenance": [],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "currently-reading",
+            "sources": [],
+            "subjects": [],
+            "title": "An Original Conformance Book"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "versions": [
+              {
+                "at": 102,
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "interpretation": {
+                  "description": "",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [],
+                  "relationships": [],
+                  "traits": []
+                },
+                "parents": [],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              },
+              {
+                "at": 103,
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "interpretation": {
+                  "description": "First impression",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "relationships": [],
+                  "traits": [
+                    "curious"
+                  ]
+                },
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              }
+            ]
+          }
+        },
+        "drafts": {},
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "assets": [],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "identifiers": [],
+            "language": null
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-concept": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-concept",
+            "kind": "concept",
+            "name": "Original concept"
+          },
+          "conformance-event": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-event",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-place": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-place",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-theme",
+            "kind": "theme",
+            "name": "Original theme"
+          }
+        },
+        "friendship_requests": [],
+        "groups": {},
+        "lists": {},
+        "local_reader": "conformance-reader",
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-scribble",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-text",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "order": {
+              "frontiers": {},
+              "inserts": {},
+              "legacy": [
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble",
+                  "old-text"
+                ],
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-text",
+                  "old-scribble"
+                ]
+              ],
+              "review_scopes": {},
+              "reviewed_orders": {},
+              "reviews": {}
+            },
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "revisions": [
+              {
+                "at": 101,
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "ontology_version": "0.4.0",
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "finished_at": null,
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "reader": "conformance-reader",
+            "started_at": 100
+          }
+        },
+        "positions": {},
+        "revision": 5,
+        "schema": "booknook.archive.v4",
+        "sessions": {
+          "conformance-session": {
+            "ended_at": 104,
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "contract": "state",
+      "id": "v4-reviewed-then-authored",
+      "input": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "authors": [
+              "Book Nook test author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "provenance": [],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "currently-reading",
+            "sources": [],
+            "subjects": [],
+            "title": "An Original Conformance Book"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "versions": [
+              {
+                "at": 102,
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "interpretation": {
+                  "description": "",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [],
+                  "relationships": [],
+                  "traits": []
+                },
+                "parents": [],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              },
+              {
+                "at": 103,
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "interpretation": {
+                  "description": "First impression",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "relationships": [],
+                  "traits": [
+                    "curious"
+                  ]
+                },
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              }
+            ]
+          }
+        },
+        "drafts": {},
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "assets": [],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "identifiers": [],
+            "language": null
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-concept": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-concept",
+            "kind": "concept",
+            "name": "Original concept"
+          },
+          "conformance-event": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-event",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-place": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-place",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-theme",
+            "kind": "theme",
+            "name": "Original theme"
+          }
+        },
+        "friendship_requests": [],
+        "groups": {},
+        "lists": {},
+        "local_reader": "conformance-reader",
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-scribble",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-text",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "v4-authored-note",
+                "kind": "paragraph",
+                "note": {
+                  "created": {
+                    "at": 444,
+                    "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                    "position_observations": [],
+                    "positions": [],
+                    "reader": "conformance-reader",
+                    "source": "recorded"
+                  },
+                  "face": "whiteboard",
+                  "schema": "booknook.note.v1"
+                },
+                "styles": [],
+                "text": "",
+                "update": "AAA="
+              }
+            ],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "order": {
+              "frontiers": {
+                "f1500434cfe19bc11ed9a1ecb02ff9f55381b51a78093570ef64e65603dbed60": [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble"
+                ]
+              },
+              "inserts": {
+                "v4-authored-note": {
+                  "after": "old-text",
+                  "frontier": "f1500434cfe19bc11ed9a1ecb02ff9f55381b51a78093570ef64e65603dbed60",
+                  "request": "a85b07bc14e14080162f6ba611ddc100bef0c83a227d3e206606e7af7c66b43b"
+                }
+              },
+              "legacy": [
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble",
+                  "old-text"
+                ],
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-text",
+                  "old-scribble"
+                ]
+              ],
+              "review_scopes": {
+                "711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5": [
+                  [
+                    "5a0cd692f192b09af2ecee1d48fe584c",
+                    "old-scribble",
+                    "old-text"
+                  ],
+                  [
+                    "5a0cd692f192b09af2ecee1d48fe584c",
+                    "old-text",
+                    "old-scribble"
+                  ]
+                ]
+              },
+              "reviewed_orders": {
+                "2bdff3917c7124e0985ff51f240b39ad21712602ef1947ec043a4fc9a9c85d66": [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble",
+                  "old-text"
+                ]
+              },
+              "reviews": {
+                "fixture-order-review": {
+                  "evidence": "711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5",
+                  "parents": [],
+                  "selected": "2bdff3917c7124e0985ff51f240b39ad21712602ef1947ec043a4fc9a9c85d66"
+                }
+              }
+            },
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "revisions": [
+              {
+                "at": 101,
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "ontology_version": "0.4.0",
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "finished_at": null,
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "reader": "conformance-reader",
+            "started_at": 100
+          }
+        },
+        "positions": {},
+        "revision": 7,
+        "schema": "booknook.archive.v4",
+        "sessions": {
+          "conformance-session": {
+            "ended_at": 104,
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "contract": "portable",
+      "id": "v4-portable-envelope",
+      "input": {
+        "assets": {},
+        "schema": "booknook.portable-export.v1",
+        "state": {
+          "activity": {},
+          "annotations": {},
+          "blocked": [],
+          "books": {
+            "cb16b69d8846c22397eebdd449c0fcc1": {
+              "authors": [
+                "Book Nook test author"
+              ],
+              "edited_fields": [],
+              "edition_ids": [
+                "a7d420d470f4776c972e9cc08bd58113"
+              ],
+              "id": "cb16b69d8846c22397eebdd449c0fcc1",
+              "provenance": [],
+              "rating": null,
+              "reading_dates": [],
+              "review": "",
+              "shelf": "currently-reading",
+              "sources": [],
+              "subjects": [],
+              "title": "An Original Conformance Book"
+            }
+          },
+          "cards": {
+            "bda191cb12ddac2e96d6b2780e9b9c02": {
+              "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+              "character_id": "325d9288d61ea24b05531536844a04c6",
+              "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+              "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+              "versions": [
+                {
+                  "at": 102,
+                  "id": "764a078e657cc3de23f6355f27ab705b",
+                  "interpretation": {
+                    "description": "",
+                    "observations": [],
+                    "passages": [],
+                    "questions": [],
+                    "relationships": [],
+                    "traits": []
+                  },
+                  "parents": [],
+                  "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                  "positions": [],
+                  "reader": "conformance-reader"
+                },
+                {
+                  "at": 103,
+                  "id": "e13602e68418c629a644ddbc3389fb58",
+                  "interpretation": {
+                    "description": "First impression",
+                    "observations": [],
+                    "passages": [],
+                    "questions": [
+                      "What changed?"
+                    ],
+                    "relationships": [],
+                    "traits": [
+                      "curious"
+                    ]
+                  },
+                  "parents": [
+                    "764a078e657cc3de23f6355f27ab705b"
+                  ],
+                  "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                  "positions": [],
+                  "reader": "conformance-reader"
+                }
+              ]
+            }
+          },
+          "drafts": {},
+          "editions": {
+            "a7d420d470f4776c972e9cc08bd58113": {
+              "assets": [],
+              "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+              "id": "a7d420d470f4776c972e9cc08bd58113",
+              "identifiers": [],
+              "language": null
+            }
+          },
+          "entities": {
+            "325d9288d61ea24b05531536844a04c6": {
+              "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+              "id": "325d9288d61ea24b05531536844a04c6",
+              "kind": "character",
+              "name": "Mara"
+            },
+            "conformance-concept": {
+              "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+              "id": "conformance-concept",
+              "kind": "concept",
+              "name": "Original concept"
+            },
+            "conformance-event": {
+              "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+              "id": "conformance-event",
+              "kind": "event",
+              "name": "Original event"
+            },
+            "conformance-place": {
+              "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+              "id": "conformance-place",
+              "kind": "place",
+              "name": "Original place"
+            },
+            "conformance-theme": {
+              "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+              "id": "conformance-theme",
+              "kind": "theme",
+              "name": "Original theme"
+            }
+          },
+          "friendship_requests": [],
+          "groups": {},
+          "lists": {},
+          "local_reader": "conformance-reader",
+          "notebooks": {
+            "a1c1d75a634816a4c961d24be421101f": {
+              "blocks": [
+                {
+                  "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                  "kind": "paragraph",
+                  "styles": [],
+                  "text": "A calm thought: café 🌿 日本語",
+                  "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+                },
+                {
+                  "id": "old-scribble",
+                  "kind": "paragraph",
+                  "styles": [],
+                  "text": "A calm thought: café 🌿 日本語",
+                  "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+                },
+                {
+                  "id": "old-text",
+                  "kind": "paragraph",
+                  "styles": [],
+                  "text": "A calm thought: café 🌿 日本語",
+                  "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+                },
+                {
+                  "id": "v4-authored-note",
+                  "kind": "paragraph",
+                  "note": {
+                    "created": {
+                      "at": 444,
+                      "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                      "position_observations": [],
+                      "positions": [],
+                      "reader": "conformance-reader",
+                      "source": "recorded"
+                    },
+                    "face": "whiteboard",
+                    "schema": "booknook.note.v1"
+                  },
+                  "styles": [],
+                  "text": "",
+                  "update": "AAA="
+                }
+              ],
+              "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+              "id": "a1c1d75a634816a4c961d24be421101f",
+              "order": {
+                "frontiers": {
+                  "f1500434cfe19bc11ed9a1ecb02ff9f55381b51a78093570ef64e65603dbed60": [
+                    "5a0cd692f192b09af2ecee1d48fe584c",
+                    "old-scribble"
+                  ]
+                },
+                "inserts": {
+                  "v4-authored-note": {
+                    "after": "old-text",
+                    "frontier": "f1500434cfe19bc11ed9a1ecb02ff9f55381b51a78093570ef64e65603dbed60",
+                    "request": "a85b07bc14e14080162f6ba611ddc100bef0c83a227d3e206606e7af7c66b43b"
+                  }
+                },
+                "legacy": [
+                  [
+                    "5a0cd692f192b09af2ecee1d48fe584c",
+                    "old-scribble",
+                    "old-text"
+                  ],
+                  [
+                    "5a0cd692f192b09af2ecee1d48fe584c",
+                    "old-text",
+                    "old-scribble"
+                  ]
+                ],
+                "review_scopes": {
+                  "711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5": [
+                    [
+                      "5a0cd692f192b09af2ecee1d48fe584c",
+                      "old-scribble",
+                      "old-text"
+                    ],
+                    [
+                      "5a0cd692f192b09af2ecee1d48fe584c",
+                      "old-text",
+                      "old-scribble"
+                    ]
+                  ]
+                },
+                "reviewed_orders": {
+                  "2bdff3917c7124e0985ff51f240b39ad21712602ef1947ec043a4fc9a9c85d66": [
+                    "5a0cd692f192b09af2ecee1d48fe584c",
+                    "old-scribble",
+                    "old-text"
+                  ]
+                },
+                "reviews": {
+                  "fixture-order-review": {
+                    "evidence": "711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5",
+                    "parents": [],
+                    "selected": "2bdff3917c7124e0985ff51f240b39ad21712602ef1947ec043a4fc9a9c85d66"
+                  }
+                }
+              },
+              "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+              "revisions": [
+                {
+                  "at": 101,
+                  "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                  "id": "62d709fa8fba418ab5dc22a576db6d11",
+                  "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                  "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+                }
+              ]
+            }
+          },
+          "ontology_version": "0.4.0",
+          "passes": {
+            "8cf2bfa81126aa792618a312a74f11cf": {
+              "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+              "finished_at": null,
+              "id": "8cf2bfa81126aa792618a312a74f11cf",
+              "reader": "conformance-reader",
+              "started_at": 100
+            }
+          },
+          "positions": {},
+          "revision": 7,
+          "schema": "booknook.archive.v4",
+          "sessions": {
+            "conformance-session": {
+              "ended_at": 104,
+              "id": "conformance-session",
+              "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+              "started_at": 101
+            }
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "contract": "state",
+      "id": "wrong-state-version-pair",
+      "input": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "authors": [
+              "Book Nook test author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "provenance": [],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "currently-reading",
+            "sources": [],
+            "subjects": [],
+            "title": "An Original Conformance Book"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "versions": [
+              {
+                "at": 102,
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "interpretation": {
+                  "description": "",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [],
+                  "relationships": [],
+                  "traits": []
+                },
+                "parents": [],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              },
+              {
+                "at": 103,
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "interpretation": {
+                  "description": "First impression",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "relationships": [],
+                  "traits": [
+                    "curious"
+                  ]
+                },
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              }
+            ]
+          }
+        },
+        "drafts": {},
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "assets": [],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "identifiers": [],
+            "language": null
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-concept": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-concept",
+            "kind": "concept",
+            "name": "Original concept"
+          },
+          "conformance-event": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-event",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-place": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-place",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-theme",
+            "kind": "theme",
+            "name": "Original theme"
+          }
+        },
+        "friendship_requests": [],
+        "groups": {},
+        "lists": {},
+        "local_reader": "conformance-reader",
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-scribble",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-text",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "v4-authored-note",
+                "kind": "paragraph",
+                "note": {
+                  "created": {
+                    "at": 444,
+                    "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                    "position_observations": [],
+                    "positions": [],
+                    "reader": "conformance-reader",
+                    "source": "recorded"
+                  },
+                  "face": "whiteboard",
+                  "schema": "booknook.note.v1"
+                },
+                "styles": [],
+                "text": "",
+                "update": "AAA="
+              }
+            ],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "order": {
+              "frontiers": {
+                "f1500434cfe19bc11ed9a1ecb02ff9f55381b51a78093570ef64e65603dbed60": [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble"
+                ]
+              },
+              "inserts": {
+                "v4-authored-note": {
+                  "after": "old-text",
+                  "frontier": "f1500434cfe19bc11ed9a1ecb02ff9f55381b51a78093570ef64e65603dbed60",
+                  "request": "a85b07bc14e14080162f6ba611ddc100bef0c83a227d3e206606e7af7c66b43b"
+                }
+              },
+              "legacy": [
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble",
+                  "old-text"
+                ],
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-text",
+                  "old-scribble"
+                ]
+              ],
+              "review_scopes": {
+                "711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5": [
+                  [
+                    "5a0cd692f192b09af2ecee1d48fe584c",
+                    "old-scribble",
+                    "old-text"
+                  ],
+                  [
+                    "5a0cd692f192b09af2ecee1d48fe584c",
+                    "old-text",
+                    "old-scribble"
+                  ]
+                ]
+              },
+              "reviewed_orders": {
+                "2bdff3917c7124e0985ff51f240b39ad21712602ef1947ec043a4fc9a9c85d66": [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble",
+                  "old-text"
+                ]
+              },
+              "reviews": {
+                "fixture-order-review": {
+                  "evidence": "711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5",
+                  "parents": [],
+                  "selected": "2bdff3917c7124e0985ff51f240b39ad21712602ef1947ec043a4fc9a9c85d66"
+                }
+              }
+            },
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "revisions": [
+              {
+                "at": 101,
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "ontology_version": "0.3.0",
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "finished_at": null,
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "reader": "conformance-reader",
+            "started_at": 100
+          }
+        },
+        "positions": {},
+        "revision": 7,
+        "schema": "booknook.archive.v4",
+        "sessions": {
+          "conformance-session": {
+            "ended_at": 104,
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "contract": "state",
+      "id": "order-on-v3",
+      "input": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "authors": [
+              "Book Nook test author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "provenance": [],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "currently-reading",
+            "sources": [],
+            "subjects": [],
+            "title": "An Original Conformance Book"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "versions": [
+              {
+                "at": 102,
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "interpretation": {
+                  "description": "",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [],
+                  "relationships": [],
+                  "traits": []
+                },
+                "parents": [],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              },
+              {
+                "at": 103,
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "interpretation": {
+                  "description": "First impression",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "relationships": [],
+                  "traits": [
+                    "curious"
+                  ]
+                },
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              }
+            ]
+          }
+        },
+        "drafts": {},
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "assets": [],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "identifiers": [],
+            "language": null
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-concept": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-concept",
+            "kind": "concept",
+            "name": "Original concept"
+          },
+          "conformance-event": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-event",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-place": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-place",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-theme",
+            "kind": "theme",
+            "name": "Original theme"
+          }
+        },
+        "friendship_requests": [],
+        "groups": {},
+        "lists": {},
+        "local_reader": "conformance-reader",
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-scribble",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-text",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "v4-authored-note",
+                "kind": "paragraph",
+                "note": {
+                  "created": {
+                    "at": 444,
+                    "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                    "position_observations": [],
+                    "positions": [],
+                    "reader": "conformance-reader",
+                    "source": "recorded"
+                  },
+                  "face": "whiteboard",
+                  "schema": "booknook.note.v1"
+                },
+                "styles": [],
+                "text": "",
+                "update": "AAA="
+              }
+            ],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "order": {
+              "frontiers": {
+                "f1500434cfe19bc11ed9a1ecb02ff9f55381b51a78093570ef64e65603dbed60": [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble"
+                ]
+              },
+              "inserts": {
+                "v4-authored-note": {
+                  "after": "old-text",
+                  "frontier": "f1500434cfe19bc11ed9a1ecb02ff9f55381b51a78093570ef64e65603dbed60",
+                  "request": "a85b07bc14e14080162f6ba611ddc100bef0c83a227d3e206606e7af7c66b43b"
+                }
+              },
+              "legacy": [
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble",
+                  "old-text"
+                ],
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-text",
+                  "old-scribble"
+                ]
+              ],
+              "review_scopes": {
+                "711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5": [
+                  [
+                    "5a0cd692f192b09af2ecee1d48fe584c",
+                    "old-scribble",
+                    "old-text"
+                  ],
+                  [
+                    "5a0cd692f192b09af2ecee1d48fe584c",
+                    "old-text",
+                    "old-scribble"
+                  ]
+                ]
+              },
+              "reviewed_orders": {
+                "2bdff3917c7124e0985ff51f240b39ad21712602ef1947ec043a4fc9a9c85d66": [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble",
+                  "old-text"
+                ]
+              },
+              "reviews": {
+                "fixture-order-review": {
+                  "evidence": "711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5",
+                  "parents": [],
+                  "selected": "2bdff3917c7124e0985ff51f240b39ad21712602ef1947ec043a4fc9a9c85d66"
+                }
+              }
+            },
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "revisions": [
+              {
+                "at": 101,
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "ontology_version": "0.3.0",
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "finished_at": null,
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "reader": "conformance-reader",
+            "started_at": 100
+          }
+        },
+        "positions": {},
+        "revision": 7,
+        "schema": "booknook.archive.v3",
+        "sessions": {
+          "conformance-session": {
+            "ended_at": 104,
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "contract": "state",
+      "id": "explicit-null-order",
+      "input": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "authors": [
+              "Book Nook test author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "provenance": [],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "currently-reading",
+            "sources": [],
+            "subjects": [],
+            "title": "An Original Conformance Book"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "versions": [
+              {
+                "at": 102,
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "interpretation": {
+                  "description": "",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [],
+                  "relationships": [],
+                  "traits": []
+                },
+                "parents": [],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              },
+              {
+                "at": 103,
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "interpretation": {
+                  "description": "First impression",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "relationships": [],
+                  "traits": [
+                    "curious"
+                  ]
+                },
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              }
+            ]
+          }
+        },
+        "drafts": {},
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "assets": [],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "identifiers": [],
+            "language": null
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-concept": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-concept",
+            "kind": "concept",
+            "name": "Original concept"
+          },
+          "conformance-event": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-event",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-place": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-place",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-theme",
+            "kind": "theme",
+            "name": "Original theme"
+          }
+        },
+        "friendship_requests": [],
+        "groups": {},
+        "lists": {},
+        "local_reader": "conformance-reader",
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-scribble",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-text",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "v4-authored-note",
+                "kind": "paragraph",
+                "note": {
+                  "created": {
+                    "at": 444,
+                    "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                    "position_observations": [],
+                    "positions": [],
+                    "reader": "conformance-reader",
+                    "source": "recorded"
+                  },
+                  "face": "whiteboard",
+                  "schema": "booknook.note.v1"
+                },
+                "styles": [],
+                "text": "",
+                "update": "AAA="
+              }
+            ],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "order": null,
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "revisions": [
+              {
+                "at": 101,
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "ontology_version": "0.4.0",
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "finished_at": null,
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "reader": "conformance-reader",
+            "started_at": 100
+          }
+        },
+        "positions": {},
+        "revision": 7,
+        "schema": "booknook.archive.v4",
+        "sessions": {
+          "conformance-session": {
+            "ended_at": 104,
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "contract": "state",
+      "id": "projection-disagrees",
+      "input": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "authors": [
+              "Book Nook test author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "provenance": [],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "currently-reading",
+            "sources": [],
+            "subjects": [],
+            "title": "An Original Conformance Book"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "versions": [
+              {
+                "at": 102,
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "interpretation": {
+                  "description": "",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [],
+                  "relationships": [],
+                  "traits": []
+                },
+                "parents": [],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              },
+              {
+                "at": 103,
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "interpretation": {
+                  "description": "First impression",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "relationships": [],
+                  "traits": [
+                    "curious"
+                  ]
+                },
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              }
+            ]
+          }
+        },
+        "drafts": {},
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "assets": [],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "identifiers": [],
+            "language": null
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-concept": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-concept",
+            "kind": "concept",
+            "name": "Original concept"
+          },
+          "conformance-event": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-event",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-place": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-place",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-theme",
+            "kind": "theme",
+            "name": "Original theme"
+          }
+        },
+        "friendship_requests": [],
+        "groups": {},
+        "lists": {},
+        "local_reader": "conformance-reader",
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "blocks": [
+              {
+                "id": "old-scribble",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-text",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "v4-authored-note",
+                "kind": "paragraph",
+                "note": {
+                  "created": {
+                    "at": 444,
+                    "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                    "position_observations": [],
+                    "positions": [],
+                    "reader": "conformance-reader",
+                    "source": "recorded"
+                  },
+                  "face": "whiteboard",
+                  "schema": "booknook.note.v1"
+                },
+                "styles": [],
+                "text": "",
+                "update": "AAA="
+              }
+            ],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "order": {
+              "frontiers": {
+                "f1500434cfe19bc11ed9a1ecb02ff9f55381b51a78093570ef64e65603dbed60": [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble"
+                ]
+              },
+              "inserts": {
+                "v4-authored-note": {
+                  "after": "old-text",
+                  "frontier": "f1500434cfe19bc11ed9a1ecb02ff9f55381b51a78093570ef64e65603dbed60",
+                  "request": "a85b07bc14e14080162f6ba611ddc100bef0c83a227d3e206606e7af7c66b43b"
+                }
+              },
+              "legacy": [
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble",
+                  "old-text"
+                ],
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-text",
+                  "old-scribble"
+                ]
+              ],
+              "review_scopes": {
+                "711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5": [
+                  [
+                    "5a0cd692f192b09af2ecee1d48fe584c",
+                    "old-scribble",
+                    "old-text"
+                  ],
+                  [
+                    "5a0cd692f192b09af2ecee1d48fe584c",
+                    "old-text",
+                    "old-scribble"
+                  ]
+                ]
+              },
+              "reviewed_orders": {
+                "2bdff3917c7124e0985ff51f240b39ad21712602ef1947ec043a4fc9a9c85d66": [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble",
+                  "old-text"
+                ]
+              },
+              "reviews": {
+                "fixture-order-review": {
+                  "evidence": "711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5",
+                  "parents": [],
+                  "selected": "2bdff3917c7124e0985ff51f240b39ad21712602ef1947ec043a4fc9a9c85d66"
+                }
+              }
+            },
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "revisions": [
+              {
+                "at": 101,
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "ontology_version": "0.4.0",
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "finished_at": null,
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "reader": "conformance-reader",
+            "started_at": 100
+          }
+        },
+        "positions": {},
+        "revision": 7,
+        "schema": "booknook.archive.v4",
+        "sessions": {
+          "conformance-session": {
+            "ended_at": 104,
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "contract": "state",
+      "id": "duplicate-legacy-path",
+      "input": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "authors": [
+              "Book Nook test author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "provenance": [],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "currently-reading",
+            "sources": [],
+            "subjects": [],
+            "title": "An Original Conformance Book"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "versions": [
+              {
+                "at": 102,
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "interpretation": {
+                  "description": "",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [],
+                  "relationships": [],
+                  "traits": []
+                },
+                "parents": [],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              },
+              {
+                "at": 103,
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "interpretation": {
+                  "description": "First impression",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "relationships": [],
+                  "traits": [
+                    "curious"
+                  ]
+                },
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              }
+            ]
+          }
+        },
+        "drafts": {},
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "assets": [],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "identifiers": [],
+            "language": null
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-concept": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-concept",
+            "kind": "concept",
+            "name": "Original concept"
+          },
+          "conformance-event": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-event",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-place": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-place",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-theme",
+            "kind": "theme",
+            "name": "Original theme"
+          }
+        },
+        "friendship_requests": [],
+        "groups": {},
+        "lists": {},
+        "local_reader": "conformance-reader",
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-scribble",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-text",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "v4-authored-note",
+                "kind": "paragraph",
+                "note": {
+                  "created": {
+                    "at": 444,
+                    "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                    "position_observations": [],
+                    "positions": [],
+                    "reader": "conformance-reader",
+                    "source": "recorded"
+                  },
+                  "face": "whiteboard",
+                  "schema": "booknook.note.v1"
+                },
+                "styles": [],
+                "text": "",
+                "update": "AAA="
+              }
+            ],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "order": {
+              "frontiers": {
+                "f1500434cfe19bc11ed9a1ecb02ff9f55381b51a78093570ef64e65603dbed60": [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble"
+                ]
+              },
+              "inserts": {
+                "v4-authored-note": {
+                  "after": "old-text",
+                  "frontier": "f1500434cfe19bc11ed9a1ecb02ff9f55381b51a78093570ef64e65603dbed60",
+                  "request": "a85b07bc14e14080162f6ba611ddc100bef0c83a227d3e206606e7af7c66b43b"
+                }
+              },
+              "legacy": [
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble",
+                  "old-text"
+                ],
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-text",
+                  "old-scribble"
+                ],
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble",
+                  "old-text"
+                ]
+              ],
+              "review_scopes": {
+                "711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5": [
+                  [
+                    "5a0cd692f192b09af2ecee1d48fe584c",
+                    "old-scribble",
+                    "old-text"
+                  ],
+                  [
+                    "5a0cd692f192b09af2ecee1d48fe584c",
+                    "old-text",
+                    "old-scribble"
+                  ]
+                ]
+              },
+              "reviewed_orders": {
+                "2bdff3917c7124e0985ff51f240b39ad21712602ef1947ec043a4fc9a9c85d66": [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble",
+                  "old-text"
+                ]
+              },
+              "reviews": {
+                "fixture-order-review": {
+                  "evidence": "711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5",
+                  "parents": [],
+                  "selected": "2bdff3917c7124e0985ff51f240b39ad21712602ef1947ec043a4fc9a9c85d66"
+                }
+              }
+            },
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "revisions": [
+              {
+                "at": 101,
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "ontology_version": "0.4.0",
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "finished_at": null,
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "reader": "conformance-reader",
+            "started_at": 100
+          }
+        },
+        "positions": {},
+        "revision": 7,
+        "schema": "booknook.archive.v4",
+        "sessions": {
+          "conformance-session": {
+            "ended_at": 104,
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "contract": "state",
+      "id": "unknown-order-member",
+      "input": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "authors": [
+              "Book Nook test author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "provenance": [],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "currently-reading",
+            "sources": [],
+            "subjects": [],
+            "title": "An Original Conformance Book"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "versions": [
+              {
+                "at": 102,
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "interpretation": {
+                  "description": "",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [],
+                  "relationships": [],
+                  "traits": []
+                },
+                "parents": [],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              },
+              {
+                "at": 103,
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "interpretation": {
+                  "description": "First impression",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "relationships": [],
+                  "traits": [
+                    "curious"
+                  ]
+                },
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              }
+            ]
+          }
+        },
+        "drafts": {},
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "assets": [],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "identifiers": [],
+            "language": null
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-concept": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-concept",
+            "kind": "concept",
+            "name": "Original concept"
+          },
+          "conformance-event": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-event",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-place": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-place",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-theme",
+            "kind": "theme",
+            "name": "Original theme"
+          }
+        },
+        "friendship_requests": [],
+        "groups": {},
+        "lists": {},
+        "local_reader": "conformance-reader",
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-scribble",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-text",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "v4-authored-note",
+                "kind": "paragraph",
+                "note": {
+                  "created": {
+                    "at": 444,
+                    "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                    "position_observations": [],
+                    "positions": [],
+                    "reader": "conformance-reader",
+                    "source": "recorded"
+                  },
+                  "face": "whiteboard",
+                  "schema": "booknook.note.v1"
+                },
+                "styles": [],
+                "text": "",
+                "update": "AAA="
+              }
+            ],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "order": {
+              "frontiers": {
+                "f1500434cfe19bc11ed9a1ecb02ff9f55381b51a78093570ef64e65603dbed60": [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble"
+                ]
+              },
+              "future": true,
+              "inserts": {
+                "v4-authored-note": {
+                  "after": "old-text",
+                  "frontier": "f1500434cfe19bc11ed9a1ecb02ff9f55381b51a78093570ef64e65603dbed60",
+                  "request": "a85b07bc14e14080162f6ba611ddc100bef0c83a227d3e206606e7af7c66b43b"
+                }
+              },
+              "legacy": [
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble",
+                  "old-text"
+                ],
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-text",
+                  "old-scribble"
+                ]
+              ],
+              "review_scopes": {
+                "711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5": [
+                  [
+                    "5a0cd692f192b09af2ecee1d48fe584c",
+                    "old-scribble",
+                    "old-text"
+                  ],
+                  [
+                    "5a0cd692f192b09af2ecee1d48fe584c",
+                    "old-text",
+                    "old-scribble"
+                  ]
+                ]
+              },
+              "reviewed_orders": {
+                "2bdff3917c7124e0985ff51f240b39ad21712602ef1947ec043a4fc9a9c85d66": [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble",
+                  "old-text"
+                ]
+              },
+              "reviews": {
+                "fixture-order-review": {
+                  "evidence": "711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5",
+                  "parents": [],
+                  "selected": "2bdff3917c7124e0985ff51f240b39ad21712602ef1947ec043a4fc9a9c85d66"
+                }
+              }
+            },
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "revisions": [
+              {
+                "at": 101,
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "ontology_version": "0.4.0",
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "finished_at": null,
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "reader": "conformance-reader",
+            "started_at": 100
+          }
+        },
+        "positions": {},
+        "revision": 7,
+        "schema": "booknook.archive.v4",
+        "sessions": {
+          "conformance-session": {
+            "ended_at": 104,
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "contract": "state",
+      "id": "frontier-digest-disagrees",
+      "input": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "authors": [
+              "Book Nook test author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "provenance": [],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "currently-reading",
+            "sources": [],
+            "subjects": [],
+            "title": "An Original Conformance Book"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "versions": [
+              {
+                "at": 102,
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "interpretation": {
+                  "description": "",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [],
+                  "relationships": [],
+                  "traits": []
+                },
+                "parents": [],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              },
+              {
+                "at": 103,
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "interpretation": {
+                  "description": "First impression",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "relationships": [],
+                  "traits": [
+                    "curious"
+                  ]
+                },
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              }
+            ]
+          }
+        },
+        "drafts": {},
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "assets": [],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "identifiers": [],
+            "language": null
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-concept": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-concept",
+            "kind": "concept",
+            "name": "Original concept"
+          },
+          "conformance-event": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-event",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-place": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-place",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-theme",
+            "kind": "theme",
+            "name": "Original theme"
+          }
+        },
+        "friendship_requests": [],
+        "groups": {},
+        "lists": {},
+        "local_reader": "conformance-reader",
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-scribble",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-text",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "v4-authored-note",
+                "kind": "paragraph",
+                "note": {
+                  "created": {
+                    "at": 444,
+                    "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                    "position_observations": [],
+                    "positions": [],
+                    "reader": "conformance-reader",
+                    "source": "recorded"
+                  },
+                  "face": "whiteboard",
+                  "schema": "booknook.note.v1"
+                },
+                "styles": [],
+                "text": "",
+                "update": "AAA="
+              }
+            ],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "order": {
+              "frontiers": {
+                "f1500434cfe19bc11ed9a1ecb02ff9f55381b51a78093570ef64e65603dbed60": [
+                  "old-text"
+                ]
+              },
+              "inserts": {
+                "v4-authored-note": {
+                  "after": "old-text",
+                  "frontier": "f1500434cfe19bc11ed9a1ecb02ff9f55381b51a78093570ef64e65603dbed60",
+                  "request": "a85b07bc14e14080162f6ba611ddc100bef0c83a227d3e206606e7af7c66b43b"
+                }
+              },
+              "legacy": [
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble",
+                  "old-text"
+                ],
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-text",
+                  "old-scribble"
+                ]
+              ],
+              "review_scopes": {
+                "711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5": [
+                  [
+                    "5a0cd692f192b09af2ecee1d48fe584c",
+                    "old-scribble",
+                    "old-text"
+                  ],
+                  [
+                    "5a0cd692f192b09af2ecee1d48fe584c",
+                    "old-text",
+                    "old-scribble"
+                  ]
+                ]
+              },
+              "reviewed_orders": {
+                "2bdff3917c7124e0985ff51f240b39ad21712602ef1947ec043a4fc9a9c85d66": [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble",
+                  "old-text"
+                ]
+              },
+              "reviews": {
+                "fixture-order-review": {
+                  "evidence": "711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5",
+                  "parents": [],
+                  "selected": "2bdff3917c7124e0985ff51f240b39ad21712602ef1947ec043a4fc9a9c85d66"
+                }
+              }
+            },
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "revisions": [
+              {
+                "at": 101,
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "ontology_version": "0.4.0",
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "finished_at": null,
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "reader": "conformance-reader",
+            "started_at": 100
+          }
+        },
+        "positions": {},
+        "revision": 7,
+        "schema": "booknook.archive.v4",
+        "sessions": {
+          "conformance-session": {
+            "ended_at": 104,
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "contract": "state",
+      "id": "duplicate-raw-state-key",
+      "raw_json": "{\"schema\":\"booknook.archive.v4\",\"activity\":{},\"annotations\":{},\"blocked\":[],\"books\":{\"cb16b69d8846c22397eebdd449c0fcc1\":{\"authors\":[\"Book Nook test author\"],\"edited_fields\":[],\"edition_ids\":[\"a7d420d470f4776c972e9cc08bd58113\"],\"id\":\"cb16b69d8846c22397eebdd449c0fcc1\",\"provenance\":[],\"rating\":null,\"reading_dates\":[],\"review\":\"\",\"shelf\":\"currently-reading\",\"sources\":[],\"subjects\":[],\"title\":\"An Original Conformance Book\"}},\"cards\":{\"bda191cb12ddac2e96d6b2780e9b9c02\":{\"block_id\":\"5a0cd692f192b09af2ecee1d48fe584c\",\"character_id\":\"325d9288d61ea24b05531536844a04c6\",\"id\":\"bda191cb12ddac2e96d6b2780e9b9c02\",\"notebook_id\":\"a1c1d75a634816a4c961d24be421101f\",\"versions\":[{\"at\":102,\"id\":\"764a078e657cc3de23f6355f27ab705b\",\"interpretation\":{\"description\":\"\",\"observations\":[],\"passages\":[],\"questions\":[],\"relationships\":[],\"traits\":[]},\"parents\":[],\"pass_id\":\"8cf2bfa81126aa792618a312a74f11cf\",\"positions\":[],\"reader\":\"conformance-reader\"},{\"at\":103,\"id\":\"e13602e68418c629a644ddbc3389fb58\",\"interpretation\":{\"description\":\"First impression\",\"observations\":[],\"passages\":[],\"questions\":[\"What changed?\"],\"relationships\":[],\"traits\":[\"curious\"]},\"parents\":[\"764a078e657cc3de23f6355f27ab705b\"],\"pass_id\":\"8cf2bfa81126aa792618a312a74f11cf\",\"positions\":[],\"reader\":\"conformance-reader\"}]}},\"drafts\":{},\"editions\":{\"a7d420d470f4776c972e9cc08bd58113\":{\"assets\":[],\"book_id\":\"cb16b69d8846c22397eebdd449c0fcc1\",\"id\":\"a7d420d470f4776c972e9cc08bd58113\",\"identifiers\":[],\"language\":null}},\"entities\":{\"325d9288d61ea24b05531536844a04c6\":{\"book_id\":\"cb16b69d8846c22397eebdd449c0fcc1\",\"id\":\"325d9288d61ea24b05531536844a04c6\",\"kind\":\"character\",\"name\":\"Mara\"},\"conformance-concept\":{\"book_id\":\"cb16b69d8846c22397eebdd449c0fcc1\",\"id\":\"conformance-concept\",\"kind\":\"concept\",\"name\":\"Original concept\"},\"conformance-event\":{\"book_id\":\"cb16b69d8846c22397eebdd449c0fcc1\",\"id\":\"conformance-event\",\"kind\":\"event\",\"name\":\"Original event\"},\"conformance-place\":{\"book_id\":\"cb16b69d8846c22397eebdd449c0fcc1\",\"id\":\"conformance-place\",\"kind\":\"place\",\"name\":\"Original place\"},\"conformance-theme\":{\"book_id\":\"cb16b69d8846c22397eebdd449c0fcc1\",\"id\":\"conformance-theme\",\"kind\":\"theme\",\"name\":\"Original theme\"}},\"friendship_requests\":[],\"groups\":{},\"lists\":{},\"local_reader\":\"conformance-reader\",\"notebooks\":{\"a1c1d75a634816a4c961d24be421101f\":{\"blocks\":[{\"id\":\"5a0cd692f192b09af2ecee1d48fe584c\",\"kind\":\"paragraph\",\"styles\":[],\"text\":\"A calm thought: café 🌿 日本語\",\"update\":\"AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA==\"},{\"id\":\"old-scribble\",\"kind\":\"paragraph\",\"styles\":[],\"text\":\"A calm thought: café 🌿 日本語\",\"update\":\"AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA==\"},{\"id\":\"old-text\",\"kind\":\"paragraph\",\"styles\":[],\"text\":\"A calm thought: café 🌿 日本語\",\"update\":\"AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA==\"},{\"id\":\"v4-authored-note\",\"kind\":\"paragraph\",\"note\":{\"created\":{\"at\":444,\"pass_id\":\"8cf2bfa81126aa792618a312a74f11cf\",\"position_observations\":[],\"positions\":[],\"reader\":\"conformance-reader\",\"source\":\"recorded\"},\"face\":\"whiteboard\",\"schema\":\"booknook.note.v1\"},\"styles\":[],\"text\":\"\",\"update\":\"AAA=\"}],\"book_id\":\"cb16b69d8846c22397eebdd449c0fcc1\",\"id\":\"a1c1d75a634816a4c961d24be421101f\",\"order\":{\"frontiers\":{\"f1500434cfe19bc11ed9a1ecb02ff9f55381b51a78093570ef64e65603dbed60\":[\"5a0cd692f192b09af2ecee1d48fe584c\",\"old-scribble\"]},\"inserts\":{\"v4-authored-note\":{\"after\":\"old-text\",\"frontier\":\"f1500434cfe19bc11ed9a1ecb02ff9f55381b51a78093570ef64e65603dbed60\",\"request\":\"a85b07bc14e14080162f6ba611ddc100bef0c83a227d3e206606e7af7c66b43b\"}},\"legacy\":[[\"5a0cd692f192b09af2ecee1d48fe584c\",\"old-scribble\",\"old-text\"],[\"5a0cd692f192b09af2ecee1d48fe584c\",\"old-text\",\"old-scribble\"]],\"review_scopes\":{\"711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5\":[[\"5a0cd692f192b09af2ecee1d48fe584c\",\"old-scribble\",\"old-text\"],[\"5a0cd692f192b09af2ecee1d48fe584c\",\"old-text\",\"old-scribble\"]]},\"reviewed_orders\":{\"2bdff3917c7124e0985ff51f240b39ad21712602ef1947ec043a4fc9a9c85d66\":[\"5a0cd692f192b09af2ecee1d48fe584c\",\"old-scribble\",\"old-text\"]},\"reviews\":{\"fixture-order-review\":{\"evidence\":\"711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5\",\"parents\":[],\"selected\":\"2bdff3917c7124e0985ff51f240b39ad21712602ef1947ec043a4fc9a9c85d66\"}}},\"pass_id\":\"8cf2bfa81126aa792618a312a74f11cf\",\"revisions\":[{\"at\":101,\"block_id\":\"5a0cd692f192b09af2ecee1d48fe584c\",\"id\":\"62d709fa8fba418ab5dc22a576db6d11\",\"reader\":\"f73a52a1636ac42b24dc5837e3a2f548\",\"update\":\"AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA==\"}]}},\"ontology_version\":\"0.4.0\",\"passes\":{\"8cf2bfa81126aa792618a312a74f11cf\":{\"book_id\":\"cb16b69d8846c22397eebdd449c0fcc1\",\"finished_at\":null,\"id\":\"8cf2bfa81126aa792618a312a74f11cf\",\"reader\":\"conformance-reader\",\"started_at\":100}},\"positions\":{},\"revision\":7,\"schema\":\"booknook.archive.v4\",\"sessions\":{\"conformance-session\":{\"ended_at\":104,\"id\":\"conformance-session\",\"pass_id\":\"8cf2bfa81126aa792618a312a74f11cf\",\"started_at\":101}}}",
+      "valid": false
+    },
+    {
+      "contract": "command",
+      "id": "atomic-review",
+      "input": {
+        "evidence": "711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5",
+        "heads": [],
+        "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+        "op": "review_notebook_order",
+        "review_id": "fixture-order-review",
+        "selected": [
+          "5a0cd692f192b09af2ecee1d48fe584c",
+          "old-scribble",
+          "old-text"
+        ]
+      },
+      "state": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "authors": [
+              "Book Nook test author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "provenance": [],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "currently-reading",
+            "sources": [],
+            "subjects": [],
+            "title": "An Original Conformance Book"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "versions": [
+              {
+                "at": 102,
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "interpretation": {
+                  "description": "",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [],
+                  "relationships": [],
+                  "traits": []
+                },
+                "parents": [],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              },
+              {
+                "at": 103,
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "interpretation": {
+                  "description": "First impression",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "relationships": [],
+                  "traits": [
+                    "curious"
+                  ]
+                },
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              }
+            ]
+          }
+        },
+        "drafts": {},
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "assets": [],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "identifiers": [],
+            "language": null
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-concept": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-concept",
+            "kind": "concept",
+            "name": "Original concept"
+          },
+          "conformance-event": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-event",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-place": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-place",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-theme",
+            "kind": "theme",
+            "name": "Original theme"
+          }
+        },
+        "friendship_requests": [],
+        "groups": {},
+        "lists": {},
+        "local_reader": "conformance-reader",
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-scribble",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-text",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "order": {
+              "frontiers": {},
+              "inserts": {},
+              "legacy": [
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble",
+                  "old-text"
+                ],
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-text",
+                  "old-scribble"
+                ]
+              ],
+              "review_scopes": {},
+              "reviewed_orders": {},
+              "reviews": {}
+            },
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "revisions": [
+              {
+                "at": 101,
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "ontology_version": "0.4.0",
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "finished_at": null,
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "reader": "conformance-reader",
+            "started_at": 100
+          }
+        },
+        "positions": {},
+        "revision": 5,
+        "schema": "booknook.archive.v4",
+        "sessions": {
+          "conformance-session": {
+            "ended_at": 104,
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "contract": "command",
+      "id": "exact-visible-append",
+      "input": {
+        "at": 444,
+        "block_id": "v4-authored-note",
+        "face": "whiteboard",
+        "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+        "op": "append_ordered_note",
+        "visible_block_ids": [
+          "5a0cd692f192b09af2ecee1d48fe584c",
+          "old-scribble",
+          "old-text"
+        ]
+      },
+      "state": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "authors": [
+              "Book Nook test author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "provenance": [],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "currently-reading",
+            "sources": [],
+            "subjects": [],
+            "title": "An Original Conformance Book"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "versions": [
+              {
+                "at": 102,
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "interpretation": {
+                  "description": "",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [],
+                  "relationships": [],
+                  "traits": []
+                },
+                "parents": [],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              },
+              {
+                "at": 103,
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "interpretation": {
+                  "description": "First impression",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "relationships": [],
+                  "traits": [
+                    "curious"
+                  ]
+                },
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              }
+            ]
+          }
+        },
+        "drafts": {},
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "assets": [],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "identifiers": [],
+            "language": null
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-concept": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-concept",
+            "kind": "concept",
+            "name": "Original concept"
+          },
+          "conformance-event": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-event",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-place": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-place",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-theme",
+            "kind": "theme",
+            "name": "Original theme"
+          }
+        },
+        "friendship_requests": [],
+        "groups": {},
+        "lists": {},
+        "local_reader": "conformance-reader",
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-scribble",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-text",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "order": {
+              "frontiers": {},
+              "inserts": {},
+              "legacy": [
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble",
+                  "old-text"
+                ],
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-text",
+                  "old-scribble"
+                ]
+              ],
+              "review_scopes": {
+                "711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5": [
+                  [
+                    "5a0cd692f192b09af2ecee1d48fe584c",
+                    "old-scribble",
+                    "old-text"
+                  ],
+                  [
+                    "5a0cd692f192b09af2ecee1d48fe584c",
+                    "old-text",
+                    "old-scribble"
+                  ]
+                ]
+              },
+              "reviewed_orders": {
+                "2bdff3917c7124e0985ff51f240b39ad21712602ef1947ec043a4fc9a9c85d66": [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble",
+                  "old-text"
+                ]
+              },
+              "reviews": {
+                "fixture-order-review": {
+                  "evidence": "711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5",
+                  "parents": [],
+                  "selected": "2bdff3917c7124e0985ff51f240b39ad21712602ef1947ec043a4fc9a9c85d66"
+                }
+              }
+            },
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "revisions": [
+              {
+                "at": 101,
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "ontology_version": "0.4.0",
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "finished_at": null,
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "reader": "conformance-reader",
+            "started_at": 100
+          }
+        },
+        "positions": {},
+        "revision": 6,
+        "schema": "booknook.archive.v4",
+        "sessions": {
+          "conformance-session": {
+            "ended_at": 104,
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101
+          }
+        }
+      },
+      "valid": true
+    },
+    {
+      "contract": "command",
+      "id": "changed-append-request-rejected",
+      "input": {
+        "at": 445,
+        "block_id": "v4-authored-note",
+        "face": "whiteboard",
+        "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+        "op": "append_ordered_note",
+        "visible_block_ids": [
+          "5a0cd692f192b09af2ecee1d48fe584c",
+          "old-scribble",
+          "old-text"
+        ]
+      },
+      "state": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "cb16b69d8846c22397eebdd449c0fcc1": {
+            "authors": [
+              "Book Nook test author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "a7d420d470f4776c972e9cc08bd58113"
+            ],
+            "id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "provenance": [],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "currently-reading",
+            "sources": [],
+            "subjects": [],
+            "title": "An Original Conformance Book"
+          }
+        },
+        "cards": {
+          "bda191cb12ddac2e96d6b2780e9b9c02": {
+            "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+            "character_id": "325d9288d61ea24b05531536844a04c6",
+            "id": "bda191cb12ddac2e96d6b2780e9b9c02",
+            "notebook_id": "a1c1d75a634816a4c961d24be421101f",
+            "versions": [
+              {
+                "at": 102,
+                "id": "764a078e657cc3de23f6355f27ab705b",
+                "interpretation": {
+                  "description": "",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [],
+                  "relationships": [],
+                  "traits": []
+                },
+                "parents": [],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              },
+              {
+                "at": 103,
+                "id": "e13602e68418c629a644ddbc3389fb58",
+                "interpretation": {
+                  "description": "First impression",
+                  "observations": [],
+                  "passages": [],
+                  "questions": [
+                    "What changed?"
+                  ],
+                  "relationships": [],
+                  "traits": [
+                    "curious"
+                  ]
+                },
+                "parents": [
+                  "764a078e657cc3de23f6355f27ab705b"
+                ],
+                "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                "positions": [],
+                "reader": "conformance-reader"
+              }
+            ]
+          }
+        },
+        "drafts": {},
+        "editions": {
+          "a7d420d470f4776c972e9cc08bd58113": {
+            "assets": [],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a7d420d470f4776c972e9cc08bd58113",
+            "identifiers": [],
+            "language": null
+          }
+        },
+        "entities": {
+          "325d9288d61ea24b05531536844a04c6": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "325d9288d61ea24b05531536844a04c6",
+            "kind": "character",
+            "name": "Mara"
+          },
+          "conformance-concept": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-concept",
+            "kind": "concept",
+            "name": "Original concept"
+          },
+          "conformance-event": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-event",
+            "kind": "event",
+            "name": "Original event"
+          },
+          "conformance-place": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-place",
+            "kind": "place",
+            "name": "Original place"
+          },
+          "conformance-theme": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "conformance-theme",
+            "kind": "theme",
+            "name": "Original theme"
+          }
+        },
+        "friendship_requests": [],
+        "groups": {},
+        "lists": {},
+        "local_reader": "conformance-reader",
+        "notebooks": {
+          "a1c1d75a634816a4c961d24be421101f": {
+            "blocks": [
+              {
+                "id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-scribble",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "old-text",
+                "kind": "paragraph",
+                "styles": [],
+                "text": "A calm thought: café 🌿 日本語",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              },
+              {
+                "id": "v4-authored-note",
+                "kind": "paragraph",
+                "note": {
+                  "created": {
+                    "at": 444,
+                    "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+                    "position_observations": [],
+                    "positions": [],
+                    "reader": "conformance-reader",
+                    "source": "recorded"
+                  },
+                  "face": "whiteboard",
+                  "schema": "booknook.note.v1"
+                },
+                "styles": [],
+                "text": "",
+                "update": "AAA="
+              }
+            ],
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "id": "a1c1d75a634816a4c961d24be421101f",
+            "order": {
+              "frontiers": {
+                "f1500434cfe19bc11ed9a1ecb02ff9f55381b51a78093570ef64e65603dbed60": [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble"
+                ]
+              },
+              "inserts": {
+                "v4-authored-note": {
+                  "after": "old-text",
+                  "frontier": "f1500434cfe19bc11ed9a1ecb02ff9f55381b51a78093570ef64e65603dbed60",
+                  "request": "a85b07bc14e14080162f6ba611ddc100bef0c83a227d3e206606e7af7c66b43b"
+                }
+              },
+              "legacy": [
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble",
+                  "old-text"
+                ],
+                [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-text",
+                  "old-scribble"
+                ]
+              ],
+              "review_scopes": {
+                "711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5": [
+                  [
+                    "5a0cd692f192b09af2ecee1d48fe584c",
+                    "old-scribble",
+                    "old-text"
+                  ],
+                  [
+                    "5a0cd692f192b09af2ecee1d48fe584c",
+                    "old-text",
+                    "old-scribble"
+                  ]
+                ]
+              },
+              "reviewed_orders": {
+                "2bdff3917c7124e0985ff51f240b39ad21712602ef1947ec043a4fc9a9c85d66": [
+                  "5a0cd692f192b09af2ecee1d48fe584c",
+                  "old-scribble",
+                  "old-text"
+                ]
+              },
+              "reviews": {
+                "fixture-order-review": {
+                  "evidence": "711cbfabf4dd7072faf9119d8f69a4f1081d413369ddd18378741810e8cdf6b5",
+                  "parents": [],
+                  "selected": "2bdff3917c7124e0985ff51f240b39ad21712602ef1947ec043a4fc9a9c85d66"
+                }
+              }
+            },
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "revisions": [
+              {
+                "at": 101,
+                "block_id": "5a0cd692f192b09af2ecee1d48fe584c",
+                "id": "62d709fa8fba418ab5dc22a576db6d11",
+                "reader": "f73a52a1636ac42b24dc5837e3a2f548",
+                "update": "AQHoicdpAAQBB2NvbnRlbnQkQSBjYWxtIHRob3VnaHQ6IGNhZsOpIPCfjL8g5pel5pys6KqeAA=="
+              }
+            ]
+          }
+        },
+        "ontology_version": "0.4.0",
+        "passes": {
+          "8cf2bfa81126aa792618a312a74f11cf": {
+            "book_id": "cb16b69d8846c22397eebdd449c0fcc1",
+            "finished_at": null,
+            "id": "8cf2bfa81126aa792618a312a74f11cf",
+            "reader": "conformance-reader",
+            "started_at": 100
+          }
+        },
+        "positions": {},
+        "revision": 7,
+        "schema": "booknook.archive.v4",
+        "sessions": {
+          "conformance-session": {
+            "ended_at": 104,
+            "id": "conformance-session",
+            "pass_id": "8cf2bfa81126aa792618a312a74f11cf",
+            "started_at": 101
+          }
+        }
+      },
+      "valid": false
+    }
+  ],
+  "ontology_version": "0.4.0",
+  "schema": "booknook.notebook-order-conformance.v1"
+}

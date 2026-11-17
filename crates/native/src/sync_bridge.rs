@@ -169,6 +169,42 @@ impl Desk {
     pub fn sync_status(&self) -> Result<String> {
         let s = self.lock()?;
         let id = device(&s)?;
+        // The complete choices use indices into this exact durable notebook state.
+        // This avoids repeating potentially long private block identifiers.
+        let state = s.load()?;
+        let mut note_order_reviews = Vec::new();
+        for review in booknook_core::notebook_order::unresolved_reviews(&state)? {
+            let notebook = state
+                .notebooks
+                .get(&review.notebook_id)
+                .ok_or_else(|| invalid("Notebook order review has no notebook"))?;
+            let index: BTreeMap<_, _> = notebook
+                .blocks
+                .iter()
+                .enumerate()
+                .map(|(offset, block)| (block.id.as_str(), offset))
+                .collect();
+            let choices = review
+                .choices
+                .iter()
+                .map(|choice| {
+                    choice
+                        .iter()
+                        .map(|block_id| -> Result<u32> {
+                            let offset = index
+                                .get(block_id.as_str())
+                                .ok_or_else(|| invalid("Notebook order choice has no block"))?;
+                            u32::try_from(*offset).map_err(|_| {
+                                invalid("Notebook order choice index exceeds its range")
+                            })
+                        })
+                        .collect::<Result<Vec<_>>>()
+                })
+                .collect::<Result<Vec<_>>>()?;
+            note_order_reviews.push(serde_json::json!({
+                "notebook_id":review.notebook_id,"evidence":review.evidence,"heads":review.heads,"choices":choices
+            }));
+        }
         let read = |query: &str| -> Result<Vec<serde_json::Value>> {
             let mut st = s.connection.prepare(query)?;
             let rows = st.query_map([], |r| r.get::<_, String>(0))?;
@@ -181,7 +217,8 @@ impl Desk {
             .prepare("SELECT id,peer,exported FROM sync_outbox ORDER BY rowid DESC")?;
         let outbox=st.query_map([],|r|Ok(serde_json::json!({"id":r.get::<_,String>(0)?,"peer":r.get::<_,String>(1)?,"exported":r.get::<_,bool>(2)?})))?.collect::<std::result::Result<Vec<_>,_>>()?;
         encoded(
-            &serde_json::json!({"device_id":id,"peers":peers,"conflicts":conflicts,"outbox":outbox}),
+            &serde_json::json!({"device_id":id,"peers":peers,"conflicts":conflicts,"outbox":outbox,
+                "note_order_reviews":note_order_reviews,"note_order_reviews_revision":state.revision}),
         )
     }
     pub fn sync_new_pairing_key(&self) -> Result<String> {
@@ -324,7 +361,8 @@ impl Desk {
             plaintext.as_bytes(),
         )?;
         let response = encoded(
-            &serde_json::json!({"batch":batch,"books":c.state.books.len(),"notebooks":c.state.notebooks.len(),"cards":c.state.cards.len(),"annotations":c.state.annotations.len(),"assets":c.assets.len(),"bytes":plaintext.len()}),
+            &serde_json::json!({"batch":batch,"books":c.state.books.len(),"notebooks":c.state.notebooks.len(),"cards":c.state.cards.len(),"annotations":c.state.annotations.len(),"assets":c.assets.len(),"bytes":plaintext.len(),
+                "archive_schema":c.state.schema}),
         )?;
         let tx = s
             .connection

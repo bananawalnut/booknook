@@ -72,7 +72,7 @@ private final class NotebookFileHost: BookNookNotebookStorage, @unchecked Sendab
 
 /// Compiled and executed against the independently extracted Swift package.
 /// All inputs, paths and writers are synthetic; no application store is accessed.
-@MainActor func runPackagedNotebookSmoke() throws {
+@MainActor func runPackagedNotebookSmoke(fixtureRoot: URL) throws {
     let root = FileManager.default.temporaryDirectory.appendingPathComponent("booknook-storage-smoke-\(UUID().uuidString)")
     try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
     defer { try? FileManager.default.removeItem(at: root) }
@@ -121,5 +121,54 @@ private final class NotebookFileHost: BookNookNotebookStorage, @unchecked Sendab
     notebookSmokeRequire(try validatePortableArchive(archiveJson: validated) == validated)
     let unknown = #"{"extra":true,"schema":"booknook.portable-export.v1","state":\#(afterRace),"assets":{}}"#
     notebookSmokeReject { _ = try validatePortableArchive(archiveJson: unknown) }
-    print("Packaged standalone Notebook: alternate persisted host, fresh availability, rejected CAS/external writer, I/O failure, local reopen and full archive validation passed.")
+    try runPackagedNotebookOrderSmoke(fixtureRoot: fixtureRoot, root: root)
+    print("Packaged standalone Notebook: storage errors, durable order review, reopen and v1/v4 archive validation passed.")
+}
+
+private func runPackagedNotebookOrderSmoke(fixtureRoot: URL, root: URL) throws {
+    let fixture = fixtureRoot.appendingPathComponent("notebook-order.json")
+    let cases = try notebookSmokeObject(String(contentsOf: fixture, encoding: .utf8))["cases"] as? [[String: Any]]
+    guard let reviewCase = cases?.first(where: { $0["id"] as? String == "atomic-review" }),
+          let initial = reviewCase["state"],
+          let command = reviewCase["input"] as? [String: Any],
+          let selected = command["selected"] as? [String],
+          let notebookID = command["notebook_id"] as? String else {
+        throw BookNookServiceError.message("The packaged notebook order fixture is incomplete")
+    }
+    let initialJSON = String(decoding: try JSONSerialization.data(withJSONObject: initial), as: UTF8.self)
+    let host = try NotebookFileHost(url: root.appendingPathComponent("review.json"), initialJSON: initialJSON)
+    let notebook = try BookNookNotebook(storage: host)
+    let before = try Data(contentsOf: host.url)
+    let reviewJSON = try notebook.orderReviewsJSON()
+    let reviews = try JSONSerialization.jsonObject(with: Data(reviewJSON.utf8)) as? [[String: Any]]
+    notebookSmokeRequire(reviews?.count == 1)
+    guard let review = reviews?.first,
+          let choices = review["choices"] as? [[String]] else {
+        throw BookNookServiceError.message("The packaged notebook returned no order choices")
+    }
+    notebookSmokeRequire(review["notebook_id"] as? String == notebookID)
+    notebookSmokeRequire(review["evidence"] as? String == command["evidence"] as? String)
+    notebookSmokeRequire(review["heads"] as? [String] == command["heads"] as? [String])
+    notebookSmokeRequire(choices.count == 2 && choices.contains(selected))
+    notebookSmokeRequire(try Data(contentsOf: host.url) == before && host.saveCount() == 0)
+
+    var stale = command
+    stale["evidence"] = String(repeating: "0", count: 64)
+    let staleJSON = String(decoding: try JSONSerialization.data(withJSONObject: stale), as: UTF8.self)
+    notebookSmokeReject { _ = try notebook.execute(commandJSON: staleJSON) }
+    notebookSmokeRequire(try Data(contentsOf: host.url) == before && host.saveCount() == 0)
+
+    let commandJSON = String(decoding: try JSONSerialization.data(withJSONObject: command), as: UTF8.self)
+    _ = try notebook.execute(commandJSON: commandJSON)
+    let reopened = try BookNookNotebook(storage: host)
+    let snapshot = try reopened.snapshotJSON()
+    let state = try notebookSmokeObject(snapshot)
+    let notebooks = state["notebooks"] as? [String: [String: Any]]
+    let blocks = notebooks?[notebookID]?["blocks"] as? [[String: Any]]
+    notebookSmokeRequire(blocks?.compactMap { $0["id"] as? String } == selected)
+    notebookSmokeRequire(state["schema"] as? String == "booknook.archive.v4")
+    notebookSmokeRequire(try reopened.orderReviewsJSON() == "[]" && host.saveCount() == 1)
+    let archive = #"{"schema":"booknook.portable-export.v1","state":\#(snapshot),"assets":{}}"#
+    let restored = try notebookSmokeObject(validatePortableArchive(archiveJson: archive))
+    notebookSmokeRequire((restored["state"] as? NSDictionary)?.isEqual(to: state) == true)
 }
