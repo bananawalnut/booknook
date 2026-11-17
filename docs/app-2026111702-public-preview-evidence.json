@@ -1,0 +1,144 @@
+{
+  "schema": "booknook.app-only-public-preview-evidence.v2",
+  "status": "PASS_PUBLIC_ARCHIVES_AND_NORMAL_IPAD_UPDATE",
+  "observed_at": "2026-11-17T10:16:31.833357+00:00",
+  "app": {
+    "version": "0.2.1",
+    "build": "2026111702",
+    "source_commit": "8341d59fd7a3b68b10c8e6dcd194240aa9f70d1a",
+    "release_url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.2",
+    "release_id": 448407487,
+    "tag": "v0.2.1-app-preview.20261117.2",
+    "published_at": "2026-11-17T10:15:08Z"
+  },
+  "source_validation": {
+    "ordinary_ci": "https://github.com/bananawalnut/booknook/actions/runs/44055471668",
+    "ordinary_steps_passed": 38,
+    "archive_ci": "https://github.com/bananawalnut/booknook/actions/runs/44055516701",
+    "archive_steps_passed": 8,
+    "artifact_id": 14316685970,
+    "artifact": {
+      "bytes": 37646850,
+      "sha256": "e0e37d29f4802ada1cd9293e3caab0f0fab598d6978715613f77a506fc9d2efc"
+    },
+    "application_version": "0.2.1",
+    "cargo_workspace_version": "0.2.2"
+  },
+  "reader_validation": {
+    "actual_wkwebview": "23 DOM assertions and exact native snapshots distinguish resolved, ambiguous, missing and unrenderable text on the CSS and fallback paths. Reflow, scroll, reordering and clearing retain precise boundaries. A unique hidden target does not report a successful jump.",
+    "native_reader": "The app keeps per-chapter placement status and displays an unplaced marker with the original quote in Saved annotations. The exact native source was typechecked and built for all three Apple targets.",
+    "scope": "Actual headless WebKit and PDFKit plus native compilation and iPad launch. A hands-on visit to the unplaced marker in the released UI remains open.",
+    "exact_assets_all_three_targets": {
+      "reader.js": {
+        "bytes": 13860,
+        "sha256": "da84f15bd86325e39ae6d71a27ab51b0dd63418ba40af34d4255d9e45b3fe982"
+      },
+      "reader-geometry.js": {
+        "bytes": 2180,
+        "sha256": "bb648f42b1fb6893ee10833559756e9016ee5ec7423442643cb62cab34345c81"
+      }
+    }
+  },
+  "archive_verification": {
+    "mac": {
+      "archive": {
+        "bytes": 14900395,
+        "sha256": "3111483dd66054786ec95cb7c7ff4aaabc32b28dc5e58491eea4e619acb243bc"
+      },
+      "tar_members": 105,
+      "bundle_files": 88,
+      "ontology_files": 80,
+      "build": "2026111702",
+      "signature": "linker-ad-hoc",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "byte-identical standalone Mach-O"
+    },
+    "ipad-sim": {
+      "archive": {
+        "bytes": 11390984,
+        "sha256": "d3af28d5c322e026b98996ba126c3897190c18fe19707372efbf8cad26ee05ea"
+      },
+      "tar_members": 102,
+      "bundle_files": 88,
+      "ontology_files": 80,
+      "build": "2026111702",
+      "signature": "linker-ad-hoc",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "byte-identical standalone Mach-O"
+    },
+    "ipad-device": {
+      "archive": {
+        "bytes": 11186692,
+        "sha256": "b5838e4c49acc797ceed89e2567133284a0bfba148f8362074b5153cceeb107e"
+      },
+      "tar_members": 102,
+      "bundle_files": 88,
+      "ontology_files": 80,
+      "build": "2026111702",
+      "signature": "unsigned",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "unsigned"
+    }
+  },
+  "public_https": {
+    "assets": {
+      "booknook-ipad-device-arm64-development-0.2.1.tar.gz": {
+        "bytes": 11186692,
+        "sha256": "b5838e4c49acc797ceed89e2567133284a0bfba148f8362074b5153cceeb107e"
+      },
+      "booknook-ipad-sim-arm64-development-0.2.1.tar.gz": {
+        "bytes": 11390984,
+        "sha256": "d3af28d5c322e026b98996ba126c3897190c18fe19707372efbf8cad26ee05ea"
+      },
+      "booknook-mac-arm64-development-0.2.1.tar.gz": {
+        "bytes": 14900395,
+        "sha256": "3111483dd66054786ec95cb7c7ff4aaabc32b28dc5e58491eea4e619acb243bc"
+      },
+      "BUILD-PROVENANCE.json": {
+        "bytes": 48134,
+        "sha256": "9c42c269a92fa72469e72c1e0a95c55d8efc1b2ef97fa12015ea7bcdb4beaac2"
+      },
+      "README.md": {
+        "bytes": 3628,
+        "sha256": "ace182a39d5b18ccb3027b891630ba69fff96ee6dcb8b4540981a7da4ec11fca"
+      },
+      "RELEASE-MANIFEST.json": {
+        "bytes": 2113,
+        "sha256": "c29108da89f2bfc788713b5b883031c8edd440051891d88a303ad802adf66ecf"
+      },
+      "SHA256SUMS": {
+        "bytes": 503,
+        "sha256": "a0b6b42f49c51003cad40ff9af318761254986e751ea0da854ec76ebf9cca9a5"
+      },
+      "VERIFICATION.json": {
+        "bytes": 115450,
+        "sha256": "94d5ecee16840115012c0e777206fde19468664244650175588c1eae56611cb1"
+      }
+    },
+    "count": 8,
+    "bytes": 37647899,
+    "earlier_releases_with_unchanged_asset_identities": 11
+  },
+  "normal_physical_ipad": {
+    "previous_build": "2026111701",
+    "current_build": "2026111702",
+    "in_place": true,
+    "app_running": true,
+    "database_bytes_matched_after_install": true,
+    "database_state_equal_after_launch": true,
+    "desk_and_assets_preserved": true,
+    "orientation_unchanged_in_observations": true,
+    "orientation_commands": false,
+    "receipt_sha256": "9b341040f8a9948e3ea736528a82245d545920722e310bb392db9d92777be088"
+  },
+  "screenshots": {
+    "ipad_build": "2026111702",
+    "ipad_simulator": "iPadOS 18.6",
+    "ipad_framebuffer_sha256": "bbe2862abbc1b41d62002d9500946faf823272850a29d09553e73ffe577eb25d",
+    "mac_capture_build": "2026111607",
+    "scope": "Original frame from the current synthetic iPad reading desk and the previously verified Mac window capture."
+  }
+}
