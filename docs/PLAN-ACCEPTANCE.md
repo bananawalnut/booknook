@@ -2,6 +2,10 @@
 
 This audit keeps the original native MVP and SDK scope intact. A passing source test is evidence for the behavior it exercises, not evidence of a production account, physical device, remote deployment, or hands-on interaction. The requested production release is not complete while essential integration and physical-device gates remain open. [Validation](VALIDATION.md) records the final check results; [delivery](DELIVERY.md) names the remaining gates.
 
+## Native app 1711 delivery
+
+Discover keeps offline recommendations available when imported titles are long or contain control characters. Your library keeps the original titles. The optional self-hosted companion rejects a Kindle catalog that grows beyond the size limit during normalization and keeps the previous selection readable after restart. The normal development-signed iPad app updated in place and reopened with its library, assets, saved finger Scribble, and observed orientation preserved. [Build 1711 evidence](app-2026111711-public-preview-evidence.json)
+
 ## Native app 1710 delivery
 
 [Build 1710 evidence](app-2026111710-public-preview-evidence.json) records 39 passing macOS 15 workflow steps, independent checks of all three Apple archives, eight matching public downloads, and an in-place iPad update that preserved the library, assets, saved finger Scribble, and observed orientation. The current iPad Simulator screenshot uses the published 1710 build with a sample desk. The Mac screenshot captures build 1705.

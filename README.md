@@ -6,6 +6,8 @@ A native reading notebook for macOS and iPad, backed by open Rust, Swift and WAS
 
 The implementation includes an offline reading desk, rich TextKit editing, EPUB, PDF, and legacy MOBI6 reading and annotation, character interpretation history, imports, Castalia consent, approved encrypted device transfers, Nostr social workflows, and reviewed RSS/Atom settings with offline publications. **It is not a qualified production release:** live Kindle/Audible/Castalia access, current physical input/accessibility, remote social/device sync and minimum-OS runtime checks remain open. Unavailable integrations return explicit errors. See [delivery status](docs/DELIVERY.md), the [full-plan acceptance matrix](docs/PLAN-ACCEPTANCE.md), [validation](docs/VALIDATION.md), the [decision log](docs/DECISIONS.md), the [UX review](docs/UX-REVIEW.md), and [DevGraph work tracking](docs/DEVGRAPH.md).
 
+**[App preview 0.2.1, build 2026111711](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.11)** keeps Discover’s offline recommendations available when imported titles are long or contain control characters. Your library keeps the original titles. The optional self-hosted companion rejects a Kindle catalog that grows beyond the size limit during normalization and keeps the previous selection readable after restart. All eight public downloads matched their checksums. The normal development-signed iPad app updated in place and reopened with its library, assets, saved finger Scribble, and observed orientation preserved. [Build 1711 evidence](docs/app-2026111711-public-preview-evidence.json)
+
 **[App preview 0.2.1, build 2026111710](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.10)** preserves Margin order across offline edits and keeps the Mac insertion caret visible when resizing the notebook. The normal iPad update kept its existing library and saved finger Scribble. All eight public downloads matched their checksums. [Build 1710 evidence](docs/app-2026111710-public-preview-evidence.json)
 
 **[App preview 0.2.1, build 2026111708](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.8)** keeps a newly created reading pass tied to its original book, even if you switch desks while saving. The normal iPad update preserved the library and prior finger Scribble. All eight public downloads matched their checksums. [Build 1708 evidence](docs/app-2026111708-public-preview-evidence.json)
@@ -56,7 +58,7 @@ The earlier iPad acceptance check [updated the normal app in place to 0.2.1 (202
 
 ![Book Nook iPad reading desk with a Margin note and character card alongside an EPUB](docs/screenshots/ipad-current.png)
 
-The iPad Simulator image shows published Release build **2026111710**. The Mac image shows the earlier published build **2026111705**. Both use sample EPUBs. [Capture details](docs/screenshots/README.md)
+The iPad Simulator image shows published Release build **2026111711**. The Mac image shows the earlier published build **2026111705**. Both use sample EPUBs. [Capture details](docs/screenshots/README.md)
 
 ## Run the native apps
 
