@@ -438,3 +438,136 @@ fn native_archive_preserves_branched_character_history_rich_notes_positions_and_
     );
     assert_archive_roundtrip(&desk, &final_state, &originals);
 }
+
+#[test]
+fn captured_character_revision_survives_native_reopen_and_portable_restore() {
+    let root = Root::new();
+    let desk = root.open();
+    let book = command(
+        &desk,
+        json!({"op":"add_book","title":"Reading fixture","author":"Author","at":1}),
+    );
+    let initial = snapshot(&desk);
+    let notebook = initial
+        .notebooks
+        .values()
+        .find(|notebook| book["book_id"].as_str() == Some(&notebook.book_id))
+        .unwrap();
+    let pass = notebook.pass_id.clone();
+    let card = command(
+        &desk,
+        json!({
+            "op":"add_character", "notebook_id":notebook.id, "block_id":notebook.blocks[0].id,
+            "name":"Mara", "at":2,
+        }),
+    )["card_id"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let initial_card = snapshot(&desk).cards[&card].versions[0].clone();
+    let text = Location::Text {
+        edition_id: initial.editions.keys().next().unwrap().clone(),
+        resource: "OPS/chapter-3.xhtml".into(),
+        quote: "Café 日本語".into(),
+        prefix: "Before ".into(),
+        suffix: " after.".into(),
+    };
+    let audio = |milliseconds| Location::Audio {
+        provider: "audible".into(),
+        source_id: "fixture".into(),
+        milliseconds,
+        chapter: None,
+    };
+    let captured = ProgressObservation {
+        id: "in-flight-at-capture".into(),
+        pass_id: pass.clone(),
+        location: audio(5000),
+        observed_at: 3,
+        received_at: 3,
+        alignment: Alignment::Unmatched,
+        provider_connection_id: Some("audible-fixture".into()),
+        audio_metadata: None,
+    };
+    let advanced = ProgressObservation {
+        id: "advanced-after-capture".into(),
+        location: audio(12000),
+        observed_at: 6,
+        received_at: 6,
+        ..captured.clone()
+    };
+    command(
+        &desk,
+        json!({"op":"observe_position","observation":advanced}),
+    );
+
+    let interpretation = CharacterInterpretation {
+        description: "What I thought in chapter 3".into(),
+        passages: vec![text.clone()],
+        ..Default::default()
+    };
+    let capture_context = CapturedReadingContext {
+        pass_id: pass.clone(),
+        positions: vec![captured.location.clone(), text],
+        position_observations: vec![captured],
+    };
+    let card_command = json!({
+        "op":"save_card_with_context","card_id":card,"parents":[initial_card.id],
+        "at":4,"interpretation":interpretation,"capture_context":capture_context,
+    });
+    let mut mismatched = card_command.clone();
+    mismatched["capture_context"]["pass_id"] = "another-pass".into();
+    let before = snapshot(&desk);
+    assert!(desk.execute(mismatched.to_string()).is_err());
+    assert_eq!(snapshot(&desk), before);
+
+    let saved = command(&desk, card_command);
+    let expected = snapshot(&desk);
+    assert_eq!(expected.revision, before.revision + 1);
+    let versions = &expected.cards[&card].versions;
+    assert_eq!(versions[0], initial_card);
+    assert_eq!(Some(versions[1].id.as_str()), saved["version_id"].as_str());
+    assert_eq!(versions[1].pass_id, pass);
+    assert_eq!(versions[1].at, 4);
+    assert_eq!(versions[1].interpretation, interpretation);
+    assert_eq!(versions[1].positions, capture_context.positions);
+    assert_eq!(
+        versions[1].position_observations,
+        capture_context.position_observations
+    );
+    assert_eq!(expected.positions, before.positions);
+    drop(desk);
+
+    let engine =
+        booknook_native::NotebookEngine::local(root.0.to_string_lossy().into_owned()).unwrap();
+    let stored: State = serde_json::from_str(&engine.snapshot().unwrap()).unwrap();
+    assert_eq!(stored, expected);
+    let next: Value = serde_json::from_str(
+        &engine
+            .execute(
+                json!({
+                    "op":"save_card_with_context","card_id":card,"parents":[saved["version_id"]],
+                    "at":7,"interpretation":CharacterInterpretation::default(),
+                    "capture_context":{"pass_id":pass,"positions":[],"position_observations":[]},
+                })
+                .to_string(),
+            )
+            .unwrap(),
+    )
+    .unwrap();
+    assert_eq!(
+        next["state"]["cards"][card.as_str()]["versions"][2]["positions"],
+        json!([])
+    );
+    let expected: State = serde_json::from_value(next["state"].clone()).unwrap();
+    assert_eq!(expected.cards[&card].versions[1], versions[1]);
+    assert!(
+        expected.cards[&card].versions[2]
+            .position_observations
+            .is_empty()
+    );
+    drop(engine);
+
+    let reopened = root.open();
+    assert_eq!(snapshot(&reopened), expected);
+    assert_archive_roundtrip(&reopened, &expected, &[]);
+}

@@ -41,7 +41,7 @@ mod sync_bridge;
 #[cfg(test)]
 mod sync_tests;
 use base64::{Engine, engine::general_purpose::STANDARD};
-use booknook_core::Command;
+use booknook_core::notebook_command::NotebookCommand;
 pub use booknook_core::portable_archive::PortableArchive;
 use std::{path::Path, sync::Mutex};
 uniffi::setup_scaffolding!();
@@ -88,8 +88,8 @@ impl Desk {
         Ok(serde_json::to_string(&s.load()?)?)
     }
     pub fn execute(&self, command_json: String) -> Result<String> {
-        let command: Command = booknook_core::strict_parse(command_json.as_bytes())?;
-        self.lock()?.execute(command)
+        let command = NotebookCommand::parse(command_json.as_bytes())?;
+        self.lock()?.execute_notebook_command(command)
     }
     pub fn canonical_payload(&self, payload_json: String) -> Result<String> {
         String::from_utf8(canonical_payload_bytes(&payload_json)?).map_err(|_| {

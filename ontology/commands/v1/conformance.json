@@ -1,0 +1,87 @@
+{
+  "schema": "booknook.card-context-command.conformance.v1",
+  "description": "Bind $card, $parent and $pass to a character card created in an isolated test notebook. Commit the later observation before submitting the captured revision.",
+  "later_observation": {
+    "id": "later-observation",
+    "pass_id": "$pass",
+    "location": {
+      "kind": "audio",
+      "provider": "audible",
+      "source_id": "B012345678",
+      "milliseconds": 24000,
+      "chapter": "Reassessment"
+    },
+    "observed_at": 20,
+    "received_at": 21,
+    "alignment": {
+      "status": "unmatched"
+    },
+    "provider_connection_id": "audible.fixture"
+  },
+  "command": {
+    "op": "save_card_with_context",
+    "card_id": "$card",
+    "parents": [
+      "$parent"
+    ],
+    "at": 13,
+    "interpretation": {
+      "description": "Her patience may be deliberate.",
+      "traits": [
+        "observant"
+      ],
+      "relationships": [],
+      "observations": [
+        "She pauses before she answers."
+      ],
+      "questions": [
+        "What does she already know?"
+      ],
+      "passages": [
+        {
+          "kind": "provider",
+          "provider": "fixture",
+          "source_id": "passage",
+          "value": "Chapter three · Café 日本語"
+        }
+      ]
+    },
+    "capture_context": {
+      "pass_id": "$pass",
+      "positions": [
+        {
+          "kind": "audio",
+          "provider": "audible",
+          "source_id": "B012345678",
+          "milliseconds": 12000,
+          "chapter": "First impressions"
+        },
+        {
+          "kind": "provider",
+          "provider": "fixture",
+          "source_id": "passage",
+          "value": "Chapter three · Café 日本語"
+        }
+      ],
+      "position_observations": [
+        {
+          "id": "captured-observation",
+          "pass_id": "$pass",
+          "location": {
+            "kind": "audio",
+            "provider": "audible",
+            "source_id": "B012345678",
+            "milliseconds": 12000,
+            "chapter": "First impressions"
+          },
+          "observed_at": 11,
+          "received_at": 12,
+          "alignment": {
+            "status": "unmatched"
+          },
+          "provider_connection_id": "audible.fixture"
+        }
+      ]
+    }
+  }
+}

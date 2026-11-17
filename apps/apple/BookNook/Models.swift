@@ -547,6 +547,38 @@ actor DeskRepository {
         }
         return command
     }
+    func characterSupportingSelection(notebookID: String) -> [String: Any]? {
+        guard selectedNotebookId == notebookID, let attachment = readerAttachment, let selection,
+              selection["edition_id"] as? String == attachment.editionID else { return nil }
+        return selection
+    }
+    func characterVersionCommand(cardID: String, parents: [String], interpretation: Interpretation,
+                                 at: UInt64 = UInt64(Date().timeIntervalSince1970)) throws -> [String: Any] {
+        guard let state, let card = state.cards[cardID], let notebook = state.notebooks[card.notebookId] else {
+            throw AuthorizationError.message("This character card is no longer available.")
+        }
+        let captured = try captureReadingContext(passID: notebook.passId)
+        var positions = captured.positions
+        var interpretation = interpretation
+        if let selection = characterSupportingSelection(notebookID: notebook.id) {
+            let options: JSONSerialization.WritingOptions = [.sortedKeys, .fragmentsAllowed]
+            let data = try JSONSerialization.data(withJSONObject: selection, options: options)
+            let location = try JSONDecoder().decode(JSONValue.self, from: data)
+            func includingSelection(in locations: [JSONValue]) throws -> [JSONValue] {
+                let included = try locations.contains { try JSONSerialization.data(withJSONObject: $0.any, options: options) == data }
+                return included ? locations : locations + [location]
+            }
+            positions = try includingSelection(in: positions)
+            interpretation.passages = try includingSelection(in: interpretation.passages)
+        }
+        let context = NotebookCaptureContext(passId: captured.passId, positions: positions,
+                                             positionObservations: captured.positionObservations)
+        let encoder = JSONEncoder()
+        encoder.keyEncodingStrategy = .convertToSnakeCase
+        return ["op": "save_card_with_context", "card_id": cardID, "parents": parents, "at": at,
+                "interpretation": try JSONSerialization.jsonObject(with: encoder.encode(interpretation)),
+                "capture_context": try context.dictionary]
+    }
     func continueHandwriting(notebookID: String) async {
         do { try await createNote(notebook: notebookID, face: "whiteboard") }
         catch { self.error = bookNookErrorMessage(error) }

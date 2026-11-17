@@ -1,0 +1,15 @@
+{
+  "schema": "booknook.command-contract-manifest.v1",
+  "version": "1",
+  "namespace": "urn:booknook:schema:",
+  "artifacts": [
+    {
+      "path": "card-context-command.schema.json",
+      "sha256": "1cdf8488cfc0653be06387eb4a1b0d3fe28ef522c9545b88bae062523e83f37a"
+    },
+    {
+      "path": "conformance.json",
+      "sha256": "b609a358418ce72ddba9d3eb3dbdf56850b9c0307122228794f9e7212c7d4564"
+    }
+  ]
+}

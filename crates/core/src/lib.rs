@@ -11,6 +11,7 @@ pub mod identity;
 pub mod imports;
 pub mod model;
 pub mod notebook;
+pub mod notebook_command;
 pub mod notebook_ink;
 pub mod notes;
 pub mod portable_archive;
@@ -298,8 +299,15 @@ fn start_pass(state: &mut State, book_id: &str, at: u64) -> Result<Notebook> {
 
 /// Atomic at the contract boundary: invalid commands never partially modify the caller's state.
 pub fn apply(state: &mut State, command: Command) -> Result<serde_json::Value> {
+    apply_atomic(state, |next| execute(next, command))
+}
+
+fn apply_atomic(
+    state: &mut State,
+    execute: impl FnOnce(&mut State) -> Result<serde_json::Value>,
+) -> Result<serde_json::Value> {
     let mut next = state.clone();
-    let result = execute(&mut next, command)?;
+    let result = execute(&mut next)?;
     // An acknowledged immutable retry has no storage or revision side effects.
     if result.get("replayed").and_then(serde_json::Value::as_bool) == Some(true) {
         validate(&next)?;
@@ -887,49 +895,16 @@ fn execute(state: &mut State, command: Command) -> Result<serde_json::Value> {
             card_id,
             parents,
             interpretation,
-            mut positions,
+            positions,
             at,
-        } => {
-            let pass_id = state
-                .cards
-                .get(&card_id)
-                .and_then(|card| state.notebooks.get(&card.notebook_id))
-                .ok_or_else(|| Error::NotFound(card_id.clone()))?
-                .pass_id
-                .clone();
-            let position_observations = latest_positions(state, &pass_id);
-            for observation in &position_observations {
-                if !positions.contains(&observation.location) {
-                    positions.push(observation.location.clone());
-                }
-            }
-            let card = state
-                .cards
-                .get_mut(&card_id)
-                .ok_or(Error::NotFound(card_id))?;
-            if parents.is_empty()
-                || parents
-                    .iter()
-                    .any(|p| !card.versions.iter().any(|v| &v.id == p))
-            {
-                return Err(Error::Invalid(
-                    "Snapshot must name existing parent versions".into(),
-                ));
-            }
-            let version = CardVersion {
-                id: new_id(),
-                parents,
-                reader: state.local_reader.clone(),
-                at,
-                pass_id: state.notebooks[&card.notebook_id].pass_id.clone(),
-                positions,
-                position_observations,
-                interpretation,
-            };
-            let id = version.id.clone();
-            card.versions.push(version);
-            Ok(json!({"version_id":id,"conflict":card.heads().len()>1}))
-        }
+        } => notebook_command::save_card(
+            state,
+            card_id,
+            parents,
+            interpretation,
+            at,
+            notebook_command::CardReadingContext::Current(positions),
+        ),
         Command::SaveAnnotation { annotation } => {
             state.annotations.insert(annotation.id.clone(), annotation);
             Ok(json!({}))

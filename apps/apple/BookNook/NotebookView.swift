@@ -188,7 +188,7 @@ struct CardEditor: View {
                             }
                         }.padding(.vertical, 8)
                     }
-                    Text(model.selection == nil ? "This version retains its reading pass and earlier supporting passages." : "The selected book passage will be attached to this version.").font(.caption).foregroundStyle(.secondary)
+                    Text(model.characterSupportingSelection(notebookID: card.notebookId) == nil ? "This version retains its reading pass and earlier supporting passages." : "The selected book passage will be attached to this version.").font(.caption).foregroundStyle(.secondary)
                     } else { Text("Select a starting version above to begin your reconciliation.").font(.callout).foregroundStyle(.secondary) }
                 }.disabled(commit.isSaving)
             }
@@ -210,14 +210,15 @@ struct CardEditor: View {
         description = value.description; traits = value.traits.joined(separator: ", "); observations = value.observations.joined(separator: "\n"); questions = value.questions.joined(separator: "\n"); relationships = value.relationships
     }
     func save() {
-        guard reconciliation.canSave else { return }
+        guard reconciliation.canSave, !commit.isSaving else { return }
         let split: (String, Character) -> [String] = { value, separator in value.split(separator: separator).map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.filter { !$0.isEmpty } }
-        var passages = reconciliationPassages(reviewedVersions.map(\.interpretation)).map(\.any)
-        if let selection = model.selection { passages.append(selection) }
-        let relationshipValues = relationships.map { ["target": $0.target, "description": $0.description] }
-        let interpretation: [String: Any] = ["description": description, "traits": split(traits, ","), "relationships": relationshipValues, "observations": split(observations, "\n"), "questions": split(questions, "\n"), "passages": passages]
+        let interpretation = Interpretation(description: description, traits: split(traits, ","), relationships: relationships,
+                                            observations: split(observations, "\n"), questions: split(questions, "\n"),
+                                            passages: reconciliationPassages(reviewedVersions.map(\.interpretation)))
+        let command = Result { try model.characterVersionCommand(cardID: card.id, parents: reconciliation.parents,
+                                                                 interpretation: interpretation) }
         Task {
-            await commit.perform({ try await model.perform(["op": "save_card", "card_id": card.id, "parents": reconciliation.parents, "interpretation": interpretation, "positions": model.selection.map { [$0] } ?? [], "at": Int(Date().timeIntervalSince1970)]) }, onSuccess: { dismiss() })
+            await commit.perform({ try await model.perform(command.get()) }, onSuccess: { dismiss() })
         }
     }
 }

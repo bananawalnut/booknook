@@ -14,6 +14,7 @@ fn main() {
         "notebook-ink": schemars::schema_for!(booknook_core::model::NotebookInk),
         "state": schemars::schema_for!(booknook_core::model::State),
         "command": schemars::schema_for!(booknook_core::Command),
+        "card-context-command": schemars::schema_for!(booknook_core::notebook_command::CardContextCommand),
         "castalia-provider-connection": schemars::schema_for!(booknook_core::castalia_connections::ProviderConnection),
         "castalia-native-authority-profile": schemars::schema_for!(booknook_core::castalia_connections::NativeAuthorityProfile),
         "connections": schemars::schema_for!(booknook_core::settings::ConnectionSettings),

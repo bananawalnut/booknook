@@ -91,9 +91,24 @@ pub fn snapshot(storage: &dyn NotebookStorage) -> Result<State> {
 /// Execute through the advertised storage contract. A failed CAS never returns a successful
 /// response or updates a cached projection; retry requires a fresh load and user decision.
 pub fn execute(storage: &dyn NotebookStorage, command: Command) -> Result<CommandResponse> {
+    execute_atomically(storage, |state| crate::apply(state, command))
+}
+
+/// Execute a typed notebook command extension through the same atomic provider contract.
+pub fn execute_notebook_command(
+    storage: &dyn NotebookStorage,
+    command: impl Into<crate::notebook_command::NotebookCommand>,
+) -> Result<CommandResponse> {
+    execute_atomically(storage, |state| command.into().apply(state))
+}
+
+fn execute_atomically(
+    storage: &dyn NotebookStorage,
+    apply: impl FnOnce(&mut State) -> Result<serde_json::Value>,
+) -> Result<CommandResponse> {
     let mut state = snapshot(storage)?;
     let revision = state.revision;
-    let result = crate::apply(&mut state, command)?;
+    let result = apply(&mut state)?;
     storage.compare_and_save(revision, &state)?;
     Ok(CommandResponse { state, result })
 }
@@ -111,6 +126,12 @@ impl<S: NotebookStorage> Notebook<S> {
     }
     pub fn execute(&self, command: Command) -> Result<CommandResponse> {
         execute(&self.storage, command)
+    }
+    pub fn execute_notebook_command(
+        &self,
+        command: impl Into<crate::notebook_command::NotebookCommand>,
+    ) -> Result<CommandResponse> {
+        execute_notebook_command(&self.storage, command)
     }
     pub fn into_storage(self) -> S {
         self.storage

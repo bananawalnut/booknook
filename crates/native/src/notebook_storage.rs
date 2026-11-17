@@ -5,6 +5,7 @@ use crate::{NativeError, Result, store::Store};
 use booknook_core::{
     Error, canonical,
     model::State,
+    notebook_command::NotebookCommand,
     providers::{self, Capability, NotebookStorage, Provider, ProviderDescriptor},
     strict_parse,
 };
@@ -61,11 +62,11 @@ impl NotebookEngine {
     }
 
     pub fn execute(&self, command_json: String) -> Result<String> {
-        let command = strict_parse(command_json.as_bytes())?;
+        let command = NotebookCommand::parse(command_json.as_bytes())?;
         self.with_storage_port(|storage| {
-            Ok(serde_json::to_string(&providers::execute(
-                storage, command,
-            )?)?)
+            Ok(serde_json::to_string(
+                &providers::execute_notebook_command(storage, command)?,
+            )?)
         })
     }
 }

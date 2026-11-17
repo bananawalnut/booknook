@@ -6,6 +6,10 @@ This audit keeps the original native MVP and SDK scope intact. A passing source 
 
 [SDK 0.2.2 delivery evidence](sdk-022-public-preview-evidence.json) records independent Rust archive export, installed Node and Chrome WASM validation, and Swift restore and reopen against the exact released packages. The test covers a synthetic legacy MOBI6 and compares the original source and regenerated XHTML. All 17 public checksums passed. The macOS runtime acceptance and the iPadOS library slices have distinct evidence.
 
+## Native app 1705 and SDK 0.2.3 source checkpoint
+
+Saving a character-card revision now captures the selected passage, time, reading pass, and available ebook and audio observations at the same point. The linked Swift workflow checks an unacknowledged reader observation, fresher ebook and audio updates, and a late branch outside the reviewed parents. The original context and independent branch survive SQLite reopen. The native portable archive regression also verifies export and restore. Older save commands and stored card versions use their existing contracts. [Versioned command schema and fixture](../ontology/commands/v1/manifest.json)
+
 ## Native app 1704 source checkpoint
 
 Actual WebKit tests reproduce long EPUB and MOBI text runs losing their interior reading position in 1703. Two distinct visible lines now produce independent bounded quotes and reopen at the right text, including after font reflow. A separate native bridge test holds the initial restore to verify that provisional geometry cannot overwrite the saved location. Existing full-run locations remain readable, and ambiguous new positions leave the last saved location intact.

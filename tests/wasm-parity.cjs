@@ -10,7 +10,69 @@ const {nativeProbe, nativeCli, inkCommand, actor} = require("./sdk-native.cjs");
 const root = path.resolve(__dirname,"..");
 const temp = fs.mkdtempSync(path.join(os.tmpdir(),"booknook-parity-"));
 const cli = (...args) => execFileSync(targetPath("debug", "booknook"),[temp,...args],{encoding:"utf8"});
+
+function checkCardContext() {
+  const fixture = JSON.parse(fs.readFileSync(path.join(root, "ontology/commands/v1/conformance.json"), "utf8"));
+  const directory = path.join(temp, "card-context");
+  const command = input => JSON.parse(nativeCli(directory, ["command"], input));
+  const state = () => JSON.parse(nativeCli(directory, ["snapshot"]));
+  let opened = command({op:"add_book", title:"The Lantern", author:"Reader", at:2});
+  const notebook = Object.values(opened.state.notebooks)[0];
+  opened = command({op:"add_character", notebook_id:notebook.id, block_id:notebook.blocks[0].id, name:"Mara", at:3});
+  const card = opened.state.cards[opened.result.card_id];
+  const replacements = new Map([["$card", card.id], ["$parent", card.versions[0].id], ["$pass", notebook.pass_id]]);
+  const bind = value => JSON.parse(JSON.stringify(value), (_key, entry) => replacements.get(entry) ?? entry);
+  command({op:"observe_position", observation:bind(fixture.later_observation)});
+  const request = bind(fixture.command);
+  const capture = request.capture_context;
+
+  function compare(input, expectedPositions, expectedObservations) {
+    const before = state();
+    const wasm = JSON.parse(core.execute(JSON.stringify(before), JSON.stringify(input)));
+    const native = command(input);
+    for (const response of [wasm, native]) {
+      const versions = response.state.cards[card.id].versions;
+      assert.deepEqual(versions.slice(0, -1), before.cards[card.id].versions);
+      const saved = versions.at(-1);
+      assert.equal(saved.id, response.result.version_id);
+      assert.deepEqual(saved.positions, expectedPositions);
+      assert.deepEqual(saved.position_observations ?? [], expectedObservations);
+      assert.deepEqual(saved.interpretation, request.interpretation);
+      assert.equal(saved.at, input.at);
+      assert.equal(saved.pass_id, notebook.pass_id);
+      assert.equal(saved.reader, before.local_reader);
+      assert.deepEqual(response.state.positions, before.positions);
+      // Only the newly generated immutable version ID differs across engines.
+      saved.id = "<new>";
+      response.result.version_id = "<new>";
+    }
+    assert.deepEqual(wasm, native);
+  }
+
+  compare(request, capture.positions, capture.position_observations);
+  const next = state().cards[card.id].versions.at(-1).id;
+  compare({...request, parents:[next], at:14,
+    capture_context:{pass_id:notebook.pass_id, positions:[], position_observations:[]}}, [], []);
+  const latest = state().cards[card.id].versions.at(-1).id;
+  const {capture_context, ...legacy} = request;
+  const later = bind(fixture.later_observation);
+  compare({...legacy, op:"save_card", parents:[latest], at:22, positions:[]}, [later.location], [later]);
+
+  const before = state();
+  for (const invalid of [
+    {...request, capture_context:{...capture, pass_id:"another-pass"}},
+    {...request, capture_context:{...capture, unexpected:true}},
+    {...request, positions:[]},
+  ]) {
+    assert.throws(() => core.execute(JSON.stringify(before), JSON.stringify(invalid)));
+    assert.throws(() => command(invalid));
+    assert.deepEqual(state(), before);
+  }
+  console.log("Character card context: exact captured and empty contexts, legacy behavior, strict rejection, and native/WASM history parity passed.");
+}
+
 try {
+  checkCardContext();
   require('./portable-services-parity.cjs')(core, nativeProbe, actor);
   require('./note-whiteboard-parity.cjs')(core);
   for (const [fixture, operation, validate, wrap] of [

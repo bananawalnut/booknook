@@ -289,4 +289,81 @@ private func readerContextEPUB(in directory: URL, label: String) throws -> URL {
     precondition(observations.map(\.providerConnectionId) == [nil, "audible.a", "audible.b", "audible.a", nil])
     precondition(observations[1].receivedAt == 260 && observations[2].observedAt == 210)
     print("Source reading history: per-connection audio/provider provenance, source-time tie order, edition and pass isolation, and exact native reopen passed.")
+
+    try await testCharacterRevisionCapture(model, desk: desk, notebookID: notebook, earlierPassID: earlier, editionID: edition)
+}
+
+@MainActor private func testCharacterRevisionCapture(_ model: DeskModel, desk: URL, notebookID: String,
+                                                     earlierPassID: String, editionID: String) async throws {
+    let notebook = model.state!.notebooks[notebookID]!
+    let added = try await model.perform(["op": "add_character", "notebook_id": notebook.id,
+                                         "block_id": notebook.blocks[0].id, "name": "Mara", "at": 260])
+    let cardID = added!.object!["card_id"] as! String
+    let initial = model.state!.cards[cardID]!.versions[0]
+    func passage(_ resource: String, _ quote: String, prefix: String = "") -> [String: Any] {
+        ["kind": "text", "edition_id": editionID, "resource": resource,
+         "quote": quote, "prefix": prefix, "suffix": ""]
+    }
+    let firstPassage = passage("one.xhtml", "position-history first café passage.")
+    let secondPassage = passage("two.xhtml", "position-history second passage.")
+    func fork(_ parent: String, _ title: String, _ supportingPassage: [String: Any], at: UInt64) async throws -> String {
+        let interpretation = ["description": title, "traits": [], "relationships": [],
+                              "observations": [], "questions": [], "passages": [supportingPassage]] as [String: Any]
+        let result = try await model.perform(["op": "save_card", "card_id": cardID,
+                                              "parents": [parent], "at": at, "positions": [], "interpretation": interpretation])
+        return result!.object!["version_id"] as! String
+    }
+    let left = try await fork(initial.id, "First branch", firstPassage, at: 261)
+    let right = try await fork(initial.id, "Second branch", secondPassage, at: 262)
+    let reviewed = model.state!.cards[cardID]!.versions.filter { [left, right].contains($0.id) }
+    let interpretation = Interpretation(description: "Both interpretations belong here",
+                                        passages: reconciliationPassages(reviewed.map(\.interpretation)))
+    let selection = passage("one.xhtml", "first café passage.", prefix: "position-history ")
+    try await model.selectBook(notebook.bookId)
+    model.selectedNotebookId = model.state!.notebooks.values.first { $0.passId == earlierPassID }!.id
+    model.selection = selection
+    let otherPass = try model.characterVersionCommand(cardID: cardID, parents: [left, right], interpretation: interpretation)
+    let otherPassInterpretation = otherPass["interpretation"] as! [String: Any]
+    precondition((otherPassInterpretation["passages"] as! [[String: Any]]).count == 2,
+                 "A selected passage in an earlier pass over the same edition is not this card's selection")
+
+    model.selectedNotebookId = notebook.id
+    model.selection = selection
+    model.recordPosition(location: firstPassage)
+    let queuedID = "\(notebook.passId):position:\(editionID)"
+    precondition(model.state!.positions[queuedID] == nil, "The reader position must still be queued at capture")
+    let tappedAt = UInt64(Date().timeIntervalSince1970)
+    let command = try model.characterVersionCommand(cardID: cardID, parents: [left, right],
+                                                    interpretation: interpretation, at: tappedAt)
+
+    model.selection = secondPassage
+    let newer = tappedAt + 1
+    try await model.perform(["op": "observe_position", "observation": [
+        "id": "later-reader-position", "pass_id": notebook.passId, "location": secondPassage,
+        "observed_at": newer, "received_at": newer, "alignment": ["status": "unmatched"]
+    ]])
+    try await model.perform(["op": "observe_position", "observation": [
+        "id": "later-audio-position", "pass_id": notebook.passId, "provider_connection_id": "audible.a",
+        "location": ["kind": "audio", "provider": "audible", "source_id": "B012345678", "milliseconds": 30000],
+        "observed_at": newer, "received_at": newer, "alignment": ["status": "unmatched"]
+    ]])
+    let unreviewed = try await fork(left, "Unreviewed branch", secondPassage, at: newer)
+    let saved = try await model.perform(command)
+    let savedID = saved!.object!["version_id"] as! String
+    let reopened = DeskModel(repository: DeskRepository(directory: desk)); await reopened.open()
+    precondition(reopened.error == nil)
+    let card = reopened.state!.cards[cardID]!
+    let version = card.versions.first { $0.id == savedID }!
+    precondition(card.versions.map(\.id) == [initial.id, left, right, unreviewed, savedID])
+    precondition(Set(card.heads.map(\.id)) == Set([unreviewed, savedID]))
+    precondition(version.parents == [left, right] && version.at == tappedAt && version.passId == notebook.passId)
+    precondition(version.interpretation.passages.compactMap { $0.object?["quote"] as? String } ==
+                 ["position-history first café passage.", "position-history second passage.", "first café passage."])
+    precondition(version.positions.compactMap { $0.object?["quote"] as? String } ==
+                 ["position-history first café passage.", "first café passage."])
+    let observations = version.positionObservations!
+    precondition(observations.map(\.id) == ["legacy-new", "a-winner", "b-only", "other-kind", queuedID])
+    precondition(observations.first(where: { $0.providerConnectionId == "audible.a" })?.location.object?["milliseconds"] as? UInt64 == 5000)
+    precondition(observations.last?.location.object?["quote"] as? String == "position-history first café passage.")
+    print("Character revision context: selection, save time, queued reader position, prior audio evidence and reviewed branches survived later updates and SQLite reopen.")
 }

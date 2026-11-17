@@ -31,5 +31,11 @@
       "version": "2",
       "manifest": "portable/v2/manifest.json"
     }
+  ],
+  "command_contracts": [
+    {
+      "version": "1",
+      "manifest": "commands/v1/manifest.json"
+    }
   ]
 }

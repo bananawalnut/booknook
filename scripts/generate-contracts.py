@@ -52,6 +52,9 @@ for name, schema in schemas.items():
     if name in PORTABLE_SCHEMAS:
         schema["$id"] = f"urn:booknook:schema:{name}:v2"
         directory = "ontology/portable/v2"
+    elif name == "card-context-command":
+        schema["$id"] = "urn:booknook:schema:card-context-command:v1"
+        directory = "ontology/commands/v1"
     elif name in PROVIDER_SCHEMAS:
         schema["$id"] = f"urn:booknook:schema:{name}:v1"
         directory = "ontology/providers/v1"
@@ -75,7 +78,7 @@ def typed_module(names, output):
         lines.append(f"export type {typename} = {ts(schemas[name])};")
     outputs[ROOT / output] = "\n".join(lines) + "\n"
 
-typed_module({"state": "State", "command": "Command", "connections": "Connections", "castalia-provider-connection": "ProviderConnection", "castalia-native-authority-profile": "NativeAuthorityProfile", "identity": "AttributionLink", "audio-observation": "AudioObservation", "audio-candidates": "AudioEditionCandidates"}, "sdk/typescript/types.ts")
+typed_module({"state": "State", "command": "Command", "card-context-command": "CardContextCommand", "connections": "Connections", "castalia-provider-connection": "ProviderConnection", "castalia-native-authority-profile": "NativeAuthorityProfile", "identity": "AttributionLink", "audio-observation": "AudioObservation", "audio-candidates": "AudioEditionCandidates"}, "sdk/typescript/types.ts")
 typed_module({"social": "SocialState", "social-action": "SocialAction", "social-local": "LocalSocialCommand", "social-event": "SocialEvent", "publication": "ApprovedPublication", "authority-policy": "AuthorityPolicy"}, "sdk/typescript/social-types.ts")
 
 typed_module({"provider-registry": "ProviderRegistry", "provider-operation": "ProviderOperation", "provider-request": "ProviderRequest", "provider-response": "ProviderResponse", "provider-execution": "ProviderExecution"}, "sdk/typescript/provider-types.ts")
@@ -127,4 +130,21 @@ if "--check" in sys.argv:
         raise SystemExit("Portable contract manifest is stale")
 else:
     portable_manifest_path.write_text(portable_raw)
+command_release = ROOT / "ontology/commands/v1"
+command_manifest = {
+    "schema": "booknook.command-contract-manifest.v1",
+    "version": "1",
+    "namespace": "urn:booknook:schema:",
+    "artifacts": [
+        {"path": p.name, "sha256": hashlib.sha256(p.read_bytes()).hexdigest()}
+        for p in sorted(command_release.iterdir()) if p.is_file() and p.name != "manifest.json"
+    ],
+}
+command_manifest_path = command_release / "manifest.json"
+command_raw = json.dumps(command_manifest, indent=2) + "\n"
+if "--check" in sys.argv:
+    if command_manifest_path.read_text() != command_raw:
+        raise SystemExit("Notebook command contract manifest is stale")
+else:
+    command_manifest_path.write_text(command_raw)
 print("Contracts and manifests verified." if "--check" in sys.argv else "Contracts and manifests generated.")

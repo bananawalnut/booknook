@@ -23,8 +23,9 @@ pub fn execute(state_json: &str, command_json: &str) -> Result<String, JsValue> 
     let run = || -> booknook_core::Result<String> {
         let mut state = booknook_core::strict_parse(state_json.as_bytes())?;
         booknook_core::validate(&state)?;
-        let command = booknook_core::strict_parse(command_json.as_bytes())?;
-        let result = booknook_core::apply(&mut state, command)?;
+        let command =
+            booknook_core::notebook_command::NotebookCommand::parse(command_json.as_bytes())?;
+        let result = command.apply(&mut state)?;
         Ok(serde_json::to_string(
             &serde_json::json!({"state":state,"result":result}),
         )?)

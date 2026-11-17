@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
-import type { State, Command, ProviderConnection, NativeAuthorityProfile } from "./types.js";
+import type { State, Command, CardContextCommand, ProviderConnection, NativeAuthorityProfile } from "./types.js";
 export type * from "./types.js";
 export type * from "./portable-services.js";
 export * from "./castalia.js";
@@ -44,7 +44,7 @@ export class BookNook {
     core.validate_archive(encodeContract(state));
     return new BookNook(core, storage);
   }
-  async execute(command: Command): Promise<{state: State; result: unknown}> {
+  async execute(command: Command | CardContextCommand): Promise<{state: State; result: unknown}> {
     const state = await this.storage.load();
     if (!state) throw new Error("Notebook storage unavailable");
     const response = parseContract<{state: State; result: unknown}>(this.core.execute(encodeContract(state), encodeContract(command)));

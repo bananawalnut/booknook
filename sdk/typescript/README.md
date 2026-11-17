@@ -63,3 +63,9 @@ Building the source WASM runtime requires a C compiler with a WebAssembly target
 script uses this explicit compiler only for WASM and keeps Zig caches under `target/`.
 Prebuilt npm consumers do not need a C compiler. Zig 0.14.1 is a verified option; obtain
 compiler archives and checksums from the [official Zig download index](https://ziglang.org/download/index.json).
+
+### Character-card revisions
+
+Use the exported `CardContextCommand` with `BookNook.execute` to save a character revision with the reading context captured when the reader requests it. The `save_card_with_context` command carries the card and parent versions, the interpretation, the save time, and the reading pass with its positions and source observations. The exact capture is stored in the existing card-version fields, including when the capture is empty. Older `save_card` callers continue to use positions observed at commit time.
+
+The [command contract](https://bananawalnut.github.io/booknook/ontology/commands/v1/manifest.json) includes the schema and a fixture used by the native and WASM parity tests. Card versions and portable archives retain their existing format.

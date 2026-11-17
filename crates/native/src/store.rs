@@ -2,6 +2,7 @@ use crate::Result;
 use booknook_core::{
     Command,
     model::State,
+    notebook_command::NotebookCommand,
     providers::{Capability, NotebookStorage, Provider, ProviderDescriptor},
 };
 use rusqlite::{Connection, params};
@@ -133,6 +134,12 @@ impl Store {
         Ok(serde_json::to_string(&booknook_core::providers::execute(
             self, command,
         )?)?)
+    }
+
+    pub fn execute_notebook_command(&mut self, command: NotebookCommand) -> Result<String> {
+        Ok(serde_json::to_string(
+            &booknook_core::providers::execute_notebook_command(self, command)?,
+        )?)
     }
 }
 
