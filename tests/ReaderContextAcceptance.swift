@@ -51,9 +51,11 @@ private func readerContextEPUB(in directory: URL, label: String) throws -> URL {
     try await model.selectBook(bookIDs[0])
     var resource = "one.xhtml"
     func context() -> ReaderSourceContext {
-        let edition = model.state!.editions[model.book!.editionIds.last!]!, asset = edition.assets.last!
-        return ReaderSourceContext(passID: model.notebook!.passId, editionID: edition.id,
-            assetID: asset.id, fingerprint: asset.sha256, resource: resource)
+        model.readerSourceContext(resource: resource)!
+    }
+    func location(_ source: ReaderSourceContext, quote: String) -> [String: Any] {
+        ["kind": "text", "edition_id": source.editionID, "resource": source.resource,
+         "quote": quote, "prefix": "", "suffix": ""]
     }
     let originalContext = context(), originalCount = model.state!.positions.count
     precondition(model.acceptsReaderContext(originalContext))
@@ -62,19 +64,40 @@ private func readerContextEPUB(in directory: URL, label: String) throws -> URL {
     // deliberately uses current model state, as ReaderPane.handle does, so any
     // leaked old callback would corrupt the current selection/position/error.
     func receiver() -> ([String: Any]) -> Void {
-        model.readerMessages(from: context(), currentResource: { resource }) { message in
+        let source = context()
+        return model.readerMessages(from: source, currentResource: { resource }) { message in
             deliveries += 1
             switch message["type"] as? String {
-            case "selection": model.selection = ["quote": message["quote"] as! String]
+            case "selection": model.selection = location(source, quote: message["quote"] as! String)
             case "selection_cleared": model.selection = nil
             case "error": model.error = message["message"] as? String
             case "navigation_status": navigationStatus = message["message"] as! String
             case "geometry", "pdf_position":
-                model.recordPosition(location: ["kind": "text", "edition_id": model.book!.editionIds.last!,
-                    "resource": resource, "quote": message["quote"] as! String, "prefix": "", "suffix": ""])
+                model.recordPosition(location: location(source, quote: message["quote"] as! String))
             default: preconditionFailure("Unexpected test message")
             }
         }
+    }
+    func saveHighlight(_ quote: String, with callback: ([String: Any]) -> Void) async throws -> String {
+        let source = context()
+        callback(["type": "selection", "quote": quote])
+        let anchor = model.selection!
+        precondition(anchor["edition_id"] as? String == source.editionID)
+        precondition(anchor["resource"] as? String == source.resource && anchor["quote"] as? String == quote)
+        let id = UUID().uuidString
+        try await model.perform(["op": "save_annotation", "annotation": [
+            "id": id, "pass_id": source.passID, "anchor": anchor, "original_context": quote,
+            "layout_fingerprint": NSNull(), "strokes": [], "native_drawing": NSNull(), "ink_geometry": NSNull()
+        ]])
+        return id
+    }
+    func assertSavedReading(_ desk: DeskModel, edition: String, quote: String, highlight: String) {
+        precondition(desk.readerAttachment?.editionID == edition)
+        precondition(desk.savedReaderPosition?["edition_id"] as? String == edition)
+        precondition(desk.savedReaderPosition?["quote"] as? String == quote)
+        precondition(desk.savedReaderPosition?["resource"] as? String == "two.xhtml")
+        precondition(desk.readerAnnotations.map(\.id) == [highlight])
+        precondition(desk.readerAnnotations.first?.anchor.object?["edition_id"] as? String == edition)
     }
     let originalReceiver = receiver()
     originalReceiver(["type": "selection", "quote": "Current A selection"])
@@ -130,28 +153,84 @@ private func readerContextEPUB(in directory: URL, label: String) throws -> URL {
     resource = "two.xhtml"
     try await releaseAndAssertRejected(oldChapter)
 
-    let beforeReplacement = context(), oldAsset = try await queueOldMessages(receiver())
-    model.accept(try await model.repository.importContent(book: bookIDs[1], url: replacement))
-    precondition(context().fingerprint != beforeReplacement.fingerprint)
+    // Two different attached EPUBs deliberately share the same chapter paths.
+    // Keep one delayed original callback for a one-way change and another for
+    // A → B → A, where pass, edition, bytes and resource all match again.
+    let beforeReplacement = context(), firstReader = receiver()
+    let firstQuote = "original second passage."
+    firstReader(["type": "geometry", "quote": firstQuote])
+    try await awaitReaderContext { model.state!.positions.count == originalCount + 2 }
+    let firstHighlight = try await saveHighlight(firstQuote, with: firstReader)
+    let oldAsset = try await queueOldMessages(firstReader)
+    let oldGeneration = try await queueOldMessages(firstReader)
+
+    try await model.attachReaderContent(replacement)
+    let current = context()
+    precondition(current.passID == beforeReplacement.passID && current.resource == beforeReplacement.resource)
+    precondition(current.editionID != beforeReplacement.editionID && current.fingerprint != beforeReplacement.fingerprint)
+    precondition(Set(model.readerAttachments.map(\.editionID)) == [beforeReplacement.editionID, current.editionID])
+    precondition(model.readerAttachment?.asset.id == current.assetID && model.selection == nil)
+    precondition(model.savedReaderPosition == nil && model.readerAnnotations.isEmpty)
     try await releaseAndAssertRejected(oldAsset)
 
-    let current = context()
     for invalid in [
-        ReaderSourceContext(passID: current.passID, editionID: current.editionID, assetID: "wrong-asset", fingerprint: current.fingerprint, resource: resource),
-        ReaderSourceContext(passID: current.passID, editionID: current.editionID, assetID: current.assetID, fingerprint: "wrong-fingerprint", resource: resource),
-        ReaderSourceContext(passID: current.passID, editionID: "wrong-edition", assetID: current.assetID, fingerprint: current.fingerprint, resource: resource)
+        ReaderSourceContext(passID: current.passID, editionID: current.editionID, assetID: "wrong-asset", fingerprint: current.fingerprint, resource: resource, choiceID: current.choiceID),
+        ReaderSourceContext(passID: current.passID, editionID: current.editionID, assetID: current.assetID, fingerprint: "wrong-fingerprint", resource: resource, choiceID: current.choiceID),
+        ReaderSourceContext(passID: current.passID, editionID: "wrong-edition", assetID: current.assetID, fingerprint: current.fingerprint, resource: resource, choiceID: current.choiceID)
     ] { precondition(!model.acceptsReaderContext(invalid)) }
-    let currentReceiver = receiver()
+    let secondReader = receiver(), secondQuote = "replacement second passage."
     model.error = nil
-    currentReceiver(["type": "selection", "quote": "Current B selection"])
-    currentReceiver(["type": "geometry", "quote": "Current B position"])
-    try await awaitReaderContext { model.state!.positions.count == originalCount + 2 }
-    precondition(model.selection?["quote"] as? String == "Current B selection" && model.error == nil)
-    let reopened = DeskModel(); await reopened.open()
-    precondition(reopened.error == nil && reopened.state!.positions.count == originalCount + 2)
-    precondition(reopened.state!.positions.values.contains { $0.passId == current.passID && $0.location.object?["quote"] as? String == "Current B position" && $0.location.object?["resource"] as? String == "two.xhtml" })
+    secondReader(["type": "geometry", "quote": secondQuote])
+    try await awaitReaderContext { model.state!.positions.count == originalCount + 3 }
+    let secondHighlight = try await saveHighlight(secondQuote, with: secondReader)
+    assertSavedReading(model, edition: current.editionID, quote: secondQuote, highlight: secondHighlight)
+    try await model.attachReaderContent(original)
+    precondition(context() == current && model.readerAttachments.count == 2, "Reattaching earlier bytes must keep the active source")
+
+    let oldSecond = try await queueOldMessages(secondReader)
+    try await model.selectReaderEdition(beforeReplacement.editionID)
+    let reopenedFirst = context()
+    precondition(model.selection == nil && reopenedFirst.choiceID != beforeReplacement.choiceID)
+    precondition(reopenedFirst.passID == beforeReplacement.passID && reopenedFirst.editionID == beforeReplacement.editionID)
+    precondition(reopenedFirst.assetID == beforeReplacement.assetID && reopenedFirst.fingerprint == beforeReplacement.fingerprint)
+    precondition(reopenedFirst.resource == beforeReplacement.resource && model.acceptsReaderContext(reopenedFirst))
+    try await releaseAndAssertRejected(oldSecond)
+    try await releaseAndAssertRejected(oldGeneration)
+    assertSavedReading(model, edition: beforeReplacement.editionID, quote: firstQuote, highlight: firstHighlight)
+    let originalFolder = try await model.repository.assetDirectory(reopenedFirst.assetID)
+    try await testAttachedTextReader(model: model, source: reopenedFirst, folder: originalFolder,
+        spine: model.readerAttachment!.asset.spine, passage: firstQuote)
+    let reopenedFirstReader = receiver()
+    reopenedFirstReader(["type": "selection", "quote": firstQuote])
+    precondition(model.selection?["quote"] as? String == firstQuote)
+    try await model.attachReaderContent(replacement)
+    precondition(context() == reopenedFirst && model.readerAttachments.count == 2, "A duplicate must not replace an explicit older choice")
+
+    try await model.selectBook(bookIDs[0])
+    precondition(context().editionID == originalContext.editionID)
+    try await model.selectBook(bookIDs[1])
+    precondition(model.notebook?.passId == current.passID)
+    assertSavedReading(model, edition: beforeReplacement.editionID, quote: firstQuote, highlight: firstHighlight)
+
+    let additional = try readerContextEPUB(in: directory, label: "additional")
+    try await model.attachReaderContent(additional)
+    let newest = context()
+    precondition(newest.passID == current.passID && ![beforeReplacement.editionID, current.editionID].contains(newest.editionID))
+    precondition(model.readerAttachments.count == 3 && model.selection == nil)
+    precondition(model.savedReaderPosition == nil && model.readerAnnotations.isEmpty)
+
+    let savedDirectory = try await model.repository.resolvedDirectory()
+    let reopened = DeskModel(repository: DeskRepository(directory: savedDirectory))
+    await reopened.open()
+    precondition(reopened.error == nil && reopened.state!.positions.count == originalCount + 3)
+    try await reopened.selectBook(bookIDs[1])
+    precondition(reopened.readerAttachment?.editionID == newest.editionID && reopened.readerAttachments.count == 3)
+    try await reopened.selectReaderEdition(beforeReplacement.editionID)
+    assertSavedReading(reopened, edition: beforeReplacement.editionID, quote: firstQuote, highlight: firstHighlight)
+    try await reopened.selectReaderEdition(current.editionID)
+    assertSavedReading(reopened, edition: current.editionID, quote: secondQuote, highlight: secondHighlight)
     precondition(!reopened.state!.positions.values.contains { ($0.location.object?["quote"] as? String)?.hasPrefix("Stale") == true })
-    print("Reader callback context: actual native EPUB import, delayed callbacks rejected after book/pass/chapter/asset switches, selection/error/navigation preserved, valid current callbacks and SQLite position reopen passed. Headless callback boundary; no device or renderer interaction.")
+    print("Reader callback context: real EPUB attachment and duplicate detection, selected-edition positions and highlights after SQLite reopen, and delayed callbacks rejected after book/pass/chapter and A–B–A transitions. The contained WebKit renderer verified the earlier attachment; no device interaction.")
 }
 
 /// Exercise the production first-input context and persist it through the actual

@@ -21,10 +21,19 @@ private enum ReaderTextHighlightPlacement: String {
     }
 }
 
+private struct OpenedReaderAttachment: Identifiable {
+    let id = UUID()
+    let identity: ReaderAttachmentIdentity
+    let directory: URL
+}
+
 struct ReaderPane: View {
     @EnvironmentObject var model: DeskModel
     @State var importing = false
-    @State var root: URL?
+    @State private var openedAttachment: OpenedReaderAttachment?
+    @State private var failedAttachment: ReaderAttachmentIdentity?
+    @State private var changingAttachment = false
+    @State private var fileTarget: (bookID: String, passID: String)?
     @State var chapter = 0
     @State var markup = false
     @AppStorage("booknook.readerFontSize") var fontSize = 19
@@ -39,24 +48,30 @@ struct ReaderPane: View {
     @State private var highlightStatus: String?
     @State private var showingAnnotations = false
     @State private var textHighlightPlacements: [String: [String: ReaderTextHighlightPlacement]] = [:]
-    var edition: Edition? { model.book?.editionIds.last.flatMap { model.state?.editions[$0] } }
-    var asset: Asset? { edition?.assets.last }
-    var annotations: [Annotation] { model.state?.annotations.values.filter { $0.passId == model.notebook?.passId && (($0.anchor.object?["edition_id"] as? String) == edition?.id || ReaderUnplacedInkLocation.matches($0, editionID: edition?.id ?? "")) } ?? [] }
-    var savedPosition: [String: Any]? { model.state?.positions.values.filter { $0.passId == model.notebook?.passId && ($0.location.object?["edition_id"] as? String) == edition?.id }.max { $0.observedAt < $1.observedAt }?.location.object }
+    var editionID: String? { model.readerAttachment?.editionID }
+    var asset: Asset? { model.readerAttachment?.asset }
+    var annotations: [Annotation] { model.readerAnnotations }
+    var savedPosition: [String: Any]? { model.savedReaderPosition }
+    private var activeAttachment: OpenedReaderAttachment? {
+        guard let openedAttachment, openedAttachment.identity == model.readerAttachmentIdentity else { return nil }
+        return openedAttachment
+    }
     var currentResource: String { guard let asset, asset.spine.indices.contains(chapter) else { return "" }; return asset.spine[chapter] }
     var inkSession: ReaderInkSession? {
-        guard let passID = model.notebook?.passId, let edition, let asset else { return nil }
-        return model.readerInkSession(passID: passID, editionID: edition.id, assetFingerprint: asset.sha256)
+        guard let source = activeAttachment?.identity else { return nil }
+        return model.readerInkSession(passID: source.passID, editionID: source.editionID, assetFingerprint: source.fingerprint)
     }
-    var messageReceiver: ([String: Any]) -> Void {
-        guard let passID = model.notebook?.passId, let edition, let asset else { return { _ in } }
-        let source = ReaderSourceContext(passID: passID, editionID: edition.id, assetID: asset.id,
-            fingerprint: asset.sha256, resource: asset.mediaType == "application/pdf" ? "book.pdf" : currentResource)
-        return model.readerMessages(from: source,
-            currentResource: { self.asset?.mediaType == "application/pdf" ? "book.pdf" : currentResource },
-            receive: handle)
+    private var rendererResource: String { asset?.mediaType == "application/pdf" ? "book.pdf" : currentResource }
+    private func messageReceiver(for opened: OpenedReaderAttachment) -> ([String: Any]) -> Void {
+        guard let source = model.readerSourceContext(resource: rendererResource),
+              source.attachmentIdentity == opened.identity else { return { _ in } }
+        return model.readerMessages(from: source, currentResource: { rendererResource }) { message in
+            guard activeAttachment?.id == opened.id else { return }
+            handle(message)
+        }
     }
     var body: some View {
+        let attachmentIdentity = model.readerAttachmentIdentity
         VStack(alignment: .leading, spacing: 0) {
             HStack {
                 ViewThatFits(in: .horizontal) {
@@ -77,27 +92,43 @@ struct ReaderPane: View {
                     #if os(iOS)
                     if asset != nil { Toggle("Pencil markup", isOn: $markup) }
                     #endif
+                    if model.readerAttachments.count > 1 {
+                        Menu("Attached editions") {
+                            ForEach(Array(model.readerAttachments.enumerated()), id: \.element.editionID) { index, attachment in
+                                let format = attachment.asset.mediaType == "application/pdf" ? "PDF" : attachment.asset.isMobi6 ? "MOBI" : "EPUB"
+                                let title = "Edition \(index + 1) · \(format)"
+                                Button { chooseEdition(attachment.editionID) } label: {
+                                    if attachment.editionID == editionID { Label(title, systemImage: "checkmark") }
+                                    else { Text(title) }
+                                }
+                            }
+                        }.disabled(changingAttachment)
+                    }
                     Button("Saved annotations (\(annotations.count))") { showingAnnotations = true }.disabled(annotations.isEmpty)
-                    Button("Attach book file…") { importing = true }
+                    Button("Attach book file…", action: chooseBookFile).disabled(changingAttachment)
                 } label: { Image(systemName: "ellipsis").frame(width: 32, height: 32).accessibilityLabel("Book options") }
             }.buttonStyle(.borderless).padding(.horizontal, 12).padding(.vertical, 10)
-            if let status = highlightStatus ?? navigationStatus {
+            if activeAttachment != nil, let status = highlightStatus ?? navigationStatus {
                 Text(status).font(.caption).foregroundStyle(.secondary).padding(.horizontal, 24).padding(.bottom, 8).accessibilityLabel(status)
             }
-            if let asset, let root {
+            if let asset, let opened = activeAttachment {
+                let root = opened.directory
+                let receive = messageReceiver(for: opened)
                 if asset.mediaType == "application/pdf" {
                     Group {
                     #if os(iOS)
-                    NativePDFView(url: root.appendingPathComponent("book.pdf"), initialPage: (savedPosition?["page"] as? NSNumber)?.intValue, fingerprint: asset.sha256, markup: markup, annotations: annotations, onMessage: messageReceiver, onInk: inkReceiver, inkSession: inkSession)
+                    NativePDFView(url: root.appendingPathComponent("book.pdf"), initialPage: (savedPosition?["page"] as? NSNumber)?.intValue, fingerprint: asset.sha256, markup: markup, annotations: annotations, onMessage: receive, onInk: inkReceiver, inkSession: inkSession)
                     #else
-                    NativePDFView(url: root.appendingPathComponent("book.pdf"), initialPage: (savedPosition?["page"] as? NSNumber)?.intValue, fingerprint: asset.sha256, markup: markup, annotations: annotations, onMessage: messageReceiver, onInk: inkReceiver)
+                    NativePDFView(url: root.appendingPathComponent("book.pdf"), initialPage: (savedPosition?["page"] as? NSNumber)?.intValue, fingerprint: asset.sha256, markup: markup, annotations: annotations, onMessage: receive, onInk: inkReceiver)
                     #endif
                     }
+                    .id(opened.id)
                     .overlay { readingPaper.blendMode(.darken).allowsHitTesting(false).accessibilityHidden(true) }
                     .compositingGroup()
                 }
                 else {
-                    EPUBView(root: root, resource: currentResource, markup: markup, annotations: annotations, geometry: geometry, fontSize: fontSize, restorePosition: savedPosition, spine: asset.spine, destination: destination, onMessage: messageReceiver, onInk: inkReceiver, inkSession: inkSession)
+                    EPUBView(root: root, resource: currentResource, markup: markup, annotations: annotations, geometry: geometry, fontSize: fontSize, restorePosition: savedPosition, spine: asset.spine, destination: destination, onMessage: receive, onInk: inkReceiver, inkSession: inkSession)
+                        .id(opened.id)
                     if !asset.isMobi6 {
                         ViewThatFits(in: .horizontal) {
                           HStack {
@@ -129,11 +160,16 @@ struct ReaderPane: View {
                         }.buttonStyle(.borderless).padding(.horizontal, 14).padding(.vertical, 6)
                     }
                 }
+            } else if let attachmentIdentity {
+                Group {
+                    if failedAttachment == attachmentIdentity { Text("This edition couldn’t be opened.") }
+                    else { ProgressView("Opening book…") }
+                }.foregroundStyle(.secondary).frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 VStack(alignment: .leading, spacing: 18) {
                     Text("Your book goes here.").font(.system(.title2, design: .serif))
                     Text("Open an EPUB, PDF, or DRM-free legacy MOBI file.").font(.callout).foregroundStyle(.secondary)
-                    Button("Choose a book file") { importing = true }.buttonStyle(.bordered)
+                    Button("Choose a book file", action: chooseBookFile).buttonStyle(.bordered).disabled(changingAttachment)
                 }.padding(24).frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             if let inkSession { ReaderInkPendingView(session: inkSession) }
@@ -149,22 +185,61 @@ struct ReaderPane: View {
                 }
             }.padding(24).frame(minWidth: 300, idealWidth: 460, minHeight: 300)
         }
-        .task(id: "\(asset?.id ?? ""):\(model.notebook?.passId ?? "")") {
-            chapter = 0; root = nil; destination = nil; resetGeometry()
-            textHighlightPlacements = [:]
-            if let asset {
-                if let resource = savedPosition?["resource"] as? String, let restored = asset.spine.firstIndex(of: resource) { chapter = restored }
-                do {
-                    let directory = try await model.repository.assetDirectory(asset.id)
-                    try Task.checkCancellation()
-                    root = directory
-                } catch { if !bookNookOperationWasCancelled(error) { model.error = bookNookErrorMessage(error) } }
-            }
-        }
+        .task(id: attachmentIdentity) { await loadAttachment(attachmentIdentity) }
         .fileImporter(isPresented: $importing, allowedContentTypes: [.pdf] + ["epub", "mobi", "azw"].compactMap {
             UTType(filenameExtension: $0, conformingTo: .data)
-        }) { result in
-            Task { do { let url = try result.get(); let access = url.startAccessingSecurityScopedResource(); defer { if access { url.stopAccessingSecurityScopedResource() } }; if let book = model.book { try await model.drainSaves(); model.accept(try await model.repository.importContent(book: book.id, url: url)) } } catch { if !bookNookOperationWasCancelled(error) { model.error = bookNookErrorMessage(error) } } }
+        }, onCompletion: attachBookFile)
+    }
+    private func loadAttachment(_ identity: ReaderAttachmentIdentity?) async {
+        guard !Task.isCancelled, identity == model.readerAttachmentIdentity else { return }
+        chapter = 0; openedAttachment = nil; failedAttachment = nil; destination = nil
+        resetGeometry()
+        textHighlightPlacements = [:]
+        guard let identity, let asset else { return }
+        if let resource = savedPosition?["resource"] as? String, let restored = asset.spine.firstIndex(of: resource) {
+            chapter = restored
+        }
+        do {
+            let directory = try await model.repository.assetDirectory(identity.assetID)
+            try Task.checkCancellation()
+            guard identity == model.readerAttachmentIdentity else { return }
+            openedAttachment = OpenedReaderAttachment(identity: identity, directory: directory)
+        } catch {
+            guard !Task.isCancelled, identity == model.readerAttachmentIdentity, !bookNookOperationWasCancelled(error) else { return }
+            failedAttachment = identity
+            model.error = bookNookErrorMessage(error)
+        }
+    }
+    private func chooseEdition(_ id: String) {
+        guard !changingAttachment, id != editionID else { return }
+        changingAttachment = true
+        Task {
+            defer { changingAttachment = false }
+            do { try await model.selectReaderEdition(id) }
+            catch { if !bookNookOperationWasCancelled(error) { model.error = bookNookErrorMessage(error) } }
+        }
+    }
+    private func chooseBookFile() {
+        guard !changingAttachment, let bookID = model.book?.id, let passID = model.notebook?.passId else { return }
+        fileTarget = (bookID, passID)
+        importing = true
+    }
+    private func attachBookFile(_ result: Result<URL, Error>) {
+        let target = fileTarget
+        fileTarget = nil
+        guard let target else { return }
+        Task {
+            do {
+                let url = try result.get()
+                guard model.book?.id == target.bookID, model.notebook?.passId == target.passID else {
+                    throw AuthorizationError.message("The reading desk changed. Open the intended book before attaching the file.")
+                }
+                changingAttachment = true
+                defer { changingAttachment = false }
+                let access = url.startAccessingSecurityScopedResource()
+                defer { if access { url.stopAccessingSecurityScopedResource() } }
+                try await model.attachReaderContent(url)
+            } catch { if !bookNookOperationWasCancelled(error) { model.error = bookNookErrorMessage(error) } }
         }
     }
     func resetGeometry() { fingerprint = ""; geometry = [:]; placements = [:]; pdfHighlights = []; lastRecordedPosition = ""; highlightStatus = nil; navigationStatus = nil; model.selection = nil }
@@ -223,16 +298,16 @@ struct ReaderPane: View {
     func handle(_ message: [String: Any]) {
         if let source = message["assetFingerprint"] as? String, source != asset?.sha256 { return }
         if message["type"] as? String == "error" { model.error = message["message"] as? String ?? "Reader unavailable"; return }
-        guard let edition else { return }
+        guard let editionID else { return }
         switch message["type"] as? String {
         case "selection":
             highlightStatus = nil
             guard let quote = message["quote"] as? String, !quote.isEmpty else { return }
-            model.selection = ["kind": "text", "edition_id": edition.id, "resource": currentResource, "quote": quote, "prefix": message["prefix"] as? String ?? "", "suffix": message["suffix"] as? String ?? ""]
+            model.selection = ["kind": "text", "edition_id": editionID, "resource": currentResource, "quote": quote, "prefix": message["prefix"] as? String ?? "", "suffix": message["suffix"] as? String ?? ""]
         case "selection_cleared": model.selection = nil; highlightStatus = nil
         case "geometry":
             fingerprint = message["fingerprint"] as? String ?? ""; geometry = message
-            if var position = message["position"] as? [String: Any] { position["kind"] = "text"; position["edition_id"] = edition.id; position["resource"] = currentResource; recordPosition(position) }
+            if var position = message["position"] as? [String: Any] { position["kind"] = "text"; position["edition_id"] = editionID; position["resource"] = currentResource; recordPosition(position) }
         case "ink_placements":
             for placement in message["placements"] as? [[String: Any]] ?? [] { if let id = placement["id"] as? String { placements[id] = placement["status"] as? String ?? "missing" } }
         case "highlight_placements":
@@ -250,9 +325,9 @@ struct ReaderPane: View {
         case "pdf_selection":
             highlightStatus = nil
             pdfHighlights = message["highlights"] as? [[String: Any]] ?? []
-            if let page = pdfHighlights.first?["page"] { model.selection = ["kind": "page", "edition_id": edition.id, "page": page] } else { model.selection = nil }
+            if let page = pdfHighlights.first?["page"] { model.selection = ["kind": "page", "edition_id": editionID, "page": page] } else { model.selection = nil }
         case "pdf_position":
-            if let page = message["page"] { recordPosition(["kind": "page", "edition_id": edition.id, "page": page]) }
+            if let page = message["page"] { recordPosition(["kind": "page", "edition_id": editionID, "page": page]) }
         case "navigate":
             if let resource = message["resource"] as? String, let index = asset?.spine.firstIndex(of: resource) { openChapter(index, fragment: message["fragment"] as? String) }
         case "navigation_status": navigationStatus = message["message"] as? String
@@ -260,19 +335,20 @@ struct ReaderPane: View {
         }
     }
     func recordPosition(_ location: [String: Any]) {
-        guard let edition, let data = try? JSONSerialization.data(withJSONObject: location, options: .sortedKeys), let key = String(data: data, encoding: .utf8), key != lastRecordedPosition else { return }
+        guard let editionID, let data = try? JSONSerialization.data(withJSONObject: location, options: .sortedKeys), let key = String(data: data, encoding: .utf8), key != lastRecordedPosition else { return }
         lastRecordedPosition = key
-        model.recordPosition(location: location, alignment: ["status": "confirmed", "edition_id": edition.id, "evidence": "Position observed in the attached content asset by Book Nook's native reader."])
+        model.recordPosition(location: location, alignment: ["status": "confirmed", "edition_id": editionID, "evidence": "Position observed in the attached content asset by Book Nook's native reader."])
     }
     var highlightRequests: [ReaderHighlightRequest] {
-        guard let edition else { return [] }
+        guard activeAttachment != nil, let editionID else { return [] }
         if !pdfHighlights.isEmpty {
             return pdfHighlights.compactMap { item in
                 guard let page = item["page"], let geometry = item["geometry"] as? [String: Any] else { return nil }
-                return ReaderHighlightRequest(anchor: ["kind": "page", "edition_id": edition.id, "page": page], geometry: geometry, context: item["quote"] as? String ?? "PDF highlight")
+                return ReaderHighlightRequest(anchor: ["kind": "page", "edition_id": editionID, "page": page], geometry: geometry, context: item["quote"] as? String ?? "PDF highlight")
             }
         }
-        guard let anchor = model.selection, anchor["kind"] as? String == "text" else { return [] }
+        guard let anchor = model.selection, anchor["kind"] as? String == "text",
+              anchor["edition_id"] as? String == editionID, anchor["resource"] as? String == currentResource else { return [] }
         return [ReaderHighlightRequest(anchor: anchor, geometry: nil, context: anchor["quote"] as? String ?? "")]
     }
     var savedHighlightKeys: Set<String> {
@@ -282,7 +358,8 @@ struct ReaderPane: View {
     }
     var selectionAlreadyHighlighted: Bool { !highlightRequests.isEmpty && highlightRequests.allSatisfy { savedHighlightKeys.contains($0.key) } }
     func saveHighlight() {
-        guard !savingHighlight, let pass = model.notebook?.passId else { return }
+        guard !savingHighlight, let opened = activeAttachment else { return }
+        let pass = opened.identity.passID
         let pending = highlightRequests.filter { !savedHighlightKeys.contains($0.key) }
         guard !pending.isEmpty else { return }
         savingHighlight = true; highlightStatus = "Saving highlight…"
@@ -294,18 +371,20 @@ struct ReaderPane: View {
                     let annotation: [String: Any] = ["id": UUID().uuidString, "pass_id": pass, "anchor": request.anchor, "original_context": request.context, "layout_fingerprint": NSNull(), "strokes": [], "native_drawing": NSNull(), "ink_geometry": request.geometry as Any? ?? NSNull()]
                     try await model.perform(["op": "save_annotation", "annotation": annotation]); saved += 1
                 }
-                highlightStatus = saved == 1 ? "Highlight saved" : "\(saved) highlights saved"
+                if activeAttachment?.id == opened.id { highlightStatus = saved == 1 ? "Highlight saved" : "\(saved) highlights saved" }
             } catch {
-                highlightStatus = "Could not save all highlights (\(saved) of \(pending.count) saved). \(bookNookErrorMessage(error)) Select the passage and retry."
+                if activeAttachment?.id == opened.id {
+                    highlightStatus = "Could not save all highlights (\(saved) of \(pending.count) saved). \(bookNookErrorMessage(error)) Select the passage and retry."
+                }
             }
         }
     }
     var inkReceiver: AnnotationSave {
-        let editionId = edition?.id, passId = model.notebook?.passId, layout = fingerprint, desk = model
+        let source = activeAttachment?.identity, layout = fingerprint, desk = model
         return { ink, acknowledged in
-            guard let editionId, let passId, let id = ink["id"] as? String, var anchor = ink["anchor"] as? [String: Any] else { acknowledged(false); return }
-            anchor["edition_id"] = editionId
-            var annotation = ink; annotation["pass_id"] = passId; annotation["anchor"] = anchor
+            guard let source, let id = ink["id"] as? String, var anchor = ink["anchor"] as? [String: Any] else { acknowledged(false); return }
+            anchor["edition_id"] = source.editionID
+            var annotation = ink; annotation["pass_id"] = source.passID; annotation["anchor"] = anchor
             annotation["original_context"] = anchor["quote"] ?? ink["original_context"] ?? "PDF page markup"
             annotation["layout_fingerprint"] = layout.isEmpty ? NSNull() : layout as Any
             Task { await desk.send(["op": "save_annotation", "annotation": annotation]); acknowledged(desk.state?.annotations[id] != nil) }

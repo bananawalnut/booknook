@@ -84,8 +84,7 @@ import WebKit
     let original = try Data(contentsOf: mobiURL)
     let accepted = try await reopened.importContent(book: bookID, url: mobiURL)
     model.accept(accepted)
-    guard let passID = model.notebook?.passId, let editionID = model.book?.editionIds.last,
-          let mobi = accepted.editions[editionID]?.assets.last, mobi.isMobi6 else {
+    guard let mobi = model.readerAttachment?.asset, mobi.isMobi6 else {
         preconditionFailure("The normal selected-file provider did not attach MOBI to the active edition")
     }
     precondition(mobi.supportsTextSize && mobi.spine == ["mobi6-v1/book.xhtml"])
@@ -93,17 +92,18 @@ import WebKit
     let stored = try Data(contentsOf: mobiFolder.appendingPathComponent("original.mobi"))
     let body = try String(contentsOf: mobiFolder.appendingPathComponent(mobi.spine[0]), encoding: .utf8)
     precondition(stored == original && body.contains("A window opened above the reading desk."))
-    let source = ReaderSourceContext(passID: passID, editionID: editionID, assetID: mobi.id,
-        fingerprint: mobi.sha256, resource: mobi.spine[0])
-    try await testAttachedMobiReader(model: model, source: source, folder: mobiFolder, spine: mobi.spine)
+    let source = model.readerSourceContext(resource: mobi.spine[0])!
+    try await testAttachedTextReader(model: model, source: source, folder: mobiFolder, spine: mobi.spine,
+        passage: "A window opened above the reading desk.", additionalProse: ["Café, 日本語, 🌿."])
     print("Normal selected-file provider preserved MOBI bytes; the contained WKWebView rendered the stable resource and delivered its selected passage.")
 }
 
-@MainActor private func testAttachedMobiReader(model: DeskModel, source: ReaderSourceContext, folder: URL, spine: [String]) async throws {
+@MainActor func testAttachedTextReader(model: DeskModel, source: ReaderSourceContext, folder: URL, spine: [String],
+                                        passage: String, additionalProse: [String] = []) async throws {
     let scripts = try ["reader-geometry", "reader"].map {
         try String(contentsOfFile: "apps/apple/Resources/\($0).js", encoding: .utf8)
     }
-    let passage = "A window opened above the reading desk."
+    let expectedProse = String(decoding: try JSONSerialization.data(withJSONObject: [passage] + additionalProse), as: UTF8.self)
     var readerError: String?
     var selectedQuote: String?
     let receive = model.readerMessages(from: source, currentResource: { source.resource }) { message in
@@ -122,7 +122,7 @@ import WebKit
     let clock = ContinuousClock()
     let deadline = clock.now + .seconds(10)
     func failure(_ message: String) -> NSError {
-        NSError(domain: "BookNookMobiReaderAcceptance", code: 1, userInfo: [NSLocalizedDescriptionKey: message])
+        NSError(domain: "BookNookTextReaderAcceptance", code: 1, userInfo: [NSLocalizedDescriptionKey: message])
     }
     func wait(for phase: String, until ready: () -> Bool) async throws {
         while clock.now < deadline {
@@ -130,7 +130,7 @@ import WebKit
             if ready() { return }
             try await Task.sleep(for: .milliseconds(25))
         }
-        throw failure("Timed out waiting for attached MOBI \(phase)")
+        throw failure("Timed out waiting for attached text \(phase)")
     }
 
     let expectedPath = folder.appendingPathComponent(source.resource).standardizedFileURL.path
@@ -143,14 +143,15 @@ import WebKit
     var evaluation: String?
     web.evaluateJavaScript("""
         (() => {
+          const [passage, ...additional] = \(expectedProse);
           const prose = document.body?.textContent ?? "";
-          if (!prose.includes("\(passage)") || !prose.includes("Café, 日本語, 🌿.")) return "Missing decoded MOBI prose";
-          const resolved = booknookResolve({quote: "\(passage)"});
-          if (resolved.status !== "resolved" || !resolved.rects.length) return "MOBI passage has no rendered text bounds";
+          if (![passage, ...additional].every(text => prose.includes(text))) return "Missing attached prose";
+          const resolved = booknookResolve({quote: passage});
+          if (resolved.status !== "resolved" || !resolved.rects.length) return "Passage has no rendered text bounds";
           const selection = getSelection();
           selection.removeAllRanges();
           selection.addRange(resolved.range);
-          return selection.toString() === "\(passage)" ? "selected" : "Wrong DOM selection";
+          return selection.toString() === passage ? "selected" : "Wrong DOM selection";
         })()
         """) { value, error in
         evaluation = error?.localizedDescription ?? (value as? String) ?? "No JavaScript result"

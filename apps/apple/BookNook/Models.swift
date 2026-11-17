@@ -19,6 +19,10 @@ struct Asset: Decodable, Identifiable {
     var isMobi6: Bool { mediaType == Self.mobi6MediaType }
     var supportsTextSize: Bool { mediaType == "application/epub+zip" || isMobi6 }
 }
+struct ReaderAttachment {
+    let editionID: String
+    let asset: Asset
+}
 struct Notebook: Decodable, Identifiable { let id: String; let bookId: String; let passId: String; let blocks: [NoteBlock]; let revisions: [NoteRevision] }
 struct NoteBlock: Decodable, Identifiable { let id: String; let kind: String; let text: String; let update: String; let styles: [InlineStyle]?; var ink: NotebookInk? = nil; var note: NoteMetadata? = nil }
 struct InlineStyle: Codable, Equatable {
@@ -182,6 +186,10 @@ actor DeskRepository {
     func stageText(_ data: Data) throws { try required().stageTextEdit(editJson: String(decoding: data, as: UTF8.self)) }
     func flushText() throws -> DeskSnapshot { try decoder.decode(DeskSnapshot.self, from: Data(try required().flushTextEdits().utf8)) }
     func importContent(book: String, url: URL) async throws -> DeskSnapshot {
+        let read = try await readReaderContent(url)
+        return try await commitReaderContent(read, book: book)
+    }
+    func readReaderContent(_ url: URL) async throws -> BookNookProviderRead {
         let media: String
         switch url.pathExtension.lowercased() {
         case "epub": media = "application/epub+zip"
@@ -189,7 +197,12 @@ actor DeskRepository {
         case "mobi", "azw": media = Asset.mobi6MediaType
         default: throw BookNookServiceError.message("Choose an EPUB, PDF, or DRM-free legacy MOBI (.mobi or .azw) file.")
         }
-        return try await importContent(providerID: AppleProviderIDs.contentFile, book: book, sourceID: url.path, mediaType: media)
+        return try await providerServices().fetch(providerID: AppleProviderIDs.contentFile,
+            operationJSON: BookNookProviderWire.json(["kind": "content", "source_id": url.path, "media_type": media]))
+    }
+    func commitReaderContent(_ read: BookNookProviderRead, book: String) async throws -> DeskSnapshot {
+        let raw = try await providerServices().commitContent(read, bookID: book)
+        return try decoder.decode(DeskSnapshot.self, from: Data(raw.utf8))
     }
     func assetDirectory(_ id: String) throws -> URL { URL(fileURLWithPath: try required().assetDirectory(assetId: id), isDirectory: true) }
     func export(to url: URL) throws { try required().exportArchive(path: url.path) }
@@ -211,8 +224,16 @@ actor DeskRepository {
     @Published private(set) var libraryOpenError: String?
     private var libraryOpeningTask: Task<Void, Never>?
     var libraryReady: Bool { state != nil && !openingLibrary }
-    @Published var selectedBookId: String?
-    @Published var selectedNotebookId: String?
+    @Published var selectedBookId: String? {
+        didSet { if oldValue != selectedBookId { readerScopeDidChange() } }
+    }
+    @Published var selectedNotebookId: String? {
+        didSet { if oldValue != selectedNotebookId { readerScopeDidChange() } }
+    }
+    @Published private var readerChoiceID = UUID()
+    private var readerEditionChoices: [String: String] = [:]
+    private var readerIntentID = UUID()
+    private var deferredReaderEditions: Set<String> = []
     @Published var notebookScrollTarget: String?
     @Published var section = "desk"
     @Published var sharingBookId: String?
@@ -264,10 +285,133 @@ actor DeskRepository {
     var books: [LibraryBook] { (state?.books.values.map { $0 } ?? []).sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending } }
     var book: LibraryBook? { selectedBookId.flatMap { state?.books[$0] } }
     var notebook: Notebook? { selectedNotebookId.flatMap { state?.notebooks[$0] } }
+    var readerAttachments: [ReaderAttachment] {
+        guard let book, let state else { return [] }
+        return book.editionIds.compactMap { id in
+            guard let edition = state.editions[id], edition.bookId == book.id,
+                  let asset = edition.assets.last(where: {
+                      $0.mediaType == "application/pdf" || ($0.supportsTextSize && !$0.spine.isEmpty)
+                  }) else { return nil }
+            return ReaderAttachment(editionID: id, asset: asset)
+        }
+    }
+    var readerAttachment: ReaderAttachment? {
+        guard let book, notebook?.bookId == book.id else { return nil }
+        let attachments = readerAttachments
+        if let chosen = readerEditionChoices[book.id],
+           let attachment = attachments.first(where: { $0.editionID == chosen }) {
+            return attachment
+        }
+        return attachments.last { !deferredReaderEditions.contains($0.editionID) } ?? attachments.last
+    }
+    var readerAttachmentIdentity: ReaderAttachmentIdentity? {
+        guard let attachment = readerAttachment, let passID = notebook?.passId else { return nil }
+        return ReaderAttachmentIdentity(passID: passID, editionID: attachment.editionID,
+            assetID: attachment.asset.id, fingerprint: attachment.asset.sha256, choiceID: readerChoiceID)
+    }
+    func readerSourceContext(resource: String) -> ReaderSourceContext? {
+        guard let identity = readerAttachmentIdentity, let asset = readerAttachment?.asset,
+              (asset.mediaType == "application/pdf" ? resource == "book.pdf" : asset.spine.contains(resource)) else {
+            return nil
+        }
+        return ReaderSourceContext(passID: identity.passID, editionID: identity.editionID,
+            assetID: identity.assetID, fingerprint: identity.fingerprint, resource: resource, choiceID: identity.choiceID)
+    }
+    var readerAnnotations: [Annotation] {
+        guard let identity = readerAttachmentIdentity else { return [] }
+        return state?.annotations.values.filter {
+            $0.passId == identity.passID &&
+                (($0.anchor.object?["edition_id"] as? String) == identity.editionID ||
+                 ReaderUnplacedInkLocation.matches($0, editionID: identity.editionID))
+        } ?? []
+    }
+    var savedReaderPosition: [String: Any]? {
+        guard let identity = readerAttachmentIdentity else { return nil }
+        return state?.positions.values.filter {
+            $0.passId == identity.passID && ($0.location.object?["edition_id"] as? String) == identity.editionID
+        }.max { $0.observedAt < $1.observedAt }?.location.object
+    }
+    private func resetReaderContext() {
+        readerChoiceID = UUID()
+        selection = nil
+    }
+    private func readerScopeDidChange() {
+        readerIntentID = UUID()
+        deferredReaderEditions.removeAll()
+        resetReaderContext()
+    }
+    func selectReaderEdition(_ id: String) async throws {
+        guard let bookID = book?.id, let notebook, notebook.bookId == bookID,
+              readerAttachments.contains(where: { $0.editionID == id }) else {
+            throw BookNookServiceError.message("This edition is no longer available in the current book.")
+        }
+        let passID = notebook.passId
+        let intent = UUID()
+        readerIntentID = intent
+        guard readerEditionChoices[bookID] != id else { return }
+        do { try await drainSaves(allowJournaledInk: true) }
+        catch {
+            guard readerIntentID == intent else { throw CancellationError() }
+            throw error
+        }
+        try Task.checkCancellation()
+        guard readerIntentID == intent, book?.id == bookID, self.notebook?.passId == passID,
+              readerAttachments.contains(where: { $0.editionID == id }) else { throw CancellationError() }
+        let previous = readerAttachmentIdentity
+        readerEditionChoices[bookID] = id
+        if readerAttachmentIdentity != previous { resetReaderContext() }
+    }
+    func attachReaderContent(_ url: URL) async throws {
+        guard let bookID = book?.id, let notebook, notebook.bookId == bookID else {
+            throw BookNookServiceError.message("Open a reading pass before attaching a book file.")
+        }
+        let passID = notebook.passId
+        let intent = UUID()
+        readerIntentID = intent
+        func isCurrent() -> Bool {
+            readerIntentID == intent && book?.id == bookID && self.notebook?.passId == passID && !Task.isCancelled
+        }
+        do {
+            try await drainSaves(allowJournaledInk: true)
+            guard isCurrent() else { throw CancellationError() }
+            let read = try await repository.readReaderContent(url)
+            guard isCurrent() else { throw CancellationError() }
+            // Use the validated result's digest, so an unrelated attachment in
+            // the returned snapshot cannot turn a duplicate into a new selection.
+            let execution = try JSONSerialization.jsonObject(with: Data(read.executionJSON.utf8)) as? [String: Any]
+            guard let response = execution?["response"] as? [String: Any],
+                  let result = response["result"] as? [String: Any], let digest = result["sha256"] as? String else {
+                throw CocoaError(.coderReadCorrupt)
+            }
+            func containsContent(_ editionID: String, in snapshot: DeskSnapshot?) -> Bool {
+                snapshot?.editions[editionID]?.assets.contains(where: { $0.sha256 == digest }) == true
+            }
+            let alreadyAttached = book?.editionIds.contains { containsContent($0, in: state) } == true
+            let snapshot = try await repository.commitReaderContent(read, book: bookID)
+            let previous = readerAttachmentIdentity
+            let previousChoiceID = readerChoiceID
+            let latest = snapshot.revision >= (state?.revision ?? 0) ? snapshot : state
+            if !alreadyAttached,
+               let editionID = latest?.books[bookID]?.editionIds.last(where: { containsContent($0, in: latest) }) {
+                if isCurrent() {
+                    readerEditionChoices[bookID] = editionID
+                } else if let previous, book?.id == bookID, previous.editionID != editionID {
+                    // A commit that already started may finish after navigation.
+                    // Keep it in the library without retargeting the open reader.
+                    deferredReaderEditions.insert(editionID)
+                }
+            }
+            accept(snapshot)
+            if readerChoiceID == previousChoiceID, readerAttachmentIdentity != previous {
+                resetReaderContext()
+            }
+        } catch {
+            guard isCurrent() else { throw CancellationError() }
+            throw error
+        }
+    }
     func acceptsReaderContext(_ context: ReaderSourceContext) -> Bool {
-        guard notebook?.passId == context.passID, let editionID = book?.editionIds.last,
-              editionID == context.editionID, let asset = state?.editions[editionID]?.assets.last else { return false }
-        return asset.id == context.assetID && asset.sha256 == context.fingerprint
+        readerSourceContext(resource: context.resource) == context
     }
     func readerMessages(from context: ReaderSourceContext, currentResource: @escaping () -> String,
                         receive: @escaping ([String: Any]) -> Void) -> ([String: Any]) -> Void {
@@ -299,7 +443,9 @@ actor DeskRepository {
     }
     func accept(_ snapshot: DeskSnapshot) {
         guard snapshot.revision >= (state?.revision ?? 0) else { return }
+        let previous = readerAttachmentIdentity
         state = snapshot
+        if readerAttachmentIdentity != previous { resetReaderContext() }
         for session in inkSessions.values {
             if let block = snapshot.notebooks[session.notebookID]?.blocks.first(where: { $0.id == session.blockID }) {
                 session.accept(block.ink)

@@ -1,6 +1,14 @@
 // SPDX-License-Identifier: MPL-2.0
 import Foundation
 
+struct ReaderAttachmentIdentity: Hashable {
+    let passID: String
+    let editionID: String
+    let assetID: String
+    let fingerprint: String
+    let choiceID: UUID?
+}
+
 /// Captured before a renderer callback is queued. Asset identity alone cannot
 /// distinguish two reading passes over the same book.
 struct ReaderSourceContext: Equatable {
@@ -9,6 +17,12 @@ struct ReaderSourceContext: Equatable {
     let assetID: String
     let fingerprint: String
     let resource: String
+    var choiceID: UUID? = nil
+
+    var attachmentIdentity: ReaderAttachmentIdentity {
+        ReaderAttachmentIdentity(passID: passID, editionID: editionID, assetID: assetID,
+                                 fingerprint: fingerprint, choiceID: choiceID)
+    }
 }
 
 struct ReaderDestination {
