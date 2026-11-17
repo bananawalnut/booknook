@@ -223,7 +223,10 @@ fn legacy_mobi_import_and_restore_keep_original_bytes_and_stable_reader_resource
         .restore_archive(archive.to_string_lossy().into_owned())
         .unwrap();
     let received = snapshot(&restored);
-    assert_eq!(received.editions[edition_id].assets, [asset.clone()]);
+    assert_eq!(
+        received.editions[edition_id].assets.as_slice(),
+        std::slice::from_ref(asset)
+    );
     let received_folder = PathBuf::from(restored.asset_directory(asset_id).unwrap());
     assert_eq!(
         std::fs::read(received_folder.join("original.mobi")).unwrap(),
