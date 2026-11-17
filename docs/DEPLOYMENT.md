@@ -2,6 +2,10 @@
 
 Book Nook requires no runtime Book Nook server. The native app stores SQLite and immutable content-addressed assets in Application Support. On Unix, the desk directory is owner-only. Local autosave and recovery require no signatures. Network publication and device pairing/transfer use explicitly reviewed Castalia actions.
 
+## SDK 0.3.0 and ontology 0.4.0
+
+[SDK 0.3.0](https://github.com/bananawalnut/booknook/releases/tag/v0.3.0-sdk-preview.20261117) publishes six qualified packages and nine support assets. [Current ontology discovery](https://bananawalnut.github.io/booknook/ontology/discovery.json) serves the verified 91-file closure with earlier releases intact. [Release evidence](sdk-030-public-preview-evidence.json) records the hosted runs, actual download hashes, and consumer scope.
+
 ## SDK-only 0.2.1 delivery — 2026-11-16
 
 [SDK 0.2.2](https://github.com/bananawalnut/booknook/releases/tag/v0.2.2-sdk-preview.20261117) provides six verified archives with a receiving lock, a checksum list, and license material. The packaged Rust → Chrome → Swift MOBI6 acceptance and the actual public streams have [separate evidence](sdk-022-public-preview-evidence.json).

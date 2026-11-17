@@ -2,6 +2,10 @@
 
 This audit keeps the original native MVP and SDK scope intact. A passing source test is evidence for the behavior it exercises, not evidence of a production account, physical device, remote deployment, or hands-on interaction. The requested production release is not complete while essential integration and physical-device gates remain open. [Validation](VALIDATION.md) records the final check results; [delivery](DELIVERY.md) names the remaining gates.
 
+## SDK 0.3.0 and ontology 0.4.0
+
+Exact hosted checks passed on the released source. Extracted Rust Core, installed npm in Node and Chrome, and an extracted Swift consumer on arm64 macOS passed notebook-order and archive checks. The three-peer native regression exercised refusal, covering history, exact encrypted retry, durable reopen, and duplicate handling in isolated test desks. Pages served 91 matching artifacts and preserved 82 previously issued files. [SDK 0.3.0 evidence](sdk-030-public-preview-evidence.json)
+
 ## Native app 1708 delivery
 
 [Build 1708 evidence](app-2026111708-public-preview-evidence.json) records the exact public archives and downloads, the linked reading-pass checks, and an in-place physical iPad update that preserved the desk and previously saved finger Scribble. The iPad and Mac screenshots retain their separately verified capture builds.

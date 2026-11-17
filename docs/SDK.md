@@ -4,6 +4,8 @@ The portable document and social contracts live in Rust. The reference apps use 
 
 ## Development preview and Rust compatibility
 
+The **[0.3.0 SDK preview](https://github.com/bananawalnut/booknook/releases/tag/v0.3.0-sdk-preview.20261117)** ships durable Margin order and explicit review in archive v4. The four Rust archives, npm package, and Swift XCFramework passed independent qualification. Swift ran on arm64 macOS, and the npm package ran in Node and Chrome. [SDK 0.3.0 evidence](sdk-030-public-preview-evidence.json)
+
 The initial `v0.1.0-preview.20261114` release is withdrawn to draft, with its tag and 17 assets preserved as historical evidence. Its archives are not recommended for new installations. [The publication record](public-preview-publication-evidence.json) retains the initial timestamps and hashes alongside the current withdrawal status.
 
 The **[0.2.2 SDK-only preview](https://github.com/bananawalnut/booknook/releases/tag/v0.2.2-sdk-preview.20261117)** includes six exact archives at source `2d91bc0`, with all 17 direct public downloads verified. An independent receiving lock binds 346 verified registry archives. An extracted Rust consumer imported DRM-free legacy MOBI6 and exported a portable archive. The installed npm SDK preserved it byte-for-byte in Node and Chrome, and the extracted Swift package restored and reopened it on arm64 macOS. The original bytes and generated XHTML survived the handoff. [SDK 0.2.2 evidence](sdk-022-public-preview-evidence.json)
