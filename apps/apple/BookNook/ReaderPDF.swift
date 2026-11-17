@@ -16,8 +16,8 @@ final class PDFReaderCoordinator: NSObject {
     var markup = false
     weak var view: PDFView?
     private var tokens: [NSObjectProtocol] = []
-    private var rendered = Set<String>()
     private var renderedMarks: [String: [(PDFPage, PDFAnnotation)]] = [:]
+    private var reportedPlacements: [String: String]?
     #if os(iOS)
     var overlays: [Int: PDFInkOverlay] = [:]
     var inkSession: ReaderInkSession?
@@ -34,7 +34,7 @@ final class PDFReaderCoordinator: NSObject {
     }
     func load(_ url: URL) {
         guard let view, view.document?.documentURL != url else { return }
-        rendered = []; renderedMarks = [:]; view.document = PDFDocument(url: url)
+        renderedMarks = [:]; reportedPlacements = nil; view.document = PDFDocument(url: url)
         if view.document == nil { emit(["type": "error", "message": "This PDF could not be opened."]) }
         else if view.document?.isLocked == true { emit(["type": "error", "message": "This PDF is password protected. Attach an accessible copy to read and annotate it."]) }
         if let initialPage, let page = view.document?.page(at: initialPage - 1) { view.go(to: page) }
@@ -56,12 +56,29 @@ final class PDFReaderCoordinator: NSObject {
         }
         emit(["type": "pdf_selection", "highlights": highlights])
     }
+    private func removeMarks(_ id: String) {
+        for (page, mark) in renderedMarks.removeValue(forKey: id) ?? [] {
+            page.removeAnnotation(mark)
+        }
+    }
     func render() {
         guard let document = view?.document else { return }
-        let present = Set(annotations.map(\.id))
-        for id in rendered.subtracting(present) { for (page, mark) in renderedMarks.removeValue(forKey: id) ?? [] { page.removeAnnotation(mark) }; rendered.remove(id) }
-        for annotation in annotations where !rendered.contains(annotation.id) {
-            guard let geometry = annotation.inkGeometry?.object, geometry["space"] as? String == "pdf_page", geometry["content_fingerprint"] as? String == fingerprint, let pageNumber = geometry["page"] as? NSNumber, let page = document.page(at: pageNumber.intValue - 1) else { continue }
+        for id in Set(renderedMarks.keys).subtracting(annotations.map(\.id)) { removeMarks(id) }
+        var placements: [String: String] = [:]
+        for annotation in annotations {
+            let id = annotation.id
+            guard let geometry = annotation.inkGeometry?.object, geometry["space"] as? String == "pdf_page" else {
+                removeMarks(id); placements[id] = "missing_geometry"; continue
+            }
+            guard geometry["content_fingerprint"] as? String == fingerprint else {
+                removeMarks(id); placements[id] = "wrong_asset"; continue
+            }
+            guard let pageNumber = (geometry["page"] as? NSNumber)?.intValue,
+                  pageNumber > 0, pageNumber <= document.pageCount,
+                  let page = document.page(at: pageNumber - 1) else {
+                removeMarks(id); placements[id] = "missing_page"; continue
+            }
+            if renderedMarks[id] != nil { placements[id] = "resolved"; continue }
             if annotation.strokes.isEmpty && annotation.nativeDrawing == nil {
                 for rect in geometry["text_rects"] as? [[String: Any]] ?? [] {
                     guard let x = rect["x"] as? NSNumber, let y = rect["y"] as? NSNumber, let w = rect["width"] as? NSNumber, let h = rect["height"] as? NSNumber else { continue }
@@ -99,7 +116,11 @@ final class PDFReaderCoordinator: NSObject {
                     let border = PDFBorder(); border.lineWidth = (stroke["width"] as? NSNumber)?.doubleValue ?? 3; mark.border = border; mark.add(path); mark.contents = annotation.originalContext; page.addAnnotation(mark); renderedMarks[annotation.id, default: []].append((page, mark))
                 }
             }
-            rendered.insert(annotation.id)
+            placements[id] = renderedMarks[id] == nil ? "missing_geometry" : "resolved"
+        }
+        if reportedPlacements != placements {
+            reportedPlacements = placements
+            emit(["type": "pdf_placements", "placements": placements])
         }
         #if os(iOS)
         for overlay in overlays.values { overlay.setMarkup(markup) }

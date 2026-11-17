@@ -24,7 +24,7 @@ final class ReaderBridgeCheck: NSObject, WKNavigationDelegate, WKScriptMessageHa
     func userContentController(_ controller: WKUserContentController, didReceive message: WKScriptMessage) { if let body = message.body as? [String: Any], body["type"] as? String == "geometry" { measurements += 1 } }
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let script = #"""
-        (()=>{
+        return await (async()=>{
           const checks=[]; const check=(ok,name)=>{if(!ok)throw new Error(name);checks.push(name)};
           check(!window.untrustedBookScriptRan,'book scripts are disabled');
           check(document.querySelectorAll('meta[name=viewport]').length===1 && document.querySelector('meta[name=viewport]').content==='width=device-width,initial-scale=1','reader viewport follows pane width without disabling zoom');
@@ -56,12 +56,59 @@ final class ReaderBridgeCheck: NSObject, WKNavigationDelegate, WKScriptMessageHa
           check(scrollY>0,'exact source position restoration');
           const beforeMissing=scrollY;booknookRestorePosition({quote:'No such passage.'});
           check(scrollY===beforeMissing,'missing position does not jump');
+          document.body.style.setProperty('max-width','42em','important');
+          booknookSetFontSize(19);
+          scrollTo(0,0);
+          const opening = {quote:'the quiet library welcomed Mara with open doors and many stories to discover in the late afternoon light.'};
+          const ending = {quote:'Last chapter marker.'};
+          const hasCustomHighlights = Boolean(window.CSS?.highlights && window.Highlight);
+          booknookAnnotations([{id:'opening',anchor:opening}]);
+          check(!hasCustomHighlights || window.CSS.highlights.get('booknook')?.size===1,'native custom highlight still renders when supported');
+          booknookAnnotations([]);
+          Object.defineProperty(window,'Highlight',{value:undefined,configurable:true});
+          const originalHeight = document.documentElement.scrollHeight;
+          booknookAnnotations([
+            {id:'opening',anchor:opening},{id:'ending',anchor:ending},
+            {id:'ambiguous',anchor:{quote:'Duplicate passage.'}},
+            {id:'missing',anchor:{quote:'No annotation match.'}}
+          ]);
+          const overlay = () => document.querySelector('[data-booknook-highlight-fallback]');
+          const aligned = anchor => {
+            const layer = overlay();
+            if (!layer) return false;
+            const expected = Array.from(booknookResolve(anchor).range.getClientRects());
+            const painted = Array.from(layer.children, rect=>rect.getBoundingClientRect());
+            return expected.length>0 && painted.length===expected.length && expected.every((rect,index)=>
+              ['left','top','width','height'].every(key=>Math.abs(rect[key]-painted[index][key]) < 0.75));
+          };
+          const waitFor = async condition => {
+            for (let attempt=0; attempt<60; attempt++) {
+              if (condition()) return true;
+              await new Promise(resolve=>setTimeout(resolve,25));
+            }
+            return false;
+          };
+          check(aligned(opening),'fallback uses only the visible, uniquely resolved highlight rectangles');
+          check(overlay().getAttribute('aria-hidden')==='true' && getComputedStyle(overlay()).pointerEvents==='none' &&
+            document.documentElement.scrollHeight===originalHeight,'fallback leaves text accessibility, hit testing and document layout intact');
+          const beforeReflow = booknookResolve(opening).rects;
+          booknookSetFontSize(34);
+          check(await waitFor(()=>aligned(opening)) &&
+            JSON.stringify(beforeReflow)!==JSON.stringify(booknookResolve(opening).rects),'fallback follows the anchored text through font reflow');
+          booknookRestorePosition(ending);
+          check(await waitFor(()=>aligned(ending)) && scrollY>0,'fallback follows an offscreen highlight after restoring its passage');
+          booknookAnnotations([]);
+          check(!overlay()?.children.length,'removing saved highlights clears the fallback');
           return checks;
         })()
         """#
-        webView.evaluateJavaScript(script) { result, error in
-            if let error { fputs("Reader bridge failed: \(error)\n",stderr); exit(1) }
-            guard let checks = result as? [String], checks.count == 16 else { fputs("Reader bridge returned an unexpected result: \(String(describing: result))\n",stderr); exit(1) }
+        webView.callAsyncJavaScript(script, arguments: [:], in: nil, in: .page) { outcome in
+            let result: Any
+            switch outcome {
+            case .success(let value): result = value
+            case .failure(let error): fputs("Reader bridge failed: \(error)\n",stderr); exit(1)
+            }
+            guard let checks = result as? [String], checks.count == 22 else { fputs("Reader bridge returned an unexpected result: \(String(describing: result))\n",stderr); exit(1) }
             print("WKWebView reader bridge: \(checks.joined(separator: "; ")).")
             exit(0)
         }

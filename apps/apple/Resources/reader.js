@@ -3,7 +3,8 @@
 (() => {
   "use strict";
   const post = body => window.webkit?.messageHandlers?.booknook?.postMessage(body);
-  let annotations = [], markerLayer;
+  const svgNamespace = "http://www.w3.org/2000/svg";
+  let annotations = [], markerLayer, highlightLayer;
   const textNodes = () => {
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
       acceptNode: node => node.parentElement?.closest("script,style,noscript,[data-booknook-overlay]") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
@@ -56,21 +57,53 @@
     if (!anchor) return {status:"missing"};
     return {...geometryFor(anchor, resource), anchor};
   };
+  // Older WebKit has no CSS Highlight registry. Paint measured text rectangles
+  // in a viewport-sized layer so it cannot affect line layout or selection.
+  const renderFallbackHighlights = rects => {
+    if (!highlightLayer) {
+      if (!rects.length) return;
+      highlightLayer = document.createElementNS(svgNamespace, "svg");
+      highlightLayer.setAttribute("data-booknook-overlay", "true");
+      highlightLayer.setAttribute("data-booknook-highlight-fallback", "");
+      highlightLayer.setAttribute("aria-hidden", "true");
+      highlightLayer.style.cssText = "position:fixed;inset:0;width:100%;height:100%;overflow:hidden;pointer-events:none;mix-blend-mode:multiply;z-index:2147483639";
+      document.body.appendChild(highlightLayer);
+    }
+    const bounds = docRect(highlightLayer.getBoundingClientRect());
+    const marks = document.createDocumentFragment();
+    for (const rect of rects) {
+      const x = rect.x - bounds.x, y = rect.y - bounds.y;
+      if (x >= bounds.width || y >= bounds.height || x + rect.width <= 0 || y + rect.height <= 0) continue;
+      const mark = document.createElementNS(svgNamespace, "rect");
+      mark.setAttribute("x", String(x));
+      mark.setAttribute("y", String(y));
+      mark.setAttribute("width", String(rect.width));
+      mark.setAttribute("height", String(rect.height));
+      mark.setAttribute("fill", "#dfc362");
+      mark.setAttribute("fill-opacity", "0.5");
+      marks.appendChild(mark);
+    }
+    highlightLayer.replaceChildren(marks);
+  };
   const renderAnnotations = () => {
     if (!markerLayer) { markerLayer = document.createElement("div"); markerLayer.dataset.booknookOverlay = "true"; markerLayer.style.cssText="position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2147483640"; document.body.appendChild(markerLayer); }
     markerLayer.replaceChildren();
-    const ranges = [], placements = [];
+    const nativeHighlights = window.CSS?.highlights && typeof window.Highlight === "function";
+    const ranges = [], highlightRects = [], placements = [];
     for (const item of annotations) {
       const resolved = resolve(item.anchor);
       if (!item.ink_geometry) {
-        if (!item.legacy_ink && resolved.status === "resolved") ranges.push(resolved.range);
-        else if (item.legacy_ink) placements.push({id:item.id,status:"legacy_layout"});
+        if (item.legacy_ink) placements.push({id:item.id,status:"legacy_layout"});
+        else if (resolved.status === "resolved") {
+          if (nativeHighlights) ranges.push(resolved.range);
+          else highlightRects.push(...resolved.rects);
+        }
       } else {
         const current = geometryFor(item.anchor, item.ink_geometry.resource);
         const placement = current.status === "resolved" ? BookNookGeometry.resolveInk(item.ink_geometry,current.geometry) : {status:current.status};
         placements.push({id:item.id,...placement});
         if (placement.status === "resolved" && item.render_portable) {
-          const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
+          const svg=document.createElementNS(svgNamespace,"svg");
           svg.setAttribute("width",String(document.documentElement.scrollWidth));svg.setAttribute("height",String(document.documentElement.scrollHeight));svg.style.cssText="position:absolute;left:0;top:0;overflow:visible";svg.setAttribute("aria-hidden","true");
           for (const stroke of item.strokes || []) { const line=document.createElementNS(svg.namespaceURI,"polyline");line.setAttribute("points",stroke.points.map(p=>`${p.x+placement.dx},${p.y+placement.dy}`).join(" "));line.setAttribute("fill","none");line.setAttribute("stroke",/^#[0-9a-f]{6}$/i.test(stroke.color)?stroke.color:"#4d7050");line.setAttribute("stroke-width",String(stroke.width));line.setAttribute("stroke-linecap","round");line.setAttribute("stroke-linejoin","round");svg.appendChild(line); }
           markerLayer.appendChild(svg);
@@ -80,7 +113,8 @@
         }
       }
     }
-    if (window.CSS?.highlights && window.Highlight) CSS.highlights.set("booknook",new Highlight(...ranges));
+    if (nativeHighlights) window.CSS.highlights.set("booknook", new window.Highlight(...ranges));
+    else renderFallbackHighlights(highlightRects);
     post({type:"ink_placements",placements});
   };
   window.booknookResolve = resolve;

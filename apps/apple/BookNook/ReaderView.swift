@@ -169,11 +169,14 @@ struct ReaderPane: View {
         let page = (annotation.anchor.object?["page"] as? NSNumber)?.intValue
         let ink = annotation.nativeDrawing != nil || !annotation.strokes.isEmpty
         let unplaced = ink && annotation.inkGeometry == nil
+        let unplacedPDF = page != nil && asset?.mediaType == "application/pdf"
+            && placements[annotation.id].map { $0 != "resolved" } == true
         VStack(alignment: .leading, spacing: 3) {
             if let page {
                 Label(annotation.originalContext, systemImage: ink ? "pencil.tip" : "highlighter")
                     .lineLimit(3).frame(maxWidth: .infinity, alignment: .leading)
-                Text("Saved on PDF page \(page)").font(.caption2).foregroundStyle(.secondary)
+                Text(unplacedPDF ? "Original PDF page \(page)" : "Saved on PDF page \(page)")
+                    .font(.caption2).foregroundStyle(.secondary)
             } else {
                 Button {
                     if let index { openChapter(index, anchor: unplacedResource == nil ? annotation.anchor.object : nil); showingAnnotations = false }
@@ -185,6 +188,9 @@ struct ReaderPane: View {
             if unplaced {
                 Text("Unplaced markup. Original ink is saved; its position over the page could not be confirmed.").font(.caption2).foregroundStyle(.secondary)
                 ReaderSavedInkPreview(annotation: annotation).frame(height: 120)
+            } else if unplacedPDF {
+                Label("Unplaced on this PDF. Original context is saved.", systemImage: "exclamationmark.circle")
+                    .font(.caption2).foregroundStyle(.secondary)
             } else if ink && resource == currentResource && placements[annotation.id] != "resolved" {
                 Text("Markup is retained with its original context. Its text layout has changed or its passage cannot be uniquely located.").font(.caption2).foregroundStyle(.secondary)
             }
@@ -205,6 +211,11 @@ struct ReaderPane: View {
             if var position = message["position"] as? [String: Any] { position["kind"] = "text"; position["edition_id"] = edition.id; position["resource"] = currentResource; recordPosition(position) }
         case "ink_placements":
             for placement in message["placements"] as? [[String: Any]] ?? [] { if let id = placement["id"] as? String { placements[id] = placement["status"] as? String ?? "missing" } }
+        case "pdf_placements":
+            if asset?.mediaType == "application/pdf",
+               let latest = message["placements"] as? [String: String], latest != placements {
+                placements = latest
+            }
         case "pdf_selection":
             highlightStatus = nil
             pdfHighlights = message["highlights"] as? [[String: Any]] ?? []
