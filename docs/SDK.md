@@ -4,6 +4,8 @@ The portable document and social contracts live in Rust. The reference apps use 
 
 ## Development preview and Rust compatibility
 
+The **[0.3.2 SDK preview](https://github.com/bananawalnut/booknook/releases/tag/v0.3.2-sdk-preview.20261117)** adds native editing and exact-version approval for top-level post drafts. The extracted Swift consumer passed on arm64 macOS and iPadOS 18.6 Simulator. Rust and installed TypeScript/WASM consumers also passed. [SDK evidence](sdk-032-public-preview-evidence.json) · [Simulator evidence](sdk-032-ipados-simulator-evidence.json)
+
 The **[0.3.1 SDK preview](https://github.com/bananawalnut/booknook/releases/tag/v0.3.1-sdk-preview.20261117)** adds read-only public-group discussion previews. An extracted Rust crate and installed npm consumers passed the preview checks. Swift consumers ran on arm64 macOS and iPadOS 18.6 Simulator. [Public download evidence](sdk-031-public-preview-evidence.json) · [iPadOS Simulator evidence](sdk-031-ipados-simulator-evidence.json)
 
 The **[0.3.0 SDK preview](https://github.com/bananawalnut/booknook/releases/tag/v0.3.0-sdk-preview.20261117)** ships durable Margin order and explicit review in archive v4. The four Rust archives, npm package, and Swift XCFramework passed independent qualification. Swift ran on arm64 macOS and the iPadOS 18.6 simulator. The npm package ran in Node and Chrome. [SDK 0.3.0 evidence](sdk-030-public-preview-evidence.json) · [iPadOS Simulator evidence](sdk-030-ipados-simulator-evidence.json)

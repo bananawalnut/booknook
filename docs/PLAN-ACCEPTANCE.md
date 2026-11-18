@@ -2,6 +2,10 @@
 
 This audit keeps the original native MVP and SDK scope intact. A passing source test is evidence for the behavior it exercises, not evidence of a production account, physical device, remote deployment, or hands-on interaction. The requested production release is not complete while essential integration and physical-device gates remain open. [Validation](VALIDATION.md) records the final check results; [delivery](DELIVERY.md) names the remaining gates.
 
+## Native app 1715 and SDK 0.3.2 delivery
+
+The exact Swift package test opens new SQLite desk handles to verify stable draft identity, refusal of superseded consent, and recovery of the approved edit. The test ran on macOS and iPadOS 18.6 Simulator. A second Simulator process reopened the notebook state. All 23 public downloads matched, and the normal iPad app launched after preserving the existing library, ink and social state through the in-place update. [Build 1715 evidence](app-2026111715-public-preview-evidence.json) · [SDK evidence](sdk-032-public-preview-evidence.json) · [Simulator evidence](sdk-032-ipados-simulator-evidence.json)
+
 ## Native app 1714 delivery
 
 The linked native workflow prepares the correct public or private audience for each draft and checks that switching groups and the Feed preserves separate draft contents. The exact Apple archives and all eight public downloads matched. The normal iPad app launched after an in-place update with its library and saved Scribble preserved. [Build 1714 evidence](app-2026111714-public-preview-evidence.json)
