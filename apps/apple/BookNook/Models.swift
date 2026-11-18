@@ -2,16 +2,6 @@
 import Foundation
 import SwiftUI
 
-struct LibraryBook: Decodable, Identifiable {
-    let id: String
-    let title: String
-    let authors: [String]
-    let subjects: [String]
-    let editionIds: [String]
-    let shelf: String
-    let rating: Int?
-    let review: String
-}
 struct Edition: Decodable, Identifiable { let id: String; let bookId: String; let assets: [Asset] }
 struct Asset: Decodable, Identifiable {
     static let mobi6MediaType = "application/x-mobipocket-ebook"

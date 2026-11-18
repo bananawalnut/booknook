@@ -12,11 +12,11 @@ import WebKit
     let controlOnly = "\u{0001}"
     let expected = "The Green Wood"
     let csv = """
-        Book Id,Title,Author,Exclusive Shelf
-        1,"\(multiline)",A,read
-        2,\(expected),B,to-read
-        3,\(oversized),C,read
-        4,\(controlOnly),D,read
+        Book Id,Title,Author,Exclusive Shelf,Bookshelves
+        1,"\(multiline)",A,read,
+        2,\(expected),B,to-read,"forest, night-reads, forest, to-read"
+        3,\(oversized),C,read,
+        4,\(controlOnly),D,read,
 
         """
     let fixture = root.appendingPathComponent("catalog.csv")
@@ -27,6 +27,7 @@ import WebKit
     model.accept(try await repository.importCatalogFile(fixture, format: "goodreads"))
     precondition(Set(model.books.map(\.title)) == Set([multiline, oversized, controlOnly, expected]))
     let match = model.books.first { $0.title == expected }!
+    precondition(match.goodreadsShelves == ["forest", "night-reads"] && match.subjects.isEmpty)
     try await model.perform(["op": "set_book_subjects", "book_id": match.id, "subjects": ["nature"]])
 
     let social = SocialController()
@@ -57,7 +58,23 @@ import WebKit
     let (state, _) = try await reopened.open()
     precondition(Set(state.books.values.map(\.title)) == originalTitles)
     precondition(Set(state.books[match.id]!.subjects) == Set(subjects))
+    precondition(state.books[match.id]!.goodreadsShelves == ["forest", "night-reads"])
+    try "Book Id,Title,Author,Exclusive Shelf\n2,\(expected),B,to-read\n".write(to: fixture, atomically: true, encoding: .utf8)
+    model.accept(try await repository.importCatalogFile(fixture, format: "goodreads"))
+    precondition(model.state!.books[match.id]!.goodreadsShelves == ["forest", "night-reads"])
+    // Native import records seconds. Give the next selections distinct times;
+    // the projection tests separately cover simultaneous and reordered records.
+    try await Task.sleep(for: .milliseconds(1_100))
+    try "Book Id,Title,Author,Exclusive Shelf,Bookshelves\n2,\(expected),B,to-read,wetlands\n".write(to: fixture, atomically: true, encoding: .utf8)
+    model.accept(try await repository.importCatalogFile(fixture, format: "goodreads"))
+    precondition(model.state!.books[match.id]!.goodreadsShelves == ["wetlands"])
+    try await Task.sleep(for: .milliseconds(1_100))
+    try "Book Id,Title,Author,Exclusive Shelf,Bookshelves\n2,\(expected),B,to-read,\n".write(to: fixture, atomically: true, encoding: .utf8)
+    model.accept(try await repository.importCatalogFile(fixture, format: "goodreads"))
+    precondition(model.state!.books[match.id]!.goodreadsShelves.isEmpty)
+    precondition(Set(model.state!.books[match.id]!.subjects) == Set(subjects))
     print("Goodreads metadata projection preserves original titles and subjects and restores unrelated offline recommendations with reasons.")
+    print("Goodreads named shelves reopen and follow supplied membership while preserving personal subjects.")
 }
 
 @MainActor func testPublicProviderRepositoryWorkflow() async throws {

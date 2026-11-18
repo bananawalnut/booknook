@@ -120,6 +120,8 @@ Start with **Add a book**, or import a Goodreads CSV or Kindle catalog from the 
 
 On iPad, tap a text note in **Margin** to type. Flip that note to **Scribble** to draw with a finger or Apple Pencil; use two fingers to pan and pinch to zoom. The light control rail provides character cards and note options. The **Margin on left/right** arrow button remembers placement. Each note’s arrow button switches between its text and Scribble. Original handwriting, erased versions and reviewed on-device transcriptions remain independently recoverable; transcription never replaces ink or typed prose. See the [handwriting guide](docs/NOTEBOOK-HANDWRITING.md).
 
+After importing a Goodreads CSV, use **Your library → Goodreads shelf** to browse its named shelves. Search narrows the selected shelf. Membership comes from the newest recorded import for each source. Imports recorded at the same time that disagree show their memberships together with a notice.
+
 The native editor keeps typing, selection, IME composition and undo in TextKit. SQLite journals pending edits before asynchronous CRDT/history work, and replays the journal on reopen. Character cards attach to stable notebook blocks, reuse characters across reading passes, and retain every saved interpretation with available reading/listening observations. A chosen version can become a separate private note draft for reviewed sharing; later private edits cannot change that snapshot. EPUB/PDF highlights and portable ink stay anchored to the edition and content region. Ambiguous placement is shown as an unresolved marker.
 
 ## Configure connections inside Book Nook

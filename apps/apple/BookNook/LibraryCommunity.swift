@@ -4,21 +4,46 @@ import SwiftUI
 struct LibraryView: View {
     @EnvironmentObject var model: DeskModel
     @State var query = ""
+    @State private var goodreadsShelf: String?
     @State var editing: LibraryBook?
     @State var editingSubjects: LibraryBook?
     @State var makingList = false
     @State var editingList: ReadingList?
-    private var filteredBooks: [LibraryBook] { model.books.filter { query.isEmpty || $0.title.localizedCaseInsensitiveContains(query) || $0.authors.joined(separator: ", ").localizedCaseInsensitiveContains(query) } }
     var body: some View {
+        let books = model.books
+        let booksByShelf = books.reduce(into: [String: Set<String>]()) { index, book in
+            for name in book.goodreadsShelves { index[name, default: []].insert(book.id) }
+        }
+        let shelfNames = booksByShelf.keys.sorted()
+        let selectedBookIds = goodreadsShelf.flatMap { booksByShelf[$0] }
+        let filteredBooks = books.filter { book in
+            (selectedBookIds?.contains(book.id) ?? true) &&
+                (query.isEmpty || book.title.localizedCaseInsensitiveContains(query) ||
+                    book.authors.joined(separator: ", ").localizedCaseInsensitiveContains(query))
+        }
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 HStack(spacing: 12) { SidebarRevealButton(); Text("Your library").font(.system(size: 34, design: .serif)) }
                 Text("A record of books, and of the reader you become.").foregroundStyle(.secondary)
                 TextField("Find a book or author", text: $query).textFieldStyle(.roundedBorder)
+                if !shelfNames.isEmpty {
+                    Picker("Goodreads shelf", selection: $goodreadsShelf) {
+                        Text("All shelves").tag(nil as String?)
+                        ForEach(shelfNames, id: \.self) { name in
+                            Text(name).tag(Optional(name))
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .accessibilityIdentifier("library-goodreads-shelf")
+                    if books.contains(where: \.hasGoodreadsShelfConflicts) {
+                        Text("Imports recorded at the same time disagree about shelf membership. Those memberships are shown together.")
+                            .font(.caption).foregroundStyle(.secondary)
+                    }
+                }
                 if filteredBooks.isEmpty {
                     VStack(alignment: .leading, spacing: 10) {
                         Text(model.books.isEmpty ? "Your library starts here" : "No matching books").font(.headline)
-                        Text(model.books.isEmpty ? "Add your first book from the sidebar, or use its import and backup menu to bring a library." : "Try a different title or author.").foregroundStyle(.secondary)
+                        Text(books.isEmpty ? "Add your first book from the sidebar, or use its import and backup menu to bring a library." : "Try a different title, author, or shelf.").foregroundStyle(.secondary)
                         if !query.isEmpty { Button("Clear search") { query = "" } }
                     }.padding(.vertical, 18)
                 }
@@ -38,7 +63,11 @@ struct LibraryView: View {
                     VStack(alignment: .leading, spacing: 6) { HStack { Text(list.title).font(.headline); Spacer(); Button("Edit list") { editingList = list } }; Text(list.bookIds.compactMap { model.state?.books[$0]?.title }.joined(separator: " · ")).font(.callout).foregroundStyle(.secondary); Label(list.shared ? "Shared" : "Private · sharing requires Castalia", systemImage: "lock").font(.caption) }.padding(18).frame(maxWidth: .infinity, alignment: .leading).background(nookAccent.opacity(0.04), in: RoundedRectangle(cornerRadius: 12))
                 }
             }.padding(36)
-        }.sheet(item: $editing) { BookReviewEditor(book: $0) }
+        }
+        .onChange(of: shelfNames) { _, names in
+            if let goodreadsShelf, !names.contains(goodreadsShelf) { self.goodreadsShelf = nil }
+        }
+        .sheet(item: $editing) { BookReviewEditor(book: $0) }
         .sheet(item: $editingSubjects) { BookSubjectsEditor(book: $0) }
         .sheet(isPresented: $makingList) { ListEditor() }
         .sheet(item: $editingList) { ListEditor(list: $0) }

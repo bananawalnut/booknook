@@ -1,0 +1,49 @@
+{
+  "result": "PASS_NATIVE_GOODREADS_SHELVES",
+  "runtime": "iPadOS 18.6 Simulator",
+  "app": {
+    "configuration": "Release",
+    "scope": "Local candidate native app with an isolated QA bundle identifier",
+    "base_commit": "08c0068f859e29d8c52ea929b7650df1e58c0279",
+    "executable_sha256": "18f0f6489493f100eca39dedb0a2e35ec66cadf02ba6a97b074f428730eac143",
+    "sdk_simulator_slice_sha256": "837ec846cda68e7f1b379d6c3cc223bd0227adb03e4776470574c9c247ef177e",
+    "changed_source_sha256": {
+      "apps/apple/BookNook/LibraryBook.swift": "0073596941edfeb70ec0ac2f06d9d18adb6de53da83b441a107b62cc89e0e613",
+      "apps/apple/BookNook/LibraryCommunity.swift": "19908ed19a25ba329197768df30f8333f6fe0390bfb176074dc6f4ddbc6cfb4b",
+      "apps/apple/BookNook/Models.swift": "f325cc2db47768bc831815cbbcfafddb4c9c115a14ef73120b4760472032d4d0"
+    }
+  },
+  "ui": [
+    "Imported the two-book fixture through the actual Files picker",
+    "All shelves displayed both books",
+    "The fiction and orchard shelves displayed the first book, and space displayed the second",
+    "Search matched within the selected shelf, and clearing search restored that shelf's books",
+    "Both checked shelves retained their membership after app termination and cold reopen"
+  ],
+  "durable": {
+    "original_goodreads_ids_and_shelf_fields_verified_in_sqlite": true,
+    "books": 2,
+    "named_shelves": 3,
+    "derived_subjects_reading_lists_or_public_activity": 0,
+    "existing_qa_library_unchanged": true
+  },
+  "test_log_sha256": "f5f103e1f9f7a6fffeef8e97a8fb8a36dc7fb54f9aa1e9825e3764184a96751c",
+  "convergence_followup": {
+    "result": "PASS_NATIVE_SHELF_PROJECTION",
+    "cause": "Synchronization unions import histories in different array orders. The native view now uses recorded time for each source and connection.",
+    "projection_source_sha256": "ede1ae665c481307134fee10720b187814e388c741a0451a79f78e3b140a453f",
+    "regression_source_sha256": "979f53ed5d27593bf5697069821604c8e39323b1b4d8e4c624d3c90a4fbd2667",
+    "cases": 10,
+    "checks": [
+      "Reversing import history preserves the displayed memberships",
+      "A newer explicit blank clears source membership",
+      "A missing shelf column preserves the last supplied observation",
+      "Equal-time conflicting observations retain memberships and report a conflict",
+      "A later observation supersedes the earlier conflict",
+      "Duplicate and normalized-equivalent observations agree",
+      "Source and connection memberships remain independent",
+      "Historical books with absent or empty provenance decode"
+    ],
+    "scope": "The preceding Simulator run exercised the earlier candidate. This follow-up covers the revised timestamp projection. Final app compilation and packaging require their own verification."
+  }
+}

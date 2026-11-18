@@ -5,6 +5,8 @@ cd "$(dirname "$0")/.."
 export DEVELOPER_DIR="${DEVELOPER_DIR:-/Applications/Xcode.app/Contents/Developer}"
 reader_test_build="${BOOKNOOK_READER_TEST_BUILD:-target/reading-tests}"
 mkdir -p "$reader_test_build"
+xcrun swiftc -parse-as-library -module-cache-path "$reader_test_build/module-cache" apps/apple/BookNook/LibraryBook.swift tests/LibraryBookShelfTests.swift -o "$reader_test_build/library-shelves"
+"$reader_test_build/library-shelves"
 node --check apps/apple/Resources/reader.js
 node --check apps/apple/Resources/reader-geometry.js
 node tests/reader-geometry.cjs
