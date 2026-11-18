@@ -131,6 +131,31 @@ fn require_reviewed_draft(state: &SocialState, event: &SocialEvent) -> Result<()
     Ok(())
 }
 
+fn require_visible_reply_parent(state: &SocialState, event: &SocialEvent) -> Result<()> {
+    if let SocialAction::Publish {
+        group_id: Some(_),
+        post,
+    } = &event.action
+        && let Some(parent) = &post.reply_to
+    {
+        // Core approval checks the group, current membership and parent context.
+        // Also honor the local feed filters that could change during consent.
+        if state.hidden.contains(parent)
+            || state.retracted.contains(parent)
+            || state
+                .publications
+                .get(parent)
+                .is_none_or(|p| state.blocked.contains(&p.event.actor))
+        {
+            return Err(booknook_core::Error::Conflict(
+                "The discussion you’re replying to is no longer visible.".into(),
+            )
+            .into());
+        }
+    }
+    Ok(())
+}
+
 fn replace_reviewed_post(
     state: &mut SocialState,
     expected: &SocialEvent,
@@ -142,7 +167,7 @@ fn replace_reviewed_post(
         (
             SocialAction::Publish { group_id: previous, post: previous_post },
             SocialAction::Publish { group_id: current, post: current_post }
-        ) if previous == current && previous_post.reply_to.is_none() && current_post.reply_to.is_none()
+        ) if previous == current && previous_post.reply_to == current_post.reply_to
     );
     if !same_destination
         || expected.id != event.id
@@ -396,6 +421,9 @@ impl Desk {
                 "Social state changed during verification; review again".into(),
             )
             .into());
+        }
+        if tracked {
+            require_visible_reply_parent(&state, &event)?;
         }
         let revision = state.revision;
         social::approve(
@@ -1331,13 +1359,8 @@ mod tests {
             "/tests/fixtures/social_receipts.rs"
         ));
     }
-    #[test]
-    fn retry_replaces_one_durable_post_and_invalidates_old_approval() {
+    fn configure_review_desk(desk: &Desk) -> AuthorityPolicy {
         use booknook_core::settings::{CastaliaSettings, ConnectionSettings};
-        let directory =
-            std::env::temp_dir().join(format!("booknook-draft-cas-{}", booknook_core::new_id()));
-        let path = directory.to_string_lossy().into_owned();
-        let desk = Desk::new(path.clone()).unwrap();
         let (_, _, policy) = synthetic::receipt(b"synthetic configuration", ACTION, 0, 100, 2);
         let pin = &policy.pins[0];
         let settings = ConnectionSettings {
@@ -1355,6 +1378,87 @@ mod tests {
         };
         desk.save_connection_settings(serde_json::to_string(&settings).unwrap())
             .unwrap();
+        policy
+    }
+
+    #[test]
+    fn tracked_reply_refuses_parent_hidden_blocked_or_retracted_during_consent() {
+        let directory = std::env::temp_dir().join(booknook_core::new_id());
+        let path = directory.to_string_lossy().into_owned();
+        let desk = Desk::new(path.clone()).unwrap();
+        let policy = configure_review_desk(&desk);
+        let group = format!("{}:consent", policy.actor);
+        let prepare = |action: serde_json::Value| -> SocialEvent {
+            serde_json::from_str(&desk.social_prepare(action.to_string()).unwrap()).unwrap()
+        };
+        let approve = |event: &SocialEvent| {
+            let (request, presentation, _) = synthetic::proof(event, 2);
+            desk.social_approve(serde_json::to_string(event).unwrap(), request, presentation)
+                .unwrap();
+        };
+        approve(&prepare(
+            json!({"op":"create_group","id":group,"name":"Readers","description":"","private":true}),
+        ));
+        let discussion = |body: &str, parent: Option<&str>| {
+            json!({"op":"publish","group_id":group,
+            "post":{"kind":"discussion","body":body,"spoiler":false,"reply_to":parent}})
+        };
+        let parent = prepare(discussion("Question", None));
+        approve(&parent);
+        let reply = prepare(discussion("Reviewed response", Some(&parent.id)));
+        desk.social_local(json!({"op":"save_draft","event":reply}).to_string())
+            .unwrap();
+        let (request, presentation, _) = synthetic::proof(&reply, 2);
+        let verify_refusal = || {
+            let before = load(&desk.lock().unwrap().connection).unwrap();
+            let error = desk
+                .social_approve(
+                    json!({"reviewed_draft":reply}).to_string(),
+                    request.clone(),
+                    presentation.clone(),
+                )
+                .unwrap_err();
+            assert!(error.to_string().contains("no longer visible"), "{error}");
+            let after = load(&desk.lock().unwrap().connection).unwrap();
+            assert_eq!(before.revision, after.revision);
+            assert_eq!(after.drafts.get(&reply.id), Some(&reply));
+            assert!(
+                !after.outbox.contains_key(&reply.id)
+                    && !after.publications.contains_key(&reply.id)
+            );
+        };
+        desk.social_local(json!({"op":"hide","event_id":parent.id,"hidden":true}).to_string())
+            .unwrap();
+        verify_refusal();
+        desk.social_local(json!({"op":"hide","event_id":parent.id,"hidden":false}).to_string())
+            .unwrap();
+        desk.social_local(json!({"op":"block","actor":parent.actor,"blocked":true}).to_string())
+            .unwrap();
+        verify_refusal();
+        desk.social_local(json!({"op":"block","actor":parent.actor,"blocked":false}).to_string())
+            .unwrap();
+        approve(&prepare(json!({"op":"retract","event_id":parent.id})));
+        verify_refusal();
+        drop(desk);
+        let reopened = Desk::new(path).unwrap();
+        assert_eq!(
+            load(&reopened.lock().unwrap().connection)
+                .unwrap()
+                .drafts
+                .get(&reply.id),
+            Some(&reply)
+        );
+        drop(reopened);
+        std::fs::remove_dir_all(directory).unwrap();
+    }
+
+    #[test]
+    fn retry_replaces_one_durable_post_and_invalidates_old_approval() {
+        let directory =
+            std::env::temp_dir().join(format!("booknook-draft-cas-{}", booknook_core::new_id()));
+        let path = directory.to_string_lossy().into_owned();
+        let desk = Desk::new(path.clone()).unwrap();
+        let policy = configure_review_desk(&desk);
         let mut original = social::prepare(
             &SocialState::default(),
             &policy.actor,
@@ -1429,6 +1533,125 @@ mod tests {
         assert_eq!(published.outbox[&original.id].publication.event, edited);
         drop(desk);
         std::fs::remove_dir_all(directory).unwrap();
+    }
+
+    #[test]
+    fn reviewed_group_reply_keeps_its_parent_and_refuses_a_discarded_draft() {
+        let mut state = SocialState::default();
+        let reader = synthetic::actor(2);
+        let group = format!("{reader}:discussion");
+        let approve = |state: &mut SocialState, action| {
+            let event = social::prepare(state, &reader, action, 100).unwrap();
+            let id = event.id.clone();
+            let (request, presentation, policy) = synthetic::proof(&event, 2);
+            social::approve(state, event, request, presentation, &policy, 100).unwrap();
+            id
+        };
+        approve(
+            &mut state,
+            SocialAction::CreateGroup {
+                id: group.clone(),
+                name: "Readers".into(),
+                description: String::new(),
+                private: true,
+            },
+        );
+        let discussion = |text: &str, reply_to: Option<String>| SocialAction::Publish {
+            group_id: Some(group.clone()),
+            post: Post {
+                kind: PostKind::Discussion,
+                book: None,
+                body: text.into(),
+                stars: None,
+                reading_status: None,
+                spoiler: false,
+                reply_to,
+            },
+        };
+        let parent = approve(&mut state, discussion("First discussion", None));
+        let other_parent = approve(&mut state, discussion("Second discussion", None));
+        let original = social::prepare(
+            &state,
+            &reader,
+            discussion("Reply", Some(parent.clone())),
+            101,
+        )
+        .unwrap();
+        social::local(
+            &mut state,
+            LocalSocialCommand::SaveDraft {
+                event: Box::new(original.clone()),
+            },
+        )
+        .unwrap();
+        let candidate = |text: &str, target| SocialEvent {
+            action: discussion(text, target),
+            ..original.clone()
+        };
+        let top_level = candidate("Top level", None);
+        let redirected = candidate("Redirected", Some(other_parent));
+        let edited = candidate("Revised reply", Some(parent));
+        let before = state.revision;
+        for invalid in [&top_level, &redirected] {
+            assert!(
+                replace_reviewed_post(&mut state, &original, Box::new(invalid.clone())).is_err()
+            );
+        }
+        assert_eq!(state.revision, before);
+        replace_reviewed_post(&mut state, &original, Box::new(edited.clone())).unwrap();
+        assert_eq!(state.revision, before + 1);
+        assert_eq!(state.drafts.len(), 1);
+        assert_eq!(state.drafts.get(&original.id), Some(&edited));
+        assert!(require_reviewed_draft(&state, &original).is_err());
+        social::local(
+            &mut state,
+            LocalSocialCommand::DeleteDraft {
+                id: edited.id.clone(),
+            },
+        )
+        .unwrap();
+        let discarded_revision = state.revision;
+        assert!(replace_reviewed_post(&mut state, &edited, Box::new(edited.clone())).is_err());
+        assert_eq!(state.revision, discarded_revision);
+        assert!(state.drafts.is_empty() && !state.outbox.contains_key(&edited.id));
+    }
+
+    #[test]
+    fn reviewed_reply_from_portable_feed_keeps_its_parent() {
+        let mut state = SocialState::default();
+        let reader = synthetic::actor(2);
+        let note = |body: &str, reply_to| SocialAction::Publish {
+            group_id: None,
+            post: Post {
+                kind: PostKind::Note,
+                book: None,
+                body: body.into(),
+                stars: None,
+                reading_status: None,
+                spoiler: false,
+                reply_to,
+            },
+        };
+        let parent =
+            social::prepare(&state, &reader, note("A portable feed note", None), 100).unwrap();
+        let parent_id = parent.id.clone();
+        let (request, presentation, policy) = synthetic::proof(&parent, 2);
+        social::approve(&mut state, parent, request, presentation, &policy, 100).unwrap();
+        let original =
+            social::prepare(&state, &reader, note("Reply", Some(parent_id.clone())), 101).unwrap();
+        social::local(
+            &mut state,
+            LocalSocialCommand::SaveDraft {
+                event: Box::new(original.clone()),
+            },
+        )
+        .unwrap();
+        let edited = SocialEvent {
+            action: note("Edited reply", Some(parent_id)),
+            ..original.clone()
+        };
+        replace_reviewed_post(&mut state, &original, Box::new(edited.clone())).unwrap();
+        assert_eq!(state.drafts.values().collect::<Vec<_>>(), vec![&edited]);
     }
 
     #[test]

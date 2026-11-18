@@ -388,10 +388,10 @@ import Foundation
         try await model.repository.socialLocal(Data(try socialJSON(["op": "block", "actor": initial.actor, "blocked": false]).utf8))
         await controller.reload(model)
 
-        draft.savedDraftID = draftID
+        draft.savedReview = savedReply
         draft.text += "Edited before another review."
         let retry = await controller.publish(draft.action(for: target, in: controller.snapshot)!, title: "Publish this group reply",
-                                             model, replacingDraftID: draft.savedDraftID)
+                                             model, reviewingPost: draft.savedReview)
         guard case .savedDraft(let savedRetry) = retry else { preconditionFailure("An edited reply must remain recoverable") }
         let retryID = savedRetry.id
         let reopened = DeskModel(repository: DeskRepository(directory: directory))
@@ -399,17 +399,35 @@ import Foundation
         let recovered = try await reopened.repository.socialSnapshot(reveal: false)
         let recoveredAction = recovered.state.drafts[retryID]?.action.object
         let recoveredPost = recoveredAction?["post"] as? [String: Any]
-        precondition(retryID != draftID && recovered.state.drafts[draftID] == nil)
+        precondition(retryID == draftID && Set(recovered.state.drafts.keys) == [draftID])
         precondition(recoveredAction?["group_id"] as? String == groupID && recoveredPost?["reply_to"] as? String == parentID)
         precondition(recoveredPost?["body"] as? String == draft.text && recoveredPost?["spoiler"] as? Bool == true)
         precondition(Set(recovered.state.publications.keys) == Set(initial.state.publications.keys))
         precondition(Set(recovered.state.outbox.keys) == Set(initial.state.outbox.keys))
+        await controller.retryDraft(event, reopened)
+        precondition(controller.error?.contains("current entry in Outbox") == true)
+        precondition(controller.snapshot?.state.revision == recovered.state.revision)
+        let staleRow = recovered.state.drafts[retryID]!
+        try await reopened.repository.socialLocal(Data(try socialJSON(["op": "delete_draft", "id": retryID]).utf8))
+        let beforeDiscardRetry = try await reopened.repository.socialSnapshot(reveal: false)
+        await controller.retryDraft(staleRow, reopened)
+        precondition(controller.error?.contains("current entry in Outbox") == true)
+        let discardReopen = DeskRepository(directory: directory)
+        _ = try await discardReopen.open()
+        let afterDiscardRetry = try await discardReopen.socialSnapshot(reveal: false)
+        precondition(afterDiscardRetry.state.drafts.isEmpty && beforeDiscardRetry.state.drafts.isEmpty)
+        precondition(afterDiscardRetry.state.revision == beforeDiscardRetry.state.revision)
+        precondition(Set(afterDiscardRetry.state.publications.keys) == Set(beforeDiscardRetry.state.publications.keys))
+        precondition(Set(afterDiscardRetry.state.outbox.keys) == Set(beforeDiscardRetry.state.outbox.keys))
+
+        let reply = await controller.publish(action, title: "Publish this group reply", reopened)
+        guard case .savedDraft(let beforeClose) = reply else { preconditionFailure("Closing must retain an existing draft") }
         try await approveFixture(["op": "close_group", "group_id": groupID],
                                  model: reopened, config: config, issuer: issuer, holder: holder)
         await controller.reload(reopened)
         precondition(!target.permitsVisibleParent(parent!, in: controller.snapshot))
-        precondition(controller.snapshot?.state.drafts[retryID] != nil)
-        print("Native group replies: exact parent, hidden/blocked/closed refusal, spoiler-safe consent, and denied draft retry after SQLite reopen passed.")
+        precondition(controller.snapshot?.state.drafts[beforeClose.id] != nil)
+        print("Native group replies: exact parent, hidden/blocked/closed refusal, spoiler-safe consent, stable SQLite retry, and discarded Outbox reply refusal passed.")
     }
 
     @MainActor static func testPublicGroupPreview() async throws {

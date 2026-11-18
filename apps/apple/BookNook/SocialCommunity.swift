@@ -346,7 +346,7 @@ struct SocialCommunityView: View {
         activeReply = target
     }
     private func closeReply() {
-        if let target = activeReply, replyDrafts[target]?.text.isEmpty == true, replyDrafts[target]?.savedDraftID == nil {
+        if let target = activeReply, replyDrafts[target]?.text.isEmpty == true, replyDrafts[target]?.savedReview == nil {
             replyDrafts.removeValue(forKey: target)
         }
         activeReply = nil
@@ -378,14 +378,20 @@ struct SocialCommunityView: View {
     private func submitReply(_ target: SocialGroupReplyTarget) async {
         guard activeReply == target, let draft = replyDrafts[target],
               let action = draft.action(for: target, in: social.snapshot) else { return }
-        switch await social.publish(action, title: "Publish this group reply", model, replacingDraftID: draft.savedDraftID) {
-        case .notSaved, .reviewChanged:
+        switch await social.publish(action, title: "Publish this group reply", model, reviewingPost: draft.savedReview) {
+        case .notSaved:
             break
+        case .reviewChanged:
+            replyDrafts[target]?.savedReview = nil
         case .savedDraft(let saved):
-            replyDrafts[target]?.savedDraftID = saved.id
+            replyDrafts[target]?.savedReview = saved
         case .approved:
-            replyDrafts.removeValue(forKey: target)
-            if activeReply == target { activeReply = nil }
+            if let current = replyDrafts[target], current.text == draft.text, current.containsSpoilers == draft.containsSpoilers {
+                replyDrafts.removeValue(forKey: target)
+                if activeReply == target { activeReply = nil }
+            } else {
+                replyDrafts[target]?.savedReview = nil
+            }
         }
     }
     private func acceptInvitation(_ invitation: SocialInvitation) async {

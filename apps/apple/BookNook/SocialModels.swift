@@ -228,7 +228,7 @@ struct SocialGroupReplyTarget: Hashable {
 struct SocialGroupReplyDraft {
     var text = ""
     var containsSpoilers = false
-    var savedDraftID: String?
+    var savedReview: SavedSocialDraft?
 
     func action(for target: SocialGroupReplyTarget, in snapshot: SocialSnapshot?) -> [String: Any]? {
         guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
@@ -347,12 +347,19 @@ extension DeskRepository {
                 let previous = try socialDecode(SocialEventModel.self, reviewingPost.eventJSON)
                 let current = try await model.repository.socialSnapshot(reveal: revealSpoilers)
                 let previousJSON = try socialJSON(previous.rawObject)
+                let previousAction = previous.action.object
+                let currentAction = event.action.object
+                let previousParent = (previousAction?["post"] as? [String: Any])?["reply_to"] as? String
+                let currentParent = (currentAction?["post"] as? [String: Any])?["reply_to"] as? String
                 guard let saved = current.state.drafts[reviewingPost.id], previous.id == reviewingPost.id,
                       try socialJSON(saved.rawObject) == previousJSON,
                       previous.actor == current.actor, current.actor == event.actor,
+                      previousAction?["op"] as? String == "publish", currentAction?["op"] as? String == "publish",
+                      previousAction?["group_id"] as? String == currentAction?["group_id"] as? String,
+                      previousParent == currentParent,
                       try socialJSON(["delivery": previous.delivery.any]) == socialJSON(["delivery": event.delivery.any]) else {
                     outcome = .reviewChanged
-                    throw AuthorizationError.message("The saved draft or its audience has changed. Your editor text is intact. Review again to save a new draft.")
+                    throw AuthorizationError.message("The saved draft, discussion or audience has changed. Your editor text is intact. Review again to save a new draft.")
                 }
                 var replacement = event.rawObject
                 replacement["id"] = reviewingPost.id
@@ -402,13 +409,12 @@ extension DeskRepository {
     }
     func retryDraft(_ event: SocialEventModel, _ model: DeskModel) async {
         guard let action = event.action.object else { return }
-        if action["op"] as? String == "publish", let post = action["post"] as? [String: Any],
-           !(post["reply_to"] is String) {
+        if action["op"] as? String == "publish" {
             do {
                 let saved = SavedSocialDraft(id: event.id, eventJSON: try socialJSON(event.rawObject))
                 let outcome = await publish(action, title: "Publish reviewed record", model, reviewingPost: saved)
                 if outcome == .reviewChanged {
-                    error = "The saved post or its audience changed. Check the current entry in Outbox. If the audience changed, start a new review in its reading group."
+                    error = "This saved post or its audience changed. Check the current entry in Outbox before reviewing again."
                 }
             } catch { self.error = bookNookErrorMessage(error) }
             return
