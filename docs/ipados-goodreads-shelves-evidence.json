@@ -45,5 +45,20 @@
       "Historical books with absent or empty provenance decode"
     ],
     "scope": "The preceding Simulator run exercised the earlier candidate. This follow-up covers the revised timestamp projection. Final app compilation and packaging require their own verification."
+  },
+  "released_build_1801": {
+    "result": "PASS_EXACT_NATIVE_1801_SHELVES",
+    "source_commit": "ebf5783fca2257cea8600faafca86558a9fd682f",
+    "release_url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261118.01",
+    "executable_sha256": "6364ea917dc349be152b67d5dff9d7f2f189c70d21faecc6b19d451861082e67",
+    "checks": [
+      "all",
+      "memberships",
+      "search_intersection",
+      "reopened"
+    ],
+    "log_sha256": "d9abfa052d1fdc476fc739bae248cee63d914f8b634d38cfaca9bd0d51be6033",
+    "scope": "Exact clean-host app with the final timestamp projection. Mac UI and normal physical iPad update verified separately.",
+    "evidence": "app-2026111801-public-preview-evidence.json"
   }
 }
