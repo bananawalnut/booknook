@@ -106,7 +106,10 @@ struct ReaderPane: View {
                     }
                     Button("Saved annotations (\(annotations.count))") { showingAnnotations = true }.disabled(annotations.isEmpty)
                     Button("Attach book file…", action: chooseBookFile).disabled(changingAttachment)
-                } label: { Image(systemName: "ellipsis").frame(width: 32, height: 32).accessibilityLabel("Book options") }
+                } label: {
+                    Image(systemName: "ellipsis").dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+                        .frame(width: 32, height: 32).readingDeskTouchTarget()
+                }.accessibilityLabel("Book options")
             }.buttonStyle(.borderless).padding(.horizontal, 12).padding(.vertical, 10)
             if activeAttachment != nil, let status = highlightStatus ?? navigationStatus {
                 Text(status).font(.caption).foregroundStyle(.secondary).padding(.horizontal, 24).padding(.bottom, 8).accessibilityLabel(status)

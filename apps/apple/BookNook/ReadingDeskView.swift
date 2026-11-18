@@ -43,7 +43,9 @@ struct ReadingDeskView: View {
                 Spacer(minLength: 12)
                 if model.saving { ProgressView().controlSize(.small).accessibilityLabel("Saving locally") }
                 Button { changeWorkspace { notebookOnRight.toggle() } } label: {
-                    Image(systemName: "arrow.left.arrow.right").frame(width: 36, height: 36)
+                    Image(systemName: "arrow.left.arrow.right")
+                        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+                        .frame(width: 36, height: 36).readingDeskTouchTarget()
                 }
                 .accessibilityLabel(notebookOnRight ? "Margin on left" : "Margin on right")
                 .accessibilityValue(notebookOnRight ? "Margin currently on right" : "Margin currently on left")
@@ -65,7 +67,13 @@ struct ReadingDeskView: View {
                     Button("Equal pane widths") { notebookFraction = 0.5 }
                     Divider()
                     Text(model.saving ? "Saving locally…" : "Saved locally")
-                } label: { Image(systemName: "ellipsis").frame(width: 36, height: 36).accessibilityLabel("Desk options") }
+                } label: {
+                    Image(systemName: "ellipsis")
+                        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+                        .frame(width: 36, height: 36).readingDeskTouchTarget()
+                }
+                .accessibilityLabel("Desk options")
+                .accessibilityIdentifier("reading-desk-options")
                 .disabled(changingPass)
             }.buttonStyle(.borderless).padding(.horizontal, 22).padding(.vertical, 14)
             Divider()

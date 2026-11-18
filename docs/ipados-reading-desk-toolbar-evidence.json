@@ -1,0 +1,55 @@
+{
+  "schema": "booknook.reading-desk-toolbar-accessibility-evidence.v1",
+  "result": "PASS_TARGETED_TOOLBAR_AND_SCRIBBLE_HEADING",
+  "configured_preview_build": "2026111725",
+  "source_base": "b48f661abb08fcab105aabd44735daf6f4aea711",
+  "changed_swift_source_sha256": {
+    "apps/apple/BookNook/NotebookInk.swift": "cb1a944e96a37a486c33ba764e2f8d517c6ef89bdc2e9719cfdb3984fdc3add0",
+    "apps/apple/BookNook/ReaderView.swift": "9cc145fc54bda1ebdde0fdb60bc8f6e6d8eb8332bf6e8f7d68c0a78eee5953f7",
+    "apps/apple/BookNook/ReadingDeskView.swift": "35e74546f641cd699f158843ccd672e1edbe63833384c4cb1d9046de8e36de99"
+  },
+  "published_swift_sdk": "0.3.5",
+  "stock_app_build": "2026111724",
+  "stock_app_archive_receipt_sha256": "92ae1c9b6a77cc4dbb435055054bc2df9039b4feee30f62e34656af253703689",
+  "isolated_simulator_executable_sha256": "4c73d7cc71b83a256a55173d7411e05bb00c1e1c2601fbf38f1d915012008fdb",
+  "simulator": "iPad Air 13-inch (M2), iPadOS 18.6 Simulator, portrait",
+  "xctest": {
+    "passed": 4,
+    "failed": 0,
+    "receipt_sha256": {
+      "candidate-17": "83948f5fac5e326adab9feda4af96f718f520955a00bf66448de995d580a50f7",
+      "large-text-18": "e6d6d0b6ed44442016d450146a3ab91f2a8fc5a9a4e9247eb9d9d4f48ca8c96f",
+      "long-context-19": "c4ae2809a2a126285ca25b506c30dbf405abf903e622ac36fe73790d342775f6",
+      "long-context-20": "f9e73da66e4c03ac5dc9d65ba93bc8aa10312e4f78556c0a5570c1bb0303e798"
+    }
+  },
+  "regular_text": {
+    "observations_in_tested_audit_categories": 0,
+    "resize_side_swap_and_reopen": true
+  },
+  "largest_text": {
+    "minimum_control_width_and_height_points": 44,
+    "actual_character_sheet_desk_menu_and_reader_menu_activation": true,
+    "note_actions_and_pane_switch_separated": true
+  },
+  "long_scribble_heading": {
+    "captured_sources_in_fixture": 6,
+    "standard_height_points": 26.5,
+    "largest_height_points": 1680.0,
+    "complete_accessibility_label_both_sizes": true,
+    "normal_screenshot_sha256": "8587f2d5ec8f6d62025ecdc0cf1233ee40aef9ddea21c84cc1d9328ef90cbb24",
+    "largest_screenshot_sha256": "7e40504590c7956f51048f795c8f8493da9339a8e5e09c3d5616db0f0631868d"
+  },
+  "mac_deployment_typecheck": {
+    "result": "PASS",
+    "target": "arm64-apple-macos14.0",
+    "source_files": 74,
+    "receipt_sha256": "cd20f0b44f3d06bc76642b68f3b0f30121b8e15d3eed1f3601c3e6b7e204bfd8"
+  },
+  "cleanup": {
+    "stock_sample_desk_unchanged": true,
+    "simulator_text_size_restored": true,
+    "simulator_returned_to_shutdown": true
+  },
+  "scope": "Local Simulator workflows on a source-linked app with released 1724 resources, plus macOS compile-time availability. At the largest size, the intentionally verbose six-source heading extends through the scrolling Margin. Short multitasking windows, physical VoiceOver and minimum-OS execution remain open."
+}

@@ -7,6 +7,7 @@ import UIKit
 
 struct NotebookInkBlockView<Actions: View>: View {
     @Environment(\.notebookPaneActive) private var paneActive
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @ObservedObject var session: NotebookInkSession
     @Binding var text: String
     @Binding var styles: [InlineStyle]
@@ -28,13 +29,16 @@ struct NotebookInkBlockView<Actions: View>: View {
             VStack(spacing: 4) {
                 Button(action: flip) {
                     Image(systemName: "arrow.2.squarepath")
+                        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
                         .frame(width: 44, height: 44).contentShape(Rectangle())
                 }.disabled(isFlipping)
                     .accessibilityLabel(whiteboard ? "Show note text" : "Flip note to Scribble")
                     .accessibilityIdentifier("notebook-face-\(session.blockID)")
                     .help(whiteboard ? "Show note text" : "Flip this note to Scribble")
                 Button(action: addCharacter) {
-                    Image(systemName: "person.crop.rectangle.badge.plus").frame(width: 44, height: 44).contentShape(Rectangle())
+                    Image(systemName: "person.crop.rectangle.badge.plus")
+                        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+                        .frame(width: 44, height: 44).contentShape(Rectangle())
                 }.accessibilityLabel("Add character card to this note")
                     .accessibilityIdentifier("notebook-character-\(session.blockID)")
                     .help("Add a character card")
@@ -63,19 +67,17 @@ struct NotebookInkBlockView<Actions: View>: View {
                     Divider()
                     Button("Ink history (\(session.versions.count))") { history = true }.disabled(session.versions.isEmpty)
                     Button("Transcribe handwriting…") { transcription = current }.disabled(current == nil || session.isSaving)
-                } label: { Image(systemName: "ellipsis").frame(width: 44, height: 44).contentShape(Rectangle()) }
-                    .accessibilityLabel("Note options")
+                } label: {
+                    Image(systemName: "ellipsis")
+                        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+                        .frame(width: 44, height: 44).contentShape(Rectangle())
+                }.accessibilityLabel("Note options")
                     .accessibilityIdentifier("notebook-section-options-\(session.blockID)")
             }.buttonStyle(.borderless).foregroundStyle(nookInk.opacity(0.55))
                 .padding(.vertical, 4).frame(width: 44)
                 .background(nookInk.opacity(0.035), in: RoundedRectangle(cornerRadius: 3))
             VStack(alignment: .leading, spacing: 10) {
-                HStack(alignment: .firstTextBaseline) {
-                    Text(noteLabel).font(.caption.weight(.medium))
-                    if let contextLabel { Text(contextLabel).font(.caption2).lineLimit(2) }
-                    Spacer(minLength: 0)
-                    if whiteboard { Text("Scribble").font(.caption2) }
-                }.foregroundStyle(nookInk.opacity(0.55))
+                noteHeading.foregroundStyle(nookInk.opacity(0.55))
                 #if os(iOS)
                 NotebookNoteFaces(text: $text, styles: $styles, formatRequest: formatRequest,
                                   session: session, tools: tools, whiteboard: whiteboard, changed: changed)
@@ -118,6 +120,27 @@ struct NotebookInkBlockView<Actions: View>: View {
         }.foregroundStyle(nookInk).background(readingPaper)
             .sheet(isPresented: $history) { NotebookInkHistory(session: session, allowWriting: true) }
             .sheet(item: $transcription) { version in NotebookTranscriptionReview(session: session, version: version) }
+    }
+
+    private var noteHeading: some View {
+        let title = Text(noteLabel).font(.caption.weight(.medium))
+        let context = contextLabel.map {
+            Text($0).font(.caption2).lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 2)
+        }
+        let face = whiteboard ? Text("Scribble").font(.caption2) : nil
+        return ViewThatFits(in: .horizontal) {
+            HStack(alignment: .firstTextBaseline) {
+                title.fixedSize()
+                if let context { context.fixedSize() }
+                Spacer(minLength: 0)
+                if let face { face.fixedSize() }
+            }
+            VStack(alignment: .leading, spacing: 4) {
+                title
+                if let context { context }
+                if let face { face }
+            }
+        }
     }
 }
 
