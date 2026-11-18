@@ -75,11 +75,67 @@ func providerSmokeReject(_ operation: () async throws -> Void) async throws {
     precondition(rejected, "Invalid/stale/cancelled provider operation was accepted")
 }
 
+private func checkPackagedGoodreadsCorrections(directory: URL, epub: URL) throws {
+    let desk = try BookNookServices(directory: directory).desk
+    func imported(_ csv: String, at: Int, expecting counter: String) throws {
+        let command = try BookNookProviderWire.json(["op": "import_goodreads", "csv": csv, "at": at])
+        let reply = try providerSmokeObject(desk.execute(commandJson: command))
+        let report = reply["result"] as! [String: Any]
+        precondition(report[counter] as? Int == 1, "Unexpected Goodreads import result")
+    }
+    let original = "Book Id,Title,Author,ISBN,ISBN13,My Rating,My Review\n42,Orchard,First,111,123,2,Imported"
+    try imported(original, at: 1, expecting: "inserted")
+    let books = try providerSmokeBooks(desk.snapshot())
+    precondition(books.count == 1)
+    let id = books.keys.first!
+    let catalogID = (books[id]!["edition_ids"] as! [String])[0]
+    _ = try desk.importContent(bookId: id, path: epub.path)
+    _ = try desk.execute(commandJson: BookNookProviderWire.json(["op": "update_book", "book_id": id,
+        "title": "Orchard", "shelf": "read", "rating": 5, "review": "Private café"]))
+    let sourceBytes = try Data(contentsOf: epub)
+    let assetID = SHA256.hash(data: sourceBytes).map { String(format: "%02x", $0) }.joined()
+    func check(_ current: Desk, isbn: String?, observations: Int) throws {
+        let state = try providerSmokeState(current.snapshot())
+        let library = state["books"] as! [String: [String: Any]]
+        let book = library[id]!
+        precondition(library.count == 1 && book["authors"] as? [String] == ["Corrected"])
+        precondition(book["rating"] as? Int == 5 && book["review"] as? String == "Private café")
+        precondition((book["provenance"] as! [[String: Any]]).count == observations)
+        let editions = state["editions"] as! [String: [String: Any]]
+        let linked = book["edition_ids"] as! [String]
+        precondition(linked.count == 2 && Set(linked) == Set(editions.keys))
+        let identifiers = editions[catalogID]!["identifiers"] as! [[String: String]]
+        let ids = Dictionary(uniqueKeysWithValues: identifiers.map { ($0["provider"]!, $0["id"]!) })
+        precondition(ids["goodreads"] == "42" && ids["isbn13"] == "9780000000101" && ids["isbn"] == isbn)
+        let attachment = editions[linked.first { $0 != catalogID }!]!
+        let assets = attachment["assets"] as! [[String: Any]]
+        precondition(assets.count == 1 && assets[0]["sha256"] as? String == assetID)
+        let assetRoot = try current.assetDirectory(assetId: assetID)
+        let persisted = try Data(contentsOf: URL(fileURLWithPath: assetRoot).appendingPathComponent("original.epub"))
+        precondition(persisted == sourceBytes)
+    }
+    try imported("Book Id,Title,Author,ISBN13\n42,Orchard,Corrected,978-0000000101", at: 2, expecting: "updated")
+    try check(desk, isbn: "111", observations: 2)
+    try imported(original, at: 3, expecting: "unchanged")
+    try check(desk, isbn: "111", observations: 2)
+    try imported("Book Id,Title,Author,ISBN\n42,Orchard,Corrected,", at: 4, expecting: "updated")
+    let reopened = try BookNookServices(directory: directory).desk
+    try check(reopened, isbn: nil, observations: 3)
+    let archive = directory.appendingPathComponent("goodreads.booknook")
+    try reopened.exportArchive(path: archive.path)
+    let restored = try BookNookServices(directory: directory.appendingPathComponent("restored")).desk
+    _ = try restored.restoreArchive(path: archive.path)
+    try check(restored, isbn: nil, observations: 3)
+    print("Packaged Swift Goodreads reimport: authors, ISBNs, private edits, attachments, reopen and restore passed.")
+}
+
 @MainActor func runPackagedProviderSmoke(fixtureRoot: URL) async throws {
     let directory = FileManager.default.temporaryDirectory.appendingPathComponent("booknook-packaged-provider-\(UUID().uuidString)")
     try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
     defer { try? FileManager.default.removeItem(at: directory) }
-    let bytes = try Data(contentsOf: fixtureRoot.appendingPathComponent("provider-sample.epub"))
+    let epub = fixtureRoot.appendingPathComponent("provider-sample.epub")
+    try checkPackagedGoodreadsCorrections(directory: directory.appendingPathComponent("goodreads"), epub: epub)
+    let bytes = try Data(contentsOf: epub)
     let provider = try PackagedAlternateProvider(bytes: bytes)
     let services = try BookNookServices(directory: directory, providers: [provider])
     let first = try await services.importCatalog(providerID: provider.id, sourceID: "selection")

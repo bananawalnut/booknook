@@ -10,6 +10,44 @@ function response(request,result) {
     provider_id:request.provider_id,connection_id:request.connection_id,result};
 }
 function deferred() { let resolve; const promise=new Promise(r=>resolve=r);return{promise,resolve}; }
+
+async function checkGoodreadsCorrections(desk) {
+  const first = 'Book Id,Title,Author,ISBN,ISBN13,Exclusive Shelf,My Rating,My Review\n42,Orchard,A,111,123,read,4,Imported note\n';
+  const importCSV = (csv, at) => desk.execute({op: 'import_goodreads', csv, at});
+  const initial = await importCSV(first, 1);
+  assert.equal(initial.result.inserted, 1);
+  const book = Object.values(initial.state.books).find(row => row.title === 'Orchard');
+  const [editionID] = book.edition_ids;
+  function identifiers(state, provider) {
+    return state.editions[editionID].identifiers.filter(item => item.provider === provider).map(item => item.id);
+  }
+
+  const corrected = await importCSV('Book Id,Title,Author,ISBN13\n42,Orchard,B,978-0000000101\n', 2);
+  assert.equal(corrected.result.updated, 1);
+  const current = corrected.state.books[book.id];
+  assert.deepEqual(current.authors, ['B']);
+  assert.deepEqual([current.shelf, current.rating, current.review], ['read', 4, 'Imported note']);
+  assert.deepEqual(identifiers(corrected.state, 'isbn'), ['111']);
+  assert.deepEqual(identifiers(corrected.state, 'isbn13'), ['9780000000101']);
+
+  await desk.execute({op: 'update_book', book_id: book.id, title: 'My orchard', shelf: 'currently-reading',
+    rating: 5, review: 'My own note'});
+  const cleared = await importCSV('Book Id,Title,Author,ISBN,Exclusive Shelf,My Rating,My Review\n42,Source title,C,,read,2,Source review\n', 3);
+  assert.equal(cleared.result.updated, 1);
+  const privateBook = cleared.state.books[book.id];
+  assert.deepEqual(privateBook.authors, ['C']);
+  assert.deepEqual([privateBook.title, privateBook.shelf, privateBook.rating, privateBook.review],
+    ['My orchard', 'currently-reading', 5, 'My own note']);
+  assert.deepEqual(identifiers(cleared.state, 'isbn'), []);
+  assert.deepEqual(identifiers(cleared.state, 'isbn13'), ['9780000000101']);
+  assert.deepEqual(identifiers(cleared.state, 'goodreads'), ['42']);
+
+  const replay = await importCSV(first, 4);
+  assert.equal(replay.result.unchanged, 1);
+  assert.deepEqual(replay.state.books, cleared.state.books);
+  assert.deepEqual(replay.state.editions, cleared.state.editions);
+}
+
 async function runProviderAcceptance(sdk,core,nativeProbe) {
   let value=null,failCAS=false,sourceTitle='Provider café',calls=0,transform=v=>v,beforeReply=async()=>{},lastRequest,commitPause;
   const bytes=new Uint8Array([37,80,68,70,45,49]); // Deliberately only hash/media validation; not a valid PDF parser fixture.
@@ -126,6 +164,7 @@ async function runProviderAcceptance(sdk,core,nativeProbe) {
   assert.throws(()=>service.replaceProviders([host]),/commit is in progress/);
   lateCancel.abort();finishCommit.resolve();const committed=await durable;commitPause=undefined;
   assert.deepEqual(committed.state,value,'An acknowledged commit must not be reported as cancellation');
-  return 'Public provider imports/reimports/private edits/reopen, generic source positions, hash/source validation, capability/duplicate rejection, cancellation, concurrent edits, stale generation and failed CAS passed.';
+  await checkGoodreadsCorrections(desk);
+  return 'Public provider imports/reimports/private edits/reopen, Goodreads author/ISBN corrections and historical replay, generic source positions, hash/source validation, capability/duplicate rejection, cancellation, concurrent edits, stale generation and failed CAS passed.';
 }
 module.exports={runProviderAcceptance};
