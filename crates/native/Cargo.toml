@@ -15,7 +15,7 @@ bindgen = ["uniffi/cli"]
 [dependencies]
 html5ever = "=0.39.0"
 async-trait = "0.1"
-booknook-connectors = { path = "../connectors", version = "0.3.1" }
+booknook-connectors = { path = "../connectors", version = "0.3.2" }
 nostr-sdk = "0.45.6"
 tokio = { version = "1.53.3", features = ["rt-multi-thread", "time", "sync"] }
 booknook-core.workspace = true

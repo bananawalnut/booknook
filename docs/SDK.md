@@ -24,7 +24,7 @@ The maintained Nostr SDK **0.45.6** removes the unmaintained relay pool and perm
 
 The receiving-lock audit JSON preserves its 17:22 UTC audit-only observation: its consumer-execution field says pending because execution had not yet begun. That historical status is superseded by the completed six-command receiving result in [final public-preview evidence](security-020-public-preview-evidence.json); the original audit evidence remains unchanged.
 
-The examples describe the current source, which builds SDK 0.3.1 archives. Local package scripts build/test archives without publishing remotely. GitHub prerelease assets are separate from registry publication, which is not claimed.
+The examples describe the current source, which builds SDK 0.3.2 archives. Local package scripts build/test archives without publishing remotely. GitHub prerelease assets are separate from registry publication, which is not claimed.
 
 ## Rust notebook storage
 
@@ -54,7 +54,7 @@ To replace SQLite, implement `Provider` and `NotebookStorage`, initialize a vali
 
 UniFFI generates `apps/apple/Generated/booknook_native.swift` and its C header/module map. `scripts/build-apple.sh` regenerates these from the actual Rust library. `Desk` is the native reference composition; it accepts a local directory and exposes commands, snapshots, imports, history, custody, social and synchronization operations. Invoke disk, cryptography and network work outside the main actor, as the reference app's `DeskRepository` does.
 
-For an independent app, use `scripts/package-swift.sh` to produce the standalone `booknook-swift-sdk-0.3.1.tar.gz`, then add its extracted directory as a local Swift Package. `BookNookNative` exposes the Rust bridge, `BookNookServices` provides asynchronous provider composition, and `CastaliaNative` supplies reusable custody, secure-storage and consent coordination. It includes arm64 macOS, iOS device and iOS Simulator slices, generated Swift and headers. Its consumer check extracts the actual archive before linking; the package does not depend on the reference app's source tree.
+For an independent app, use `scripts/package-swift.sh` to produce the standalone `booknook-swift-sdk-0.3.2.tar.gz`, then add its extracted directory as a local Swift Package. `BookNookNative` exposes the Rust bridge, `BookNookServices` provides asynchronous provider composition, and `CastaliaNative` supplies reusable custody, secure-storage and consent coordination. It includes arm64 macOS, iOS device and iOS Simulator slices, generated Swift and headers. Its consumer check extracts the actual archive before linking; the package does not depend on the reference app's source tree.
 
 Local command results contain `state` and `result`. Use IDs returned by `result` rather than searching by display title. Keep an editor draft until a throwing save acknowledges persistence. Custody unlock does not authorize a publication: use the prepared disclosure and explicit consent lifecycle. Do not infer operational permission from a directory identity or a Nostr signature.
 
@@ -76,7 +76,7 @@ The native `social_snapshot` response adds an optional `public_group_previews` a
 
 ### Native saved-post review
 
-The native desk can refresh a top-level post draft with `social_local` using `{"op":"replace_reviewed_post","expected":<saved event>,"event":<refreshed event>}`. Both records use the same draft ID, reader, group destination, and delivery. SQLite compares the entire saved event before one durable write. A changed reader, audience, or saved event leaves the stored draft available for separate review.
+In SDK 0.3.2, the native desk can refresh a top-level post draft with `social_local` using `{"op":"replace_reviewed_post","expected":<saved event>,"event":<refreshed event>}`. Both records use the same draft ID, reader, group destination, and delivery. SQLite compares the entire saved event before one durable write. A changed reader, audience, or saved event leaves the stored draft available for separate review.
 
 Pass `{"reviewed_draft":<event>}` to `social_approve` when consent is tied to a saved draft. The desk verifies the saved event and the signed event before publication. Standalone callers may continue using the existing bare event format. These native desk operations do not change the portable command, archive, or relay schemas.
 

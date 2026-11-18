@@ -2,6 +2,7 @@
 // Compiled by an independent consumer of the installed CastaliaNative product.
 // Fixture signatures and recovery bytes are deliberately public synthetic data.
 import Foundation
+import BookNookNative
 #if canImport(CastaliaNative)
 import CastaliaNative
 #endif
@@ -64,14 +65,66 @@ private final class CastaliaSmokeStorage: CastaliaSecureMaterialStorage {
     try castaliaSmokeRequire(rejected, "An invalid or cancelled authorization succeeded")
 }
 
+private func runPackagedSavedPostReview(_ scenario: [String: Any]) throws {
+    func json(_ value: [String: Any]) throws -> String {
+        String(decoding: try JSONSerialization.data(withJSONObject: value, options: [.sortedKeys]), as: UTF8.self)
+    }
+    func state(_ desk: Desk) throws -> [String: Any] {
+        let raw = try desk.socialSnapshot(revealSpoilers: false)
+        guard let snapshot = try JSONSerialization.jsonObject(with: Data(raw.utf8)) as? [String: Any],
+              let state = snapshot["state"] as? [String: Any] else { throw CastaliaSmokeFailure.assertion("Missing social state") }
+        return state
+    }
+    func event(_ name: String) throws -> (event: [String: Any], request: String, presentation: String) {
+        guard let phase = scenario[name] as? [String: Any], let event = phase["event"] as? [String: Any],
+              let request = phase["request"] as? String, let presentation = phase["presentation"] as? String else {
+            throw CastaliaSmokeFailure.assertion("Missing synthetic post review evidence")
+        }
+        return (event, request, presentation)
+    }
+    let original = try event("original"), edited = try event("edited")
+    guard let settings = scenario["settings"] as? [String: Any], let id = original.event["id"] as? String,
+          edited.event["id"] as? String == id else { throw CastaliaSmokeFailure.assertion("Missing synthetic draft identity") }
+    let root = FileManager.default.temporaryDirectory.appendingPathComponent("booknook-installed-review-\(UUID().uuidString)")
+    defer { try? FileManager.default.removeItem(at: root) }
+    let desk = try Desk(directory: root.path)
+    try desk.saveConnectionSettings(settingsJson: json(settings))
+    try desk.socialLocal(commandJson: json(["op": "save_draft", "event": original.event]))
+    try desk.socialLocal(commandJson: json(["op": "replace_reviewed_post", "expected": original.event, "event": edited.event]))
+    let reopened = try Desk(directory: root.path)
+    let before = try state(reopened)
+    let drafts = before["drafts"] as? [String: [String: Any]]
+    let previousQueue = before["outbox"] as? [String: Any]
+    try castaliaSmokeRequire(drafts?.count == 1 && previousQueue?.isEmpty == true, "Replacement must preserve just one unapproved draft")
+    try castaliaSmokeRequire(try (drafts?[id]).map(json) == json(edited.event), "Reopened draft must match the edited event")
+
+    var refused = false
+    do {
+        try reopened.socialApprove(eventJson: json(["reviewed_draft": original.event]), requestJson: original.request,
+                                   presentationJson: original.presentation)
+    } catch { refused = error.localizedDescription.contains("The saved draft changed") }
+    try castaliaSmokeRequire(refused, "A valid approval for the superseded draft must be refused")
+    try reopened.socialApprove(eventJson: json(["reviewed_draft": edited.event]), requestJson: edited.request,
+                               presentationJson: edited.presentation)
+    let after = try state(Desk(directory: root.path))
+    let outgoing = after["outbox"] as? [String: [String: Any]]
+    let publication = outgoing?[id]?["publication"] as? [String: Any]
+    let published = publication?["event"] as? [String: Any]
+    try castaliaSmokeRequire((after["drafts"] as? [String: Any])?.isEmpty == true && outgoing?.count == 1,
+                             "Approval must persist one outgoing record for the saved edit")
+    try castaliaSmokeRequire(try published.map(json) == json(edited.event), "Outgoing record must match the approved saved event")
+    print("Packaged Swift saved-post review replaced one draft, refused the stale signed approval, and reopened the exact approved edit.")
+}
+
 /// The host generates castalia-generic-fixture.json immediately before execution
-/// with `cargo run -p booknook-native --example castalia-fixture`. Its actual issuer
-/// signature is valid for 120 seconds. No application database or network is used.
+/// with `cargo run -p booknook-native --example castalia-fixture`.
 @MainActor func runPackagedCastaliaSmoke(fixtureRoot: URL) async throws {
     let bytes = try Data(contentsOf: fixtureRoot.appendingPathComponent("castalia-generic-fixture.json"))
     guard let fixture = try JSONSerialization.jsonObject(with: bytes) as? [String: Any],
           let passphrase = fixture["passphrase"] as? String,
-          let publicKey = fixture["public_key"] as? String else { throw CastaliaSmokeFailure.assertion("Missing synthetic fixture") }
+          let publicKey = fixture["public_key"] as? String,
+          let savedPost = fixture["saved_post_review"] as? [String: Any] else { throw CastaliaSmokeFailure.assertion("Missing synthetic fixture") }
+    try runPackagedSavedPostReview(savedPost)
     func data(_ key: String) throws -> Data {
         guard let value = fixture[key] else { throw CastaliaSmokeFailure.assertion("Missing fixture field") }
         return try JSONSerialization.data(withJSONObject: value, options: [.sortedKeys, .withoutEscapingSlashes])
