@@ -29,6 +29,14 @@ Only validated ASIN, title and author strings enter `booknook.kindle-catalog.v1`
 
 The entire normalized result is committed through the existing Rust import command after enumeration and a final cancellation check. Failure before commit leaves the library unchanged. If an already-started SQLite commit succeeds during cancellation, its durable snapshot is accepted without replacing a newer visible revision. Repeated imports retain existing private edits through the shared reconciliation rules.
 
+## Attach an eligible Kindle purchase
+
+Amazon provides EPUB and PDF downloads in **Manage Your Content and Devices** for verified purchasers of Kindle titles whose publishers have confirmed DRM-free download access. Availability is set per title. [Amazon KDP download guidance](https://kdp.amazon.com/en_US/help/topic/GDDXGH9VR22ACM8U)
+
+Open the existing catalog entry in Book Nook. Select **Choose a book file** in the reader, or **Book options → Attach book file…** to add a file alongside another edition. Choose the EPUB or PDF you downloaded. Book Nook retains the catalog entry and Kindle provenance, stores the attached file as a separate edition, and preserves the Kindle source position for reference.
+
+The shipped Swift SDK exercised this handoff with a synthetic catalog and original EPUB. Reimport retained the reader’s rating and review, and attaching the same EPUB again kept one file edition. Backup and restore preserved the original bytes and reading resource. PDF attachment, live catalog sign-in, and an actual purchase download still need an end-to-end check. [File handoff evidence](kindle-purchased-file-handoff-evidence.json)
+
 ## Validation and outstanding qualification
 
 Run `bash scripts/test-kindle-web.sh` on macOS after building the native bridge. The test links the actual app and SQLite core. It covers pagination and failure bounds, private-edit preservation, cancellation before/after commit, reopen, and actual WebKit nonpersistent stores/content worlds with in-memory synthetic responses. It does not load Amazon, enter credentials, modify an account, use a physical device or exercise a live provider.

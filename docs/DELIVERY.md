@@ -2,7 +2,7 @@
 
 Book Nook has an integrated native development app and open Rust, Swift, and WASM/TypeScript SDKs. Production qualification still requires live source accounts, operational Castalia authority, remote exchange, hands-on physical iPad checks, and runtime checks on the oldest supported OS versions.
 
-Build 1720 is the next app-only preview. It keeps an approved transfer available when Book Nook cannot read the recovery Keychain item. The isolated iPadOS Simulator save matched the durable packet. [Simulator evidence](sync-recovery-read-isolation-evidence.json)
+[App build 1720](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.20) keeps approved transfers visible during a recovery Keychain error. All eight public downloads matched. The normal iPad update preserved the library, Scribble, social state and observed orientation. [App evidence](app-2026111720-public-preview-evidence.json) · [Simulator evidence](sync-recovery-read-isolation-evidence.json)
 
 [App build 1719](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.19) checks approval at the chosen destination and keeps the queue on cancellation. The iPadOS 18.6 Simulator Files picker passed local save, cancellation and byte-identical retry. All eight public downloads matched. The normal iPad app updated in place and kept its library, saved Scribble, social state and observed orientation. Physical picker use and external file-provider qualification remain open. [App evidence](app-2026111719-public-preview-evidence.json) · [Simulator evidence](native-sync-picker-simulator-evidence.json)
 

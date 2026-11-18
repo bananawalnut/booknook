@@ -1,0 +1,21 @@
+{
+  "schema": "booknook.kindle-purchased-file-handoff-evidence.v1",
+  "status": "PASS",
+  "source_of_corpus": "Synthetic catalog and separately generated original EPUB",
+  "sdk_version": "0.3.5",
+  "sdk_source": "95c9bf5bfd430192ae9d5d1779e9e58afa85086c",
+  "swift_archive_sha256": "46b4441b3f70b488e27a9bbd4fdf03c53e398737da8bc3f3382c94406e598c84",
+  "swift_fixture_sha256": "055a2fd51f04f3c81c339cabb737335788347b4ccaf298c170e37d3c0ef8461e",
+  "operational_amazon_account_used": false,
+  "observed_utc": "2026-11-18T07:05:22+00:00",
+  "qualification": {
+    "catalog_source_preserved": true,
+    "distinct_edition_without_inferred_equivalence": true,
+    "offline_restore_exact": true,
+    "original_epub_and_resource_preserved": true,
+    "repeated_file_deduplicated": true,
+    "retained_private_edits_after_reimport": true
+  },
+  "amazon_publisher_documentation": "https://kdp.amazon.com/en_US/help/topic/GDDXGH9VR22ACM8U",
+  "receipt_sha256": "c0c9f20fd6f4f01f9dc79917a22045e36ab33e8ddb54a3c4f1b5ce5874985f65"
+}
