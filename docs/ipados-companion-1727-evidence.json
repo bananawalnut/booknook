@@ -1,0 +1,33 @@
+{
+  "result": "PASS_NATIVE_COMPANION_PAIR_IMPORT_AND_REOPEN",
+  "recorded_at_utc": "2026-11-18T16:27:28.273474+00:00",
+  "app": {
+    "source_commit": "a2d7f34d843726ad3f2f444a0bdfa68c6920f1b6",
+    "build": "2026111727",
+    "sdk_version": "0.3.5",
+    "runtime": "iPadOS 18.6 Simulator",
+    "construction": "Local Xcode Release rebuild with standard Simulator ad hoc signing",
+    "executable_sha256": "f97d35d0912d174ab7ebfe6aaad1b3fc31320b7d20ed3d18ba0162f7729ea112",
+    "public_preview_executable_sha256": "97ba4304cc77feb9a823362e5625592dce4eabfcd46acfbcfaff892027e6d09c"
+  },
+  "companion": {
+    "entry_point": "services/library-companion/booknook_companion.py",
+    "sha256": "47ffc32f475d6c582cccdd6a0c73080c46e498205bebcc72575c38b08c6264d3",
+    "producer_tests_passed": 26,
+    "test_source": "Synthetic catalog served by the real local reference companion over loopback"
+  },
+  "verified": [
+    "The iPad app completed one-time pairing and read authenticated source metadata",
+    "Refresh imported a private book with its exact provider identifier and timestamped reading position",
+    "SQLite preserved the connection provenance and the catalog-only edition",
+    "The fresh app process displayed the imported book and reconnected using the saved Keychain token",
+    "Disconnect revoked the service device row and cleared the endpoint",
+    "No public activity or draft was created",
+    "The disposable Simulator was deleted"
+  ],
+  "open": [
+    "The downloadable Simulator archive for build 1727 opens a Keychain entitlement alert in Connections. This pass used the same source with a new Simulator signature.",
+    "An updated public Simulator archive requires packaging and validation.",
+    "This run used a selected file source. Live Kindle and Audible accounts and the physical iPad connection remain outside this check."
+  ]
+}

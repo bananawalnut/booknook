@@ -45,6 +45,46 @@ class CompanionTests(unittest.TestCase):
             with self.assertRaises(m.ClosedError): service.handle("GET", "/v1/provider-connections/us", headers, b"")
             service.db.close()
 
+    def test_selected_catalog_positions_follow_source_replacement_and_restart(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / "data"
+            selected = Path(tmp) / "catalog.json"
+            entry = {"asin": "B012345678", "title": "Quiet", "authors": []}
+            def catalog(**fields):
+                return json.dumps({"schema": "booknook.kindle-catalog.v1", "items": [dict(entry, **fields)]}).encode()
+            metadata = catalog()
+            progress = catalog(position="chapter:3", observed_at=10)
+            selected.write_bytes(progress)
+            service = m.Companion(root, catalog=selected)
+            self.addCleanup(service.db.close)
+            request = json.dumps({"schema":"booknook.companion-pair.v1", "code":service.code, "device_name":"reader"}).encode()
+            pair = service.handle("POST", "/v1/pair", {}, request)
+            headers = {"Authorization": "Bearer " + pair["token"]}
+            def reference():
+                return service.handle("GET", "/v1/provider-connections/us", headers, b"")[0]
+            first = reference()
+            self.assertIn("kindle.positions", first["capabilities"])
+            selected.write_bytes(metadata)
+            self.assertNotIn("kindle.positions", reference()["capabilities"])
+            service.handle("PUT", "/v1/kindle/catalog", headers, progress)
+            self.assertEqual(first, reference())
+            with self.assertRaises(m.ClosedError):
+                service.handle("PUT", "/v1/kindle/catalog", headers, catalog(position="chapter:4"))
+            self.assertEqual(first, reference())
+            service.db.close()
+            service = m.Companion(root, catalog=selected)
+            self.addCleanup(service.db.close)
+            self.assertEqual(first, reference())
+            (root / "kindle-catalog.json").write_bytes(b"{")
+            self.assertEqual(reference()["status"], "unavailable")
+            self.assertNotIn("kindle.positions", reference()["capabilities"])
+            with self.assertRaises(m.ClosedError):
+                service.handle("GET", "/v1/kindle/catalog", headers, b"")
+            (root / "kindle-catalog.json").unlink()
+            self.assertEqual(reference()["status"], "unavailable")
+            with self.assertRaises(OSError):
+                service.handle("GET", "/v1/kindle/catalog", headers, b"")
+
     def test_optional_outage_marks_cached_refs_unavailable_without_disabling_local_catalog(self):
         with tempfile.TemporaryDirectory() as root:
             service = m.Companion(Path(root), provider=["synthetic-source"])

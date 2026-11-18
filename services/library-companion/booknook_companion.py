@@ -435,13 +435,42 @@ class Companion:
                 name += " (optional source adapter unavailable; check its configuration)"
         return {"schema": "booknook.companion.v1", "name": name, "capabilities": sorted(set(capabilities)), "qualified": qualified}
 
+    def selected_catalog(self):
+        # Snapshot the selection with its writer. A concurrent atomic upload
+        # can yield either complete generation; slow source I/O stays unlocked.
+        with self.lock:
+            uploaded = self.selected_upload
+            snapshot = self.snapshot_catalog
+            configured = self.catalog
+        if not uploaded and snapshot is not None:
+            return snapshot
+        source = self.root / "kindle-catalog.json" if uploaded or not configured else configured
+        if not uploaded and not source.exists():
+            if configured:
+                raise ClosedError(503, "Select a Kindle catalog export in Book Nook or configure a live adapter")
+            return None
+        with source.open("rb") as file:
+            return normalize_catalog(file.read(MAX_BYTES + 1))
+
     def provider_connections(self, device, marketplace):
         connections = []
-        if self.catalog or (self.root / "kindle-catalog.json").exists():
+        try:
+            local = self.selected_catalog()
+            local_selected = local is not None
+            status = "available"
+        except (ClosedError, OSError):
+            # A malformed or missing selection cannot supply progress or yield
+            # to a shadowed provider. Other provider discovery still works.
+            local, local_selected, status = None, True, "unavailable"
+        if local_selected:
+            capabilities = ["kindle.catalog", "kindle.catalog.import"]
+            if local and any(item.get("position") and item["position"].strip()
+                             and item["observed_at"] <= 2**64 - 1 for item in local["items"]):
+                capabilities.append("kindle.positions")
             handle = hashlib.sha256(("castalia.provider-connection.v1:kindle:" + str(self.root.resolve()) + ":" + device).encode()).hexdigest()
             connections.append({"schema": "castalia.provider-connection.v1", "connection_id": "kindle." + handle,
                 "provider_id": "com.amazon.kindle", "display_name": "Selected Kindle catalog",
-                "capabilities": ["kindle.catalog", "kindle.catalog.import"], "status": "available", "credential": None})
+                "capabilities": capabilities, "status": status, "credential": None})
         provided = []
         if self.provider:
             try:
@@ -537,27 +566,22 @@ class Companion:
                     output.write(encoded)
                     output.flush()
                     os.fsync(output.fileno())
-                staging.replace(target)
+                with self.lock:
+                    staging.replace(target)
+                    self.selected_upload = True
             except BaseException:
                 staging.unlink(missing_ok=True)
                 raise
-            self.selected_upload = True
             return {"imported": len(catalog["items"])}
         if path == "/v1/kindle/catalog" and method == "GET":
-            if self.selected_upload:
-                with (self.root / "kindle-catalog.json").open("rb") as file:
-                    return normalize_catalog(file.read(MAX_BYTES + 1))
-            if self.snapshot_catalog is not None:
-                return self.snapshot_catalog
-            source = self.catalog or self.root / "kindle-catalog.json"
-            if not self.catalog and not source.exists() and self.provider:
+            local = self.selected_catalog()
+            if local is not None:
+                return local
+            if self.provider:
                 provided, _qualified = self.provider_capabilities()
                 if "kindle.catalog" in provided:
                     return validate_catalog(self.adapter("kindle.catalog"))
-            if not source.exists():
-                raise ClosedError(503, "Select a Kindle catalog export in Book Nook or configure a live adapter")
-            with source.open("rb") as file:
-                return normalize_catalog(file.read(MAX_BYTES + 1))
+            raise ClosedError(503, "Select a Kindle catalog export in Book Nook or configure a live adapter")
         if path == "/v1/accounts/authorize" and method == "POST":
             value = strict_json(body)
             if set(value) != {"provider", "marketplace"} or value["provider"] not in ("kindle", "audible") or value["marketplace"] not in ("us", "uk", "de", "ca", "au"):
