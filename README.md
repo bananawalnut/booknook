@@ -6,6 +6,8 @@ A native reading notebook for macOS and iPad, backed by open Rust, Swift and WAS
 
 The implementation includes an offline reading desk, rich TextKit editing, EPUB, PDF, and legacy MOBI6 reading and annotation, character interpretation history, imports, Castalia consent, approved encrypted device transfers, Nostr social workflows, and reviewed RSS/Atom settings with offline publications. **It is not a qualified production release:** live Kindle/Audible/Castalia access, current physical input/accessibility, remote social/device sync and minimum-OS runtime checks remain open. Unavailable integrations return explicit errors. See [delivery status](docs/DELIVERY.md), the [full-plan acceptance matrix](docs/PLAN-ACCEPTANCE.md), [validation](docs/VALIDATION.md), the [decision log](docs/DECISIONS.md), the [UX review](docs/UX-REVIEW.md), and [DevGraph work tracking](docs/DEVGRAPH.md).
 
+**[App preview 0.2.1, build 2026111716](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.16)** keeps a saved group reply tied to its original draft and parent. If the parent becomes hidden or retracted during review, the reply stays private. All eight public app downloads matched. The iPad update preserved the library, saved Scribble and social state. [Build 1716 evidence](docs/app-2026111716-public-preview-evidence.json)
+
 **[App preview 0.2.1, build 2026111715](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.15)** keeps the same draft when you revise a saved Feed post or the opening post of a group thread. Approval applies to the exact version you reviewed. All eight public downloads matched their checksums. The normal iPad app reopened with its library, saved Scribble, and social state preserved. [Build 1715 evidence](docs/app-2026111715-public-preview-evidence.json)
 
 **[App preview 0.2.1, build 2026111714](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.14)** keeps the Feed and each reading group’s drafts separate. Review captures the selected destination and text, and edits made during approval stay in the editor. All eight public downloads matched their checksums. [Build 1714 evidence](docs/app-2026111714-public-preview-evidence.json)
@@ -44,6 +46,8 @@ Earlier local Mac Release **2026111502**, including native source `2a567f4`, add
 
 Bounded Mac checks on build **1404** passed ASCII typing plus native Unicode paste, Undo/Redo, EPUB reading, character-card history/context, pane resizing/swapping, text-whiteboard-text switching and durable normal quit/reopen. Build **1405** separately showed the corrected labels and one successful later reopen. Its initial startup delayed in `chmod` before SQLite and resumed unaided; the cause remains unresolved. These checks extend the partial fourth UX round and do not qualify physical Pencil/keyboard/IME, accessibility or every workflow.
 
+**[SDK preview 0.3.3](https://github.com/bananawalnut/booknook/releases/tag/v0.3.3-sdk-preview.20261117)** applies exact-version review to reply drafts. Extracted Swift consumers passed signed reply tests on macOS and iPadOS Simulator. All 15 public SDK downloads matched. [SDK evidence](docs/sdk-033-public-preview-evidence.json) · [Simulator evidence](docs/sdk-033-ipados-simulator-evidence.json)
+
 **[SDK preview 0.3.2](https://github.com/bananawalnut/booknook/releases/tag/v0.3.2-sdk-preview.20261117)** adds native replacement and exact-version approval for top-level post drafts. The packaged Swift test refused stale consent and reopened the approved edit. All 15 public downloads matched their checksums. [SDK evidence](docs/sdk-032-public-preview-evidence.json) · [Simulator evidence](docs/sdk-032-ipados-simulator-evidence.json)
 
 **[SDK preview 0.3.1](https://github.com/bananawalnut/booknook/releases/tag/v0.3.1-sdk-preview.20261117)** exposes public-group previews and passed independent checks in Rust, Node, Chrome, macOS Swift, and an iPadOS 18.6 Simulator Swift consumer. All 15 public downloads matched their checksums. [SDK 0.3.1 evidence](docs/sdk-031-public-preview-evidence.json)
@@ -70,7 +74,7 @@ The earlier iPad acceptance check [updated the normal app in place to 0.2.1 (202
 
 ![Book Nook iPad reading desk with a Margin note and character card alongside an EPUB](docs/screenshots/ipad-current.png)
 
-The iPad Simulator image shows published Release build **2026111715**. The Mac image shows the earlier published build **2026111705**. Both use sample EPUBs. [Capture details](docs/screenshots/README.md)
+The iPad Simulator image shows published Release build **2026111716**. The Mac image shows the earlier published build **2026111705**. Both use sample EPUBs. [Capture details](docs/screenshots/README.md)
 
 ## Run the native apps
 

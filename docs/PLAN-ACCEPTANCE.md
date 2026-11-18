@@ -4,7 +4,7 @@ This audit keeps the original native MVP and SDK scope intact. A passing source 
 
 ## Saved group reply recovery
 
-The reply composer and Outbox compare the exact saved version before replacing a draft at the same ID. Group and parent IDs stay tied to the saved reply. An Outbox action for a discarded or superseded reply leaves the store unchanged. If a parent becomes hidden or retracted, or its author is blocked during consent, the native approval keeps the reply private. The linked Swift SQLite workflow, a signed native SQLite approval test, and the independent loopback Nostr relay test passed. Candidate app build 1716 and SDK 0.3.3 await archive qualification. The published 1715 app and 0.3.2 SDK remain the current previews.
+The reply composer and Outbox compare the exact saved version before replacing a draft at the same ID. Group and parent IDs stay tied to the saved reply. An Outbox action for a discarded or superseded reply leaves the store unchanged. If a parent becomes hidden or retracted, or its author is blocked during consent, the native approval keeps the reply private. The linked Swift SQLite workflow, a signed native SQLite approval test, and the independent loopback Nostr relay test passed. App build 1716 and SDK 0.3.3 passed archive qualification. The extracted Swift package ran the same signed reply workflow on macOS and iPadOS 18.6 Simulator. All 23 public downloads matched. The in-place iPad update preserved its existing library, saved Scribble and social state. [App evidence](app-2026111716-public-preview-evidence.json) · [SDK evidence](sdk-033-public-preview-evidence.json) · [Simulator evidence](sdk-033-ipados-simulator-evidence.json)
 
 ## Native app 1715 and SDK 0.3.2 delivery
 

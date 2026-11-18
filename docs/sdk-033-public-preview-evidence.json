@@ -1,0 +1,124 @@
+{
+  "schema": "booknook.sdk-public-preview-evidence.v2",
+  "status": "PASS_PUBLIC_DOWNLOADS_AND_SDK_CONSUMERS",
+  "sdk_version": "0.3.3",
+  "release": {
+    "source_commit": "dde45d189370ecc6277b7aa9293e684e6c8ab37d",
+    "release_id": 449456387,
+    "tag": "v0.3.3-sdk-preview.20261117",
+    "url": "https://github.com/bananawalnut/booknook/releases/tag/v0.3.3-sdk-preview.20261117",
+    "published_at": "2026-11-18T02:43:44Z"
+  },
+  "hosted": {
+    "archive_run": "https://github.com/bananawalnut/booknook/actions/runs/44221210128",
+    "source_contract_run": "https://github.com/bananawalnut/booknook/actions/runs/44221153290",
+    "portable_artifact_id": 14390792530,
+    "swift_artifact_id": 14392660516
+  },
+  "independent_consumers": {
+    "rust": "Extracted Core passed 15 notebook cases and signed public-group replay.",
+    "typescript_wasm": "Installed CommonJS, ESM, Node and browser WASM, and strict NodeNext declarations passed.",
+    "swift_macos_arm64": "PASS exact hosted Swift 0.3.3 archives: macOS arm64 extracted-package notebook, saved-post and group-reply consumer.",
+    "swift_arm64_slices": {
+      "macos-arm64": 1111,
+      "ios-arm64": 1105,
+      "ios-arm64-simulator": 1105
+    },
+    "swift_ipados_18_6": "The exact slice passed signed saved-post and group-reply checks through new Swift desk handles. A second process independently reopened the notebook witness."
+  },
+  "packages": {
+    "booknook-connectors-0.3.3.crate": {
+      "bytes": 72899,
+      "sha256": "f7298a9b3a8c7332b7c2d9c078bbb3d18295bbb99452d60105aebb8b65aa20a9"
+    },
+    "booknook-core-0.3.3.crate": {
+      "bytes": 203880,
+      "sha256": "340ec7890df40db9f08d705f14db215dfb401e283044bc877de73db524805e26"
+    },
+    "booknook-native-0.3.3.crate": {
+      "bytes": 212258,
+      "sha256": "d492a651a6a81d52d7fa04ff33899df88c77bdc0daf7afedf8aaa954ab656822"
+    },
+    "booknook-sdk-0.3.3.tgz": {
+      "bytes": 4695329,
+      "sha256": "d7a8cd0e5a48ebad72d06b11b8f26b42ca33ea5c9178aa085bb3192d66cf52ee"
+    },
+    "booknook-swift-sdk-0.3.3.tar.gz": {
+      "bytes": 149389932,
+      "sha256": "4c0899b390ddc88d99cf81edb51d64550c0d7593d3d3afacc74bd852eb092147"
+    },
+    "booknook-wasm-0.3.3.crate": {
+      "bytes": 38796,
+      "sha256": "15aae1d4f42814a24eaaf13039c6358f32b975d865bad600a4ab00a31ce78204"
+    }
+  },
+  "public_https": {
+    "assets": {
+      "BUILD-PROVENANCE-apple.json": {
+        "bytes": 990,
+        "sha256": "4c6b1c5aa7f62bdf55d507a5c30c214c09377e42b101ad533231f7cca9ac34bf"
+      },
+      "BUILD-PROVENANCE-portable.json": {
+        "bytes": 1669,
+        "sha256": "0143e39eeee6a5bc6bec14ef24bf0a17c2b2511ae69641e3104c5e4cce78faad"
+      },
+      "CONSUMER-VERIFICATION.json": {
+        "bytes": 1878,
+        "sha256": "5ed7e37f8abc3463ce3944a1b599d6dd64853fe3f28d240c2905ff8761861783"
+      },
+      "DEPENDENCY-LICENSES.csv": {
+        "bytes": 45827,
+        "sha256": "70160ad3c4be10f071f274ef0e3525597e819229b5ad740cbf9d585ab7f963e5"
+      },
+      "LICENSE-APACHE": {
+        "bytes": 11326,
+        "sha256": "fabba0cb7d00a4b3211fdc13699223ab2d22f88678ccd608494cf2b332b903e9"
+      },
+      "LICENSE-MIT": {
+        "bytes": 1079,
+        "sha256": "e4c16e07e31d3fdbba827f245f39f51ee0871898f1585653129bcbe3c63a7410"
+      },
+      "LICENSE-MPL-2.0": {
+        "bytes": 16727,
+        "sha256": "66a3107d5ad6a058aab753eaac2047ccb2ed0e39465dd0fe5844da3e300d5172"
+      },
+      "RELEASE-MANIFEST.json": {
+        "bytes": 2384,
+        "sha256": "0855b6e17f4d8882c3e38fcca7145d9a56acc17166c6816ce873b69cf62376e5"
+      },
+      "SHA256SUMS": {
+        "bytes": 1266,
+        "sha256": "3449a5fd1ef5285cc0fcd1822763e1756b082bcf82eddaee8ce5da782c754d23"
+      },
+      "booknook-connectors-0.3.3.crate": {
+        "bytes": 72899,
+        "sha256": "f7298a9b3a8c7332b7c2d9c078bbb3d18295bbb99452d60105aebb8b65aa20a9"
+      },
+      "booknook-core-0.3.3.crate": {
+        "bytes": 203880,
+        "sha256": "340ec7890df40db9f08d705f14db215dfb401e283044bc877de73db524805e26"
+      },
+      "booknook-native-0.3.3.crate": {
+        "bytes": 212258,
+        "sha256": "d492a651a6a81d52d7fa04ff33899df88c77bdc0daf7afedf8aaa954ab656822"
+      },
+      "booknook-sdk-0.3.3.tgz": {
+        "bytes": 4695329,
+        "sha256": "d7a8cd0e5a48ebad72d06b11b8f26b42ca33ea5c9178aa085bb3192d66cf52ee"
+      },
+      "booknook-swift-sdk-0.3.3.tar.gz": {
+        "bytes": 149389932,
+        "sha256": "4c0899b390ddc88d99cf81edb51d64550c0d7593d3d3afacc74bd852eb092147"
+      },
+      "booknook-wasm-0.3.3.crate": {
+        "bytes": 38796,
+        "sha256": "15aae1d4f42814a24eaaf13039c6358f32b975d865bad600a4ab00a31ce78204"
+      }
+    },
+    "count": 15,
+    "bytes": 154696240,
+    "prior_releases_preserved": 27,
+    "receipt_sha256": "e62db6d133ab6e28bcbe272ed79e4cddf313ea39e32a44cb1215d0f19e349706"
+  },
+  "scope": "Exact development SDK release. Live authority, source access, physical iPad SDK execution and minimum-OS runtime require separate evidence."
+}

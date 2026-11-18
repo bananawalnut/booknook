@@ -4,6 +4,8 @@ The portable document and social contracts live in Rust. The reference apps use 
 
 ## Development preview and Rust compatibility
 
+The **[0.3.3 SDK preview](https://github.com/bananawalnut/booknook/releases/tag/v0.3.3-sdk-preview.20261117)** adds exact-parent replacement and approval checks for native reply drafts. The extracted Swift consumers exercised those checks with signed synthetic group records on macOS and iPadOS 18.6 Simulator. Rust and installed TypeScript/WASM consumers also passed. [SDK evidence](sdk-033-public-preview-evidence.json) · [Simulator evidence](sdk-033-ipados-simulator-evidence.json)
+
 The **[0.3.2 SDK preview](https://github.com/bananawalnut/booknook/releases/tag/v0.3.2-sdk-preview.20261117)** adds native editing and exact-version approval for top-level post drafts. The extracted Swift consumer passed on arm64 macOS and iPadOS 18.6 Simulator. Rust and installed TypeScript/WASM consumers also passed. [SDK evidence](sdk-032-public-preview-evidence.json) · [Simulator evidence](sdk-032-ipados-simulator-evidence.json)
 
 The **[0.3.1 SDK preview](https://github.com/bananawalnut/booknook/releases/tag/v0.3.1-sdk-preview.20261117)** adds read-only public-group discussion previews. An extracted Rust crate and installed npm consumers passed the preview checks. Swift consumers ran on arm64 macOS and iPadOS 18.6 Simulator. [Public download evidence](sdk-031-public-preview-evidence.json) · [iPadOS Simulator evidence](sdk-031-ipados-simulator-evidence.json)
@@ -80,9 +82,9 @@ The native `social_snapshot` response adds an optional `public_group_previews` a
 
 In SDK 0.3.2, the native desk can refresh a top-level post draft with `social_local` using `{"op":"replace_reviewed_post","expected":<saved event>,"event":<refreshed event>}`. Both records use the same draft ID, reader, group destination, and delivery. SQLite compares the entire saved event before one durable write. A changed reader, audience, or saved event leaves the stored draft available for separate review.
 
-SDK 0.3.3 source also applies this operation to replies when both records use the same parent post ID. The built-in reply composer is available in reading groups. The Outbox also accepts compatible ungrouped replies restored from portable social exports. Retrying a superseded or discarded reply cannot create a new draft. The published 0.3.2 archive supports the top-level operation described above.
+SDK 0.3.3 also applies this operation to replies when both records use the same parent post ID. The built-in reply composer is available in reading groups. The Outbox also accepts compatible ungrouped replies restored from portable social exports. Retrying a superseded or discarded reply cannot create a new draft. The published 0.3.2 archive supports the top-level operation described above.
 
-Pass `{"reviewed_draft":<event>}` to `social_approve` when consent is tied to a saved draft. The desk verifies the saved event and the signed event before publication. SDK 0.3.3 source also checks that a group reply’s parent is still visible when approval is committed. A parent hidden, blocked, or removed during consent leaves the reply saved locally. Standalone callers may continue using the existing bare event format. These native desk operations do not change the portable command, archive, or relay schemas.
+Pass `{"reviewed_draft":<event>}` to `social_approve` when consent is tied to a saved draft. The desk verifies the saved event and the signed event before publication. SDK 0.3.3 also checks that a group reply’s parent is still visible when approval is committed. A parent hidden, blocked, or removed during consent leaves the reply saved locally. Standalone callers may continue using the existing bare event format. These native desk operations do not change the portable command, archive, or relay schemas.
 
 ### Recommendations and approved encrypted transfer
 

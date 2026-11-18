@@ -1,0 +1,150 @@
+{
+  "schema": "booknook.app-only-public-preview-evidence.v2",
+  "status": "PASS_PUBLIC_ARCHIVES",
+  "observed_at": "2026-11-18T02:46:16.117176+00:00",
+  "app": {
+    "version": "0.2.1",
+    "build": "2026111716",
+    "source_commit": "dde45d189370ecc6277b7aa9293e684e6c8ab37d",
+    "release_url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.16",
+    "release_id": 449459385,
+    "tag": "v0.2.1-app-preview.20261117.16",
+    "published_at": "2026-11-18T02:46:08Z"
+  },
+  "source_validation": {
+    "archive_ci": "https://github.com/bananawalnut/booknook/actions/runs/44221207612",
+    "archive_job_id": 134523237790,
+    "archive_runner": "macos-15",
+    "contract_runs": {
+      "push": 44221153290
+    },
+    "artifact_id": 14391353654,
+    "artifact": {
+      "bytes": 38776468,
+      "sha256": "9fd530aab1555c1a7e79eaed30e2d7c805d6dd534065d9e6582c296abbebd5f2"
+    },
+    "independent_archive_verification_receipt_sha256": "b89e40f361f954a9b6a4e6c51e35cfd6098778cc8150f3927bacbc6e0b79d39b"
+  },
+  "archive_verification": {
+    "mac": {
+      "archive": {
+        "bytes": 15308040,
+        "sha256": "6005b73d5098a62f5dee83e650a5e5d49e999cbe6f97446cbb6524276062817c"
+      },
+      "tar_members": 120,
+      "bundle_files": 99,
+      "ontology_files": 91,
+      "build": "2026111716",
+      "signature": "linker-ad-hoc",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "byte-identical standalone Mach-O"
+    },
+    "ipad-sim": {
+      "archive": {
+        "bytes": 11745904,
+        "sha256": "6cb40167ace8d698e28cd39f0e8cde6dad06619178d7f1575758af4270d586c8"
+      },
+      "tar_members": 117,
+      "bundle_files": 99,
+      "ontology_files": 91,
+      "build": "2026111716",
+      "signature": "linker-ad-hoc",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "byte-identical standalone Mach-O"
+    },
+    "ipad-device": {
+      "archive": {
+        "bytes": 11531981,
+        "sha256": "d1378bae3c5153f838a5864577152ae3a377461dd8cbc28f4c4b859c9216d0bb"
+      },
+      "tar_members": 117,
+      "bundle_files": 99,
+      "ontology_files": 91,
+      "build": "2026111716",
+      "signature": "unsigned",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "unsigned"
+    }
+  },
+  "ontology": {
+    "version": "0.4.0",
+    "files_per_bundle": 91,
+    "manifests_sha256": {
+      "ontology/v0.4.0/manifest.json": "6c9bac5c91b5c11782178e7a2d45dcea9c4ffa9ea918515da208c89e775dcf94",
+      "ontology/portable/v3/manifest.json": "260eb9b0b6c6b47d0d9efcc3f21154720d8f8b45aed3b8c9b1a2157a5963b303"
+    },
+    "discovery": "https://bananawalnut.github.io/booknook/ontology/discovery.json"
+  },
+  "public_https": {
+    "assets": {
+      "booknook-ipad-device-arm64-development-0.2.1.tar.gz": {
+        "bytes": 11531981,
+        "sha256": "d1378bae3c5153f838a5864577152ae3a377461dd8cbc28f4c4b859c9216d0bb"
+      },
+      "booknook-ipad-sim-arm64-development-0.2.1.tar.gz": {
+        "bytes": 11745904,
+        "sha256": "6cb40167ace8d698e28cd39f0e8cde6dad06619178d7f1575758af4270d586c8"
+      },
+      "booknook-mac-arm64-development-0.2.1.tar.gz": {
+        "bytes": 15308040,
+        "sha256": "6005b73d5098a62f5dee83e650a5e5d49e999cbe6f97446cbb6524276062817c"
+      },
+      "BUILD-PROVENANCE.json": {
+        "bytes": 54187,
+        "sha256": "212b70fd237f4e0658cb8e99cfe1e72c25cf59614247c81dd39bd91b99da3ac1"
+      },
+      "README.md": {
+        "bytes": 3628,
+        "sha256": "2b2ef1efdb897f44956f1d0c86464ba4cdb66943e3980f86d72224b0324d0b0d"
+      },
+      "RELEASE-MANIFEST.json": {
+        "bytes": 2469,
+        "sha256": "dd85bb429ae1ed30e28a3ee40186813646a6a507738d3d1dfac9c53c875343ef"
+      },
+      "SHA256SUMS": {
+        "bytes": 503,
+        "sha256": "d26fc4e658b708fe2b11dca8ed782e5f6f9466ac76cb5e3a5594ef0acb8f1923"
+      },
+      "VERIFICATION.json": {
+        "bytes": 131161,
+        "sha256": "28611280376c0b747032eb41fa772cb3f00258d3f0db3ee0c0b4f1adf01877b6"
+      }
+    },
+    "count": 8,
+    "bytes": 38777873,
+    "earlier_releases_with_unchanged_asset_identities": 28,
+    "receipt_sha256": "e68987807cba4657f188fd879443783087a92bdb2456d4bb3bf410ddd4070fd6"
+  },
+  "scope": "Exact Apple archives and public downloads, normal in-place iPad update, and an isolated Simulator capture. Physical input, current Mac foreground QA, minimum-OS runtime and live integrations require separate evidence.",
+  "focused_regressions": {
+    "linked_native_reply_workflow": "passed",
+    "native_signed_approval": "Existing group reply stays private after the parent is hidden, retracted or blocked during consent.",
+    "extracted_swift_sdk": "Same parent and draft ID, refused stale consent and discarded retry, reopened exact approved edit."
+  },
+  "normal_physical_ipad": {
+    "previous_build": "2026111715",
+    "current_build": "2026111716",
+    "app_running": true,
+    "database_bytes_matched_after_install": true,
+    "desk_and_assets_preserved": true,
+    "postlaunch_notebook_desk_fields_changed": [
+      "revision"
+    ],
+    "prior_social_state_preserved": true,
+    "orientation_unchanged_in_observations": true,
+    "orientation_commands": false,
+    "saved_ink_section_count": 1,
+    "saved_ink_hashes_equal": true,
+    "receipt_sha256": "230265d24bc205c12fa4da8a8d7b16ab9600ce3533bbbee4a5e761957b9c456b",
+    "scope": "Locally development-signed installation, normal launch and saved-data comparison."
+  },
+  "screenshots": {
+    "ipad_build": "2026111716",
+    "ipad_receipt_sha256": "b625d4eae59d701e5d1389475172713d7feecc89bf7ef9cb7d3a40bd2be55877",
+    "ipad_framebuffer_sha256": "d024b581ae4b83728f0ed8ee9455d80b55b214bd64360f025db9f772f35431cf",
+    "mac_build": "2026111705"
+  }
+}
