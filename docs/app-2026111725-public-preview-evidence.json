@@ -1,0 +1,156 @@
+{
+  "schema": "booknook.app-only-public-preview-evidence.v2",
+  "status": "PASS_PUBLIC_ARCHIVES",
+  "observed_at": "2026-11-18T11:39:30.032975+00:00",
+  "app": {
+    "version": "0.2.1",
+    "build": "2026111725",
+    "source_commit": "bb71638a64267e124e1e55c20b2ef544045df9c5",
+    "release_url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.25",
+    "release_id": 449899961,
+    "tag": "v0.2.1-app-preview.20261117.25",
+    "published_at": "2026-11-18T11:39:04Z"
+  },
+  "source_validation": {
+    "archive_ci": "https://github.com/bananawalnut/booknook/actions/runs/44293617827",
+    "archive_job_id": 134764850066,
+    "archive_runner": "macos-latest",
+    "contract_runs": {
+      "push": 44293546872
+    },
+    "artifact_id": 14423462612,
+    "artifact": {
+      "bytes": 38869507,
+      "sha256": "3febf0c055c4dc658441735701946e0f2a5ec1d5be911d9128813ab47a989067"
+    },
+    "independent_archive_verification_receipt_sha256": "7cd310c4df5aeb4e1fb7cbb87af8a435ce976647964be2987d21619e75d4b2dd"
+  },
+  "archive_verification": {
+    "mac": {
+      "archive": {
+        "bytes": 15326235,
+        "sha256": "789c033b193600e0662f8072d708112ee985ae44011ec389265d51227e3732fc"
+      },
+      "tar_members": 120,
+      "bundle_files": 99,
+      "ontology_files": 91,
+      "build": "2026111725",
+      "signature": "linker-ad-hoc",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "byte-identical standalone Mach-O"
+    },
+    "ipad-sim": {
+      "archive": {
+        "bytes": 11785845,
+        "sha256": "3978b0349fee26f6633cad3bf297cef018103ecdb99e5f3b3fd5689194421e8e"
+      },
+      "tar_members": 117,
+      "bundle_files": 99,
+      "ontology_files": 91,
+      "build": "2026111725",
+      "signature": "linker-ad-hoc",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "byte-identical standalone Mach-O"
+    },
+    "ipad-device": {
+      "archive": {
+        "bytes": 11566884,
+        "sha256": "bc6191b6fdb530d5e32dc5bdee0f178aea736009f16452a2cf68c5f173f39689"
+      },
+      "tar_members": 117,
+      "bundle_files": 99,
+      "ontology_files": 91,
+      "build": "2026111725",
+      "signature": "unsigned",
+      "full_manifest_modes_and_inspection_equal": true,
+      "public_content_rechecked": true,
+      "signature_scope": "unsigned"
+    }
+  },
+  "ontology": {
+    "version": "0.4.0",
+    "files_per_bundle": 91,
+    "manifests_sha256": {
+      "ontology/v0.4.0/manifest.json": "6c9bac5c91b5c11782178e7a2d45dcea9c4ffa9ea918515da208c89e775dcf94",
+      "ontology/portable/v3/manifest.json": "260eb9b0b6c6b47d0d9efcc3f21154720d8f8b45aed3b8c9b1a2157a5963b303"
+    },
+    "discovery": "https://bananawalnut.github.io/booknook/ontology/discovery.json"
+  },
+  "public_https": {
+    "assets": {
+      "booknook-ipad-device-arm64-development-0.2.1.tar.gz": {
+        "bytes": 11566884,
+        "sha256": "bc6191b6fdb530d5e32dc5bdee0f178aea736009f16452a2cf68c5f173f39689"
+      },
+      "booknook-ipad-sim-arm64-development-0.2.1.tar.gz": {
+        "bytes": 11785845,
+        "sha256": "3978b0349fee26f6633cad3bf297cef018103ecdb99e5f3b3fd5689194421e8e"
+      },
+      "booknook-mac-arm64-development-0.2.1.tar.gz": {
+        "bytes": 15326235,
+        "sha256": "789c033b193600e0662f8072d708112ee985ae44011ec389265d51227e3732fc"
+      },
+      "BUILD-PROVENANCE.json": {
+        "bytes": 54187,
+        "sha256": "7c0ed9d943d15237997c3bdb809c50e9a6fbab3e823fcbb761eb7877eee6c18b"
+      },
+      "README.md": {
+        "bytes": 3628,
+        "sha256": "1be4c982fa45ef6d6fc6e13efcbe39e6255d275f30465260526c24561645b400"
+      },
+      "RELEASE-MANIFEST.json": {
+        "bytes": 2469,
+        "sha256": "4d85a8d9759cb696f682200a4a141deedb7e67eaca154b64eb1787f986af6b31"
+      },
+      "SHA256SUMS": {
+        "bytes": 503,
+        "sha256": "72f6f7e54f5dcd4fd118be843b3bd69226502dc233fde6006b365f1b92840981"
+      },
+      "VERIFICATION.json": {
+        "bytes": 131161,
+        "sha256": "145a791bf3b2aa457041ed0f7f7468d5ac2c1252b12a52a56f1083fc547bce2f"
+      }
+    },
+    "count": 8,
+    "bytes": 38870912,
+    "earlier_releases_with_unchanged_asset_identities": 38,
+    "receipt_sha256": "5cd1b472ac294a0f6e1981098e5075e54c881db7f64f4bda858424b379a0bccb"
+  },
+  "scope": "Independent binary verification of three Apple development preview archives and eight public downloads. Native accessibility acceptance used an isolated iPadOS Simulator desk. Physical VoiceOver is still open. The normal iPad app was updated in place and reopened with its library, Scribble and social state intact.",
+  "ipados_accessibility_acceptance": {
+    "evidence": "ipados-reading-desk-toolbar-evidence.json",
+    "sha256": "fd61ce8990925b16b4b382778e473a128b2ff50db03b9811859acdb17b3bd3b5"
+  },
+  "physical_ipad": {
+    "result": "PASS_IN_PLACE_AND_RUNNING",
+    "previous_build": "2026111724",
+    "installed_build": "2026111725",
+    "library_and_assets_preserved": true,
+    "saved_scribble_preserved": true,
+    "social_state_preserved": true,
+    "orientation_equal_in_observations": true,
+    "orientation_commands": false,
+    "receipt_sha256": "84a9bcd1564df7917f9497dae2d4ef436e82f14bd296dc1b835903c3b450ce8a",
+    "launch_state_delta": {
+      "install_exact": true,
+      "after_launch_changed_fields": [
+        "revision"
+      ],
+      "revision_increment": 1
+    },
+    "launch_state_delta_receipt_sha256": "1310f7ae4c8b99ea125e91daca94f8a231f84a1f90a11a1c2d3a64780f755ac3"
+  },
+  "readme_capture": {
+    "runtime": "iPadOS 18.6 Simulator",
+    "source": "bb71638a64267e124e1e55c20b2ef544045df9c5",
+    "build": "2026111725",
+    "raw_framebuffer_sha256": "1c6d532f511c17776a1b01ba486d5a5f41b9251ca00c7d2115bd0fcc615e1f63",
+    "receipt_sha256": "ad57438d3d9e87142322dbbf365db318ad7e50814d67a26a3c84792a7e49d3a9"
+  },
+  "readme_capture_builds": {
+    "macOS": "2026111720",
+    "iPad": "2026111725"
+  }
+}
