@@ -1,0 +1,35 @@
+{
+  "schema": "booknook.sdk-ipados-simulator-evidence.v1",
+  "result": "PASS",
+  "sdk": {
+    "version": "0.3.4",
+    "source": "9bfa0ae3677ffc256e5b98cf652db4b85196e7ca",
+    "archive_sha256": "ef3aba466c1ab461c9a565d5f1c1107104c0e26aac8a906edfc30d7a62b25d55",
+    "simulator_slice_sha256": "e7bdf06f212de73f5110ae4a55341391f581703c40791f35904a4372ec50c5ed"
+  },
+  "runtime": {
+    "platform": "arm64 iPadOS Simulator",
+    "runtime_version": "18.6",
+    "build": "22G86"
+  },
+  "consumer": {
+    "membership_witness": true,
+    "saved_post": true,
+    "group_reply": true,
+    "notebook": true,
+    "separate_process_reopen": true,
+    "membership_witness_sha256": "b69b1af035826176c15f950a247ff76ca912f45d9ed56285d31b3a64d1762c66"
+  },
+  "sqlite": {
+    "quick_check": "ok",
+    "reopened_saved_revision": 1
+  },
+  "cleanup": {
+    "synthetic_install_removed": true,
+    "sample_app_metadata_preserved": true,
+    "simulator_shutdown": true,
+    "first_install_interrupted_by_scratch_guard_receipt_sha256": "6d3843795f45a6252bf7aa457232348e22a6ceccfb3bfee686604107f579568a"
+  },
+  "scope": "Packaged iPad Simulator Swift slice and signed synthetic data. The native app installation on a physical iPad is documented separately.",
+  "receipt_sha256": "e5f7df30a8890f70aea5b08550480fc7dd4dcf39ef8cf3a5f79d1426bf8877cc"
+}

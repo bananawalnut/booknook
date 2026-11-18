@@ -1,0 +1,103 @@
+{
+  "schema": "booknook.sdk-public-preview-evidence.v1",
+  "status": "PASS_PUBLIC_ARCHIVES",
+  "sdk_version": "0.3.4",
+  "release": {
+    "release_id": 449509746,
+    "tag": "v0.3.4-sdk-preview.20261117",
+    "url": "https://github.com/bananawalnut/booknook/releases/tag/v0.3.4-sdk-preview.20261117",
+    "published_at": "2026-11-18T04:09:48Z",
+    "source_commit": "9bfa0ae3677ffc256e5b98cf652db4b85196e7ca"
+  },
+  "hosted": {
+    "sdk_workflow_run": 44230273678,
+    "contract_workflow_run": 44230269753,
+    "portable_artifact": 14394408057,
+    "apple_artifact": 14395259558
+  },
+  "independent_consumers": {
+    "rust_and_node_wasm": {
+      "result": "PASS",
+      "receipt_sha256": "48a8db8d3255112cfbe020cee28d1ae521184aca43e2bae25a6d5e5f740ed34a",
+      "scope": "All four published crate archives compared against the exact source. Independent Core runtime and installed npm CommonJS, ESM, types and both WASM targets exercised under Node."
+    },
+    "macos_swift": {
+      "result": "PASS",
+      "receipt_sha256": "ddb9fff41e8c2dbf62039e175775155ddfe2a11eae3051b7f24d3ac2a3fa4732",
+      "membership_witness_sha256": "b69b1af035826176c15f950a247ff76ca912f45d9ed56285d31b3a64d1762c66"
+    },
+    "ipados_simulator_swift": {
+      "result": "PASS",
+      "evidence": "sdk-034-ipados-simulator-evidence.json"
+    }
+  },
+  "public_https": {
+    "asset_count": 15,
+    "bytes": 154770221,
+    "assets": {
+      "BUILD-PROVENANCE-apple.json": {
+        "bytes": 990,
+        "sha256": "3356edb10c04e36b222577366407dc3a2c7bf07b3fea00866a3594b8653e40c9"
+      },
+      "BUILD-PROVENANCE-portable.json": {
+        "bytes": 1669,
+        "sha256": "28ee272ce301226f31e06e518d945312bf291cbaf4867bb983659506971e12ca"
+      },
+      "CONSUMER-VERIFICATION.json": {
+        "bytes": 1895,
+        "sha256": "a3dd2aa012f8fd03ab1c81e70d9031fe8bebc2c76888755d297133090b586c36"
+      },
+      "DEPENDENCY-LICENSES.csv": {
+        "bytes": 45827,
+        "sha256": "ea742019d6babe11b81b123b7f6600ea7314940464c1e3623c7832ef8ca81e2c"
+      },
+      "LICENSE-APACHE": {
+        "bytes": 11326,
+        "sha256": "fabba0cb7d00a4b3211fdc13699223ab2d22f88678ccd608494cf2b332b903e9"
+      },
+      "LICENSE-MIT": {
+        "bytes": 1079,
+        "sha256": "e4c16e07e31d3fdbba827f245f39f51ee0871898f1585653129bcbe3c63a7410"
+      },
+      "LICENSE-MPL-2.0": {
+        "bytes": 16727,
+        "sha256": "66a3107d5ad6a058aab753eaac2047ccb2ed0e39465dd0fe5844da3e300d5172"
+      },
+      "RELEASE-MANIFEST.json": {
+        "bytes": 2384,
+        "sha256": "f88a4be116bda6ffb5bfef4c9835d746450b981534e76a48304d2e1ce653471f"
+      },
+      "SHA256SUMS": {
+        "bytes": 1266,
+        "sha256": "6b57466bfbd68ebe5612727ddda889915f147bae1b1811a069244ab870b00b1f"
+      },
+      "booknook-connectors-0.3.4.crate": {
+        "bytes": 72903,
+        "sha256": "10a77a52ac7152ec4e098498702830ddda1eab7bb1edbce937717eca8e48bffc"
+      },
+      "booknook-core-0.3.4.crate": {
+        "bytes": 204377,
+        "sha256": "a19273952baeb9f6cc1b78aa91955c5c22fb68acd211c7295b06bbcde3596eef"
+      },
+      "booknook-native-0.3.4.crate": {
+        "bytes": 214335,
+        "sha256": "d761dee04ec7dd975923e0aa567494a426c8ed2fe9b9b086aff6b65e2cd345a5"
+      },
+      "booknook-sdk-0.3.4.tgz": {
+        "bytes": 4695715,
+        "sha256": "7d46ca57724f31867bd45bdbba7fd3f9bf69f53456ad1d42c679898e9290e648"
+      },
+      "booknook-swift-sdk-0.3.4.tar.gz": {
+        "bytes": 149460933,
+        "sha256": "ef3aba466c1ab461c9a565d5f1c1107104c0e26aac8a906edfc30d7a62b25d55"
+      },
+      "booknook-wasm-0.3.4.crate": {
+        "bytes": 38795,
+        "sha256": "f8e2d42b3b866061202b7d192c0d95b02d0ae2788ebdc6282e71f0de316dc208"
+      }
+    },
+    "earlier_release_identities_preserved": 29,
+    "receipt_sha256": "10529f2228ae3a448f014f062dda1310e36ca0755ef1605b4ab5d3c0c0d235f6"
+  },
+  "scope": "GitHub preview packages. Minimum-OS execution and live production integrations have separate acceptance gates."
+}
