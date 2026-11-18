@@ -7,7 +7,7 @@
   "sample_data": "Both apps show The Quiet Library EPUB, a Margin note and a character card from a synthetic desk.",
   "private_user_data_published": false,
   "physical_ipad_capture": false,
-  "raw_ipad_framebuffer_sha256": "3991d2f2ab8b9dd9ee60228cd59b5887f05b54202678f62563558e0a32963080",
+  "raw_ipad_framebuffer_sha256": "53c0d65e3aed4c7c5d545f200d2ca45a0f6719652d05c23d24f11a8b1b842ece",
   "captures": [
     {
       "platform": "macOS",
@@ -31,22 +31,22 @@
       "platform": "iPad",
       "image": "ipad-current.png",
       "format": "PNG",
-      "sha256": "3991d2f2ab8b9dd9ee60228cd59b5887f05b54202678f62563558e0a32963080",
+      "sha256": "53c0d65e3aed4c7c5d545f200d2ca45a0f6719652d05c23d24f11a8b1b842ece",
       "width": 2048,
       "height": 2732,
       "bundle_id": "org.booknook.ipad",
       "configuration": "Release",
-      "executable_sha256": "26d2539611b6148d960ea085a56169b0a2231d0f33861d918088ac5058a84073",
+      "executable_sha256": "51c6813082819c5e2c2fc9fa16347d185418b4a6850af37364f4c10710ada19e",
       "environment": "iPad Air 13-inch (M2), iPadOS 18.6 Simulator, portrait",
-      "app_source_revision": "2149553525d68eb223bcecaf980d39605cfa6d88",
-      "capture_receipt_sha256": "3dedc8f56630347fe70b942b780b319b6dc4ab9e701df3ee1afc9021d4ba3a01",
+      "app_source_revision": "c3e4d3a747f28592ef7f2cc876e7abd78050989f",
+      "capture_receipt_sha256": "a2d9d175bbfee23ceaf8561ee6469fac885ea6022d2026cc2b3829d284bb56f0",
       "image_processing": "Original simctl framebuffer bytes.",
-      "app_build": "2026111720",
+      "app_build": "2026111721",
       "captured_on": "2026-11-18"
     }
   ],
   "source_equivalence": "Each executable matches the public Release archive for the build recorded with its capture.",
   "scope": "Actual Release apps using isolated synthetic workspaces. Physical install and hardware qualification have separate evidence.",
-  "latest_public_build": "2026111720",
-  "latest_public_source_revision": "2149553525d68eb223bcecaf980d39605cfa6d88"
+  "latest_public_build": "2026111721",
+  "latest_public_source_revision": "c3e4d3a747f28592ef7f2cc876e7abd78050989f"
 }

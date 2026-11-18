@@ -2,7 +2,7 @@
 
 Book Nook has an integrated native development app and open Rust, Swift, and WASM/TypeScript SDKs. Production qualification still requires live source accounts, operational Castalia authority, remote exchange, hands-on physical iPad checks, and runtime checks on the oldest supported OS versions.
 
-Build 1721 is staged with a Mac sidebar that keeps its width between 240 and 320 points while the detail view stays mounted. The AppKit regression passed at a 735-point window width and through hide and reopen. The iPad branch type-checked for deployment to iPadOS 17. Exact archive and live interaction checks are pending. [Layout evidence](mac-sidebar-layout-evidence.json)
+[App build 1721](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.21) keeps the Mac sidebar readable as the desk narrows. All eight public downloads matched. The normal iPad update preserved the library, saved Scribble, social state, and observed orientation. A visible walkthrough of the packaged Mac app remains pending. The AppKit regression passed at a 735-point window width and through hide and reopen. The iPad branch type-checked for deployment to iPadOS 17. [Build evidence](app-2026111721-public-preview-evidence.json) · [Layout evidence](mac-sidebar-layout-evidence.json)
 
 [App build 1720](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.20) keeps approved transfers visible during a recovery Keychain error. All eight public downloads matched. The normal iPad update preserved the library, Scribble, social state and observed orientation. [App evidence](app-2026111720-public-preview-evidence.json) · [Simulator evidence](sync-recovery-read-isolation-evidence.json)
 
