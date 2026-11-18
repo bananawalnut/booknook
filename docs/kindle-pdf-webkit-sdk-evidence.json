@@ -1,0 +1,51 @@
+{
+  "result": "PASS",
+  "sdk_version": "0.3.5",
+  "sdk_source": "95c9bf5bfd430192ae9d5d1779e9e58afa85086c",
+  "published_npm_archive_sha256": "9011d0c49df02ed863198fe8c23149bc86095eb4372fc94c15b6fb47fb735e4b",
+  "localized_native_cli_sha256": "36dc617f80eea5a28f7691c39021858f26cbd0b2a8ad4ac277c3f712d7b44476",
+  "source_pdf_sha256": "c35bb0bbfefde316664c3723153c32bdb764543338249fb9660ac707fbfefa07",
+  "source_pdf_bytes": 12418,
+  "runner_sha256": "dddcbddf5ed37a04630bd8c2c283b6377364aac0f49cb1e03d2a03dbba68bf49",
+  "javascript_sha256": "41dec58f56202e126cc19803322c065f668bfc57e125600c38ff2f84a3367e01",
+  "runtimes": [
+    "webkit_browser"
+  ],
+  "webkit_executable_sha256": "5c15980f9bd67166ba26d04c8b97c067f72207fffcd7faa17b084b70374ee457",
+  "webkit_test_source_sha256": "04ade10defd566f4a646ca365e544b9584d2d215988d0e3d81b4da8d47d85c40",
+  "webkit": {
+    "archive_bytes": 21228,
+    "browser_user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+    "default_browser_loader": true,
+    "engine": "WKWebView",
+    "modified_pdf_rejected": true,
+    "native_webkit_framework": "21624.1.16.11.4",
+    "normalized_json_equal": true,
+    "original_pdf_sha256": "c35bb0bbfefde316664c3723153c32bdb764543338249fb9660ac707fbfefa07",
+    "transferred_wasm_bytes": 5678817
+  },
+  "wasm_over_http": {
+    "path": "/sdk/pkg/web/booknook_wasm_bg.wasm",
+    "content_type": "application/wasm",
+    "sha256": "b1b3b8de1cab85939bb23f05e05e6cc2d4b0362f58833979471ad2d70792de0e",
+    "same_origin": true,
+    "loopback_listener_closed": true,
+    "distinct_successful_routes": 13
+  },
+  "qualification": {
+    "separate_kindle_and_pdf_locations": true,
+    "unicode_note_and_private_review_preserved": true,
+    "pdf_bytes_restored_identically": true,
+    "browser_rejected_modified_asset": true,
+    "native_reexport_matched_original_except_store_revision": true
+  },
+  "scope": "Published npm package loaded by its default browser module entry in the native WebKit framework over a bounded loopback HTTP server. Then restored by the local Rust SQLite CLI. The catalog, Unicode note and original PDF are synthetic.",
+  "observed_utc": "2026-11-18T10:45:21.655561+00:00",
+  "schema": "booknook.public-sdk-webkit-portable-archive-evidence.v1",
+  "private_verification_sha256": "593d1237e76cef09c81e805cd2e7ee4c8baeff9616274e2f5e4d4d9020dbcc32",
+  "host": {
+    "os": "macOS 26.4.1",
+    "architecture": "arm64"
+  },
+  "coverage_boundary": "System WKWebView on macOS with the released browser package. Other browser engines, actual Kindle account access and browser application UI remain separate."
+}
