@@ -37,7 +37,7 @@ Open the existing catalog entry in Book Nook. Select **Choose a book file** in t
 
 The shipped Swift SDK exercised this handoff with a synthetic catalog and original EPUB and PDF fixtures. Reimport retained the reader’s rating and review, and a repeated attachment kept one file edition. The backup restored the original bytes and reading resources. On macOS, PDFKit read both pages of the attached and restored PDF in order. [EPUB evidence](kindle-purchased-file-handoff-evidence.json) · [PDF evidence](kindle-pdf-file-handoff-evidence.json)
 
-The Mac app’s ReaderPane opened the attached PDF from managed storage in an offscreen test. It saved page two to the attached edition and reopened there with a fresh desk. Visible file-picker use, live catalog sign-in, and downloading a purchased title still need a hands-on check. [Reader acceptance](kindle-pdf-reader-pane-evidence.json)
+Book Nook’s reader opened the attached PDF from managed storage on macOS and in an iPadOS 18.6 Simulator harness. It saved page two to the attached edition and reopened there. The iPad test used a fresh app process. File-picker use, physical iPad reading, live catalog sign-in, and downloading a purchased title still need hands-on checks. [Mac reader acceptance](kindle-pdf-reader-pane-evidence.json) · [iPadOS Simulator reader acceptance](kindle-pdf-ipados-reader-pane-evidence.json)
 
 ## Validation and outstanding qualification
 

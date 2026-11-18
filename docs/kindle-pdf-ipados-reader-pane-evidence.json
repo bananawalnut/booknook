@@ -1,0 +1,31 @@
+{
+  "schema": "booknook.kindle-pdf-ipados-reader-pane-evidence.v1",
+  "result": "PASS",
+  "source_commit": "c3e4d3a747f28592ef7f2cc876e7abd78050989f",
+  "native_source_files": 73,
+  "native_source_map_sha256": "88513bb5d3c8c32cb46629774f3907830b1683e43626b9d3faf3591dbb2c9d7a",
+  "swift_sdk_version": "0.3.5",
+  "swift_archive_sha256": "46b4441b3f70b488e27a9bbd4fdf03c53e398737da8bc3f3382c94406e598c84",
+  "swift_simulator_slice_sha256": "837ec846cda68e7f1b379d6c3cc223bd0227adb03e4776470574c9c247ef177e",
+  "original_pdf_sha256": "c35bb0bbfefde316664c3723153c32bdb764543338249fb9660ac707fbfefa07",
+  "test_source_sha256": "3741acd1fe838f6d7413baaaaee50b7c51b4b39d21177bc3e52d9ec975f3b1ab",
+  "signed_qa_binary_sha256": "6c061ed1d2901ad7290c1c2f26e4e560cfd2ceaeaf4b15be11941928f3355db0",
+  "build_receipt_sha256": "4ab9fab536a2ff4d3e822e427280ca18e29d61c0f6c9018777923aabdc8ba67d",
+  "runtime_receipt_sha256": "73af5205c0ac736aad6d7632e51c924d9c39134d88feef26910934c306f143d3",
+  "runtime": "iPadOS 18.6 Simulator (arm64)",
+  "observed_utc": "2026-11-18T08:42:28.786548+00:00",
+  "qualification": {
+    "synthetic_assetless_kindle_catalog_and_distinct_attached_pdf_edition": true,
+    "reader_opened_byte_identical_managed_pdf_and_both_unicode_pages": true,
+    "pdfkit_navigation_to_page_two_persisted_for_the_file_edition": true,
+    "new_app_process_reopened_page_two": true,
+    "isolated_qa_bundle_removed_and_simulator_returned_to_shutdown": true
+  },
+  "scope": "Actual Book Nook SwiftUI ReaderPane and UIKit PDFView in a separate simulator harness using the published SDK. Programmatic native page navigation.",
+  "open_qualification": [
+    "Physical iPad PDF reader and input",
+    "Visible file picker",
+    "iPadOS 17 runtime",
+    "Live Kindle catalog sign-in and purchased-file retrieval"
+  ]
+}

@@ -2,6 +2,10 @@
 
 Initial registration was independently read back on **2026-11-13** against Book Nook source `abd2cb1928518be66eda247bea473c98413bb1a2`; the November 14 continuation below records later source and qualification checkpoints. DevGraph is the work tracker; this document is a navigation snapshot, not a replacement tracker or acceptance result.
 
+## Release qualification coverage — 2026-11-18
+
+A DevGraph read confirmed Project/booknook v46 under Arena/castalia v10 with 24 child issues. The existing issues cover the remaining packaged Mac walkthrough, physical input and endurance, live Kindle and Audible access, operational Castalia consent, remote Nostr exchange, two-device encrypted sync, and the macOS 14 and iPadOS 17 runtime checks. See the original backlog table for their IDs. The latest separate checks cover [preview 1721](app-2026111721-public-preview-evidence.json) and [the iPadOS Simulator PDF reader](kindle-pdf-ipados-reader-pane-evidence.json).
+
 ## Startup/import tracking checkpoint — 2026-11-15
 
 Canonical read-back verifies Project/booknook **v46** and Issue/booknook-hands-on-workflows **v4**. Two description-only patches preserve their complete previous descriptions, titles, priorities and lifecycle. Parentage, dependencies, inherited Castalia membership and all **24 Project children** are unchanged. Both unsigned EventReceipts report `pending`: the local mutations committed; external delivery and portable signed attestation are not claimed. Other records retain their separately dated checkpoints below.
