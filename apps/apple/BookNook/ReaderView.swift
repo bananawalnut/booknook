@@ -141,7 +141,7 @@ struct ReaderPane: View {
                                         else { Text(chapterLabel(resource)) }
                                     }
                                 }
-                            } label: { Text("Chapter \(chapter + 1) of \(asset.spine.count)").font(.caption).fixedSize() }
+                            } label: { Text("Chapter \(chapter + 1) of \(asset.spine.count)").font(.caption).fixedSize().readingDeskTouchTarget() }
                             .accessibilityLabel("Choose chapter, currently \(chapter + 1) of \(asset.spine.count)")
                             Spacer()
                             Button { openChapter(chapter + 1) } label: { Image(systemName: "chevron.right").frame(width: 32, height: 32).accessibilityLabel("Next chapter") }.disabled(chapter + 1 >= asset.spine.count)
@@ -155,7 +155,7 @@ struct ReaderPane: View {
                                   }
                               }
                               Button("Next chapter") { openChapter(chapter + 1) }.disabled(chapter + 1 >= asset.spine.count)
-                          } label: { Text("\(chapter + 1) / \(asset.spine.count)").font(.caption).frame(maxWidth: .infinity) }
+                          } label: { Text("\(chapter + 1) / \(asset.spine.count)").font(.caption).frame(maxWidth: .infinity).readingDeskTouchTarget() }
                           .accessibilityLabel("Choose chapter, currently \(chapter + 1) of \(asset.spine.count)")
                         }.buttonStyle(.borderless).padding(.horizontal, 14).padding(.vertical, 6)
                     }

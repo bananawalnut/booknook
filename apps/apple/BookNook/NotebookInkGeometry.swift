@@ -15,10 +15,18 @@ struct NotebookCanvasGeometry {
 }
 
 struct NotebookPaneFrames {
+    static var dividerWidth: CGFloat {
+        #if os(iOS)
+        44
+        #else
+        18
+        #endif
+    }
+
     let notebook: CGRect
     let divider: CGRect
     let reader: CGRect
-    init(size: CGSize, notebookOnRight: Bool, notebookFraction: Double = 0.51, separatorWidth: CGFloat = 18) {
+    init(size: CGSize, notebookOnRight: Bool, notebookFraction: Double = 0.51, separatorWidth: CGFloat = Self.dividerWidth) {
         let width = max(0, size.width), height = max(0, size.height)
         let separator = min(max(0, separatorWidth), width)
         let available = width - separator

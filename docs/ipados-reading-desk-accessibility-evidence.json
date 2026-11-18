@@ -1,0 +1,82 @@
+{
+  "schema": "booknook.ipados-reading-desk-accessibility-evidence.v1",
+  "result": "PASS_TARGETED_REPAIRS",
+  "runtime": "iPadOS 18.6 Simulator",
+  "observed_utc": "2026-11-18T10:07:00.296440+00:00",
+  "baseline": {
+    "released_build": "2026111722",
+    "source": "3106d150884d5716619d9288a827ad429f688a09",
+    "archive_executable_sha256": "2c4c35efa975f7749ab5c8f06dc4274422195d82686473a62d05b1c46b070286",
+    "xctest_audit_receipt_sha256": "62826ec8296a7c03d63c1749e49bb2c9649e603cfca40c0b143e69efb5ec55f0",
+    "observations": {
+      "Hit area is too small": 4,
+      "Text clipped": 7,
+      "Label not human-readable": 1
+    }
+  },
+  "tested_candidate": {
+    "configured_preview_build": "2026111723",
+    "source_base": "4587370d213349c55fd88bc71872936888854e58",
+    "changed_source_sha256": {
+      "apps/apple/BookNook/BookNookApp.swift": "ea1df247fc5cf9eb881fbcf2466270e3a73826cca31fc04cceff198e3cef72ac",
+      "apps/apple/BookNook/NotebookInkGeometry.swift": "2adacd9309ba6b9056e68615771e51cf410a3c85c93cda9bd28c9e8121b0d0ae",
+      "apps/apple/BookNook/NotebookPane.swift": "722d965d25272510233bc2892dffe9cfd894d29b01a3b890e94f87533030604d",
+      "apps/apple/BookNook/NotebookView.swift": "1671025ac94f9657b8bb2b3af7954714905ecaa76020e679ecfe927a872aa7c5",
+      "apps/apple/BookNook/ReaderView.swift": "7f65d7b2cb883f9d25cb9fcbb952c4d9adb0e68118d665752cdea10cb9ef9d8f",
+      "apps/apple/BookNook/ReadingDeskView.swift": "462fe00e8b9e5e6b2518f8a89bd6af185995bdb7eddac9c740c86cb2be21a81b"
+    },
+    "mode": "Isolated Simulator app compiled from the candidate Swift source against the released Swift SDK 0.3.5 with public 1722 resources.",
+    "executable_sha256": "db7c4c2cfb640cae8d8b880506613d20f0651c4ce4258d09fb49c0ea94d98358",
+    "xctest_audit_receipt_sha256": "7546853c784fdfda2a98f3c5351e28c49086ec09d878cbfb346c23d7031d557b",
+    "build_receipt_sha256": "cb3e60900b08895a8779d1f7964d06cbc374e6a1fac811fb1435306b74eea97f",
+    "xctest_passed": 1,
+    "xctest_failed": 0,
+    "audit_minimum_width_and_height_points": 44,
+    "tested_targets": [
+      "Add note",
+      "Develop this card",
+      "Resize Margin and book",
+      "Choose chapter"
+    ],
+    "decorative_character_symbol_hidden_from_accessibility": true,
+    "divider_drag_then_swap_then_process_relaunch": "PASS",
+    "selected_navigation_item_changes_with_section": "PASS",
+    "selected_book_remains_exposed_while_browsing_library": "PASS"
+  },
+  "sidebar_large_text_observations": [
+    {
+      "label": "Book Nook",
+      "audit": "Potential text clipping at larger Dynamic Type sizes"
+    },
+    {
+      "label": "Community",
+      "audit": "Potential text clipping at larger Dynamic Type sizes"
+    },
+    {
+      "label": "Connections",
+      "audit": "Potential text clipping at larger Dynamic Type sizes"
+    },
+    {
+      "label": "Field Notes from the Orchard",
+      "audit": "Potential text clipping at larger Dynamic Type sizes"
+    },
+    {
+      "label": "Reading desk",
+      "audit": "Potential text clipping at larger Dynamic Type sizes"
+    },
+    {
+      "label": "Sync & recovery",
+      "audit": "Potential text clipping at larger Dynamic Type sizes"
+    },
+    {
+      "label": "Your library",
+      "audit": "Potential text clipping at larger Dynamic Type sizes"
+    }
+  ],
+  "scope": "Default-size Simulator inspection and interactions using the synthetic reading desk. Apple’s clipping warnings call for a separate large-text test. Physical iPad, VoiceOver, and minimum-OS runtime qualification remain open.",
+  "qa": {
+    "public_simulator_executable_and_existing_desk_preserved": true,
+    "sample_desk_removed": true,
+    "simulator_returned_to_shutdown": true
+  }
+}

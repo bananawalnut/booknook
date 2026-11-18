@@ -29,12 +29,15 @@ import CoreGraphics
         for width in [320.0, 640, 740, 820, 1024, 1440] {
             for fraction in [-1.0, 0.1, 0.35, 0.5, 0.8, 2, .nan] {
                 let size = CGSize(width: width, height: 700)
-                let left = NotebookPaneFrames(size: size, notebookOnRight: false, notebookFraction: fraction)
-                let right = NotebookPaneFrames(size: size, notebookOnRight: true, notebookFraction: fraction)
-                precondition(left.notebook.width > 0 && left.reader.width > 0, "A small width must never hide either context")
-                precondition(left.notebook.width.isFinite && left.reader.width.isFinite)
-                precondition(left.notebook.size == right.notebook.size && left.reader.size == right.reader.size, "Swapping sides must preserve the selected pane widths")
-                precondition(abs(left.notebook.width + left.divider.width + left.reader.width - width) < 0.000001)
+                for dividerWidth: CGFloat in [18, 44] {
+                    let left = NotebookPaneFrames(size: size, notebookOnRight: false, notebookFraction: fraction, separatorWidth: dividerWidth)
+                    let right = NotebookPaneFrames(size: size, notebookOnRight: true, notebookFraction: fraction, separatorWidth: dividerWidth)
+                    precondition(left.notebook.width > 0 && left.reader.width > 0, "A small width must never hide either context")
+                    precondition(left.notebook.width.isFinite && left.reader.width.isFinite)
+                    precondition(left.divider.width == dividerWidth && right.divider.width == dividerWidth)
+                    precondition(left.notebook.size == right.notebook.size && left.reader.size == right.reader.size, "Swapping sides must preserve the selected pane widths")
+                    precondition(abs(left.notebook.width + left.divider.width + left.reader.width - width) < 0.000001)
+                }
             }
         }
         print("Notebook geometry: fixed ink coordinates, proportional scaling, adjustable clamped split, both contexts at narrow widths and mirrored sides preserving width passed.")

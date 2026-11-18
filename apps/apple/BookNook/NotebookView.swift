@@ -112,13 +112,15 @@ struct CharacterCardView: View {
     @State var history = false
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack { Image(systemName: "person.text.rectangle"); Text(model.state?.entities[card.characterId]?.name ?? "Character").font(.system(.headline, design: .serif)); Spacer(); Button { history = true } label: { Label("\(card.versions.count)", systemImage: "clock.arrow.circlepath") }.buttonStyle(.borderless).accessibilityLabel("\(model.state?.entities[card.characterId]?.name ?? "Character") history, \(card.versions.count) versions").help("View saved character interpretations") }
+            HStack { Image(systemName: "person.text.rectangle").accessibilityHidden(true); Text(model.state?.entities[card.characterId]?.name ?? "Character").font(.system(.headline, design: .serif)); Spacer(); Button { history = true } label: { Label("\(card.versions.count)", systemImage: "clock.arrow.circlepath") }.buttonStyle(.borderless).accessibilityLabel("\(model.state?.entities[card.characterId]?.name ?? "Character") history, \(card.versions.count) versions").help("View saved character interpretations") }
             if card.heads.count > 1 { Label("\(card.heads.count) interpretations need review", systemImage: "arrow.triangle.branch").font(.caption).foregroundStyle(.orange) }
             ForEach(card.heads) { version in
                 Text(version.interpretation.description.isEmpty ? "What do you notice about this character?" : version.interpretation.description).font(.callout).foregroundStyle(version.interpretation.description.isEmpty ? .secondary : .primary)
                 if !version.interpretation.traits.isEmpty { Text(version.interpretation.traits.joined(separator: " · ")).font(.caption).foregroundStyle(nookAccent) }
             }
-            Button("Develop this card") { editing = true }.font(.caption).buttonStyle(.borderless)
+            Button { editing = true } label: {
+                Text("Develop this card").readingDeskTouchTarget()
+            }.font(.caption).buttonStyle(.borderless)
         }.padding(16).background(nookAccent.opacity(0.07), in: RoundedRectangle(cornerRadius: 12))
         .sheet(isPresented: $editing) { CardEditor(card: card) }
         .sheet(isPresented: $history) { CharacterHistoryView(card: card) }

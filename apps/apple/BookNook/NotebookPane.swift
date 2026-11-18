@@ -31,7 +31,7 @@ struct NotebookPane: View {
                                 catch { addError = bookNookErrorMessage(error) }
                             }
                         } label: {
-                            Label(adding ? "Adding…" : "Add note", systemImage: "plus")
+                            Label(adding ? "Adding…" : "Add note", systemImage: "plus").readingDeskTouchTarget()
                         }.disabled(adding).accessibilityIdentifier("notebook-add-note").buttonStyle(.borderless).font(.caption).foregroundStyle(nookInk.opacity(0.6))
                             .padding(.top, 12)
                     }.padding(.horizontal, 16).padding(.top, 16).padding(.bottom, 40)

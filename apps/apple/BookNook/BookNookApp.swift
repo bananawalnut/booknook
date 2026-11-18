@@ -178,6 +178,8 @@ struct RootView: View {
                                 Spacer(minLength: 0)
                             }.padding(8).background(model.selectedBookId == book.id ? nookAccent.opacity(0.09) : .clear, in: RoundedRectangle(cornerRadius: 8))
                         }.buttonStyle(.plain)
+                            .accessibilityAddTraits(model.selectedBookId == book.id ? .isSelected : [])
+                            .accessibilityIdentifier("sidebar-book-\(book.id)")
                     }
                 }
             }.disabled(!model.libraryReady)
@@ -254,7 +256,12 @@ struct RootView: View {
         #endif
     }
     func nav(_ id: String, _ title: String, _ icon: String) -> some View {
-        Button { model.section = id; showDetailInCompact() } label: { Label(title, systemImage: icon).frame(maxWidth: .infinity, alignment: .leading).padding(10).background(model.section == id ? nookAccent.opacity(0.12) : .clear, in: RoundedRectangle(cornerRadius: 8)) }.buttonStyle(.plain).disabled(!model.libraryReady)
+        Button { model.section = id; showDetailInCompact() } label: {
+            Label(title, systemImage: icon).frame(maxWidth: .infinity, alignment: .leading).padding(10)
+                .background(model.section == id ? nookAccent.opacity(0.12) : .clear, in: RoundedRectangle(cornerRadius: 8))
+        }.buttonStyle(.plain).disabled(!model.libraryReady)
+            .accessibilityAddTraits(model.section == id ? .isSelected : [])
+            .accessibilityIdentifier("sidebar-section-\(id)")
     }
     var libraryStartup: some View {
         VStack(alignment: .leading, spacing: 20) {

@@ -2,6 +2,10 @@
 
 This audit keeps the original native MVP and SDK scope intact. A passing source test is evidence for the behavior it exercises, not evidence of a production account, physical device, remote deployment, or hands-on interaction. The requested production release is not complete while essential integration and physical-device gates remain open. [Validation](VALIDATION.md) records the final check results; [delivery](DELIVERY.md) names the remaining gates.
 
+## Reading desk accessibility
+
+Apple’s iPadOS 18.6 Simulator audit found four undersized controls and a decorative symbol announced by its system name in public preview 1722. A separate app built from the candidate Swift sources passed the hit-region checks and exposed the selected sidebar section and reading book. The same test dragged the divider, moved the Margin to the right, and reopened the app with both preferences saved. Seven audit warnings flagged possible sidebar clipping at larger text sizes. Large-text, VoiceOver and physical iPad interaction remain open. [Audit evidence](ipados-reading-desk-accessibility-evidence.json)
+
 ## Encrypted transfer finalization
 
 In the current source, the native app chooses a folder before asking Desk to write the encrypted file. An open picker holds the selected Outbox entry or source device. Cancelling the picker leaves the queue alone. File coordination covers access to the selected location, and the final save goes through the existing pairing, Outbox and authority checks. Each successful retry receives its own filename. The Mac workflow linked against the published SDK 0.3.5 confirmed that disabling the pairing or removing the queued transfer writes no file. After re-enabling the pairing, the same approved batch wrote byte-identical retries without replacing a pre-existing file. The iPad source type-checked with the iOS 17 deployment target. The real iPadOS 18.6 Simulator Files picker passed cancellation, local folder selection and a byte-identical retry. Physical picker use and cloud or third-party file providers remain open. [Simulator evidence](native-sync-picker-simulator-evidence.json)

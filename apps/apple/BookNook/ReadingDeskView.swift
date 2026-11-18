@@ -7,6 +7,16 @@ import AppKit
 import UIKit
 #endif
 
+extension View {
+    func readingDeskTouchTarget() -> some View {
+        #if os(iOS)
+        frame(minWidth: 44, minHeight: 44).contentShape(Rectangle())
+        #else
+        self
+        #endif
+    }
+}
+
 struct ReadingDeskView: View {
     @EnvironmentObject var model: DeskModel
     @State private var changingPass = false
