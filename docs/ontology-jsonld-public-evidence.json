@@ -1,0 +1,184 @@
+{
+  "schema": "booknook.remote-jsonld-acceptance.v1",
+  "result": "PASS",
+  "observed_utc": "2026-11-18T03:01:28.447Z",
+  "processor": {
+    "package": "jsonld",
+    "version": "9.0.0",
+    "node": "26.8.2",
+    "rdf_canonicalization": "RDFC-1.0",
+    "package_lock_sha256": "373925921d2661c33976eb1836130de5362a8d2c15a8bc1f08016d751a03bb62",
+    "dependencies": {
+      "@digitalbazaar/http-client": {
+        "version": "4.4.0",
+        "integrity": "sha512-ODhCGmElUPmR3IR+KZmBNkRAFyjJ01rxvk2E+/qQ2h2EGPJH5k6bz3N24ympGc5+i4YCGk/ipIpmkwc0+iSmRg==",
+        "license": "BSD-3-Clause"
+      },
+      "canonicalize": {
+        "version": "2.1.0",
+        "integrity": "sha512-F705O3xrsUtgt98j7leetNhTWPe+5S72rlL5O4jA1pKqBVQ/dT1O1D6PFxmSXvc0SUOinWS57DKx0I3CHrXJHQ==",
+        "license": "Apache-2.0"
+      },
+      "jsonld": {
+        "version": "9.0.0",
+        "integrity": "sha512-pjMIdkXfC1T2wrX9B9i2uXhGdyCmgec3qgMht+TDj+S0qX3bjWMQUfL7NeqEhuRTi8G5ESzmL9uGlST7nzSEWg==",
+        "license": "BSD-3-Clause"
+      },
+      "ky": {
+        "version": "1.14.3",
+        "integrity": "sha512-9zy9lkjac+TR1c2tG+mkNSVlyOpInnWdSMiue4F+kq8TwJSgv6o8jhLRg8Ho6SnZ9wOYUq/yozts9qQCfk7bIw==",
+        "license": "MIT"
+      },
+      "lru-cache": {
+        "version": "6.0.0",
+        "integrity": "sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==",
+        "license": "ISC"
+      },
+      "rdf-canonize": {
+        "version": "5.0.0",
+        "integrity": "sha512-g8OUrgMXAR9ys/ZuJVfBr05sPPoMA7nHIVs8VEvg9QwM5W4GR2qSFEEHjsyHF1eWlBaf8Ev40WNjQFQ+nJTO3w==",
+        "license": "BSD-3-Clause"
+      },
+      "setimmediate": {
+        "version": "1.0.5",
+        "integrity": "sha512-MATJdZp8sLqDl/68LfQmbP8zKPLQNV6BIZoIgrscFDQ+RsvK/BxeDQOgyxKKoh0y/8h3BqVFnCqQ/gd+reiIXA==",
+        "license": "MIT"
+      },
+      "undici": {
+        "version": "6.29.1",
+        "integrity": "sha512-EvRlUt/QqAEvXdQeRMYUfwOQsfzpDztykrG2owGEE/rBOBoYv9uF39ZzsNDh4lTFHhTr2XOZjKkYgueD12ZmGA==",
+        "license": "MIT"
+      },
+      "yallist": {
+        "version": "4.0.0",
+        "integrity": "sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==",
+        "license": "ISC"
+      }
+    }
+  },
+  "booknook": {
+    "discovery": "https://bananawalnut.github.io/booknook/ontology/discovery.json",
+    "current": "0.4.0",
+    "exact_files": 91,
+    "jsonld_documents_loaded": 7,
+    "graph_nquads_sha256": {
+      "0.1.0": "d5db022e47b081431c956f42abb2fe77650531d5756b578aab7b952780121cde",
+      "0.2.0": "d1d1ead67d06f51be57977d2124212b4ec2653ecc5350de694ab0547323043ba",
+      "0.3.0": "452a9f0db2e12dc9dbc1ae4cd00fc4b08e991e65c2a104000be73aa39c30a891",
+      "0.4.0": "96f1b7d6ced13fb516846d0176f6ae5714c32a57198cce61d7e3ab7ddc74f4d5"
+    },
+    "current_imports": [
+      "https://zenith-research.ca/ontology/v0.6.0/ontology.jsonld",
+      "urn:booknook:ontology:release:0.3.0"
+    ],
+    "contexts": {
+      "v0.1.0/context.jsonld": {
+        "checked_iri_relationships": 4,
+        "statements": 11
+      },
+      "v0.2.0/context.jsonld": {
+        "checked_iri_relationships": 4,
+        "statements": 11
+      },
+      "v0.3.0/context.jsonld": {
+        "checked_iri_relationships": 4,
+        "statements": 11
+      }
+    },
+    "app_offline_comparison": {
+      "build": "2026111716",
+      "source_commit": "dde45d189370ecc6277b7aa9293e684e6c8ab37d",
+      "archive_verification_report_sha256": "28611280376c0b747032eb41fa772cb3f00258d3f0db3ee0c0b4f1adf01877b6",
+      "targets": [
+        "mac",
+        "ipad-sim",
+        "ipad-device"
+      ],
+      "files_equal_per_target": 91
+    }
+  },
+  "castalia": {
+    "ontology": "https://zenith-research.ca/ontology/v0.6.0/ontology.jsonld",
+    "manifest_sha256": "24c7f491bd009036032255436fa6cc5a2b9fd36e4d041ba55b58feaa5e8e2b4b",
+    "advertised_bundle_digest": "11d670a57b2052b4de00509559d081b524bf953c6da2544a25f33976857f8f4f",
+    "aggregate_recomputed": false,
+    "files": {
+      "README.md": {
+        "sha256": "e6aa80cfcf3e76035e89a527e8dc0075d03c5395a2ee2ba1b193c4b09f8b670d",
+        "bytes": 647
+      },
+      "arena-contract.json": {
+        "sha256": "2d225d78ffdb11859961a5c9f136d75df3f4711b00779b7043d988956b9939d8",
+        "bytes": 4380
+      },
+      "arena-runtime.md": {
+        "sha256": "6216a9b0392d3f0c12031dfe5cf4cacc86679d48c0bf3c48c355bef27770dbd8",
+        "bytes": 5885
+      },
+      "arenas.md": {
+        "sha256": "c34d825225afc3520f5b53b0d30a2acfbe2f51c01a070626d059ecfbf84043d9",
+        "bytes": 4629
+      },
+      "classes.md": {
+        "sha256": "57a79df367f531b93faa6d0923ecf57f1830a23c1afdcda9fee52a6917c3e980",
+        "bytes": 10334
+      },
+      "compatibility.md": {
+        "sha256": "7e98ab6801e090d5ad5d4b24a6fc91e37496593227f8cf439d4c016fd6b72b68",
+        "bytes": 885
+      },
+      "constraints.cypher": {
+        "sha256": "5e04fefc3528379fe77048070a4e459abf438e664f8e45deab3c90425f03ad27",
+        "bytes": 2347
+      },
+      "context.jsonld": {
+        "sha256": "bcb4c213b415cc4058361d7c6dbf28b90cb40a39d53ebefe506990c8dca91d6c",
+        "bytes": 1045
+      },
+      "invariants.md": {
+        "sha256": "22c5aadcab5902295d9ce5580148e497e1032b1ec3998029bee5c409d777a82e",
+        "bytes": 4904
+      },
+      "ontology.jsonld": {
+        "sha256": "3dd65ac8bc0fc9304b10bfd7e630e5a04dd1ba7d3b23c657beda20c6757a512c",
+        "bytes": 11008
+      },
+      "operations.json": {
+        "sha256": "98043897e5131dd2f1c2bdb85c883cbd3e1098d010dc60c21fd082f18c4d2808",
+        "bytes": 7724
+      },
+      "predicates.md": {
+        "sha256": "79b9a73496ab353fde833c458d1608cc846b013794e9468236521c5076b03568",
+        "bytes": 4796
+      },
+      "readiness.md": {
+        "sha256": "922235c94f09e2b5c13576678feaa808451043b55589e364e8c45b70a3bc6198",
+        "bytes": 2902
+      },
+      "repository-contract.json": {
+        "sha256": "be546b86a92ebb045252dce4c65cd02ead0ca2dd5fe7d371def9f752ca3c468d",
+        "bytes": 1359
+      },
+      "rolodex.md": {
+        "sha256": "996e8d30c4b96e11f3cc3f74079f32f84b6ff1a121cd363e550b424264ea4eb3",
+        "bytes": 4105
+      },
+      "taxonomy.md": {
+        "sha256": "b9125bac71a748d6a1ab39f426f34506cb655304856427aa6772a50adce523f1",
+        "bytes": 2163
+      }
+    },
+    "file_count": 16
+  },
+  "scope": "Actual HTTPS node document loader and explicitly resolved import catalog. Role equivalence and namespace relationships were checked as RDF statements. The advertised Zenith bundle digest and each individual file hash were checked.",
+  "verifier": {
+    "path": "tests/ontology-jsonld.cjs",
+    "sha256": "b9dafb4a51e9f5c40207c4316ffc38c46915506a90d8ebb429196ce0626700f9"
+  },
+  "acceptance_boundaries": {
+    "http": "Exact public response hashes, verified HTTPS, JSON and JSON-LD media types, and Book Nook CORS headers.",
+    "browser": "Browser execution remains unverified. HTTP response headers were observed.",
+    "upstream_bundle": "The advertised bundle digest matches the Book Nook pin. Each listed file hash was independently verified. The aggregate file-list digest was not recomputed.",
+    "identity": "RDF checks the equivalence statement. Book Nook separately normalizes Actor in typed directory input. Operational permission requires its own Castalia proof."
+  }
+}

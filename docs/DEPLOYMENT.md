@@ -73,6 +73,20 @@ GitHub Pages now serves the selected [public discovery endpoint](https://bananaw
 
 The existing [commit-pinned raw download mirror](https://raw.githubusercontent.com/bananawalnut/booknook/995b36bd380c6d1fb1401599c6754dc13fbc082d/ontology/discovery.json) was independently fetched before Pages publication on November 14: all 80 files matched offline source byte for byte. It serves `text/plain; charset=utf-8` with CORS `*`; that earlier receipt qualifies a byte-download mirror, not a standard remote JSON-LD loader. Pages has its separate public qualification above. Issued ontology bytes and relative paths remain unchanged.
 
+### Remote JSON-LD 1.1
+
+The current 0.4.0 discovery serves 91 files that match the repository and all three build 1716 Apple archive inventories. The standard HTTPS document loader in jsonld.js 9.0.0 produced the same canonical RDF graphs from the public and offline Book Nook files. The check resolved the 0.3.0 release URN through discovery and verified the published Zenith v0.6.0 graph and its remote context. All 16 upstream files matched their hashes in the v0.6.0 manifest, whose advertised bundle digest matches the Book Nook pin. [Verification evidence](ontology-jsonld-public-evidence.json) · [JSON-LD 1.1 processing](https://www.w3.org/TR/json-ld11-api/)
+
+The Book Nook contexts preserve the upstream IRIs for `Entity`, `Person`, `Agent`, `Organization`, and `Actor`. Zenith declares `Actor` equivalent to `Entity`. Book Nook’s typed directory input normalizes the alias separately, and a literary `Character` remains a `LiteraryEntity`. RDF attribution conveys descriptive identity. Castalia permissions require verified approval. [Castalia mapping](../ontology/v0.1.0/castalia-mapping.json)
+
+Run the public check from the repository root in a separate temporary dependency directory. The verifier uses public HTTPS and needs Node and Python 3.
+
+```sh
+ontology_check_dir="$(mktemp -d)"
+npm install --prefix "$ontology_check_dir" --ignore-scripts --no-audit --no-fund --save-exact jsonld@9.0.0
+node tests/ontology-jsonld.cjs "$ontology_check_dir/node_modules/jsonld"
+```
+
 ## Optional library companion
 
 `services/library-companion/booknook_companion.py` runs a paired provider host using the Python standard library. Its [README](../services/library-companion/README.md) documents startup, native pairing, token revocation, local Kindle metadata import and the bounded provider-executable protocol. A selected current Kindle-for-Mac SQLite snapshot can be normalized locally using the companion’s export command, then imported as metadata-only JSON. Raw database upload is accepted only on a loopback-bound companion from a loopback peer; Book Nook additionally requires a literal loopback URL and explicitly disables proxy routing for that request. The source is a cache snapshot, not proof of cloud login, ownership, position freshness or complete cloud coverage. Loopback is the default. iPad access to another machine requires properly trusted HTTPS/TLS and explicit pairing; do not expose a plaintext LAN credential endpoint. Browser origins are rejected rather than granted broad access.
