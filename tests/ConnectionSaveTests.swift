@@ -116,12 +116,41 @@ import Foundation
         let selectedBytes = try await CompanionKindleImport.readFile(disguisedSnapshot)
         precondition(selectedBytes == sqlite)
         fails { _ = try CompanionKindleImport.validate(selectedBytes, endpoint: remote) }
-        let largeFile = directory.appendingPathComponent("oversized.sqlite")
-        _ = FileManager.default.createFile(atPath: largeFile.path, contents: nil)
+        let selectedLink = directory.appendingPathComponent("catalog-link.json")
+        try FileManager.default.createSymbolicLink(at: selectedLink, withDestinationURL: disguisedSnapshot)
+        for invalid in [selectedLink, directory] {
+            do {
+                _ = try await CompanionKindleImport.readFile(invalid)
+                preconditionFailure("A link or directory was accepted as a regular catalog file")
+            } catch let error as ConnectionInputError {
+                precondition(error.localizedDescription == "Choose a regular catalog file no larger than 32 MiB.")
+            }
+        }
+        do {
+            _ = try await CompanionKindleImport.readFile(directory.appendingPathComponent("missing.json"))
+            preconditionFailure("A missing catalog was read")
+        } catch let error as CocoaError {
+            precondition(error.code == .fileReadNoSuchFile)
+        }
+        let largeFile = directory.appendingPathComponent("large.sqlite")
+        precondition(FileManager.default.createFile(atPath: largeFile.path, contents: nil))
+        let emptyFile = try await CompanionKindleImport.readFile(largeFile)
+        precondition(emptyFile.isEmpty, "File-content validation must keep ownership of empty catalog refusal")
         let handle = try FileHandle(forWritingTo: largeFile)
-        try handle.truncate(atOffset: UInt64(CompanionKindleImport.maximumBytes + 1)); try handle.close()
-        do { _ = try await CompanionKindleImport.readFile(largeFile); preconditionFailure("Oversized file accepted") } catch { }
-        do { _ = try await CompanionKindleImport.readFile(directory); preconditionFailure("Directory accepted") } catch { }
+        defer { try? handle.close() }
+        let limit = CompanionKindleImport.maximumBytes
+        try handle.truncate(atOffset: UInt64(limit))
+        try handle.seek(toOffset: UInt64(limit - sqlite.count))
+        try handle.write(contentsOf: sqlite)
+        let exactBytes = try await CompanionKindleImport.readFile(largeFile)
+        precondition(exactBytes.count == limit && exactBytes.suffix(sqlite.count) == sqlite)
+        try handle.truncate(atOffset: UInt64(limit + 1))
+        do {
+            _ = try await CompanionKindleImport.readFile(largeFile)
+            preconditionFailure("Oversized catalog file accepted")
+        } catch let error as ConnectionInputError {
+            precondition(error.localizedDescription == "Choose a regular catalog file no larger than 32 MiB.")
+        }
         let gate = AsyncStream<Void>.makeStream()
         let cancelledRead = Task {
             for await _ in gate.stream { }

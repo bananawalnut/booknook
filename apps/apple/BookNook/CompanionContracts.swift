@@ -50,33 +50,11 @@ enum CompanionKindleImport {
     /// Keep the security-scoped grant alive through bounded background I/O.
     static func readFile(_ url: URL) async throws -> Data {
         try Task.checkCancellation()
-        let reader = Task.detached(priority: .userInitiated) {
-            guard url.isFileURL else { throw ConnectionInputError.message("Choose a local catalog file.") }
-            let access = url.startAccessingSecurityScopedResource()
-            defer { if access { url.stopAccessingSecurityScopedResource() } }
-            let values = try url.resourceValues(forKeys: [.isRegularFileKey, .fileSizeKey])
-            guard values.isRegularFile == true, (values.fileSize ?? 0) <= maximumBytes else {
-                throw ConnectionInputError.message("Choose a regular catalog file no larger than 32 MiB.")
-            }
-            let handle = try FileHandle(forReadingFrom: url)
-            defer { try? handle.close() }
-            var bytes = Data()
-            while true {
-                try Task.checkCancellation()
-                let chunk = try handle.read(upToCount: min(1_048_576, maximumBytes + 1 - bytes.count)) ?? Data()
-                if chunk.isEmpty { break }
-                bytes.append(chunk)
-                guard bytes.count <= maximumBytes else { throw ConnectionInputError.message("Catalog exceeds 32 MiB.") }
-            }
-            return bytes
-        }
-        return try await withTaskCancellationHandler {
-            let bytes = try await reader.value
-            try Task.checkCancellation()
-            return bytes
-        } onCancel: {
-            reader.cancel()
-        }
+        guard url.isFileURL else { throw ConnectionInputError.message("Choose a local catalog file.") }
+        return try await readSelectedRegularFile(
+            url, maximumBytes: maximumBytes,
+            invalidFile: ConnectionInputError.message("Choose a regular catalog file no larger than 32 MiB."),
+            exceedsLimit: ConnectionInputError.message("Catalog exceeds 32 MiB."))
     }
 }
 

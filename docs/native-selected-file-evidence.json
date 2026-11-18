@@ -1,0 +1,44 @@
+{
+  "schema": "booknook.native-selected-file-evidence.v1",
+  "result": "PASS_MAC_SOURCE_WORKFLOWS",
+  "base_commit": "aa81d784928f8b77cb745d5f2a79ae5a7f11f7c2",
+  "candidate_app_build": "2026111722",
+  "native_source_sha256": {
+    "SelectedRegularFile.swift": "e3cd3a2cb1c2ac7bb99293598b0d98e427737d3996a16da760141166b45f4600",
+    "AppleProviderAdapters.swift": "88db754a83fccc0a76b490bc48a025752189a4e8233f6ab09f059be592f7479e",
+    "CompanionContracts.swift": "164067319a7248e6e232f5f1246674b4434d072ed88d11d26a0def4231ad32a1",
+    "PublicationImport.swift": "71e33c030040aa4b4dd4160dd5b0550b3ab050996fc501a1aacdfdeee465cca8"
+  },
+  "bounded_catalog_checks_test_sha256": "9159dfa3a66906a5d5247995995beb437a579e54b10298a896c813d7fc16c9b0",
+  "macos_linked_workflows": {
+    "runtime": "26.4.1",
+    "target": "arm64-apple-macos14",
+    "input_map_sha256": "086b3f14f24a5247c40d51b36ba3823cf819ff946c056ea125646b564779999c",
+    "swift_sdk_archive_sha256": "46b4441b3f70b488e27a9bbd4fdf03c53e398737da8bc3f3382c94406e598c84",
+    "sample_pdf_sha256": "c35bb0bbfefde316664c3723153c32bdb764543338249fb9660ac707fbfefa07",
+    "checks": {
+      "companion_kindle": true,
+      "publication_review": true,
+      "local_book_and_catalog": true
+    },
+    "receipt_sha256": "6834609efeff2488674279b4b839c1dda6c87085c6d6bd1ab3d24b16a3af0760"
+  },
+  "recovery_tests": {
+    "result": "PASS",
+    "catalog_cases": [
+      "ordinary file",
+      "trailing symbolic link",
+      "directory",
+      "missing file",
+      "empty file reaches format validation",
+      "exactly 32 MiB",
+      "over limit",
+      "pre-cancelled read"
+    ]
+  },
+  "remaining": [
+    "Candidate iPadOS Files picker runtime",
+    "Physical iPad and cloud file provider acceptance"
+  ],
+  "scope": "Actual Mac import workflows with a synthetic desk and the released Swift SDK. Mac runtime was 26.4.1. Apple deployment targets and account qualification retain separate evidence."
+}

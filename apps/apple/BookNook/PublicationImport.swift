@@ -75,29 +75,12 @@ struct PublicationImportWire: Decodable {
 /// this is a raw feed section. A Wallet/account/envelope is never unwrapped here.
 func readPublicationImport(_ url: URL) async throws -> Data {
     try Task.checkCancellation()
-    let task = Task.detached(priority: .utility) {
-        try Task.checkCancellation()
-        guard url.isFileURL else { throw PublicationFailure.message("Choose a local feed settings file.") }
-        let accessed = url.startAccessingSecurityScopedResource()
-        defer { if accessed { url.stopAccessingSecurityScopedResource() } }
-        let values = try url.resourceValues(forKeys: [.isRegularFileKey, .fileSizeKey])
-        guard values.isRegularFile == true, let size = values.fileSize, size <= 262_144 else {
-            throw PublicationFailure.message("Choose a regular feed settings file no larger than 256 KiB.")
-        }
-        try Task.checkCancellation()
-        let file = try FileHandle(forReadingFrom: url); defer { try? file.close() }
-        var bytes = Data()
-        while bytes.count <= 262_144 {
-            let chunk = try file.read(upToCount: 262_145 - bytes.count) ?? Data()
-            if chunk.isEmpty { break }
-            bytes.append(chunk)
-            try Task.checkCancellation()
-        }
-        guard !bytes.isEmpty, bytes.count <= 262_144 else {
-            throw PublicationFailure.message("Choose a raw feed settings JSON file no larger than 256 KiB.")
-        }
-        try Task.checkCancellation()
-        return bytes
-    }
-    return try await withTaskCancellationHandler { try await task.value } onCancel: { task.cancel() }
+    guard url.isFileURL else { throw PublicationFailure.message("Choose a local feed settings file.") }
+    let invalidJSONFile = PublicationFailure.message("Choose a raw feed settings JSON file no larger than 256 KiB.")
+    let bytes = try await readSelectedRegularFile(
+        url, maximumBytes: 262_144, priority: .utility,
+        invalidFile: PublicationFailure.message("Choose a regular feed settings file no larger than 256 KiB."),
+        exceedsLimit: invalidJSONFile)
+    guard !bytes.isEmpty else { throw invalidJSONFile }
+    return bytes
 }

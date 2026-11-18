@@ -66,31 +66,12 @@ enum AppleFileProviders {
         ]))
     }
     private static func read(path: String, maximum: Int) async throws -> Data {
-        let reader = Task.detached(priority: .userInitiated) {
-            guard path.hasPrefix("/") else { throw BookNookServiceError.message("Choose a local file.") }
-            let url = URL(fileURLWithPath: path)
-            let access = url.startAccessingSecurityScopedResource()
-            defer { if access { url.stopAccessingSecurityScopedResource() } }
-            let attributes = try url.resourceValues(forKeys: [.isRegularFileKey, .fileSizeKey])
-            guard attributes.isRegularFile == true, (attributes.fileSize ?? 0) <= maximum else {
-                throw BookNookServiceError.message("The selected file is not a regular file within the supported size limit.")
-            }
-            let handle = try FileHandle(forReadingFrom: url)
-            defer { try? handle.close() }
-            var bytes = Data()
-            while true {
-                try Task.checkCancellation()
-                let chunk = try handle.read(upToCount: min(1_048_576, maximum + 1 - bytes.count)) ?? Data()
-                if chunk.isEmpty { return bytes }
-                bytes.append(chunk)
-                guard bytes.count <= maximum else { throw BookNookServiceError.message("The selected file exceeds the supported size limit.") }
-            }
-        }
-        return try await withTaskCancellationHandler {
-            let bytes = try await reader.value
-            try Task.checkCancellation()
-            return bytes
-        } onCancel: { reader.cancel() }
+        try Task.checkCancellation()
+        guard path.hasPrefix("/") else { throw BookNookServiceError.message("Choose a local file.") }
+        return try await readSelectedRegularFile(
+            URL(fileURLWithPath: path), maximumBytes: maximum,
+            invalidFile: BookNookServiceError.message("The selected file is not a regular file within the supported size limit."),
+            exceedsLimit: BookNookServiceError.message("The selected file exceeds the supported size limit."))
     }
 }
 
