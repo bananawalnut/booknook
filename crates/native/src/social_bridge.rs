@@ -16,6 +16,7 @@ use booknook_core::{
 };
 use nostr_sdk::prelude::*;
 use rusqlite::{Connection, OptionalExtension, params};
+use serde::Deserialize;
 use serde_json::json;
 use std::collections::BTreeMap;
 
@@ -92,6 +93,71 @@ fn save(c: &mut Connection, previous: u64, s: &SocialState) -> Result<()> {
     tx.commit()?;
     Ok(())
 }
+// Native review commands layer CAS over the stored event. Portable commands and the
+// signed event remain compatible with standalone SDK hosts.
+#[derive(Deserialize)]
+#[serde(untagged)]
+enum NativeLocalCommand {
+    Portable(LocalSocialCommand),
+    Review(NativeReviewCommand),
+}
+#[derive(Deserialize)]
+#[serde(tag = "op", rename_all = "snake_case", deny_unknown_fields)]
+enum NativeReviewCommand {
+    ReplaceReviewedPost {
+        expected: Box<SocialEvent>,
+        event: Box<SocialEvent>,
+    },
+}
+#[derive(Deserialize)]
+#[serde(untagged)]
+enum NativeApprovalInput {
+    Event(Box<SocialEvent>),
+    Draft(NativeDraftApproval),
+}
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct NativeDraftApproval {
+    reviewed_draft: Box<SocialEvent>,
+}
+
+fn require_reviewed_draft(state: &SocialState, event: &SocialEvent) -> Result<()> {
+    if state.drafts.get(&event.id) != Some(event) {
+        return Err(booknook_core::Error::Conflict(
+            "The saved draft changed. Review the current entry in Outbox.".into(),
+        )
+        .into());
+    }
+    Ok(())
+}
+
+fn replace_reviewed_post(
+    state: &mut SocialState,
+    expected: &SocialEvent,
+    event: Box<SocialEvent>,
+) -> Result<()> {
+    require_reviewed_draft(state, expected)?;
+    let same_destination = matches!(
+        (&expected.action, &event.action),
+        (
+            SocialAction::Publish { group_id: previous, post: previous_post },
+            SocialAction::Publish { group_id: current, post: current_post }
+        ) if previous == current && previous_post.reply_to.is_none() && current_post.reply_to.is_none()
+    );
+    if !same_destination
+        || expected.id != event.id
+        || expected.actor != event.actor
+        || expected.delivery != event.delivery
+    {
+        return Err(booknook_core::Error::Conflict(
+            "The saved draft belongs to a different reader or audience.".into(),
+        )
+        .into());
+    }
+    social::local(state, LocalSocialCommand::SaveDraft { event })?;
+    Ok(())
+}
+
 fn keys(secret: &[u8]) -> Result<Keys> {
     let secret = SecretKey::from_slice(secret)
         .map_err(|_| booknook_core::Error::Invalid("Invalid Nostr custody key".into()))?;
@@ -282,11 +348,26 @@ impl Desk {
         )?)?)
     }
     pub fn social_local(&self, command_json: String) -> Result<()> {
-        let command: LocalSocialCommand = booknook_core::strict_parse(command_json.as_bytes())?;
+        let command: NativeLocalCommand = booknook_core::strict_parse(command_json.as_bytes())?;
         let mut store = self.lock()?;
         let mut state = load(&store.connection)?;
         let revision = state.revision;
-        social::local(&mut state, command)?;
+        match command {
+            NativeLocalCommand::Portable(command) => social::local(&mut state, command)?,
+            NativeLocalCommand::Review(NativeReviewCommand::ReplaceReviewedPost {
+                expected,
+                event,
+            }) => {
+                let policy = Self::policy_on(&store.connection, social::ACTION, None)?;
+                if policy.actor != event.actor {
+                    return Err(booknook_core::Error::Conflict(
+                        "The saved draft belongs to a different reader.".into(),
+                    )
+                    .into());
+                }
+                replace_reviewed_post(&mut state, &expected, event)?;
+            }
+        }
         save(&mut store.connection, revision, &state)
     }
     pub fn social_approve(
@@ -295,11 +376,17 @@ impl Desk {
         request_json: String,
         presentation_json: String,
     ) -> Result<()> {
-        let event: SocialEvent = booknook_core::strict_parse(event_json.as_bytes())?;
+        let (event, tracked) = match booknook_core::strict_parse(event_json.as_bytes())? {
+            NativeApprovalInput::Event(event) => (event, false),
+            NativeApprovalInput::Draft(draft) => (draft.reviewed_draft, true),
+        };
         let original = {
             let store = self.lock()?;
             load(&store.connection)?
         };
+        if tracked {
+            require_reviewed_draft(&original, &event)?;
+        }
         self.audit_social(&original, now()?)?;
         let policy = self.policy(social::ACTION, None)?;
         let mut store = self.lock()?;
@@ -313,7 +400,7 @@ impl Desk {
         let revision = state.revision;
         social::approve(
             &mut state,
-            event,
+            *event,
             request_json,
             presentation_json,
             &policy,
@@ -1244,6 +1331,106 @@ mod tests {
             "/tests/fixtures/social_receipts.rs"
         ));
     }
+    #[test]
+    fn retry_replaces_one_durable_post_and_invalidates_old_approval() {
+        use booknook_core::settings::{CastaliaSettings, ConnectionSettings};
+        let directory =
+            std::env::temp_dir().join(format!("booknook-draft-cas-{}", booknook_core::new_id()));
+        let path = directory.to_string_lossy().into_owned();
+        let desk = Desk::new(path.clone()).unwrap();
+        let (_, _, policy) = synthetic::receipt(b"synthetic configuration", ACTION, 0, 100, 2);
+        let pin = &policy.pins[0];
+        let settings = ConnectionSettings {
+            castalia: Some(CastaliaSettings {
+                issuer: pin.issuer.clone(),
+                key_id: pin.key_id.clone(),
+                issuer_public_key: pin.public_key.clone(),
+                audience: pin.audience.clone(),
+                terminal_caller: policy.expected_caller.id.clone(),
+                holder_public_key: policy.actor.clone(),
+                policy_digest: policy.policy_digest.clone(),
+                credential_endpoint: "http://127.0.0.1:65500/credential".into(),
+            }),
+            ..Default::default()
+        };
+        desk.save_connection_settings(serde_json::to_string(&settings).unwrap())
+            .unwrap();
+        let mut original = social::prepare(
+            &SocialState::default(),
+            &policy.actor,
+            SocialAction::Publish {
+                group_id: None,
+                post: Post {
+                    kind: PostKind::Note,
+                    book: None,
+                    body: "Before review".into(),
+                    stars: None,
+                    reading_status: None,
+                    spoiler: false,
+                    reply_to: None,
+                },
+            },
+            now().unwrap(),
+        )
+        .unwrap();
+        original.id = "one-durable-post".into();
+        desk.social_local(json!({"op":"save_draft", "event": original}).to_string())
+            .unwrap();
+        let old_snapshot = load(&desk.lock().unwrap().connection).unwrap();
+        let mut edited = original.clone();
+        let SocialAction::Publish { post, .. } = &mut edited.action else {
+            unreachable!()
+        };
+        post.body = "After review: café".into();
+
+        let update = |expected: &SocialEvent, event: &SocialEvent| {
+            json!({"op":"replace_reviewed_post", "expected": expected, "event": event}).to_string()
+        };
+        let mut wrong_audience = edited.clone();
+        wrong_audience.delivery = Delivery::Direct {
+            recipients: [policy.actor.clone()].into(),
+        };
+        assert!(
+            desk.social_local(update(&original, &wrong_audience))
+                .is_err()
+        );
+        let mut wrong_reader = edited.clone();
+        wrong_reader.actor = synthetic::actor(3);
+        assert!(desk.social_local(update(&original, &wrong_reader)).is_err());
+        desk.social_local(update(&original, &edited)).unwrap();
+        let (request, presentation, _) = synthetic::proof(&original, 2);
+        assert!(
+            desk.social_approve(
+                json!({"reviewed_draft": original}).to_string(),
+                request,
+                presentation
+            )
+            .is_err()
+        );
+        assert!(desk.social_local(update(&original, &edited)).is_err());
+        drop(desk);
+
+        let desk = Desk::new(path).unwrap();
+        let state = load(&desk.lock().unwrap().connection).unwrap();
+        assert_eq!(state.revision, old_snapshot.revision + 1);
+        assert_eq!(state.drafts.len(), 1);
+        assert_eq!(state.drafts.get(&original.id), Some(&edited));
+        assert!(state.outbox.is_empty());
+        let (request, presentation, _) = synthetic::proof(&edited, 2);
+        desk.social_approve(
+            json!({"reviewed_draft": edited}).to_string(),
+            request,
+            presentation,
+        )
+        .unwrap();
+        let published = load(&desk.lock().unwrap().connection).unwrap();
+        assert!(published.drafts.is_empty());
+        assert_eq!(published.outbox.len(), 1);
+        assert_eq!(published.outbox[&original.id].publication.event, edited);
+        drop(desk);
+        std::fs::remove_dir_all(directory).unwrap();
+    }
+
     #[test]
     fn reopened_desk_audits_same_second_creation_before_invitation() {
         use booknook_core::settings::{CastaliaSettings, ConnectionSettings};

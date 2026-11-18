@@ -3,7 +3,20 @@ import SwiftUI
 
 struct SocialBook: Codable, Equatable, Identifiable { let id: String; let title: String; let author: String }
 struct SocialPost: Codable { let kind: String; let book: SocialBook?; let body: String; let stars: Int?; let readingStatus: String?; let spoiler: Bool; let replyTo: String? }
-struct SocialEventModel: Decodable, Identifiable { let id: String; let actor: String; let at: UInt64; let resourceVersion: UInt64; let action: JSONValue; let delivery: JSONValue }
+struct SocialEventModel: Decodable, Identifiable {
+    let schema: String
+    let id: String
+    let actor: String
+    let at: UInt64
+    let resourceVersion: UInt64
+    let action: JSONValue
+    let delivery: JSONValue
+
+    var rawObject: [String: Any] {
+        ["schema": schema, "id": id, "actor": actor, "at": at, "resource_version": resourceVersion,
+         "action": action.any, "delivery": delivery.any]
+    }
+}
 struct SocialPublication: Decodable { let event: SocialEventModel; let approvedAt: UInt64 }
 struct SocialOutbox: Decodable { let publication: SocialPublication; let acknowledged: [String: [String]] }
 struct SocialList: Codable, Identifiable { let id: String; let owner: String; let name: String; let description: String; let books: [SocialBook]; let version: UInt64; let deleted: Bool }
@@ -154,16 +167,42 @@ struct SocialPostDraft: Equatable {
 }
 
 struct SocialPostDrafts {
-    private var drafts: [SocialPostDestination: SocialPostDraft] = [:]
-
-    subscript(destination: SocialPostDestination) -> SocialPostDraft {
-        get { drafts[destination] ?? SocialPostDraft() }
-        set { drafts[destination] = newValue }
+    struct Entry {
+        let id = UUID()
+        var content: SocialPostDraft
+        var savedReview: SavedSocialDraft?
     }
 
+    private var drafts: [SocialPostDestination: Entry] = [:]
+
+    subscript(destination: SocialPostDestination) -> SocialPostDraft {
+        get { drafts[destination]?.content ?? SocialPostDraft() }
+        set {
+            if drafts[destination] == nil { start(newValue, for: destination) }
+            else { drafts[destination]?.content = newValue }
+        }
+    }
+
+    mutating func start(_ draft: SocialPostDraft, for destination: SocialPostDestination) {
+        drafts[destination] = Entry(content: draft)
+    }
+
+    func entry(for destination: SocialPostDestination) -> Entry? { drafts[destination] }
+
     mutating func finish(_ outcome: SocialPublicationOutcome, for destination: SocialPostDestination,
-                         submitted: SocialPostDraft) {
-        if outcome == .approved, drafts[destination] == submitted { drafts.removeValue(forKey: destination) }
+                         submitted: Entry) {
+        guard let current = drafts[destination], current.id == submitted.id else { return }
+        switch outcome {
+        case .notSaved:
+            break
+        case .savedDraft(let saved):
+            drafts[destination]?.savedReview = saved
+        case .reviewChanged:
+            drafts[destination]?.savedReview = nil
+        case .approved:
+            if current.content == submitted.content { drafts.removeValue(forKey: destination) }
+            else { drafts[destination]?.savedReview = nil }
+        }
     }
 }
 
@@ -205,9 +244,15 @@ struct SocialGroupReplyDraft {
     }
 }
 
+struct SavedSocialDraft: Equatable {
+    let id: String
+    let eventJSON: String
+}
+
 enum SocialPublicationOutcome: Equatable {
     case notSaved
-    case savedDraft(String)
+    case savedDraft(SavedSocialDraft)
+    case reviewChanged
     case approved
 }
 
@@ -225,7 +270,10 @@ func socialAudience(isPublic: Bool, recipientCount: Int? = nil) -> String {
 extension DeskRepository {
     func socialSnapshot(reveal: Bool) throws -> SocialSnapshot { try socialDecode(SocialSnapshot.self, required().socialSnapshot(revealSpoilers: reveal)) }
     func socialPrepare(_ data: Data) throws -> String { try required().socialPrepare(actionJson: String(decoding: data, as: UTF8.self)) }
-    func socialApprove(event: String, receipt: AuthorizationReceipt) throws { try required().socialApprove(eventJson: event, requestJson: receipt.requestJSON, presentationJson: receipt.presentationJSON) }
+    func socialApprove(event: String, receipt: AuthorizationReceipt, requireSavedDraft: Bool = false) throws {
+        let approval = requireSavedDraft ? try socialJSON(["reviewed_draft": JSONSerialization.jsonObject(with: Data(event.utf8))]) : event
+        try required().socialApprove(eventJson: approval, requestJson: receipt.requestJSON, presentationJson: receipt.presentationJSON)
+    }
     func socialLocal(_ data: Data) throws { try required().socialLocal(commandJson: String(decoding: data, as: UTF8.self)) }
     func socialOwnedID() throws -> String { try required().socialNewOwnedId() }
     func socialGenerateKey() throws -> Data { try required().socialGenerateTransportSecret() }
@@ -269,7 +317,7 @@ extension DeskRepository {
     }
     @discardableResult
     func publish(_ action: [String: Any], title: String, _ model: DeskModel, replacingDraftID: String? = nil,
-                 listReview: SocialListReview? = nil) async -> SocialPublicationOutcome {
+                 listReview: SocialListReview? = nil, reviewingPost: SavedSocialDraft? = nil) async -> SocialPublicationOutcome {
         guard !busy else { return .notSaved }
         busy = true; error = nil; defer { busy = false }
         var outcome = SocialPublicationOutcome.notSaved
@@ -289,13 +337,31 @@ extension DeskRepository {
                 let current = try await model.repository.socialSnapshot(reveal: revealSpoilers)
                 guard listReview.matches(current) else { throw listConflict() }
             }
-            let eventJSON = try await model.repository.socialPrepare(JSONSerialization.data(withJSONObject: action))
-            let event = try socialDecode(SocialEventModel.self, eventJSON)
-            // Preparation stamps the latest native version; it must not rebase a draft.
+            var eventJSON = try await model.repository.socialPrepare(JSONSerialization.data(withJSONObject: action))
+            var event = try socialDecode(SocialEventModel.self, eventJSON)
+            // Preparation stamps the latest native version; it must not rebase a list draft.
             if let listReview, !listReview.matches(event) { throw listConflict() }
             let rawEvent = try JSONSerialization.jsonObject(with: Data(eventJSON.utf8))
-            try await model.repository.socialLocal(JSONSerialization.data(withJSONObject: ["op": "save_draft", "event": rawEvent]))
-            outcome = .savedDraft(event.id)
+            var command: [String: Any] = ["op": "save_draft", "event": rawEvent]
+            if let reviewingPost {
+                let previous = try socialDecode(SocialEventModel.self, reviewingPost.eventJSON)
+                let current = try await model.repository.socialSnapshot(reveal: revealSpoilers)
+                let previousJSON = try socialJSON(previous.rawObject)
+                guard let saved = current.state.drafts[reviewingPost.id], previous.id == reviewingPost.id,
+                      try socialJSON(saved.rawObject) == previousJSON,
+                      previous.actor == current.actor, current.actor == event.actor,
+                      try socialJSON(["delivery": previous.delivery.any]) == socialJSON(["delivery": event.delivery.any]) else {
+                    outcome = .reviewChanged
+                    throw AuthorizationError.message("The saved draft or its audience has changed. Your editor text is intact. Review again to save a new draft.")
+                }
+                var replacement = event.rawObject
+                replacement["id"] = reviewingPost.id
+                eventJSON = try socialJSON(replacement)
+                event = try socialDecode(SocialEventModel.self, eventJSON)
+                command = ["op": "replace_reviewed_post", "expected": previous.rawObject, "event": replacement]
+            }
+            try await model.repository.socialLocal(JSONSerialization.data(withJSONObject: command))
+            outcome = .savedDraft(SavedSocialDraft(id: event.id, eventJSON: eventJSON))
             // Keep the original recoverable until its replacement is durably saved.
             // A preparation/save failure retains the original; consent failure retains the new draft.
             if let replacingDraftID, replacingDraftID != event.id {
@@ -323,7 +389,7 @@ extension DeskRepository {
             var statements = [audience, "Only this reviewed record leaves Book Nook. Your surrounding notebook and private history stay private."]
             statements += socialDisclosure(action: preparedAction, event: event, state: snapshot?.state)
             let receipt = try await model.authorization.authorize(payload: Data(eventJSON.utf8), action: "social.execute", resourceVersion: event.resourceVersion, disclosure: AuthorizationDisclosure(title: title, statements: statements))
-            try await model.repository.socialApprove(event: eventJSON, receipt: receipt)
+            try await model.repository.socialApprove(event: eventJSON, receipt: receipt, requireSavedDraft: true)
             outcome = .approved
             status = "Approved and waiting in your outbox. Choose Send & refresh when you are ready to deliver it."
             await reload(model)
@@ -336,6 +402,17 @@ extension DeskRepository {
     }
     func retryDraft(_ event: SocialEventModel, _ model: DeskModel) async {
         guard let action = event.action.object else { return }
+        if action["op"] as? String == "publish", let post = action["post"] as? [String: Any],
+           !(post["reply_to"] is String) {
+            do {
+                let saved = SavedSocialDraft(id: event.id, eventJSON: try socialJSON(event.rawObject))
+                let outcome = await publish(action, title: "Publish reviewed record", model, reviewingPost: saved)
+                if outcome == .reviewChanged {
+                    error = "The saved post or its audience changed. Check the current entry in Outbox. If the audience changed, start a new review in its reading group."
+                }
+            } catch { self.error = bookNookErrorMessage(error) }
+            return
+        }
         await publish(action, title: "Publish reviewed record", model, replacingDraftID: event.id,
                       listReview: SocialListReview(retrying: event))
     }
