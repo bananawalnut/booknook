@@ -1,0 +1,103 @@
+{
+  "schema": "booknook.sdk-public-preview-evidence.v1",
+  "status": "PASS_PUBLIC_ARCHIVES",
+  "sdk_version": "0.3.5",
+  "release": {
+    "release_id": 449549756,
+    "tag": "v0.3.5-sdk-preview.20261117",
+    "url": "https://github.com/bananawalnut/booknook/releases/tag/v0.3.5-sdk-preview.20261117",
+    "published_at": "2026-11-18T05:11:02Z",
+    "source_commit": "95c9bf5bfd430192ae9d5d1779e9e58afa85086c"
+  },
+  "hosted": {
+    "sdk_workflow_run": 44239959060,
+    "contract_workflow_run": 44239955766,
+    "portable_artifact": 14398274369,
+    "apple_artifact": 14399179642
+  },
+  "independent_consumers": {
+    "rust_and_node_wasm": {
+      "result": "PASS",
+      "receipt_sha256": "dcc525e050b444d909694cec108c50e118625f31ee2931e79547b3a2bbd93ea6",
+      "scope": "Independent Rust Core and exact installed npm CommonJS, ESM, types and both WASM targets under Node."
+    },
+    "macos_swift": {
+      "result": "PASS",
+      "receipt_sha256": "9eea98bc6bd1096dcd3e8678c74b33e2a45af60379d627ea0b04859f646509c4",
+      "sync_export_witness_sha256": "028a57fce45523a15494cd1ecc3ce77475e18056c2ecd145da7ecf73e6ed138b"
+    },
+    "ipados_simulator_swift": {
+      "result": "PASS",
+      "evidence": "sdk-035-ipados-simulator-evidence.json"
+    }
+  },
+  "public_https": {
+    "asset_count": 15,
+    "bytes": 154807154,
+    "assets": {
+      "BUILD-PROVENANCE-apple.json": {
+        "bytes": 990,
+        "sha256": "9d4cb8d19374bc1849ffc5f7ec7cd1e67af27b84ec1cfc97c6304ab422c1cbdf"
+      },
+      "BUILD-PROVENANCE-portable.json": {
+        "bytes": 1669,
+        "sha256": "e2f928717f76e05896647391881e85bdda7af8af7051f5110d875873a0d621c5"
+      },
+      "CONSUMER-VERIFICATION.json": {
+        "bytes": 1913,
+        "sha256": "f587d87d1c0cdb185f634c701d86d80e9e07608cd8ab40babf92b3680904de79"
+      },
+      "DEPENDENCY-LICENSES.csv": {
+        "bytes": 45827,
+        "sha256": "5fe7dc3e66399cf28f43460c40f1d47faeed6fa564663b4bc405b5f3d421727a"
+      },
+      "LICENSE-APACHE": {
+        "bytes": 11326,
+        "sha256": "fabba0cb7d00a4b3211fdc13699223ab2d22f88678ccd608494cf2b332b903e9"
+      },
+      "LICENSE-MIT": {
+        "bytes": 1079,
+        "sha256": "e4c16e07e31d3fdbba827f245f39f51ee0871898f1585653129bcbe3c63a7410"
+      },
+      "LICENSE-MPL-2.0": {
+        "bytes": 16727,
+        "sha256": "66a3107d5ad6a058aab753eaac2047ccb2ed0e39465dd0fe5844da3e300d5172"
+      },
+      "RELEASE-MANIFEST.json": {
+        "bytes": 2384,
+        "sha256": "1672463298459f5d8614ddc3d6d3bdf6786198772c557825add6db6c9accaff5"
+      },
+      "SHA256SUMS": {
+        "bytes": 1266,
+        "sha256": "d6f974564309a1fee0021cb3cf66b981a0c39301994cc5bd18791b9dc5b729bb"
+      },
+      "booknook-connectors-0.3.5.crate": {
+        "bytes": 72904,
+        "sha256": "07d58d306e51e1a4a46c74c15ab3b4c708ccc3ecc56fffa8a21409144bdacf0b"
+      },
+      "booknook-core-0.3.5.crate": {
+        "bytes": 204376,
+        "sha256": "e95d83c0e154fefe9b59d01c879a0b6b5b602a59a38b072abc701303b9c6e9ce"
+      },
+      "booknook-native-0.3.5.crate": {
+        "bytes": 215734,
+        "sha256": "fe57500e6681d3c69df4e8c4c4fe4e5712c9196b2e518696e2ceef3e0178d658"
+      },
+      "booknook-sdk-0.3.5.tgz": {
+        "bytes": 4695939,
+        "sha256": "9011d0c49df02ed863198fe8c23149bc86095eb4372fc94c15b6fb47fb735e4b"
+      },
+      "booknook-swift-sdk-0.3.5.tar.gz": {
+        "bytes": 149496225,
+        "sha256": "46b4441b3f70b488e27a9bbd4fdf03c53e398737da8bc3f3382c94406e598c84"
+      },
+      "booknook-wasm-0.3.5.crate": {
+        "bytes": 38795,
+        "sha256": "b6d0f2d6f3673b6a42bc0002a537289f3bef311014620b97b4022f6fbffd2dff"
+      }
+    },
+    "earlier_release_identities_preserved": 31,
+    "receipt_sha256": "1c68456644b9aec74d5023d28325de0fe95ed38c3582abbb5a3447612062bb0d"
+  },
+  "scope": "Verified GitHub preview packages. Minimum-OS runtime and live external integration remain open."
+}

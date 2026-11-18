@@ -1,0 +1,35 @@
+{
+  "schema": "booknook.sdk-ipados-simulator-evidence.v1",
+  "result": "PASS",
+  "sdk": {
+    "version": "0.3.5",
+    "source": "95c9bf5bfd430192ae9d5d1779e9e58afa85086c",
+    "archive_sha256": "46b4441b3f70b488e27a9bbd4fdf03c53e398737da8bc3f3382c94406e598c84",
+    "simulator_slice_sha256": "837ec846cda68e7f1b379d6c3cc223bd0227adb03e4776470574c9c247ef177e"
+  },
+  "runtime": {
+    "platform": "arm64 iPadOS Simulator",
+    "runtime_version": "18.6",
+    "build": "22G86"
+  },
+  "consumer": {
+    "sync_export": true,
+    "membership": true,
+    "group_reply": true,
+    "saved_post": true,
+    "notebook": true,
+    "sync_export_witness_sha256": "028a57fce45523a15494cd1ecc3ce77475e18056c2ecd145da7ecf73e6ed138b",
+    "separate_process_reopen": true
+  },
+  "sqlite": {
+    "quick_check": "ok",
+    "reopened_saved_revision": 1
+  },
+  "cleanup": {
+    "synthetic_install_removed": true,
+    "sample_app_metadata_preserved": true,
+    "simulator_shutdown": true
+  },
+  "scope": "Packaged simulator Swift slice and signed synthetic data. Physical installation has its own evidence.",
+  "receipt_sha256": "a8e1b542d7232ba7d4729a0396197f869cc2be7ee0d209325a2048a3f4b4506b"
+}

@@ -1,0 +1,18 @@
+{
+  "schema": "booknook.reference-issuer-sync-composition.v1",
+  "result": "PASS",
+  "source_commit": "95c9bf5bfd430192ae9d5d1779e9e58afa85086c",
+  "observed_at": "2026-11-18T04:53:52.399037+00:00",
+  "reference_issuer_binary_sha256": "e1a2d8d0b6aab6d3d12b90f491af2ac787609cb3ae364694d3d4c968ada68a6e",
+  "native_runtime_sha256": "4526e4da674a3af741486e20461da9bc8f3cf7ba7067d285720df0e6e2ec76c1",
+  "test_sha256": "812f745de22367e5a7e5e2deb101c260f12648f87a0ce3d8c1c99a3e51473a7f",
+  "observations": [
+    "Two isolated native SQLite desks used the actual reference issuer over HTTPS with a temporary trusted certificate.",
+    "Native custody approved two pairings and one encrypted snapshot with independently returned issuer credentials.",
+    "Private synthetic content was absent from the exported encrypted envelope.",
+    "A change to the receiver authority refused the exact file with its prior state intact.",
+    "The approved transfer survived native desk reopen and duplicate delivery left the stored state unchanged."
+  ],
+  "scope": "Local file transfer between isolated desks on one Mac with synthetic Castalia custody.",
+  "receipt_sha256": "93c4f2c46405b10d37f36e018d36a0a4e3e7a2fca17a9c9db45ed5d529fbba77"
+}

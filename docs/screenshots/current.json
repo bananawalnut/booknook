@@ -7,7 +7,7 @@
   "sample_data": "Mac uses The Pocket Orchard EPUB and two synthetic notes. iPad uses The Quiet Library EPUB, a Margin note and a character card.",
   "private_user_data_published": false,
   "physical_ipad_capture": false,
-  "raw_ipad_framebuffer_sha256": "e3510a8986bad701f6e666774f08efd69d8df258777eb09e819687d7c01c6c3d",
+  "raw_ipad_framebuffer_sha256": "87aa020894d26dbc0295bb6740f1c2be466101fa3f786048f81b8bbebaf76968",
   "captures": [
     {
       "platform": "macOS",
@@ -31,17 +31,17 @@
       "platform": "iPad",
       "image": "ipad-current.png",
       "format": "PNG",
-      "sha256": "e3510a8986bad701f6e666774f08efd69d8df258777eb09e819687d7c01c6c3d",
+      "sha256": "87aa020894d26dbc0295bb6740f1c2be466101fa3f786048f81b8bbebaf76968",
       "width": 2048,
       "height": 2732,
       "bundle_id": "org.booknook.ipad",
       "configuration": "Release",
-      "executable_sha256": "ec40bf0768e74ae46506cf1bd12789f899b8cf351bc4925d43bae212d5f66a63",
+      "executable_sha256": "6f5c1065b67fb816fb2a09fdf03a078ecc84dfd0671e0c32501df765d1ea5683",
       "environment": "iPad Air 13-inch (M2), iPadOS 18.6 Simulator, portrait",
-      "app_source_revision": "9bfa0ae3677ffc256e5b98cf652db4b85196e7ca",
-      "capture_receipt_sha256": "30820b164bfd414289b528beb0c7240e7d76f447782b76b64c73d6c3486dcc5d",
+      "app_source_revision": "95c9bf5bfd430192ae9d5d1779e9e58afa85086c",
+      "capture_receipt_sha256": "cb6e2e3ebeb0219925d392da8e71b853c2dbdeae73882f38c8858e96c6fac951",
       "image_processing": "Original simctl framebuffer bytes.",
-      "app_build": "2026111717",
+      "app_build": "2026111718",
       "captured_on": "2026-11-17"
     }
   ],

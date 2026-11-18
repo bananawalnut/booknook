@@ -4,6 +4,8 @@ The portable document and social contracts live in Rust. The reference apps use 
 
 ## Development preview and Rust compatibility
 
+The 0.3.5 SDK preview verifies active pairing and Castalia trust before publishing approved encrypted files. The exact Swift consumer ran the failed-write, retry, receive and duplicate checks on macOS and iPadOS Simulator. [SDK preview](https://github.com/bananawalnut/booknook/releases/tag/v0.3.5-sdk-preview.20261117) · [SDK evidence](sdk-035-public-preview-evidence.json)
+
 The 0.3.4 SDK preview adds exact saved-action refresh and binds native approvals to the Castalia authority used during verification. Extracted Swift consumers passed signed membership tests on macOS and iPadOS Simulator. Rust and the installed TypeScript/WASM package passed independent checks. [SDK preview](https://github.com/bananawalnut/booknook/releases/tag/v0.3.4-sdk-preview.20261117) · [SDK evidence](sdk-034-public-preview-evidence.json) · [Simulator evidence](sdk-034-ipados-simulator-evidence.json)
 
 The **[0.3.3 SDK preview](https://github.com/bananawalnut/booknook/releases/tag/v0.3.3-sdk-preview.20261117)** adds exact-parent replacement and approval checks for native reply drafts. The extracted Swift consumers exercised those checks with signed synthetic group records on macOS and iPadOS 18.6 Simulator. Rust and installed TypeScript/WASM consumers also passed. [SDK evidence](sdk-033-public-preview-evidence.json) · [Simulator evidence](sdk-033-ipados-simulator-evidence.json)
