@@ -51,5 +51,13 @@
     "steps_started": 0,
     "qualification": "GitHub ended the job before assigning a runner. iPadOS 17 execution remains pending.",
     "receipt_sha256": "f4e8c1361a39fc28ac436c52de0dc30b9570ee84f60abacffd639808b17976d1"
+  },
+  "ipados_17_xcode164_retry": {
+    "result": "NO_RUNNER_CAPACITY",
+    "run_url": "https://github.com/bananawalnut/booknook/actions/runs/44326819869",
+    "job": 134880226406,
+    "steps_started": 0,
+    "app_install_attempted": false,
+    "receipt_sha256": "215196c23bcb5935ae4d2c2bab66b807d70cd8268eb19df15683560ac38cbae6"
   }
 }

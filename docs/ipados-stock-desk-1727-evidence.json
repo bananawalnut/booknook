@@ -1,0 +1,42 @@
+{
+  "result": "PASS_STOCK_1727_TYPED_UNDO_AND_SCRIBBLE_REOPEN",
+  "observed_at_utc": "2026-11-18T15:38:45.913934+00:00",
+  "source_commit": "a2d7f34d843726ad3f2f444a0bdfa68c6920f1b6",
+  "build": "2026111727",
+  "release_id": 450054012,
+  "runtime": "iPadOS 18.6 Simulator",
+  "exact_executable_sha256": "97ba4304cc77feb9a823362e5625592dce4eabfcd46acfbcfaff892027e6d09c",
+  "checks": [
+    "typed",
+    "undo",
+    "redo",
+    "ink",
+    "returned_to_text",
+    "reopened"
+  ],
+  "persisted": {
+    "native_ink_sha256": "4e7d9e64983dee1361294ad064e63efc60b7130e1c48e5d7335796d0e060116b",
+    "portable_point_count": 13,
+    "portable_horizontal_span": 100.0,
+    "note_count": 2,
+    "creation_origin": "recorded",
+    "creation_in_same_edition": true,
+    "notes_reopened_in_exact_order": true,
+    "typing_undo_redo_had_distinct_saved_states": true
+  },
+  "epub_sha256": "7a3547bcfe19dab9c99ee3dead9493dbe0b2e933628fe5a1be7ebff4aebfc2a0",
+  "log_sha256": "ee2aec0c89e2e13453e842e4f7fa1619e065f20ac8e0034f808437466bf208e4",
+  "scope": "Exact published Simulator app. Typing shortcuts and a touch drag are synthesized by XCTest in a disposable desk.",
+  "ordinary_simulator_store_unchanged": true,
+  "ordinary_simulator_prefs_restored": true,
+  "pre_cleanup_preference_files_changed": [
+    "org.booknook.ipad.plist"
+  ],
+  "simulator_shutdown": true,
+  "orientation_commands": false,
+  "schema": "booknook.stock-app-note-reopen-evidence.v1",
+  "receipt_sha256": "b0546b04c54b581ef3e2b3a64cb955a299401e8c204811ad561517e9f243b763",
+  "test_source_sha256": "660d739e58afb01faa5d7357dc96b3d79a802d26f86484b975b9c22c64b25702",
+  "durable_data_receipt_sha256": "c48bb9dff75d4609a22c83188cc2a24640796f7b2981d3befc4099fbadd1c67d",
+  "initial_redo_check": "Timed out before the Simulator keyboard-mode setup was added. The qualified run confirms the exact restored text and saved state."
+}
