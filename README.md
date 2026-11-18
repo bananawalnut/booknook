@@ -6,6 +6,8 @@ A native reading notebook for macOS and iPad, backed by open Rust, Swift and WAS
 
 The implementation includes an offline reading desk, rich TextKit editing, EPUB, PDF, and legacy MOBI6 reading and annotation, character interpretation history, imports, Castalia consent, approved encrypted device transfers, Nostr social workflows, and reviewed RSS/Atom settings with offline publications. **It is not a qualified production release:** live Kindle/Audible/Castalia access, current physical input/accessibility, remote social/device sync and minimum-OS runtime checks remain open. Unavailable integrations return explicit errors. See [delivery status](docs/DELIVERY.md), the [full-plan acceptance matrix](docs/PLAN-ACCEPTANCE.md), [validation](docs/VALIDATION.md), the [decision log](docs/DECISIONS.md), the [UX review](docs/UX-REVIEW.md), and [DevGraph work tracking](docs/DEVGRAPH.md).
 
+**[App preview 0.2.1, build 2026111714](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.14)** keeps the Feed and each reading group’s drafts separate. Review captures the selected destination and text, and edits made during approval stay in the editor. All eight public downloads matched their checksums. [Build 1714 evidence](docs/app-2026111714-public-preview-evidence.json)
+
 **[App preview 0.2.1, build 2026111713](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.13)**. Readers can preview verified discussions in open public groups before joining. Spoiler text is hidden by default, and joining is still required to post or reply. All eight public downloads matched their checksums. The normal iPad app updated in place with its library and Scribble preserved. [Build 1713 evidence](docs/app-2026111713-public-preview-evidence.json)
 
 **[App preview 0.2.1, build 2026111712](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.12)** can clear the matching local Audible connection after you confirm the registration was removed in Amazon’s device list. A newer replacement remains intact. Recovery requires the updated optional library companion and Audible adapter. Headless and synthetic loopback checks passed. Live Audible recovery and physical Keychain behavior remain unverified. All eight public downloads matched their checksums. The normal development-signed iPad app updated in place and reopened with its library, assets, saved finger Scribble, and observed orientation preserved. [Build 1712 evidence](docs/app-2026111712-public-preview-evidence.json)
@@ -64,7 +66,7 @@ The earlier iPad acceptance check [updated the normal app in place to 0.2.1 (202
 
 ![Book Nook iPad reading desk with a Margin note and character card alongside an EPUB](docs/screenshots/ipad-current.png)
 
-The iPad Simulator image shows published Release build **2026111713**. The Mac image shows the earlier published build **2026111705**. Both use sample EPUBs. [Capture details](docs/screenshots/README.md)
+The iPad Simulator image shows published Release build **2026111714**. The Mac image shows the earlier published build **2026111705**. Both use sample EPUBs. [Capture details](docs/screenshots/README.md)
 
 ## Run the native apps
 
