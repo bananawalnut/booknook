@@ -45,6 +45,148 @@ fn goodreads_reimport_preserves_personal_edits_and_provenance() {
     assert_eq!(s.books[&book.id].provenance.len(), 2);
 }
 #[test]
+fn goodreads_corrections_update_only_supplied_catalog_fields() {
+    let first = "Book Id,Title,Author,My Rating,My Review,Exclusive Shelf,ISBN,ISBN13\n42,Orchard,A,4,Imported,read,111,123\n";
+    let corrected = "Book Id,Title,Author,ISBN13\n42,Orchard,B,=\"978-0000000101\"\n";
+    let mut s = State::default();
+    imports::goodreads(&mut s, first, 1).unwrap();
+    let book = s.books.values().next().unwrap().clone();
+    let catalog_id = &book.edition_ids[0];
+    let catalog = s.editions.get_mut(catalog_id).unwrap();
+    catalog.language = Some("fr".into());
+    catalog.identifiers.push(SourceRef {
+        provider: "external".into(),
+        id: "other".into(),
+    });
+    catalog.identifiers.push(SourceRef {
+        provider: "isbn13".into(),
+        id: "obsolete-alias".into(),
+    });
+    let hash = "a".repeat(64);
+    catalog.assets.push(ContentAsset {
+        id: hash.clone(),
+        media_type: "application/pdf".into(),
+        storage_key: hash.clone(),
+        sha256: hash.clone(),
+        spine: vec![],
+    });
+    let mut attached = catalog.clone();
+    attached.id = format!("{}:content:{}", book.id, hash);
+    s.books
+        .get_mut(&book.id)
+        .unwrap()
+        .edition_ids
+        .push(attached.id.clone());
+    s.editions.insert(attached.id.clone(), attached.clone());
+
+    assert_eq!(imports::goodreads(&mut s, corrected, 2).unwrap().updated, 1);
+    let current = &s.books[&book.id];
+    assert_eq!(current.authors, ["B"]);
+    assert_eq!(
+        (&current.shelf, current.rating, &current.review),
+        (&book.shelf, Some(4), &book.review)
+    );
+    assert_eq!(
+        current.edition_ids,
+        [catalog_id.clone(), attached.id.clone()]
+    );
+    let catalog = &s.editions[catalog_id];
+    assert_eq!(catalog.language.as_deref(), Some("fr"));
+    assert_eq!(catalog.assets, attached.assets);
+    assert_eq!(s.editions[&attached.id], attached);
+    let identifiers = |s: &State| {
+        s.editions[catalog_id]
+            .identifiers
+            .iter()
+            .map(|i| (i.provider.clone(), i.id.clone()))
+            .collect::<std::collections::BTreeMap<_, _>>()
+    };
+    let ids = identifiers(&s);
+    assert_eq!(ids["isbn"], "111");
+    assert_eq!(ids["isbn13"], "9780000000101");
+    assert_eq!(ids["goodreads"], "42");
+    assert_eq!(ids["external"], "other");
+    assert_eq!(
+        catalog
+            .identifiers
+            .iter()
+            .filter(|id| id.provider == "isbn13")
+            .count(),
+        1
+    );
+    let before = s.clone();
+    assert_eq!(imports::goodreads(&mut s, first, 3).unwrap().unchanged, 1);
+    assert_eq!(s, before);
+
+    imports::goodreads(&mut s, "Book Id,Title,Author,ISBN\n42,Orchard,B,\n", 4).unwrap();
+    assert!(!identifiers(&s).contains_key("isbn"));
+    assert_eq!(identifiers(&s)["isbn13"], "9780000000101");
+    imports::goodreads(
+        &mut s,
+        "Book Id,Title,Author,My Rating,My Review,Exclusive Shelf\n42,Orchard,B,,,\n",
+        5,
+    )
+    .unwrap();
+    let current = &s.books[&book.id];
+    assert_eq!(current.rating, None);
+    assert!(current.review.is_empty());
+    assert!(current.shelf.is_empty());
+    let current = s.books.get_mut(&book.id).unwrap();
+    current.authors = vec!["Personal author".into()];
+    current.edited_fields.insert("authors".into());
+    imports::goodreads(
+        &mut s,
+        "Book Id,Title,Author,ISBN13\n42,Orchard,Provider author,9780000000102\n",
+        6,
+    )
+    .unwrap();
+    assert_eq!(s.books[&book.id].authors, ["Personal author"]);
+    assert_eq!(identifiers(&s)["isbn13"], "9780000000102");
+    imports::goodreads(&mut s, &first.replace("42,Orchard", "99,Orchard"), 7).unwrap();
+    assert_eq!(s.books.len(), 2);
+    validate(&s).unwrap();
+}
+
+#[test]
+fn kindle_author_correction_recreates_missing_catalog_without_overwriting_private_edits() {
+    let mut s = State::default();
+    let raw = r#"{"schema":"booknook.kindle-catalog.v1","items":[{"asin":"B000000001","title":"First","authors":["A"],"observed_at":null,"position":null}]}"#;
+    imports::kindle(&mut s, raw, 1).unwrap();
+    let original = s.books.values().next().unwrap().clone();
+    let hash = "b".repeat(64);
+    let mut attached = s.editions[&original.edition_ids[0]].clone();
+    attached.id = format!("{}:content:{}", original.id, hash);
+    attached.assets.push(ContentAsset {
+        id: hash.clone(),
+        media_type: "application/pdf".into(),
+        storage_key: hash.clone(),
+        sha256: hash,
+        spine: vec![],
+    });
+    s.books.get_mut(&original.id).unwrap().edition_ids = vec![attached.id.clone()];
+    s.editions.insert(attached.id.clone(), attached.clone());
+    s.editions.remove(&original.edition_ids[0]);
+    validate(&s).unwrap();
+    let corrected = raw.replace(r#"["A"]"#, r#"["B","C"]"#);
+    imports::kindle(&mut s, &corrected, 2).unwrap();
+    assert_eq!(s.books[&original.id].authors, ["B", "C"]);
+    assert_eq!(
+        s.books[&original.id].edition_ids,
+        [original.edition_ids[0].clone(), attached.id.clone()]
+    );
+    assert_eq!(s.editions[&attached.id], attached);
+    validate(&s).unwrap();
+    let book = s.books.get_mut(&original.id).unwrap();
+    book.authors = vec!["Personal".into()];
+    book.edited_fields.insert("authors".into());
+    imports::kindle(&mut s, &corrected.replace("First", "New title"), 3).unwrap();
+    assert_eq!(s.books[&original.id].authors, ["Personal"]);
+    imports::kindle(&mut s, &raw.replace("B000000001", "B000000002"), 4).unwrap();
+    assert_eq!(s.books.len(), 2);
+    validate(&s).unwrap();
+}
+
+#[test]
 fn book_subject_edits_are_normalized_private_and_survive_import() {
     let csv = "Book Id,Title,Author,My Rating\n42,Example,Writer,4\n";
     let mut state = State::default();

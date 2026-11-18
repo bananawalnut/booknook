@@ -38,17 +38,43 @@ fn upsert(
             report.unchanged += 1;
             return Ok(());
         }
+        let goodreads = incoming.source.provider == "goodreads";
+        let supplied = |column: &str| !goodreads || incoming.fields.contains_key(column);
         if !old.edited_fields.contains("title") {
             old.title = book.title;
         }
-        if !old.edited_fields.contains("shelf") {
+        if !old.edited_fields.contains("authors") {
+            old.authors = book.authors;
+        }
+        if supplied("Exclusive Shelf") && !old.edited_fields.contains("shelf") {
             old.shelf = book.shelf;
         }
-        if !old.edited_fields.contains("rating") {
+        if supplied("My Rating") && !old.edited_fields.contains("rating") {
             old.rating = book.rating;
         }
-        if !old.edited_fields.contains("review") {
+        if supplied("My Review") && !old.edited_fields.contains("review") {
             old.review = book.review;
+        }
+        if let Some(catalog) = state.editions.get_mut(&edition.id) {
+            if goodreads {
+                for (column, namespace) in [("ISBN", "isbn"), ("ISBN13", "isbn13")] {
+                    if incoming.fields.contains_key(column) {
+                        catalog.identifiers.retain(|id| id.provider != namespace);
+                        catalog.identifiers.extend(
+                            edition
+                                .identifiers
+                                .iter()
+                                .filter(|id| id.provider == namespace)
+                                .cloned(),
+                        );
+                    }
+                }
+            }
+        } else {
+            // A historical book can have only attached editions or no editions.
+            // Keep the relative order of its attachments, including its last one.
+            old.edition_ids.insert(0, edition.id.clone());
+            state.editions.insert(edition.id.clone(), edition);
         }
         old.provenance.append(&mut book.provenance);
         old.reading_dates.extend(book.reading_dates);
