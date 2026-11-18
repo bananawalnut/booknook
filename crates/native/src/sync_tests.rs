@@ -510,6 +510,101 @@ fn disabled_peer_blocks_preparation_receiving_and_already_approved_export() {
     assert_eq!(b.snapshot().unwrap(), before);
 }
 #[test]
+fn export_respects_pairing_outbox_and_authority_changes_from_another_handle() {
+    for mutation in ["disable", "discard", "authority"] {
+        let root = Directory::new();
+        let desk = setup(&root);
+        let other = Desk::new(root.path()).unwrap();
+        let key = "bc".repeat(32);
+        pair(&desk, "recipient", &key, true);
+        add_book(&desk);
+        let batch = approved(&desk, "recipient", &key);
+        let path = root.0.join("existing.json");
+        let original_file = b"previous export";
+        std::fs::write(&path, original_file).unwrap();
+        let original_settings = desk.connection_settings().unwrap();
+        let mut settings: ConnectionSettings = serde_json::from_str(&original_settings).unwrap();
+        settings.castalia.as_mut().unwrap().policy_digest = "fa".repeat(32);
+        let race_key = key.clone();
+        let race_id = batch.clone();
+        crate::sync_bridge::BEFORE_EXPORT_ADMISSION.with(|hook| {
+            let previous = hook.replace(Some(Box::new(move || match mutation {
+                "disable" => pair(&other, "recipient", &race_key, false),
+                "discard" => other.sync_remove_outbox(race_id).unwrap(),
+                "authority" => {
+                    other
+                        .save_connection_settings(serde_json::to_string(&settings).unwrap())
+                        .unwrap();
+                }
+                _ => unreachable!(),
+            })));
+            assert!(previous.is_none());
+        });
+        let destination = path.to_string_lossy().into_owned();
+        assert!(
+            desk.sync_export(batch.clone(), destination.clone())
+                .is_err(),
+            "an export succeeded after {mutation}"
+        );
+        assert_eq!(std::fs::read(&path).unwrap(), original_file);
+        assert!(std::fs::read_dir(&root.0).unwrap().all(|entry| {
+            entry
+                .unwrap()
+                .path()
+                .extension()
+                .is_none_or(|ext| ext != "tmp")
+        }));
+        drop(desk);
+        let reopened = Desk::new(root.path()).unwrap();
+        let status = value(reopened.sync_status().unwrap());
+        let outbox = status["outbox"].as_array().unwrap();
+        if mutation == "discard" {
+            assert!(outbox.is_empty());
+            assert!(reopened.sync_export(batch, destination).is_err());
+            assert_eq!(std::fs::read(&path).unwrap(), original_file);
+            continue;
+        }
+        assert_eq!(outbox.len(), 1);
+        assert_eq!(outbox[0]["id"], batch);
+        assert_eq!(outbox[0]["exported"], false);
+        if mutation == "disable" {
+            pair(&reopened, "recipient", &key, true);
+        } else {
+            reopened
+                .save_connection_settings(original_settings)
+                .unwrap();
+        }
+        let unavailable_destination = root.0.join("directory.json");
+        std::fs::create_dir(&unavailable_destination).unwrap();
+        assert!(
+            reopened
+                .sync_export(
+                    batch.clone(),
+                    unavailable_destination.to_string_lossy().into()
+                )
+                .is_err()
+        );
+        assert!(
+            std::fs::read_dir(&unavailable_destination)
+                .unwrap()
+                .next()
+                .is_none()
+        );
+        assert_eq!(
+            value(reopened.sync_status().unwrap())["outbox"][0]["exported"],
+            false
+        );
+        reopened.sync_export(batch, destination).unwrap();
+        let packet: Value = serde_json::from_slice(&std::fs::read(path).unwrap()).unwrap();
+        assert_eq!(packet["schema"], "booknook.sync-packet.v1");
+        assert_eq!(
+            value(reopened.sync_status().unwrap())["outbox"][0]["exported"],
+            true
+        );
+    }
+}
+
+#[test]
 fn corrupt_local_asset_refuses_snapshot_without_committing_prepared_data() {
     let root = Directory::new();
     let d = setup(&root);

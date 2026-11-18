@@ -432,23 +432,28 @@ fn post(port: u16, token: &str, body: &[u8], extra: &str) -> (u16, Vec<u8>) {
         .unwrap();
     (status, raw[boundary + 4..].to_vec())
 }
-#[test]
-#[ignore = "Starts an actual local HTTP issuer; run scripts/test-issuer.sh in a loopback-enabled environment"]
-fn actual_http_issuer_roundtrips_native_consent_and_receiver() {
-    let mut f = Fixture::new();
+fn serve(f: &Fixture, tls: bool) -> (Server, u16) {
     let script = PathBuf::from(std::env::var_os("BOOKNOOK_ISSUER_HTTP_SERVICE")
         .expect("Set BOOKNOOK_ISSUER_HTTP_SERVICE to the reference HTTP script; scripts/test-issuer.sh does this"));
+    let mut command = Command::new("python3");
+    command.args([
+        script.to_str().unwrap(),
+        "--issuer-bin",
+        env!("CARGO_BIN_EXE_booknook-issuer"),
+        "--config",
+        f.root.join("issuer.json").to_str().unwrap(),
+        "--port",
+        "0",
+    ]);
+    if tls {
+        command
+            .arg("--cert")
+            .arg(f.root.join("cert.pem"))
+            .arg("--key")
+            .arg(f.root.join("tls.key"));
+    }
     let mut server = Server(
-        Command::new("python3")
-            .args([
-                script.to_str().unwrap(),
-                "--issuer-bin",
-                env!("CARGO_BIN_EXE_booknook-issuer"),
-                "--config",
-                f.root.join("issuer.json").to_str().unwrap(),
-                "--port",
-                "0",
-            ])
+        command
             .stdout(Stdio::piped())
             .stderr(Stdio::null())
             .spawn()
@@ -459,7 +464,88 @@ fn actual_http_issuer_roundtrips_native_consent_and_receiver() {
         .read_line(&mut line)
         .unwrap();
     let listener: Value = serde_json::from_str(&line).unwrap();
+    assert_eq!(listener["tls"], tls);
     let port = listener["port"].as_u64().unwrap() as u16;
+    (server, port)
+}
+
+#[test]
+#[ignore = "Starts the actual local HTTPS issuer using temporary certificate trust"]
+fn actual_https_issuer_issues_a_verifiable_credential() {
+    let f = Fixture::new();
+    f.write("openssl.cnf", b"[req]\nprompt=no\ndistinguished_name=dn\nx509_extensions=ext\n[dn]\nCN=localhost\n[ext]\nsubjectAltName=IP:127.0.0.1\n");
+    let cert = Command::new("openssl")
+        .current_dir(&f.root)
+        .args([
+            "req",
+            "-x509",
+            "-newkey",
+            "rsa:2048",
+            "-nodes",
+            "-days",
+            "1",
+            "-config",
+            "openssl.cnf",
+            "-keyout",
+            "tls.key",
+            "-out",
+            "cert.pem",
+        ])
+        .output()
+        .unwrap();
+    assert!(
+        cert.status.success(),
+        "{}",
+        String::from_utf8_lossy(&cert.stderr)
+    );
+    let (_server, port) = serve(&f, true);
+    let mut client = Command::new("curl")
+        .current_dir(&f.root)
+        .args([
+            "--disable",
+            "--fail",
+            "--silent",
+            "--show-error",
+            "--noproxy",
+            "*",
+            "--max-time",
+            "15",
+            "--cacert",
+            "cert.pem",
+            "--header",
+            "Content-Type: application/json",
+            "--header",
+            &format!("Authorization: Bearer {TOKEN}"),
+            "--data-binary",
+            "@-",
+            &format!("https://127.0.0.1:{port}/v1/credentials"),
+        ])
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .unwrap();
+    client
+        .stdin
+        .take()
+        .unwrap()
+        .write_all(&canonical(&f.request).unwrap())
+        .unwrap();
+    let reply = client.wait_with_output().unwrap();
+    assert!(
+        reply.status.success(),
+        "{}",
+        String::from_utf8_lossy(&reply.stderr)
+    );
+    let (request, _) = validate_request(&reply.stdout, &f.policy(), &f.payload, 0, now()).unwrap();
+    assert_eq!(request.disclosure.title, "Publish selected note");
+}
+
+#[test]
+#[ignore = "Starts an actual local HTTP issuer; run scripts/test-issuer.sh in a loopback-enabled environment"]
+fn actual_http_issuer_roundtrips_native_consent_and_receiver() {
+    let mut f = Fixture::new();
+    let (_server, port) = serve(&f, false);
     let endpoint = format!("http://127.0.0.1:{port}/v1/credentials");
     let desk = f.desk(&endpoint);
     let action = desk

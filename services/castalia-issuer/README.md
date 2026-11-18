@@ -62,6 +62,7 @@ Current native controls use these exact values. For the two device rows, substit
 | Disable a device | `device.enroll` | `Disable <device name>` |
 | Approve private sync snapshot | `sync.send` | `Send a private reading snapshot` |
 | Publish composer review, rating, update, note, or group discussion | `social.execute` | `Publish this reading selection` |
+| Reply to a group discussion | `social.execute` | `Publish this group reply` |
 | Publish a selected notebook note | `social.execute` | `Publish only this selected note` |
 | Retry a saved publication draft | `social.execute` | `Publish reviewed record` |
 | Retract a publication | `social.execute` | `Retract this published selection` |

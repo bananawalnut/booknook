@@ -154,6 +154,8 @@ fn import_assets(root: &Path, c: &Content) -> Result<()> {
 thread_local! {
     pub(crate) static BEFORE_RECEIVE_ADMISSION: std::cell::RefCell<Option<Box<dyn FnOnce()>>> =
         const { std::cell::RefCell::new(None) };
+    pub(crate) static BEFORE_EXPORT_ADMISSION: std::cell::RefCell<Option<Box<dyn FnOnce()>>> =
+        const { std::cell::RefCell::new(None) };
 }
 
 #[cfg(test)]
@@ -279,19 +281,13 @@ impl Desk {
         request_json: String,
         presentation_json: String,
     ) -> Result<()> {
-        let policy = self.policy("device.enroll", None)?;
         let proposed: Peer = strict_parse(peer_json.as_bytes())?;
-        let at = now()?;
-        let receipt = verify_receipt(
-            request_json.as_bytes(),
-            presentation_json.as_bytes(),
-            &policy,
-            &canonical(&proposed)?,
-            proposed.version,
-            at,
-        )?;
         let mut s = self.lock()?;
         let local = device(&s)?;
+        let tx = s
+            .connection
+            .transaction_with_behavior(TransactionBehavior::Immediate)?;
+        let policy = Self::policy_on(&tx, "device.enroll", None)?;
         if proposed.schema != "booknook.device-pairing.v1"
             || proposed.local_device != local
             || proposed.owner != policy.actor
@@ -301,9 +297,15 @@ impl Desk {
         {
             return Err(invalid("Pairing record does not match this device"));
         }
-        let tx = s
-            .connection
-            .transaction_with_behavior(TransactionBehavior::Immediate)?;
+        let at = now()?;
+        let receipt = verify_receipt(
+            request_json.as_bytes(),
+            presentation_json.as_bytes(),
+            &policy,
+            &canonical(&proposed)?,
+            proposed.version,
+            at,
+        )?;
         let previous = stored_peer(&tx, &proposed.device_id)?;
         let expected = previous
             .as_ref()
@@ -390,15 +392,14 @@ impl Desk {
         request_json: String,
         presentation_json: String,
     ) -> Result<String> {
-        let policy = self.policy("sync.send", None)?;
         let key = key(&key_hex)?;
         let mut s = self.lock()?;
         schema(&s)?;
-        // Serialize the pairing check, sealing and outbox admission across Desk
-        // handles. Rekey acquires the same writer lock before checking the outbox.
+        // A second Desk can change the authority or rekey between review and approval.
         let tx = s
             .connection
             .transaction_with_behavior(TransactionBehavior::Immediate)?;
+        let policy = Self::policy_on(&tx, "sync.send", None)?;
         let raw: String = tx.query_row(
             "SELECT batch FROM sync_prepared WHERE id=?1",
             [&batch_id],
@@ -460,15 +461,27 @@ impl Desk {
         Ok(())
     }
     pub fn sync_export(&self, batch_id: String, path: String) -> Result<()> {
-        let policy = self.policy("sync.send", None)?;
-        let s = self.lock()?;
+        let mut s = self.lock()?;
         schema(&s)?;
-        let (peer_id, raw): (String, String) = s.connection.query_row(
-            "SELECT peer,packet FROM sync_outbox WHERE id=?1",
-            [&batch_id],
-            |r| Ok((r.get(0)?, r.get(1)?)),
-        )?;
-        let peer = peer(&s.connection, &peer_id)?;
+        #[cfg(test)]
+        if let Some(change) = BEFORE_EXPORT_ADMISSION.with(|hook| hook.borrow_mut().take()) {
+            change();
+        }
+        // Keep approval, pairing and the retry copy current until the file is published.
+        // Even the temporary ciphertext belongs in the destination only after these checks.
+        let tx = s
+            .connection
+            .transaction_with_behavior(TransactionBehavior::Immediate)?;
+        let policy = Self::policy_on(&tx, "sync.send", None)?;
+        let (peer_id, raw): (String, String) = tx
+            .query_row(
+                "SELECT peer,packet FROM sync_outbox WHERE id=?1",
+                [&batch_id],
+                |r| Ok((r.get(0)?, r.get(1)?)),
+            )
+            .optional()?
+            .ok_or_else(|| invalid("This encrypted snapshot is no longer in Outbox"))?;
+        let peer = peer(&tx, &peer_id)?;
         if !peer.enabled || peer.owner != policy.actor {
             return Err(invalid(
                 "This device was disabled; queued exports are suspended",
@@ -483,9 +496,9 @@ impl Desk {
             packet.envelope.batch.revision,
             packet.approved_at,
         )?;
+        tx.execute("UPDATE sync_outbox SET exported=1 WHERE id=?1", [batch_id])?;
         portable::write_atomic(Path::new(&path), &packet, booknook_core::MAX_JSON_BYTES)?;
-        s.connection
-            .execute("UPDATE sync_outbox SET exported=1 WHERE id=?1", [batch_id])?;
+        tx.commit()?;
         Ok(())
     }
     /// Removes only the retry copy after a human confirms delivery or cancels it.

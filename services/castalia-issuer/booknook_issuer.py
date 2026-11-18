@@ -107,6 +107,20 @@ class Issuer:
                     stream.close()
             self.slots.release()
 
+class IssuerServer(http.server.ThreadingHTTPServer):
+    tls_context = None
+
+    def finish_request(self, request, client_address):
+        request.settimeout(10)
+        if self.tls_context is None:
+            return super().finish_request(request, client_address)
+        try:
+            connection = self.tls_context.wrap_socket(request, server_side=True)
+        except OSError:
+            return
+        with connection:
+            super().finish_request(connection, client_address)
+
 class Handler(http.server.BaseHTTPRequestHandler):
     server_version = "BookNookIssuer/0.1"
     def log_message(self, *_):
@@ -164,13 +178,13 @@ def main():
         loopback = False
     if bool(args.cert) != bool(args.key) or (not loopback and not args.cert):
         parser.error("non-loopback binding requires an explicit TLS certificate and key")
-    server = http.server.ThreadingHTTPServer((args.host, args.port), Handler)
+    server = IssuerServer((args.host, args.port), Handler)
     server.issuer = Issuer(args.issuer_bin, args.config)
     if args.cert:
         context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
         context.minimum_version = ssl.TLSVersion.TLSv1_2
         context.load_cert_chain(args.cert, args.key)
-        server.socket = context.wrap_socket(server.socket, server_side=True)
+        server.tls_context = context
     print(json.dumps({"schema":"booknook.issuer-listener.v1", "port":server.server_address[1], "tls":bool(args.cert)}), flush=True)
     try:
         server.serve_forever()

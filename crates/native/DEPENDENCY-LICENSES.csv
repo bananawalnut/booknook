@@ -38,10 +38,10 @@ blake2,0.10.6,MIT OR Apache-2.0,https://github.com/RustCrypto/hashes,"dependency
 blake3,1.8.7,CC0-1.0 OR Apache-2.0 OR Apache-2.0 WITH LLVM-exception,https://github.com/BLAKE3-team/BLAKE3,"dependency (all features, build/platform graph)"
 block-buffer,0.10.4,MIT OR Apache-2.0,https://github.com/RustCrypto/utils,"dependency (all features, build/platform graph)"
 block-padding,0.3.3,MIT OR Apache-2.0,https://github.com/RustCrypto/utils,"dependency (all features, build/platform graph)"
-booknook-connectors,0.3.4,MIT OR Apache-2.0,,workspace
-booknook-core,0.3.4,MIT OR Apache-2.0,,workspace
-booknook-native,0.3.4,MIT OR Apache-2.0,,workspace
-booknook-wasm,0.3.4,MIT OR Apache-2.0,,workspace
+booknook-connectors,0.3.5,MIT OR Apache-2.0,,workspace
+booknook-core,0.3.5,MIT OR Apache-2.0,,workspace
+booknook-native,0.3.5,MIT OR Apache-2.0,,workspace
+booknook-wasm,0.3.5,MIT OR Apache-2.0,,workspace
 bumpalo,3.20.3,MIT OR Apache-2.0,https://github.com/fitzgen/bumpalo,"dependency (all features, build/platform graph)"
 byteorder,1.5.0,Unlicense OR MIT,https://github.com/BurntSushi/byteorder,"dependency (all features, build/platform graph)"
 bytes,1.12.1,MIT,https://github.com/tokio-rs/bytes,"dependency (all features, build/platform graph)"

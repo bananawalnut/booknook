@@ -128,7 +128,7 @@ private struct SyncRecoveryContent: View {
                         Divider(); Text("Approved transfers").font(.title2)
                         ForEach(status.outbox) { batch in
                             HStack {
-                                VStack(alignment: .leading) { Text(status.peers.first(where: { $0.id == batch.peer })?.label ?? batch.peer); Text(batch.exported ? "Exported · delivery not confirmed" : "Ready to export").font(.caption).foregroundStyle(.secondary) }
+                                VStack(alignment: .leading) { Text(status.peers.first(where: { $0.id == batch.peer })?.label ?? batch.peer); Text(batch.exported ? "Copy prepared · delivery not confirmed" : "Ready to export").font(.caption).foregroundStyle(.secondary) }
                                 Spacer()
                                 Button("Export file") { run { try await export(batch.id) } }
                                 Button("Remove retry copy") { removing = batch }
@@ -181,7 +181,15 @@ private struct SyncRecoveryContent: View {
                 message = "Snapshot received. Any conflicting edits are listed below."
             }
         }
-        .fileExporter(isPresented: $exporting, document: document, contentType: .json, defaultFilename: "BookNook-encrypted-snapshot") { result in if case .failure(let error) = result, !bookNookOperationWasCancelled(error) { model.error = bookNookErrorMessage(error) } }
+        .fileExporter(isPresented: $exporting, document: document, contentType: .json, defaultFilename: "BookNook-encrypted-snapshot") { result in
+            document = nil
+            switch result {
+            case .success:
+                message = "Encrypted snapshot saved. Confirm its arrival before removing the retry copy."
+            case .failure(let error):
+                if !bookNookOperationWasCancelled(error) { model.error = bookNookErrorMessage(error) }
+            }
+        }
         .confirmationDialog("Remove the encrypted retry copy?", isPresented: Binding(get: { removing != nil }, set: { if !$0 { removing = nil } })) {
             if let batch = removing { Button("Remove retry copy", role: .destructive) { run { try await model.repository.syncRemove(id: batch.id); removing = nil } } }
         } message: { Text("Only do this after confirming delivery, or to cancel the transfer. Your local notebook is retained.") }
@@ -271,7 +279,9 @@ private struct SyncRecoveryContent: View {
         let url = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".json")
         defer { try? FileManager.default.removeItem(at: url) }
         try await model.repository.syncExport(id: id, url: url)
-        document = ExportDocument(data: try Data(contentsOf: url)); exporting = true
+        document = ExportDocument(data: try Data(contentsOf: url))
+        message = nil
+        exporting = true
     }
     func resolveOrder(_ review: NotebookOrderReview, choosing order: [String]) {
         let reviewID = UUID().uuidString.lowercased().replacingOccurrences(of: "-", with: "")

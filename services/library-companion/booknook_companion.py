@@ -631,6 +631,20 @@ class Companion:
             return result
         raise ClosedError(404, "Unknown companion operation")
 
+class CompanionServer(http.server.ThreadingHTTPServer):
+    tls_context = None
+
+    def finish_request(self, request, client_address):
+        request.settimeout(30)
+        if self.tls_context is None:
+            return super().finish_request(request, client_address)
+        try:
+            connection = self.tls_context.wrap_socket(request, server_side=True)
+        except OSError:
+            return
+        with connection:
+            super().finish_request(connection, client_address)
+
 class Handler(http.server.BaseHTTPRequestHandler):
     server_version = "BookNookCompanion/0.1"
     def log_message(self, *_):
@@ -718,11 +732,12 @@ def main():
         parser.exit(2, f"Catalog source rejected ({error.code}): {error.message}\n")
     except OSError:
         parser.exit(2, "Catalog source is unavailable. Select an accessible local export.\n")
-    server = http.server.ThreadingHTTPServer((args.host, args.port), Handler)
+    server = CompanionServer((args.host, args.port), Handler)
     server.companion = companion
     if args.cert and args.key:
         context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER); context.minimum_version = ssl.TLSVersion.TLSv1_2
-        context.load_cert_chain(args.cert, args.key); server.socket = context.wrap_socket(server.socket, server_side=True)
+        context.load_cert_chain(args.cert, args.key)
+        server.tls_context = context
     print(f"Book Nook companion: {'https' if args.cert else 'http'}://{args.host}:{args.port}")
     print(f"Pairing code (one use, expires in five minutes): {companion.code}", flush=True)
     try:

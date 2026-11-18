@@ -386,7 +386,7 @@ dependencies = [
 
 [[package]]
 name = "booknook-connectors"
-version = "0.3.4"
+version = "0.3.5"
 dependencies = [
  "base64 0.22.1",
  "booknook-core",
@@ -405,7 +405,7 @@ dependencies = [
 
 [[package]]
 name = "booknook-core"
-version = "0.3.4"
+version = "0.3.5"
 dependencies = [
  "base64 0.22.1",
  "chacha20poly1305",
@@ -429,7 +429,7 @@ dependencies = [
 
 [[package]]
 name = "booknook-native"
-version = "0.3.4"
+version = "0.3.5"
 dependencies = [
  "aes-gcm",
  "argon2",
@@ -459,7 +459,7 @@ dependencies = [
 
 [[package]]
 name = "booknook-wasm"
-version = "0.3.4"
+version = "0.3.5"
 dependencies = [
  "booknook-core",
  "serde",
