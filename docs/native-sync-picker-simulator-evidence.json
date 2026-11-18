@@ -1,0 +1,32 @@
+{
+  "schema": "booknook.native-sync-picker-evidence.v1",
+  "source_commit": "3654c0eb00ac6b19299f20857213b722bf924c7a",
+  "result": "PASS",
+  "observed_utc": "2026-11-18T05:51:40+00:00",
+  "application_sources": "Normal Book Nook Swift sources inside an isolated signed Simulator test wrapper with its own Keychain namespace and synthetic desk.",
+  "production_swift_file_sha256": "6d1173652961f892d75de4ecdcdf87c31ada0bdc82434db7bbace6b16f439a28",
+  "sdk_version": "0.3.5",
+  "ios_simulator_archive_slice_sha256": "837ec846cda68e7f1b379d6c3cc223bd0227adb03e4776470574c9c247ef177e",
+  "runtime": "iPadOS 18.6 Simulator",
+  "test_executions": 3,
+  "test_failures_on_corrected_harness": 0,
+  "local_destination": "The test app’s own synthetic directory exposed by On My iPad.",
+  "observed": {
+    "cancel_keeps_retry_and_directory": true,
+    "one_exact_approved_file_saved": true,
+    "duplicate_filename_avoided_and_bytes_identical": true,
+    "ordinary_simulator_app_executable_unchanged": true,
+    "isolated_app_and_runner_removed": true,
+    "dedicated_simulator_shutdown": true
+  },
+  "approved_received_file_readback": "Both saved JSON files matched the durable Rust Outbox packet. The pre-existing file kept its original contents.",
+  "initial_attempts": [
+    "Cancel passed. The first save attempt stopped because the QA bundle’s generated Info.plist omitted its explicit Files-sharing key.",
+    "The next launch stopped in preflight because CoreSimulator returned the former QA app container path after uninstall. That path was absent. The corrected harness checked path existence for its own app and runner."
+  ],
+  "outside_this_run": [
+    "Physical iPad or actual two-device transfer",
+    "Cloud or third-party file provider selection",
+    "Live change of pairing state while the sheet remained open. The separate linked Mac regression covers rejection at the final Desk write."
+  ]
+}

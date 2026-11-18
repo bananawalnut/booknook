@@ -2,6 +2,8 @@
 
 Book Nook has an integrated native development app and open Rust, Swift, and WASM/TypeScript SDKs. Production qualification still requires live source accounts, operational Castalia authority, remote exchange, hands-on physical iPad checks, and runtime checks on the oldest supported OS versions.
 
+The next app build is 1719. The iPadOS 18.6 Simulator Files picker passed local destination selection, cancellation and byte-identical retry on the changed Swift source using SDK 0.3.5. Physical and external file-provider qualification remain open. [Simulator evidence](native-sync-picker-simulator-evidence.json)
+
 App build 1718 and SDK 0.3.5 serialize approved encrypted file export with pairing, Castalia trust and Outbox changes. The extracted Swift consumers passed file-write failure, retry, receive and duplicate delivery on macOS and iPadOS Simulator. A separate test used the real reference issuer over trusted HTTPS with two isolated native desks. All 23 public assets matched. The iPad update preserved the library, saved Scribble, social state and observed orientation. [App evidence](app-2026111718-public-preview-evidence.json) · [SDK evidence](sdk-035-public-preview-evidence.json) · [Local issuer and sync evidence](reference-issuer-sync-composition-evidence.json)
 
 The next physical sync check reached Apple’s free-development app limit. The isolated Mac and iPadOS Simulator rehearsal passed approved transfer in both directions, reopen, replay, Unicode note merge and explicit rating conflict resolution. The existing normal iPad app reopened after the QA install refusal. [Device qualification evidence](physical-sync-035-qualification-evidence.json)
