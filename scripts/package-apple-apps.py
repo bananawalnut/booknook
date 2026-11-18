@@ -24,6 +24,15 @@ PRODUCTS = {
     "ipad-device": ("ipad-device/Build/Products/{configuration}-iphoneos/BookNookPad.app", "iPhoneOS", "IOS", "org.booknook.ipad"),
 }
 MINIMUM_OS = {"mac": "14.0", "ipad-sim": "17.0", "ipad-device": "17.0"}
+SIMULATOR_APPLICATION_ID = "BOOKNOOKQA.org.booknook.ipad"
+SIMULATOR_SECTION = re.compile(
+    r"^[ \t]*sectname[ \t]+(__entitlements|__ents_der)[ \t]*\n"
+    r"[ \t]*segname[ \t]+__TEXT[ \t]*\n"
+    r"[ \t]*addr[ \t]+0x[0-9a-fA-F]+[ \t]*\n"
+    r"[ \t]*size[ \t]+(0x[0-9a-fA-F]+)[ \t]*\n"
+    r"[ \t]*offset[ \t]+([0-9]+)[ \t]*$",
+    re.MULTILINE,
+)
 PUBLIC_CONTENT_CHUNK_BYTES = 1024 * 1024
 PUBLIC_CONTENT_PATH_SIGNATURES = tuple(
     root.encode(encoding)
@@ -130,6 +139,57 @@ def verify_linker_signature(executable):
         subprocess.run(["/usr/bin/codesign", "--verify", "--strict", str(standalone)], check=True)
 
 
+def inspect_signature(display, bundle=False):
+    lines = display.splitlines()
+    if "Signature=adhoc" in lines:
+        if any(line.startswith("CodeDirectory ") and "linker-signed" in line for line in lines):
+            return "linker-ad-hoc"
+        if bundle and any(line.startswith("Sealed Resources version=") for line in lines):
+            return "bundle-ad-hoc"
+        return "ad-hoc"
+    if any(line.endswith(": code object is not signed at all") for line in lines):
+        return "unsigned"
+    return "other"
+
+
+def verify_simulator_entitlements(executable, loads):
+    sections = SIMULATOR_SECTION.findall(loads)
+    if sorted(name for name, _, _ in sections) != ["__entitlements", "__ents_der"]:
+        raise ValueError("Simulator executable requires one XML and one DER entitlement section")
+    contents = {}
+    binary_size = executable.stat().st_size
+    with executable.open("rb") as stream:
+        for name, hex_size, decimal_offset in sections:
+            size, offset = int(hex_size, 16), int(decimal_offset)
+            if not 0 < size <= 16 * 1024 or not 0 < offset <= binary_size - size:
+                raise ValueError("Invalid Simulator entitlement section bounds")
+            stream.seek(offset)
+            contents[name] = stream.read(size)
+
+    xml = contents["__entitlements"].rstrip(b"\x00")
+    if plistlib.loads(xml) != {"application-identifier": SIMULATOR_APPLICATION_ID}:
+        raise ValueError("Unexpected Simulator app identity or entitlement")
+    # Use the same canonical encoding as Xcode's DER entitlement build step.
+    with tempfile.TemporaryDirectory(prefix="booknook-simulator-entitlements-") as directory:
+        source, encoded = Path(directory) / "entitlements.plist", Path(directory) / "entitlements.der"
+        source.write_bytes(xml)
+        subprocess.run(["/usr/bin/derq", "query", "-f", "xml", "-i", str(source), "-o", str(encoded), "--raw"],
+                       check=True, capture_output=True)
+        if encoded.read_bytes() != contents["__ents_der"]:
+            raise ValueError("Simulator XML and DER entitlements differ")
+
+
+def verify_simulator_signature(app, executable, loads, display):
+    if "TeamIdentifier=not set" not in display.splitlines():
+        raise ValueError("Simulator app must use an ad hoc signature")
+    subprocess.run(["/usr/bin/codesign", "--verify", "--deep", "--strict", str(app)], check=True)
+    entitlements = subprocess.check_output(["/usr/bin/codesign", "-d", "--xml", "--entitlements", "-", str(app)],
+                                          stderr=subprocess.DEVNULL)
+    if entitlements and plistlib.loads(entitlements) != {}:
+        raise ValueError("Unexpected entitlement in the Simulator app signature")
+    verify_simulator_entitlements(executable, loads)
+
+
 def inspect(app, key, configuration="Debug"):
     _, supported, platform, bundle_id = PRODUCTS[key]
     info_path = app / ("Contents/Info.plist" if key == "mac" else "Info.plist")
@@ -142,8 +202,10 @@ def inspect(app, key, configuration="Debug"):
     if key != "mac":
         assert info["UIDeviceFamily"] == [2]
     binaries = app / ("Contents/MacOS" if key == "mac" else "")
-    executable = binaries / info["CFBundleExecutable"]
-    assert executable.is_file() and os.access(executable, os.X_OK)
+    executable_name = info["CFBundleExecutable"]
+    assert isinstance(executable_name, str) and executable_name and Path(executable_name).name == executable_name
+    executable = binaries / executable_name
+    assert not executable.is_symlink() and executable.is_file() and os.access(executable, os.X_OK)
     if configuration == "Debug":
         assert (binaries / f'{info["CFBundleExecutable"]}.debug.dylib').is_file()
     resources = app / ("Contents/Resources" if key == "mac" else "")
@@ -176,19 +238,29 @@ def inspect(app, key, configuration="Debug"):
                           if dependency.startswith("@rpath/") else [expand(dependency)])
             assert any(candidate.resolve().is_relative_to(app.resolve()) and candidate.is_file()
                        for candidate in candidates), f"Unbundled dependency: {dependency}"
-        signature = subprocess.run(["/usr/bin/codesign", "-dvv", str(path)], capture_output=True, text=True)
-        sign_text = signature.stderr
-        signing = "linker-ad-hoc" if "Signature=adhoc" in sign_text else "unsigned" if "not signed at all" in sign_text else "other"
+        simulator_main = key == "ipad-sim" and path == executable
+        subject = app if simulator_main else path
+        signature = subprocess.run(["/usr/bin/codesign", "-dvv", str(subject)], capture_output=True, text=True)
+        signing = inspect_signature(signature.stderr, bundle=simulator_main)
+        if simulator_main:
+            assert signing == "bundle-ad-hoc", "Simulator app lacks its sealed ad hoc signature"
+            assert re.search(r"^\s*cmd LC_MAIN\s*$", loads, re.MULTILINE), "Simulator app has no executable entry"
+            verify_simulator_signature(app, executable, loads, signature.stderr)
+        elif key == "ipad-sim":
+            assert signing in {"ad-hoc", "linker-ad-hoc"}, f"Unexpected Simulator support binary signature: {path.name}"
         machos[path.relative_to(app).as_posix()] = {
             "architecture": "arm64", "platform": platform, "minimum_os": minimum, "dependencies": libraries,
             "rpaths": rpaths, "signature": signing,
         }
     assert executable.relative_to(app).as_posix() in machos, "Main executable is not a verified Mach-O"
     assert len(machos) >= (2 if configuration == "Debug" else 1)
-    return {"info": {name: info.get(name) for name in [
+    report = {"info": {name: info.get(name) for name in [
         "CFBundleExecutable", "CFBundleIdentifier", "CFBundleSupportedPlatforms",
         "CFBundleShortVersionString", "CFBundleVersion", "LSMinimumSystemVersion",
         "MinimumOSVersion", "UIDeviceFamily"]}, "mach_o": machos, "ontology": ontology}
+    if key == "ipad-sim":
+        report["simulator_entitlements"] = {"app_scoped": True, "xml_der_match": True}
+    return report
 
 
 def normalized(info):
@@ -275,7 +347,7 @@ These archives preserve the already-built Book Nook {app_version} (build {app_bu
 | Archive | Intended environment | Limitations |
 | --- | --- | --- |
 | `booknook-mac-arm64-development-{app_version}.tar.gz` | Apple Silicon Mac, macOS 14 or newer | Launchable-format native development app with linker ad-hoc Mach-O signatures; no Developer ID, sealed resource signature or notarization. Local execution remains subject to macOS security and compatibility checks. No launch was performed during packaging. |
-| `booknook-ipad-sim-arm64-development-{app_version}.tar.gz` | arm64 iPad Simulator in Xcode, iOS 17 or newer runtime | Simulator build only; cannot run on a physical iPad. Requires a compatible installed simulator runtime and separate developer installation. |
+| `booknook-ipad-sim-arm64-development-{app_version}.tar.gz` | arm64 iPad Simulator in Xcode, iOS 17 or newer runtime | Xcode ad hoc app signature with sealed resources and app-scoped Simulator Keychain entitlements. Requires a compatible installed Simulator runtime. |
 | `booknook-ipad-device-arm64-development-{app_version}.tar.gz` | arm64 physical iPad build target, iPadOS 17 or newer | Unsigned app bundle, not an installable IPA. Proper developer signing/provisioning and device qualification are still required. |
 
 Check `shasum -a 256 -c SHA256SUMS`, then extract the appropriate tarball. Each archive contains the entire `.app`, reader JavaScript, offline ontology resources and license inventory. Debug bundles must include their `.debug.dylib`; Release bundles may contain a single main binary. Existing binary signatures are recorded per Mach-O; packaging does not add or renew them. There are no third-party dynamic dependencies outside the bundles: remaining dynamic links are Apple system libraries/frameworks. The Rust implementation is statically linked into the app's binaries.

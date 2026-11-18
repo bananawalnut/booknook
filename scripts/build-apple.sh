@@ -85,7 +85,10 @@ cd apps/apple
 xcodegen generate
 xcode_args=(-project BookNook.xcodeproj -scheme "$scheme" -sdk "$sdk" -destination "$destination"
   -configuration "$booknook_app_configuration" -derivedDataPath "$booknook_app_build_dir/$platform"
-  ARCHS=arm64 CODE_SIGNING_ALLOWED=NO "BOOKNOOK_RUST_LIBRARY=$native_library")
+  ARCHS=arm64 "BOOKNOOK_RUST_LIBRARY=$native_library")
+if [[ "$platform" != ipad-sim ]]; then
+  xcode_args+=(CODE_SIGNING_ALLOWED=NO)
+fi
 if [[ "$public_build" == 1 ]]; then
   xcode_args+=(DEBUG_INFORMATION_FORMAT=dwarf GCC_GENERATE_DEBUGGING_SYMBOLS=NO
     'BOOKNOOK_PUBLIC_LINK_FLAGS=-Wl,-S'

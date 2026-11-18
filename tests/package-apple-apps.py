@@ -95,6 +95,41 @@ class BundleInspectionTests(unittest.TestCase):
             self.inspect_fixture(configuration="Release", main_magic=b"text")
 
 
+class SimulatorSigningTests(unittest.TestCase):
+    def test_distinguishes_a_sealed_signature_from_linker_ad_hoc(self):
+        sealed = "Signature=adhoc\nCodeDirectory flags=0x2(adhoc)\nSealed Resources version=2"
+        linker = "Signature=adhoc\nCodeDirectory flags=0x20002(adhoc,linker-signed)"
+        self.assertEqual(PACKAGE.inspect_signature(sealed, bundle=True), "bundle-ad-hoc")
+        self.assertEqual(PACKAGE.inspect_signature("Signature=adhoc"), "ad-hoc")
+        self.assertEqual(PACKAGE.inspect_signature(linker, bundle=True), "linker-ad-hoc")
+
+    def verify_fixture(self, identity=PACKAGE.SIMULATOR_APPLICATION_ID, der=b"matching DER", duplicate=False):
+        xml = plistlib.dumps({"application-identifier": identity})
+
+        def section(name, size, offset):
+            return f"Section\n  sectname {name}\n  segname __TEXT\n  addr 0x1000\n  size 0x{size:x}\n  offset {offset}\n"
+
+        loads = section("__entitlements", len(xml), 4) + section("__ents_der", len(der), 4 + len(xml))
+        if duplicate:
+            loads += section("__ents_der", len(der), 4 + len(xml))
+        with tempfile.TemporaryDirectory() as directory:
+            binary = Path(directory) / "BookNookPad"
+            binary.write_bytes(b"test" + xml + der)
+
+            def encode(arguments, **_):
+                self.assertEqual(Path(arguments[arguments.index("-i") + 1]).read_bytes(), xml)
+                Path(arguments[arguments.index("-o") + 1]).write_bytes(b"matching DER")
+
+            with patch.object(PACKAGE.subprocess, "run", side_effect=encode):
+                PACKAGE.verify_simulator_entitlements(binary, loads)
+
+    def test_app_scoped_matching_entitlements_are_required(self):
+        self.verify_fixture()
+        for options in ({"identity": "OTHERTEAM0.org.booknook.ipad"}, {"der": b"other DER"}, {"duplicate": True}):
+            with self.subTest(options=options), self.assertRaises(ValueError):
+                self.verify_fixture(**options)
+
+
 class LinkerSignatureTests(unittest.TestCase):
     def test_verification_uses_standalone_copy_of_exact_bytes(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -70,11 +70,12 @@ jobs:
               inspection = package.inspect(app, platform, "Release")
               info = inspection["info"]
               versions.add((info["CFBundleShortVersionString"], info["CFBundleVersion"]))
-              expected_signature = "unsigned" if platform == "ipad-device" else "linker-ad-hoc"
-              for name, binary in inspection["mach_o"].items():
-                  assert binary["signature"] == expected_signature
-                  if expected_signature == "linker-ad-hoc":
-                      package.verify_linker_signature(app / name)
+              if platform != "ipad-sim":
+                  expected_signature = "unsigned" if platform == "ipad-device" else "linker-ad-hoc"
+                  for name, binary in inspection["mach_o"].items():
+                      assert binary["signature"] == expected_signature
+                      if expected_signature == "linker-ad-hoc":
+                          package.verify_linker_signature(app / name)
               app_trees[platform] = {
                   "files": {name: {k: v for k, v in entry.items() if k != "mode"}
                             for name, entry in package.manifest(app).items() if "directory" not in entry}

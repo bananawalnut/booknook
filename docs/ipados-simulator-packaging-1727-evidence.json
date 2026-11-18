@@ -1,0 +1,36 @@
+{
+  "result": "PASS_EXTRACTED_PREVIEW_COMPANION",
+  "recorded_at_utc": "2026-11-18T16:39:36.177854+00:00",
+  "base_source_commit": "24b7bdbc1648d5fa426219eb3894d08f1854add8",
+  "build": "2026111727",
+  "app_version": "0.2.1",
+  "sdk_version": "0.3.5",
+  "archive": {
+    "name": "booknook-ipad-sim-arm64-development-0.2.1.tar.gz",
+    "bytes": 11561009,
+    "sha256": "b094d9038b3e64b6ced5dd3bb7d1a5a6936e2c2453dfe3bffbd7aaaa8e4c2698",
+    "executable_sha256": "f2057dc3a6e39f464d3ba630eb1a6d4faeb573d98ff68cede84cecc4f9bd18ee"
+  },
+  "verification": {
+    "package_regression_tests": 19,
+    "sealed_ad_hoc_signature_verified_before_and_after_extraction": true,
+    "xml_and_der_simulator_entitlements_match": true,
+    "project_owned_app_scope": true,
+    "package_content_screen_passed": true,
+    "other_platform_inputs": "Byte-verified published build 1727 archives",
+    "other_platform_signatures": {
+      "mac": "linker-ad-hoc",
+      "ipad-device": "unsigned"
+    }
+  },
+  "runtime": {
+    "environment": "Disposable iPadOS 18.6 Simulator",
+    "installed_archive_executable_matches": true,
+    "companion_service_sha256": "47ffc32f475d6c582cccdd6a0c73080c46e498205bebcc72575c38b08c6264d3",
+    "checks": ["paired", "source_metadata", "imported", "reconnected", "disconnected"],
+    "saved_private_book_with_source_provenance_and_explicit_timestamp": true,
+    "remaining_paired_token_rows_after_disconnect": 0,
+    "disposable_simulator_deleted": true
+  },
+  "scope": "The reference companion served a synthetic selected catalog. Physical-device input, live account access, and minimum-OS execution require separate qualification."
+}
