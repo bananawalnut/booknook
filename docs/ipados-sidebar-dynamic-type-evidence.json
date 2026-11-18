@@ -1,0 +1,43 @@
+{
+  "schema": "booknook.ipados-sidebar-dynamic-type-evidence.v1",
+  "result": "PASS_IPADOS_LARGEST_TEXT_SIDEBAR_PORTRAIT",
+  "source_base": "ae1e2fbfafe52aec73f885abaee460b70972eaa3",
+  "configured_preview_build": "2026111724",
+  "candidate_source_sha256": "1d25a524b772f15515cac114196af25f635312a97ac06cc9fb63e457e4205ae5",
+  "candidate_executable_sha256": "077e6cb99bfe76110889df633f747c45fbbd704da4358259baf112226d8b35d9",
+  "published_swift_sdk": "0.3.5",
+  "simulator": "iPad Air 13-inch (M2), iPadOS 18.6, portrait",
+  "baseline": {
+    "release_candidate_build": "2026111723",
+    "test_evidence_sha256": "af23ef157b3bbc337d75b09b81dd54a12cae8c3cc515f148cebb4fbb2ec79508",
+    "initial_screenshot_sha256": "e0fa0c4954a82651ab164901e953263c59818c3e0eff37d317bfd13d3419cde2",
+    "visually_observed": "Header, five navigation labels and the visible book title were truncated at the largest text setting."
+  },
+  "largest_text": {
+    "setting": "accessibility-extra-extra-extra-large",
+    "test_evidence_sha256": "f56881746c51d153d557622520804931e8449fd520c4b928dc2eeff96562c5be",
+    "screenshot_sha256": {
+      "scrolled": "3fb5f59f98654c1a6d94dfee3d99ad0909f7463ff3029699b22e34977e0b751a",
+      "initial": "f4bbcc9b6dfb79f8f525b5193c20dccf389c798e0c9c6d75202d24d0dec4999b"
+    },
+    "label_wrapping_visually_verified": true,
+    "all_five_navigation_actions_reachable": true,
+    "both_book_rows_reachable_by_scrolling": true,
+    "add_book_reachable_before_after_scroll": true,
+    "add_book_open_and_cancel": true,
+    "hide_sidebar_control_reachable_before_after_scroll": true
+  },
+  "normal_text": {
+    "test_evidence_sha256": "da07384b1f77d0284859d25de176dbbcb07211c6b99b118e1afb3254dc248381",
+    "issues_in_tested_audit_categories": 0,
+    "divider_drag_side_swap_and_reopen": "PASS",
+    "sidebar_selection": "PASS"
+  },
+  "build_receipt_sha256": "fd6723669d5f1264fba8c42606aee242747470339a84766054f9fef2fbafa49a",
+  "cleanup": {
+    "ordinary_simulator_desk_unchanged": true,
+    "original_text_size_restored": true,
+    "simulator_returned_to_shutdown": true
+  },
+  "scope": "Two isolated Simulator interactions on the same candidate. Short multitasking windows, remaining large-text desk controls, physical iPad and VoiceOver remain open."
+}

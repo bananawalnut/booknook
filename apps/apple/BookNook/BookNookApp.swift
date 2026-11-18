@@ -78,6 +78,7 @@ private struct BookNookNavigationChrome: ViewModifier {
 struct RootView: View {
     @EnvironmentObject var model: DeskModel
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var addBook = false
     @State private var importing = false
     @State private var importKind = "goodreads"
@@ -148,16 +149,42 @@ struct RootView: View {
 
     private var sidebar: some View {
         VStack(alignment: .leading, spacing: 22) {
-            HStack(spacing: 10) {
-                Image("BookNookMark").resizable().interpolation(.none).scaledToFit()
-                    .frame(width: 28, height: 28).clipShape(RoundedRectangle(cornerRadius: 6))
-                    .accessibilityHidden(true)
-                Text("Book Nook").font(.system(.title2, design: .serif)).bold().lineLimit(1).minimumScaleFactor(0.8)
-                Spacer(minLength: 0)
-                Button(action: hideSidebar) { Image(systemName: "sidebar.left").frame(width: 44, height: 44) }
-                .buttonStyle(.borderless).accessibilityLabel("Hide sidebar")
-                .accessibilityIdentifier("hide-sidebar").help("Make room for your reading desk")
-            }.padding(.top, 4)
+            sidebarHeader
+            if dynamicTypeSize.isAccessibilitySize {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 22) {
+                        sidebarSections
+                        sidebarBooks
+                        if !model.saving { sidebarPrivacy }
+                    }
+                }.accessibilityIdentifier("sidebar-navigation-scroll")
+                sidebarActions
+                if model.saving { sidebarPrivacy }
+            } else {
+                sidebarSections
+                ScrollView { sidebarBooks }
+                sidebarActions
+                sidebarPrivacy
+            }
+        }.padding(20)
+    }
+
+    private var sidebarHeader: some View {
+        HStack(spacing: 10) {
+            Image("BookNookMark").resizable().interpolation(.none).scaledToFit()
+                .frame(width: 28, height: 28).clipShape(RoundedRectangle(cornerRadius: 6))
+                .accessibilityHidden(true)
+            Text("Book Nook").font(.system(.title2, design: .serif)).bold()
+                .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1).minimumScaleFactor(0.8)
+            Spacer(minLength: 0)
+            Button(action: hideSidebar) { Image(systemName: "sidebar.left").frame(width: 44, height: 44) }
+            .buttonStyle(.borderless).accessibilityLabel("Hide sidebar")
+            .accessibilityIdentifier("hide-sidebar").help("Make room for your reading desk")
+        }.padding(.top, 4)
+    }
+
+    private var sidebarSections: some View {
+        VStack(alignment: .leading, spacing: 22) {
             Text("A little room for big ideas.").font(.caption).foregroundStyle(.secondary)
             VStack(spacing: 4) {
                 nav("desk", "Reading desk", "pencil.and.outline")
@@ -168,42 +195,54 @@ struct RootView: View {
             }
             Divider()
             Text("ON YOUR DESK").font(.caption2).tracking(2).foregroundStyle(.secondary)
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: 8) {
-                    ForEach(model.books) { book in
-                        Button { Task { do { try await model.selectBook(book.id); model.section = "desk"; showDetailInCompact() } catch { model.error = bookNookErrorMessage(error) } } } label: {
-                            HStack(alignment: .top) {
-                                RoundedRectangle(cornerRadius: 3).fill(nookAccent.opacity(0.15)).frame(width: 27, height: 38).overlay(Image(systemName: "book.closed").font(.caption))
-                                VStack(alignment: .leading, spacing: 3) { Text(book.title).lineLimit(2).font(.callout); Text(book.authors.joined(separator: ", ")).font(.caption).foregroundStyle(.secondary).lineLimit(1) }
-                                Spacer(minLength: 0)
-                            }.padding(8).background(model.selectedBookId == book.id ? nookAccent.opacity(0.09) : .clear, in: RoundedRectangle(cornerRadius: 8))
-                        }.buttonStyle(.plain)
-                            .accessibilityAddTraits(model.selectedBookId == book.id ? .isSelected : [])
-                            .accessibilityIdentifier("sidebar-book-\(book.id)")
-                    }
-                }
-            }.disabled(!model.libraryReady)
-            HStack {
-                Button { addBook = true } label: { Label("Add a book", systemImage: "plus") }.buttonStyle(.bordered).disabled(!model.libraryReady)
-                Spacer(minLength: 4)
-                Menu {
-                    Menu {
-                        Button("Goodreads CSV") { importKind = "goodreads"; importing = true }
-                        Button("Kindle catalog JSON") { importKind = "kindle"; importing = true }
-                        Button("Restore Book Nook export") { importKind = "restore"; importing = true }
-                    } label: { Label("Import", systemImage: "square.and.arrow.down") }
-                    .accessibilityLabel("Import books or restore backup")
-                    .accessibilityIdentifier("library-import")
-                    Button { reviewingBackup = true } label: { Label("Export private backup", systemImage: "square.and.arrow.up") }
-                        .accessibilityIdentifier("export-private-backup")
-                        .disabled(model.saving || model.state == nil)
-                } label: { Image(systemName: "ellipsis").frame(width: 44, height: 44) }
-                .menuStyle(.button).buttonStyle(.borderless).accessibilityLabel("Import and backup")
-                .accessibilityIdentifier("library-actions")
-                .help("Import books or export a private backup").disabled(!model.libraryReady)
+        }
+    }
+
+    private var sidebarBooks: some View {
+        LazyVStack(alignment: .leading, spacing: 8) {
+            ForEach(model.books) { book in
+                Button { Task { do { try await model.selectBook(book.id); model.section = "desk"; showDetailInCompact() } catch { model.error = bookNookErrorMessage(error) } } } label: {
+                    HStack(alignment: .top) {
+                        RoundedRectangle(cornerRadius: 3).fill(nookAccent.opacity(0.15)).frame(width: 27, height: 38).overlay(Image(systemName: "book.closed").font(.caption))
+                        VStack(alignment: .leading, spacing: 3) {
+                            Text(book.title).font(.callout).lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 2)
+                            Text(book.authors.joined(separator: ", ")).font(.caption).foregroundStyle(.secondary)
+                                .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
+                        }
+                        Spacer(minLength: 0)
+                    }.padding(8).background(model.selectedBookId == book.id ? nookAccent.opacity(0.09) : .clear, in: RoundedRectangle(cornerRadius: 8))
+                }.buttonStyle(.plain)
+                    .accessibilityAddTraits(model.selectedBookId == book.id ? .isSelected : [])
+                    .accessibilityIdentifier("sidebar-book-\(book.id)")
             }
-            Label(model.saving ? "Saving locally…" : "Your writing stays with you", systemImage: model.saving ? "clock" : "lock").font(.caption2).foregroundStyle(.secondary)
-        }.padding(20)
+        }.disabled(!model.libraryReady)
+    }
+
+    private var sidebarActions: some View {
+        HStack {
+            Button { addBook = true } label: { Label("Add a book", systemImage: "plus") }
+                .buttonStyle(.bordered).disabled(!model.libraryReady).accessibilityIdentifier("sidebar-add-book")
+            Spacer(minLength: 4)
+            Menu {
+                Menu {
+                    Button("Goodreads CSV") { importKind = "goodreads"; importing = true }
+                    Button("Kindle catalog JSON") { importKind = "kindle"; importing = true }
+                    Button("Restore Book Nook export") { importKind = "restore"; importing = true }
+                } label: { Label("Import", systemImage: "square.and.arrow.down") }
+                .accessibilityLabel("Import books or restore backup")
+                .accessibilityIdentifier("library-import")
+                Button { reviewingBackup = true } label: { Label("Export private backup", systemImage: "square.and.arrow.up") }
+                    .accessibilityIdentifier("export-private-backup")
+                    .disabled(model.saving || model.state == nil)
+            } label: { Image(systemName: "ellipsis").frame(width: 44, height: 44) }
+            .menuStyle(.button).buttonStyle(.borderless).accessibilityLabel("Import and backup")
+            .accessibilityIdentifier("library-actions")
+            .help("Import books or export a private backup").disabled(!model.libraryReady)
+        }
+    }
+
+    private var sidebarPrivacy: some View {
+        Label(model.saving ? "Saving locally…" : "Your writing stays with you", systemImage: model.saving ? "clock" : "lock").font(.caption2).foregroundStyle(.secondary)
     }
 
     private var detail: some View {
@@ -257,7 +296,13 @@ struct RootView: View {
     }
     func nav(_ id: String, _ title: String, _ icon: String) -> some View {
         Button { model.section = id; showDetailInCompact() } label: {
-            Label(title, systemImage: icon).frame(maxWidth: .infinity, alignment: .leading).padding(10)
+            Group {
+                if dynamicTypeSize.isAccessibilitySize {
+                    Text(title).fixedSize(horizontal: false, vertical: true)
+                } else {
+                    Label(title, systemImage: icon)
+                }
+            }.frame(maxWidth: .infinity, alignment: .leading).padding(10)
                 .background(model.section == id ? nookAccent.opacity(0.12) : .clear, in: RoundedRectangle(cornerRadius: 8))
         }.buttonStyle(.plain).disabled(!model.libraryReady)
             .accessibilityAddTraits(model.section == id ? .isSelected : [])

@@ -4,7 +4,7 @@ This audit keeps the original native MVP and SDK scope intact. A passing source 
 
 ## Reading desk accessibility
 
-Apple’s iPadOS 18.6 Simulator audit found four undersized controls and a decorative symbol announced by its system name in public preview 1722. A separate app built from the candidate Swift sources passed the hit-region checks and exposed the selected sidebar section and reading book. The same test dragged the divider, moved the Margin to the right, and reopened the app with both preferences saved. Seven audit warnings flagged possible sidebar clipping at larger text sizes. Large-text, VoiceOver and physical iPad interaction remain open. [Audit evidence](ipados-reading-desk-accessibility-evidence.json)
+Apple’s iPadOS 18.6 Simulator audit found four undersized controls and a decorative symbol announced by its system name in public preview 1722. A separate app built from the candidate Swift sources passed the hit-region checks and exposed the selected sidebar section and reading book. The same test dragged the divider, moved the Margin to the right, and reopened the app with both preferences saved. The largest accessibility text setting confirmed sidebar clipping. The next candidate wraps the sidebar labels and scrolls the navigation and books while keeping Add a book available. The iPadOS 18.6 portrait Simulator passed the largest-text workflow and the normal-size regression. Short multitasking windows, remaining large-text desk controls, VoiceOver and physical iPad remain open. [Default-size audit](ipados-reading-desk-accessibility-evidence.json) · [Dynamic Type evidence](ipados-sidebar-dynamic-type-evidence.json)
 
 ## Encrypted transfer finalization
 
