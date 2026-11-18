@@ -42,5 +42,14 @@
     "failed_stage": "simulator-springboard-readiness",
     "receipt_sha256": "9992a9e0f968a80d1427f720e601f8b62c4969141a2eca5ca5dfdd3b41396625",
     "next_run": "https://github.com/bananawalnut/booknook/actions/runs/44321524300"
+  },
+  "ipados_17_xcode164_attempt": {
+    "result": "NO_RUNNER_CAPACITY",
+    "run_url": "https://github.com/bananawalnut/booknook/actions/runs/44321524300",
+    "job": 134861435416,
+    "app_install_attempted": false,
+    "steps_started": 0,
+    "qualification": "GitHub ended the job before assigning a runner. iPadOS 17 execution remains pending.",
+    "receipt_sha256": "f4e8c1361a39fc28ac436c52de0dc30b9570ee84f60abacffd639808b17976d1"
   }
 }

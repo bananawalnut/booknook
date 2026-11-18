@@ -1,0 +1,24 @@
+{
+  "result": "PASS_PRIVATE_INTERFACE_REFERENCE_COMPANION",
+  "source_commit": "a2d7f34d843726ad3f2f444a0bdfa68c6920f1b6",
+  "service_source_sha256": "1ed89271c7047242b502ae07ea31ef0315e78ff028428d80b24e89f7b0360467",
+  "recorded_at_utc": "2026-11-18T14:24:23.251134+00:00",
+  "private_ipv4_listener_only": true,
+  "client_certificate_validation": "Direct IP hostname verification with disposable certificate",
+  "checks": {
+    "no_unencrypted_launch": true,
+    "untrusted_certificate_refused": true,
+    "unpaired_access_denied": true,
+    "one_use_pairing": true,
+    "unknown_catalog_field_denied": true,
+    "unicode_catalog_roundtrip": true,
+    "raw_sqlite_denied": true,
+    "prior_catalog_unchanged_after_denial": true,
+    "catalog_and_pairing_survived_restart": true,
+    "unpair_revoked_old_token": true
+  },
+  "scope": "Reference CLI and separate HTTPS client on the same Mac over a private IPv4 interface, using a synthetic catalog. Second-device reachability, iPad trust and live Kindle accounts remain open.",
+  "schema": "booknook.reference-companion-private-interface-evidence.v1",
+  "receipt_sha256": "13059d6022827edcecb51f7910a0323f11f1eb578cffbbe6a3f094385caef318",
+  "qualifier_sha256": "1419908cd2777dccf1d7eb4a6b0fad9ccc7410d93db2321e92d83ef565eca391"
+}
