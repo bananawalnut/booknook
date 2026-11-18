@@ -1,0 +1,27 @@
+{
+  "schema": "booknook.kindle-pdf-portable-sdk-evidence.v1",
+  "result": "PASS",
+  "sdk_version": "0.3.5",
+  "sdk_source": "95c9bf5bfd430192ae9d5d1779e9e58afa85086c",
+  "published_npm_archive_sha256": "9011d0c49df02ed863198fe8c23149bc86095eb4372fc94c15b6fb47fb735e4b",
+  "localized_native_cli_sha256": "36dc617f80eea5a28f7691c39021858f26cbd0b2a8ad4ac277c3f712d7b44476",
+  "source_pdf_sha256": "c35bb0bbfefde316664c3723153c32bdb764543338249fb9660ac707fbfefa07",
+  "source_pdf_bytes": 12418,
+  "runner_sha256": "587804f8548440f9e66c25d216d9a3d6b92d846cd729bd8cec22b208c1b50ee5",
+  "javascript_sha256": "77dcee1f14df280b21a82b02392ee048eafc7feededf2380543f1e18f1a8b2df",
+  "observed_utc": "2026-11-18T08:58:31.631389+00:00",
+  "runtimes": [
+    "commonjs_node",
+    "esm_node",
+    "esm_web_target_in_node"
+  ],
+  "qualification": {
+    "separate_kindle_and_pdf_locations": true,
+    "unicode_note_and_private_review_preserved": true,
+    "pdf_bytes_restored_identically": true,
+    "each_javascript_runtime_rejected_modified_asset": true,
+    "native_reexport_matched_original_except_store_revision": true
+  },
+  "scope": "Published npm package 0.3.5 with both WASM targets executed in Node. Native export and restore used the local SQLite CLI and an original PDF attached to a synthetic Kindle catalog.",
+  "node_and_wasm_receipt_sha256": "7b6318c2c4d391b2f6a3f04cf615c962e708bf30a3f6219bea3f85b4eb8d8446"
+}

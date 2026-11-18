@@ -39,6 +39,8 @@ The shipped Swift SDK exercised this handoff with a synthetic catalog and origin
 
 Book Nook’s reader opened the attached PDF from managed storage on macOS and in an iPadOS 18.6 Simulator harness. It saved page two to the attached edition and reopened there. The iPad test used a fresh app process. File-picker use, physical iPad reading, live catalog sign-in, and downloading a purchased title still need hands-on checks. [Mac reader acceptance](kindle-pdf-reader-pane-evidence.json) · [iPadOS Simulator reader acceptance](kindle-pdf-ipados-reader-pane-evidence.json)
 
+A portable backup of the attached Kindle PDF also passed through the published WASM SDK and back into native SQLite. The restore kept the original file, independent Kindle and PDF positions, Unicode note, and private review. All three JavaScript entry points rejected changed PDF bytes. [Portable SDK evidence](kindle-pdf-portable-sdk-evidence.json)
+
 ## Validation and outstanding qualification
 
 Run `bash scripts/test-kindle-web.sh` on macOS after building the native bridge. The test links the actual app and SQLite core. It covers pagination and failure bounds, private-edit preservation, cancellation before/after commit, reopen, and actual WebKit nonpersistent stores/content worlds with in-memory synthetic responses. It does not load Amazon, enter credentials, modify an account, use a physical device or exercise a live provider.
