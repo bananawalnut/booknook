@@ -186,7 +186,10 @@ struct ReaderPane: View {
                         ForEach(annotations.sorted { $0.id < $1.id }) { annotation in annotationRow(annotation) }
                     }.frame(maxWidth: .infinity, alignment: .leading)
                 }
-            }.padding(24).frame(minWidth: 300, idealWidth: 460, minHeight: 300)
+            }
+            .padding(24).frame(minWidth: 300, idealWidth: 460, minHeight: 300)
+            .foregroundStyle(nookInk).tint(nookAccent)
+            .presentationBackground(readingPaper)
         }
         .task(id: attachmentIdentity) { await loadAttachment(attachmentIdentity) }
         .fileImporter(isPresented: $importing, allowedContentTypes: [.pdf] + ["epub", "mobi", "azw"].compactMap {
@@ -285,16 +288,16 @@ struct ReaderPane: View {
                 Text(index == nil ? "Original source is not in this attached book" : "Saved in \(chapterLabel(resource))").font(.caption2).foregroundStyle(.secondary)
             }
             if unplaced {
-                Text("Unplaced markup. Original ink is saved; its position over the page could not be confirmed.").font(.caption2).foregroundStyle(.secondary)
+                Text("Unplaced markup. Original ink is saved; its position over the page could not be confirmed.").font(.caption2).foregroundStyle(nookInk)
                 ReaderSavedInkPreview(annotation: annotation).frame(height: 120)
             } else if unplacedPDF {
                 Label("Unplaced on this PDF. Original context is saved.", systemImage: "exclamationmark.circle")
-                    .font(.caption2).foregroundStyle(.secondary)
+                    .font(.caption2).foregroundStyle(nookInk)
             } else if let highlightMarker {
                 Label(highlightMarker, systemImage: "exclamationmark.circle")
-                    .font(.caption2).foregroundStyle(.secondary)
+                    .font(.caption2).foregroundStyle(nookInk)
             } else if ink && resource == currentResource && placements[annotation.id] != "resolved" {
-                Text("Markup is retained with its original context. Its text layout has changed or its passage cannot be uniquely located.").font(.caption2).foregroundStyle(.secondary)
+                Text("Markup is retained with its original context. Its text layout has changed or its passage cannot be uniquely located.").font(.caption2).foregroundStyle(nookInk)
             }
         }
     }

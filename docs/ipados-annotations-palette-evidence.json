@@ -1,0 +1,112 @@
+{
+  "result": "PASS_SAVED_ANNOTATIONS_READING_PALETTE",
+  "scope": "Simulator pixel measurements and functional acceptance. The reference is the exact public 1726 iPad Simulator app. Candidate 1727 links all 74 Swift sources against the verified 0.3.5 SDK and reuses the released book resources.",
+  "published_baseline": {
+    "build": "2026111726",
+    "source": "cd32c6405b1c01507fe9bc01f99200c43b5876c9",
+    "executable_sha256": "6b7d58e07cade3c53ac5ce5073ebef9ef78fa03d78ca60d29943834930b14688",
+    "functional_evidence": "ipados-saved-epub-highlights-evidence.json"
+  },
+  "candidate": {
+    "build": "2026111727",
+    "base": "8da021d898218ee84e53293f2818ecd150e69c87",
+    "simulator_executable_sha256": "2803e95d65ba38fa965f8104013a57c4d4ff54b5721f7d399beb10582b3c08b9",
+    "reader_source_sha256": "6e0b1c15a311121513f9b19efa3280bb160c90e79dc4b76882b0108629e79040",
+    "apple_build_config_sha256": "0aadfa333c2556c175565a9d4e27025b3aafd103044734d7b8e46823e225ec54",
+    "functional_checks": {
+      "original_contexts_and_chapter_visible": true,
+      "ambiguity_and_missing_are_distinct": true,
+      "unique_highlight_has_no_error_marker": true,
+      "markers_survived_real_text_and_split_reflow": true,
+      "ambiguous_row_returned_to_original_chapter": true,
+      "markers_recomputed_after_relaunch": true,
+      "durable_annotation_anchors_and_contexts_exact": true
+    },
+    "xcresult": {
+      "passed": 1,
+      "failed": 0,
+      "result_bundle": "attempt-3.xcresult"
+    },
+    "test_log_sha256": "dd5fe03e44a12df63a7f64147c16c354e385e10fbae0e046c5533450f535aba5",
+    "build_receipt_sha256": "f10b2bfe00e83acb56477a717b01a93727346cf2c6c7569a5a9c47cb3d9f8a3b",
+    "test_receipt_sha256": "5461f6ad7cd624d6ad51d817786e4140cc2bf3173066f0008be6380d6b932a2d",
+    "macos_deployment_typecheck": {
+      "result": "PASS",
+      "target": "arm64-apple-macos14.0",
+      "source_receipt_sha256": "f10b2bfe00e83acb56477a717b01a93727346cf2c6c7569a5a9c47cb3d9f8a3b",
+      "sdk_sha256": "46b4441b3f70b488e27a9bbd4fdf03c53e398737da8bc3f3382c94406e598c84",
+      "source_files": 74,
+      "scope": "Full source typecheck against the declared macOS target. System runtime and accessibility remain separate.",
+      "recorded_utc": "2026-11-18T12:41:39.644999+00:00"
+    }
+  },
+  "captured_colors": {
+    "result": "PASS_READING_PAPER_AND_WARNING_INK",
+    "reference": {
+      "image_sha256": "7c759b5b773b019d395016599c9d974dc19b10bfc92ec1fedde2ea5135de0d2f",
+      "paper_rgb": [
+        255,
+        255,
+        255
+      ],
+      "warning_measurements": [
+        [
+          [
+            148,
+            159,
+            155
+          ],
+          911
+        ],
+        [
+          [
+            148,
+            159,
+            155
+          ],
+          997
+        ]
+      ],
+      "warning_contrast_ratios": [
+        2.73,
+        2.73
+      ]
+    },
+    "candidate": {
+      "image_sha256": "8239a4b7bb3d042f6cee99e977af6261e12081d32ad01d6fdeaa1af161b828ed",
+      "paper_rgb": [
+        247,
+        242,
+        229
+      ],
+      "warning_measurements": [
+        [
+          [
+            41,
+            63,
+            56
+          ],
+          877
+        ],
+        [
+          [
+            41,
+            63,
+            56
+          ],
+          938
+        ]
+      ],
+      "warning_contrast_ratios": [
+        10.09,
+        10.09
+      ]
+    }
+  },
+  "recorded_at": "2026-11-18T12:44:46.284880+00:00",
+  "boundary": [
+    "No physical iPad input or VoiceOver",
+    "No minimum OS runtime qualification",
+    "No fresh macOS GUI capture"
+  ]
+}
