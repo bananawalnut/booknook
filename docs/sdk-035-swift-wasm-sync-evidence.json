@@ -1,0 +1,46 @@
+{
+  "result": "PASS_PUBLISHED_SWIFT_WASM_APPROVED_SYNC",
+  "tested_at": "2026-11-18T11:30:27.279012+00:00",
+  "scope": "Published Swift SDK on macOS and the published default Node WASM module, using isolated SQLite desks and synthetic local Castalia authorization.",
+  "sdk": {
+    "version": "0.3.5",
+    "source_commit": "95c9bf5bfd430192ae9d5d1779e9e58afa85086c",
+    "swift_xcframework_sha256": "46b4441b3f70b488e27a9bbd4fdf03c53e398737da8bc3f3382c94406e598c84",
+    "npm_tarball_sha256": "9011d0c49df02ed863198fe8c23149bc86095eb4372fc94c15b6fb47fb735e4b",
+    "macos_arm64_library_sha256": "bf4f913178f2cc8c0c3a6f7eabdf3d13b806f0cfb2d693b7c5ffa61b85c3a5c5"
+  },
+  "runtimes": {
+    "macos": "26.4.1",
+    "node": "v20.20.0"
+  },
+  "witness": {
+    "swift_sha256": "4c4c83fec04bd116aaf4fa79ef4686d0a4f6abd572d5c45018c7d4803d2991c8",
+    "javascript_sha256": "b499e06e00505a6b4285a1bd3285e94b469489ccd242b380db8a30035266e623"
+  },
+  "checks": {
+    "nativeOpenedInNodeWasm": true,
+    "recipientMismatchRejected": true,
+    "wrongKeyRejected": true,
+    "historicalApprovalOpens": true,
+    "futureApprovalRejected": true,
+    "expiredApprovalCannotSeal": true,
+    "sameApprovedBytesDistinctCiphertexts": true,
+    "approvedUnicodeOnly": true,
+    "wrongKeyUnchanged": true,
+    "acceptedOnlyApprovedNote": true,
+    "reopenedExactStateAndStatus": true,
+    "exactReplayUnchanged": true,
+    "reencryptedBatchIDRejectedUnchanged": true
+  },
+  "packet_digests_sha256": {
+    "native": "49c3e0ffe40f84f0fa23809f013aac75259a0957f8423ed0421a690b3e38a10e",
+    "wasm": "db6890e6f4d9a0116e11730540b98f91696bc7f4f82757181664e2ff66a55fbe",
+    "alternate": "f9a63c979330592fbf5a8e86b4bfb8009789524b3f7a9d5db8961dd1273bae36"
+  },
+  "target_state_changed_only_on_first_valid_receive": true,
+  "still_open": [
+    "Exchange across two physical devices",
+    "Operational Castalia issuer consent",
+    "External Nostr relay delivery"
+  ]
+}
