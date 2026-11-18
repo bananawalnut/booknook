@@ -47,5 +47,35 @@
     "os": "macOS 26.4.1",
     "architecture": "arm64"
   },
-  "coverage_boundary": "System WKWebView on macOS with the released browser package. Other browser engines, actual Kindle account access and browser application UI remain separate."
+  "coverage_boundary": "System WKWebView on macOS with the released browser package. Other browser engines, actual Kindle account access and browser application UI remain separate.",
+  "archive_v4_qualification": {
+    "field_coverage": {
+      "separate_kindle_and_pdf_locations": true,
+      "unicode_note_and_private_review_preserved": true,
+      "ordered_note_and_immutable_scribble_preserved": true,
+      "two_versioned_character_interpretations_and_positions_preserved": true,
+      "missing_character_history_parent_rejected": true,
+      "pdf_bytes_restored_identically": true,
+      "browser_rejected_modified_asset": true,
+      "native_reexport_matched_original_except_store_revision": true
+    },
+    "web_engine": {
+      "archive_bytes": 28329,
+      "archive_schema": "booknook.archive.v4",
+      "browser_user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+      "corrupted_history_rejected": true,
+      "default_browser_loader": true,
+      "engine": "WKWebView",
+      "modified_pdf_rejected": true,
+      "native_webkit_framework": "21624.1.16.11.4",
+      "normalized_json_equal": true,
+      "original_pdf_sha256": "c35bb0bbfefde316664c3723153c32bdb764543338249fb9660ac707fbfefa07",
+      "transferred_wasm_bytes": 5678817
+    },
+    "runner_sha256": "df50d7aed135874e27d9420da4108fd7bbab1645dd6047d858cfc3dc86bf19c1",
+    "javascript_sha256": "43d480f2ea1d0fd2194faf0adde7395ad9ecd36f6c418601ca254b5699a381a4",
+    "private_verification_sha256": "6f824bb9810d798aba1641b24a898c5b74aef18f402881f1138580ab60e566df",
+    "observed_utc": "2026-11-18T10:49:36.956841+00:00",
+    "scope": "The native app command path captured different Kindle and PDF positions for two immutable interpretations of the same character. A separate ordered Margin note contains a portable Scribble version. Validation rejects a broken character ancestry and an altered PDF. The archived payload is equal after browser export and fresh SQLite restore, with only the restored store revision excluded from comparison."
+  }
 }
