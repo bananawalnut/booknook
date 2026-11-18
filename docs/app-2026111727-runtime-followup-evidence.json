@@ -1,0 +1,46 @@
+{
+  "schema": "booknook.app-runtime-followup.v1",
+  "recorded_at": "2026-11-18T14:14:58.464358+00:00",
+  "app_build": "2026111727",
+  "app_version": "0.2.1",
+  "source_commit": "a2d7f34d843726ad3f2f444a0bdfa68c6920f1b6",
+  "public_release": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.27",
+  "public_release_id": 450054012,
+  "macos": {
+    "result": "PASS_STOCK_READER_REOPEN",
+    "host": "macOS 26.4.1",
+    "architecture": "arm64",
+    "archive_sha256": "1798f59c16d3bb3c17bda99d38dc46594f8437b4035bc4176704cc424ea6a90e",
+    "executable_sha256": "d2212867f6ebf85ce04abbbd098b623345591ea2447a60b8911bf983ef6009c6",
+    "initialized_fresh_desk": true,
+    "fresh_reading_revisions": [
+      4,
+      6
+    ],
+    "distinct_processes": true,
+    "fixture": "Original Book Nook book in an isolated SQLite desk.",
+    "observation": "Two fresh saved text positions matched exact UTF-16 quote, prefix and suffix for the same edition and pass.",
+    "qualification": "Startup and reading-state persistence on the observed host. Visual capture and macOS 14 execution remain pending.",
+    "initial_verifier_outcome": "The first reading check timed out. Its matcher required whole text nodes. The corrected check accepts exact contextual anchors beginning inside a text node.",
+    "receipt_sha256": "1eabdb70ac80cd663acfca4dfdd981384f70d5f7bcf151c77ef723c5998e61b7",
+    "qualifier_sha256": "9141ac6ea8b7c8fd9ca528a5b08082807b4fed418a4a1fc1075cfacd3606e5c6"
+  },
+  "ipados_17_first_1727_attempt": {
+    "result": "HOST_READINESS_NONPASS",
+    "run_url": "https://github.com/bananawalnut/booknook/actions/runs/44318628953",
+    "job": 134851315297,
+    "host": "26.7.2",
+    "xcode": "Xcode 26.4.1\nBuild version 17E202",
+    "runtime": {
+      "id": "com.apple.CoreSimulator.SimRuntime.iOS-17-0",
+      "version": "17.0",
+      "build": "21A328"
+    },
+    "exact_device_booted": true,
+    "springboard_ready": false,
+    "app_install_attempted": false,
+    "failed_stage": "simulator-springboard-readiness",
+    "receipt_sha256": "9992a9e0f968a80d1427f720e601f8b62c4969141a2eca5ca5dfdd3b41396625",
+    "next_run": "https://github.com/bananawalnut/booknook/actions/runs/44321524300"
+  }
+}
