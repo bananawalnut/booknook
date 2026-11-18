@@ -15,6 +15,7 @@ import Foundation
             do {
                 if CommandLine.arguments.contains("--public-group-preview") { try await testPublicGroupPreview(); exit(0) }
                 if CommandLine.arguments.contains("--group-replies") { try await testGroupReplies(); exit(0) }
+                if CommandLine.arguments.contains("--group-membership-review") { try await testGroupMembershipReview(); exit(0) }
                 if CommandLine.arguments.contains("--shared-list-review") { try await testSharedListReview(); exit(0) }
                 if CommandLine.arguments.contains("--reading-pass-navigation") { try await testReadingPassNavigation(); exit(0) }
                 if CommandLine.arguments.contains("--audible-recovery-contract") { try testAudibleRecoveryContract(); exit(0) }
@@ -295,6 +296,7 @@ import Foundation
         try await testRecommendationTitleProjection()
         try await testPublicationWorkflow()
         try await testGroupReplies()
+        try await testGroupMembershipReview()
         try await testPublicGroupPreview()
         try await testSharedListReview()
         print("Native desk workflows: duplicate-title identity, failed navigation, explicit sessions, private earlier-character-version drafts, thrown save rejection, unrated Unicode review, list edit/conflict retention, failed social retry with durable draft recovery, reopen and cancellation distinctions passed.")
@@ -391,7 +393,7 @@ import Foundation
         draft.savedReview = savedReply
         draft.text += "Edited before another review."
         let retry = await controller.publish(draft.action(for: target, in: controller.snapshot)!, title: "Publish this group reply",
-                                             model, reviewingPost: draft.savedReview)
+                                             model, reviewingDraft: draft.savedReview)
         guard case .savedDraft(let savedRetry) = retry else { preconditionFailure("An edited reply must remain recoverable") }
         let retryID = savedRetry.id
         let reopened = DeskModel(repository: DeskRepository(directory: directory))
@@ -428,6 +430,95 @@ import Foundation
         precondition(!target.permitsVisibleParent(parent!, in: controller.snapshot))
         precondition(controller.snapshot?.state.drafts[beforeClose.id] != nil)
         print("Native group replies: exact parent, hidden/blocked/closed refusal, spoiler-safe consent, stable SQLite retry, and discarded Outbox reply refusal passed.")
+    }
+
+    @MainActor static func testGroupMembershipReview() async throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("booknook-membership-" + UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let primary = DeskModel(repository: DeskRepository(directory: directory))
+        await primary.open()
+        let issuer = try Curve25519.Signing.PrivateKey(rawRepresentation: Data(repeating: 1, count: 32))
+        let owner = try Curve25519.Signing.PrivateKey(rawRepresentation: Data(repeating: 2, count: 32))
+        let member = try Curve25519.Signing.PrivateKey(rawRepresentation: Data(repeating: 3, count: 32))
+        let later = try Curve25519.Signing.PrivateKey(rawRepresentation: Data(repeating: 4, count: 32))
+        let ownerID = hex(owner.publicKey.rawRepresentation)
+        let memberID = hex(member.publicKey.rawRepresentation)
+        let laterID = hex(later.publicKey.rawRepresentation)
+        var settings = ConnectionConfiguration()
+        let trust = CastaliaConfiguration(issuer: "synthetic-issuer", keyId: "test",
+            issuerPublicKey: hex(issuer.publicKey.rawRepresentation), audience: "booknook-test",
+            terminalCaller: "synthetic-booknook-test", holderPublicKey: ownerID,
+            policyDigest: hex(SHA256.hash(data: Data("synthetic policy".utf8))),
+            credentialEndpoint: "http://127.0.0.1:65500/credential")
+        settings.castalia = trust
+        try await primary.repository.saveConnections(settings)
+        let id = try await primary.repository.socialOwnedID()
+        try await approveFixture(["op":"create_group", "id":id, "name":"Review fixture", "description":"", "private":false],
+                                 model: primary, config: trust, issuer: issuer, holder: owner)
+
+        func requestAdmission(_ key: Curve25519.Signing.PrivateKey, on model: DeskModel) async throws {
+            var visitor = settings
+            visitor.castalia?.holderPublicKey = hex(key.publicKey.rawRepresentation)
+            try await model.repository.saveConnections(visitor)
+            try await approveFixture(["op":"request_join", "group_id":id], model: model, config: visitor.castalia!,
+                                     issuer: issuer, holder: key)
+            try await model.repository.saveConnections(settings)
+        }
+        func roster(_ members: [String], moderators: [String] = []) -> [String: Any] {
+            ["op":"set_members", "group_id":id, "members":members.sorted(), "moderators":moderators.sorted()]
+        }
+
+        try await requestAdmission(member, on: primary)
+        try await approveFixture(roster([ownerID, memberID]), model: primary, config: trust, issuer: issuer, holder: owner)
+        let controller = SocialController()
+        await controller.reload(primary)
+        let original = controller.snapshot!.state.groups[id]!
+        let originalAction = roster(original.members, moderators: [memberID])
+        let oldReview = SocialGroupMembershipReview(original)
+        let first = await controller.publish(originalAction, title: "Review membership", primary, membershipReview: oldReview)
+        guard case .savedDraft(let saved) = first else { preconditionFailure("Initial roster draft must save while locked") }
+        let oldRow = controller.snapshot!.state.drafts[saved.id]!
+        precondition(oldRow.resourceVersion == original.epoch)
+
+        let second = DeskModel(repository: DeskRepository(directory: directory))
+        await second.open()
+        try await requestAdmission(later, on: second)
+        try await approveFixture(roster([ownerID, memberID, laterID]), model: second, config: trust, issuer: issuer, holder: owner)
+        let before = try await second.repository.socialSnapshot(reveal: false)
+        let current = before.state.groups[id]!
+        precondition(current.epoch > original.epoch && current.members.contains(laterID))
+
+        let stale = await controller.publish(originalAction, title: "Review membership", primary, membershipReview: oldReview)
+        precondition(stale == .notSaved && controller.error?.contains("group’s membership changed") == true)
+        await controller.retryDraft(oldRow, primary)
+        precondition(controller.error?.contains("group’s membership changed") == true)
+        let refused = try await second.repository.socialSnapshot(reveal: false)
+        precondition(refused.state.revision == before.state.revision)
+        precondition(refused.state.groups[id]?.members == current.members)
+        let retained = try socialJSON(refused.state.drafts[saved.id]!.rawObject)
+        let originalJSON = try socialJSON(oldRow.rawObject)
+        precondition(retained == originalJSON)
+
+        let valid = await controller.publish(roster(current.members, moderators: [memberID]), title: "Review membership",
+                                             primary, membershipReview: SocialGroupMembershipReview(current))
+        guard case .savedDraft(let revised) = valid else { preconditionFailure("Current roster draft must save") }
+        await controller.retryDraft(controller.snapshot!.state.drafts[revised.id]!, primary)
+        precondition(controller.snapshot?.state.drafts[revised.id]?.resourceVersion == current.epoch)
+        precondition(Set(controller.snapshot!.state.drafts.keys) == [saved.id, revised.id])
+        let discarded = controller.snapshot!.state.drafts[revised.id]!
+        try await second.repository.socialLocal(Data(try socialJSON(["op":"delete_draft", "id":revised.id]).utf8))
+        let afterDiscard = try await second.repository.socialSnapshot(reveal: false)
+        await controller.retryDraft(discarded, primary)
+        precondition(controller.error?.contains("current entry in Outbox") == true)
+        let reopened = DeskRepository(directory: directory)
+        _ = try await reopened.open()
+        let final = try await reopened.socialSnapshot(reveal: false)
+        precondition(final.state.revision == afterDiscard.state.revision)
+        precondition(Set(final.state.drafts.keys) == [saved.id])
+        precondition(final.state.groups[id]?.members == current.members)
+        precondition(Set(final.state.outbox.keys) == Set(before.state.outbox.keys))
+        precondition(primary.authorization.pending == nil)
+        print("Native membership review: changed epoch refused, current roster kept one draft ID, and discarded Outbox actions stayed discarded across SQLite reopen.")
     }
 
     @MainActor static func testPublicGroupPreview() async throws {
@@ -535,7 +626,7 @@ import Foundation
         drafts[privateGroup].text += " with an edit made during review"
         let revised = drafts.entry(for: privateGroup)!
         let retry = await author.publish(revised.content.action(for: privateGroup, book: book)!,
-                                         title: "Review private draft again", owner, reviewingPost: revised.savedReview)
+                                         title: "Review private draft again", owner, reviewingDraft: revised.savedReview)
         guard case .savedDraft(let retried) = retry else { preconditionFailure("Retry must save the edited draft") }
         let stored = author.snapshot!.state.drafts
         precondition(retried.id == saved.id && stored.count == 1)
@@ -551,7 +642,7 @@ import Foundation
         let awaiting = drafts.entry(for: privateGroup)!
         try await owner.repository.socialLocal(Data(try socialJSON(["op": "delete_draft", "id": saved.id]).utf8))
         let removed = await author.publish(awaiting.content.action(for: privateGroup, book: book)!,
-                                           title: "Review after discard", owner, reviewingPost: awaiting.savedReview)
+                                           title: "Review after discard", owner, reviewingDraft: awaiting.savedReview)
         precondition(removed == .reviewChanged && author.snapshot!.state.drafts.isEmpty)
         await author.retryDraft(currentQueueRow, owner)
         precondition(author.error?.contains("current entry in Outbox") == true && author.snapshot!.state.drafts.isEmpty)

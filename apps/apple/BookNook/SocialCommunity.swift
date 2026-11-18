@@ -178,7 +178,7 @@ struct SocialCommunityView: View {
                       let action = postAction(submitted.content, for: destination) else { return }
                 Task {
                     let outcome = await social.publish(action, title: "Publish this reading selection", model,
-                                                       reviewingPost: submitted.savedReview)
+                                                       reviewingDraft: submitted.savedReview)
                     postDrafts.finish(outcome, for: destination, submitted: submitted)
                 }
             }.buttonStyle(.borderedProminent).disabled(postAction(draft.wrappedValue, for: destination) == nil)
@@ -378,7 +378,7 @@ struct SocialCommunityView: View {
     private func submitReply(_ target: SocialGroupReplyTarget) async {
         guard activeReply == target, let draft = replyDrafts[target],
               let action = draft.action(for: target, in: social.snapshot) else { return }
-        switch await social.publish(action, title: "Publish this group reply", model, reviewingPost: draft.savedReview) {
+        switch await social.publish(action, title: "Publish this group reply", model, reviewingDraft: draft.savedReview) {
         case .notSaved:
             break
         case .reviewChanged:
@@ -411,7 +411,12 @@ struct SocialCommunityView: View {
         }
         return Array(Set(candidates.filter { !group.members.contains($0) && !group.banned.contains($0) })).sorted()
     }
-    private func setMembers(_ group: SocialGroup, members: [String], moderators: [String]) async { await social.publish(["op": "set_members", "group_id": group.id, "members": Array(Set(members)).sorted(), "moderators": Array(Set(moderators)).sorted()], title: "Change this group's membership", model) }
+    private func setMembers(_ group: SocialGroup, members: [String], moderators: [String]) async {
+        await social.publish(["op": "set_members", "group_id": group.id,
+                              "members": Array(Set(members)).sorted(), "moderators": Array(Set(moderators)).sorted()],
+                             title: "Change this group's membership", model,
+                             membershipReview: SocialGroupMembershipReview(group))
+    }
     private var discoveryView: some View {
         VStack(alignment: .leading, spacing: 20) {
             HStack {

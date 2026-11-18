@@ -722,6 +722,75 @@ fn retraction_and_moderation_cancel_unsent_content_and_reject_stale_retry_copies
 }
 
 #[test]
+fn parent_retraction_stops_reply_delivery_but_keeps_signed_history_replayable() {
+    for moderator_removal in [false, true] {
+        let mut state = SocialState::default();
+        let group_id = make_group(&mut state, true);
+        let parent = execute(
+            &mut state,
+            2,
+            SocialAction::Publish {
+                group_id: Some(group_id.clone()),
+                post: note("Earlier topic", false),
+            },
+            110,
+        );
+        let mut receiver = state.clone();
+        let reply = execute(
+            &mut state,
+            2,
+            SocialAction::Publish {
+                group_id: Some(group_id.clone()),
+                post: Post {
+                    reply_to: Some(parent.event.id.clone()),
+                    ..note("Approved before moderation", false)
+                },
+            },
+            111,
+        );
+        let epoch = state.groups[&group_id].epoch;
+        let (_, _, policy) = proof(&reply.event, 2);
+        validate_outgoing(&state, &reply, &policy, 111).unwrap();
+
+        // Hiding a post is local view state, distinct from signed removal.
+        local(
+            &mut state,
+            LocalSocialCommand::Hide {
+                event_id: parent.event.id.clone(),
+                hidden: true,
+            },
+        )
+        .unwrap();
+        validate_outgoing(&state, &reply, &policy, 112).unwrap();
+
+        let action = if moderator_removal {
+            SocialAction::Moderate {
+                group_id: group_id.clone(),
+                event_id: Some(parent.event.id.clone()),
+                ban_actor: None,
+            }
+        } else {
+            SocialAction::Retract {
+                event_id: parent.event.id.clone(),
+            }
+        };
+        let removal = execute(&mut state, 2, action, 112);
+        assert_eq!(state.groups[&group_id].epoch, epoch);
+        let error = validate_outgoing(&state, &reply, &policy, 113).unwrap_err();
+        assert!(error.to_string().contains("reply’s parent"), "{error}");
+        assert_eq!(state.outbox[&reply.event.id].publication, reply);
+        assert_eq!(state.publications[&reply.event.id], reply);
+
+        // The receiver may learn of removal before receiving a reply sent earlier.
+        assert!(receive(&mut receiver, removal, &policy, 113).unwrap());
+        assert!(receive(&mut receiver, reply.clone(), &policy, 113).unwrap());
+        assert_eq!(receiver.publications[&reply.event.id], reply);
+        assert!(receiver.retracted.contains(&parent.event.id));
+        assert!(!receiver.outbox.contains_key(&reply.event.id));
+    }
+}
+
+#[test]
 fn cancelling_delivery_preserves_approved_history_and_receipt_replay_protection() {
     let mut state = SocialState::default();
     let publication = execute(

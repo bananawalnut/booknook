@@ -15,7 +15,7 @@ use booknook_core::{
     social_protocol::{self as social, *},
 };
 use nostr_sdk::prelude::*;
-use rusqlite::{Connection, OptionalExtension, params};
+use rusqlite::{Connection, OptionalExtension, TransactionBehavior, params};
 use serde::Deserialize;
 use serde_json::json;
 use std::collections::BTreeMap;
@@ -70,7 +70,30 @@ fn load(c: &Connection) -> Result<SocialState> {
     social::validate(&state)?;
     Ok(state)
 }
+fn audit_with_policy(
+    state: &SocialState,
+    policy: &AuthorityPolicy,
+    at: u64,
+) -> booknook_core::Result<()> {
+    social::audit(
+        state,
+        |who| {
+            let mut author = policy.clone();
+            author.actor = who.into();
+            Ok(author)
+        },
+        at,
+    )
+}
 fn save(c: &mut Connection, previous: u64, s: &SocialState) -> Result<()> {
+    save_with_policy(c, previous, s, None)
+}
+fn save_with_policy(
+    c: &mut Connection,
+    previous: u64,
+    s: &SocialState,
+    policy: Option<&AuthorityPolicy>,
+) -> Result<()> {
     social::validate(s)?;
     let json = serde_json::to_string(s)?;
     if json.len() > booknook_core::MAX_JSON_BYTES {
@@ -79,7 +102,20 @@ fn save(c: &mut Connection, previous: u64, s: &SocialState) -> Result<()> {
         )
         .into());
     }
-    let tx = c.transaction()?;
+    let tx = c.transaction_with_behavior(match policy {
+        Some(_) => TransactionBehavior::Immediate,
+        None => TransactionBehavior::Deferred,
+    })?;
+    if let Some(expected) = policy {
+        let current = Desk::policy_on(&tx, social::ACTION, None)?;
+        if canonical(&current)? != canonical(expected)? {
+            return Err(booknook_core::Error::Conflict(
+                "Castalia authority changed during review; review the current settings and retry"
+                    .into(),
+            )
+            .into());
+        }
+    }
     let n = tx.execute(
         "UPDATE social_state SET revision=?1,json=?2 WHERE id=1 AND revision=?3",
         params![sql(s.revision)?, json, sql(previous)?],
@@ -105,6 +141,10 @@ enum NativeLocalCommand {
 #[serde(tag = "op", rename_all = "snake_case", deny_unknown_fields)]
 enum NativeReviewCommand {
     ReplaceReviewedPost {
+        expected: Box<SocialEvent>,
+        event: Box<SocialEvent>,
+    },
+    RefreshReviewedAction {
         expected: Box<SocialEvent>,
         event: Box<SocialEvent>,
     },
@@ -176,6 +216,27 @@ fn replace_reviewed_post(
     {
         return Err(booknook_core::Error::Conflict(
             "The saved draft belongs to a different reader or audience.".into(),
+        )
+        .into());
+    }
+    social::local(state, LocalSocialCommand::SaveDraft { event })?;
+    Ok(())
+}
+
+fn refresh_reviewed_action(
+    state: &mut SocialState,
+    expected: &SocialEvent,
+    event: Box<SocialEvent>,
+) -> Result<()> {
+    require_reviewed_draft(state, expected)?;
+    if expected.id != event.id
+        || expected.actor != event.actor
+        || expected.resource_version != event.resource_version
+        || expected.delivery != event.delivery
+        || expected.action != event.action
+    {
+        return Err(booknook_core::Error::Conflict(
+            "The saved action changed. Open the current record before reviewing again.".into(),
         )
         .into());
     }
@@ -336,18 +397,7 @@ impl Desk {
         // lock is held during replay, and restored data never supplies trust.
         let verified = previews.is_empty()
             || policy.as_ref().is_some_and(|policy| {
-                now().is_ok_and(|at| {
-                    social::audit(
-                        &state,
-                        |who| {
-                            let mut author = policy.clone();
-                            author.actor = who.into();
-                            Ok(author)
-                        },
-                        at,
-                    )
-                    .is_ok()
-                })
+                now().is_ok_and(|at| audit_with_policy(&state, policy, at).is_ok())
             });
         let verified_previews = verified.then_some(previews);
         Ok(serde_json::to_string(&json!({
@@ -360,16 +410,19 @@ impl Desk {
         }))?)
     }
     pub fn social_prepare(&self, action_json: String) -> Result<String> {
-        let who = self.policy(social::ACTION, None)?.actor;
+        let policy = self.policy(social::ACTION, None)?;
         let action: SocialAction = booknook_core::strict_parse(action_json.as_bytes())?;
         let state = {
             let store = self.lock()?;
             load(&store.connection)?
         };
         let at = now()?;
-        self.audit_social(&state, at)?;
+        audit_with_policy(&state, &policy, at)?;
         Ok(serde_json::to_string(&social::prepare(
-            &state, &who, action, at,
+            &state,
+            &policy.actor,
+            action,
+            at,
         )?)?)
     }
     pub fn social_local(&self, command_json: String) -> Result<()> {
@@ -377,12 +430,20 @@ impl Desk {
         let mut store = self.lock()?;
         let mut state = load(&store.connection)?;
         let revision = state.revision;
-        match command {
-            NativeLocalCommand::Portable(command) => social::local(&mut state, command)?,
-            NativeLocalCommand::Review(NativeReviewCommand::ReplaceReviewedPost {
-                expected,
-                event,
-            }) => {
+        let policy = match command {
+            NativeLocalCommand::Portable(command) => {
+                social::local(&mut state, command)?;
+                None
+            }
+            NativeLocalCommand::Review(review) => {
+                let (expected, event, edit_post) = match review {
+                    NativeReviewCommand::ReplaceReviewedPost { expected, event } => {
+                        (expected, event, true)
+                    }
+                    NativeReviewCommand::RefreshReviewedAction { expected, event } => {
+                        (expected, event, false)
+                    }
+                };
                 let policy = Self::policy_on(&store.connection, social::ACTION, None)?;
                 if policy.actor != event.actor {
                     return Err(booknook_core::Error::Conflict(
@@ -390,10 +451,15 @@ impl Desk {
                     )
                     .into());
                 }
-                replace_reviewed_post(&mut state, &expected, event)?;
+                if edit_post {
+                    replace_reviewed_post(&mut state, &expected, event)?;
+                } else {
+                    refresh_reviewed_action(&mut state, &expected, event)?;
+                }
+                Some(policy)
             }
-        }
-        save(&mut store.connection, revision, &state)
+        };
+        save_with_policy(&mut store.connection, revision, &state, policy.as_ref())
     }
     pub fn social_approve(
         &self,
@@ -412,8 +478,8 @@ impl Desk {
         if tracked {
             require_reviewed_draft(&original, &event)?;
         }
-        self.audit_social(&original, now()?)?;
         let policy = self.policy(social::ACTION, None)?;
+        audit_with_policy(&original, &policy, now()?)?;
         let mut store = self.lock()?;
         let mut state = load(&store.connection)?;
         if state.revision != original.revision {
@@ -434,7 +500,7 @@ impl Desk {
             &policy,
             now()?,
         )?;
-        save(&mut store.connection, revision, &state)
+        save_with_policy(&mut store.connection, revision, &state, Some(&policy))
     }
     pub fn social_new_owned_id(&self) -> Result<String> {
         Ok(social::new_owned_id(
@@ -1382,6 +1448,82 @@ mod tests {
     }
 
     #[test]
+    fn reviewed_save_compares_castalia_authority_across_desk_handles() {
+        use booknook_core::settings::ConnectionSettings;
+        let directory = std::env::temp_dir().join(booknook_core::new_id());
+        let path = directory.to_string_lossy().into_owned();
+        let desk = Desk::new(path.clone()).unwrap();
+        let other = Desk::new(path).unwrap();
+        configure_review_desk(&desk);
+        let policy = desk.policy(social::ACTION, None).unwrap();
+        let prepare = |body: &str| -> SocialEvent {
+            serde_json::from_str(
+                &desk
+                    .social_prepare(
+                        json!({"op":"publish","post":{"kind":"note","body":body,"spoiler":false}})
+                            .to_string(),
+                    )
+                    .unwrap(),
+            )
+            .unwrap()
+        };
+        let retained = prepare("Keep this reviewed draft");
+        let rejected = prepare("A review under the previous authority");
+        let mut settings: ConnectionSettings =
+            serde_json::from_str(&other.connection_settings().unwrap()).unwrap();
+        settings.audible_marketplace = "uk".into();
+        other
+            .save_connection_settings(serde_json::to_string(&settings).unwrap())
+            .unwrap();
+        let mut state = load(&desk.lock().unwrap().connection).unwrap();
+        let initial_revision = state.revision;
+        social::local(
+            &mut state,
+            LocalSocialCommand::SaveDraft {
+                event: Box::new(retained.clone()),
+            },
+        )
+        .unwrap();
+        save_with_policy(
+            &mut desk.lock().unwrap().connection,
+            initial_revision,
+            &state,
+            Some(&policy),
+        )
+        .unwrap();
+
+        let revision = state.revision;
+        let before = canonical(&state).unwrap();
+        social::local(
+            &mut state,
+            LocalSocialCommand::SaveDraft {
+                event: Box::new(rejected),
+            },
+        )
+        .unwrap();
+        settings.castalia.as_mut().unwrap().policy_digest = "ff".repeat(32);
+        other
+            .save_connection_settings(serde_json::to_string(&settings).unwrap())
+            .unwrap();
+        let error = save_with_policy(
+            &mut desk.lock().unwrap().connection,
+            revision,
+            &state,
+            Some(&policy),
+        )
+        .unwrap_err();
+        assert!(
+            error.to_string().contains("Castalia authority changed"),
+            "{error}"
+        );
+        let after = load(&other.lock().unwrap().connection).unwrap();
+        assert_eq!(before, canonical(&after).unwrap());
+        assert_eq!(after.drafts.get(&retained.id), Some(&retained));
+        drop((desk, other));
+        std::fs::remove_dir_all(directory).unwrap();
+    }
+
+    #[test]
     fn tracked_reply_refuses_parent_hidden_blocked_or_retracted_during_consent() {
         let directory = std::env::temp_dir().join(booknook_core::new_id());
         let path = directory.to_string_lossy().into_owned();
@@ -1531,6 +1673,68 @@ mod tests {
         assert!(published.drafts.is_empty());
         assert_eq!(published.outbox.len(), 1);
         assert_eq!(published.outbox[&original.id].publication.event, edited);
+        drop(desk);
+        std::fs::remove_dir_all(directory).unwrap();
+    }
+
+    #[test]
+    fn refresh_reviewed_action_preserves_exact_action_and_obeys_discard() {
+        let directory = std::env::temp_dir().join(booknook_core::new_id());
+        let path = directory.to_string_lossy().into_owned();
+        let desk = Desk::new(path.clone()).unwrap();
+        let policy = configure_review_desk(&desk);
+        let original: SocialEvent = serde_json::from_str(
+            &desk
+                .social_prepare(
+                    json!({
+                        "op": "create_group", "id": format!("{}:saved-review", policy.actor),
+                        "name": "Reviewed group", "description": "", "private": false
+                    })
+                    .to_string(),
+                )
+                .unwrap(),
+        )
+        .unwrap();
+        desk.social_local(json!({"op":"save_draft","event":original}).to_string())
+            .unwrap();
+        let command = |expected: &SocialEvent, event: &SocialEvent| {
+            json!({"op":"refresh_reviewed_action","expected":expected,"event":event}).to_string()
+        };
+        let revised = SocialEvent {
+            at: original.at + 1,
+            ..original.clone()
+        };
+        let mut changed = revised.clone();
+        let SocialAction::CreateGroup { name, .. } = &mut changed.action else {
+            unreachable!()
+        };
+        *name = "Other group".into();
+        assert!(desk.social_local(command(&original, &changed)).is_err());
+        let version_changed = SocialEvent {
+            resource_version: revised.resource_version + 1,
+            ..revised.clone()
+        };
+        assert!(
+            desk.social_local(command(&original, &version_changed))
+                .is_err()
+        );
+        desk.social_local(command(&original, &revised)).unwrap();
+        assert!(desk.social_local(command(&original, &revised)).is_err());
+        let reopened = Desk::new(path).unwrap();
+        let state = load(&reopened.lock().unwrap().connection).unwrap();
+        assert_eq!(state.drafts.values().collect::<Vec<_>>(), vec![&revised]);
+        assert!(state.outbox.is_empty());
+        reopened
+            .social_local(json!({"op":"delete_draft","id":revised.id}).to_string())
+            .unwrap();
+        assert!(desk.social_local(command(&revised, &revised)).is_err());
+        assert!(
+            load(&reopened.lock().unwrap().connection)
+                .unwrap()
+                .drafts
+                .is_empty()
+        );
+        drop(reopened);
         drop(desk);
         std::fs::remove_dir_all(directory).unwrap();
     }

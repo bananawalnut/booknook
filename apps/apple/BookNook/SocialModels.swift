@@ -76,6 +76,38 @@ struct SocialListReview {
     }
 }
 
+struct SocialGroupMembershipReview {
+    let groupID: String
+    let owner: String
+    let epoch: UInt64
+
+    init(_ group: SocialGroup) {
+        groupID = group.id
+        owner = group.owner
+        epoch = group.epoch
+    }
+
+    init?(retrying event: SocialEventModel) {
+        guard let action = event.action.object, Self.requiresEpoch(action),
+              let groupID = action["group_id"] as? String else { return nil }
+        self.groupID = groupID
+        owner = event.actor
+        epoch = event.resourceVersion
+    }
+
+    static func requiresEpoch(_ action: [String: Any]) -> Bool { action["op"] as? String == "set_members" }
+
+    func matches(_ snapshot: SocialSnapshot) -> Bool {
+        guard let group = snapshot.state.groups[groupID], !group.closed else { return false }
+        return snapshot.actor == owner && group.owner == owner && group.epoch == epoch
+    }
+
+    func matches(_ event: SocialEventModel) -> Bool {
+        event.actor == owner && event.resourceVersion == epoch
+            && event.action.object?["group_id"] as? String == groupID
+    }
+}
+
 struct SocialListDraft {
     let review: SocialListReview?
     var name: String
@@ -316,21 +348,30 @@ extension DeskRepository {
         } catch { self.error = bookNookErrorMessage(error) }
     }
     @discardableResult
-    func publish(_ action: [String: Any], title: String, _ model: DeskModel, replacingDraftID: String? = nil,
-                 listReview: SocialListReview? = nil, reviewingPost: SavedSocialDraft? = nil) async -> SocialPublicationOutcome {
+    func publish(_ action: [String: Any], title: String, _ model: DeskModel, listReview: SocialListReview? = nil,
+                 membershipReview: SocialGroupMembershipReview? = nil,
+                 reviewingDraft: SavedSocialDraft? = nil) async -> SocialPublicationOutcome {
         guard !busy else { return .notSaved }
         busy = true; error = nil; defer { busy = false }
         var outcome = SocialPublicationOutcome.notSaved
         do {
             func listConflict() -> AuthorizationError {
                 let instruction = "Open the current list before reviewing changes again."
-                if replacingDraftID != nil || outcome != .notSaved {
+                if reviewingDraft != nil || outcome != .notSaved {
                     return .message("This shared list changed. Your saved draft was kept. " + instruction)
                 }
                 if action["op"] as? String == "delete_list" {
                     return .message("This shared list changed. Open the current list before reviewing deletion again.")
                 }
                 return .message("This shared list changed. Your edits are still in the editor. " + instruction)
+            }
+            let membershipConflict = AuthorizationError.message("This group’s membership changed. Open the current group before reviewing again.")
+            if SocialGroupMembershipReview.requiresEpoch(action) {
+                guard let membershipReview, action["group_id"] as? String == membershipReview.groupID else {
+                    throw membershipConflict
+                }
+                let current = try await model.repository.socialSnapshot(reveal: revealSpoilers)
+                guard membershipReview.matches(current) else { throw membershipConflict }
             }
             if SocialListReview.requiresVersion(action) {
                 guard let listReview, action["id"] as? String == listReview.id else { throw listConflict() }
@@ -339,41 +380,47 @@ extension DeskRepository {
             }
             var eventJSON = try await model.repository.socialPrepare(JSONSerialization.data(withJSONObject: action))
             var event = try socialDecode(SocialEventModel.self, eventJSON)
-            // Preparation stamps the latest native version; it must not rebase a list draft.
+            // Preparation stamps the current version. Keep the one the reader reviewed.
             if let listReview, !listReview.matches(event) { throw listConflict() }
+            if let membershipReview, !membershipReview.matches(event) { throw membershipConflict }
             let rawEvent = try JSONSerialization.jsonObject(with: Data(eventJSON.utf8))
             var command: [String: Any] = ["op": "save_draft", "event": rawEvent]
-            if let reviewingPost {
-                let previous = try socialDecode(SocialEventModel.self, reviewingPost.eventJSON)
+            if let reviewingDraft {
+                let previous = try socialDecode(SocialEventModel.self, reviewingDraft.eventJSON)
                 let current = try await model.repository.socialSnapshot(reveal: revealSpoilers)
-                let previousJSON = try socialJSON(previous.rawObject)
-                let previousAction = previous.action.object
-                let currentAction = event.action.object
-                let previousParent = (previousAction?["post"] as? [String: Any])?["reply_to"] as? String
-                let currentParent = (currentAction?["post"] as? [String: Any])?["reply_to"] as? String
-                guard let saved = current.state.drafts[reviewingPost.id], previous.id == reviewingPost.id,
-                      try socialJSON(saved.rawObject) == previousJSON,
-                      previous.actor == current.actor, current.actor == event.actor,
-                      previousAction?["op"] as? String == "publish", currentAction?["op"] as? String == "publish",
-                      previousAction?["group_id"] as? String == currentAction?["group_id"] as? String,
-                      previousParent == currentParent,
-                      try socialJSON(["delivery": previous.delivery.any]) == socialJSON(["delivery": event.delivery.any]) else {
+                func staleReview() -> AuthorizationError {
                     outcome = .reviewChanged
-                    throw AuthorizationError.message("The saved draft, discussion or audience has changed. Your editor text is intact. Review again to save a new draft.")
+                    return .message("This saved review changed. Check the current entry in Outbox before reviewing again.")
+                }
+                guard let saved = current.state.drafts[reviewingDraft.id], previous.id == reviewingDraft.id,
+                      let previousAction = previous.action.object, let currentAction = event.action.object,
+                      try socialJSON(saved.rawObject) == socialJSON(previous.rawObject),
+                      previous.actor == current.actor, current.actor == event.actor,
+                      try socialJSON(["delivery": previous.delivery.any]) == socialJSON(["delivery": event.delivery.any]) else {
+                    throw staleReview()
+                }
+
+                let operation: String
+                if previousAction["op"] as? String == "publish" {
+                    let previousParent = (previousAction["post"] as? [String: Any])?["reply_to"] as? String
+                    let currentParent = (currentAction["post"] as? [String: Any])?["reply_to"] as? String
+                    guard currentAction["op"] as? String == "publish",
+                          previousAction["group_id"] as? String == currentAction["group_id"] as? String,
+                          previousParent == currentParent else { throw staleReview() }
+                    operation = "replace_reviewed_post"
+                } else {
+                    guard previous.resourceVersion == event.resourceVersion,
+                          try socialJSON(previousAction) == socialJSON(currentAction) else { throw staleReview() }
+                    operation = "refresh_reviewed_action"
                 }
                 var replacement = event.rawObject
-                replacement["id"] = reviewingPost.id
+                replacement["id"] = reviewingDraft.id
                 eventJSON = try socialJSON(replacement)
                 event = try socialDecode(SocialEventModel.self, eventJSON)
-                command = ["op": "replace_reviewed_post", "expected": previous.rawObject, "event": replacement]
+                command = ["op": operation, "expected": previous.rawObject, "event": replacement]
             }
             try await model.repository.socialLocal(JSONSerialization.data(withJSONObject: command))
             outcome = .savedDraft(SavedSocialDraft(id: event.id, eventJSON: eventJSON))
-            // Keep the original recoverable until its replacement is durably saved.
-            // A preparation/save failure retains the original; consent failure retains the new draft.
-            if let replacingDraftID, replacingDraftID != event.id {
-                try await model.repository.socialLocal(JSONSerialization.data(withJSONObject: ["op": "delete_draft", "id": replacingDraftID]))
-            }
             let preparedAction = event.action.object ?? action
             if let groupID = preparedAction["group_id"] as? String,
                let post = preparedAction["post"] as? [String: Any],
@@ -384,10 +431,11 @@ extension DeskRepository {
                 guard target.parent(in: current) != nil else {
                     throw AuthorizationError.message("The discussion you’re replying to is no longer visible.")
                 }
-            } else if let listReview {
+            } else if listReview != nil || membershipReview != nil {
                 let current = try await model.repository.socialSnapshot(reveal: revealSpoilers)
                 snapshot = current
-                guard listReview.matches(current) else { throw listConflict() }
+                if let listReview, !listReview.matches(current) { throw listConflict() }
+                if let membershipReview, !membershipReview.matches(current) { throw membershipConflict }
             } else {
                 await reload(model)
             }
@@ -409,18 +457,11 @@ extension DeskRepository {
     }
     func retryDraft(_ event: SocialEventModel, _ model: DeskModel) async {
         guard let action = event.action.object else { return }
-        if action["op"] as? String == "publish" {
-            do {
-                let saved = SavedSocialDraft(id: event.id, eventJSON: try socialJSON(event.rawObject))
-                let outcome = await publish(action, title: "Publish reviewed record", model, reviewingPost: saved)
-                if outcome == .reviewChanged {
-                    error = "This saved post or its audience changed. Check the current entry in Outbox before reviewing again."
-                }
-            } catch { self.error = bookNookErrorMessage(error) }
-            return
-        }
-        await publish(action, title: "Publish reviewed record", model, replacingDraftID: event.id,
-                      listReview: SocialListReview(retrying: event))
+        do {
+            let saved = SavedSocialDraft(id: event.id, eventJSON: try socialJSON(event.rawObject))
+            await publish(action, title: "Publish reviewed record", model, listReview: SocialListReview(retrying: event),
+                          membershipReview: SocialGroupMembershipReview(retrying: event), reviewingDraft: saved)
+        } catch { self.error = bookNookErrorMessage(error) }
     }
     func bind(_ model: DeskModel) async {
         guard !busy else { return }; busy = true; error = nil; defer { busy = false }

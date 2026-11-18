@@ -386,6 +386,32 @@ async fn private_group_native_journey(relay: &RelayProcess) {
     assert!(!state(&desks[2]).publications.contains_key(&later.id));
     assert_eq!(exchange(&desks[1], relay, &keys[1]).await["received"], 0);
 
+    let mut reply_action = discussion(&group_id, "PRIVATE-REPLY: pending parent removal");
+    let SocialAction::Publish { post, .. } = &mut reply_action else {
+        unreachable!()
+    };
+    post.reply_to = Some(later.id.clone());
+    let reply = approve(&desks[0], 2, reply_action);
+    let moderation = approve(
+        &desks[0],
+        2,
+        SocialAction::Moderate {
+            group_id: group_id.clone(),
+            event_id: Some(later.id.clone()),
+            ban_actor: None,
+        },
+    );
+    let moderated = exchange(&desks[0], relay, &keys[0]).await;
+    assert_eq!(
+        moderated["sent"], 2,
+        "Only moderation reaches the two members"
+    );
+    exchange(&desks[1], relay, &keys[1]).await;
+    let peer = state(&desks[1]);
+    assert!(peer.publications.contains_key(&moderation.id));
+    assert!(peer.retracted.contains(&later.id));
+    assert!(!peer.publications.contains_key(&reply.id));
+
     // Inspect the independent relay's actual stored envelopes, not prepared
     // in-memory records. No private plaintext or stale delivery may be present.
     let observer = relay.transport().await;
@@ -407,6 +433,7 @@ async fn private_group_native_journey(relay: &RelayProcess) {
             "PRIVATE-FIRST",
             "PRIVATE-STALE",
             "PRIVATE-LATER",
+            "PRIVATE-REPLY",
             "Synthetic three-reader private circle",
             group_id.as_str(),
         ] {
@@ -423,11 +450,11 @@ async fn private_group_native_journey(relay: &RelayProcess) {
                 booknook_core::digest(format!("{id}:{}", synthetic::actor(seed)).as_bytes())
             )
         };
-        assert!(
-            !private.iter().any(
-                |event| event.tags.identifier().as_deref() == Some(address(&stale.id).as_str())
-            )
-        );
+        for withheld in [&stale.id, &reply.id] {
+            assert!(!private.iter().any(
+                |event| event.tags.identifier().as_deref() == Some(address(withheld).as_str())
+            ));
+        }
         let delivered: Vec<_> = private
             .iter()
             .filter(|event| event.tags.identifier().as_deref() == Some(address(&later.id).as_str()))
@@ -447,8 +474,12 @@ async fn private_group_native_journey(relay: &RelayProcess) {
         "Reopening must not make the stale audience eligible: {retried}"
     );
     assert!(state(&reopened).outbox[&stale.id].acknowledged.is_empty());
+    let final_state = state(&reopened);
+    assert!(final_state.retracted.contains(&later.id));
+    assert!(final_state.publications.contains_key(&reply.id));
+    assert!(final_state.outbox[&reply.id].acknowledged.is_empty());
     println!(
-        "Independent relay private groups: three native desks, isolated invitations, transferable batch admission, encrypted discussions, deduplication, member removal, exact post-removal recipients and durable stale-audience retry denial passed."
+        "Independent relay private groups: three native desks, isolated invitations, transferable batch admission, encrypted discussions, deduplication, member removal, exact post-removal recipients, durable stale-audience retry denial, and queued reply refusal after parent moderation passed."
     );
 }
 
@@ -768,6 +799,172 @@ fn sending_rechecks_issuer_policy_between_recipient_acks() {
 #[test]
 fn sending_ack_never_resurrects_a_cancelled_outbox() {
     assert_send_race(SendRace::CancelDelivery);
+}
+#[test]
+fn sending_rechecks_signed_parent_removal_between_reply_recipient_acks() {
+    use std::sync::Arc;
+
+    let root =
+        std::env::temp_dir().join(format!("booknook-reply-race-{}", booknook_core::new_id()));
+    let relay = "wss://synthetic-relay.example/";
+    let sender = Arc::new(open(&root.join("sender"), 2, relay));
+    let peer = open(&root.join("peer"), 3, relay);
+    let bus = Arc::new(MemoryProviderBus::default());
+    let keys = [2u8, 3].map(|seed| Keys::parse(&format!("{seed:02x}").repeat(32)).unwrap());
+    for desk in [sender.as_ref(), &peer] {
+        desk.replace_provider_host(Box::new(MemoryProvider(bus.clone())), 1)
+            .unwrap();
+    }
+    let owner_identity = bind(&sender, 2, &keys[0]);
+    sender
+        .social_import_binding(bind(&peer, 3, &keys[1]))
+        .unwrap();
+    peer.social_import_binding(owner_identity).unwrap();
+    let sync = |desk: &Desk, index: usize| -> serde_json::Value {
+        serde_json::from_str(
+            &desk
+                .provider_social_exchange(
+                    "test.transport".into(),
+                    keys[index].secret_key().to_secret_bytes().to_vec(),
+                    false,
+                )
+                .unwrap(),
+        )
+        .unwrap()
+    };
+    let group_id = new_owned_id(&synthetic::actor(2)).unwrap();
+    approve(
+        &sender,
+        2,
+        SocialAction::CreateGroup {
+            id: group_id.clone(),
+            name: "Private reading group".into(),
+            description: "Two synthetic readers".into(),
+            private: true,
+        },
+    );
+    assert_eq!(sync(&sender, 0)["sent"], 1);
+    let invitation_id = booknook_core::new_id();
+    approve(
+        &sender,
+        2,
+        SocialAction::Invite {
+            id: invitation_id.clone(),
+            group: state(&sender).groups[&group_id].clone(),
+            invitee: synthetic::actor(3),
+            expires_at: now().unwrap() + 600,
+        },
+    );
+    assert_eq!(sync(&sender, 0)["sent"], 2);
+    sync(&peer, 1);
+    approve(
+        &peer,
+        3,
+        SocialAction::AcceptInvitation {
+            invitation_id,
+            admission_consent: None,
+        },
+    );
+    assert_eq!(sync(&peer, 1)["sent"], 2);
+    sync(&sender, 0);
+    approve(
+        &sender,
+        2,
+        SocialAction::SetMembers {
+            group_id: group_id.clone(),
+            members: [synthetic::actor(2), synthetic::actor(3)].into(),
+            moderators: Default::default(),
+            admission_proofs: Vec::new(),
+        },
+    );
+    assert_eq!(sync(&sender, 0)["sent"], 2);
+    sync(&peer, 1);
+    let parent = approve(&peer, 3, discussion(&group_id, "Original discussion"));
+    assert_eq!(sync(&peer, 1)["sent"], 2);
+    sync(&sender, 0);
+    let mut action = discussion(&group_id, "Approved reply");
+    let SocialAction::Publish { post, .. } = &mut action else {
+        unreachable!()
+    };
+    post.reply_to = Some(parent.id.clone());
+    let reply = approve(&sender, 2, action);
+    let approval = state(&sender).publications[&reply.id].clone();
+    let Delivery::Direct { recipients } = &reply.delivery else {
+        panic!("Expected private reply")
+    };
+    assert_eq!(recipients.len(), 2);
+
+    let private_count = || {
+        bus.events
+            .lock()
+            .unwrap()
+            .iter()
+            .filter(|e| {
+                e["tags"]
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .any(|tag| tag[0] == "p")
+            })
+            .count()
+    };
+    let before = private_count();
+    let weak = Arc::downgrade(&sender);
+    let parent_id = parent.id.clone();
+    sender
+        .replace_provider_host(
+            Box::new(RacingProvider {
+                bus: bus.clone(),
+                after_first_send: std::sync::Mutex::new(Some(Box::new(move || {
+                    let desk = weak.upgrade().unwrap();
+                    let removal = approve(
+                        &desk,
+                        2,
+                        SocialAction::Moderate {
+                            group_id,
+                            event_id: Some(parent_id),
+                            ban_actor: None,
+                        },
+                    );
+                    // Isolate reply delivery on retry. The signed removal stays in local history.
+                    desk.social_local(
+                        serde_json::to_string(&LocalSocialCommand::CancelDelivery {
+                            event_id: removal.id,
+                        })
+                        .unwrap(),
+                    )
+                    .unwrap();
+                }))),
+            }),
+            2,
+        )
+        .unwrap();
+    assert_eq!(sync(&sender, 0)["sent"], 1);
+    assert_eq!(private_count(), before + 1);
+    let current = state(&sender);
+    assert!(current.retracted.contains(&parent.id));
+    let pending = &current.outbox[&reply.id];
+    assert_eq!(pending.acknowledged.len(), 1);
+    assert!(
+        pending
+            .acknowledged
+            .contains_key(recipients.first().unwrap())
+    );
+    drop(sender);
+
+    let reopened = Desk::new(root.join("sender").to_string_lossy().into()).unwrap();
+    reopened
+        .replace_provider_host(Box::new(MemoryProvider(bus.clone())), 1)
+        .unwrap();
+    assert_eq!(sync(&reopened, 0)["sent"], 0);
+    assert_eq!(private_count(), before + 1);
+    let after = state(&reopened);
+    assert!(after.retracted.contains(&parent.id));
+    assert_eq!(after.publications[&reply.id], approval);
+    assert_eq!(&after.outbox[&reply.id], pending);
+    drop(reopened);
+    drop(peer);
+    std::fs::remove_dir_all(root).unwrap();
 }
 #[test]
 fn sending_rechecks_binding_expiry_at_dispatch_time() {

@@ -28,7 +28,7 @@ The maintained Nostr SDK **0.45.6** removes the unmaintained relay pool and perm
 
 The receiving-lock audit JSON preserves its 17:22 UTC audit-only observation: its consumer-execution field says pending because execution had not yet begun. That historical status is superseded by the completed six-command receiving result in [final public-preview evidence](security-020-public-preview-evidence.json); the original audit evidence remains unchanged.
 
-The examples describe the current source, which builds SDK 0.3.3 archives. Local package scripts build/test archives without publishing remotely. GitHub prerelease assets are separate from registry publication, which is not claimed.
+The examples describe the current source, which builds SDK 0.3.4 archives. Local package scripts build/test archives without publishing remotely. GitHub prerelease assets are separate from registry publication, which is not claimed.
 
 ## Rust notebook storage
 
@@ -58,7 +58,7 @@ To replace SQLite, implement `Provider` and `NotebookStorage`, initialize a vali
 
 UniFFI generates `apps/apple/Generated/booknook_native.swift` and its C header/module map. `scripts/build-apple.sh` regenerates these from the actual Rust library. `Desk` is the native reference composition; it accepts a local directory and exposes commands, snapshots, imports, history, custody, social and synchronization operations. Invoke disk, cryptography and network work outside the main actor, as the reference app's `DeskRepository` does.
 
-For an independent app, use `scripts/package-swift.sh` to produce the standalone `booknook-swift-sdk-0.3.3.tar.gz`, then add its extracted directory as a local Swift Package. `BookNookNative` exposes the Rust bridge, `BookNookServices` provides asynchronous provider composition, and `CastaliaNative` supplies reusable custody, secure-storage and consent coordination. It includes arm64 macOS, iOS device and iOS Simulator slices, generated Swift and headers. Its consumer check extracts the actual archive before linking; the package does not depend on the reference app's source tree.
+For an independent app, use `scripts/package-swift.sh` to produce the standalone `booknook-swift-sdk-0.3.4.tar.gz`, then add its extracted directory as a local Swift Package. `BookNookNative` exposes the Rust bridge, `BookNookServices` provides asynchronous provider composition, and `CastaliaNative` supplies reusable custody, secure-storage and consent coordination. It includes arm64 macOS, iOS device and iOS Simulator slices, generated Swift and headers. Its consumer check extracts the actual archive before linking; the package does not depend on the reference app's source tree.
 
 Local command results contain `state` and `result`. Use IDs returned by `result` rather than searching by display title. Keep an editor draft until a throwing save acknowledges persistence. Custody unlock does not authorize a publication: use the prepared disclosure and explicit consent lifecycle. Do not infer operational permission from a directory identity or a Nostr signature.
 
@@ -85,6 +85,10 @@ In SDK 0.3.2, the native desk can refresh a top-level post draft with `social_lo
 SDK 0.3.3 also applies this operation to replies when both records use the same parent post ID. The built-in reply composer is available in reading groups. The Outbox also accepts compatible ungrouped replies restored from portable social exports. Retrying a superseded or discarded reply cannot create a new draft. The published 0.3.2 archive supports the top-level operation described above.
 
 Pass `{"reviewed_draft":<event>}` to `social_approve` when consent is tied to a saved draft. The desk verifies the saved event and the signed event before publication. SDK 0.3.3 also checks that a group reply’s parent is still visible when approval is committed. A parent hidden, blocked, or removed during consent leaves the reply saved locally. Standalone callers may continue using the existing bare event format. These native desk operations do not change the portable command, archive, or relay schemas.
+
+The SDK 0.3.4 source adds `{"op":"refresh_reviewed_action","expected":<saved event>,"event":<refreshed event>}` for a retry of an unchanged action. Keep the exact saved ID, actor, action, resource version and delivery. A missing or replaced draft, changed action, or changed version fails the SQLite comparison before writing. The reference app binds a membership review to the selected group’s epoch when the reader opens review and when they retry it from Outbox. Native review edits and both approval entry points compare the effective Castalia authority under the same SQLite transaction as the social-state write. Approval audits prior publications and verifies the new receipt under that same policy.
+
+The sender checks recorded parent retraction or moderation before encoding an approved reply and again before dispatching each envelope. Earlier acknowledgments and signed history stay readable. Receiver validation can still replay a historical reply after learning of the parent’s removal. Once an envelope is in flight, a local removal cannot recall it.
 
 ### Recommendations and approved encrypted transfer
 

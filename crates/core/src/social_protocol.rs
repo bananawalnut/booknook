@@ -1236,16 +1236,22 @@ pub fn validate_outgoing(
             "A recipient was blocked before delivery",
         )?;
     }
-    if let SocialAction::Publish {
-        group_id: Some(id), ..
-    } = &p.event.action
-    {
-        let g = group(s, id)?;
-        live_member(g, &p.event.actor)?;
+    if let SocialAction::Publish { group_id, post } = &p.event.action {
         ensure(
-            p.event.resource_version == g.epoch && p.event.delivery == group_delivery(g),
-            "Membership changed before sending; review a new publication",
+            !post
+                .reply_to
+                .as_ref()
+                .is_some_and(|parent| s.retracted.contains(parent)),
+            "The reply’s parent was retracted or removed by moderation",
         )?;
+        if let Some(id) = group_id {
+            let g = group(s, id)?;
+            live_member(g, &p.event.actor)?;
+            ensure(
+                p.event.resource_version == g.epoch && p.event.delivery == group_delivery(g),
+                "Membership changed before sending; review a new publication",
+            )?;
+        }
     }
     Ok(())
 }
