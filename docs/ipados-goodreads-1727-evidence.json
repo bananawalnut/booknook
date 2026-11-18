@@ -1,0 +1,41 @@
+{
+  "result": "PASS_GOODREADS_FILES_IMPORT_REIMPORT_AND_REOPEN",
+  "app_build": "2026111727",
+  "app_version": "0.2.1",
+  "app_source_commit": "a2d7f34d843726ad3f2f444a0bdfa68c6920f1b6",
+  "preview_release_id": 450054012,
+  "archive_sha256": "6ce3163ac8928b16a5c3b3b686631cdac4c600f05b7127abe5703ff5d14827c7",
+  "executable_sha256": "97ba4304cc77feb9a823362e5625592dce4eabfcd46acfbcfaff892027e6d09c",
+  "runtime": "iPadOS 18.6 Simulator",
+  "test_log_sha256": "b71dd6c8c12220eecf00028c23cc73343280c52dce2d5cd4f7ced6a1c5732963",
+  "checks": [
+    "Cancelled the native Files picker",
+    "Imported the selected Goodreads CSV and opened the original review",
+    "Changed the rating from four to five stars and used Save privately",
+    "Reimported the same CSV and checked the five stars and original review",
+    "Terminated and relaunched the app and verified both again"
+  ],
+  "durable_state": {
+    "books": 2,
+    "editions": 2,
+    "saved_private_rating": 5,
+    "preserved_original_review": true,
+    "preserved_shelf_and_date_read": true,
+    "original_goodreads_ids_isbn_review_and_rating_provenance_verified": true,
+    "public_activity_and_drafts": 0,
+    "database_revision": 6
+  },
+  "review_edit_followup": {
+    "result": "PASS_GOODREADS_FILES_IMPORT_REIMPORT_AND_REOPEN",
+    "test_log_sha256": "54191b0725172f32b6a9a67ad04abacd16760f38ac3594589179b8f6be0968e6",
+    "typed_in_the_native_review_editor": true,
+    "saved_private_rating": 5,
+    "edited_review_visible_after_reimport_and_cold_reopen": true,
+    "sqlite_preserved_edit_and_original_import_provenance": true,
+    "books_and_editions": [2, 2],
+    "public_activity_and_drafts": 0,
+    "existing_simulator_library_and_preferences_restored": true
+  },
+  "isolation": "An isolated test library inside the dedicated QA Simulator. Existing library and preferences matched their original inventories after cleanup.",
+  "scope": "The app used a synthetic Goodreads CSV. The two passing runs exercised private rating and review edits in the released native UI. Physical keyboard, IME, and device input are separate checks."
+}
