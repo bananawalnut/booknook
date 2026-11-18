@@ -118,7 +118,7 @@ struct SocialCommunityView: View {
                 social.error = "This private sharing draft is no longer available. Return to its history and prepare it again."
                 return
             }
-            postDrafts[.feed] = SocialPostDraft(text: draft.body, containsSpoilers: draft.spoiler)
+            postDrafts.start(SocialPostDraft(text: draft.body, containsSpoilers: draft.spoiler), for: .feed)
             tab = "Feed"; composerExpanded = true
             social.status = "Private selection loaded for review. Edit it here; nothing has been published. Its saved copy remains in Unpublished drafts."
             model.sharingBookId = nil
@@ -128,8 +128,9 @@ struct SocialCommunityView: View {
         guard let id = model.sharingBookId, let book = model.state?.books[id] else { return }
         let readingStatus = ["to-read", "currently-reading", "read", "paused", "abandoned"].contains(book.shelf) ? book.shelf : "to-read"
         let kind = book.review.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && book.rating != nil ? "rating" : "review"
-        postDrafts[.feed] = SocialPostDraft(bookID: id, kind: kind, text: book.review, stars: book.rating ?? 0,
-                                             readingStatus: readingStatus)
+        let draft = SocialPostDraft(bookID: id, kind: kind, text: book.review, stars: book.rating ?? 0,
+                                    readingStatus: readingStatus)
+        postDrafts.start(draft, for: .feed)
         tab = "Feed"; composerExpanded = true
         model.sharingBookId = nil
     }
@@ -173,10 +174,11 @@ struct SocialCommunityView: View {
             Toggle("Contains spoilers", isOn: draft.containsSpoilers)
             Text("You will review this exact text and its audience before approving. Your notebook and earlier drafts stay private.").font(.caption).foregroundStyle(.secondary)
             Button("Review & approve publication") {
-                let submitted = postDrafts[destination]
-                guard let action = postAction(submitted, for: destination) else { return }
+                guard let submitted = postDrafts.entry(for: destination),
+                      let action = postAction(submitted.content, for: destination) else { return }
                 Task {
-                    let outcome = await social.publish(action, title: "Publish this reading selection", model)
+                    let outcome = await social.publish(action, title: "Publish this reading selection", model,
+                                                       reviewingPost: submitted.savedReview)
                     postDrafts.finish(outcome, for: destination, submitted: submitted)
                 }
             }.buttonStyle(.borderedProminent).disabled(postAction(draft.wrappedValue, for: destination) == nil)
@@ -377,10 +379,10 @@ struct SocialCommunityView: View {
         guard activeReply == target, let draft = replyDrafts[target],
               let action = draft.action(for: target, in: social.snapshot) else { return }
         switch await social.publish(action, title: "Publish this group reply", model, replacingDraftID: draft.savedDraftID) {
-        case .notSaved:
+        case .notSaved, .reviewChanged:
             break
-        case .savedDraft(let id):
-            replyDrafts[target]?.savedDraftID = id
+        case .savedDraft(let saved):
+            replyDrafts[target]?.savedDraftID = saved.id
         case .approved:
             replyDrafts.removeValue(forKey: target)
             if activeReply == target { activeReply = nil }

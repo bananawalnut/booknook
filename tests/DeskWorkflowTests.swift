@@ -368,7 +368,8 @@ import Foundation
         // The app uses the real native draft store. The signer stays locked, so
         // there is no Keychain access, consent dialog, issuer call, or relay.
         let result = await controller.publish(action, title: "Publish this group reply", model)
-        guard case .savedDraft(let draftID) = result else { preconditionFailure("A denied reply must stay private and recoverable") }
+        guard case .savedDraft(let savedReply) = result else { preconditionFailure("A denied reply must stay private and recoverable") }
+        let draftID = savedReply.id
         precondition(controller.error?.contains("Unlock your Castalia identity") == true)
         let event = controller.snapshot!.state.drafts[draftID]!
         let disclosure = socialDisclosure(action: event.action.object!, event: event, state: controller.snapshot?.state)
@@ -391,7 +392,8 @@ import Foundation
         draft.text += "Edited before another review."
         let retry = await controller.publish(draft.action(for: target, in: controller.snapshot)!, title: "Publish this group reply",
                                              model, replacingDraftID: draft.savedDraftID)
-        guard case .savedDraft(let retryID) = retry else { preconditionFailure("An edited reply must remain recoverable") }
+        guard case .savedDraft(let savedRetry) = retry else { preconditionFailure("An edited reply must remain recoverable") }
+        let retryID = savedRetry.id
         let reopened = DeskModel(repository: DeskRepository(directory: directory))
         await reopened.open()
         let recovered = try await reopened.repository.socialSnapshot(reveal: false)
@@ -503,16 +505,51 @@ import Foundation
             if expectedDelivery == "direct" { precondition(delivery["recipients"] as? [String] == [snapshot.actor]) }
             else { precondition(!prepared.contains(privateText)) }
         }
-        drafts.finish(.savedDraft("denied"), for: privateGroup, submitted: privateSelection)
-        precondition(drafts[privateGroup] == privateSelection)
+        let author = SocialController()
+        await author.reload(owner)
+        let initial = drafts.entry(for: privateGroup)!
+        let first = await author.publish(privateSelection.action(for: privateGroup, book: book)!,
+                                         title: "Review private draft", owner)
+        guard case .savedDraft(let saved) = first else { preconditionFailure("Locked signer must leave a saved draft") }
+        let originalQueueRow = author.snapshot!.state.drafts[saved.id]!
+        drafts.finish(first, for: privateGroup, submitted: initial)
+        precondition(drafts[privateGroup] == privateSelection && drafts.entry(for: privateGroup)?.savedReview == saved)
         drafts[privateGroup].text += " with an edit made during review"
-        drafts.finish(.approved, for: privateGroup, submitted: privateSelection)
+        let revised = drafts.entry(for: privateGroup)!
+        let retry = await author.publish(revised.content.action(for: privateGroup, book: book)!,
+                                         title: "Review private draft again", owner, reviewingPost: revised.savedReview)
+        guard case .savedDraft(let retried) = retry else { preconditionFailure("Retry must save the edited draft") }
+        let stored = author.snapshot!.state.drafts
+        precondition(retried.id == saved.id && stored.count == 1)
+        precondition((stored[saved.id]?.action.object?["post"] as? [String: Any])?["body"] as? String == revised.content.text)
+        precondition(author.snapshot!.state.outbox.count == snapshot.state.outbox.count)
+        await author.retryDraft(originalQueueRow, owner)
+        precondition(author.error?.contains("current entry in Outbox") == true)
+        let afterStaleRetry = author.snapshot!.state.drafts
+        precondition(afterStaleRetry.count == 1)
+        precondition((afterStaleRetry[saved.id]?.action.object?["post"] as? [String: Any])?["body"] as? String == revised.content.text)
+        let currentQueueRow = afterStaleRetry[saved.id]!
+        drafts.finish(retry, for: privateGroup, submitted: revised)
+        let awaiting = drafts.entry(for: privateGroup)!
+        try await owner.repository.socialLocal(Data(try socialJSON(["op": "delete_draft", "id": saved.id]).utf8))
+        let removed = await author.publish(awaiting.content.action(for: privateGroup, book: book)!,
+                                           title: "Review after discard", owner, reviewingPost: awaiting.savedReview)
+        precondition(removed == .reviewChanged && author.snapshot!.state.drafts.isEmpty)
+        await author.retryDraft(currentQueueRow, owner)
+        precondition(author.error?.contains("current entry in Outbox") == true && author.snapshot!.state.drafts.isEmpty)
+        drafts.finish(removed, for: privateGroup, submitted: awaiting)
+        precondition(drafts.entry(for: privateGroup)?.savedReview == nil)
+        drafts.finish(.approved, for: privateGroup, submitted: initial)
         precondition(drafts[privateGroup].text.hasSuffix("made during review"))
-        let revised = drafts[privateGroup]
-        drafts.finish(.approved, for: privateGroup, submitted: revised)
+        let approved = drafts.entry(for: privateGroup)!
+        drafts.finish(.approved, for: privateGroup, submitted: approved)
         precondition(drafts[privateGroup] == SocialPostDraft() && drafts[publicGroup].text == "Public group question")
         precondition(drafts[feed].text == "Public review")
-        print("Native post drafts retain exact destination, separate private group text and spoiler state, and preserve in-flight edits.")
+        let previousFeed = drafts.entry(for: feed)!
+        drafts.start(SocialPostDraft(text: "Fresh sharing intent"), for: feed)
+        drafts.finish(.savedDraft(saved), for: feed, submitted: previousFeed)
+        precondition(drafts.entry(for: feed)?.savedReview == nil && drafts[feed].text == "Fresh sharing intent")
+        print("Native post drafts retain exact audiences, reuse a single saved draft, and preserve newer edits and sharing intents.")
     }
 
     @MainActor static func testSharedListReview() async throws {
@@ -559,7 +596,8 @@ import Foundation
 
         // Real native preparation saves an unapproved v1 draft while the signer is locked.
         let first = await controller.publish(action, title: "Review this shared list", model, listReview: draft.review)
-        guard case .savedDraft(let draftID) = first else { preconditionFailure("Current shared-list draft must be saved") }
+        guard case .savedDraft(let savedList) = first else { preconditionFailure("Current shared-list draft must be saved") }
+        let draftID = savedList.id
         precondition(controller.error?.contains("Unlock your Castalia identity") == true)
         let stored = controller.snapshot!.state.drafts[draftID]!
         let storedActionJSON = try socialJSON(stored.action.object!)

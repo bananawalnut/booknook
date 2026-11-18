@@ -74,6 +74,12 @@ For a reader outside the membership roster, Core’s `social_protocol::public_gr
 
 The native `social_snapshot` response adds an optional `public_group_previews` array. The preview can be unavailable if current authority cannot verify restored history. Older snapshots still decode in the native app. Hosts rendering a public view should use only the preview rows. The full native snapshot is a local application read. Membership remains required for posting and replying.
 
+### Native saved-post review
+
+The native desk can refresh a top-level post draft with `social_local` using `{"op":"replace_reviewed_post","expected":<saved event>,"event":<refreshed event>}`. Both records use the same draft ID, reader, group destination, and delivery. SQLite compares the entire saved event before one durable write. A changed reader, audience, or saved event leaves the stored draft available for separate review.
+
+Pass `{"reviewed_draft":<event>}` to `social_approve` when consent is tied to a saved draft. The desk verifies the saved event and the signed event before publication. Standalone callers may continue using the existing bare event format. These native desk operations do not change the portable command, archive, or relay schemas.
+
 ### Recommendations and approved encrypted transfer
 
 `recommendations(core, input)` runs the shared Rust recommendation provider with catalog candidates, chosen interests, exclusions and independently verified shared ratings. Its input has no notebook, annotation, character-card or handwriting fields. `socialRecommendations(core, socialState, candidates, excluded, policy, now)` additionally rebuilds signed history under the host's current issuer pins and rejects forged friendship/group projections, invalid receipts or revoked trust before scoring. The policy actor is the viewer; other authors are checked using the same trusted pins, audience/caller and `social.execute` policy. Private group ratings and blocked readers do not contribute. Use the local API with no shared ratings when no identity is configured; verification failures do not silently turn untrusted social data into evidence.
