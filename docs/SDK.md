@@ -4,6 +4,8 @@ The portable document and social contracts live in Rust. The reference apps use 
 
 ## Development preview and Rust compatibility
 
+The **[0.3.1 SDK preview](https://github.com/bananawalnut/booknook/releases/tag/v0.3.1-sdk-preview.20261117)** adds read-only public-group discussion previews. An extracted Rust crate and installed npm consumers passed the preview checks. Swift consumers ran on arm64 macOS and iPadOS 18.6 Simulator. [Public download evidence](sdk-031-public-preview-evidence.json) · [iPadOS Simulator evidence](sdk-031-ipados-simulator-evidence.json)
+
 The **[0.3.0 SDK preview](https://github.com/bananawalnut/booknook/releases/tag/v0.3.0-sdk-preview.20261117)** ships durable Margin order and explicit review in archive v4. The four Rust archives, npm package, and Swift XCFramework passed independent qualification. Swift ran on arm64 macOS and the iPadOS 18.6 simulator. The npm package ran in Node and Chrome. [SDK 0.3.0 evidence](sdk-030-public-preview-evidence.json) · [iPadOS Simulator evidence](sdk-030-ipados-simulator-evidence.json)
 
 The initial `v0.1.0-preview.20261114` release is withdrawn to draft, with its tag and 17 assets preserved as historical evidence. Its archives are not recommended for new installations. [The publication record](public-preview-publication-evidence.json) retains the initial timestamps and hashes alongside the current withdrawal status.
@@ -22,7 +24,7 @@ The maintained Nostr SDK **0.45.6** removes the unmaintained relay pool and perm
 
 The receiving-lock audit JSON preserves its 17:22 UTC audit-only observation: its consumer-execution field says pending because execution had not yet begun. That historical status is superseded by the completed six-command receiving result in [final public-preview evidence](security-020-public-preview-evidence.json); the original audit evidence remains unchanged.
 
-The examples describe the current source, which builds SDK 0.3.0 archives. Local package scripts build/test archives without publishing remotely. GitHub prerelease assets are separate from registry publication, which is not claimed.
+The examples describe the current source, which builds SDK 0.3.1 archives. Local package scripts build/test archives without publishing remotely. GitHub prerelease assets are separate from registry publication, which is not claimed.
 
 ## Rust notebook storage
 
@@ -52,7 +54,7 @@ To replace SQLite, implement `Provider` and `NotebookStorage`, initialize a vali
 
 UniFFI generates `apps/apple/Generated/booknook_native.swift` and its C header/module map. `scripts/build-apple.sh` regenerates these from the actual Rust library. `Desk` is the native reference composition; it accepts a local directory and exposes commands, snapshots, imports, history, custody, social and synchronization operations. Invoke disk, cryptography and network work outside the main actor, as the reference app's `DeskRepository` does.
 
-For an independent app, use `scripts/package-swift.sh` to produce the standalone `booknook-swift-sdk-0.3.0.tar.gz`, then add its extracted directory as a local Swift Package. `BookNookNative` exposes the Rust bridge, `BookNookServices` provides asynchronous provider composition, and `CastaliaNative` supplies reusable custody, secure-storage and consent coordination. It includes arm64 macOS, iOS device and iOS Simulator slices, generated Swift and headers. Its consumer check extracts the actual archive before linking; the package does not depend on the reference app's source tree.
+For an independent app, use `scripts/package-swift.sh` to produce the standalone `booknook-swift-sdk-0.3.1.tar.gz`, then add its extracted directory as a local Swift Package. `BookNookNative` exposes the Rust bridge, `BookNookServices` provides asynchronous provider composition, and `CastaliaNative` supplies reusable custody, secure-storage and consent coordination. It includes arm64 macOS, iOS device and iOS Simulator slices, generated Swift and headers. Its consumer check extracts the actual archive before linking; the package does not depend on the reference app's source tree.
 
 Local command results contain `state` and `result`. Use IDs returned by `result` rather than searching by display title. Keep an editor draft until a throwing save acknowledges persistence. Custody unlock does not authorize a publication: use the prepared disclosure and explicit consent lifecycle. Do not infer operational permission from a directory identity or a Nostr signature.
 

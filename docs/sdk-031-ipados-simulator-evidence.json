@@ -1,0 +1,49 @@
+{
+  "schema": "booknook.sdk.ipados-simulator-evidence.v1",
+  "result": "PASS",
+  "sdk": {
+    "version": "0.3.1",
+    "source_commit": "f7da99fc4c1bf4f023bd416c1dea94956c750018",
+    "archive": "booknook-swift-sdk-0.3.1.tar.gz",
+    "archive_sha256": "ed41c2d5e1ad12c101cf4fcfd44a0c689ae96da19ceb6995511a6694aae094cb",
+    "slice": "ios-arm64-simulator",
+    "slice_sha256": "2f5dddb4fdec2ae07e500f61370f099ceeb9b2437d7ac4fe1b2d12e216ebca18"
+  },
+  "runtime": {
+    "device_model": "iPad Air 13-inch (M2) Simulator",
+    "os": "iPadOS 18.6",
+    "runtime_build": "22G86",
+    "architecture": "arm64"
+  },
+  "consumer": {
+    "harness_executable_sha256": "2aebc78f7152bd3b1609fc93cd83a896c80a2115d480c3ddea4507f9e88fda74",
+    "installed_executable_matches_signed_build": true,
+    "tested_source_sha256": "d8c6c1d4842f2a12d49efb2a9fce6ee160a2ce926dadbb13e8880b9e393c3116",
+    "fixture_sha256": "5c08f68c3a61bf7901c7bd4f3cb1a72103b1e7a0674166827474b41298461258",
+    "linked_native_symbols": [
+      "_uniffi_booknook_native_fn_method_notebookengine_notebook_order_reviews",
+      "_uniffi_booknook_native_checksum_method_notebookengine_notebook_order_reviews"
+    ],
+    "covers": [
+      "Unicode writes",
+      "compare-and-save conflicts",
+      "SQLite independent reopen",
+      "archive v1 and v4 validation",
+      "canonical notebook order review"
+    ]
+  },
+  "sqlite": {
+    "independent_read_only_quick_check": "ok",
+    "separate_write_and_reopen_processes": true,
+    "revision": 1,
+    "matching_stored_json_sha256": "44c9fee3f93dd46d24c9adb49aba7ae9cfd3f4972a1f85457950733efa711a49"
+  },
+  "cleanup": {
+    "dedicated_simulator_returned_to_shutdown": true,
+    "synthetic_harness_bundle_and_data_removed": true,
+    "existing_booknook_bundle_and_container_registration_metadata_matched": true
+  },
+  "initial_attempt": "A simulator registry change halted the first attempt after installation. Recovery verified the installed binary and fixture hashes and the existing app registration before the two fresh launches.",
+  "scope": "Exact Swift SDK on iPadOS Simulator. Physical iPad SDK execution and exact iPadOS 17 runtime remain open.",
+  "receipt_sha256": "4e50d1eba13ac78e179d242e3166f9fb9c3ec5a4672014a7ad43646624ad34dc"
+}

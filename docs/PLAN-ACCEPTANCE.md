@@ -2,6 +2,10 @@
 
 This audit keeps the original native MVP and SDK scope intact. A passing source test is evidence for the behavior it exercises, not evidence of a production account, physical device, remote deployment, or hands-on interaction. The requested production release is not complete while essential integration and physical-device gates remain open. [Validation](VALIDATION.md) records the final check results; [delivery](DELIVERY.md) names the remaining gates.
 
+## App 1713 and SDK 0.3.1 delivery
+
+The exact candidate passed linked Swift/SQLite and rebuilt WASM tests for public previews, spoiler hiding, and membership checks. All nine app and SDK archives passed independent acceptance and all 23 public downloads matched their checksums. The updated iPad app reopened its existing desk and saved Scribble. The exact Swift SDK ran a separate write and reopen on iPadOS 18.6 Simulator. [App evidence](app-2026111713-public-preview-evidence.json) · [SDK evidence](sdk-031-public-preview-evidence.json) · [Simulator evidence](sdk-031-ipados-simulator-evidence.json)
+
 ## Native app 1712 delivery
 
 After you confirm in Amazon’s device list that an Audible registration was removed, Book Nook can clear the matching local connection and leave a newer replacement intact. Recovery requires the updated optional library companion and Audible adapter. Headless and synthetic loopback checks passed. Live Audible recovery and physical Keychain behavior remain unverified. The normal development-signed iPad app updated in place and reopened with its library, assets, saved finger Scribble, and observed orientation preserved. [Build 1712 evidence](app-2026111712-public-preview-evidence.json)
