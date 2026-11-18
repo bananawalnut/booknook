@@ -1,0 +1,40 @@
+{
+  "schema": "booknook.mac-sidebar-layout-evidence.v1",
+  "candidate_build": "2026111721",
+  "result": "PASS",
+  "base": "4bcd28d66ef223be26f499ff01f1cc19a61c7493",
+  "booknook_app_swift_sha256": "2ea7c8474d9cbe903f85faac868120941a9da1b5381493b30733f9989a2b6fde",
+  "runtime_test_sha256": "3bb8a2a7bda98bbe01d84199eab00a47a6429ddaf77f3a7159bbb45932c38aae",
+  "native_source_map_sha256": "88513bb5d3c8c32cb46629774f3907830b1683e43626b9d3faf3591dbb2c9d7a",
+  "swift_sdk_archive_sha256": "46b4441b3f70b488e27a9bbd4fdf03c53e398737da8bc3f3382c94406e598c84",
+  "test_executable_sha256": "2a4824e4db191af90ec7aff0a520c1694d435c283e67d19cb02c4525df3ce4f4",
+  "macos": "26.4.1",
+  "mac_target": "arm64-apple-macos14",
+  "mac_run": "Mac sidebar runtime layout passed: width bounds, narrow window, hide/reopen, and detail identity",
+  "ipad_target": "arm64-apple-ios17.0-simulator",
+  "ipad_typecheck_pass": true,
+  "recorded_utc": "2026-11-18T07:56:50+00:00",
+  "released_regression": {
+    "build": "2026111720",
+    "window_width": 1320,
+    "observed_sidebar_width": 150,
+    "screenshot_manifest": "screenshots/current.json"
+  },
+  "offscreen_mac_cases": {
+    "default_width": 1320,
+    "narrow_width": 735,
+    "requested_sidebar_widths": [
+      150,
+      390
+    ],
+    "resulting_sidebar_widths": [
+      240,
+      320
+    ],
+    "hide_reclaimed_width": 735,
+    "detail_appearances": 1,
+    "detail_disappearances": 0
+  },
+  "scope": "AppKit-hosted SwiftUI split fixture linked alongside all Apple Swift sources and the released SDK. iPadOS 17 target type checking. Visible release UI, hardware input and minimum-OS runtime checks remain pending.",
+  "source_runtime_receipt_sha256": "ccc0027368e0a067c134a734825b99663dfa7c03efffdbfb97e445282aa9cd4a"
+}

@@ -21,6 +21,7 @@ import Foundation
                 if CommandLine.arguments.contains("--reading-pass-navigation") { try await testReadingPassNavigation(); exit(0) }
                 if CommandLine.arguments.contains("--audible-recovery-contract") { try testAudibleRecoveryContract(); exit(0) }
                 if CommandLine.arguments.contains("--recommendation-titles") { try await testRecommendationTitleProjection(); exit(0) }
+                if CommandLine.arguments.contains("--mac-sidebar-layout") { try await testMacSidebarLayout(); exit(0) }
                 if CommandLine.arguments.contains("--startup") { try await testDeskStartup(); exit(0) }
                 if CommandLine.arguments.contains("--publications") { try await testPublicationWorkflow(); exit(0) }
                 if CommandLine.arguments.contains("--source-reading-history") { try await testSourceReadingHistory(); exit(0) }
