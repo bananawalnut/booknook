@@ -1,0 +1,40 @@
+{
+  "result": "PASS_STOCK_IPAD_SAVED_EPUB_HIGHLIGHTS",
+  "observed_at": "2026-11-18T12:36:08.982480+00:00",
+  "build": "2026111726",
+  "source": "cd32c6405b1c01507fe9bc01f99200c43b5876c9",
+  "release_id": 449945438,
+  "runtime": "iPadOS 18.6 Simulator",
+  "exact_executable_sha256": "6b7d58e07cade3c53ac5ce5073ebef9ef78fa03d78ca60d29943834930b14688",
+  "epub_fixture_sha256": "124e1f877c810d997bf7b487f22f3ee963dafd8688b7ca7e227e36c6eb4aeeab",
+  "original_annotation_count": 3,
+  "swift_test_source_sha256": "d4f73543917a3e6935aeb27aff25df84d7236f791f1a20142bdc13bd14215b32",
+  "setup_source_sha256": "d556a845169435ed3b4a668d4d9c7f479ae57e6ea48da1c0fc45320e5ca3f4fd",
+  "test_log_sha256": "162ba851c15a7bb8424cda99e93c4e6ee827db29bd97cccc7f1f984987f73648",
+  "observed_split": "Margin 64 percent → Margin 53 percent",
+  "observed_font_size": 21,
+  "xcresult": {
+    "passed": 1,
+    "failed": 0,
+    "result_bundle": "attempt-2.xcresult"
+  },
+  "checks": {
+    "original_contexts_and_chapter_visible": true,
+    "ambiguity_and_missing_are_distinct": true,
+    "unique_highlight_has_no_error_marker": true,
+    "markers_survived_real_text_and_split_reflow": true,
+    "ambiguous_row_returned_to_original_chapter": true,
+    "markers_recomputed_after_relaunch": true,
+    "durable_annotation_anchors_and_contexts_exact": true
+  },
+  "simulator_preferences_restored": true,
+  "ordinary_simulator_desk_unchanged": true,
+  "disposable_fixture_removed": true,
+  "scope": "Exact archived iPad Simulator application and its Saved annotations sheet. The initial EPUB and saved highlights are synthetic. Physical Pencil, VoiceOver, and iPadOS 17 remain open.",
+  "test_details": {
+    "unique_and_unplaced": "The sheet showed exactly two warning rows beneath their appropriate saved quotes. The uniquely resolved quote had no unplaced warning.",
+    "original_context": "All three rows named Chapter 1 as the original chapter. From Chapter 2, the ambiguous row reopened Chapter 1 without rewriting its saved anchor.",
+    "recovery": "A fresh process reopened Chapter 1, reconstructed both warnings, and left all annotation records, notebook records, and source edition data unchanged.",
+    "earlier_harness_result": "A launch argument pinned the original width. The acceptance rerun used the normal writable Simulator app preferences and restored them afterward."
+  }
+}
