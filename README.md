@@ -6,6 +6,8 @@ A native reading notebook for macOS and iPad, backed by open Rust, Swift and WAS
 
 The implementation includes an offline reading desk, rich TextKit editing, EPUB, PDF, and legacy MOBI6 reading and annotation, character interpretation history, imports, Castalia consent, approved encrypted device transfers, Nostr social workflows, and reviewed RSS/Atom settings with offline publications. **It is not a qualified production release:** live Kindle/Audible/Castalia access, current physical input/accessibility, remote social/device sync and minimum-OS runtime checks remain open. Unavailable integrations return explicit errors. See [delivery status](docs/DELIVERY.md), the [full-plan acceptance matrix](docs/PLAN-ACCEPTANCE.md), [validation](docs/VALIDATION.md), the [decision log](docs/DECISIONS.md), the [UX review](docs/UX-REVIEW.md), and [DevGraph work tracking](docs/DEVGRAPH.md).
 
+App preview 0.2.1 build **2026111722** verifies the selected file when importing books and catalogs. The iPadOS Files acceptance covered cancel, attach and reopen of an original PDF. All eight public downloads matched. The normal iPad app was updated in place and reopened with its library, Scribble and social state intact. [App preview](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.22) · [Build evidence](docs/app-2026111722-public-preview-evidence.json)
+
 App preview 0.2.1 build **2026111721** keeps the Mac sidebar readable as the desk narrows. All eight public downloads matched. The normal iPad update preserved the library, saved Scribble, social state, and observed orientation. A visible walkthrough of the packaged Mac app remains pending. [App preview](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.21) · [Build evidence](docs/app-2026111721-public-preview-evidence.json)
 
 App preview 0.2.1 build **2026111720** keeps approved transfers visible during a recovery Keychain error. All eight public downloads matched. The normal iPad update preserved the library, Scribble, social state and observed orientation. [App preview](https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261117.20) · [Build evidence](docs/app-2026111720-public-preview-evidence.json)
@@ -88,7 +90,7 @@ The earlier iPad acceptance check [updated the normal app in place to 0.2.1 (202
 
 ![Book Nook iPad reading desk with a Margin note and character card alongside an EPUB](docs/screenshots/ipad-current.png)
 
-The Mac window shows published build **2026111720**. The iPad Simulator image shows published build **2026111721**. Both use the same sample desk. [Capture details](docs/screenshots/README.md)
+The Mac window shows published build **2026111720**. The iPad Simulator image shows published build **2026111722**. Both use the same sample desk. [Capture details](docs/screenshots/README.md)
 
 ## Run the native apps
 
