@@ -1,6 +1,6 @@
 {
   "schema": "booknook.native-selected-file-evidence.v1",
-  "result": "PASS_MAC_SOURCE_WORKFLOWS",
+  "result": "PASS_MAC_SOURCE_AND_IPADOS_FILES_WORKFLOWS",
   "base_commit": "aa81d784928f8b77cb745d5f2a79ae5a7f11f7c2",
   "candidate_app_build": "2026111722",
   "native_source_sha256": {
@@ -37,8 +37,31 @@
     ]
   },
   "remaining": [
-    "Candidate iPadOS Files picker runtime",
+    "Exact app archives and public release",
     "Physical iPad and cloud file provider acceptance"
   ],
-  "scope": "Actual Mac import workflows with a synthetic desk and the released Swift SDK. Mac runtime was 26.4.1. Apple deployment targets and account qualification retain separate evidence."
+  "scope": "Actual Mac import workflows and the iPadOS 18.6 system Files picker in a separate candidate-source QA app. Tests used a synthetic desk and the released Swift SDK. Deployment targets, physical use, and account access have separate evidence.",
+  "source_commit": "3106d150884d5716619d9288a827ad429f688a09",
+  "candidate_ipados_files_picker": {
+    "runtime": "iPadOS 18.6 Simulator (arm64)",
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "recorded_utc": "2026-11-18T09:26:07.250000+00:00",
+    "linked_source_count": 74,
+    "sdk_archive_sha256": "46b4441b3f70b488e27a9bbd4fdf03c53e398737da8bc3f3382c94406e598c84",
+    "reader_sha256": "e3cd3a2cb1c2ac7bb99293598b0d98e427737d3996a16da760141166b45f4600",
+    "simulator_qa_binary_sha256": "f0d0d4b72e1678d0d20c0b75eea3689c2d4074b6b0de8e15693ae332fd444917",
+    "build_receipt_sha256": "744133b78cfd39dd49dc9bfeaab8987de6563e5768ba4ecdedc93c092caae30e",
+    "runtime_receipt_sha256": "50fd7b07627472b82b25503ba503502aab4676c9bcb1a5d07173f0ff46e194ef",
+    "xctest_result_sha256": "239fd01eb54d7e5b8fb7dc89914de5a2a51a995878bb5ecc3a2da2774d36d1a2",
+    "checks": {
+      "cancel_returned_to_empty_reader": true,
+      "native_files_selection_attached_exact_pdf_bytes": true,
+      "distinct_kindle_and_pdf_editions_preserved": true,
+      "reopened_page_two_in_new_process": true,
+      "stock_1721_executable_unchanged": true,
+      "qa_apps_removed_and_simulator_returned_to_shutdown": true
+    }
+  }
 }
