@@ -461,6 +461,58 @@ import Foundation
         precondition(ownerSnapshot.publicGroupPreviews?.isEmpty == true)
         precondition(ownerSnapshot.discussion(in: publicGroup).map(\.post.body) == [discussion])
         print("Verified public reading group previews, spoiler redaction, retained private membership, and reply gating passed.")
+        try await testPostDraftAudience(owner: owner, snapshot: ownerSnapshot, publicID: ids[0], privateID: ids[1])
+    }
+
+    @MainActor private static func testPostDraftAudience(owner: DeskModel, snapshot: SocialSnapshot,
+                                                          publicID: String, privateID: String) async throws {
+        let feed = SocialPostDestination.feed
+        let publicGroup = SocialPostDestination.group(id: publicID, actor: snapshot.actor)
+        let privateGroup = SocialPostDestination.group(id: privateID, actor: snapshot.actor)
+        let otherReader = SocialPostDestination.group(id: privateID, actor: String(repeating: "a", count: 64))
+        let book = SocialBook(id: "fixture-book", title: "Synthetic book", author: "Synthetic author")
+        let privateText = "Private rehearsal: café 日本語"
+        var drafts = SocialPostDrafts()
+        drafts[privateGroup] = SocialPostDraft(bookID: book.id, text: privateText, containsSpoilers: true)
+        precondition(drafts[feed] == SocialPostDraft() && drafts[publicGroup] == SocialPostDraft())
+        precondition(drafts[otherReader] == SocialPostDraft() && !otherReader.permitsPosting(in: snapshot))
+        precondition(drafts[feed].action(for: feed, book: book) == nil)
+        precondition(drafts[publicGroup].action(for: publicGroup, book: book) == nil)
+
+        drafts[feed] = SocialPostDraft(bookID: book.id, kind: "review", text: "Public review", stars: 4)
+        drafts[publicGroup].text = "Public group question"
+        let privateSelection = drafts[privateGroup]
+        precondition(privateSelection.text == privateText && privateSelection.bookID == book.id && privateSelection.containsSpoilers)
+        let targets: [(SocialPostDestination, String?, String, String, String)] = [
+            (privateGroup, privateID, "discussion", privateText, "direct"),
+            (publicGroup, publicID, "discussion", "Public group question", "public"),
+            (feed, nil, "review", "Public review", "public")
+        ]
+        for (target, expectedID, expectedKind, expectedText, expectedDelivery) in targets {
+            precondition(target.permitsPosting(in: snapshot))
+            let action = drafts[target].action(for: target, book: book)!
+            let prepared = try await owner.repository.socialPrepare(Data(try socialJSON(action).utf8))
+            let event = try JSONSerialization.jsonObject(with: Data(prepared.utf8)) as! [String: Any]
+            let reviewedAction = event["action"] as! [String: Any]
+            let post = reviewedAction["post"] as! [String: Any]
+            let delivery = event["delivery"] as! [String: Any]
+            precondition(reviewedAction["group_id"] as? String == expectedID)
+            precondition(post["kind"] as? String == expectedKind && post["body"] as? String == expectedText)
+            precondition(post["spoiler"] as? Bool == (target == privateGroup))
+            precondition(delivery["kind"] as? String == expectedDelivery)
+            if expectedDelivery == "direct" { precondition(delivery["recipients"] as? [String] == [snapshot.actor]) }
+            else { precondition(!prepared.contains(privateText)) }
+        }
+        drafts.finish(.savedDraft("denied"), for: privateGroup, submitted: privateSelection)
+        precondition(drafts[privateGroup] == privateSelection)
+        drafts[privateGroup].text += " with an edit made during review"
+        drafts.finish(.approved, for: privateGroup, submitted: privateSelection)
+        precondition(drafts[privateGroup].text.hasSuffix("made during review"))
+        let revised = drafts[privateGroup]
+        drafts.finish(.approved, for: privateGroup, submitted: revised)
+        precondition(drafts[privateGroup] == SocialPostDraft() && drafts[publicGroup].text == "Public group question")
+        precondition(drafts[feed].text == "Public review")
+        print("Native post drafts retain exact destination, separate private group text and spoiler state, and preserve in-flight edits.")
     }
 
     @MainActor static func testSharedListReview() async throws {

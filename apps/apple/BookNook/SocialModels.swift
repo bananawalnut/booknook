@@ -99,6 +99,74 @@ struct SocialListDraft {
     }
 }
 
+enum SocialPostDestination: Hashable {
+    case feed
+    case group(id: String, actor: String)
+
+    var groupID: String? {
+        if case let .group(id, _) = self { return id }
+        return nil
+    }
+
+    func permitsPosting(in snapshot: SocialSnapshot?) -> Bool {
+        guard let snapshot, !snapshot.actor.isEmpty else { return false }
+        switch self {
+        case .feed:
+            return true
+        case let .group(id, actor):
+            guard let group = snapshot.state.groups[id], snapshot.actor == actor else { return false }
+            return !group.closed && group.members.contains(actor) && !group.banned.contains(actor)
+        }
+    }
+}
+
+struct SocialPostDraft: Equatable {
+    var bookID = ""
+    var kind = "note"
+    var text = ""
+    var stars = 0
+    var readingStatus = "currently-reading"
+    var containsSpoilers = false
+
+    func action(for destination: SocialPostDestination, book: SocialBook?) -> [String: Any]? {
+        let groupID = destination.groupID
+        let postKind = groupID == nil ? kind : "discussion"
+        let selectedBook = book?.id == bookID ? book : nil
+        let hasText = !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        switch postKind {
+        case "rating":
+            guard selectedBook != nil, (1...5).contains(stars) else { return nil }
+        case "review":
+            guard selectedBook != nil, hasText else { return nil }
+        case "reading_update":
+            guard selectedBook != nil else { return nil }
+        default:
+            guard hasText else { return nil }
+        }
+        let reference = selectedBook.map { ["id": $0.id, "title": $0.title, "author": $0.author] }
+        let rating = ["rating", "review"].contains(postKind) && (1...5).contains(stars) ? stars as Any : NSNull()
+        return ["op": "publish", "group_id": groupID as Any? ?? NSNull(), "post": [
+            "kind": postKind, "book": reference as Any? ?? NSNull(), "body": text, "stars": rating,
+            "reading_status": postKind == "reading_update" ? readingStatus as Any : NSNull(),
+            "spoiler": containsSpoilers, "reply_to": NSNull()
+        ]]
+    }
+}
+
+struct SocialPostDrafts {
+    private var drafts: [SocialPostDestination: SocialPostDraft] = [:]
+
+    subscript(destination: SocialPostDestination) -> SocialPostDraft {
+        get { drafts[destination] ?? SocialPostDraft() }
+        set { drafts[destination] = newValue }
+    }
+
+    mutating func finish(_ outcome: SocialPublicationOutcome, for destination: SocialPostDestination,
+                         submitted: SocialPostDraft) {
+        if outcome == .approved, drafts[destination] == submitted { drafts.removeValue(forKey: destination) }
+    }
+}
+
 struct SocialGroupReplyTarget: Hashable {
     let actor: String
     let groupID: String

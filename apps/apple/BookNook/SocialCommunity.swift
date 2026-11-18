@@ -10,13 +10,8 @@ struct SocialCommunityView: View {
     @EnvironmentObject var model: DeskModel
     @StateObject private var social = SocialController()
     @State private var tab = "Feed"
-    @State private var selectedBook = ""
-    @State private var kind = "note"
-    @State private var bodyText = ""
-    @State private var stars = 0
+    @State private var postDrafts = SocialPostDrafts()
     @State private var composerExpanded = false
-    @State private var readingStatus = "currently-reading"
-    @State private var spoiler = false
     @State private var activeReply: SocialGroupReplyTarget?
     @State private var replyDrafts: [SocialGroupReplyTarget: SocialGroupReplyDraft] = [:]
     @State private var peer = ""
@@ -123,64 +118,69 @@ struct SocialCommunityView: View {
                 social.error = "This private sharing draft is no longer available. Return to its history and prepare it again."
                 return
             }
-            selectedBook = ""; bodyText = draft.body; stars = 0; kind = "note"
-            spoiler = draft.spoiler; tab = "Feed"; composerExpanded = true
+            postDrafts[.feed] = SocialPostDraft(text: draft.body, containsSpoilers: draft.spoiler)
+            tab = "Feed"; composerExpanded = true
             social.status = "Private selection loaded for review. Edit it here; nothing has been published. Its saved copy remains in Unpublished drafts."
             model.sharingBookId = nil
             model.sharingDraftId = nil
             return
         }
         guard let id = model.sharingBookId, let book = model.state?.books[id] else { return }
-        selectedBook = id; bodyText = book.review; stars = book.rating ?? 0
-        readingStatus = ["to-read", "currently-reading", "read", "paused", "abandoned"].contains(book.shelf) ? book.shelf : "to-read"
-        kind = book.review.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && book.rating != nil ? "rating" : "review"
-        spoiler = false; tab = "Feed"; composerExpanded = true
+        let readingStatus = ["to-read", "currently-reading", "read", "paused", "abandoned"].contains(book.shelf) ? book.shelf : "to-read"
+        let kind = book.review.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && book.rating != nil ? "rating" : "review"
+        postDrafts[.feed] = SocialPostDraft(bookID: id, kind: kind, text: book.review, stars: book.rating ?? 0,
+                                             readingStatus: readingStatus)
+        tab = "Feed"; composerExpanded = true
         model.sharingBookId = nil
     }
 
     private var feedView: some View {
         VStack(alignment: .leading, spacing: 20) {
             HStack { Text("Newest first").font(.headline); Spacer(); Toggle("Reveal spoilers", isOn: $social.revealSpoilers).toggleStyle(.switch).fixedSize(); networkButton }
-            DisclosureGroup("Write a review, rating, update, or selected note", isExpanded: $composerExpanded) { composer(groupID: nil) }.padding(18).background(nookAccent.opacity(0.04), in: RoundedRectangle(cornerRadius: 12))
+            DisclosureGroup("Write a review, rating, update, or selected note", isExpanded: $composerExpanded) { composer(.feed) }.padding(18).background(nookAccent.opacity(0.04), in: RoundedRectangle(cornerRadius: 12))
             if social.snapshot?.feed.isEmpty != false { Text("When you and a friend both accept, their published activity appears here. Group conversations also appear while you are a member.").foregroundStyle(.secondary).padding(.vertical, 24) }
             discussionCards(social.snapshot?.feed ?? [])
         }
     }
-    private func canPublish(groupID: String?) -> Bool {
-        guard !social.busy, !social.actor.isEmpty else { return false }
-        if let groupID { return state?.groups[groupID] != nil && !bodyText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
-        if kind == "rating" { return !selectedBook.isEmpty && stars > 0 }
-        if kind == "review" { return !selectedBook.isEmpty && !bodyText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
-        if kind == "reading_update" { return !selectedBook.isEmpty }
-        return !bodyText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    private func postAction(_ draft: SocialPostDraft, for destination: SocialPostDestination) -> [String: Any]? {
+        guard !social.busy, destination.permitsPosting(in: social.snapshot) else { return nil }
+        let book = model.books.first { $0.id == draft.bookID }.map {
+            SocialBook(id: $0.id, title: $0.title, author: $0.authors.joined(separator: ", "))
+        }
+        return draft.action(for: destination, book: book)
     }
-    @ViewBuilder private func composer(groupID: String?) -> some View {
+    private func composer(_ destination: SocialPostDestination) -> some View {
+        let draft = Binding(get: { postDrafts[destination] }, set: { postDrafts[destination] = $0 })
+        let groupID = destination.groupID
+        let kind = draft.wrappedValue.kind
         let targetGroup = groupID.flatMap { state?.groups[$0] }
         let isPublic = groupID == nil || targetGroup?.private == false
         let count = targetGroup.map { Set($0.members).subtracting($0.banned).count }
-        VStack(alignment: .leading, spacing: 12) {
+        return VStack(alignment: .leading, spacing: 12) {
             Label(socialAudience(isPublic: isPublic, recipientCount: count), systemImage: isPublic ? "globe" : "lock.fill").font(.callout.weight(.semibold))
                 .accessibilityIdentifier("social-composer-audience")
-            if groupID == nil { Picker("Share", selection: $kind) { Text("Selected note").tag("note"); Text("Review").tag("review"); Text("Rating").tag("rating"); Text("Reading update").tag("reading_update") } }
-            Picker("Book", selection: $selectedBook) { Text(groupID == nil && ["review", "rating", "reading_update"].contains(kind) ? "Choose a book" : "No book").tag(""); ForEach(model.books) { Text($0.title).tag($0.id) } }
+            if groupID == nil { Picker("Share", selection: draft.kind) { Text("Selected note").tag("note"); Text("Review").tag("review"); Text("Rating").tag("rating"); Text("Reading update").tag("reading_update") } }
+            Picker("Book", selection: draft.bookID) { Text(groupID == nil && ["review", "rating", "reading_update"].contains(kind) ? "Choose a book" : "No book").tag(""); ForEach(model.books) { Text($0.title).tag($0.id) } }
             if groupID == nil && (kind == "rating" || kind == "review") {
-                Picker("Stars", selection: $stars) { Text(kind == "review" ? "No rating" : "Choose a rating").tag(0); ForEach(1...5, id: \.self) { Text(String(repeating: "★", count: $0)).tag($0) } }
+                Picker("Stars", selection: draft.stars) { Text(kind == "review" ? "No rating" : "Choose a rating").tag(0); ForEach(1...5, id: \.self) { Text(String(repeating: "★", count: $0)).tag($0) } }
             }
-            if groupID == nil && kind == "reading_update" { Picker("Progress", selection: $readingStatus) { Text("Want to read").tag("to-read"); Text("Reading").tag("currently-reading"); Text("Finished").tag("read"); Text("Paused").tag("paused"); Text("Stopped").tag("abandoned") } }
-            TextEditor(text: $bodyText)
+            if groupID == nil && kind == "reading_update" { Picker("Progress", selection: draft.readingStatus) { Text("Want to read").tag("to-read"); Text("Reading").tag("currently-reading"); Text("Finished").tag("read"); Text("Paused").tag("paused"); Text("Stopped").tag("abandoned") } }
+            TextEditor(text: draft.text)
                 .scrollContentBackground(.hidden)
                 .background(readingPaper, in: RoundedRectangle(cornerRadius: 5))
                 .frame(minHeight: 120).accessibilityLabel("Text to publish")
                 .overlay(RoundedRectangle(cornerRadius: 5).stroke(.secondary.opacity(0.2)).allowsHitTesting(false))
-            Toggle("Contains spoilers", isOn: $spoiler)
+            Toggle("Contains spoilers", isOn: draft.containsSpoilers)
             Text("You will review this exact text and its audience before approving. Your notebook and earlier drafts stay private.").font(.caption).foregroundStyle(.secondary)
-            Button("Review & approve publication") { Task { await publishPost(groupID: groupID) } }.buttonStyle(.borderedProminent).disabled(!canPublish(groupID: groupID))
-        }.padding(.top, 12)
-    }
-    private func publishPost(groupID: String?) async {
-        let book = model.books.first { $0.id == selectedBook }
-        let post: [String: Any] = ["kind": groupID == nil ? kind : "discussion", "book": book.map { ["id": $0.id, "title": $0.title, "author": $0.authors.joined(separator: ", ")] } as Any? ?? NSNull(), "body": bodyText, "stars": groupID == nil && ["rating", "review"].contains(kind) && stars > 0 ? stars as Any : NSNull(), "reading_status": groupID == nil && kind == "reading_update" ? readingStatus as Any : NSNull(), "spoiler": spoiler, "reply_to": NSNull()]
-        await social.publish(["op": "publish", "group_id": groupID as Any? ?? NSNull(), "post": post], title: "Publish this reading selection", model)
+            Button("Review & approve publication") {
+                let submitted = postDrafts[destination]
+                guard let action = postAction(submitted, for: destination) else { return }
+                Task {
+                    let outcome = await social.publish(action, title: "Publish this reading selection", model)
+                    postDrafts.finish(outcome, for: destination, submitted: submitted)
+                }
+            }.buttonStyle(.borderedProminent).disabled(postAction(draft.wrappedValue, for: destination) == nil)
+        }.padding(.top, 12).id(destination)
     }
     private var friendsView: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -280,7 +280,7 @@ struct SocialCommunityView: View {
             if group.closed {
                 Text("This group is closed.").font(.callout).foregroundStyle(.secondary)
             } else if group.members.contains(social.actor) && !group.banned.contains(social.actor) {
-                DisclosureGroup("Write to this group") { composer(groupID: group.id) }
+                DisclosureGroup("Write to this group") { composer(.group(id: group.id, actor: social.actor)) }
                 discussionCards(social.snapshot?.discussion(in: group) ?? [])
             } else if !group.private && !group.banned.contains(social.actor) && state?.blocked.contains(group.owner) != true {
                 let requested = state?.joinRequests.values.contains { $0.groupId == group.id && $0.reader == social.actor && $0.epoch == group.epoch && $0.expiresAt > UInt64(Date().timeIntervalSince1970) } ?? false
