@@ -1,0 +1,22 @@
+{
+  "schema": "booknook.sync-recovery-read-isolation-evidence.v1",
+  "result": "PASS",
+  "tested_base_commit": "7230681d65ab42383b3277d72455692007fe04f0",
+  "tested_swift_file_sha256": "48021df9aa95dfd370f2cae519f8881a526b332aa6394c2760949d84de38e1bf",
+  "observed_utc": "2026-11-18T06:43:33+00:00",
+  "runtime": "iPadOS 18.6 Simulator",
+  "recovery_failure": "Native secure-storage read in a separate Simulator test app with no application Keychain entitlement.",
+  "data": "Synthetic signed queued transfer using the public Swift SDK 0.3.5.",
+  "observed": {
+    "secure_storage_failure_inline": true,
+    "new_approval_controls_disabled": true,
+    "approved_outbox_export_matched_durable_packet": true,
+    "ordinary_simulator_app_executable_unchanged": true,
+    "isolated_app_and_runner_removed": true,
+    "dedicated_simulator_shutdown": true
+  },
+  "output": "One encrypted file in the app's selected local folder, matching the exact packet in SQLite.",
+  "physical_or_operational_custody_test": false,
+  "sdk_simulator_slice_sha256": "837ec846cda68e7f1b379d6c3cc223bd0227adb03e4776470574c9c247ef177e",
+  "receipt_sha256": "c662334e4f24c375a2de993a4608273583e516a46083a39342c652608bc3e572"
+}

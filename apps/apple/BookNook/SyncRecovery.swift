@@ -87,13 +87,17 @@ private enum SyncFileAction {
 }
 
 private struct SyncRecoveryContent: View {
+    private enum RecoveryFileAvailability {
+        case missing, available, unreadable
+    }
+
     @EnvironmentObject var model: DeskModel
     @ObservedObject var authorization: AuthorizationCoordinator
     @State private var status: SyncStatus?
     @State private var orderReviewSnapshot: DeskSnapshot?
     @State private var identityConfigured = false
     @State private var expectedHolder: String?
-    @State private var recoveryStored = false
+    @State private var recoveryFile: RecoveryFileAvailability = .missing
     @State private var revealPairingKey = false
     @State private var busy = false
     @State private var choosingFile = false
@@ -105,7 +109,7 @@ private struct SyncRecoveryContent: View {
     private var pairingKey: String { authorization.syncDraft.secret }
     private var selectedPeer: String { authorization.syncDraft.selectedPeer }
     private var prerequisites: SyncPrerequisites {
-        SyncPrerequisites(configured: identityConfigured, recoveryStored: recoveryStored, expectedHolder: expectedHolder, unlockedHolder: authorization.unlockedPublicKey)
+        SyncPrerequisites(configured: identityConfigured, recoveryStored: recoveryFile == .available, expectedHolder: expectedHolder, unlockedHolder: authorization.unlockedPublicKey)
     }
     var body: some View {
         ScrollView {
@@ -115,7 +119,10 @@ private struct SyncRecoveryContent: View {
                 VStack(alignment: .leading, spacing: 10) {
                     Text(prerequisites.canApprove ? "Ready to pair and approve transfers" : "Set up your identity before pairing").font(.headline)
                     prerequisite("Save your identity provider settings in Connections", complete: identityConfigured)
-                    prerequisite("Save your encrypted recovery file in Connections", complete: recoveryStored)
+                    prerequisite("Save your encrypted recovery file in Connections", complete: recoveryFile == .available)
+                    if recoveryFile == .unreadable {
+                        Text("Book Nook couldn’t read your recovery file from secure storage.").font(.callout).foregroundStyle(.secondary)
+                    }
                     prerequisite("Unlock the identity used by both devices", complete: prerequisites.identityUnlocked)
                     if !prerequisites.canApprove {
                         Text("Your library and notebook still work offline. Complete these steps in Connections, then return here. Entered pairing details stay in this app session.").font(.callout).foregroundStyle(.secondary)
@@ -240,12 +247,25 @@ private struct SyncRecoveryContent: View {
     }
     @MainActor func refresh() async {
         do {
+            try await refreshSyncStatus()
+        } catch {
+            if !bookNookOperationWasCancelled(error) { model.error = bookNookErrorMessage(error) }
+        }
+        do {
             let config = try await model.repository.connections().castalia
             expectedHolder = config?.holderPublicKey
             identityConfigured = config != nil && !(config?.policyDigest.isEmpty ?? true) && !(config?.credentialEndpoint.isEmpty ?? true)
-            recoveryStored = try CustodySecureStorage().read(account: RecoveryImportCandidate.account) != nil
-            try await refreshSyncStatus()
-        } catch { if !bookNookOperationWasCancelled(error) { model.error = bookNookErrorMessage(error) } }
+        } catch {
+            expectedHolder = nil
+            identityConfigured = false
+            if !bookNookOperationWasCancelled(error) { model.error = bookNookErrorMessage(error) }
+        }
+        do {
+            let stored = try CustodySecureStorage().read(account: RecoveryImportCandidate.account)
+            recoveryFile = stored == nil ? .missing : .available
+        } catch {
+            recoveryFile = .unreadable
+        }
     }
     @MainActor private func refreshSyncStatus() async throws {
         for _ in 0..<2 {
