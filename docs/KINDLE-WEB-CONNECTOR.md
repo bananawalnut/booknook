@@ -37,7 +37,9 @@ Open the existing catalog entry in Book Nook. Select **Choose a book file** in t
 
 The shipped Swift SDK exercised this handoff with a synthetic catalog and original EPUB and PDF fixtures. Reimport retained the reader’s rating and review, and a repeated attachment kept one file edition. The backup restored the original bytes and reading resources. On macOS, PDFKit read both pages of the attached and restored PDF in order. [EPUB evidence](kindle-purchased-file-handoff-evidence.json) · [PDF evidence](kindle-pdf-file-handoff-evidence.json)
 
-Book Nook’s reader opened the attached PDF from managed storage on macOS and in an iPadOS 18.6 Simulator harness. It saved page two to the attached edition and reopened there. The iPad test used a fresh app process. File-picker use, physical iPad reading, live catalog sign-in, and downloading a purchased title still need hands-on checks. [Mac reader acceptance](kindle-pdf-reader-pane-evidence.json) · [iPadOS Simulator reader acceptance](kindle-pdf-ipados-reader-pane-evidence.json)
+Book Nook’s reader opened the attached PDF from managed storage on macOS and in an iPadOS 18.6 Simulator harness. It saved page two to the attached edition and reopened there. The iPad test used a fresh app process. [Mac reader acceptance](kindle-pdf-reader-pane-evidence.json) · [iPadOS Simulator reader acceptance](kindle-pdf-ipados-reader-pane-evidence.json)
+
+A separate Simulator test used the real Files picker to cancel, then select the original PDF from **On My iPad**. The new edition opened and kept page two on relaunch. Physical iPad use, other file providers, live sign-in, and downloading a purchased title still need checks. [Files picker evidence](kindle-pdf-files-picker-evidence.json)
 
 A portable backup of the attached Kindle PDF also passed through the published WASM SDK and back into native SQLite. The restore kept the original file, independent Kindle and PDF positions, Unicode note, and private review. All three JavaScript entry points rejected changed PDF bytes. [Portable SDK evidence](kindle-pdf-portable-sdk-evidence.json)
 

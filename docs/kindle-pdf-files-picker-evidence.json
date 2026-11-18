@@ -1,0 +1,38 @@
+{
+  "schema": "booknook.kindle-pdf-files-picker-evidence.v1",
+  "result": "PASS",
+  "source_commit": "c3e4d3a747f28592ef7f2cc876e7abd78050989f",
+  "runtime": "iPadOS 18.6 Simulator (arm64)",
+  "observed_utc": "2026-11-18T09:04:06.866000+00:00",
+  "native_source_files": 73,
+  "native_source_map_sha256": "88513bb5d3c8c32cb46629774f3907830b1683e43626b9d3faf3591dbb2c9d7a",
+  "swift_sdk_version": "0.3.5",
+  "swift_archive_sha256": "46b4441b3f70b488e27a9bbd4fdf03c53e398737da8bc3f3382c94406e598c84",
+  "swift_simulator_slice_sha256": "837ec846cda68e7f1b379d6c3cc223bd0227adb03e4776470574c9c247ef177e",
+  "sample_pdf_sha256": "c35bb0bbfefde316664c3723153c32bdb764543338249fb9660ac707fbfefa07",
+  "reader_test_host_sha256": "c36bd2f3eb1889d987b58892dd6ed4e3928d66efb9d3ae70a4e895641e549e2c",
+  "xcuitest_source_sha256": "b94e5062fb7d3221560040c9b2a173f6ee956f4db8a3d5ae1458d7c29c4e6128",
+  "build_receipt_sha256": "087cb1c325be3e108eb5b627afda8e92010555403bf25ee8cee77fe6785f5caf",
+  "runtime_receipt_sha256": "85865ed965131506ff9f61affc6b3a3015faaa9749b2ebc2594f1cba8e0c1657",
+  "xcresult_sha256": "1157df85b4b91b643da247b00074eececd938ee39d9e95fab3be6c9321140792",
+  "xcuitest_run": {
+    "passed": 1,
+    "failures": 0,
+    "skipped": 0
+  },
+  "qualified": {
+    "cancel_returned_to_empty_reader": true,
+    "real_local_files_picker_selected_original_pdf": true,
+    "separate_pdf_edition_with_original_bytes_and_kindle_provenance": true,
+    "page_two_restored_in_fresh_process": true,
+    "qa_bundles_removed_and_previous_shutdown_restored": true,
+    "ordinary_installed_simulator_executable_unchanged": true
+  },
+  "scope": "Real Files selection and production ReaderPane in a separate Simulator app, with a separate local fixture holder. Page navigation was programmatic after selection.",
+  "remaining": [
+    "Physical iPad picker and reader input",
+    "Cloud and third-party file providers",
+    "Live Kindle account access and purchased-file download",
+    "iPadOS 17 runtime"
+  ]
+}
