@@ -96,10 +96,20 @@ struct SocialCommunityView: View {
                     try Task.checkCancellation()
                     guard fileReadID == request else { throw CancellationError() }
                     try await model.repository.socialImportBinding(binding)
+                    await social.reload(model)
                 case .history:
+                    try Task.checkCancellation()
+                    guard fileReadID == request else { return }
+                    social.error = nil
+                    social.status = ""
                     try await model.repository.socialRestore(url)
+                    let restored = try await model.repository.socialSnapshot(reveal: social.revealSpoilers)
+                    try Task.checkCancellation()
+                    guard fileReadID == request else { return }
+                    social.snapshot = restored
+                    interests = restored.state.preferredSubjects.joined(separator: ", ")
+                    social.status = "Social history restored."
                 }
-                await social.reload(model)
             } catch {
                 if fileReadID == request, !bookNookOperationWasCancelled(error) { social.error = bookNookErrorMessage(error) }
             }

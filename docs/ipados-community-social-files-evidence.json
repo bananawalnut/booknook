@@ -1,0 +1,83 @@
+{
+  "result": "PASS_COMMUNITY_SOCIAL_FILES_AND_RESTORE_REFRESH",
+  "scope": "XCUITest used the actual Community Sharing screen and the system Files interface on iPadOS 18.6 Simulator. The tested app opened two isolated SQLite desks. A disposable local Files fixture app held the exported archive.",
+  "baseline": {
+    "build": "2026111725",
+    "source": "bb71638a64267e124e1e55c20b2ef544045df9c5",
+    "release_id": 449899961,
+    "executable_sha256": "55d09c7f12b139fe1ace964df9ea975531e6b58fa424c710d9696c67b49c5866",
+    "test_log_sha256": "1a27f4ba06e1543ffc1b75de13e0c991060aa46402b4b32e574f88a5030bb37f",
+    "test_source_sha256": "d206a54cbf1629ffe844a1e0b29948132b63b767ce85baa8627374fadae172d2",
+    "xcresult": {
+      "passed": 1,
+      "failed": 0,
+      "name": "attempt-4.xcresult"
+    },
+    "restored_interests_immediate": false,
+    "round_trip_checks": {
+      "files_export_cancelled_without_error": true,
+      "files_export_completed": true,
+      "export_exact_source_social_state": true,
+      "export_excludes_independent_trust_and_library": true,
+      "files_restore_into_separate_empty_social_desk": true,
+      "unicode_draft_and_subjects_reopened": true,
+      "occupied_restore_refused_in_app": true,
+      "recipient_library_connections_and_social_state_verified": true,
+      "source_desk_unchanged": true
+    },
+    "receipt_sha256": "80a5db8d1365ef66db680daa4a59df9bc3197e6f6b811036c9554bf847cebc7e"
+  },
+  "candidate": {
+    "build": "2026111726",
+    "base_commit": "1a5822794fd740e7f2ad887f3eabf2ee1a07ac3f",
+    "swift_ui_source_sha256": "937f4aaf5e4ebb1366c198379070ab7541f3223fe1ee4d6b0d68eed60f9c92f4",
+    "apple_build_config_sha256": "524414132e7dedd2270ecfae44dac25767b7f062b98ed8aa8d62788c6187ce1c",
+    "simulator_test_executable_sha256": "b1e386a193b25f41256f559c1d8f325d4078ab60cbb29a73acfbb7314c29b2da",
+    "test_source_sha256": "08d63b9347e46e37c34d5173cbcd92e39eedf9d73a7db7454c41956ff6181a05",
+    "test_log_sha256": "28f4e4f9f5c2565005ea8de69c6274f97d4254bd6b78e4d6cefa03cd93f0b409",
+    "xcresult": {
+      "passed": 1,
+      "failed": 0,
+      "name": "attempt-5.xcresult"
+    },
+    "restored_interests_immediate": true,
+    "round_trip_checks": {
+      "files_export_cancelled_without_error": true,
+      "files_export_completed": true,
+      "export_exact_source_social_state": true,
+      "export_excludes_independent_trust_and_library": true,
+      "files_restore_into_separate_empty_social_desk": true,
+      "unicode_draft_and_subjects_reopened": true,
+      "occupied_restore_refused_in_app": true,
+      "recipient_library_connections_and_social_state_verified": true,
+      "source_desk_unchanged": true,
+      "success_confirmation_and_immediate_discovery_rehydration": true
+    },
+    "receipt_sha256": "7746cf4cae544b1be429aed327dc3237cdb63026fb1cf23ec76f2b43fd45eae9",
+    "macos_deployment_typecheck": {
+      "result": "PASS",
+      "target": "arm64-apple-macos14.0",
+      "source_receipt_sha256": "fcbf158d5f51e906d2926a792235c70057630c9010cc8e6257d30cfbb209a8a3",
+      "sdk_sha256": "46b4441b3f70b488e27a9bbd4fdf03c53e398737da8bc3f3382c94406e598c84",
+      "source_files": 74,
+      "scope": "Full source typecheck against the declared macOS target. System runtime and accessibility remain separate.",
+      "recorded_utc": "2026-11-18T11:57:22.943577+00:00",
+      "receipt_sha256": "0a31caba5b4a4b328cb831f5389da9d30767b8404f68b404ec92c87da9c50ea8"
+    }
+  },
+  "observations": [
+    "The saved JSON exactly matched the source social state.",
+    "The private Unicode draft and preferred subjects survived restore and process restart.",
+    "The occupied restore showed the native conflict. The restored state, destination library and destination settings exactly matched their expected values afterward.",
+    "The source library and the ordinary Simulator store remained unchanged.",
+    "The exported fixture contained no configuration pins, issuer endpoints or library book data."
+  ],
+  "open_qualification": [
+    "Physical iPad interaction",
+    "Cloud and third-party Files providers",
+    "Operational Castalia",
+    "Remote relay delivery",
+    "macOS 14 and iPadOS 17 runtime"
+  ],
+  "recorded_at": "2026-11-18T11:57:34.737957+00:00"
+}
