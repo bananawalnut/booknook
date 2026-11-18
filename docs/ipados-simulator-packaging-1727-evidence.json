@@ -32,5 +32,21 @@
     "remaining_paired_token_rows_after_disconnect": 0,
     "disposable_simulator_deleted": true
   },
+  "independent_hosted_archives": {
+    "result": "PASS_INDEPENDENT_ARCHIVE",
+    "source_commit": "2af9b9ef3f15cf5147bca45b1133f1e2364ec984",
+    "run_id": 44350197748,
+    "artifact_id": 14449153342,
+    "artifact_bytes": 38707557,
+    "artifact_sha256": "cdd51ad08dec11c519687e5fa4416c66b7e53fc686f3be02407fc57e2eb5575c",
+    "verified_checksum_entries": 5,
+    "all_bundle_manifests_and_build_provenance_matched": true,
+    "simulator_archive_sha256": "74a1b4994eae9e3b759c840a5d2ee5a9b34c00b1829d8648ebbb15fb6aea3992",
+    "simulator_executable_sha256": "913a7044db5f5baa542e168d1c51162a5d2058590d9dd6c6ce1f9dc3c12b5958",
+    "simulator_seal_and_app_scoped_entitlements_verified": true,
+    "mac_signature": "linker-ad-hoc",
+    "ipad_device_signature": "unsigned",
+    "scope": "Independent inspection of the downloaded GitHub Actions artifact. The runtime verification above covers the published supplement."
+  },
   "scope": "The reference companion served a synthetic selected catalog. Physical-device input, live account access, and minimum-OS execution require separate qualification."
 }
