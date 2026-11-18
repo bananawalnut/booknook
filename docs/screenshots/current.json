@@ -47,6 +47,6 @@
   ],
   "source_equivalence": "Each executable matches the public Release archive for the build recorded with its capture.",
   "scope": "Actual Release apps using isolated synthetic workspaces. Physical install and hardware qualification have separate evidence.",
-  "latest_public_build": "2026111716",
-  "latest_public_source_revision": "dde45d189370ecc6277b7aa9293e684e6c8ab37d"
+  "latest_public_build": "2026111719",
+  "latest_public_source_revision": "f0c6d6a1ee50beb86267e82d03fb4ed83a5b9920"
 }
