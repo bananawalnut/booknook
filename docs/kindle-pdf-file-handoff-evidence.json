@@ -1,0 +1,45 @@
+{
+  "schema": "booknook.kindle-pdf-file-handoff-evidence.v1",
+  "status": "PASS",
+  "sdk_version": "0.3.5",
+  "sdk_source": "95c9bf5bfd430192ae9d5d1779e9e58afa85086c",
+  "swift_archive_sha256": "46b4441b3f70b488e27a9bbd4fdf03c53e398737da8bc3f3382c94406e598c84",
+  "swift_fixture_sha256": "5b88faedb20f84097a4822120d7096af910cccfe68b20e17dcd6e8eb5df78a66",
+  "executable_sha256": "2526e3fcd245145e0c220bc41610557c00b56936dfd96e730aadf8bea0bab82f",
+  "native_slice_sha256": "bf4f913178f2cc8c0c3a6f7eabdf3d13b806f0cfb2d693b7c5ffa61b85c3a5c5",
+  "source_pdf_sha256": "c35bb0bbfefde316664c3723153c32bdb764543338249fb9660ac707fbfefa07",
+  "source_pdf_bytes": 12418,
+  "source_of_corpus": "Synthetic Kindle catalog and original two-page CoreGraphics PDF",
+  "operational_amazon_account_used": false,
+  "observed_utc": "2026-11-18T07:36:58.909507+00:00",
+  "source_pages": [
+    "Page one: café atlas",
+    "Page two: naïve reader"
+  ],
+  "attached_pages": [
+    "Page one: café atlas",
+    "Page two: naïve reader"
+  ],
+  "restored_pages": [
+    "Page one: café atlas",
+    "Page two: naïve reader"
+  ],
+  "qualification": {
+    "asset_declares_pdf_mime_and_exact_source_sha256": true,
+    "backup_contains_original_pdf_by_sha256": true,
+    "catalog_provenance_and_private_title_rating_review_survived_reimport": true,
+    "pdfkit_reads_two_distinct_ordered_unicode_pages_on_all_three_copies": true,
+    "repeat_attachment_preserved_one_file_edition_and_one_asset": true,
+    "restored_book_and_editions_match_reopened_desk": true,
+    "separate_pdf_edition_without_inferred_identifiers": true,
+    "single_initial_catalog_book_and_assetless_kindle_edition": true,
+    "source_attached_and_restored_pdf_bytes_match": true,
+    "source_position_retained_through_attach_reimport_restore": true
+  },
+  "environment": "Headless macOS arm64, PDFKit and the released Swift SDK 0.3.5.",
+  "open_qualification": [
+    "Book Nook PDF reader UI on the attached edition",
+    "Live Amazon catalog sign-in and actual purchase retrieval"
+  ],
+  "receipt_sha256": "4bbba844548b480f80f118d5df399c3d147cd5690cef7d41c4625f11b86c8c22"
+}

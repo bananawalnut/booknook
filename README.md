@@ -80,13 +80,13 @@ The earlier iPad acceptance check [updated the normal app in place to 0.2.1 (202
 
 **macOS — reading desk**
 
-![Book Nook macOS reading desk with an EPUB and two Margin notes on warm paper](docs/screenshots/macos-current.jpg)
+![Book Nook macOS reading desk with a Margin note and character card alongside an EPUB](docs/screenshots/macos-current.jpg)
 
 **iPad — reading desk**
 
 ![Book Nook iPad reading desk with a Margin note and character card alongside an EPUB](docs/screenshots/ipad-current.png)
 
-The iPad Simulator image shows published Release build **2026111720**. The Mac image shows the earlier published build **2026111705**. Both use sample EPUBs. [Capture details](docs/screenshots/README.md)
+Both screenshots show published Release build **2026111720** with a sample desk. The iPad screenshot was taken in Simulator. [Capture details](docs/screenshots/README.md)
 
 ## Run the native apps
 

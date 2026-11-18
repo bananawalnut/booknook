@@ -35,7 +35,7 @@ Amazon provides EPUB and PDF downloads in **Manage Your Content and Devices** fo
 
 Open the existing catalog entry in Book Nook. Select **Choose a book file** in the reader, or **Book options → Attach book file…** to add a file alongside another edition. Choose the EPUB or PDF you downloaded. Book Nook retains the catalog entry and Kindle provenance, stores the attached file as a separate edition, and preserves the Kindle source position for reference.
 
-The shipped Swift SDK exercised this handoff with a synthetic catalog and original EPUB. Reimport retained the reader’s rating and review, and attaching the same EPUB again kept one file edition. Backup and restore preserved the original bytes and reading resource. PDF attachment, live catalog sign-in, and an actual purchase download still need an end-to-end check. [File handoff evidence](kindle-purchased-file-handoff-evidence.json)
+The shipped Swift SDK exercised this handoff with a synthetic catalog and original EPUB and PDF fixtures. Reimport retained the reader’s rating and review, and a repeated attachment kept one file edition. The backup restored the original bytes and reading resources. On macOS, PDFKit read both pages of the attached and restored PDF in order. Live catalog sign-in, an actual purchase download, and opening an attached Kindle PDF in the Book Nook reader UI remain open. [EPUB evidence](kindle-purchased-file-handoff-evidence.json) · [PDF evidence](kindle-pdf-file-handoff-evidence.json)
 
 ## Validation and outstanding qualification
 

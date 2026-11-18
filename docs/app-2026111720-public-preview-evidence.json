@@ -138,5 +138,17 @@
     "raw_framebuffer_sha256": "3991d2f2ab8b9dd9ee60228cd59b5887f05b54202678f62563558e0a32963080",
     "simulator_executable_sha256": "26d2539611b6148d960ea085a56169b0a2231d0f33861d918088ac5058a84073",
     "receipt_sha256": "3dedc8f56630347fe70b942b780b319b6dc4ab9e701df3ee1afc9021d4ba3a01"
+  },
+  "mac_readme_capture": {
+    "runtime": "macOS 26.4.1, native app window",
+    "source": "2149553525d68eb223bcecaf980d39605cfa6d88",
+    "build": "2026111720",
+    "executable_sha256": "5ce093c3a6abc251a0e011763b9330333c2434d682522bd432f59b43a1a00c8f",
+    "original_jpeg_sha256": "3a547ab642e5f75f0c8e68c44ff90094d5f8b252b94c94c2fc8d127be4bc8483",
+    "published_jpeg_sha256": "38c594291bb4f967516deac41261e0996fd3a39c41c09b0c0d7ed8811a7cc96c",
+    "receipt_sha256": "f4bfb3ed0ad10a060211fa2f5789b0bb704cecd98558a1eccf5f48ad43afa43b",
+    "window_crop_top_pixels": 80,
+    "synthetic_desk": true,
+    "owned_preview_closed": true
   }
 }
