@@ -1,0 +1,38 @@
+{
+  "schema": "booknook.physical-sync-qualification.v1",
+  "source_commit": "95c9bf5bfd430192ae9d5d1779e9e58afa85086c",
+  "sdk_version": "0.3.5",
+  "SDK_archive": {
+    "bytes": 149496225,
+    "sha256": "46b4441b3f70b488e27a9bbd4fdf03c53e398737da8bc3f3382c94406e598c84"
+  },
+  "physical_iPad": {
+    "status": "BLOCKED_BEFORE_EXECUTION",
+    "observed_at": "2026-11-18T05:26:12.888163+00:00",
+    "runtime": "18.1.1",
+    "model": "iPad Air 13-inch (M2)",
+    "signing": "The existing QA bundle profile was renewed on the existing development team and validated for the paired iPad.",
+    "blocker": "CoreDevice reported that the iPad had reached its free-development-profile app limit.",
+    "isolation": "The normal Book Nook app remained build 1718 and reopened. The QA bundle was absent after cleanup.",
+    "orientation_observations_equal": true,
+    "orientation_commands": false,
+    "provisioning_receipt_sha256": "2cc07476aa4aa70bfe195a7b6290c108b098be334065290e8471b9c7fc83cf7c",
+    "installation_error_receipt_sha256": "f957804b2eb2efaa09f5922d6b212fa169bfc5b36f6c7593f225d8a44e73bd70",
+    "test_attempt_receipt_sha256": "c7df807ba5eb127586441422375296b2ae2999959248cf136e178212584cc68b"
+  },
+  "mac_and_iPadOS_simulator_rehearsal": {
+    "result": "PASS",
+    "mac_runtime": "26.4.1",
+    "iPadOS_simulator_runtime": "18.6",
+    "data_source": "Temporary synthetic SQLite desks using the published Apple SDK slices and synthetic signed Castalia approvals.",
+    "evidence": [
+      "Both directions transferred an exact approved encrypted file.",
+      "A fresh Simulator process reopened the accepted state, and replay left that state unchanged.",
+      "Three Unicode notes merged after independent offline edits.",
+      "The receiver preserved both offline ratings, exposed one conflict, and reopened the explicitly chosen value.",
+      "The temporary Mac files and Simulator app were removed, and the dedicated Simulator shut down."
+    ],
+    "receipt_sha256": "7bf0f6f7f63ae44ced885797869a6b4548818a338641b9df78fcec12d1fc1e77"
+  },
+  "scope": "The rehearsal proves the signed transfer and conflict logic across Mac and iPadOS Simulator SDK consumers. Physical-device execution, operational Castalia authority and the reader-facing file picker retain separate acceptance gates."
+}
