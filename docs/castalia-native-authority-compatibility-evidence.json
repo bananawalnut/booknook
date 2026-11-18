@@ -1,0 +1,29 @@
+{
+  "schema": "booknook.native-authority-compatibility-evidence.v1",
+  "result": "PASS",
+  "sdk_version": "0.3.5",
+  "sdk_source": "95c9bf5bfd430192ae9d5d1779e9e58afa85086c",
+  "booknook_main_when_checked": "46b2a3448841d4bc9709d47a13cabc75dfacd4fb",
+  "shared_fixture_count": 39,
+  "native_positive_cases": 7,
+  "checks": {
+    "installed_cjs_node_wasm": 42,
+    "installed_esm_node_wasm": 42,
+    "installed_esm_web_wasm_under_node": 42,
+    "upstream_typescript_checkout": 41,
+    "shipped_swift_macos_sdk": 42
+  },
+  "shared_fixture_sha256": "1d3895f024c01379acc556750a4ad5eb8fe5b1358765effd4776fb10f91c463e",
+  "browser_fixture_sha256": "5b576dd69e2f01bec6f97f2413c1f8acb95adb900d4e326bdc81358349030e70",
+  "swift_sdk_sha256": "46b4441b3f70b488e27a9bbd4fdf03c53e398737da8bc3f3382c94406e598c84",
+  "operational_issuer_or_credentials_used": false,
+  "observed_utc": "2026-11-18T06:52:56+00:00",
+  "extra_negative_cases": [
+    "Castalia browser provider profile fixture",
+    "Zenith membership-trust shape with synthetic pins",
+    "Duplicate raw JSON issuer field"
+  ],
+  "upstream_typescript_scope": "Inspected development checkout accepts parsed JSON values. Duplicate raw keys are covered by the shipped raw-JSON consumers.",
+  "operational_qualification": "Open. Requires a documented native action issuer, its reviewed public profile, an existing Castalia identity, and explicit approval for an enabled operation.",
+  "receipt_sha256": "8f4b06395979b72e26cc4d5a800d0fabd017a574276772af9ffc227cde2b14f1"
+}

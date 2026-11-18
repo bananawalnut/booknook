@@ -20,6 +20,16 @@ Profiles can be exported from the current public configuration. Private reading 
 
 The reusable Castalia interface does not imply that the deployed Zenith or Castalia Web issuer currently accepts Book Nook's operation requests. Their membership issuance is distinct from generic v2 action authority. Reuse an existing issuer when it supports that contract and its operator explicitly permits the caller/actions. The optional reference issuer supplies a concrete compatible local implementation without inventing a membership requirement.
 
+## Qualify an existing issuer
+
+The inspected Zenith Web path issues membership credentials. Transfer’s documented session interface supplies scoped service reads through opaque handles. Book Nook’s native authorizer needs the existing Castalia v2 credential for its exact reviewed action and disclosure, obtained through [the configured issuer endpoint](../services/library-companion/README.md#issuer-endpoint-contract).
+
+1. Obtain the operator’s public native authority profile and verify the issuer key, audience, terminal caller, policy digest and credential endpoint through an independent operator channel. Apply the proposed trust inside **Connections → Sign in with Castalia** and select the existing Castalia identity there.
+2. For the first live check, use an isolated desk with sample content and an operator-approved `device.enroll` action for that holder and caller. Review the provider’s disclosure title and the destination device in Book Nook. The pairing approval records device access locally.
+3. Cancel a reviewed pairing and confirm that it creates no device entry. Review a fresh request, approve it through native custody and confirm that the exact pairing survives reopening. A subsequent `sync.send` needs its own approval. Record the issuer and client versions and the result, withholding credentials and private desk contents.
+
+The shipped Swift and WASM SDKs agreed on the 39 shared native-profile fixtures plus three negative cases. They refused a browser profile, a membership trust record and a raw JSON duplicate issuer field. [Compatibility evidence](castalia-native-authority-compatibility-evidence.json)
+
 ## Provider adapter behavior
 
 The paired library companion advertises `provider_connections_v1`. Authenticated `GET /v1/provider-connections/{marketplace}` returns a JSON array of shared descriptors; the supported marketplace identifiers are `us`, `uk`, `de`, `ca` and `au`. The route without a marketplace defaults to `us`. This listing is private to the paired device. It does not connect, renew, register or export credentials.
