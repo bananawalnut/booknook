@@ -17,6 +17,7 @@ import Foundation
                 if CommandLine.arguments.contains("--group-replies") { try await testGroupReplies(); exit(0) }
                 if CommandLine.arguments.contains("--group-membership-review") { try await testGroupMembershipReview(); exit(0) }
                 if CommandLine.arguments.contains("--shared-list-review") { try await testSharedListReview(); exit(0) }
+                if CommandLine.arguments.contains("--sync-destination") { try await testSyncDestination(); exit(0) }
                 if CommandLine.arguments.contains("--reading-pass-navigation") { try await testReadingPassNavigation(); exit(0) }
                 if CommandLine.arguments.contains("--audible-recovery-contract") { try testAudibleRecoveryContract(); exit(0) }
                 if CommandLine.arguments.contains("--recommendation-titles") { try await testRecommendationTitleProjection(); exit(0) }
@@ -299,7 +300,93 @@ import Foundation
         try await testGroupMembershipReview()
         try await testPublicGroupPreview()
         try await testSharedListReview()
+        try await testSyncDestination()
         print("Native desk workflows: duplicate-title identity, failed navigation, explicit sessions, private earlier-character-version drafts, thrown save rejection, unrated Unicode review, list edit/conflict retention, failed social retry with durable draft recovery, reopen and cancellation distinctions passed.")
+    }
+
+    @MainActor static func testSyncDestination() async throws {
+        let fm = FileManager.default
+        let root = fm.temporaryDirectory.appendingPathComponent("booknook-sync-destination-" + UUID().uuidString)
+        let directory = root.appendingPathComponent("desk")
+        let folder = root.appendingPathComponent("destination")
+        try fm.createDirectory(at: folder, withIntermediateDirectories: true)
+        defer { try? fm.removeItem(at: root) }
+
+        let primary = DeskRepository(directory: directory)
+        let second = DeskRepository(directory: directory)
+        _ = try await primary.open()
+        _ = try await second.open()
+        let issuer = try Curve25519.Signing.PrivateKey(rawRepresentation: Data(repeating: 1, count: 32))
+        let holder = try Curve25519.Signing.PrivateKey(rawRepresentation: Data(repeating: 2, count: 32))
+        let config = CastaliaConfiguration(issuer: "synthetic-issuer", keyId: "test",
+            issuerPublicKey: hex(issuer.publicKey.rawRepresentation), audience: "booknook-test",
+            terminalCaller: "synthetic-booknook-test", holderPublicKey: hex(holder.publicKey.rawRepresentation),
+            policyDigest: hex(SHA256.hash(data: Data("synthetic sync destination".utf8))),
+            credentialEndpoint: "http://127.0.0.1:65500/credential")
+        var settings = ConnectionConfiguration()
+        settings.castalia = config
+        try await primary.saveConnections(settings)
+        let key = try await primary.syncNewKey()
+        let peer = "fixture-other-device"
+        let now = UInt64(Date().timeIntervalSince1970)
+
+        func receipt(_ payload: Data, action: String, version: UInt64) async throws -> AuthorizationReceipt {
+            let request = try await primary.authorizedAction(payload: payload, action: action,
+                resourceVersion: version, idempotencyKey: UUID().uuidString)
+            return try fixtureReceipt(request, at: now, config: config, issuer: issuer, holder: holder)
+        }
+        func pair(_ repository: DeskRepository, enabled: Bool) async throws {
+            let raw = try await repository.syncPreparePeer(id: peer, label: "Synthetic device", key: key, enabled: enabled)
+            let payload = Data(raw.utf8)
+            guard let object = try JSONSerialization.jsonObject(with: payload) as? [String: Any],
+                  let version = object["version"] as? NSNumber else { throw CocoaError(.coderReadCorrupt) }
+            let approval = try await receipt(payload, action: "device.enroll", version: version.uint64Value)
+            try await repository.syncApprovePeer(raw, receipt: approval)
+        }
+
+        try await pair(primary, enabled: true)
+        let prepared = try await primary.syncPrepare(peer: peer)
+        guard let batch = prepared.batch.object, let id = batch["id"] as? String,
+              let revision = batch["revision"] as? NSNumber else { throw CocoaError(.coderReadCorrupt) }
+        let approval = try await receipt(JSONSerialization.data(withJSONObject: batch),
+            action: "sync.send", version: revision.uint64Value)
+        _ = try await primary.syncApprove(id: id, key: key, receipt: approval)
+        let unrelated = folder.appendingPathComponent("keep.json")
+        let original = Data("existing user file".utf8)
+        try original.write(to: unrelated)
+
+        // A second Desk can revoke authorization while the destination is still being chosen.
+        try await pair(second, enabled: false)
+        do {
+            _ = try await primary.syncExportToFolder(id: id, folder: folder)
+            preconditionFailure("A disabled pairing wrote to the chosen destination")
+        } catch { precondition(bookNookErrorMessage(error).contains("queued exports are suspended")) }
+        let refused = try await second.syncStatus()
+        precondition(refused.outbox.first(where: { $0.id == id })?.exported == false)
+        let unchanged = try fm.contentsOfDirectory(atPath: folder.path)
+        precondition(unchanged == [unrelated.lastPathComponent])
+
+        try await pair(second, enabled: true)
+        let first = try await primary.syncExportToFolder(id: id, folder: folder)
+        let retry = try await second.syncExportToFolder(id: id, folder: folder)
+        let firstBytes = try Data(contentsOf: first)
+        let retryBytes = try Data(contentsOf: retry)
+        precondition(first.deletingLastPathComponent().path == folder.path && first.pathExtension == "json")
+        precondition(retry.deletingLastPathComponent().path == folder.path && first != retry)
+        precondition(!firstBytes.isEmpty && firstBytes == retryBytes)
+        let ready = try await second.syncStatus()
+        precondition(ready.outbox.first(where: { $0.id == id })?.exported == true)
+
+        try await second.syncRemove(id: id)
+        do {
+            _ = try await primary.syncExportToFolder(id: id, folder: folder)
+            preconditionFailure("A removed retry copy wrote to the chosen destination")
+        } catch { precondition(bookNookErrorMessage(error).contains("no longer in Outbox")) }
+        let remaining = try fm.contentsOfDirectory(atPath: folder.path)
+        let stillUnrelated = try Data(contentsOf: unrelated)
+        precondition(Set(remaining) == [unrelated.lastPathComponent, first.lastPathComponent, retry.lastPathComponent])
+        precondition(stillUnrelated == original)
+        print("Native sync destination refused revoked or removed transfers before writing, kept the retry, and saved identical ciphertext under distinct filenames.")
     }
 
     static func testAudibleRecoveryContract() throws {
@@ -748,6 +835,19 @@ import Foundation
 
     @MainActor @discardableResult private static func approveFixture(_ action: [String: Any], model: DeskModel,
         config: CastaliaConfiguration, issuer: Curve25519.Signing.PrivateKey, holder: Curve25519.Signing.PrivateKey) async throws -> SocialEventModel {
+        let raw = try await model.repository.socialPrepare(JSONSerialization.data(withJSONObject: action,
+            options: [.sortedKeys, .withoutEscapingSlashes]))
+        let decoder = JSONDecoder(); decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let event = try decoder.decode(SocialEventModel.self, from: Data(raw.utf8))
+        let request = try await model.repository.authorizedAction(payload: Data(raw.utf8), action: "social.execute",
+            resourceVersion: event.resourceVersion, idempotencyKey: event.id)
+        try await model.repository.socialApprove(event: raw, receipt: fixtureReceipt(request, at: event.at,
+            config: config, issuer: issuer, holder: holder))
+        return event
+    }
+
+    private static func fixtureReceipt(_ request: String, at: UInt64, config: CastaliaConfiguration,
+        issuer: Curve25519.Signing.PrivateKey, holder: Curve25519.Signing.PrivateKey) throws -> AuthorizationReceipt {
         // Public synthetic fixture keys are restricted to this isolated desk.
         func canonical(_ value: [String: Any]) throws -> Data {
             try JSONSerialization.data(withJSONObject: value, options: [.sortedKeys, .withoutEscapingSlashes])
@@ -756,13 +856,8 @@ import Foundation
         func signature(_ key: Curve25519.Signing.PrivateKey, _ domain: String, _ value: [String: Any]) throws -> String {
             try hex(key.signature(for: Data(domain.utf8) + canonical(value)))
         }
-        let raw = try await model.repository.socialPrepare(canonical(action))
-        let decoder = JSONDecoder(); decoder.keyDecodingStrategy = .convertFromSnakeCase
-        let event = try decoder.decode(SocialEventModel.self, from: Data(raw.utf8))
-        let request = try await model.repository.authorizedAction(payload: Data(raw.utf8), action: "social.execute",
-            resourceVersion: event.resourceVersion, idempotencyKey: event.id)
         let requestBytes = Data(request.utf8)
-        let disclosure: [String: Any] = ["title": "Synthetic group setup", "statements": ["Synthetic test data only"]]
+        let disclosure: [String: Any] = ["title": "Synthetic desk action", "statements": ["Synthetic test data only"]]
         let nonce = String(digest(requestBytes).prefix(32))
         let common: [String: Any] = [
             "holder_public_key": config.holderPublicKey, "issuer": config.issuer, "key_id": config.keyId,
@@ -773,20 +868,19 @@ import Foundation
         var claims = common
         claims["schema"] = "castalia.request-credential.v1"
         claims["policy_digest_sha256"] = config.policyDigest
-        claims["issued_at"] = event.at - 1
-        claims["expires_at"] = event.at + 119
+        claims["issued_at"] = at - 1
+        claims["expires_at"] = at + 119
         let credential: [String: Any] = ["claims": claims, "signature": try signature(issuer, "castalia.request-credential.v1/signature\0", claims)]
         var presentation = common
         presentation["schema"] = "castalia.credential-presentation.v2"
         presentation["credential_digest_sha256"] = digest(try canonical(credential))
-        presentation["issued_at"] = event.at
-        presentation["expires_at"] = event.at + 60
+        presentation["issued_at"] = at
+        presentation["expires_at"] = at + 60
         presentation["signature"] = try signature(holder, "castalia.credential-presentation.v2/signature\0", presentation)
         let receiptRequest = try canonical(["schema": "castalia.credential-presentation-request.v2",
             "request_bytes_base64": requestBytes.base64EncodedString(), "disclosure": disclosure, "credential": credential])
-        try await model.repository.socialApprove(event: raw, receipt: AuthorizationReceipt(
+        return AuthorizationReceipt(
             requestJSON: String(decoding: receiptRequest, as: UTF8.self),
-            presentationJSON: String(decoding: try canonical(presentation), as: UTF8.self)))
-        return event
+            presentationJSON: String(decoding: try canonical(presentation), as: UTF8.self))
     }
 }

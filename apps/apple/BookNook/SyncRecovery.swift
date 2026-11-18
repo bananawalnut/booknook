@@ -35,11 +35,36 @@ extension DeskRepository {
     func syncPrepare(peer: String) throws -> SyncPrepared { try syncDecode(SyncPrepared.self, required().syncPrepare(peerId: peer)) }
     func syncApprove(id: String, key: String, receipt: AuthorizationReceipt) throws -> String { try required().syncApprove(batchId: id, keyHex: key, requestJson: receipt.requestJSON, presentationJson: receipt.presentationJSON) }
     func syncCancel(id: String) throws { try required().syncCancelPrepared(batchId: id) }
-    func syncExport(id: String, url: URL) throws { try required().syncExport(batchId: id, path: url.path) }
+    func syncExportToFolder(id: String, folder: URL) throws -> URL {
+        let access = folder.startAccessingSecurityScopedResource()
+        defer { if access { folder.stopAccessingSecurityScopedResource() } }
+        let file = folder.appendingPathComponent("BookNook-encrypted-snapshot-\(UUID().uuidString).json")
+        let desk = try required()
+        var coordinationError: NSError?
+        var written: Result<URL, Error>?
+        NSFileCoordinator().coordinate(writingItemAt: file, options: [], error: &coordinationError) { destination in
+            written = Result {
+                try desk.syncExport(batchId: id, path: destination.path)
+                return destination
+            }
+        }
+        if let coordinationError { throw coordinationError }
+        guard let written else { throw CocoaError(.fileWriteUnknown) }
+        return try written.get()
+    }
     func syncRemove(id: String) throws { try required().syncRemoveOutbox(batchId: id) }
     func syncReceive(url: URL, peer: String, key: String) throws -> DeskSnapshot {
-        let result = try required().syncReceive(path: url.path, sourceDevice: peer, keyHex: key)
-        return try syncDecode(Response.self, result).state
+        let access = url.startAccessingSecurityScopedResource()
+        defer { if access { url.stopAccessingSecurityScopedResource() } }
+        let desk = try required()
+        var coordinationError: NSError?
+        var received: Result<String, Error>?
+        NSFileCoordinator().coordinate(readingItemAt: url, options: [], error: &coordinationError) { source in
+            received = Result { try desk.syncReceive(path: source.path, sourceDevice: peer, keyHex: key) }
+        }
+        if let coordinationError { throw coordinationError }
+        guard let received else { throw CocoaError(.fileReadUnknown) }
+        return try syncDecode(Response.self, received.get()).state
     }
     func syncResolve(id: String, incoming: Bool) throws -> DeskSnapshot { try syncDecode(DeskSnapshot.self, required().syncResolve(conflictId: id, useIncoming: incoming)) }
 }
@@ -47,6 +72,18 @@ extension DeskRepository {
 struct SyncRecoveryView: View {
     @EnvironmentObject var model: DeskModel
     var body: some View { SyncRecoveryContent(authorization: model.authorization) }
+}
+
+private enum SyncFileAction {
+    case receive(SyncPeer)
+    case export(String)
+
+    var contentTypes: [UTType] {
+        switch self {
+        case .receive: return [.json]
+        case .export: return [.folder]
+        }
+    }
 }
 
 private struct SyncRecoveryContent: View {
@@ -59,9 +96,8 @@ private struct SyncRecoveryContent: View {
     @State private var recoveryStored = false
     @State private var revealPairingKey = false
     @State private var busy = false
-    @State private var importing = false
-    @State private var exporting = false
-    @State private var document: ExportDocument?
+    @State private var choosingFile = false
+    @State private var fileAction: SyncFileAction?
     @State private var message: String?
     @State private var removing: SyncOutbox?
     private var deviceId: String { authorization.syncDraft.deviceID }
@@ -120,7 +156,10 @@ private struct SyncRecoveryContent: View {
                                 guard let recipient = status.peers.first(where: { $0.id == selectedPeer && $0.enabled }) else { return }
                                 run { try await prepare(for: recipient) }
                             }.buttonStyle(.borderedProminent).disabled(!prerequisites.canApprove)
-                            Button("Import encrypted snapshot") { importing = true }.buttonStyle(.bordered).disabled(!identityConfigured)
+                            Button("Import encrypted snapshot") {
+                                guard let peer = status.peers.first(where: { $0.id == selectedPeer && $0.enabled }) else { return }
+                                chooseFile(for: .receive(peer))
+                            }.buttonStyle(.bordered).disabled(!identityConfigured)
                         }.disabled(selectedPeer.isEmpty || model.saving)
                         Text("Each approved snapshot includes the library, notebooks, character history, annotations, reading positions, and accessible book files. Credentials and connection settings are excluded. File transfer needs no Book Nook server.").font(.caption).foregroundStyle(.secondary)
                     }
@@ -130,7 +169,7 @@ private struct SyncRecoveryContent: View {
                             HStack {
                                 VStack(alignment: .leading) { Text(status.peers.first(where: { $0.id == batch.peer })?.label ?? batch.peer); Text(batch.exported ? "Copy prepared · delivery not confirmed" : "Ready to export").font(.caption).foregroundStyle(.secondary) }
                                 Spacer()
-                                Button("Export file") { run { try await export(batch.id) } }
+                                Button("Export to folder…") { chooseFile(for: .export(batch.id)) }
                                 Button("Remove retry copy") { removing = batch }
                             }
                         }
@@ -168,27 +207,28 @@ private struct SyncRecoveryContent: View {
                     }
                 }
                 if busy { ProgressView("Preparing your reviewed action…") }
-                if let message { Text(message).font(.callout).foregroundStyle(.secondary) }
+                if let message { Text(message).font(.callout).foregroundStyle(.secondary).textSelection(.enabled) }
             }.padding(36).disabled(busy)
         }
         .task { await refresh() }
-        .fileImporter(isPresented: $importing, allowedContentTypes: [.json]) { result in
+        .fileImporter(isPresented: $choosingFile, allowedContentTypes: fileAction?.contentTypes ?? [.json], allowsMultipleSelection: false) { result in
+            guard let action = fileAction else { return }
+            fileAction = nil
             run {
-                let url = try result.get(); let access = url.startAccessingSecurityScopedResource(); defer { if access { url.stopAccessingSecurityScopedResource() } }
-                try await model.drainSaves()
-                model.accept(try await model.repository.syncReceive(url: url, peer: selectedPeer, key: savedKey(selectedPeer)))
-                model.reloadEditorSessions()
-                message = "Snapshot received. Any conflicting edits are listed below."
+                guard let url = try result.get().first else { throw CocoaError(.fileNoSuchFile) }
+                switch action {
+                case .receive(let peer):
+                    try await model.drainSaves()
+                    model.accept(try await model.repository.syncReceive(url: url, peer: peer.id, key: savedKey(peer.id)))
+                    model.reloadEditorSessions()
+                    message = "Snapshot received. Any conflicting edits are listed below."
+                case .export(let batchID):
+                    let file = try await model.repository.syncExportToFolder(id: batchID, folder: url)
+                    message = "Saved \(file.lastPathComponent). Confirm its arrival before removing the retry copy."
+                }
             }
-        }
-        .fileExporter(isPresented: $exporting, document: document, contentType: .json, defaultFilename: "BookNook-encrypted-snapshot") { result in
-            document = nil
-            switch result {
-            case .success:
-                message = "Encrypted snapshot saved. Confirm its arrival before removing the retry copy."
-            case .failure(let error):
-                if !bookNookOperationWasCancelled(error) { model.error = bookNookErrorMessage(error) }
-            }
+        } onCancellation: {
+            fileAction = nil
         }
         .confirmationDialog("Remove the encrypted retry copy?", isPresented: Binding(get: { removing != nil }, set: { if !$0 { removing = nil } })) {
             if let batch = removing { Button("Remove retry copy", role: .destructive) { run { try await model.repository.syncRemove(id: batch.id); removing = nil } } }
@@ -275,13 +315,10 @@ private struct SyncRecoveryContent: View {
             message = "Approved snapshot is ready in the transfer queue. Export it when ready."
         } catch { try? await model.repository.syncCancel(id: id); throw error }
     }
-    @MainActor func export(_ id: String) async throws {
-        let url = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".json")
-        defer { try? FileManager.default.removeItem(at: url) }
-        try await model.repository.syncExport(id: id, url: url)
-        document = ExportDocument(data: try Data(contentsOf: url))
+    private func chooseFile(for action: SyncFileAction) {
+        fileAction = action
         message = nil
-        exporting = true
+        choosingFile = true
     }
     func resolveOrder(_ review: NotebookOrderReview, choosing order: [String]) {
         let reviewID = UUID().uuidString.lowercased().replacingOccurrences(of: "-", with: "")
