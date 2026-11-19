@@ -1,0 +1,230 @@
+{
+  "hosted": {
+    "apple_first_attempt": {
+      "job_id": 135091973652,
+      "reason": "Hosted arm64 macOS runner allocation failed.",
+      "receipt_sha256": "6deb865a529b43b9b873da1890a179b64776b23d0371cdb0eed840f6073214a4",
+      "result": "cancelled",
+      "run_attempt": 1,
+      "steps_executed": 0
+    },
+    "contract_attempt": 1,
+    "contract_ci_receipt_sha256": "151d9c44e0e56d569f579fe1a8f1958be8db063245367b325cf4d4e2e249ad76",
+    "contract_workflow_run": 44386278450,
+    "contract_workflow_url": "https://github.com/bananawalnut/booknook/actions/runs/44386278450",
+    "hosted_consumer_scope": "The portable job exercised extracted Rust and installed npm packages. The retried Apple job ran the full extracted Swift package consumer on arm64 macOS at the same source commit.",
+    "producer_jobs": {
+      "apple": {
+        "artifact_id": 14467763903,
+        "artifact_sha256": "316d2945db6c4aa7a0b75c1e5abc1e3ae0b4a2f8ac4f6c38994e98b214c66b80",
+        "job_id": 135104976439,
+        "job_url": "https://github.com/bananawalnut/booknook/actions/runs/44386370605/job/135104976439",
+        "provenance_sha256": "51150651a519f5dcf0fa2897f6f7df51ec07a18ae733e1342320d3b3a3f3e16f",
+        "run_attempt": 2
+      },
+      "portable": {
+        "artifact_id": 14465503085,
+        "artifact_sha256": "4fffb5e9ad5b66d26341725f41a2ee29d4ac364e0654a34e41f7556da9a69773",
+        "job_id": 135091974146,
+        "job_url": "https://github.com/bananawalnut/booknook/actions/runs/44386370605/job/135091974146",
+        "provenance_sha256": "7647a5b63db6a7d7b1074826bfe5f381123b4f0d3cfb536e7c3689cd3cd31244",
+        "run_attempt": 1
+      }
+    },
+    "sdk_terminal_attempt": 2,
+    "sdk_workflow_run": 44386370605,
+    "sdk_workflow_url": "https://github.com/bananawalnut/booknook/actions/runs/44386370605"
+  },
+  "independent_consumers": {
+    "browser_wasm": {
+      "checks": [
+        "browser_wasm_digest",
+        "corrected_author_and_isbn13",
+        "omitted_fields_retained",
+        "explicit_blank_clears_one_namespace",
+        "private_edits_preserved",
+        "reopen_and_historical_replay",
+        "portable_export_roundtrip"
+      ],
+      "receipt_sha256": "17903adb787aaa6c08346c70901c694610e9201bf33db4ac909584047c2ff735",
+      "result": "PASS",
+      "scope": "Installed web-target WASM with synthetic host storage.",
+      "wasm_sha256": "2cc89f0290eabcc634051533ea59e791358b921da08ad6c4e9d666c412512c13"
+    },
+    "installed_javascript": {
+      "module_formats": [
+        "CommonJS",
+        "ESM"
+      ],
+      "provider_correction_passes": 3,
+      "receipt_sha256": "1d157b83568b4f1612f3d7e957d398d57b8e5bbd9735d05fb30260257ebdefa4",
+      "result": "PASS",
+      "type_check": "NodeNext",
+      "wasm_targets_under_node": [
+        "nodejs",
+        "web"
+      ]
+    },
+    "macos_swift": {
+      "architecture": "arm64",
+      "fixture_sha256": "f1f54598f34360d2df0bcd38342d2466e83cd568a6b52585947d6f94d59907b4",
+      "inspected_xcframework_slices": {
+        "ios-arm64": {
+          "architecture": "arm64",
+          "deployment_target": "17.0",
+          "indexed_sdk_exports_checked": 2,
+          "library_bytes": 153874160,
+          "library_sha256": "1a80cce7a15e57cde5af416354aa04a696f9e4fb363a026abd23eb95721c3e21",
+          "mach_o_platform": 2,
+          "object_count": 1105
+        },
+        "ios-arm64-simulator": {
+          "architecture": "arm64",
+          "deployment_target": "17.0",
+          "indexed_sdk_exports_checked": 2,
+          "library_bytes": 153838320,
+          "library_sha256": "db2ddb0a82966e311b5fdb7b9d8d0ff46ffa05e24d329e1de5ebba51ae1afe26",
+          "mach_o_platform": 7,
+          "object_count": 1105
+        },
+        "macos-arm64": {
+          "architecture": "arm64",
+          "deployment_target": "14.0",
+          "indexed_sdk_exports_checked": 2,
+          "library_bytes": 154295048,
+          "library_sha256": "08ee68650f5db3c6bee124ead0ccd8b385cb95e4fe2a0dc63c294a332e92df50",
+          "mach_o_platform": 1,
+          "object_count": 1111
+        }
+      },
+      "provider_smoke_sha256": "f1afa77784aa277168c64bbc47a0bba379eb0b50654e41eb33874e4646c7ba79",
+      "receipt_sha256": "adc9d4befcd9f321abf75e71bed18f039be03d56314bc34c0abb1fc2d9a1e8c0",
+      "result": "PASS",
+      "scope": "Goodreads author and ISBN corrections, historical replay, retained reader edits and attached EPUB bytes, SQLite reopen and archive restore."
+    },
+    "packaged_core": {
+      "contract_tests_passed": 18,
+      "receipt_sha256": "f05e81fc26f317eb25c357026f757e7ab169e3a477be3ed7c6c982d61cadf476",
+      "result": "PASS"
+    }
+  },
+  "public_https": {
+    "asset_count": 16,
+    "assets": {
+      "BUILD-PROVENANCE-apple.json": {
+        "bytes": 990,
+        "id": 765002111,
+        "sha256": "51150651a519f5dcf0fa2897f6f7df51ec07a18ae733e1342320d3b3a3f3e16f"
+      },
+      "BUILD-PROVENANCE-portable.json": {
+        "bytes": 1669,
+        "id": 765002202,
+        "sha256": "7647a5b63db6a7d7b1074826bfe5f381123b4f0d3cfb536e7c3689cd3cd31244"
+      },
+      "CONSUMER-VERIFICATION.json": {
+        "bytes": 2771,
+        "id": 765002333,
+        "sha256": "910cba8aae95e0fbe01927a0f3940efde606ed25b75c696194cdc09e8d10d42f"
+      },
+      "DEPENDENCY-LICENSES.csv": {
+        "bytes": 45827,
+        "id": 765002520,
+        "sha256": "2d92b21ee4f73792e76257466a33c9b37a4666208bf1ca80aac97711942c4ec4"
+      },
+      "LICENSE-APACHE": {
+        "bytes": 11326,
+        "id": 765002428,
+        "sha256": "fabba0cb7d00a4b3211fdc13699223ab2d22f88678ccd608494cf2b332b903e9"
+      },
+      "LICENSE-BOUNDARIES.md": {
+        "bytes": 8505,
+        "id": 765002376,
+        "sha256": "01c939c88f854cf460b2141b4adeb833378932ed907c02574a4de84d21644991"
+      },
+      "LICENSE-MIT": {
+        "bytes": 1079,
+        "id": 765002147,
+        "sha256": "e4c16e07e31d3fdbba827f245f39f51ee0871898f1585653129bcbe3c63a7410"
+      },
+      "LICENSE-MPL-2.0": {
+        "bytes": 16727,
+        "id": 765002462,
+        "sha256": "66a3107d5ad6a058aab753eaac2047ccb2ed0e39465dd0fe5844da3e300d5172"
+      },
+      "RELEASE-MANIFEST.json": {
+        "bytes": 2682,
+        "id": 765002267,
+        "sha256": "6fb71e4b816be8f362f8f58d1dbd2f6ecbfc7915d1ab399098b26c874fa054eb"
+      },
+      "SHA256SUMS": {
+        "bytes": 1354,
+        "id": 765002177,
+        "sha256": "54b5a397ec10049f7b0a09b30d9d1cdf5251bb353afab1e0ecf7c52dc3d9ab3f"
+      },
+      "booknook-connectors-0.3.6.crate": {
+        "bytes": 72904,
+        "id": 765002552,
+        "sha256": "1c8293cd9cab0edf29d361cdbd713c45fb9f18f406345ba18008b55fdc84965e"
+      },
+      "booknook-core-0.3.6.crate": {
+        "bytes": 205934,
+        "id": 765002593,
+        "sha256": "2900d8e85af91b817b1152bb798c42b46f7af318b449dbf075b0a7d41c58a6a3"
+      },
+      "booknook-native-0.3.6.crate": {
+        "bytes": 215735,
+        "id": 765002655,
+        "sha256": "6a87a70523947d69646bad77e8c84a68fb03498929660e830f10f140a483a499"
+      },
+      "booknook-sdk-0.3.6.tgz": {
+        "bytes": 4696746,
+        "id": 765002692,
+        "sha256": "aebf2848c97f8ec4b3e96135889ed71d97dea2f0befe3b500f75eb904096471e"
+      },
+      "booknook-swift-sdk-0.3.6.tar.gz": {
+        "bytes": 149552084,
+        "id": 765002752,
+        "sha256": "9a40e228478992f11b8f7b3396f04886f16e1fb153c86e42ead99ef0ccf200ed"
+      },
+      "booknook-wasm-0.3.6.crate": {
+        "bytes": 38798,
+        "id": 765002492,
+        "sha256": "f66d1976590ade1a8c11460365312aec494fa43e4f1de45a427a79a47bf0b5a8"
+      }
+    },
+    "bytes": 154875131,
+    "draft_and_public_asset_ids_match": true,
+    "earlier_release_identities_preserved": 43,
+    "receipt_sha256": "9571b034cceb6232795b71bf4555650045ae73539a83f8e1f003369c60ec9242",
+    "verified_at": "2026-11-18T21:06:37.895135+00:00"
+  },
+  "receipt_sha256": {
+    "apple_consumer": "adc9d4befcd9f321abf75e71bed18f039be03d56314bc34c0abb1fc2d9a1e8c0",
+    "apple_transport": "80779e550083d9e0eca8e876cf8642df27a20b149ff83ae720bb723778204bb4",
+    "asset_map": "232503e137a654185db2028bde95af8b644c86cc584ebd5597d3ebb679cbdb65",
+    "browser": "17903adb787aaa6c08346c70901c694610e9201bf33db4ac909584047c2ff735",
+    "draft": "56caaec56d9392e47b02b34e4b6574fba3d5991edeae511e0a29a011855fcd3b",
+    "npm": "1d157b83568b4f1612f3d7e957d398d57b8e5bbd9735d05fb30260257ebdefa4",
+    "portable_consumer": "40a6227671dac0237c9e0d52df8e15bbf6efa0f225640accf73869b7011cb598",
+    "portable_transport": "a26e9e27738dc16ad71f708bd0d8643ba8b346300c9e1000133882c77dc88d8d",
+    "published": "38a2e035144568dcf11a8b9cbb3ee65079b6f97e28987ddccccac1d5d575943a",
+    "rust": "f05e81fc26f317eb25c357026f757e7ab169e3a477be3ed7c6c982d61cadf476"
+  },
+  "release": {
+    "published_at": "2026-11-18T21:06:01+00:00",
+    "release_id": 450553705,
+    "source_commit": "ad3162fda3013406b8c4f410c568eddac1ff8a35",
+    "source_tree": "48c6d0c5eda661879b81c717f2cfab1f2fe6e0e5",
+    "tag": "v0.3.6-sdk-preview.20261118",
+    "url": "https://github.com/bananawalnut/booknook/releases/tag/v0.3.6-sdk-preview.20261118"
+  },
+  "schema": "booknook.sdk-public-preview-evidence.v1",
+  "scope": {
+    "app_builds": "App build 2026111801 predates the author and ISBN fix. Native app delivery of this correction is tracked separately for build 2026111802.",
+    "ipados": "The simulator and device libraries passed arm64 Mach-O platform, deployment-target and indexed-export inspection. Executing SDK 0.3.6 on iPadOS and at the minimum supported OS versions remains a separate runtime check.",
+    "live_acceptance": "Live Kindle, Audible and Castalia accounts, remote social and device synchronization, physical Pencil input and current accessibility acceptance remain separate checks.",
+    "synchronization": "Existing synchronization can restore an older source ISBN alias after a local clear. Propagating source identifier deletion across replicas remains open."
+  },
+  "sdk_version": "0.3.6",
+  "status": "PASS_PUBLIC_ARCHIVES"
+}

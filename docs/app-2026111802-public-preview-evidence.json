@@ -1,0 +1,126 @@
+{
+  "app": {
+    "build": "2026111802",
+    "release_id": 451794445,
+    "release_url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261118.02",
+    "source_commit": "e4e57d72d0efeb18cdb88df2b57f77f8ee1422c5",
+    "tag": "v0.2.1-app-preview.20261118.02",
+    "version": "0.2.1"
+  },
+  "archives": {
+    "ipad-device": {
+      "archive": "booknook-ipad-device-arm64-development-0.2.1.tar.gz",
+      "archive_sha256": "358425ab5e4e40f3ba09d12d96f5c8daa40699716c96a52f36053c4816698c7b",
+      "executable_sha256": "4b003edd33640156ba3102b90378bf7951190fbf3e83d50b6fb3cdc867c39b82",
+      "manifest_files": 99,
+      "sdk_slice_sha256": "1a80cce7a15e57cde5af416354aa04a696f9e4fb363a026abd23eb95721c3e21"
+    },
+    "ipad-sim": {
+      "archive": "booknook-ipad-sim-arm64-development-0.2.1.tar.gz",
+      "archive_sha256": "a58d3d7a96a499d033ef33106d3b44e1994a12c6712f459f34f160704fd8e16f",
+      "executable_sha256": "1974e1b2a74aa6447878fd7daab7226e7adce58a3c294c13141ee1be63210efe",
+      "manifest_files": 100,
+      "sdk_slice_sha256": "db2ddb0a82966e311b5fdb7b9d8d0ff46ffa05e24d329e1de5ebba51ae1afe26"
+    },
+    "mac": {
+      "archive": "booknook-mac-arm64-development-0.2.1.tar.gz",
+      "archive_sha256": "58b9c6f39a3aa1c0cbbe237011c50a51e3e88bc724eb0f05821764b6a06b9bb7",
+      "executable_sha256": "5d31597d1b0b24fc4de05fca2862da2395fa2dede347d6a1e060695843bbef6e",
+      "manifest_files": 99,
+      "sdk_slice_sha256": "08ee68650f5db3c6bee124ead0ccd8b385cb95e4fe2a0dc63c294a332e92df50"
+    }
+  },
+  "build_provenance": {
+    "app_source_tree": "d40736a1cf4ccca16520e00bec2d6754e5bc7942",
+    "contract_run": 44397703470,
+    "contract_url": "https://github.com/bananawalnut/booknook/actions/runs/44397703470",
+    "method": "local-xcode-public-sdk-slices",
+    "receiving_receipt_sha256": "a8a413226e478149c353156bd4cb1d453e104b383bcb37fba3f4b60f8a76d4b5",
+    "sdk_archive": {
+      "bytes": 149552084,
+      "name": "booknook-swift-sdk-0.3.6.tar.gz",
+      "sha256": "9a40e228478992f11b8f7b3396f04886f16e1fb153c86e42ead99ef0ccf200ed"
+    },
+    "sdk_artifact_id": 14467763903,
+    "sdk_job_id": 135104976439,
+    "sdk_release_id": 450553705,
+    "sdk_run": 44386370605,
+    "sdk_run_attempt": 2,
+    "sdk_source": "ad3162fda3013406b8c4f410c568eddac1ff8a35",
+    "sdk_version": "0.3.6"
+  },
+  "mac": {
+    "scope": "Release build, archive contents and anonymous download verification."
+  },
+  "physical_ipad": {
+    "availability_receipt_sha256": "c0f0aa633161a18d7ba7bc2c5ec16d997650825eac552318f6d3f74c1a26256f",
+    "development_signed": true,
+    "installation_attempted": false,
+    "observed_on": "2026-11-19",
+    "scope": "CoreDevice reported the paired iPad tunnel unavailable and development services unavailable. Installation, launch and preservation on this iPad remain pending.",
+    "signing_receipt_sha256": "e37f5f461c05600877f1b80bb6e01fc17ebd15a105b0916da4c45a5a9a279031",
+    "status": "PENDING_DEVICE_UNAVAILABLE"
+  },
+  "public_downloads": {
+    "anonymous_https": true,
+    "assets": {
+      "BUILD-PROVENANCE.json": {
+        "bytes": 56063,
+        "id": 768879830,
+        "sha256": "685c18b8f5429047181c07ec4e10d73c032efe321ee32bddb98b1291cd51b556"
+      },
+      "README.md": {
+        "bytes": 3636,
+        "id": 768879777,
+        "sha256": "b2f76bfa836fb0419641ae0a550c6b8d85f11cd429b022d9843c3a1218f6a888"
+      },
+      "RELEASE-MANIFEST.json": {
+        "bytes": 1443,
+        "id": 768879742,
+        "sha256": "27fb6509f1a19804f91a699c88e45772275127e4dde425390bd60d1f11f5f9e2"
+      },
+      "SHA256SUMS": {
+        "bytes": 503,
+        "id": 768879683,
+        "sha256": "7a698c29ca4440c88835f3505489466518b6eb0a7e5d05bc68f88007a04d8856"
+      },
+      "VERIFICATION.json": {
+        "bytes": 131549,
+        "id": 768879894,
+        "sha256": "cf86b48345ec34e81054ecb3e4f1aaa09415e115cddd796c96e9ee2508c83d71"
+      },
+      "booknook-ipad-device-arm64-development-0.2.1.tar.gz": {
+        "bytes": 11540557,
+        "id": 768879949,
+        "sha256": "358425ab5e4e40f3ba09d12d96f5c8daa40699716c96a52f36053c4816698c7b"
+      },
+      "booknook-ipad-sim-arm64-development-0.2.1.tar.gz": {
+        "bytes": 11583230,
+        "id": 768880098,
+        "sha256": "a58d3d7a96a499d033ef33106d3b44e1994a12c6712f459f34f160704fd8e16f"
+      },
+      "booknook-mac-arm64-development-0.2.1.tar.gz": {
+        "bytes": 15273210,
+        "id": 768880285,
+        "sha256": "58b9c6f39a3aa1c0cbbe237011c50a51e3e88bc724eb0f05821764b6a06b9bb7"
+      }
+    },
+    "bytes": 38590191,
+    "count": 8,
+    "prior_releases_preserved": 44,
+    "receipt_sha256": "f27c25d5a06f22ef422905290d37a8b855c7b6a4f4f225fb28ad24812f09f609"
+  },
+  "result": "PASS_PUBLIC_ARCHIVES_AND_SIMULATOR_PHYSICAL_INSTALL_PENDING",
+  "schema": "booknook.local-native-preview-evidence.v1",
+  "scope": "Build 1802 includes the catalog reimport correction. Source-ISBN deletion across replicas, minimum OS execution, physical Pencil, keyboard, IME and accessibility input, live Kindle, Audible and Castalia accounts, and remote social and device exchange remain separate acceptance checks.",
+  "simulator": {
+    "checks": [
+      "Corrected author and ISBN13 after reimport",
+      "Omitted ISBN10 retained and explicit blank cleared",
+      "Reader rating, review, reading dates and attached EPUB preserved across cold reopen"
+    ],
+    "existing_qa_library_and_preferences_preserved": true,
+    "receipt_sha256": "6d28524a1e1da8578a8773f34c026dfdcd571507a2c1c2c74e5ceed6199d7b1d",
+    "runtime": "iPadOS 18.6 Simulator"
+  }
+}
