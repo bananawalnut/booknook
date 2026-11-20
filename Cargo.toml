@@ -1,5 +1,6 @@
 [workspace]
 members = ["crates/core", "crates/native", "crates/wasm", "crates/connectors"]
+exclude = ["vendor/faster-hex"]
 resolver = "2"
 
 [workspace.package]
@@ -19,3 +20,7 @@ booknook-core = { path = "crates/core", version = "0.4.0" }
 [profile.release]
 lto = "thin"
 opt-level = "s"
+
+[patch.crates-io]
+# Backport the fixed heapless dependency without changing Nostr's public types.
+faster-hex = { path = "vendor/faster-hex" }

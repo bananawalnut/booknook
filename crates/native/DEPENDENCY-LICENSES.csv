@@ -125,7 +125,7 @@ hashbrown,0.14.5,MIT OR Apache-2.0,https://github.com/rust-lang/hashbrown,"depen
 hashbrown,0.16.1,MIT OR Apache-2.0,https://github.com/rust-lang/hashbrown,"dependency (all features, build/platform graph)"
 hashbrown,0.17.1,MIT OR Apache-2.0,https://github.com/rust-lang/hashbrown,"dependency (all features, build/platform graph)"
 hashlink,0.12.2,MIT OR Apache-2.0,https://github.com/djc/hashlink,"dependency (all features, build/platform graph)"
-heapless,0.8.0,MIT OR Apache-2.0,https://github.com/rust-embedded/heapless,"dependency (all features, build/platform graph)"
+heapless,0.9.4,MIT OR Apache-2.0,https://github.com/rust-embedded/heapless,"dependency (all features, build/platform graph)"
 heck,0.5.0,MIT OR Apache-2.0,https://github.com/withoutboats/heck,"dependency (all features, build/platform graph)"
 hex,0.4.3,MIT OR Apache-2.0,https://github.com/KokaKiwi/rust-hex,"dependency (all features, build/platform graph)"
 hex-conservative,0.2.3,CC0-1.0,https://github.com/rust-bitcoin/hex-conservative,"dependency (all features, build/platform graph)"

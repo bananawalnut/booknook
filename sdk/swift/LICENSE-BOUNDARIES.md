@@ -7,6 +7,9 @@
 | `services/optional-audible-adapter/**` optional Audible account process | AGPL-3.0-only; separately installed upstream dependency and notices |
 | Original ontology, fixtures, build scripts and documentation | MIT OR Apache-2.0 |
 | Original `assets/branding/**` artwork and `apps/apple/Assets.xcassets/**` renditions | MIT OR Apache-2.0 |
+| Upstream `vendor/faster-hex/**` and its bundled Rust SDK copy | Upstream MIT and retained third-party notices; see `LICENSE` and `LICENSE-THIRD-PARTY` there |
+
+The faster-hex 0.10.1 dependency backport retains upstream source and notices and changes its heapless requirement to exactly 0.9.4. `vendor/faster-hex/BOOKNOOK-PATCH.md` records the registry archive checksum and upstream revision. Both Cargo roots apply the path patch. Rust SDK archives carry the same source and a consumer workspace manifest; downstream hosts must apply that root patch. These modified source archives are SDK workspace distributions, not registry publication of the upstream crate.
 
 Local Rust, JavaScript and Swift package scripts include both SDK license texts and a copy of this inventory boundary document. Package-local synthetic test fixtures and license files are generated from their canonical workspace copies by `scripts/sync-package-resources.py`; CI checks that they agree. The npm package contains compiled facade code plus WASM. The Swift package contains generated UniFFI bindings, the linked Rust XCFramework and original MIT OR Apache-2.0 `BookNookServices`/`CastaliaNative` Swift facades; the MPL application consumes these same source files. Downstream binary notices must cover the actual linked dependency closures as well as the new dual-licensed SDK code. The generic Castalia custody extraction introduces no new third-party dependency. A locally passing package/consumer test does not replace that distribution notice review.
 

@@ -36,6 +36,16 @@ The examples describe the current source, which builds SDK 0.4.0 archives. Local
 
 ## Rust notebook storage
 
+The source SDK 0.4.0 packages include a faster-hex dependency backport selecting heapless 0.9.4. Cargo applies patches from the consuming workspace. After extracting all four matching `.crate` archives into one directory, initialize their verified workspace with:
+
+```sh
+cp booknook-core-0.4.0/sdk-workspace.toml Cargo.toml
+cp booknook-core-0.4.0/Cargo.lock Cargo.lock
+cargo test --locked --workspace --all-targets
+```
+
+The manifest points to the patched source bundled inside the core archive. An existing application workspace must copy the matching `[patch.crates-io]` entries into its own root manifest and adjust the paths. The package script verifies this independent resolution and rejects a registry fallback or heapless 0.8. The source and both lockfiles retain the strict advisory policy; no advisory IDs are ignored. New SDK 0.4.0 release archives remain separately qualified before publication.
+
 The native SQLite adapter and a custom host adapter share `NotebookStorage`:
 
 ```rust,no_run
