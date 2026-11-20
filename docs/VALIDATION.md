@@ -1,5 +1,11 @@
 # Validation record
 
+## Goodreads browser source check — November 20, 2026
+
+The complete native app passes macOS 14 and iPadOS 17 target typechecks with warnings treated as errors. The standalone `test-goodreads-browser.sh` runs real WebKit against a synthetic page: observed history and back/forward controls, insecure navigation refusal with a redacted notice, isolated cookies and persistence across process restart. Its disposable website store is removed after the run. The Apple workflow includes this check.
+
+These are source and offline WebKit checks. Live Goodreads sign-in, visual walkthrough and installation of this source increment remain unqualified; the released app remains build 1802.
+
 ## Candidate 1602 source checks — 2026-11-16
 
 On the published Mac 1601 app, the existing Scribble note menu exposed zoom and origin reset with no directional pan. Candidate 1602 adds four standard pan commands to that same menu on Mac and iPad. The viewport moves in overlapping steps at the current zoom; the saved drawing stays unchanged. The AppKit test exercises the actual tool closures, including offscreen ink and hidden boards. Mac and iPad Simulator Swift source typechecks pass, including the updated PencilKit acceptance harness; its runtime and hands-on keyboard navigation are still unverified. The full local reading suite passes, including the caret reflow test and actual WebKit/PDFKit checks. A preflight typecheck stopped after a separate source file changed mid-run; the frozen replay passed on both targets.
@@ -195,6 +201,8 @@ bash scripts/test-recovery.sh
 # Build the macOS native bridge before the full-app workflow executable:
 bash scripts/build-apple.sh mac
 bash scripts/test-ui-workflows.sh
+# Standalone macOS WebKit navigation and session isolation:
+bash scripts/test-goodreads-browser.sh
 python3 -m unittest discover -s tests/companion -v
 ```
 

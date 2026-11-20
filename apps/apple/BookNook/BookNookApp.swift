@@ -80,6 +80,7 @@ struct RootView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var addBook = false
+    @State private var showingGoodreads = false
     @State private var importing = false
     @State private var importKind = "goodreads"
     @State private var exporting = false
@@ -100,6 +101,7 @@ struct RootView: View {
         .toolbarBackground(nookPaper, for: .windowToolbar)
         #endif
         .sheet(isPresented: $addBook) { AddBookView() }
+        .sheet(isPresented: $showingGoodreads) { GoodreadsBrowser() }
         .sheet(isPresented: $reviewingBackup) {
             VStack(alignment: .leading, spacing: 20) {
                 Text("Export a private backup").font(.system(.title2, design: .serif))
@@ -189,6 +191,14 @@ struct RootView: View {
             VStack(spacing: 4) {
                 nav("desk", "Reading desk", "pencil.and.outline")
                 nav("library", "Your library", "books.vertical")
+                Button { showingGoodreads = true } label: {
+                    HStack(spacing: 12) {
+                        Image(systemName: "globe").frame(width: 22)
+                        Text("Goodreads")
+                        Spacer(minLength: 0)
+                    }.padding(.horizontal, 10).padding(.vertical, 10)
+                }.buttonStyle(.plain).accessibilityIdentifier("sidebar-goodreads")
+                    .help("Browse Goodreads without leaving your reading desk")
                 nav("community", "Community", "person.2")
                 nav("connections", "Connections", "link")
                 nav("sync", "Sync & recovery", "arrow.triangle.2.circlepath")
