@@ -122,6 +122,7 @@ private final class NotebookFileHost: BookNookNotebookStorage, @unchecked Sendab
     let unknown = #"{"extra":true,"schema":"booknook.portable-export.v1","state":\#(afterRace),"assets":{}}"#
     notebookSmokeReject { _ = try validatePortableArchive(archiveJson: unknown) }
     try runPackagedNotebookOrderSmoke(fixtureRoot: fixtureRoot, root: root)
+    try runPackagedISBNHistorySmoke(fixtureRoot: fixtureRoot, root: root)
     print("Packaged standalone Notebook: storage errors, durable order review, reopen and v1/v4 archive validation passed.")
 }
 
@@ -171,4 +172,57 @@ private func runPackagedNotebookOrderSmoke(fixtureRoot: URL, root: URL) throws {
     let archive = #"{"schema":"booknook.portable-export.v1","state":\#(snapshot),"assets":{}}"#
     let restored = try notebookSmokeObject(validatePortableArchive(archiveJson: archive))
     notebookSmokeRequire((restored["state"] as? NSDictionary)?.isEqual(to: state) == true)
+}
+
+private func runPackagedISBNHistorySmoke(fixtureRoot: URL, root: URL) throws {
+    let fixture = fixtureRoot.appendingPathComponent("isbn-history.json")
+    let corpus = try notebookSmokeObject(String(contentsOf: fixture, encoding: .utf8))
+    guard let cases = corpus["cases"] as? [[String: Any]] else { throw CocoaError(.coderReadCorrupt) }
+    func input(_ id: String) throws -> [String: Any] {
+        guard let value = cases.first(where: { $0["id"] as? String == id })?["input"] as? [String: Any] else {
+            throw CocoaError(.coderReadCorrupt)
+        }
+        return value
+    }
+    func raw(_ object: [String: Any]) throws -> String {
+        String(decoding: try JSONSerialization.data(withJSONObject: object, options: [.sortedKeys]), as: UTF8.self)
+    }
+
+    let review = try input("review"), reassertion = try input("reassert")
+    guard let edition = review["edition_id"] as? String, let ns = review["namespace"] as? String,
+          let original = reassertion["historical_node"] as? String else { throw CocoaError(.coderReadCorrupt) }
+    let host = try NotebookFileHost(url: root.appendingPathComponent("isbn.json"),
+                                    initialJSON: raw(input("v5-unresolved")))
+    let engine = try BookNookNotebook(storage: host)
+    let before = try Data(contentsOf: host.url)
+    let reviews = try JSONSerialization.jsonObject(with: Data(engine.isbnReviewsJSON().utf8)) as? [[String: Any]]
+    let unreviewed = try notebookSmokeObject(engine.isbnHistoryJSON(editionID: edition, namespace: ns))
+    notebookSmokeRequire(reviews?.count == 1)
+    notebookSmokeRequire(reviews?.first?["edition_id"] as? String == edition && reviews?.first?["namespace"] as? String == ns)
+    notebookSmokeRequire(reviews?.first?["heads"] as? [String] == review["expected_heads"] as? [String])
+    notebookSmokeRequire(reviews?.first?["choices"] as? [[String]] == [["222"], ["333"]])
+    notebookSmokeRequire(unreviewed["heads"] as? [String] == review["expected_heads"] as? [String])
+    notebookSmokeRequire(unreviewed["legacy_absence_unknown"] is Bool)
+    notebookSmokeReject { _ = try engine.isbnHistoryJSON(editionID: edition, namespace: "other") }
+    notebookSmokeReject { _ = try engine.execute(commandJSON: raw(input("stale-review"))) }
+    notebookSmokeRequire(try Data(contentsOf: host.url) == before && host.saveCount() == 0)
+
+    for (command, expected) in [(review, "v5-reviewed"), (reassertion, "v5-reasserted")] {
+        let reopened = try BookNookNotebook(storage: host)
+        let response = try notebookSmokeObject(reopened.execute(commandJSON: raw(command)))
+        let expectedState = try input(expected)
+        notebookSmokeRequire((response["state"] as? NSDictionary)?.isEqual(to: expectedState) == true)
+        let saves = host.saveCount()
+        let replay = try notebookSmokeObject(reopened.execute(commandJSON: raw(command)))
+        notebookSmokeRequire((replay["result"] as? [String: Any])?["replayed"] as? Bool == true && host.saveCount() == saves)
+        let cold = try BookNookNotebook(storage: host)
+        notebookSmokeRequire(try cold.isbnReviewsJSON() == "[]")
+        let history = try notebookSmokeObject(cold.isbnHistoryJSON(editionID: edition, namespace: ns))
+        let nodes = history["nodes"] as? [String: [String: Any]]
+        notebookSmokeRequire(nodes?[original]?["values"] as? [String] == ["111"])
+        let envelope = try raw(["schema": "booknook.portable-export.v1", "state": try notebookSmokeObject(cold.snapshotJSON()), "assets": [:]])
+        let restored = try notebookSmokeObject(validatePortableArchive(archiveJson: envelope))
+        notebookSmokeRequire((restored["state"] as? NSDictionary)?.isEqual(to: expectedState) == true)
+    }
+    print("Packaged ISBN choices, historical reassertion, cold reopen and portable archive passed.")
 }

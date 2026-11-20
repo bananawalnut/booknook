@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
-import type { State, Command, CardContextCommand, NotebookOrderCommand, PendingNotebookOrderReview, ProviderConnection, NativeAuthorityProfile } from "./types.js";
+import type { State, Command, IsbnHistoryCommand, IsbnReview, IsbnHistoryView, CardContextCommand, NotebookOrderCommand, PendingNotebookOrderReview, ProviderConnection, NativeAuthorityProfile } from "./types.js";
 export type * from "./types.js";
 export type * from "./portable-services.js";
 export * from "./castalia.js";
@@ -21,6 +21,17 @@ export interface NotebookOrderingCore {
 /** Use the returned evidence and heads when submitting an explicit order review. */
 export function notebookOrderReviews(core: NotebookOrderingCore, state: State): PendingNotebookOrderReview[] {
   return parseContract(core.notebook_order_reviews(encodeContract(state)));
+}
+/** Optional capability for reading portable ISBN disputes and historical node IDs. */
+export interface IsbnHistoryCore {
+  isbn_reviews(stateJson: string): string;
+  isbn_history(stateJson: string, editionId: string, namespace: string): string;
+}
+export function isbnReviews(core: IsbnHistoryCore, state: State): IsbnReview[] {
+  return parseContract(core.isbn_reviews(encodeContract(state)));
+}
+export function isbnHistory(core: IsbnHistoryCore, state: State, editionId: string, namespace: string): IsbnHistoryView {
+  return parseContract(core.isbn_history(encodeContract(state), editionId, namespace));
 }
 /** Public Castalia configuration only; validation does not establish trust or sign in. */
 export interface CastaliaConfigurationCore {
@@ -52,10 +63,13 @@ export class BookNook {
     core.validate_archive(encodeContract(state));
     return new BookNook(core, storage);
   }
-  async execute(command: Command | CardContextCommand | NotebookOrderCommand): Promise<{state: State; result: unknown}> {
+  async execute(command: Command | CardContextCommand | NotebookOrderCommand | IsbnHistoryCommand): Promise<{state: State; result: unknown}> {
     const state = await this.storage.load();
     if (!state) throw new Error("Notebook storage unavailable");
     const response = parseContract<{state: State; result: unknown}>(this.core.execute(encodeContract(state), encodeContract(command)));
+    const result = response.result;
+    if (response.state.revision === state.revision && typeof result === "object" && result !== null &&
+        "replayed" in result && result.replayed === true) return response;
     if (!(await this.storage.compareAndSave(state.revision, response.state))) throw new Error("Storage conflict: reload before retrying");
     return response;
   }

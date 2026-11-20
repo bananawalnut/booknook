@@ -45,6 +45,7 @@ pub enum NotebookCommand {
     Existing(Command),
     WithCardContext(CardContextCommand),
     WithNotebookOrder(NotebookOrderCommand),
+    WithIsbnHistory(crate::isbn_history::IsbnHistoryCommand),
 }
 
 impl From<Command> for NotebookCommand {
@@ -69,6 +70,9 @@ impl NotebookCommand {
             Some("append_ordered_note" | "review_notebook_order") => {
                 Ok(Self::WithNotebookOrder(serde_json::from_value(value)?))
             }
+            Some("review_isbn" | "reassert_isbn") => {
+                Ok(Self::WithIsbnHistory(serde_json::from_value(value)?))
+            }
             _ => Ok(serde_json::from_value::<Command>(value)?.into()),
         }
     }
@@ -78,6 +82,7 @@ impl NotebookCommand {
             Self::Existing(command) => crate::apply(state, command),
             Self::WithCardContext(command) => command.apply(state),
             Self::WithNotebookOrder(command) => command.apply(state),
+            Self::WithIsbnHistory(command) => command.apply(state),
         }
     }
 }

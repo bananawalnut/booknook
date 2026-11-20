@@ -966,6 +966,11 @@ public protocol DeskProtocol: AnyObject, Sendable {
 
     func socialSnapshot(revealSpoilers: Bool) throws  -> String
 
+    /**
+     * Inspect one edition and namespace without mutating the portable graph or sync tables.
+     */
+    func isbnHistory(editionId: String, namespace: String) throws  -> String
+
     func syncApprove(batchId: String, keyHex: String, requestJson: String, presentationJson: String) throws  -> String
 
     func syncApprovePeer(peerJson: String, requestJson: String, presentationJson: String) throws
@@ -1689,6 +1694,20 @@ open func socialSnapshot(revealSpoilers: Bool)throws  -> String  {
     uniffi_booknook_native_fn_method_desk_social_snapshot(
             self.uniffiCloneHandle(),
         FfiConverterBool.lower(revealSpoilers),uniffiCallStatus
+    )
+})
+}
+
+    /**
+     * Inspect one edition and namespace without mutating the portable graph or sync tables.
+     */
+open func isbnHistory(editionId: String, namespace: String)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_desk_isbn_history(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(editionId),
+        FfiConverterString.lower(namespace),uniffiCallStatus
     )
 })
 }
@@ -3433,6 +3452,13 @@ public protocol NotebookEngineProtocol: AnyObject, Sendable {
 
     func execute(commandJson: String) throws  -> String
 
+    func isbnHistory(editionId: String, namespace: String) throws  -> String
+
+    /**
+     * Read portable ISBN choices from a freshly validated host or SQLite snapshot.
+     */
+    func isbnReviews() throws  -> String
+
     /**
      * Read complete, current note-order choices without writing to the host store.
      */
@@ -3528,6 +3554,29 @@ open func execute(commandJson: String)throws  -> String  {
     uniffi_booknook_native_fn_method_notebookengine_execute(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(commandJson),uniffiCallStatus
+    )
+})
+}
+
+open func isbnHistory(editionId: String, namespace: String)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_notebookengine_isbn_history(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(editionId),
+        FfiConverterString.lower(namespace),uniffiCallStatus
+    )
+})
+}
+
+    /**
+     * Read portable ISBN choices from a freshly validated host or SQLite snapshot.
+     */
+open func isbnReviews()throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNativeError_lift) {
+        uniffiCallStatus in
+    uniffi_booknook_native_fn_method_notebookengine_isbn_reviews(
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -5110,6 +5159,9 @@ private let initializationResult: InitializationResult = {
     if (uniffi_booknook_native_checksum_method_desk_social_snapshot() != 2598) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_booknook_native_checksum_method_desk_isbn_history() != 34811) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_booknook_native_checksum_method_desk_sync_approve() != 35495) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -5267,6 +5319,12 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_booknook_native_checksum_method_notebookengine_execute() != 63772) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_notebookengine_isbn_history() != 54119) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_booknook_native_checksum_method_notebookengine_isbn_reviews() != 37395) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_booknook_native_checksum_method_notebookengine_notebook_order_reviews() != 62205) {

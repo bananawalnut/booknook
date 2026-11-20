@@ -1,0 +1,11 @@
+{
+  "schema": "booknook.portable-contract-manifest.v1",
+  "version": "4",
+  "namespace": "urn:booknook:schema:",
+  "artifacts": [
+    {
+      "path": "portable-export.schema.json",
+      "sha256": "12964ee38a5ec595afe2a7162884d021f08e213857f162d084df111d6ac91994"
+    }
+  ]
+}

@@ -42,7 +42,9 @@ let responseJSON = try alternate.execute(commandJSON: commandJSON)
 
 This store receives private notebook state. It is separate from the asynchronous catalog/content provider interface, which does not receive the notebook. It also does not replace `Desk`'s composed local settings, social state, assets or write-ahead text journal. The reference app continues using that journaled `Desk` path. Use a separate directory for standalone local notebooks; do not share it with an active `Desk`. The underlying UniFFI types are `NotebookEngine` and `NotebookStorageHost` in `BookNookNative`.
 
-`orderReviewsJSON()` reads pending Margin order choices without writing state. Present the choices to the reader, then submit `review_notebook_order` with its exact evidence and heads, a stable review ID, and the selected order. Reload choices after a stale-evidence error. The package reads archive v1 through v4. Use a v4-capable peer when exchanging v4 state.
+`orderReviewsJSON()` reads pending Margin order choices without writing state. Present the choices to the reader, then submit `review_notebook_order` with its exact evidence and heads, a stable review ID, and the selected order. Reload choices after a stale-evidence error. The package reads archive v1 through v5. Use a peer that supports the archive version being exchanged.
+
+`isbnReviewsJSON()` reads pending Goodreads ISBN choices. `isbnHistoryJSON(editionID:namespace:)` returns the recorded observations and current heads. Use those exact heads with `review_isbn` to choose an alternative or `reassert_isbn` to restore an earlier observation. These unsigned local decisions survive private export and synchronization in archive v5. A v4-only peer rejects v5 rather than discarding its history.
 
 The package script builds its independent consumer first, then generates a fresh public synthetic Castalia fixture. It exercises real SQLite/provider persistence and a second application's approval, and independently verifies the resulting receipt. These checks use synthetic providers and recovery material; they do not qualify a live account, issuer or Keychain installation.
 

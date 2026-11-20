@@ -9,6 +9,7 @@ pub mod feeds;
 pub mod history;
 pub mod identity;
 pub mod imports;
+pub mod isbn_history;
 pub mod model;
 pub mod notebook;
 pub mod notebook_command;

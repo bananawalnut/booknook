@@ -48,6 +48,110 @@ async function checkGoodreadsCorrections(desk) {
   assert.deepEqual(replay.state.editions, cleared.state.editions);
 }
 
+async function checkPortableIsbnHistory(sdk, core) {
+  async function reader(seed) {
+    let state = structuredClone(seed);
+    let csv;
+    let saveAttempts = 0;
+    const provider = descriptor('fixture.goodreads', 'goodreads');
+    const storage = {
+      async load() { return structuredClone(state); },
+      async compareAndSave(expected, next) {
+        saveAttempts++;
+        if ((state?.revision ?? null) !== expected) return false;
+        state = structuredClone(next);
+        return true;
+      }
+    };
+    const host = { descriptorJSON: JSON.stringify(provider), async execute(raw) {
+      return {responseJSON: JSON.stringify(response(JSON.parse(raw), {kind: 'catalog', catalog: {format: 'goodreads', csv}}))};
+    }};
+    let sequence = 0;
+    const options = {now: () => 1000n, requestID: () => `isbn-request-${++sequence}`};
+    const service = await sdk.BookNookServices.open(core, storage, [host], options);
+    return {desk: await sdk.BookNook.open(core, storage), storage, get saveAttempts() { return saveAttempts; }, async importValue(val) {
+      csv = `Book Id,Title,Author,ISBN\n42,Orchard,Reader,${val}\n`;
+      return (await service.importCatalog(provider.id, 'selected-catalog')).state;
+    }};
+  }
+
+  const seed = await (await reader(null)).importValue('111');
+  const [edition] = Object.keys(seed.editions);
+  const history = state => sdk.isbnHistory(core, state, edition, 'isbn');
+  const [original] = history(seed).heads;
+  const branch = async value => (await reader(seed)).importValue(value);
+  const local = await branch('222');
+  const clear = await branch('');
+  const merge = (a, b) => sdk.reconcile(core, null, a, b).state;
+  const merged = merge(local, clear);
+  const pending = state => sdk.isbnReviews(core, state);
+  const [review] = pending(merged);
+  assert.deepEqual(pending(merge(clear, local)), [review]);
+  assert.equal(review.edition_id, edition);
+  assert.equal(review.namespace, 'isbn');
+  assert.deepEqual(review.choices, [[], ['222']]);
+  assert.equal(review.heads.length, 2);
+  assert.ok(review.heads.every(head => typeof head === 'string' && /^[0-9a-f]{64}$/.test(head)));
+  assert.deepEqual(review.heads, [...review.heads].sort());
+  const roundtrip = state => sdk.validatePortableArchive(core, sdk.encodePortableArchive(core, {
+    schema:'booknook.portable-export.v1', state, assets:{}
+  })).state;
+  const restored = await reader(roundtrip(merged));
+  assert.deepEqual(pending(await restored.storage.load()), [review]);
+  const choose = {op:'review_isbn', edition_id:edition, namespace:'isbn', expected_heads:review.heads, values:[]};
+  const third = await branch('333');
+  const changed = await reader(merge(merged, third));
+  const before = await changed.storage.load();
+  await assert.rejects(() => changed.desk.execute(choose));
+  assert.deepEqual(await changed.storage.load(), before);
+  const beforeDecision = restored.saveAttempts;
+  const chosen = await restored.desk.execute(choose);
+  assert.equal(restored.saveAttempts, beforeDecision + 1);
+  assert.deepEqual(pending(chosen.state), []);
+  const bookID = Object.keys(chosen.state.books)[0];
+  const edited = await restored.desk.execute({op:'update_book', book_id:bookID, title:'Orchard', shelf:'read', rating:4, review:'Private later edit'});
+  assert.ok(edited.state.revision > chosen.state.revision);
+  const beforeReplay = restored.saveAttempts;
+  const replay = await restored.desk.execute(choose);
+  assert.equal(replay.result.replayed, true);
+  assert.equal(replay.result.node_id, chosen.result.node_id);
+  assert.equal(restored.saveAttempts, beforeReplay);
+  assert.deepEqual(replay.state, edited.state);
+  assert.deepEqual(await restored.storage.load(), edited.state);
+  const observed = merge(roundtrip(chosen.state), local);
+  assert.deepEqual(history(observed).heads, [chosen.result.node_id]);
+  assert.deepEqual(history(observed).nodes[chosen.result.node_id].values, []);
+  const reopened = await reader(observed);
+  const result = await reopened.desk.execute({op:'reassert_isbn', edition_id:edition, namespace:'isbn',
+    expected_heads:[chosen.result.node_id], historical_node:original});
+  const final = merge(roundtrip(result.state), clear);
+  assert.deepEqual(history(final).heads, [result.result.node_id]);
+  assert.deepEqual(history(final).nodes[result.result.node_id].values, ['111']);
+  assert.deepEqual(final.editions[edition].identifiers.filter(i => i.provider === 'isbn').map(i => i.id), ['111']);
+  assert.throws(() => history({...final, revision: Number.MAX_SAFE_INTEGER + 1}));
+
+  // Equal legacy empties can mean either a proven clear or an unknown absence.
+  const asLegacy = state => {
+    const legacy = structuredClone(state);
+    delete legacy.isbn_history;
+    legacy.schema = 'booknook.archive.v4';
+    legacy.ontology_version = '0.4.0';
+    core.validate_archive(JSON.stringify(legacy));
+    return legacy;
+  };
+  const legacy = [asLegacy(await (await reader(null)).importValue('')), asLegacy(clear), asLegacy(seed)];
+  let expectedGraph;
+  for (const order of [[0,1,2], [0,2,1], [1,0,2], [1,2,0], [2,0,1], [2,1,0]]) {
+    const [a,b,c] = order.map(index => legacy[index]);
+    for (const state of [merge(merge(a,b),c), merge(a,merge(b,c))]) {
+      assert.deepEqual(pending(state).map(review => review.choices), [[[], ['111']]]);
+      assert.equal(history(state).legacy_absence_unknown, true);
+      expectedGraph ??= state.isbn_history;
+      assert.deepEqual(state.isbn_history, expectedGraph);
+    }
+  }
+}
+
 async function runProviderAcceptance(sdk,core,nativeProbe) {
   let value=null,failCAS=false,sourceTitle='Provider café',calls=0,transform=v=>v,beforeReply=async()=>{},lastRequest,commitPause;
   const bytes=new Uint8Array([37,80,68,70,45,49]); // Deliberately only hash/media validation; not a valid PDF parser fixture.
@@ -165,6 +269,7 @@ async function runProviderAcceptance(sdk,core,nativeProbe) {
   lateCancel.abort();finishCommit.resolve();const committed=await durable;commitPause=undefined;
   assert.deepEqual(committed.state,value,'An acknowledged commit must not be reported as cancellation');
   await checkGoodreadsCorrections(desk);
-  return 'Public provider imports/reimports/private edits/reopen, Goodreads author/ISBN corrections and historical replay, generic source positions, hash/source validation, capability/duplicate rejection, cancellation, concurrent edits, stale generation and failed CAS passed.';
+  await checkPortableIsbnHistory(sdk, core);
+  return 'Public provider imports/reimports/private edits/reopen, Goodreads author/ISBN corrections and historical replay, portable v5 ISBN review/reassert/reopen and acknowledged replay without CAS, generic source positions, hash/source validation, capability/duplicate rejection, cancellation, concurrent edits, stale generation and failed CAS passed.';
 }
 module.exports={runProviderAcceptance};

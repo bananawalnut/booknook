@@ -21,6 +21,10 @@ struct SyncStatus: Decodable {
     let deviceId: String; let peers: [SyncPeer]; let conflicts: [SyncConflict]; let outbox: [SyncOutbox]
     let noteOrderReviews: [NotebookOrderReview]?
     let noteOrderReviewsRevision: UInt64?
+    let isbnReviews: [ISBNReview]?
+    let isbnHistoryScopes: [ISBNHistoryScope]?
+    let isbnHistoryRevision: UInt64?
+    let isbnProtectedConflictIds: [String]?
 }
 struct SyncPrepared: Decodable {
     let batch: JSONValue; let books: Int; let notebooks: Int; let cards: Int
@@ -29,6 +33,9 @@ struct SyncPrepared: Decodable {
 private func syncDecode<T: Decodable>(_ type: T.Type, _ raw: String) throws -> T { let d = JSONDecoder(); d.keyDecodingStrategy = .convertFromSnakeCase; return try d.decode(type, from: Data(raw.utf8)) }
 extension DeskRepository {
     func syncStatus() throws -> SyncStatus { try syncDecode(SyncStatus.self, required().syncStatus()) }
+    func isbnHistory(_ scope: ISBNHistoryScope) throws -> ISBNHistory {
+        try syncDecode(ISBNHistory.self, required().isbnHistory(editionId: scope.editionId, namespace: scope.namespace))
+    }
     func syncNewKey() throws -> String { try required().syncNewPairingKey() }
     func syncPreparePeer(id: String, label: String, key: String, enabled: Bool) throws -> String { try required().syncPreparePeer(deviceId: id, label: label, keyHex: key, enabled: enabled) }
     func syncApprovePeer(_ raw: String, receipt: AuthorizationReceipt) throws { try required().syncApprovePeer(peerJson: raw, requestJson: receipt.requestJSON, presentationJson: receipt.presentationJSON) }
@@ -197,6 +204,11 @@ private struct SyncRecoveryContent: View {
                             Button("Refresh notebook order review") { Task { await refresh() } }
                         }
                     }
+                    if let scopes = status.isbnHistoryScopes, !scopes.isEmpty {
+                        ISBNRecoverySection(scopes: scopes, reviews: status.isbnReviews ?? [],
+                                            repository: model.repository, decide: resolveISBN)
+                            .id(status.isbnHistoryRevision)
+                    }
                     if !status.conflicts.isEmpty {
                         Divider(); Text("Conflicting edits").font(.title2)
                         Text("Both interpretations are preserved until you choose. Character-card branches remain independently recoverable in card history.").font(.callout).foregroundStyle(.secondary)
@@ -207,7 +219,12 @@ private struct SyncRecoveryContent: View {
                                 Text("From paired device").font(.caption.bold()); Text(display(conflict.incoming)).textSelection(.enabled)
                                 HStack {
                                     Button("Keep this device’s current value") { resolve(conflict, incoming: false) }
-                                    Button("Use incoming value") { resolve(conflict, incoming: true) }
+                                    if status.isbnProtectedConflictIds?.contains(conflict.id) != true {
+                                        Button("Use incoming value") { resolve(conflict, incoming: true) }
+                                    }
+                                }
+                                if status.isbnProtectedConflictIds?.contains(conflict.id) == true {
+                                    Text("Use ISBN history to change this edition’s ISBN.").font(.caption).foregroundStyle(.secondary)
                                 }
                             }.padding(18).background(.white.opacity(0.6), in: RoundedRectangle(cornerRadius: 12))
                         }
@@ -326,7 +343,9 @@ private struct SyncRecoveryContent: View {
                 "Include \(prepared.assets) accessible content files. The snapshot is encrypted with this device pair’s key.",
                 "Only the snapshot at library revision \(revision) is approved. Later edits stay local until another approval.",
             ]
-            if prepared.archiveSchema == "booknook.archive.v4" {
+            if prepared.archiveSchema == "booknook.archive.v5" {
+                statements.append("The receiving device needs a Book Nook version that supports ISBN history snapshots.")
+            } else if prepared.archiveSchema == "booknook.archive.v4" {
                 statements.append("The receiving device needs a Book Nook version that supports notebook-order snapshots.")
             }
             let receipt = try await model.authorization.authorize(payload: payload, action: "sync.send", resourceVersion: revision.uint64Value,
@@ -358,10 +377,113 @@ private struct SyncRecoveryContent: View {
             }
         }
     }
+    func resolveISBN(_ decision: ISBNDecision) {
+        run {
+            do {
+                try await model.drainSaves()
+                let result = try await model.perform(decision.command)
+                guard result?.object?["node_id"] is String else { throw CocoaError(.coderReadCorrupt) }
+            } catch {
+                await refresh()
+                throw error
+            }
+        }
+    }
     func resolve(_ conflict: SyncConflict, incoming: Bool) { run { try await model.drainSaves(); model.accept(try await model.repository.syncResolve(id: conflict.id, incoming: incoming)); model.reloadEditorSessions() } }
     func display(_ value: JSONValue) -> String { if case .string(let text) = value { return text }; guard let data = try? JSONSerialization.data(withJSONObject: value.any, options: [.prettyPrinted, .sortedKeys, .fragmentsAllowed]) else { return "Unavailable" }; return String(decoding: data, as: UTF8.self) }
 }
 
+
+private struct ISBNRecoverySection: View {
+    let scopes: [ISBNHistoryScope]
+    let reviews: [ISBNReview]
+    let repository: DeskRepository
+    let decide: (ISBNDecision) -> Void
+
+    private func valuesLabel(_ values: [String]) -> String {
+        values.isEmpty ? "No ISBN" : values.joined(separator: ", ")
+    }
+    var body: some View {
+        Divider()
+        if !reviews.isEmpty {
+            Text("ISBN changes to review").font(.title2)
+            let titles = Dictionary(uniqueKeysWithValues: scopes.map { ($0.id, $0.label) })
+            ForEach(reviews) { review in
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(titles[review.id] ?? review.editionId).font(.headline)
+                    Text("Currently shown: \(valuesLabel(review.provisionalValues))").font(.callout)
+                    ForEach(review.choices, id: \.isbnValueBytes) { choice in
+                        Button(choice.isEmpty ? "Clear this ISBN" : "Use \(valuesLabel(choice))") {
+                            decide(.review(review, choice))
+                        }
+                    }
+                }
+            }
+        }
+        DisclosureGroup("ISBN history") {
+            LazyVStack(alignment: .leading, spacing: 12) {
+                ForEach(scopes) { scope in
+                    ISBNHistoryRow(scope: scope, repository: repository, decide: decide)
+                }
+            }.padding(.leading)
+        }
+    }
+}
+
+private struct ISBNHistoryRow: View {
+    let scope: ISBNHistoryScope
+    let repository: DeskRepository
+    let decide: (ISBNDecision) -> Void
+    @State private var expanded = false
+    @State private var history: ISBNHistory?
+    @State private var error: String?
+
+    var body: some View {
+        DisclosureGroup(scope.label, isExpanded: $expanded) {
+            VStack(alignment: .leading, spacing: 8) {
+                if let history {
+                    ForEach(history.activeChoices, id: \.isbnValueBytes) { values in
+                        Text(values.isEmpty ? "Recorded value: no ISBN" : "Recorded value: \(values.joined(separator: ", "))")
+                            .font(.callout)
+                    }
+                    if history.legacyAbsenceUnknown {
+                        Text("An earlier snapshot had no recorded ISBN for this field.").font(.callout)
+                    }
+                    if history.earlierChoices.isEmpty {
+                        Text("No earlier ISBN choices are available.").font(.callout)
+                    }
+                    ForEach(history.earlierChoices, id: \.self) { id in
+                        if let node = history.nodes[id] {
+                            if node.kind == "value_anchor" {
+                                Text("Earlier observed catalog value").font(.caption)
+                            }
+                            Button(node.values.isEmpty ? "Restore empty ISBN" : "Restore \(node.values.joined(separator: ", "))") {
+                                decide(.reassert(history, id))
+                            }
+                        }
+                    }
+                } else if let error {
+                    Text(error).font(.callout)
+                    Button("Reload ISBN history") { Task { await load() } }
+                } else {
+                    ProgressView("Reading ISBN history…")
+                }
+            }
+        }.task(id: expanded) { if expanded { await load() } }
+    }
+
+    @MainActor private func load() async {
+        do {
+            let loaded = try await repository.isbnHistory(scope)
+            try Task.checkCancellation()
+            history = loaded
+            error = nil
+        } catch where !bookNookOperationWasCancelled(error) {
+            history = nil
+            self.error = bookNookErrorMessage(error)
+        } catch {}
+    }
+}
 
 private struct NotebookOrderReviewPanel: View {
     let review: NotebookOrderReview

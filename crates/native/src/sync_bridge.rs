@@ -4,7 +4,7 @@ use crate::{Desk, NativeError, Result, content, now, portable, store::Store};
 use base64::{Engine, engine::general_purpose::STANDARD};
 use booknook_core::{
     authority::verify_receipt,
-    canonical, digest,
+    canonical, digest, isbn_history,
     model::State,
     reconcile::{self, Conflict},
     strict_parse,
@@ -99,6 +99,14 @@ fn encoded<T: Serialize>(v: &T) -> Result<String> {
         return Err(invalid("Sync record exceeds 128 MiB"));
     }
     String::from_utf8(bytes).map_err(|_| invalid("Invalid JSON encoding"))
+}
+fn receive_response(state: &State, duplicate: bool, conflicts: usize) -> Result<String> {
+    // Generic conflicts count newly recorded local rows. ISBN reviews describe
+    // every currently pending portable decision, including on redelivery.
+    encoded(&serde_json::json!({
+        "duplicate": duplicate, "conflicts": conflicts, "state": state,
+        "isbn_reviews": isbn_history::pending_reviews(state)?,
+    }))
 }
 fn content(s: &Store) -> Result<Content> {
     let state = s.load()?;
@@ -207,22 +215,58 @@ impl Desk {
                 "notebook_id":review.notebook_id,"evidence":review.evidence,"heads":review.heads,"choices":choices
             }));
         }
+        let isbn_reviews = isbn_history::pending_reviews(&state)?;
+        let mut isbn_scopes = Vec::new();
+        for (edition_id, namespaces) in &state.isbn_history {
+            let edition = state
+                .editions
+                .get(edition_id)
+                .ok_or_else(|| invalid("ISBN history has no catalog edition"))?;
+            let book = state
+                .books
+                .get(&edition.book_id)
+                .ok_or_else(|| invalid("ISBN history has no book"))?;
+            for namespace in namespaces.keys() {
+                isbn_scopes.push(serde_json::json!({
+                    "edition_id": edition_id, "namespace": namespace, "book_title": book.title,
+                }));
+            }
+        }
         let read = |query: &str| -> Result<Vec<serde_json::Value>> {
             let mut st = s.connection.prepare(query)?;
             let rows = st.query_map([], |r| r.get::<_, String>(0))?;
             rows.map(|r| Ok(strict_parse(r?.as_bytes())?)).collect()
         };
         let peers = read("SELECT json FROM sync_peers ORDER BY id")?;
-        let conflicts = read("SELECT json FROM sync_conflicts ORDER BY id")?;
+        let mut conflicts_query = s
+            .connection
+            .prepare("SELECT json FROM sync_conflicts ORDER BY id")?;
+        let conflicts = conflicts_query
+            .query_map([], |row| row.get::<_, String>(0))?
+            .map(|raw| -> Result<Conflict> { Ok(strict_parse(raw?.as_bytes())?) })
+            .collect::<Result<Vec<_>>>()?;
+        let isbn_protected_conflicts: Vec<_> = conflicts
+            .iter()
+            .filter(|conflict| reconcile::requires_isbn_review(&state, conflict))
+            .map(|conflict| &conflict.id)
+            .collect();
         let mut st = s
             .connection
             .prepare("SELECT id,peer,exported FROM sync_outbox ORDER BY rowid DESC")?;
         let outbox=st.query_map([],|r|Ok(serde_json::json!({"id":r.get::<_,String>(0)?,"peer":r.get::<_,String>(1)?,"exported":r.get::<_,bool>(2)?})))?.collect::<std::result::Result<Vec<_>,_>>()?;
         encoded(
             &serde_json::json!({"device_id":id,"peers":peers,"conflicts":conflicts,"outbox":outbox,
-                "note_order_reviews":note_order_reviews,"note_order_reviews_revision":state.revision}),
+                "note_order_reviews":note_order_reviews,"note_order_reviews_revision":state.revision,
+                "isbn_reviews":isbn_reviews,"isbn_history_scopes":isbn_scopes,"isbn_history_revision":state.revision,
+                "isbn_protected_conflict_ids":isbn_protected_conflicts}),
         )
     }
+    /// Inspect one edition and namespace without mutating the portable graph or sync tables.
+    pub fn isbn_history(&self, edition_id: String, namespace: String) -> Result<String> {
+        let state = self.lock()?.load()?;
+        encoded(&isbn_history::history(&state, &edition_id, &namespace)?)
+    }
+
     pub fn sync_new_pairing_key(&self) -> Result<String> {
         let mut bytes = [0u8; 32];
         getrandom::getrandom(&mut bytes).map_err(|_| invalid("Entropy unavailable"))?;
@@ -563,8 +607,9 @@ impl Desk {
             if previous != packet_digest {
                 return Err(invalid("Sync batch ID was reused"));
             }
+            booknook_core::validate(&c.state)?;
             let state = Store::load_from(&tx)?;
-            return encoded(&serde_json::json!({"duplicate":true,"conflicts":0,"state":state}));
+            return receive_response(&state, true, 0);
         }
         let base: Option<String> = tx
             .query_row(
@@ -591,9 +636,7 @@ impl Desk {
         let current = Store::load_from(&tx)?;
         let merged = reconcile::reconcile(base.as_ref(), &current, &c.state)?;
         let json = encoded(&merged.state)?;
-        let response = encoded(
-            &serde_json::json!({"duplicate":false,"conflicts":merged.conflicts.len(),"state":&merged.state}),
-        )?;
+        let response = receive_response(&merged.state, false, merged.conflicts.len())?;
         import_assets(root, &c)?;
         let count = tx.execute(
             "UPDATE desk SET revision=?1,json=?2 WHERE singleton=1 AND revision=?3",

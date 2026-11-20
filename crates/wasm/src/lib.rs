@@ -62,6 +62,40 @@ pub fn notebook_order_reviews(state_json: &str) -> Result<String, JsValue> {
     };
     run().map_err(|e| JsValue::from_str(&e.to_string()))
 }
+fn isbn_query<T: serde::Serialize>(
+    state_json: &str,
+    read: impl FnOnce(&booknook_core::model::State) -> booknook_core::Result<T>,
+) -> Result<String, JsValue> {
+    let run = || -> booknook_core::Result<String> {
+        let state = booknook_core::strict_parse(state_json.as_bytes())?;
+        booknook_core::validate(&state)?;
+        let json = serde_json::to_string(&read(&state)?)?;
+        if json.len() > booknook_core::MAX_JSON_BYTES {
+            return Err(booknook_core::Error::Invalid(
+                "ISBN history exceeds the response limit".into(),
+            ));
+        }
+        Ok(json)
+    };
+    run().map_err(|e| JsValue::from_str(&e.to_string()))
+}
+
+#[wasm_bindgen]
+pub fn isbn_reviews(state_json: &str) -> Result<String, JsValue> {
+    isbn_query(state_json, booknook_core::isbn_history::pending_reviews)
+}
+
+#[wasm_bindgen]
+pub fn isbn_history(
+    state_json: &str,
+    edition_id: &str,
+    namespace: &str,
+) -> Result<String, JsValue> {
+    isbn_query(state_json, |state| {
+        booknook_core::isbn_history::history(state, edition_id, namespace)
+    })
+}
+
 /// Same three-way private reconciliation used by the native encrypted transport.
 #[wasm_bindgen]
 pub fn reconcile_states(

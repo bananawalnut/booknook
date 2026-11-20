@@ -3,6 +3,80 @@ import Foundation
 import SwiftUI
 
 struct Edition: Decodable, Identifiable { let id: String; let bookId: String; let assets: [Asset] }
+struct ISBNHistoryScope: Decodable, Identifiable {
+    let editionId: String
+    let namespace: String
+    let bookTitle: String
+    var id: [String] { [editionId, namespace] }
+    var label: String { "\(bookTitle) · \(namespace == "isbn13" ? "ISBN-13" : "ISBN")" }
+}
+struct ISBNReview: Decodable, Identifiable {
+    let editionId: String
+    let namespace: String
+    let heads: [String]
+    let choices: [[String]]
+    let provisionalValues: [String]
+    var id: [String] { [editionId, namespace] }
+}
+extension Array where Element == String {
+    // Source identifier values retain their exact UTF-8 spelling in the portable history.
+    var isbnValueBytes: [Data] { map { Data($0.utf8) } }
+}
+struct ISBNHistory: Decodable {
+    struct Node: Decodable {
+        let kind: String
+        let values: [String]
+    }
+    let editionId: String
+    let namespace: String
+    let heads: [String]
+    let nodes: [String: Node]
+    let legacyAbsenceUnknown: Bool
+
+    var activeChoices: [[String]] {
+        var seen = Set<[Data]>()
+        return heads.compactMap { nodes[$0]?.values }
+            .filter { seen.insert($0.isbnValueBytes).inserted }
+            .sorted { left, right in
+                left.lexicographicallyPrecedes(right) { $0.utf8.lexicographicallyPrecedes($1.utf8) }
+            }
+    }
+
+    // A compatibility anchor can be the only record of an older catalog value.
+    var earlierChoices: [String] {
+        let headIDs = Set(heads)
+        let active = Set(activeChoices.map(\.isbnValueBytes))
+        var offered = Set<[Data]>()
+        let ranked = nodes.sorted { left, right in
+            let leftAnchor = left.value.kind == "value_anchor"
+            let rightAnchor = right.value.kind == "value_anchor"
+            if leftAnchor != rightAnchor { return !leftAnchor }
+            return left.key < right.key
+        }
+        return ranked.compactMap { id, node in
+            let bytes = node.values.isbnValueBytes
+            guard !headIDs.contains(id), !active.contains(bytes),
+                  ["import", "review", "reassert", "value_anchor"].contains(node.kind),
+                  offered.insert(bytes).inserted else { return nil }
+            return id
+        }
+    }
+}
+enum ISBNDecision {
+    case review(ISBNReview, [String])
+    case reassert(ISBNHistory, String)
+
+    var command: [String: Any] {
+        switch self {
+        case .review(let review, let values):
+            return ["op": "review_isbn", "edition_id": review.editionId, "namespace": review.namespace,
+                    "expected_heads": review.heads, "values": values]
+        case .reassert(let history, let node):
+            return ["op": "reassert_isbn", "edition_id": history.editionId, "namespace": history.namespace,
+                    "expected_heads": history.heads, "historical_node": node]
+        }
+    }
+}
 struct Asset: Decodable, Identifiable {
     static let mobi6MediaType = "application/x-mobipocket-ebook"
     let id: String; let mediaType: String; let storageKey: String; let sha256: String; let spine: [String]

@@ -1,0 +1,161 @@
+{
+  "$defs": {
+    "Node": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "value_anchor",
+              "type": "string"
+            },
+            "values": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "kind",
+            "values"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "connection_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "kind": {
+              "const": "import",
+              "type": "string"
+            },
+            "parents": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "row_digest": {
+              "type": "string"
+            },
+            "source_id": {
+              "type": "string"
+            },
+            "values": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "kind",
+            "parents",
+            "values",
+            "source_id",
+            "row_digest"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "review",
+              "type": "string"
+            },
+            "parents": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "values": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "kind",
+            "parents",
+            "values"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "historical_node": {
+              "type": "string"
+            },
+            "kind": {
+              "const": "reassert",
+              "type": "string"
+            },
+            "parents": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "values": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "kind",
+            "parents",
+            "historical_node",
+            "values"
+          ],
+          "type": "object"
+        }
+      ]
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "edition_id": {
+      "type": "string"
+    },
+    "heads": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "legacy_absence_unknown": {
+      "type": "boolean"
+    },
+    "namespace": {
+      "type": "string"
+    },
+    "nodes": {
+      "additionalProperties": {
+        "$ref": "#/$defs/Node"
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "edition_id",
+    "namespace",
+    "heads",
+    "nodes",
+    "legacy_absence_unknown"
+  ],
+  "title": "IsbnHistoryView",
+  "type": "object",
+  "$id": "urn:booknook:schema:0.5.0:isbn-history-view"
+}

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "choices": {
+      "items": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "type": "array"
+    },
+    "edition_id": {
+      "type": "string"
+    },
+    "heads": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "namespace": {
+      "type": "string"
+    },
+    "provisional_values": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "edition_id",
+    "namespace",
+    "heads",
+    "choices",
+    "provisional_values"
+  ],
+  "title": "IsbnReview",
+  "type": "object",
+  "$id": "urn:booknook:schema:0.5.0:isbn-review"
+}

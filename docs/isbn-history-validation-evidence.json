@@ -1,0 +1,140 @@
+{
+  "schema": "booknook.local-contract-validation.v1",
+  "result": "PASS_LOCAL_CHECKS_HOSTED_RELEASE_PENDING",
+  "sdk_version": "0.4.0",
+  "app_build_candidate": "2026111901",
+  "state_schema": "booknook.archive.v5",
+  "ontology_version": "0.5.0",
+  "source_base": "990486a0d554fd186e0c47a2994abb5fab9ed5cd",
+  "source_files_sha256": {
+    "Cargo.lock": "9e5189b1b1f8bcd12224fac3b06c893f19101835dabab69119dbc34d53890116",
+    "Cargo.toml": "93dc007d36f852d8406863092b70613e2f18b2b46d76476cf02816b44e4a33e3",
+    "README.md": "97eb8989eb38b3683f0e7a499983718c4d6f46f35652e7df9d64ceb50f962ce4",
+    "apps/apple/BookNook/Models.swift": "7c8c76753bc7f77410735e3b5b6672dd2837730af8f72e4abd4d3442971258c7",
+    "apps/apple/BookNook/SyncRecovery.swift": "eed10b2f4b49462b09378263d85d72ca3746a13ee9e043dc957d09713f4b977b",
+    "apps/apple/Generated/booknook_native.swift": "487d05de33902dde24fd22046d28c383f9b3ae33fa5eaaf971fae5138f187e12",
+    "apps/apple/Generated/booknook_nativeFFI.h": "1e912a3c75f0e6be6a8e8680b787ba89439004a323ce304c0645e15e1e2acc15",
+    "apps/apple/project.yml": "ea7e317271217f2b5c32fadccf62b3ef6c344c8bffd091159befb50e9756402c",
+    "crates/connectors/DEPENDENCY-LICENSES.csv": "693d0272e649ed8e11006e2de45cd9c7f08233bdbfffd9e118e3350d8bd28b76",
+    "crates/core/DEPENDENCY-LICENSES.csv": "693d0272e649ed8e11006e2de45cd9c7f08233bdbfffd9e118e3350d8bd28b76",
+    "crates/core/examples/schema.rs": "8019645388993c35580bf618c24effa31c974988ade5f1f2d51f316c6941238e",
+    "crates/core/src/imports.rs": "7ab461264e85ffabde3070a2d1de4a011033b42e2ffc9a57b0828ad26c9c1499",
+    "crates/core/src/isbn_history.rs": "7c94decb9c4b4d67b642fe98f8f386b0e205b40a4618faeb6122a1fccbf8c8cf",
+    "crates/core/src/lib.rs": "16af5879711bc0cac227ed748ba00481923914e2d2ef8d252abe6b888c615c23",
+    "crates/core/src/model.rs": "b159294e08cb153717e3a9676343c1c589ab17362756f67218b336a6ef5d9167",
+    "crates/core/src/notebook_command.rs": "ce09319066cc8eac7a00a4aa8a80db4f99f48f03338ed999c0b0eacd453e4893",
+    "crates/core/src/providers.rs": "a206d1ffd0b2c20d7ee70d6f531cc3d0dedeeff16dd44233c8285295451578d1",
+    "crates/core/src/reconcile.rs": "ef017bcfc9d6d2c703c00da8fbda173fe1036b6cc85734307519e905f45a4028",
+    "crates/core/src/validation.rs": "0d28d4a925727b9654ccb57ab93ef9f5f2e68c65c40b416fbedb845725827243",
+    "crates/core/tests/fixtures/isbn-history.json": "b2668468ccbc50fe3c955fc913dec634dd105db95757c39ed05d0d38651d1aca",
+    "crates/core/tests/isbn_history.rs": "4db9910ea25e10bf048e7ff742c70f0bd9f61702567ba724c2bb273d24586f4d",
+    "crates/native/Cargo.toml": "cd90f65c4b7371a91345fb4fbc6f4d77982ea6bbbce881116ff41794429d15e6",
+    "crates/native/DEPENDENCY-LICENSES.csv": "693d0272e649ed8e11006e2de45cd9c7f08233bdbfffd9e118e3350d8bd28b76",
+    "crates/native/src/notebook_storage.rs": "2c461a798c4f228892414e5b32192f5bcbef8c0ad95258825b88a2650b5c0efd",
+    "crates/native/src/sync_bridge.rs": "3a8d0bdc8685800f9b3188325873e635b2f9e97b52d97f45b8ec8b6ab42707cf",
+    "crates/native/src/sync_tests.rs": "4690abb6bf256848053bef6aee351c772735e23002583568c365a26edc4b235c",
+    "crates/wasm/DEPENDENCY-LICENSES.csv": "693d0272e649ed8e11006e2de45cd9c7f08233bdbfffd9e118e3350d8bd28b76",
+    "crates/wasm/src/lib.rs": "e7f6e6e43c2860398cecc92ff94e94cec8d9e879eb5eb6ca31a59365f42246fb",
+    "docs/DECISIONS.md": "96ff23b4035e388f59af35785e802d4921ea0eab05d19d980b596b4430f73a0b",
+    "docs/DELIVERY.md": "bf55fa0661d0065c55634d4d4ff778da50768a52db27719ec5f92aadf7f84927",
+    "docs/ISBN-HISTORY.md": "ee6454136583d988b5d9c3c6d7d81dacdbcea75716b95a5d70edd60424fc5262",
+    "docs/SDK.md": "bbcb6b0e2ca62d81aee951e6b9e0d3ce07a3d3c9a510c7373cc9e7cfac0c85d9",
+    "docs/dependency-licenses.csv": "693d0272e649ed8e11006e2de45cd9c7f08233bdbfffd9e118e3350d8bd28b76",
+    "ontology/discovery.json": "79261bf628cb2bec107cff416e1e90a929b0320f85e0ba1d71b58111cf9c9b95",
+    "ontology/portable/v4/manifest.json": "6dc5c3f6c04b21822f11a64efb784b3c54c0b696c98a6f24a45a64b6225a8262",
+    "ontology/portable/v4/portable-export.schema.json": "12964ee38a5ec595afe2a7162884d021f08e213857f162d084df111d6ac91994",
+    "ontology/v0.5.0/conformance.json": "b2668468ccbc50fe3c955fc913dec634dd105db95757c39ed05d0d38651d1aca",
+    "ontology/v0.5.0/isbn-history-command.schema.json": "d686878e9476c43fe05bd08b70f8a4ccebccf7c8aa9ebbd21acae91f49ed2a39",
+    "ontology/v0.5.0/isbn-history-view.schema.json": "a7990af47f1bf03bf73a35fdae5e684d2b0d908a7dbaa23a6c67902d7f77955c",
+    "ontology/v0.5.0/isbn-review.schema.json": "981ea5eb17af50b1b60363cf7243e953ed3dcf0bab3be38ed01ccf3a610dce17",
+    "ontology/v0.5.0/manifest.json": "3fdb9e9fc9de2e6eba50a489da44d2e96da9b8d6cefc5e659c43c3bd7e07d79c",
+    "ontology/v0.5.0/ontology.jsonld": "8fe68f1fcb3c22c2a9989dfbff9c6f43761d2c9f096d679efab0fea60215bcc5",
+    "ontology/v0.5.0/state.schema.json": "d1d2112b3881bb9554176e05b10e2ffdf799573e803f5634c184956cdd3f1038",
+    "scripts/generate-contracts.py": "8ff6f00f7bfef1348e209311d411d407b1e66104e0ffab69df497afea999d83c",
+    "scripts/package-swift.sh": "ecf83ebf00dae010adbd94701dc6bff465902ba2a06e48e890f5e738832065a4",
+    "scripts/sync-package-resources.py": "f55083e4272dde39c448dc87058e15e431a4f40e4683d41c8ed3b1c1ebcc91d0",
+    "sdk/swift/DEPENDENCY-LICENSES.csv": "693d0272e649ed8e11006e2de45cd9c7f08233bdbfffd9e118e3350d8bd28b76",
+    "sdk/swift/README.md": "f00e49788f1600bcae4d5969aa319c90c6f7ba5c043ab3f328c0646a329b1551",
+    "sdk/swift/Sources/BookNookServices/BookNookNotebook.swift": "6e674559dcb9b874853362b89ba3ac4d9727cec0559f8d81c496b93fd94a69ad",
+    "sdk/typescript/DEPENDENCY-LICENSES.csv": "693d0272e649ed8e11006e2de45cd9c7f08233bdbfffd9e118e3350d8bd28b76",
+    "sdk/typescript/README.md": "92a25858705685fff241bb2f74dbc2df3b2a560333eaff8e4809f4a0008a2d08",
+    "sdk/typescript/archive-types.ts": "c7e98b1b627681fc6b651bc748911f639daf1d72f809c25e2ae92df901f7de29",
+    "sdk/typescript/index.ts": "0d13c06f23ec6dec6d50bb7835f39dd519f7d0bb3436af53054d75eb3bdb6306",
+    "sdk/typescript/package-lock.json": "c66ad7c1cb446c072a19f1a3a3676393b18db8891fe9b867c1d11daa8b02575a",
+    "sdk/typescript/package.json": "8ff7795c4e047784efbf717f0bb425600a992cf24ee5fe93dd89eb565d44e644",
+    "sdk/typescript/types.ts": "68eac6f71d4de6a1495ecc7f1a0fd527ac78da91c99c2fa62fcd7f5bf2cf5b91",
+    "tests/DeskWorkflowTests.swift": "009f55f4092e265cc86300ac4b822831ad2cda6c28474b84fafa069f8d347118",
+    "tests/PackagedNotebookSmoke.swift": "38351c1986273823f47a8124fa28692350c19e47969f2b6b26e9b6512ce1cb48",
+    "tests/ontology-jsonld.cjs": "d5ed562b5ab864717c05063dadf55c022def7aec753f37f68d4484bbe471c6eb",
+    "tests/provider-service-acceptance.cjs": "6aef236abd7a504e0bd27c3f0de01806f7f494ba70075ead0a22012c51765f98",
+    "tests/relay-read-probe/Cargo.lock": "8dedf6aed98b98260ef8aa3fda564a2d03bc4cce8308113ea43b3d6c032af12b",
+    "tests/sdk-target-routing.py": "1f80f5ca51c547cf3ae7bf73bb3b3f665e4718f459d3b57accfbc7b9839af46d"
+  },
+  "checks": {
+    "rust_workspace": {
+      "sha256": "6fd24774c9f0d987a93dfbb5343eaddc4927a4693a9aef4783a337972de05141",
+      "marker": "Doc-tests booknook_wasm",
+      "passed": 373,
+      "declared_ignored": 6,
+      "scope": "Final complete offline Rust workspace suite after the legacy migration fix."
+    },
+    "clippy": {
+      "sha256": "29729195739ae3b58c88e355a615aa5243c9f57f5611f0cb0d65b92387acc5d4",
+      "marker": "Finished `dev` profile"
+    },
+    "generated_contracts_licenses_and_format": {
+      "sha256": "99188733d04f399672d8ef2b93c7f81a84ed7322bb72a1d3941178cea06ca35e",
+      "marker": "PASS_FINAL_CONTRACTS_LICENSES_FORMAT_AND_SCRIPT_SYNTAX"
+    },
+    "swift_workflows": {
+      "sha256": "a4d70140b05f8f49ecc24bcab0dc0bd65d1d4023b50239a86897a8e87f1914a4",
+      "marker": "Mac sidebar runtime layout passed"
+    },
+    "swift_history_and_utf8": {
+      "sha256": "a4d70140b05f8f49ecc24bcab0dc0bd65d1d4023b50239a86897a8e87f1914a4",
+      "marker": "Swift Sync Recovery decoded portable alternatives"
+    },
+    "independent_relay_before_final_migration_fix": {
+      "sha256": "ab7ff6280e48a5439a404b69c4702fcfd9729bde8355a8d175ad0b42e75abfe4",
+      "marker": "test result: ok. 1 passed; 0 failed"
+    },
+    "installed_javascript": {
+      "sha256": "beb2a2c2673aa4aeba4aa6b2401aa5d1593b397b8e09b6e9fbb5f8ae3d5c7f08",
+      "marker": "Installed npm archive passed CommonJS, ESM, browser-WASM initialization and consumer type checks; nothing published.",
+      "provider_runtime_combinations": 3,
+      "local_archive_sha256": "4876fcbb8b1f58e8626c9a5eda2d4f8fa82a76713e3ec71561ab5a95dff259ce"
+    },
+    "frozen_sdk_036": {
+      "sha256": "0099bffe5145ff3e88e6e5a6fbd179d16409e89a858da39e5d5386ddcdf4c5e2",
+      "marker": "Frozen SDK 0.3.6 rejected v5 state"
+    },
+    "actual_browser": {
+      "receipt_sha256": "d186130ab966d39f246504a730e0de4c55c9fa539df632429940ad49e5532a10",
+      "wasm_sha256": "9a68ab27618db18ef0a93c0193efd5814fc76d842ce2ee5d06e8ddd49349a503",
+      "checks": [
+        "browser_wasm_digest",
+        "same_choices_on_both_receives",
+        "portable_pending_reopen",
+        "stale_heads_rejected_without_write",
+        "review_clear_preserves_other_namespace",
+        "decision_replay_no_cas_preserves_later_edit",
+        "portable_resolved_stale_peer_preserves_clear",
+        "historical_source_row_remains_idempotent",
+        "reassert_survives_roundtrip_and_stale_clear",
+        "reassert_replay_no_cas",
+        "legacy_roundtrip_preserves_version",
+        "legacy_value_preserved_as_anchor",
+        "legacy_observed_value_restored",
+        "three_legacy_replicas_all_twelve_merge_orders"
+      ],
+      "observed_utc": "2026-11-20T00:47:08.180Z"
+    }
+  },
+  "scope": [
+    "Local source and npm package checks, with synthetic libraries and authority fixtures.",
+    "The workspace's declared optional tests remain separately scoped. The independent relay ran before the final legacy migration fix; the final workspace suite reran native sync tests.",
+    "The first final-Swift link attempt exhausted disk space. Reclaiming only completed compiler caches allowed the full Swift workflow to pass against the retained final bridge.",
+    "Hosted source CI, public 0.4.0 SDK packages, app 1901 and ontology deployment require separate qualification.",
+    "Live account/authority, remote exchange, minimum OS and physical input remain open. Build 1802 installation awaits the iPad."
+  ]
+}

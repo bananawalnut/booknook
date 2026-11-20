@@ -109,7 +109,12 @@ fn execute_atomically(
     let mut state = snapshot(storage)?;
     let revision = state.revision;
     let result = apply(&mut state)?;
-    storage.compare_and_save(revision, &state)?;
+    // Immutable command replay is acknowledged at the observed snapshot without a write.
+    if revision != state.revision
+        || result.get("replayed").and_then(serde_json::Value::as_bool) != Some(true)
+    {
+        storage.compare_and_save(revision, &state)?;
+    }
     Ok(CommandResponse { state, result })
 }
 

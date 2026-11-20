@@ -32,7 +32,7 @@ The maintained Nostr SDK **0.45.6** removes the unmaintained relay pool and perm
 
 The receiving-lock audit JSON preserves its 17:22 UTC audit-only observation: its consumer-execution field says pending because execution had not yet begun. That historical status is superseded by the completed six-command receiving result in [final public-preview evidence](security-020-public-preview-evidence.json); the original audit evidence remains unchanged.
 
-The examples describe the current source, which builds SDK 0.3.5 archives. Local package scripts build/test archives without publishing remotely. GitHub prerelease assets are separate from registry publication, which is not claimed.
+The examples describe the current source, which builds SDK 0.4.0 archives. Local package scripts build/test archives without publishing remotely. GitHub prerelease assets are separate from registry publication, which is not claimed.
 
 ## Rust notebook storage
 
@@ -62,7 +62,7 @@ To replace SQLite, implement `Provider` and `NotebookStorage`, initialize a vali
 
 UniFFI generates `apps/apple/Generated/booknook_native.swift` and its C header/module map. `scripts/build-apple.sh` regenerates these from the actual Rust library. `Desk` is the native reference composition; it accepts a local directory and exposes commands, snapshots, imports, history, custody, social and synchronization operations. Invoke disk, cryptography and network work outside the main actor, as the reference app's `DeskRepository` does.
 
-For an independent app, use `scripts/package-swift.sh` to produce the standalone `booknook-swift-sdk-0.3.5.tar.gz`, then add its extracted directory as a local Swift Package. `BookNookNative` exposes the Rust bridge, `BookNookServices` provides asynchronous provider composition, and `CastaliaNative` supplies reusable custody, secure-storage and consent coordination. It includes arm64 macOS, iOS device and iOS Simulator slices, generated Swift and headers. Its consumer check extracts the actual archive before linking; the package does not depend on the reference app's source tree.
+For an independent app, use `scripts/package-swift.sh` to produce the standalone `booknook-swift-sdk-0.4.0.tar.gz`, then add its extracted directory as a local Swift Package. `BookNookNative` exposes the Rust bridge, `BookNookServices` provides asynchronous provider composition, and `CastaliaNative` supplies reusable custody, secure-storage and consent coordination. It includes arm64 macOS, iOS device and iOS Simulator slices, generated Swift and headers. Its consumer check extracts the actual archive before linking; the package does not depend on the reference app's source tree.
 
 Local command results contain `state` and `result`. Use IDs returned by `result` rather than searching by display title. Keep an editor draft until a throwing save acknowledges persistence. Custody unlock does not authorize a publication: use the prepared disclosure and explicit consent lifecycle. Do not infer operational permission from a directory identity or a Nostr signature.
 
@@ -180,11 +180,15 @@ Use `append_ordered_note` to create a Margin entry with the stable block ID, the
 
 Read pending choices with Rust `notebook_order::unresolved_reviews`, Swift `BookNookNotebook.orderReviewsJSON()`, or TypeScript `notebookOrderReviews(core, state)`. Display the eligible choices, then send `review_notebook_order` with a stable review ID, the complete selected order, and the evidence and heads from that read. Reload choices after a stale-evidence error. An accepted exact replay keeps the same revision. [Order contracts and conformance fixtures](../ontology/v0.4.0/manifest.json)
 
-Hosts must persist `Notebook.order` alongside its projected `blocks`. Rust code constructing a `Notebook` with a struct literal sets `order: None` for a legacy notebook. Current readers accept archives v1 through v4, and readers exchanging v4 state must both support v4. The existing portable export and encrypted transfer envelopes keep their wire versions.
+Hosts must persist `Notebook.order` alongside its projected `blocks`. Rust code constructing a `Notebook` with a struct literal sets `order: None` for a legacy notebook. Current readers accept archives v1 through v5. Readers exchanging a state must support its archive version; ISBN history requires v5 support. The existing portable export and encrypted transfer envelopes keep their wire versions.
+
+### Goodreads ISBN changes (ontology 0.5.0)
+
+The SDK 0.4.0 source candidate adds portable ISBN history for Goodreads catalog editions. Query `isbn_history::pending_reviews` in Rust, `BookNookNotebook.isbnReviewsJSON()` in Swift or `isbnReviews(core, state)` in TypeScript. Use the complete returned heads to choose an alternative with `review_isbn` or restore a superseded observation with `reassert_isbn`. Local review needs no signature. [ISBN history guide](ISBN-HISTORY.md)
 
 ## Complete portable exports
 
-The existing native export envelope is now the public Rust `booknook_core::portable_archive::PortableArchive` contract. Its wire version remains `booknook.portable-export.v1`: `state` holds a v1, v2, v3 or v4 domain document, `assets` maps asset IDs to original base64 bytes, and optional `social` retains the social state, transport binding/history proofs and pending relay events. The [portable protocol manifest v3](../ontology/portable/v3/manifest.json) includes the v4 notebook order field. The [earlier portable edition](../ontology/portable/v1/manifest.json) and issued ontology 0.1.0 and 0.2.0 artifacts remain unchanged.
+The native export envelope is the public Rust `booknook_core::portable_archive::PortableArchive` contract. Its wire version remains `booknook.portable-export.v1`. The candidate accepts domain state versions v1 through v5. The `assets` map stores original base64 bytes by asset ID. Optional `social` retains social state, transport binding and history proofs, and pending relay events. Portable protocol manifest v4 adds v5 ISBN history alongside v4 notebook order. Earlier published contracts remain available. [Current portable manifest](../ontology/portable/v4/manifest.json) · [Notebook order edition](../ontology/portable/v3/manifest.json) · [First portable edition](../ontology/portable/v1/manifest.json)
 
 Rust `portable_archive::parse` and `roundtrip`, native/Swift `validate_portable_archive` / `validatePortableArchive`, and WASM `validate_portable_archive` consume the **original JSON**. They reject duplicate and unknown fields, unsupported versions, missing/corrupt referenced assets, invalid social structures and forged pending relay signatures under the existing 128 MiB envelope bound. Original asset encodings and embedded signed request, presentation and event strings are retained. Outer JSON whitespace, property order, and ordinary domain defaults may normalize; never sign the normalized envelope as if it were the original bytes. Legacy omitted `social` and omitted social `binding_history` remain accepted. Unreferenced v1 asset entries remain retained without being interpreted, preserving the previous envelope contract.
 

@@ -1,0 +1,36 @@
+{
+  "schema": "booknook.ontology-manifest.v1",
+  "version": "0.5.0",
+  "namespace": "urn:booknook:ontology:",
+  "castalia": {
+    "version": "0.6.0",
+    "canonical_base_url": "https://zenith-research.ca/ontology/v0.6.0",
+    "bundle_digest": "11d670a57b2052b4de00509559d081b524bf953c6da2544a25f33976857f8f4f"
+  },
+  "artifacts": [
+    {
+      "path": "conformance.json",
+      "sha256": "b2668468ccbc50fe3c955fc913dec634dd105db95757c39ed05d0d38651d1aca"
+    },
+    {
+      "path": "isbn-history-command.schema.json",
+      "sha256": "d686878e9476c43fe05bd08b70f8a4ccebccf7c8aa9ebbd21acae91f49ed2a39"
+    },
+    {
+      "path": "isbn-history-view.schema.json",
+      "sha256": "a7990af47f1bf03bf73a35fdae5e684d2b0d908a7dbaa23a6c67902d7f77955c"
+    },
+    {
+      "path": "isbn-review.schema.json",
+      "sha256": "981ea5eb17af50b1b60363cf7243e953ed3dcf0bab3be38ed01ccf3a610dce17"
+    },
+    {
+      "path": "ontology.jsonld",
+      "sha256": "8fe68f1fcb3c22c2a9989dfbff9c6f43761d2c9f096d679efab0fea60215bcc5"
+    },
+    {
+      "path": "state.schema.json",
+      "sha256": "d1d2112b3881bb9554176e05b10e2ffdf799573e803f5634c184956cdd3f1038"
+    }
+  ]
+}

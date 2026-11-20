@@ -78,6 +78,25 @@ impl NotebookEngine {
         })
     }
 
+    /// Read portable ISBN choices from a freshly validated host or SQLite snapshot.
+    pub fn isbn_reviews(&self) -> Result<String> {
+        self.with_storage_port(|storage| {
+            let state = providers::snapshot(storage)?;
+            isbn_query_json(&booknook_core::isbn_history::pending_reviews(&state)?)
+        })
+    }
+
+    pub fn isbn_history(&self, edition_id: String, namespace: String) -> Result<String> {
+        self.with_storage_port(|storage| {
+            let state = providers::snapshot(storage)?;
+            isbn_query_json(&booknook_core::isbn_history::history(
+                &state,
+                &edition_id,
+                &namespace,
+            )?)
+        })
+    }
+
     pub fn execute(&self, command_json: String) -> Result<String> {
         let command = NotebookCommand::parse(command_json.as_bytes())?;
         self.with_storage_port(|storage| {
@@ -86,6 +105,14 @@ impl NotebookEngine {
             )?)
         })
     }
+}
+
+fn isbn_query_json(value: &impl serde::Serialize) -> Result<String> {
+    let json = serde_json::to_string(value)?;
+    if json.len() > booknook_core::MAX_JSON_BYTES {
+        return Err(Error::Invalid("ISBN query exceeds the 128 MiB response limit".into()).into());
+    }
+    Ok(json)
 }
 
 impl NotebookEngine {

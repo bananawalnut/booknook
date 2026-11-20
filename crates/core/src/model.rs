@@ -18,6 +18,7 @@ pub(crate) enum ArchiveVersion {
     Ink,
     Notes,
     Order,
+    Isbn,
 }
 
 impl ArchiveVersion {
@@ -27,13 +28,14 @@ impl ArchiveVersion {
             Self::Ink => (INK_ARCHIVE_SCHEMA, INK_ONTOLOGY),
             Self::Notes => (NOTE_ARCHIVE_SCHEMA, NOTE_ONTOLOGY),
             Self::Order => (ORDER_ARCHIVE_SCHEMA, ORDER_ONTOLOGY),
+            Self::Isbn => ("booknook.archive.v5", "0.5.0"),
         }
     }
 }
 impl State {
     pub(crate) fn archive_version(&self) -> Option<ArchiveVersion> {
         use ArchiveVersion::*;
-        [Base, Ink, Notes, Order].into_iter().find(|version| {
+        [Base, Ink, Notes, Order, Isbn].into_iter().find(|version| {
             version.names() == (self.schema.as_str(), self.ontology_version.as_str())
         })
     }
@@ -548,6 +550,8 @@ pub struct State {
     pub local_reader: String,
     pub books: BTreeMap<String, Book>,
     pub editions: BTreeMap<String, Edition>,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub isbn_history: crate::isbn_history::Histories,
     pub passes: BTreeMap<String, ReadingPass>,
     pub sessions: BTreeMap<String, ReadingSession>,
     pub notebooks: BTreeMap<String, Notebook>,
@@ -572,6 +576,7 @@ impl Default for State {
             local_reader: crate::new_id(),
             books: BTreeMap::new(),
             editions: BTreeMap::new(),
+            isbn_history: BTreeMap::new(),
             passes: BTreeMap::new(),
             sessions: BTreeMap::new(),
             notebooks: BTreeMap::new(),

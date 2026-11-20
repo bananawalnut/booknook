@@ -1,0 +1,2553 @@
+{
+  "cases": [
+    {
+      "contract": "state",
+      "id": "legacy-untouched",
+      "input": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049": {
+            "authors": [
+              "Author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition"
+            ],
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "provenance": [
+              {
+                "digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "111",
+                  "Title": "Book"
+                },
+                "imported_at": 10,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              }
+            ],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "",
+            "sources": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              }
+            ],
+            "subjects": [],
+            "title": "Book"
+          }
+        },
+        "cards": {},
+        "drafts": {},
+        "editions": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "assets": [],
+            "book_id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition",
+            "identifiers": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              },
+              {
+                "id": "111",
+                "provider": "isbn"
+              }
+            ],
+            "language": null
+          }
+        },
+        "entities": {},
+        "friendship_requests": [],
+        "groups": {},
+        "lists": {},
+        "local_reader": "synthetic",
+        "notebooks": {},
+        "ontology_version": "0.1.0",
+        "passes": {},
+        "positions": {},
+        "revision": 0,
+        "schema": "booknook.archive.v1",
+        "sessions": {}
+      },
+      "valid": true
+    },
+    {
+      "contract": "state",
+      "id": "v5-unresolved",
+      "input": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049": {
+            "authors": [
+              "Author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition"
+            ],
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "provenance": [
+              {
+                "digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "111",
+                  "Title": "Book"
+                },
+                "imported_at": 10,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "222",
+                  "Title": "Book"
+                },
+                "imported_at": 2,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "333",
+                  "Title": "Book"
+                },
+                "imported_at": 3,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              }
+            ],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "",
+            "sources": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              }
+            ],
+            "subjects": [],
+            "title": "Book"
+          }
+        },
+        "cards": {},
+        "drafts": {},
+        "editions": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "assets": [],
+            "book_id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition",
+            "identifiers": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              },
+              {
+                "id": "222",
+                "provider": "isbn"
+              }
+            ],
+            "language": null
+          }
+        },
+        "entities": {},
+        "friendship_requests": [],
+        "groups": {},
+        "isbn_history": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "isbn": {
+              "nodes": {
+                "22b7d383ffc7e778cba6250a784ad2a8d5e802ad2348361db6c2a86685ded446": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e",
+                    "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e"
+                  ],
+                  "row_digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                  "source_id": "42",
+                  "values": [
+                    "222"
+                  ]
+                },
+                "8c66d0e18bf3c90340938994cfc2a4b837b1ac69c37231728c83f0bfc34776ee": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2",
+                    "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e"
+                  ],
+                  "row_digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                  "source_id": "42",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056"
+                  ],
+                  "row_digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                  "source_id": "42",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "222"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "lists": {},
+        "local_reader": "synthetic",
+        "notebooks": {},
+        "ontology_version": "0.5.0",
+        "passes": {},
+        "positions": {},
+        "revision": 1,
+        "schema": "booknook.archive.v5",
+        "sessions": {}
+      },
+      "valid": true
+    },
+    {
+      "contract": "state",
+      "id": "v5-reviewed",
+      "input": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049": {
+            "authors": [
+              "Author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition"
+            ],
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "provenance": [
+              {
+                "digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "111",
+                  "Title": "Book"
+                },
+                "imported_at": 10,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "222",
+                  "Title": "Book"
+                },
+                "imported_at": 2,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "333",
+                  "Title": "Book"
+                },
+                "imported_at": 3,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              }
+            ],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "",
+            "sources": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              }
+            ],
+            "subjects": [],
+            "title": "Book"
+          }
+        },
+        "cards": {},
+        "drafts": {},
+        "editions": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "assets": [],
+            "book_id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition",
+            "identifiers": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              },
+              {
+                "id": "222",
+                "provider": "isbn"
+              }
+            ],
+            "language": null
+          }
+        },
+        "entities": {},
+        "friendship_requests": [],
+        "groups": {},
+        "isbn_history": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "isbn": {
+              "nodes": {
+                "22b7d383ffc7e778cba6250a784ad2a8d5e802ad2348361db6c2a86685ded446": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e",
+                    "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e"
+                  ],
+                  "row_digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                  "source_id": "42",
+                  "values": [
+                    "222"
+                  ]
+                },
+                "8c66d0e18bf3c90340938994cfc2a4b837b1ac69c37231728c83f0bfc34776ee": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2",
+                    "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e"
+                  ],
+                  "row_digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                  "source_id": "42",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "c2f102151f6b9cc159918e9ee3966417f8c63930705b66318fedc6aeae7eb6a4": {
+                  "kind": "review",
+                  "parents": [
+                    "22b7d383ffc7e778cba6250a784ad2a8d5e802ad2348361db6c2a86685ded446",
+                    "8c66d0e18bf3c90340938994cfc2a4b837b1ac69c37231728c83f0bfc34776ee"
+                  ],
+                  "values": [
+                    "222"
+                  ]
+                },
+                "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056"
+                  ],
+                  "row_digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                  "source_id": "42",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "222"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "lists": {},
+        "local_reader": "synthetic",
+        "notebooks": {},
+        "ontology_version": "0.5.0",
+        "passes": {},
+        "positions": {},
+        "revision": 2,
+        "schema": "booknook.archive.v5",
+        "sessions": {}
+      },
+      "valid": true
+    },
+    {
+      "contract": "state",
+      "id": "v5-reasserted",
+      "input": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049": {
+            "authors": [
+              "Author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition"
+            ],
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "provenance": [
+              {
+                "digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "111",
+                  "Title": "Book"
+                },
+                "imported_at": 10,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "222",
+                  "Title": "Book"
+                },
+                "imported_at": 2,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "333",
+                  "Title": "Book"
+                },
+                "imported_at": 3,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              }
+            ],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "",
+            "sources": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              }
+            ],
+            "subjects": [],
+            "title": "Book"
+          }
+        },
+        "cards": {},
+        "drafts": {},
+        "editions": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "assets": [],
+            "book_id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition",
+            "identifiers": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              },
+              {
+                "id": "111",
+                "provider": "isbn"
+              }
+            ],
+            "language": null
+          }
+        },
+        "entities": {},
+        "friendship_requests": [],
+        "groups": {},
+        "isbn_history": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "isbn": {
+              "nodes": {
+                "22b7d383ffc7e778cba6250a784ad2a8d5e802ad2348361db6c2a86685ded446": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e",
+                    "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e"
+                  ],
+                  "row_digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                  "source_id": "42",
+                  "values": [
+                    "222"
+                  ]
+                },
+                "8c66d0e18bf3c90340938994cfc2a4b837b1ac69c37231728c83f0bfc34776ee": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2",
+                    "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e"
+                  ],
+                  "row_digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                  "source_id": "42",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "c2f102151f6b9cc159918e9ee3966417f8c63930705b66318fedc6aeae7eb6a4": {
+                  "kind": "review",
+                  "parents": [
+                    "22b7d383ffc7e778cba6250a784ad2a8d5e802ad2348361db6c2a86685ded446",
+                    "8c66d0e18bf3c90340938994cfc2a4b837b1ac69c37231728c83f0bfc34776ee"
+                  ],
+                  "values": [
+                    "222"
+                  ]
+                },
+                "d875908bf43b0e7ccd9a29fd7e94fef78f5ee139273b249f27ee1c23569e826c": {
+                  "historical_node": "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e",
+                  "kind": "reassert",
+                  "parents": [
+                    "c2f102151f6b9cc159918e9ee3966417f8c63930705b66318fedc6aeae7eb6a4"
+                  ],
+                  "values": [
+                    "111"
+                  ]
+                },
+                "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056"
+                  ],
+                  "row_digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                  "source_id": "42",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "222"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "lists": {},
+        "local_reader": "synthetic",
+        "notebooks": {},
+        "ontology_version": "0.5.0",
+        "passes": {},
+        "positions": {},
+        "revision": 3,
+        "schema": "booknook.archive.v5",
+        "sessions": {}
+      },
+      "valid": true
+    },
+    {
+      "contract": "portable",
+      "id": "v5-portable-envelope",
+      "input": {
+        "assets": {},
+        "schema": "booknook.portable-export.v1",
+        "state": {
+          "activity": {},
+          "annotations": {},
+          "blocked": [],
+          "books": {
+            "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049": {
+              "authors": [
+                "Author"
+              ],
+              "edited_fields": [],
+              "edition_ids": [
+                "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition"
+              ],
+              "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+              "provenance": [
+                {
+                  "digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                  "fields": {
+                    "Author": "Author",
+                    "Book Id": "42",
+                    "ISBN": "111",
+                    "Title": "Book"
+                  },
+                  "imported_at": 10,
+                  "source": {
+                    "id": "42",
+                    "provider": "goodreads"
+                  }
+                },
+                {
+                  "digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                  "fields": {
+                    "Author": "Author",
+                    "Book Id": "42",
+                    "ISBN": "222",
+                    "Title": "Book"
+                  },
+                  "imported_at": 2,
+                  "source": {
+                    "id": "42",
+                    "provider": "goodreads"
+                  }
+                },
+                {
+                  "digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                  "fields": {
+                    "Author": "Author",
+                    "Book Id": "42",
+                    "ISBN": "333",
+                    "Title": "Book"
+                  },
+                  "imported_at": 3,
+                  "source": {
+                    "id": "42",
+                    "provider": "goodreads"
+                  }
+                }
+              ],
+              "rating": null,
+              "reading_dates": [],
+              "review": "",
+              "shelf": "",
+              "sources": [
+                {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              ],
+              "subjects": [],
+              "title": "Book"
+            }
+          },
+          "cards": {},
+          "drafts": {},
+          "editions": {
+            "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+              "assets": [],
+              "book_id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+              "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition",
+              "identifiers": [
+                {
+                  "id": "42",
+                  "provider": "goodreads"
+                },
+                {
+                  "id": "222",
+                  "provider": "isbn"
+                }
+              ],
+              "language": null
+            }
+          },
+          "entities": {},
+          "friendship_requests": [],
+          "groups": {},
+          "isbn_history": {
+            "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+              "isbn": {
+                "nodes": {
+                  "22b7d383ffc7e778cba6250a784ad2a8d5e802ad2348361db6c2a86685ded446": {
+                    "connection_id": null,
+                    "kind": "import",
+                    "parents": [
+                      "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e",
+                      "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e"
+                    ],
+                    "row_digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                    "source_id": "42",
+                    "values": [
+                      "222"
+                    ]
+                  },
+                  "8c66d0e18bf3c90340938994cfc2a4b837b1ac69c37231728c83f0bfc34776ee": {
+                    "connection_id": null,
+                    "kind": "import",
+                    "parents": [
+                      "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2",
+                      "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e"
+                    ],
+                    "row_digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                    "source_id": "42",
+                    "values": [
+                      "333"
+                    ]
+                  },
+                  "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2": {
+                    "kind": "value_anchor",
+                    "values": [
+                      "333"
+                    ]
+                  },
+                  "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056": {
+                    "kind": "value_anchor",
+                    "values": [
+                      "111"
+                    ]
+                  },
+                  "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e": {
+                    "connection_id": null,
+                    "kind": "import",
+                    "parents": [
+                      "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056"
+                    ],
+                    "row_digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                    "source_id": "42",
+                    "values": [
+                      "111"
+                    ]
+                  },
+                  "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e": {
+                    "kind": "value_anchor",
+                    "values": [
+                      "222"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "lists": {},
+          "local_reader": "synthetic",
+          "notebooks": {},
+          "ontology_version": "0.5.0",
+          "passes": {},
+          "positions": {},
+          "revision": 1,
+          "schema": "booknook.archive.v5",
+          "sessions": {}
+        }
+      },
+      "valid": true
+    },
+    {
+      "contract": "isbn-command",
+      "id": "review",
+      "input": {
+        "edition_id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition",
+        "expected_heads": [
+          "22b7d383ffc7e778cba6250a784ad2a8d5e802ad2348361db6c2a86685ded446",
+          "8c66d0e18bf3c90340938994cfc2a4b837b1ac69c37231728c83f0bfc34776ee"
+        ],
+        "namespace": "isbn",
+        "op": "review_isbn",
+        "values": [
+          "222"
+        ]
+      },
+      "state": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049": {
+            "authors": [
+              "Author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition"
+            ],
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "provenance": [
+              {
+                "digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "111",
+                  "Title": "Book"
+                },
+                "imported_at": 10,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "222",
+                  "Title": "Book"
+                },
+                "imported_at": 2,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "333",
+                  "Title": "Book"
+                },
+                "imported_at": 3,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              }
+            ],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "",
+            "sources": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              }
+            ],
+            "subjects": [],
+            "title": "Book"
+          }
+        },
+        "cards": {},
+        "drafts": {},
+        "editions": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "assets": [],
+            "book_id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition",
+            "identifiers": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              },
+              {
+                "id": "222",
+                "provider": "isbn"
+              }
+            ],
+            "language": null
+          }
+        },
+        "entities": {},
+        "friendship_requests": [],
+        "groups": {},
+        "isbn_history": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "isbn": {
+              "nodes": {
+                "22b7d383ffc7e778cba6250a784ad2a8d5e802ad2348361db6c2a86685ded446": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e",
+                    "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e"
+                  ],
+                  "row_digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                  "source_id": "42",
+                  "values": [
+                    "222"
+                  ]
+                },
+                "8c66d0e18bf3c90340938994cfc2a4b837b1ac69c37231728c83f0bfc34776ee": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2",
+                    "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e"
+                  ],
+                  "row_digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                  "source_id": "42",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056"
+                  ],
+                  "row_digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                  "source_id": "42",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "222"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "lists": {},
+        "local_reader": "synthetic",
+        "notebooks": {},
+        "ontology_version": "0.5.0",
+        "passes": {},
+        "positions": {},
+        "revision": 1,
+        "schema": "booknook.archive.v5",
+        "sessions": {}
+      },
+      "valid": true
+    },
+    {
+      "contract": "isbn-command",
+      "id": "reassert",
+      "input": {
+        "edition_id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition",
+        "expected_heads": [
+          "c2f102151f6b9cc159918e9ee3966417f8c63930705b66318fedc6aeae7eb6a4"
+        ],
+        "historical_node": "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e",
+        "namespace": "isbn",
+        "op": "reassert_isbn"
+      },
+      "state": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049": {
+            "authors": [
+              "Author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition"
+            ],
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "provenance": [
+              {
+                "digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "111",
+                  "Title": "Book"
+                },
+                "imported_at": 10,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "222",
+                  "Title": "Book"
+                },
+                "imported_at": 2,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "333",
+                  "Title": "Book"
+                },
+                "imported_at": 3,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              }
+            ],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "",
+            "sources": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              }
+            ],
+            "subjects": [],
+            "title": "Book"
+          }
+        },
+        "cards": {},
+        "drafts": {},
+        "editions": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "assets": [],
+            "book_id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition",
+            "identifiers": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              },
+              {
+                "id": "222",
+                "provider": "isbn"
+              }
+            ],
+            "language": null
+          }
+        },
+        "entities": {},
+        "friendship_requests": [],
+        "groups": {},
+        "isbn_history": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "isbn": {
+              "nodes": {
+                "22b7d383ffc7e778cba6250a784ad2a8d5e802ad2348361db6c2a86685ded446": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e",
+                    "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e"
+                  ],
+                  "row_digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                  "source_id": "42",
+                  "values": [
+                    "222"
+                  ]
+                },
+                "8c66d0e18bf3c90340938994cfc2a4b837b1ac69c37231728c83f0bfc34776ee": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2",
+                    "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e"
+                  ],
+                  "row_digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                  "source_id": "42",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "c2f102151f6b9cc159918e9ee3966417f8c63930705b66318fedc6aeae7eb6a4": {
+                  "kind": "review",
+                  "parents": [
+                    "22b7d383ffc7e778cba6250a784ad2a8d5e802ad2348361db6c2a86685ded446",
+                    "8c66d0e18bf3c90340938994cfc2a4b837b1ac69c37231728c83f0bfc34776ee"
+                  ],
+                  "values": [
+                    "222"
+                  ]
+                },
+                "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056"
+                  ],
+                  "row_digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                  "source_id": "42",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "222"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "lists": {},
+        "local_reader": "synthetic",
+        "notebooks": {},
+        "ontology_version": "0.5.0",
+        "passes": {},
+        "positions": {},
+        "revision": 2,
+        "schema": "booknook.archive.v5",
+        "sessions": {}
+      },
+      "valid": true
+    },
+    {
+      "contract": "isbn-command",
+      "id": "stale-review",
+      "input": {
+        "edition_id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition",
+        "expected_heads": [
+          "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e"
+        ],
+        "namespace": "isbn",
+        "op": "review_isbn",
+        "values": [
+          "222"
+        ]
+      },
+      "state": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049": {
+            "authors": [
+              "Author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition"
+            ],
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "provenance": [
+              {
+                "digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "111",
+                  "Title": "Book"
+                },
+                "imported_at": 10,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "222",
+                  "Title": "Book"
+                },
+                "imported_at": 2,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "333",
+                  "Title": "Book"
+                },
+                "imported_at": 3,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              }
+            ],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "",
+            "sources": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              }
+            ],
+            "subjects": [],
+            "title": "Book"
+          }
+        },
+        "cards": {},
+        "drafts": {},
+        "editions": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "assets": [],
+            "book_id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition",
+            "identifiers": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              },
+              {
+                "id": "111",
+                "provider": "isbn"
+              }
+            ],
+            "language": null
+          }
+        },
+        "entities": {},
+        "friendship_requests": [],
+        "groups": {},
+        "isbn_history": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "isbn": {
+              "nodes": {
+                "22b7d383ffc7e778cba6250a784ad2a8d5e802ad2348361db6c2a86685ded446": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e",
+                    "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e"
+                  ],
+                  "row_digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                  "source_id": "42",
+                  "values": [
+                    "222"
+                  ]
+                },
+                "8c66d0e18bf3c90340938994cfc2a4b837b1ac69c37231728c83f0bfc34776ee": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2",
+                    "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e"
+                  ],
+                  "row_digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                  "source_id": "42",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "c2f102151f6b9cc159918e9ee3966417f8c63930705b66318fedc6aeae7eb6a4": {
+                  "kind": "review",
+                  "parents": [
+                    "22b7d383ffc7e778cba6250a784ad2a8d5e802ad2348361db6c2a86685ded446",
+                    "8c66d0e18bf3c90340938994cfc2a4b837b1ac69c37231728c83f0bfc34776ee"
+                  ],
+                  "values": [
+                    "222"
+                  ]
+                },
+                "d875908bf43b0e7ccd9a29fd7e94fef78f5ee139273b249f27ee1c23569e826c": {
+                  "historical_node": "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e",
+                  "kind": "reassert",
+                  "parents": [
+                    "c2f102151f6b9cc159918e9ee3966417f8c63930705b66318fedc6aeae7eb6a4"
+                  ],
+                  "values": [
+                    "111"
+                  ]
+                },
+                "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056"
+                  ],
+                  "row_digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                  "source_id": "42",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "222"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "lists": {},
+        "local_reader": "synthetic",
+        "notebooks": {},
+        "ontology_version": "0.5.0",
+        "passes": {},
+        "positions": {},
+        "revision": 3,
+        "schema": "booknook.archive.v5",
+        "sessions": {}
+      },
+      "valid": false
+    },
+    {
+      "contract": "state",
+      "id": "wrong-hash",
+      "input": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049": {
+            "authors": [
+              "Author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition"
+            ],
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "provenance": [
+              {
+                "digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "111",
+                  "Title": "Book"
+                },
+                "imported_at": 10,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "222",
+                  "Title": "Book"
+                },
+                "imported_at": 2,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "333",
+                  "Title": "Book"
+                },
+                "imported_at": 3,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              }
+            ],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "",
+            "sources": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              }
+            ],
+            "subjects": [],
+            "title": "Book"
+          }
+        },
+        "cards": {},
+        "drafts": {},
+        "editions": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "assets": [],
+            "book_id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition",
+            "identifiers": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              },
+              {
+                "id": "222",
+                "provider": "isbn"
+              }
+            ],
+            "language": null
+          }
+        },
+        "entities": {},
+        "friendship_requests": [],
+        "groups": {},
+        "isbn_history": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "isbn": {
+              "nodes": {
+                "22b7d383ffc7e778cba6250a784ad2a8d5e802ad2348361db6c2a86685ded446": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e",
+                    "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e"
+                  ],
+                  "row_digest": "0000000000000000000000000000000000000000000000000000000000000000",
+                  "source_id": "42",
+                  "values": [
+                    "222"
+                  ]
+                },
+                "8c66d0e18bf3c90340938994cfc2a4b837b1ac69c37231728c83f0bfc34776ee": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2",
+                    "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e"
+                  ],
+                  "row_digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                  "source_id": "42",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056"
+                  ],
+                  "row_digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                  "source_id": "42",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "222"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "lists": {},
+        "local_reader": "synthetic",
+        "notebooks": {},
+        "ontology_version": "0.5.0",
+        "passes": {},
+        "positions": {},
+        "revision": 1,
+        "schema": "booknook.archive.v5",
+        "sessions": {}
+      },
+      "valid": false
+    },
+    {
+      "contract": "state",
+      "id": "dangling-parent",
+      "input": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049": {
+            "authors": [
+              "Author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition"
+            ],
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "provenance": [
+              {
+                "digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "111",
+                  "Title": "Book"
+                },
+                "imported_at": 10,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "222",
+                  "Title": "Book"
+                },
+                "imported_at": 2,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "333",
+                  "Title": "Book"
+                },
+                "imported_at": 3,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              }
+            ],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "",
+            "sources": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              }
+            ],
+            "subjects": [],
+            "title": "Book"
+          }
+        },
+        "cards": {},
+        "drafts": {},
+        "editions": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "assets": [],
+            "book_id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition",
+            "identifiers": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              },
+              {
+                "id": "222",
+                "provider": "isbn"
+              }
+            ],
+            "language": null
+          }
+        },
+        "entities": {},
+        "friendship_requests": [],
+        "groups": {},
+        "isbn_history": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "isbn": {
+              "nodes": {
+                "22b7d383ffc7e778cba6250a784ad2a8d5e802ad2348361db6c2a86685ded446": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "0000000000000000000000000000000000000000000000000000000000000000"
+                  ],
+                  "row_digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                  "source_id": "42",
+                  "values": [
+                    "222"
+                  ]
+                },
+                "8c66d0e18bf3c90340938994cfc2a4b837b1ac69c37231728c83f0bfc34776ee": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2",
+                    "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e"
+                  ],
+                  "row_digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                  "source_id": "42",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056"
+                  ],
+                  "row_digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                  "source_id": "42",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "222"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "lists": {},
+        "local_reader": "synthetic",
+        "notebooks": {},
+        "ontology_version": "0.5.0",
+        "passes": {},
+        "positions": {},
+        "revision": 1,
+        "schema": "booknook.archive.v5",
+        "sessions": {}
+      },
+      "valid": false
+    },
+    {
+      "contract": "state",
+      "id": "cyclic-parent",
+      "input": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049": {
+            "authors": [
+              "Author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition"
+            ],
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "provenance": [
+              {
+                "digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "111",
+                  "Title": "Book"
+                },
+                "imported_at": 10,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "222",
+                  "Title": "Book"
+                },
+                "imported_at": 2,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "333",
+                  "Title": "Book"
+                },
+                "imported_at": 3,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              }
+            ],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "",
+            "sources": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              }
+            ],
+            "subjects": [],
+            "title": "Book"
+          }
+        },
+        "cards": {},
+        "drafts": {},
+        "editions": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "assets": [],
+            "book_id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition",
+            "identifiers": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              },
+              {
+                "id": "222",
+                "provider": "isbn"
+              }
+            ],
+            "language": null
+          }
+        },
+        "entities": {},
+        "friendship_requests": [],
+        "groups": {},
+        "isbn_history": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "isbn": {
+              "nodes": {
+                "22b7d383ffc7e778cba6250a784ad2a8d5e802ad2348361db6c2a86685ded446": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "22b7d383ffc7e778cba6250a784ad2a8d5e802ad2348361db6c2a86685ded446"
+                  ],
+                  "row_digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                  "source_id": "42",
+                  "values": [
+                    "222"
+                  ]
+                },
+                "8c66d0e18bf3c90340938994cfc2a4b837b1ac69c37231728c83f0bfc34776ee": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2",
+                    "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e"
+                  ],
+                  "row_digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                  "source_id": "42",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056"
+                  ],
+                  "row_digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                  "source_id": "42",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "222"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "lists": {},
+        "local_reader": "synthetic",
+        "notebooks": {},
+        "ontology_version": "0.5.0",
+        "passes": {},
+        "positions": {},
+        "revision": 1,
+        "schema": "booknook.archive.v5",
+        "sessions": {}
+      },
+      "valid": false
+    },
+    {
+      "contract": "state",
+      "id": "projection-mismatch",
+      "input": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049": {
+            "authors": [
+              "Author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition"
+            ],
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "provenance": [
+              {
+                "digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "111",
+                  "Title": "Book"
+                },
+                "imported_at": 10,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "222",
+                  "Title": "Book"
+                },
+                "imported_at": 2,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "333",
+                  "Title": "Book"
+                },
+                "imported_at": 3,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              }
+            ],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "",
+            "sources": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              }
+            ],
+            "subjects": [],
+            "title": "Book"
+          }
+        },
+        "cards": {},
+        "drafts": {},
+        "editions": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "assets": [],
+            "book_id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition",
+            "identifiers": [],
+            "language": null
+          }
+        },
+        "entities": {},
+        "friendship_requests": [],
+        "groups": {},
+        "isbn_history": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "isbn": {
+              "nodes": {
+                "22b7d383ffc7e778cba6250a784ad2a8d5e802ad2348361db6c2a86685ded446": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e",
+                    "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e"
+                  ],
+                  "row_digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                  "source_id": "42",
+                  "values": [
+                    "222"
+                  ]
+                },
+                "8c66d0e18bf3c90340938994cfc2a4b837b1ac69c37231728c83f0bfc34776ee": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2",
+                    "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e"
+                  ],
+                  "row_digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                  "source_id": "42",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056"
+                  ],
+                  "row_digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                  "source_id": "42",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "222"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "lists": {},
+        "local_reader": "synthetic",
+        "notebooks": {},
+        "ontology_version": "0.5.0",
+        "passes": {},
+        "positions": {},
+        "revision": 1,
+        "schema": "booknook.archive.v5",
+        "sessions": {}
+      },
+      "valid": false
+    },
+    {
+      "contract": "state",
+      "id": "wrong-version",
+      "input": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049": {
+            "authors": [
+              "Author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition"
+            ],
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "provenance": [
+              {
+                "digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "111",
+                  "Title": "Book"
+                },
+                "imported_at": 10,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "222",
+                  "Title": "Book"
+                },
+                "imported_at": 2,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "333",
+                  "Title": "Book"
+                },
+                "imported_at": 3,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              }
+            ],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "",
+            "sources": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              }
+            ],
+            "subjects": [],
+            "title": "Book"
+          }
+        },
+        "cards": {},
+        "drafts": {},
+        "editions": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "assets": [],
+            "book_id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition",
+            "identifiers": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              },
+              {
+                "id": "222",
+                "provider": "isbn"
+              }
+            ],
+            "language": null
+          }
+        },
+        "entities": {},
+        "friendship_requests": [],
+        "groups": {},
+        "isbn_history": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "isbn": {
+              "nodes": {
+                "22b7d383ffc7e778cba6250a784ad2a8d5e802ad2348361db6c2a86685ded446": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e",
+                    "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e"
+                  ],
+                  "row_digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                  "source_id": "42",
+                  "values": [
+                    "222"
+                  ]
+                },
+                "8c66d0e18bf3c90340938994cfc2a4b837b1ac69c37231728c83f0bfc34776ee": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2",
+                    "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e"
+                  ],
+                  "row_digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                  "source_id": "42",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056"
+                  ],
+                  "row_digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                  "source_id": "42",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "222"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "lists": {},
+        "local_reader": "synthetic",
+        "notebooks": {},
+        "ontology_version": "0.4.0",
+        "passes": {},
+        "positions": {},
+        "revision": 1,
+        "schema": "booknook.archive.v5",
+        "sessions": {}
+      },
+      "valid": false
+    },
+    {
+      "contract": "state",
+      "id": "null-history",
+      "input": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049": {
+            "authors": [
+              "Author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition"
+            ],
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "provenance": [
+              {
+                "digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "111",
+                  "Title": "Book"
+                },
+                "imported_at": 10,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "222",
+                  "Title": "Book"
+                },
+                "imported_at": 2,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "333",
+                  "Title": "Book"
+                },
+                "imported_at": 3,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              }
+            ],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "",
+            "sources": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              }
+            ],
+            "subjects": [],
+            "title": "Book"
+          }
+        },
+        "cards": {},
+        "drafts": {},
+        "editions": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "assets": [],
+            "book_id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition",
+            "identifiers": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              },
+              {
+                "id": "222",
+                "provider": "isbn"
+              }
+            ],
+            "language": null
+          }
+        },
+        "entities": {},
+        "friendship_requests": [],
+        "groups": {},
+        "isbn_history": null,
+        "lists": {},
+        "local_reader": "synthetic",
+        "notebooks": {},
+        "ontology_version": "0.5.0",
+        "passes": {},
+        "positions": {},
+        "revision": 1,
+        "schema": "booknook.archive.v5",
+        "sessions": {}
+      },
+      "valid": false
+    },
+    {
+      "contract": "state",
+      "id": "unknown-field",
+      "input": {
+        "activity": {},
+        "annotations": {},
+        "blocked": [],
+        "books": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049": {
+            "authors": [
+              "Author"
+            ],
+            "edited_fields": [],
+            "edition_ids": [
+              "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition"
+            ],
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "provenance": [
+              {
+                "digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "111",
+                  "Title": "Book"
+                },
+                "imported_at": 10,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "222",
+                  "Title": "Book"
+                },
+                "imported_at": 2,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              },
+              {
+                "digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                "fields": {
+                  "Author": "Author",
+                  "Book Id": "42",
+                  "ISBN": "333",
+                  "Title": "Book"
+                },
+                "imported_at": 3,
+                "source": {
+                  "id": "42",
+                  "provider": "goodreads"
+                }
+              }
+            ],
+            "rating": null,
+            "reading_dates": [],
+            "review": "",
+            "shelf": "",
+            "sources": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              }
+            ],
+            "subjects": [],
+            "title": "Book"
+          }
+        },
+        "cards": {},
+        "drafts": {},
+        "editions": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "assets": [],
+            "book_id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+            "id": "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition",
+            "identifiers": [
+              {
+                "id": "42",
+                "provider": "goodreads"
+              },
+              {
+                "id": "222",
+                "provider": "isbn"
+              }
+            ],
+            "language": null
+          }
+        },
+        "entities": {},
+        "friendship_requests": [],
+        "groups": {},
+        "isbn_history": {
+          "goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition": {
+            "isbn": {
+              "future": false,
+              "nodes": {
+                "22b7d383ffc7e778cba6250a784ad2a8d5e802ad2348361db6c2a86685ded446": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e",
+                    "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e"
+                  ],
+                  "row_digest": "b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be",
+                  "source_id": "42",
+                  "values": [
+                    "222"
+                  ]
+                },
+                "8c66d0e18bf3c90340938994cfc2a4b837b1ac69c37231728c83f0bfc34776ee": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2",
+                    "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e"
+                  ],
+                  "row_digest": "2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9",
+                  "source_id": "42",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "333"
+                  ]
+                },
+                "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e": {
+                  "connection_id": null,
+                  "kind": "import",
+                  "parents": [
+                    "da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056"
+                  ],
+                  "row_digest": "497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708",
+                  "source_id": "42",
+                  "values": [
+                    "111"
+                  ]
+                },
+                "f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e": {
+                  "kind": "value_anchor",
+                  "values": [
+                    "222"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "lists": {},
+        "local_reader": "synthetic",
+        "notebooks": {},
+        "ontology_version": "0.5.0",
+        "passes": {},
+        "positions": {},
+        "revision": 1,
+        "schema": "booknook.archive.v5",
+        "sessions": {}
+      },
+      "valid": false
+    },
+    {
+      "contract": "state",
+      "id": "duplicate-raw-history",
+      "raw_json": "{\"isbn_history\":{},\"activity\":{},\"annotations\":{},\"blocked\":[],\"books\":{\"goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049\":{\"authors\":[\"Author\"],\"edited_fields\":[],\"edition_ids\":[\"goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition\"],\"id\":\"goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049\",\"provenance\":[{\"digest\":\"497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708\",\"fields\":{\"Author\":\"Author\",\"Book Id\":\"42\",\"ISBN\":\"111\",\"Title\":\"Book\"},\"imported_at\":10,\"source\":{\"id\":\"42\",\"provider\":\"goodreads\"}},{\"digest\":\"b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be\",\"fields\":{\"Author\":\"Author\",\"Book Id\":\"42\",\"ISBN\":\"222\",\"Title\":\"Book\"},\"imported_at\":2,\"source\":{\"id\":\"42\",\"provider\":\"goodreads\"}},{\"digest\":\"2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9\",\"fields\":{\"Author\":\"Author\",\"Book Id\":\"42\",\"ISBN\":\"333\",\"Title\":\"Book\"},\"imported_at\":3,\"source\":{\"id\":\"42\",\"provider\":\"goodreads\"}}],\"rating\":null,\"reading_dates\":[],\"review\":\"\",\"shelf\":\"\",\"sources\":[{\"id\":\"42\",\"provider\":\"goodreads\"}],\"subjects\":[],\"title\":\"Book\"}},\"cards\":{},\"drafts\":{},\"editions\":{\"goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition\":{\"assets\":[],\"book_id\":\"goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049\",\"id\":\"goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition\",\"identifiers\":[{\"id\":\"42\",\"provider\":\"goodreads\"},{\"id\":\"222\",\"provider\":\"isbn\"}],\"language\":null}},\"entities\":{},\"friendship_requests\":[],\"groups\":{},\"isbn_history\":{\"goodreads:73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049:edition\":{\"isbn\":{\"nodes\":{\"22b7d383ffc7e778cba6250a784ad2a8d5e802ad2348361db6c2a86685ded446\":{\"connection_id\":null,\"kind\":\"import\",\"parents\":[\"e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e\",\"f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e\"],\"row_digest\":\"b2d2d09edbc6adca28bc43fce39fac8cbda122393f135050a91d4a688c1138be\",\"source_id\":\"42\",\"values\":[\"222\"]},\"8c66d0e18bf3c90340938994cfc2a4b837b1ac69c37231728c83f0bfc34776ee\":{\"connection_id\":null,\"kind\":\"import\",\"parents\":[\"c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2\",\"e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e\"],\"row_digest\":\"2df654ca2f4c3ba1f17977631351cc18ba9fb80923c148e75a214130b7bc07d9\",\"source_id\":\"42\",\"values\":[\"333\"]},\"c262e0cf38efaf74b3247006ce3f44caa9311114d7db24d922592b6aff6f19e2\":{\"kind\":\"value_anchor\",\"values\":[\"333\"]},\"da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056\":{\"kind\":\"value_anchor\",\"values\":[\"111\"]},\"e7df63b479dc32aca72e20b8c07037d682df95981ed56a6df8c901303fca801e\":{\"connection_id\":null,\"kind\":\"import\",\"parents\":[\"da5a361e1f057d1d4df8fd70f887195f3f0cf424bcf5997002099504e6194056\"],\"row_digest\":\"497ba3a1224c2734859266ad195631098b421a552a23d1de492b61896a74d708\",\"source_id\":\"42\",\"values\":[\"111\"]},\"f4be084f377b6a61852254406a46f149f48488a11b84f072f70cca1a7918d70e\":{\"kind\":\"value_anchor\",\"values\":[\"222\"]}}}}},\"lists\":{},\"local_reader\":\"synthetic\",\"notebooks\":{},\"ontology_version\":\"0.5.0\",\"passes\":{},\"positions\":{},\"revision\":1,\"schema\":\"booknook.archive.v5\",\"sessions\":{}}",
+      "valid": false
+    }
+  ],
+  "schema": "booknook.conformance.v1",
+  "ontology_version": "0.5.0"
+}

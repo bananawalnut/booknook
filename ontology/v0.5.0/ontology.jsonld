@@ -1,0 +1,36 @@
+{
+  "@context": {
+    "bn": "urn:booknook:ontology:",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+  },
+  "@id": "urn:booknook:ontology:release:0.5.0",
+  "@type": "owl:Ontology",
+  "owl:versionInfo": "0.5.0",
+  "owl:imports": [
+    { "@id": "urn:booknook:ontology:release:0.4.0" },
+    { "@id": "https://zenith-research.ca/ontology/v0.6.0/ontology.jsonld" }
+  ],
+  "@graph": [
+    {
+      "@id": "bn:IsbnHistory",
+      "@type": "owl:Class",
+      "rdfs:comment": "Private immutable observations and reviewed choices for one catalog edition's ISBN namespace. The current identifiers are a validated projection of this history."
+    },
+    {
+      "@id": "bn:IsbnObservation",
+      "@type": "owl:Class",
+      "rdfs:comment": "An explicit source-column observation with recorded causal predecessors. Missing columns and unsupported legacy absence never imply a clear. A content digest provides integrity rather than identity or operational authority."
+    },
+    {
+      "@id": "bn:IsbnReview",
+      "@type": "owl:Class",
+      "rdfs:comment": "An explicit value choice against the complete observed frontier. Competing observations and subsequent decisions remain recoverable through synchronization and portable exports."
+    },
+    {
+      "@id": "bn:IsbnReassertion",
+      "@type": "owl:Class",
+      "rdfs:comment": "An explicit return to a historical value against the checked current frontier, distinct from replaying an already imported catalog row."
+    }
+  ]
+}

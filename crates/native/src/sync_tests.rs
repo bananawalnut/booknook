@@ -1505,3 +1505,217 @@ fn encrypted_order_overflow_is_atomic_and_the_original_packet_retries_after_cove
     assert_eq!(duplicate["duplicate"], true);
     assert_eq!(a.snapshot().unwrap(), durable);
 }
+
+#[test]
+fn portable_isbn_review_survives_approved_receives_reopen_replay_and_restore() {
+    let ar = Directory::new();
+    let br = Directory::new();
+    let cr = Directory::new();
+    let a = setup(&ar);
+    let b = setup(&br);
+    let c = setup(&cr);
+    let (ai, bi, ci) = (id(&a), id(&b), id(&c));
+    let key = "25".repeat(32);
+    for (desk, peers) in [(&a, [&bi, &ci]), (&b, [&ai, &ci]), (&c, [&ai, &bi])] {
+        for peer in peers {
+            pair(desk, peer, &key, true);
+        }
+    }
+    let import = |desk: &Desk, isbn: &str| {
+        let csv = format!(
+            "Book Id,Title,Author,ISBN,ISBN13\n42,Shared book,Writer,{isbn},9780306406157\n"
+        );
+        desk.execute(json!({"op":"import_goodreads", "csv":csv, "at":1}).to_string())
+            .unwrap();
+    };
+    let receive = |desk: &Desk, path: &str, from: &str| {
+        value(
+            desk.sync_receive(path.into(), from.into(), key.clone())
+                .unwrap(),
+        )
+    };
+    import(&a, "0306406152");
+    let initial = exported(&a, &bi, &key, &ar.0.join("initial.json"));
+    receive(&b, &initial, &ai);
+    import(&a, "");
+    import(&b, "014032724X");
+    let left = exported(&a, &bi, &key, &ar.0.join("clear.json"));
+    let right = exported(&b, &ai, &key, &br.0.join("change.json"));
+    let received = receive(&a, &right, &bi);
+    let reverse = receive(&b, &left, &ai);
+    assert_eq!(received["conflicts"], 0);
+    assert_eq!(reverse["isbn_reviews"], received["isbn_reviews"]);
+    let reviews = received["isbn_reviews"].as_array().unwrap();
+    assert_eq!(reviews.len(), 1);
+    let review = &reviews[0];
+    let edition = review["edition_id"].as_str().unwrap();
+    assert_eq!(review["namespace"], "isbn");
+    assert_eq!(review["choices"], json!([[], ["014032724X"]]));
+    assert_eq!(review["heads"].as_array().unwrap().len(), 2);
+    let status = value(a.sync_status().unwrap());
+    assert_eq!(status["isbn_reviews"], received["isbn_reviews"]);
+    assert!(
+        status["isbn_history_scopes"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|scope| scope["edition_id"] == edition
+                && scope["namespace"] == "isbn"
+                && scope["book_title"] == "Shared book")
+    );
+
+    // A third reader receives both heads even with an empty local conflict table.
+    let pending = exported(&a, &ci, &key, &ar.0.join("pending.json"));
+    assert_eq!(
+        receive(&c, &pending, &ai)["isbn_reviews"],
+        received["isbn_reviews"]
+    );
+    drop(c);
+    let c = Desk::new(cr.path()).unwrap();
+    let before = c.snapshot().unwrap();
+    let replay = receive(&c, &pending, &ai);
+    assert_eq!(replay["duplicate"], true);
+    assert_eq!(replay["isbn_reviews"], received["isbn_reviews"]);
+    assert_eq!(c.snapshot().unwrap(), before);
+    let history = |desk: &Desk| value(desk.isbn_history(edition.into(), "isbn".into()).unwrap());
+    let initial_history = history(&c);
+    assert_eq!(initial_history["heads"], review["heads"]);
+    assert_eq!(c.snapshot().unwrap(), before);
+
+    // A legacy whole-field row stays available for dismissal but cannot change a tracked ISBN.
+    let field = &replay["state"]["editions"][edition]["identifiers"];
+    let mut incoming = field.as_array().unwrap().clone();
+    incoming.push(json!({"provider":"isbn","id":"1111111111"}));
+    let legacy = json!({"id":"legacy-identifiers","collection":"editions","record_id":edition,
+        "field":"identifiers","local":field,"incoming":incoming});
+    c.lock()
+        .unwrap()
+        .connection
+        .execute(
+            "INSERT INTO sync_conflicts VALUES(?1,?2)",
+            ["legacy-identifiers", &legacy.to_string()],
+        )
+        .unwrap();
+    let legacy_status = value(c.sync_status().unwrap());
+    assert_eq!(legacy_status["conflicts"], json!([legacy]));
+    assert_eq!(
+        legacy_status["isbn_protected_conflict_ids"],
+        json!(["legacy-identifiers"])
+    );
+    assert!(c.sync_resolve("legacy-identifiers".into(), true).is_err());
+    assert_eq!(c.snapshot().unwrap(), before);
+    c.sync_resolve("legacy-identifiers".into(), false).unwrap();
+    assert_eq!(
+        value(c.sync_status().unwrap())["isbn_reviews"],
+        received["isbn_reviews"]
+    );
+
+    let settle = json!({"op":"review_isbn","edition_id":edition,"namespace":"isbn",
+        "expected_heads":review["heads"],"values":[]});
+    c.execute(settle.to_string()).unwrap();
+    let settled = c.snapshot().unwrap();
+    assert_eq!(
+        value(c.execute(settle.to_string()).unwrap())["result"]["replayed"],
+        true
+    );
+    assert_eq!(c.snapshot().unwrap(), settled);
+    let duplicate = receive(&c, &pending, &ai);
+    assert_eq!(duplicate["duplicate"], true);
+    assert_eq!(duplicate["isbn_reviews"], json!([]));
+    assert_eq!(c.snapshot().unwrap(), settled);
+    let unreviewed = exported(&b, &ci, &key, &br.0.join("unreviewed.json"));
+    assert_eq!(receive(&c, &unreviewed, &bi)["isbn_reviews"], json!([]));
+
+    let current = history(&c);
+    let original = current["nodes"]
+        .as_object()
+        .unwrap()
+        .iter()
+        .find(|(_, node)| node["kind"] == "import" && node["values"] == json!(["0306406152"]))
+        .unwrap()
+        .0;
+    let reassert = |heads: &Value| {
+        json!({"op":"reassert_isbn","edition_id":edition,"namespace":"isbn",
+        "expected_heads":heads,"historical_node":original})
+    };
+    let before_stale = c.snapshot().unwrap();
+    assert!(c.execute(reassert(&review["heads"]).to_string()).is_err());
+    assert_eq!(c.snapshot().unwrap(), before_stale);
+    let decision = reassert(&current["heads"]);
+    c.execute(decision.to_string()).unwrap();
+    let changed = c.snapshot().unwrap();
+    assert_eq!(
+        value(c.execute(decision.to_string()).unwrap())["result"]["replayed"],
+        true
+    );
+    assert_eq!(c.snapshot().unwrap(), changed);
+    let ids = value(changed)["editions"][edition]["identifiers"]
+        .as_array()
+        .unwrap()
+        .clone();
+    assert!(ids.contains(&json!({"provider":"isbn", "id":"0306406152"})));
+    assert!(ids.contains(&json!({"provider":"isbn13","id":"9780306406157"})));
+    assert!(!ids.contains(&json!({"provider":"isbn","id":"014032724X"})));
+
+    let archive = cr.0.join("restored-isbn.json");
+    c.export_archive(archive.to_string_lossy().into_owned())
+        .unwrap();
+    let restored_root = Directory::new();
+    let restored = Desk::new(restored_root.path()).unwrap();
+    restored
+        .restore_archive(archive.to_string_lossy().into_owned())
+        .unwrap();
+    assert_eq!(history(&restored), history(&c));
+    assert_eq!(
+        value(restored.sync_status().unwrap())["isbn_reviews"],
+        json!([])
+    );
+}
+
+#[test]
+fn malformed_durable_isbn_heads_fail_reopen_status_and_duplicate_receive() {
+    let ar = Directory::new();
+    let br = Directory::new();
+    let a = setup(&ar);
+    let b = setup(&br);
+    let ai = id(&a);
+    let bi = id(&b);
+    let key = "26".repeat(32);
+    pair(&a, &bi, &key, true);
+    pair(&b, &ai, &key, true);
+    for isbn in ["0306406152", "014032724X"] {
+        a.execute(
+            json!({"op":"import_goodreads","at":1,
+            "csv":format!("Book Id,Title,Author,ISBN\n42,Books,Writer,{isbn}\n")})
+            .to_string(),
+        )
+        .unwrap();
+    }
+    let file = exported(&a, &bi, &key, &ar.0.join("before-corruption.json"));
+    b.sync_receive(file.clone(), ai.clone(), key.clone())
+        .unwrap();
+    let mut state = value(b.snapshot().unwrap());
+    let graph = state["isbn_history"]
+        .as_object_mut()
+        .unwrap()
+        .values_mut()
+        .next()
+        .unwrap();
+    // Replace a persisted node's content while retaining its original digest-key.
+    let nodes = graph["isbn"]["nodes"].as_object_mut().unwrap();
+    let node = nodes
+        .values_mut()
+        .find(|node| node["kind"] == "import")
+        .unwrap();
+    node["values"] = json!(["1111111111"]);
+    let corrupt = state.to_string();
+    b.lock()
+        .unwrap()
+        .connection
+        .execute("UPDATE desk SET json=?1 WHERE singleton=1", [&corrupt])
+        .unwrap();
+    assert!(b.sync_status().is_err());
+    assert!(b.sync_receive(file, ai, key).is_err());
+    drop(b);
+    assert!(Desk::new(br.path()).is_err());
+}

@@ -79,6 +79,7 @@ fixtures=output/'fixtures'
 fixtures.mkdir()
 shutil.copy2(root/'tests/fixtures/provider-sample.epub',fixtures/'provider-sample.epub')
 shutil.copy2(root/'crates/core/tests/fixtures/notebook-order.json',fixtures/'notebook-order.json')
+shutil.copy2(root/'crates/core/tests/fixtures/isbn-history.json',fixtures/'isbn-history.json')
 (output/'version').write_text(version)
 PY
 headers="$target_directory/sdk-package-check/swift/headers"

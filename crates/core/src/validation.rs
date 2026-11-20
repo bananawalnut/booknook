@@ -85,6 +85,7 @@ pub fn validate(state: &State) -> Result<()> {
         .archive_version()
         .ok_or_else(|| Error::Invalid("Unsupported archive/ontology version".into()))?;
     require(!state.local_reader.is_empty(), "Missing local attribution")?;
+    crate::isbn_history::validate(state)?;
     for (id, b) in &state.books {
         require(id == &b.id && !b.title.trim().is_empty(), "Invalid book")?;
         require(
@@ -190,7 +191,7 @@ pub fn validate(state: &State) -> Result<()> {
         }
         if let Some(order) = &n.order {
             require(
-                version == ArchiveVersion::Order,
+                version >= ArchiveVersion::Order,
                 "Notebook order requires archive.v4 / ontology 0.4.0",
             )?;
             order

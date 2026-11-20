@@ -17,6 +17,7 @@ import Foundation
                 if CommandLine.arguments.contains("--group-replies") { try await testGroupReplies(); exit(0) }
                 if CommandLine.arguments.contains("--group-membership-review") { try await testGroupMembershipReview(); exit(0) }
                 if CommandLine.arguments.contains("--shared-list-review") { try await testSharedListReview(); exit(0) }
+                if CommandLine.arguments.contains("--isbn-recovery") { try await testISBNRecovery(); exit(0) }
                 if CommandLine.arguments.contains("--sync-destination") { try await testSyncDestination(); exit(0) }
                 if CommandLine.arguments.contains("--reading-pass-navigation") { try await testReadingPassNavigation(); exit(0) }
                 if CommandLine.arguments.contains("--audible-recovery-contract") { try testAudibleRecoveryContract(); exit(0) }
@@ -302,7 +303,85 @@ import Foundation
         try await testPublicGroupPreview()
         try await testSharedListReview()
         try await testSyncDestination()
+        try await testISBNRecovery()
         print("Native desk workflows: duplicate-title identity, failed navigation, explicit sessions, private earlier-character-version drafts, thrown save rejection, unrated Unicode review, list edit/conflict retention, failed social retry with durable draft recovery, reopen and cancellation distinctions passed.")
+    }
+
+    @MainActor static func testISBNRecovery() async throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("booknook-isbn-\(UUID().uuidString)")
+        defer { try? FileManager.default.removeItem(at: root) }
+        let repo = DeskRepository(directory: root)
+        _ = try await repo.open()
+        let fixture = URL(fileURLWithPath: "crates/core/tests/fixtures/isbn-history.json")
+        guard let corpus = try JSONSerialization.jsonObject(with: Data(contentsOf: fixture)) as? [String: Any],
+              let cases = corpus["cases"] as? [[String: Any]],
+              let state = cases.first(where: { $0["id"] as? String == "v5-unresolved" })?["input"] as? [String: Any] else {
+            throw CocoaError(.coderReadCorrupt)
+        }
+        let file = root.appendingPathComponent("fixture.json")
+        try JSONSerialization.data(withJSONObject: ["schema":"booknook.portable-export.v1","state":state,"assets":[:]]).write(to: file)
+        let model = DeskModel(repository: repo)
+        model.accept(try await repo.restore(from: file))
+        let status = try await repo.syncStatus()
+        guard let review = status.isbnReviews?.first, let scope = status.isbnHistoryScopes?.first(where: { $0.id == review.id }),
+              let selected = review.choices.first(where: { $0 == ["222"] }) else { throw CocoaError(.coderReadCorrupt) }
+        precondition(status.conflicts.isEmpty && scope.bookTitle == "Book")
+        precondition(review.choices == [["222"], ["333"]] && review.provisionalValues == ["222"])
+        try await model.perform(ISBNDecision.review(review, selected).command)
+        let afterReview = try await repo.syncStatus()
+        precondition(afterReview.isbnReviews?.isEmpty == true)
+        let reopened = DeskRepository(directory: root)
+        _ = try await reopened.open()
+        let history = try await reopened.isbnHistory(scope)
+        guard let earlier = history.earlierChoices.first(where: { history.nodes[$0]?.values == ["111"] }) else {
+            throw CocoaError(.coderReadCorrupt)
+        }
+        let matching = history.earlierChoices.filter { history.nodes[$0]?.values == ["111"] }
+        precondition(matching == [earlier] && history.nodes[earlier]?.kind == "import")
+        try await model.perform(ISBNDecision.reassert(history, earlier).command)
+        let restored = try await reopened.isbnHistory(scope)
+        precondition(restored.heads.count == 1 && restored.nodes[restored.heads[0]]?.values == ["111"])
+        do {
+            _ = try await model.perform(ISBNDecision.review(review, ["333"]).command)
+            preconditionFailure("A stale ISBN choice replaced a historical reassertion")
+        } catch {
+            let unchanged = try await repo.isbnHistory(scope)
+            precondition(unchanged.heads == restored.heads)
+        }
+        // A pre-history catalog can retain its earlier ISBN solely as a value anchor.
+        guard let legacy = cases.first(where: { $0["id"] as? String == "legacy-untouched" })?["input"] as? [String: Any] else {
+            throw CocoaError(.coderReadCorrupt)
+        }
+        let older = DeskRepository(directory: root.appendingPathComponent("legacy"))
+        _ = try await older.open()
+        try JSONSerialization.data(withJSONObject: ["schema":"booknook.portable-export.v1","state":legacy,"assets":[:]]).write(to: file)
+        let upgraded = DeskModel(repository: older)
+        upgraded.accept(try await older.restore(from: file))
+        try await upgraded.perform(["op":"import_goodreads", "at":20, "csv":"Book Id,Title,Author,ISBN\n42,Book,Author,444\n"])
+        let upgradedHistory = try await older.isbnHistory(scope)
+        guard let anchor = upgradedHistory.earlierChoices.first, upgradedHistory.earlierChoices.count == 1 else {
+            throw CocoaError(.coderReadCorrupt)
+        }
+        precondition(upgradedHistory.nodes[anchor]?.kind == "value_anchor" && upgradedHistory.nodes[anchor]?.values == ["111"])
+        try await upgraded.perform(ISBNDecision.reassert(upgradedHistory, anchor).command)
+        let back = try await older.isbnHistory(scope)
+        precondition(back.activeChoices == [["111"]])
+        let composed = "caf\u{e9}", decomposed = "cafe\u{301}"
+        for value in [composed, decomposed] {
+            try await upgraded.perform(["op":"import_goodreads", "at":21,
+                                        "csv":"Book Id,Title,Author,ISBN\n42,Book,Author,\(value)\n"])
+        }
+        let spellings = try await older.isbnHistory(scope)
+        let matchingSpelling = spellings.earlierChoices.filter {
+            spellings.nodes[$0]?.values.first.map { Data($0.utf8) } == Data(composed.utf8)
+        }
+        guard matchingSpelling.count == 1, let previous = matchingSpelling.first,
+              spellings.nodes[previous]?.kind == "import" else { throw CocoaError(.coderReadCorrupt) }
+        precondition(spellings.activeChoices.first?.first.map { Data($0.utf8) } == Data(decomposed.utf8))
+        try await upgraded.perform(ISBNDecision.reassert(spellings, previous).command)
+        let reasserted = try await older.isbnHistory(scope)
+        precondition(reasserted.activeChoices.first?.first.map { Data($0.utf8) } == Data(composed.utf8))
+        print("Swift Sync Recovery decoded portable alternatives and applied a review and a historical choice across reopen.")
     }
 
     @MainActor static func testSyncDestination() async throws {

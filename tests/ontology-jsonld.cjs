@@ -99,7 +99,7 @@ async function verifyCastaliaManifest() {
 
 async function main() {
   const catalog = bookNookInventory();
-  assert.equal(catalog.current, '0.4.0');
+  assert.equal(catalog.current, '0.5.0');
   const discovery = JSON.parse(offline('discovery.json'));
   const releases = discovery.releases.map(({ version, manifest }) => {
     const pin = JSON.parse(offline(manifest)).castalia;
@@ -151,12 +151,18 @@ async function main() {
   }
 
   const currentUrn = bn + 'release:' + discovery.current;
-  const priorUrn = bn + 'release:0.3.0';
+  const priorUrn = bn + 'release:0.4.0';
   const currentImports = subjects(graphs[discovery.current], owl + 'imports', currentUrn);
   assert.deepEqual(currentImports, [castaliaGraph, priorUrn].sort());
   assert(releases.some(entry => bn + 'release:' + entry.version === priorUrn));
-  for (const type of ['NotebookOrder', 'NotebookAppend', 'NotebookOrderReview']) {
+  for (const type of ['IsbnHistory', 'IsbnObservation', 'IsbnReview', 'IsbnReassertion']) {
     assert(graphs[discovery.current].some(row => row.graph.value === currentUrn && row.subject.value === bn + type &&
+      row.predicate.value === rdfType && row.object.value === owl + 'Class'), type);
+  }
+  assert.deepEqual(subjects(graphs['0.4.0'], owl + 'imports', priorUrn),
+    [castaliaGraph, bn + 'release:0.3.0'].sort());
+  for (const type of ['NotebookOrder', 'NotebookAppend', 'NotebookOrderReview']) {
+    assert(graphs['0.4.0'].some(row => row.graph.value === priorUrn && row.subject.value === bn + type &&
       row.predicate.value === rdfType && row.object.value === owl + 'Class'), type);
   }
 

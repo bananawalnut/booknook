@@ -5,7 +5,7 @@ use std::collections::{BTreeMap, BTreeSet};
 fn id(provider: &str, source: &str) -> String {
     format!("{provider}:{}", digest(source.as_bytes()))
 }
-fn clean_isbn(raw: &str) -> String {
+pub(crate) fn clean_isbn(raw: &str) -> String {
     raw.trim()
         .trim_start_matches('=')
         .trim_matches('"')
@@ -183,6 +183,10 @@ pub fn goodreads_from_connection(
             edited_fields: BTreeSet::new(),
             provenance: vec![evidence],
         };
+        let previous = staged.editions.get(&edition_id).cloned();
+        let previous_unchanged = report.unchanged;
+        let managed_edition = edition_id.clone();
+        let observation = book.provenance[0].clone();
         upsert(
             &mut staged,
             book,
@@ -195,7 +199,16 @@ pub fn goodreads_from_connection(
             },
             &mut report,
         )?;
+        if report.unchanged == previous_unchanged {
+            crate::isbn_history::record_import(
+                &mut staged,
+                &managed_edition,
+                &observation,
+                previous.as_ref(),
+            )?;
+        }
     }
+    crate::isbn_history::validate(&staged)?;
     *state = staged;
     Ok(report)
 }

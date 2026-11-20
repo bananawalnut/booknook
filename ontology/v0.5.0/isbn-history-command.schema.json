@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "additionalProperties": false,
+      "properties": {
+        "edition_id": {
+          "type": "string"
+        },
+        "expected_heads": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "op": {
+          "const": "review_isbn",
+          "type": "string"
+        },
+        "values": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "op",
+        "edition_id",
+        "namespace",
+        "expected_heads",
+        "values"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "edition_id": {
+          "type": "string"
+        },
+        "expected_heads": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "historical_node": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "op": {
+          "const": "reassert_isbn",
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "edition_id",
+        "namespace",
+        "expected_heads",
+        "historical_node"
+      ],
+      "type": "object"
+    }
+  ],
+  "title": "IsbnHistoryCommand",
+  "$id": "urn:booknook:schema:0.5.0:isbn-history-command"
+}

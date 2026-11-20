@@ -32,6 +32,10 @@ public final class BookNookNotebook: Sendable {
     }
     public func snapshotJSON() throws -> String { try native.snapshot() }
     public func orderReviewsJSON() throws -> String { try native.notebookOrderReviews() }
+    public func isbnReviewsJSON() throws -> String { try native.isbnReviews() }
+    public func isbnHistoryJSON(editionID: String, namespace: String) throws -> String {
+        try native.isbnHistory(editionId: editionID, namespace: namespace)
+    }
     public func execute(commandJSON: String) throws -> String { try native.execute(commandJson: commandJSON) }
 }
 

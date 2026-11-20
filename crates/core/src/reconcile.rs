@@ -146,6 +146,7 @@ pub fn reconcile(base: Option<&State>, local: &State, incoming: &State) -> Resul
         ]
     );
     records!(editions, &["id", "book_id"], &["identifiers", "assets"]);
+    crate::isbn_history::merge(local, incoming, &mut state)?;
     records!(passes, &["id", "book_id", "reader", "started_at"], &[]);
     records!(sessions, &["id", "pass_id", "started_at"], &[]);
     records!(entities, &["id", "book_id", "kind"], &[]);
@@ -268,8 +269,20 @@ pub fn reconcile(base: Option<&State>, local: &State, incoming: &State) -> Resul
     crate::validate(&state)?;
     Ok(MergeReport { state, conflicts })
 }
+/// A generic legacy conflict may still be dismissed; it cannot write over a managed ISBN graph.
+pub fn requires_isbn_review(state: &State, conflict: &Conflict) -> bool {
+    conflict.collection == "isbn_history"
+        || (conflict.collection == "editions"
+            && state.isbn_history.contains_key(&conflict.record_id)
+            && (conflict.field.is_empty() || conflict.field == "identifiers"))
+}
 /// Resolution is optimistic: a subsequent edit must be reviewed again, never overwritten.
 pub fn resolve(state: &State, conflict: &Conflict, use_incoming: bool) -> Result<State> {
+    if use_incoming && requires_isbn_review(state, conflict) {
+        return Err(Error::Conflict(
+            "Managed ISBN alternatives must be reviewed through their observed heads".into(),
+        ));
+    }
     let mut json = value(state)?;
     let collection = json
         .get_mut(&conflict.collection)

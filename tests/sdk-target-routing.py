@@ -229,6 +229,7 @@ class RoutingFixture:
                      "FeedSourceSDKTypes.mts","FeedXMLSDKTypes.mts"]:
             self.write("tests/" + name, "synthetic fixture\n")
         self.write("crates/core/tests/fixtures/notebook-order.json", "synthetic fixture\n")
+        self.write("crates/core/tests/fixtures/isbn-history.json", "synthetic fixture\n")
         for name in ["Package.swift","Sources/BookNookServices/BookNookProvider.swift",
                      "Sources/BookNookServices/BookNookNotebook.swift",
                      "Sources/CastaliaNative/CastaliaSession.swift",
@@ -314,6 +315,7 @@ class TargetRoutingTests(unittest.TestCase):
             self.assertTrue((f.target / f"packages/booknook-swift-sdk-{VERSION}.tar.gz").is_file())
             fixtures = f.target / "sdk-package-check/swift/fixtures"
             self.assertTrue((fixtures / "notebook-order.json").is_file())
+            self.assertTrue((fixtures / "isbn-history.json").is_file())
             self.assertFalse(any(c["tool"] == "xcodebuild" for c in f.commands()))
             self.assertFalse((f.root / "target").exists())
 
