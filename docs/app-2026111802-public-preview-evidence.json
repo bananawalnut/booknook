@@ -53,13 +53,18 @@
     "scope": "Release build, archive contents and anonymous download verification."
   },
   "physical_ipad": {
-    "availability_receipt_sha256": "c0f0aa633161a18d7ba7bc2c5ec16d997650825eac552318f6d3f74c1a26256f",
-    "development_signed": true,
-    "installation_attempted": false,
-    "observed_on": "2026-11-19",
-    "scope": "CoreDevice reported the paired iPad tunnel unavailable and development services unavailable. Installation, launch and preservation on this iPad remain pending.",
+    "after_build": "2026111802",
+    "before_build": "2026111801",
+    "byte_identical_store_after_install": true,
+    "desk_and_assets_preserved": true,
+    "ink_hash_before_after_equal": true,
+    "install_receipt_sha256": "71aafe6c571d58131c8020501ac2200e0e0d5d4793778cc66bd073eebea8de20",
+    "normal_launch": true,
+    "orientation_commands": false,
+    "orientation_equal_in_observations": true,
     "signing_receipt_sha256": "e37f5f461c05600877f1b80bb6e01fc17ebd15a105b0916da4c45a5a9a279031",
-    "status": "PENDING_DEVICE_UNAVAILABLE"
+    "social_state_equal_in_observations": true,
+    "updated_in_place": true
   },
   "public_downloads": {
     "anonymous_https": true,
@@ -110,7 +115,7 @@
     "prior_releases_preserved": 44,
     "receipt_sha256": "f27c25d5a06f22ef422905290d37a8b855c7b6a4f4f225fb28ad24812f09f609"
   },
-  "result": "PASS_PUBLIC_ARCHIVES_AND_SIMULATOR_PHYSICAL_INSTALL_PENDING",
+  "result": "PASS_PUBLIC_ARCHIVES_AND_BOUNDED_NATIVE_WORKFLOWS",
   "schema": "booknook.local-native-preview-evidence.v1",
   "scope": "Build 1802 includes the catalog reimport correction. Source-ISBN deletion across replicas, minimum OS execution, physical Pencil, keyboard, IME and accessibility input, live Kindle, Audible and Castalia accounts, and remote social and device exchange remain separate acceptance checks.",
   "simulator": {

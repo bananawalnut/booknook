@@ -2,6 +2,25 @@
 
 Initial registration was independently read back on **2026-11-13** against Book Nook source `abd2cb1928518be66eda247bea473c98413bb1a2`; the November 14 continuation below records later source and qualification checkpoints. DevGraph is the work tracker; this document is a navigation snapshot, not a replacement tracker or acceptance result.
 
+## Current tracking checkpoint — 2026-11-20
+
+Eight description-only updates were signed through the configured native integration and read back from DevGraph. Each prior description remains verbatim as history. Titles, priorities and lifecycle are unchanged. The existing Project and backlog are reused.
+
+| Record | Verified version |
+|---|---:|
+| Project/booknook | 47 |
+| Issue/booknook-hands-on-workflows | 15 |
+| Issue/booknook-ci-evidence | 20 |
+| Issue/booknook-current-packages | 17 |
+| Issue/booknook-sdk-publication | 7 |
+| Issue/booknook-ontology-publication | 5 |
+| Issue/booknook-negentropy-security | 10 |
+| Issue/booknook-local-install-renewal | 5 |
+
+The checkpoint records [qualified ISBN-history source and public ontology 0.5.0](isbn-history-hosted-evidence.json), public SDK 0.3.6, and the [successful normal iPad update to build 1802](app-2026111802-public-preview-evidence.json). SDK 0.4.0 and app 1901 public archives remain separate release work. Live accounts, Book Nook's own operational Castalia consent, physical Pencil and keyboard/IME, accessibility/endurance, remote exchange and minimum-OS runtime acceptance remain open in the existing backlog.
+
+All eight unsigned EventReceipts report `pending`: the local mutations committed, while external delivery is not claimed. Operational configuration, authorization details, exact requests and idempotency files remain private. This tracking update does not qualify Book Nook's separate Castalia integration or close the production MVP.
+
 ## Release qualification coverage — 2026-11-18
 
 A DevGraph read confirmed Project/booknook v46 under Arena/castalia v10 with 24 child issues. The existing issues cover the remaining packaged Mac walkthrough, physical input and endurance, live Kindle and Audible access, operational Castalia consent, remote Nostr exchange, two-device encrypted sync, and the macOS 14 and iPadOS 17 runtime checks. See the original backlog table for their IDs. The latest separate checks cover [preview 1721](app-2026111721-public-preview-evidence.json) and [the iPadOS Simulator PDF reader](kindle-pdf-ipados-reader-pane-evidence.json).
