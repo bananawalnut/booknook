@@ -13,7 +13,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = [
-    "cargo_paths.py", "package-rust.sh", "package-typescript.sh",
+    "cargo_paths.py", "package-rust.sh", "bundle-rust-sdk-patch.py", "package-typescript.sh",
     "package-swift.sh", "stage-sdk-deliverables.py", "build-apple.sh", "build-wasm.sh", "test-sdk.sh",
 ]
 VERSION = "1.2.3"
@@ -46,6 +46,19 @@ def executable(path, contents):
     path.chmod(0o755)
 if name == "cargo":
     if args[0] == "metadata":
+        if "--manifest-path" in args:
+            workspace = target / "sdk-package-check/rust"
+            assert args == ["metadata", "--locked", "--offline", "--format-version", "1",
+                            "--manifest-path", str(workspace / "Cargo.toml")]
+            manifest = tomllib.loads((workspace / "Cargo.toml").read_text())
+            patch = workspace / manifest["patch"]["crates-io"]["faster-hex"]["path"] / "Cargo.toml"
+            assert patch.is_file()
+            print(json.dumps({"packages": [
+                {"name": "booknook-core", "version": "1.2.3"},
+                {"name": "faster-hex", "source": None, "manifest_path": str(patch)},
+                {"name": "heapless", "version": "0.9.4"},
+            ]}))
+            sys.exit(0)
         assert args == ["metadata", "--locked", "--offline", "--no-deps", "--format-version", "1"]
         assert Path.cwd() == root, "Metadata must use the source workspace, not caller cwd"
         if "FIXTURE_METADATA_EXIT" in os.environ:
@@ -281,10 +294,13 @@ class TargetRoutingTests(unittest.TestCase):
         for mode in ["default", "relative", "absolute", "config"]:
             with self.subTest(mode=mode), tempfile.TemporaryDirectory(prefix="booknook-routing-") as directory:
                 f = RoutingFixture(directory, mode)
+                f.write("vendor/faster-hex/Cargo.toml", '[package]\nname = "faster-hex"\nversion = "0.10.1"\n')
+                for name in ["LICENSE", "src/lib.rs", "BOOKNOOK-PATCH.md"]:
+                    f.write("vendor/faster-hex/" + name, "synthetic routing fixture\n")
                 r = f.run("package-rust.sh")
                 self.assertEqual(r.returncode, 0, r.stderr)
                 self.assertTrue((f.target / "sdk-package-check/rust/Cargo.lock").is_file())
-                self.assertEqual([c["args"][0] for c in f.commands()], ["metadata","package","test"])
+                self.assertEqual([c["args"][0] for c in f.commands()], ["metadata","package","metadata","test"])
                 if mode != "default":
                     self.assertFalse((f.root / "target").exists())
 
