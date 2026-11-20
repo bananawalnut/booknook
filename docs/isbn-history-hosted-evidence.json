@@ -1,0 +1,520 @@
+{
+  "schema": "booknook.hosted-source-validation.v1",
+  "result": "PASS_HOSTED_SOURCE_AND_PUBLIC_ONTOLOGY",
+  "observed_utc": "2026-11-20T17:21:24.362035+00:00",
+  "source_commit": "258b3e26590bc2a069755c9710eba9dbd2bed898",
+  "source_tree": "8047ea8318f80115f3e74c7e24bdfcd473d3aa60",
+  "sdk_source_version": "0.4.0",
+  "app_build_candidate": "2026111901",
+  "contracts": {
+    "run_id": 44778322676,
+    "url": "https://github.com/bananawalnut/booknook/actions/runs/44778322676",
+    "workflow_id": 387291585,
+    "workflow_path": ".github/workflows/check.yml",
+    "attempt": 1,
+    "apple_runner": "macos-15",
+    "apple_xcode": "26.3",
+    "jobs": [
+      {
+        "id": 136433996920,
+        "name": "apple",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-11-20T16:56:18Z",
+            "completed_at": "2026-11-20T16:56:20Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-11-20T16:56:20Z",
+            "completed_at": "2026-11-20T16:56:23Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@stable",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-11-20T16:56:23Z",
+            "completed_at": "2026-11-20T16:56:30Z"
+          },
+          {
+            "name": "Select Xcode 26.3 on macOS 15",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-11-20T16:56:30Z",
+            "completed_at": "2026-11-20T16:56:30Z"
+          },
+          {
+            "name": "Run brew install xcodegen",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-11-20T16:56:30Z",
+            "completed_at": "2026-11-20T16:56:36Z"
+          },
+          {
+            "name": "Run bash scripts/build-apple.sh mac",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-11-20T16:56:36Z",
+            "completed_at": "2026-11-20T17:04:05Z"
+          },
+          {
+            "name": "Run bash scripts/build-apple.sh ipad-sim",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-11-20T17:04:05Z",
+            "completed_at": "2026-11-20T17:08:41Z"
+          },
+          {
+            "name": "Run bash scripts/build-apple.sh ipad-device",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-11-20T17:08:41Z",
+            "completed_at": "2026-11-20T17:13:28Z"
+          },
+          {
+            "name": "Run bash scripts/test-reading.sh",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-11-20T17:13:28Z",
+            "completed_at": "2026-11-20T17:14:24Z"
+          },
+          {
+            "name": "Run bash scripts/test-recovery.sh",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-11-20T17:14:24Z",
+            "completed_at": "2026-11-20T17:14:37Z"
+          },
+          {
+            "name": "Run bash scripts/test-ui-workflows.sh",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-11-20T17:14:37Z",
+            "completed_at": "2026-11-20T17:17:52Z"
+          },
+          {
+            "name": "Run bash scripts/test-feed-source-swift.sh",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-11-20T17:17:52Z",
+            "completed_at": "2026-11-20T17:18:38Z"
+          },
+          {
+            "name": "Run bash scripts/test-feed-xml-swift.sh",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-11-20T17:18:38Z",
+            "completed_at": "2026-11-20T17:18:45Z"
+          },
+          {
+            "name": "Run bash scripts/test-feed-public-https-swift.sh",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14,
+            "started_at": "2026-11-20T17:18:45Z",
+            "completed_at": "2026-11-20T17:18:49Z"
+          },
+          {
+            "name": "Run bash scripts/test-feed-cache-swift.sh",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15,
+            "started_at": "2026-11-20T17:18:49Z",
+            "completed_at": "2026-11-20T17:18:56Z"
+          },
+          {
+            "name": "Run bash scripts/package-swift.sh --use-built",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16,
+            "started_at": "2026-11-20T17:18:56Z",
+            "completed_at": "2026-11-20T17:19:48Z"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 32,
+            "started_at": "2026-11-20T17:19:48Z",
+            "completed_at": "2026-11-20T17:19:49Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 33,
+            "started_at": "2026-11-20T17:19:49Z",
+            "completed_at": "2026-11-20T17:19:53Z"
+          }
+        ]
+      },
+      {
+        "id": 136433997471,
+        "name": "portable",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-11-20T16:56:18Z",
+            "completed_at": "2026-11-20T16:56:19Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-11-20T16:56:19Z",
+            "completed_at": "2026-11-20T16:56:21Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@stable",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-11-20T16:56:21Z",
+            "completed_at": "2026-11-20T16:56:23Z"
+          },
+          {
+            "name": "Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-11-20T16:56:23Z",
+            "completed_at": "2026-11-20T16:56:23Z"
+          },
+          {
+            "name": "Install the WebAssembly C toolchain",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-11-20T16:56:23Z",
+            "completed_at": "2026-11-20T16:56:31Z"
+          },
+          {
+            "name": "Run bash scripts/check.sh",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-11-20T16:56:31Z",
+            "completed_at": "2026-11-20T16:58:35Z"
+          },
+          {
+            "name": "Verify the complete dependency-license inventory",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-11-20T16:58:35Z",
+            "completed_at": "2026-11-20T16:58:35Z"
+          },
+          {
+            "name": "Verify the dependency advisory gate policy",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-11-20T16:58:35Z",
+            "completed_at": "2026-11-20T16:58:36Z"
+          },
+          {
+            "name": "Install the pinned dependency auditor",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-11-20T16:58:36Z",
+            "completed_at": "2026-11-20T17:00:18Z"
+          },
+          {
+            "name": "Audit both lockfiles against fresh official RustSec advisories",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-11-20T17:00:18Z",
+            "completed_at": "2026-11-20T17:00:18Z"
+          },
+          {
+            "name": "Reject oversized negentropy ID lists before allocation",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-11-20T17:00:18Z",
+            "completed_at": "2026-11-20T17:00:19Z"
+          },
+          {
+            "name": "Run bash scripts/test-issuer.sh",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-11-20T17:00:19Z",
+            "completed_at": "2026-11-20T17:00:21Z"
+          },
+          {
+            "name": "Run cargo install wasm-bindgen-cli --version 0.2.127 --locked",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-11-20T17:00:21Z",
+            "completed_at": "2026-11-20T17:01:14Z"
+          },
+          {
+            "name": "Run bash scripts/test-sdk.sh",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14,
+            "started_at": "2026-11-20T17:01:14Z",
+            "completed_at": "2026-11-20T17:01:59Z"
+          },
+          {
+            "name": "Run bash scripts/package-rust.sh",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15,
+            "started_at": "2026-11-20T17:01:59Z",
+            "completed_at": "2026-11-20T17:02:40Z"
+          },
+          {
+            "name": "Run bash scripts/package-typescript.sh",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16,
+            "started_at": "2026-11-20T17:02:40Z",
+            "completed_at": "2026-11-20T17:02:45Z"
+          },
+          {
+            "name": "Run python3 -m unittest discover -s tests/companion -v",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17,
+            "started_at": "2026-11-20T17:02:45Z",
+            "completed_at": "2026-11-20T17:02:57Z"
+          },
+          {
+            "name": "Verify Apple bundle deployment metadata checks",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18,
+            "started_at": "2026-11-20T17:02:57Z",
+            "completed_at": "2026-11-20T17:02:57Z"
+          },
+          {
+            "name": "Post Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 35,
+            "started_at": "2026-11-20T17:02:57Z",
+            "completed_at": "2026-11-20T17:02:57Z"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 36,
+            "started_at": "2026-11-20T17:02:57Z",
+            "completed_at": "2026-11-20T17:02:57Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 37,
+            "started_at": "2026-11-20T17:02:57Z",
+            "completed_at": "2026-11-20T17:02:57Z"
+          }
+        ]
+      }
+    ]
+  },
+  "dependency_repair": {
+    "faster_hex": "0.10.1 with the documented local dependency backport",
+    "heapless": "0.9.4",
+    "rustsec_local_database": "f291af9b1cc0d21dfcea1709d6b037963cef262b",
+    "local_two_lock_audit": {
+      "schema": "booknook.dependency-advisory-gate.v1",
+      "database_commit": "f291af9b1cc0d21dfcea1709d6b037963cef262b",
+      "locks": {
+        "root": {
+          "sha256": "35ad035b5e22506285295008a401875c7a0519d37422e3236b12b46e819ab9e8",
+          "exit_code": 0,
+          "warning_counts": {
+            "unmaintained": 3
+          }
+        },
+        "relay-read-probe": {
+          "sha256": "7a4f550d620ee1951ff1dcd5d886d607f443bdd8a4e6709fd41b2d82aafc1ff1",
+          "exit_code": 0,
+          "warning_counts": {
+            "unmaintained": 2
+          }
+        }
+      },
+      "errors": []
+    },
+    "consumer_scope": "The hosted Rust package step tests all four extracted archives with a bundled dependency patch and canonical consumer lock. Independent public release archives remain separately qualified."
+  },
+  "ontology": {
+    "source_commit": "56ef7a9ef29e91698635ed66a835ef40279c62f5",
+    "run_id": 44772871337,
+    "url": "https://github.com/bananawalnut/booknook/actions/runs/44772871337",
+    "attempt": 1,
+    "current": "0.5.0",
+    "exact_files": 100,
+    "bytes": 1786662,
+    "prior_immutable_files_preserved": 90,
+    "public_readback_sha256": "df432649f5d52687d632b68ebf5d4dbce82da7f8c1a60f0ca82d08c1dcd7ac02",
+    "processor": {
+      "package": "jsonld",
+      "version": "9.0.0",
+      "node": "26.8.2",
+      "rdf_canonicalization": "RDFC-1.0"
+    },
+    "booknook": {
+      "discovery": "https://bananawalnut.github.io/booknook/ontology/discovery.json",
+      "current": "0.5.0",
+      "exact_files": 100,
+      "jsonld_documents_loaded": 8,
+      "graph_nquads_sha256": {
+        "0.1.0": "d5db022e47b081431c956f42abb2fe77650531d5756b578aab7b952780121cde",
+        "0.2.0": "d1d1ead67d06f51be57977d2124212b4ec2653ecc5350de694ab0547323043ba",
+        "0.3.0": "452a9f0db2e12dc9dbc1ae4cd00fc4b08e991e65c2a104000be73aa39c30a891",
+        "0.4.0": "96f1b7d6ced13fb516846d0176f6ae5714c32a57198cce61d7e3ab7ddc74f4d5",
+        "0.5.0": "2ec8d1199530517c7ee67607fce8a47f6737b4af91d82721605326a73893bb4f"
+      },
+      "current_imports": [
+        "https://zenith-research.ca/ontology/v0.6.0/ontology.jsonld",
+        "urn:booknook:ontology:release:0.4.0"
+      ],
+      "contexts": {
+        "v0.1.0/context.jsonld": {
+          "checked_iri_relationships": 4,
+          "statements": 11
+        },
+        "v0.2.0/context.jsonld": {
+          "checked_iri_relationships": 4,
+          "statements": 11
+        },
+        "v0.3.0/context.jsonld": {
+          "checked_iri_relationships": 4,
+          "statements": 11
+        }
+      }
+    },
+    "castalia": {
+      "ontology": "https://zenith-research.ca/ontology/v0.6.0/ontology.jsonld",
+      "manifest_sha256": "24c7f491bd009036032255436fa6cc5a2b9fd36e4d041ba55b58feaa5e8e2b4b",
+      "advertised_bundle_digest": "11d670a57b2052b4de00509559d081b524bf953c6da2544a25f33976857f8f4f",
+      "aggregate_recomputed": false,
+      "files": {
+        "README.md": {
+          "sha256": "e6aa80cfcf3e76035e89a527e8dc0075d03c5395a2ee2ba1b193c4b09f8b670d",
+          "bytes": 647
+        },
+        "arena-contract.json": {
+          "sha256": "2d225d78ffdb11859961a5c9f136d75df3f4711b00779b7043d988956b9939d8",
+          "bytes": 4380
+        },
+        "arena-runtime.md": {
+          "sha256": "6216a9b0392d3f0c12031dfe5cf4cacc86679d48c0bf3c48c355bef27770dbd8",
+          "bytes": 5885
+        },
+        "arenas.md": {
+          "sha256": "c34d825225afc3520f5b53b0d30a2acfbe2f51c01a070626d059ecfbf84043d9",
+          "bytes": 4629
+        },
+        "classes.md": {
+          "sha256": "57a79df367f531b93faa6d0923ecf57f1830a23c1afdcda9fee52a6917c3e980",
+          "bytes": 10334
+        },
+        "compatibility.md": {
+          "sha256": "7e98ab6801e090d5ad5d4b24a6fc91e37496593227f8cf439d4c016fd6b72b68",
+          "bytes": 885
+        },
+        "constraints.cypher": {
+          "sha256": "5e04fefc3528379fe77048070a4e459abf438e664f8e45deab3c90425f03ad27",
+          "bytes": 2347
+        },
+        "context.jsonld": {
+          "sha256": "bcb4c213b415cc4058361d7c6dbf28b90cb40a39d53ebefe506990c8dca91d6c",
+          "bytes": 1045
+        },
+        "invariants.md": {
+          "sha256": "22c5aadcab5902295d9ce5580148e497e1032b1ec3998029bee5c409d777a82e",
+          "bytes": 4904
+        },
+        "ontology.jsonld": {
+          "sha256": "3dd65ac8bc0fc9304b10bfd7e630e5a04dd1ba7d3b23c657beda20c6757a512c",
+          "bytes": 11008
+        },
+        "operations.json": {
+          "sha256": "98043897e5131dd2f1c2bdb85c883cbd3e1098d010dc60c21fd082f18c4d2808",
+          "bytes": 7724
+        },
+        "predicates.md": {
+          "sha256": "79b9a73496ab353fde833c458d1608cc846b013794e9468236521c5076b03568",
+          "bytes": 4796
+        },
+        "readiness.md": {
+          "sha256": "922235c94f09e2b5c13576678feaa808451043b55589e364e8c45b70a3bc6198",
+          "bytes": 2902
+        },
+        "repository-contract.json": {
+          "sha256": "be546b86a92ebb045252dce4c65cd02ead0ca2dd5fe7d371def9f752ca3c468d",
+          "bytes": 1359
+        },
+        "rolodex.md": {
+          "sha256": "996e8d30c4b96e11f3cc3f74079f32f84b6ff1a121cd363e550b424264ea4eb3",
+          "bytes": 4105
+        },
+        "taxonomy.md": {
+          "sha256": "b9125bac71a748d6a1ab39f426f34506cb655304856427aa6772a50adce523f1",
+          "bytes": 2163
+        }
+      },
+      "file_count": 16
+    },
+    "receipt_sha256": "75f00f4706557cfab67283cc46b93cd74eda2980ca8b82bc31da657cc2800d7c"
+  },
+  "retained_nonpasses": [
+    {
+      "source": "56ef7a9ef29e91698635ed66a835ef40279c62f5",
+      "run_id": 44772871456,
+      "scope": "Portable strict audit rejected heapless 0.8.0 unsound advisories RUSTSEC-2026-0574 through RUSTSEC-2026-0582. The independent Apple job passed."
+    },
+    {
+      "source": "2f686779c33670b4d2ba86ac20eca9d080454b41",
+      "run_id": 44776087975,
+      "scope": "Target-routing fixture omitted the new package helper. After the portable failure the queued Apple job was cancelled as superseded. The corrected fixture passed all 12 local routing tests."
+    },
+    {
+      "source": "258b3e26590bc2a069755c9710eba9dbd2bed898",
+      "run_id": 44776740261,
+      "scope": "The portable job passed completely. Apple was waiting on macos-latest when the fallback was selected and briefly began checkout before cancellation. It was superseded only after the exact-source macos-15 fallback Apple job started; no completed Apple qualification follows from that cancelled job."
+    }
+  ],
+  "scope": [
+    "Hosted source, generated package consumers, and the actual public ontology are qualified at the stated commits.",
+    "SDK 0.4.0 and app 1901 public archive publication remain separate. Existing public previews remain SDK 0.3.6 and app 1802.",
+    "The iPad 1802 installation, live accounts and Castalia authority, Pencil and broader physical input/accessibility, remote exchange and minimum OS checks remain open.",
+    "Maintenance follow-ups for basic-toml, chrono and smallstr remain recorded. No advisory-ignore policy was added."
+  ]
+}
