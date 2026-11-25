@@ -56,13 +56,65 @@ private struct Acceptance {
         }
     }
 
+    static func checkPresentation(available: CGSize) async throws {
+        let session = GoodreadsBrowserSession(dataStore: .nonPersistent())
+        let browser = GoodreadsBrowser(session: session, startAtHome: false, availableSpace: available)
+        let hosted = NSHostingView(rootView: browser.environment(\.accessibilityEnabled, true))
+        let fit = hosted.fittingSize
+        guard fit.width <= available.width, fit.height <= available.height, fit.width > 0, fit.height > 0 else {
+            throw Failure.check("sheet cannot fit available space: \(fit) in \(available)")
+        }
+        let window = NSWindow(contentRect: CGRect(origin: .zero, size: fit), styleMask: [.borderless],
+                              backing: .buffered, defer: false)
+        window.contentView = hosted
+        defer { window.contentView = nil; session.close() }
+        hosted.layoutSubtreeIfNeeded()
+        let fixture = "<style>*{margin:0}article{width:900px}</style><title>Shelf layout</title><article>Fixture shelf</article>"
+        session.webView.loadSimulatedRequest(URLRequest(url: URL(string: "https://fixture.invalid/layout")!), responseHTML: fixture)
+        try await wait("sheet content laid out") { session.webView.title == "Shelf layout" && session.webView.bounds.width > 0 }
+        let metrics = try await session.webView.evaluateJavaScript("[innerWidth, document.documentElement.scrollWidth]")
+        guard let values = metrics as? [NSNumber], values.count == 2 else { throw Failure.check("missing webpage geometry") }
+        let viewport = values[0].doubleValue, document = values[1].doubleValue
+        guard abs(viewport - session.webView.bounds.width) <= 2,
+              available.width >= 900 ? viewport >= 900 && document <= viewport : viewport > 0 && viewport < 900 && document >= 900 else {
+            throw Failure.check("web viewport \(viewport), document \(document), view \(session.webView.bounds), available \(available)")
+        }
+
+        var seen = Set<ObjectIdentifier>()
+        func doneFrame(_ node: NSObject) -> CGRect? {
+            guard seen.insert(ObjectIdentifier(node)).inserted else { return nil }
+            func attribute(_ key: String) -> Any? {
+                node.responds(to: NSSelectorFromString(key)) ? node.value(forKey: key) : nil
+            }
+            if attribute("accessibilityIdentifier") as? String == "goodreads-done" {
+                return (attribute("accessibilityFrame") as? NSValue)?.rectValue
+            }
+            for child in attribute("accessibilityChildren") as? [NSObject] ?? [] {
+                if let found = doneFrame(child) { return found }
+            }
+            if let view = node as? NSView {
+                for child in view.subviews { if let found = doneFrame(child) { return found } }
+            }
+            return nil
+        }
+        let bounds = window.convertToScreen(hosted.convert(hosted.bounds, to: nil))
+        let done = doneFrame(window) ?? doneFrame(hosted)
+        guard let done, !done.isEmpty, bounds.insetBy(dx: -1, dy: -1).contains(done) else {
+            throw Failure.check("Done frame \(String(describing: done)), sheet \(bounds)")
+        }
+        print("Goodreads sheet \(Int(fit.width))×\(Int(fit.height)): web viewport \(Int(viewport)), document \(Int(document)), Done visible")
+    }
+
     static func main() async {
         _ = NSApplication.shared.setActivationPolicy(.prohibited)
         let args = CommandLine.arguments
         guard args.count == 3, let id = UUID(uuidString: args[2]), id != GoodreadsBrowserSession.storeID else { exit(2) }
         do {
             switch args[1] {
-            case "exercise": try await exercise(id)
+            case "exercise":
+                try await checkPresentation(available: CGSize(width: 1440, height: 900))
+                try await checkPresentation(available: CGSize(width: 620, height: 420))
+                try await exercise(id)
             case "reopen": try await checkReopened(id)
             case "cleanup":
                 // Initialize WebKit's process pool before its class-level deletion API.

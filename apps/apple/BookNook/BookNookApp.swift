@@ -150,24 +150,25 @@ struct RootView: View {
     }
 
     private var sidebar: some View {
-        VStack(alignment: .leading, spacing: 22) {
-            sidebarHeader
-            if dynamicTypeSize.isAccessibilitySize {
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 22) {
-                        sidebarSections
-                        sidebarBooks
-                        if !model.saving { sidebarPrivacy }
-                    }
-                }.accessibilityIdentifier("sidebar-navigation-scroll")
-                sidebarActions
-                if model.saving { sidebarPrivacy }
-            } else {
-                sidebarSections
-                ScrollView { sidebarBooks }
-                sidebarActions
-                sidebarPrivacy
+        ViewThatFits(in: .vertical) {
+            // Keep the familiar pinned controls when there is enough room.
+            VStack(alignment: .leading, spacing: 22) {
+                sidebarHeader.fixedSize(horizontal: false, vertical: true)
+                sidebarSections.fixedSize(horizontal: false, vertical: true)
+                ScrollView { sidebarBooks }.frame(minHeight: 80)
+                sidebarActions.fixedSize(horizontal: false, vertical: true)
+                sidebarPrivacy.fixedSize(horizontal: false, vertical: true)
             }
+            // Short windows and large text need one scrollable route to every action.
+            ScrollView {
+                VStack(alignment: .leading, spacing: 22) {
+                    sidebarHeader
+                    sidebarSections
+                    sidebarActions
+                    sidebarBooks
+                    sidebarPrivacy
+                }.frame(maxWidth: .infinity, alignment: .leading)
+            }.accessibilityIdentifier("sidebar-navigation-scroll")
         }.padding(20)
     }
 

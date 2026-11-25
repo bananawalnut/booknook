@@ -23,6 +23,9 @@ import Combine
         let configuration = WKWebViewConfiguration()
         configuration.websiteDataStore = dataStore ?? .init(forIdentifier: Self.storeID)
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = false
+        #if os(iOS)
+        configuration.defaultWebpagePreferences.preferredContentMode = .mobile
+        #endif
         webView = WKWebView(frame: .zero, configuration: configuration)
         super.init()
         webView.navigationDelegate = self
@@ -129,15 +132,38 @@ import Combine
     }
 }
 
+/// Fit the native sheet to the available display; never zoom or rewrite website text.
+struct GoodreadsBrowserPresentation {
+    static func fitted(to available: CGSize) -> CGSize {
+        let width = available.width.isFinite && available.width > 0 ? available.width : 1104
+        let height = available.height.isFinite && available.height > 0 ? available.height : 744
+        return CGSize(width: min(1040, max(1, width - 64)),
+                      height: min(680, max(1, height - 64)))
+    }
+}
+
 struct GoodreadsBrowser: View {
     @Environment(\.dismiss) private var dismiss
-    @StateObject private var session = GoodreadsBrowserSession()
+    @StateObject private var session: GoodreadsBrowserSession
+    private let startAtHome: Bool
+    #if os(macOS)
+    private let presentationSize: CGSize
+    #endif
+
+    init(session: GoodreadsBrowserSession? = nil, startAtHome: Bool = true, availableSpace: CGSize? = nil) {
+        _session = StateObject(wrappedValue: session ?? GoodreadsBrowserSession())
+        self.startAtHome = startAtHome
+        #if os(macOS)
+        let screen = NSApp.keyWindow?.screen ?? NSScreen.main
+        presentationSize = GoodreadsBrowserPresentation.fitted(to: availableSpace ?? screen?.visibleFrame.size ?? CGSize(width: 1104, height: 744))
+        #endif
+    }
     var body: some View {
         VStack(spacing: 0) {
             HStack {
                 Text("Goodreads").font(.system(.title3, design: .serif)).bold()
                 Spacer()
-                Button("Done") { dismiss() }.keyboardShortcut(.cancelAction)
+                Button("Done") { dismiss() }.keyboardShortcut(.cancelAction).fixedSize()
                     .accessibilityIdentifier("goodreads-done")
             }.padding(.horizontal, 18).padding(.top, 12)
             HStack(spacing: 4) {
@@ -164,12 +190,12 @@ struct GoodreadsBrowser: View {
                 .accessibilityIdentifier("goodreads-web-content")
         }.foregroundStyle(nookInk).background(nookPaper).tint(nookAccent)
         #if os(macOS)
-        .frame(minWidth: 520, idealWidth: 780, minHeight: 420, idealHeight: 620)
+        .frame(width: presentationSize.width, height: presentationSize.height)
         #else
         .frame(minWidth: 280, minHeight: 380)
         .presentationDetents([.large])
         #endif
-        .task { session.start() }
+        .task { if startAtHome { session.start() } }
         .onDisappear { session.close() }
     }
     private func browserButton(_ title: String, icon: String, action: @escaping () -> Void) -> some View {

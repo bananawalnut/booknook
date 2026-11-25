@@ -1,0 +1,81 @@
+{
+  "schema": "booknook.mac-layout-source-evidence.v1",
+  "date": "2026-11-25",
+  "candidate_app_build": "2026112501",
+  "sdk_source_unchanged_from": "d86217bb8c9e01160613f5a067e33a31955d010f",
+  "result": "PASS_BOUNDED_LOCAL_NATIVE_UI_REGRESSIONS",
+  "changes": [
+    "Use a single scrollable sidebar when pinned navigation cannot fit; retain the existing roomy-window layout.",
+    "Fit the Goodreads sheet to the available Mac display, with an explicitly sized WebKit viewport and a fully visible Done button.",
+    "Prefer mobile website presentation on iPad."
+  ],
+  "sidebar": {
+    "production_baseline": "02e33a26057cf6f7dba59fbe222275ba8051b599",
+    "original_exit": 1,
+    "repaired_exit": 0,
+    "window_points": [
+      820,
+      400
+    ],
+    "text_sizes": [
+      "large",
+      "accessibility5"
+    ],
+    "assertions": [
+      "Actual Goodreads, Add a book and selected-book accessibility controls are each fully contained in the sidebar viewport at a reachable scroll offset.",
+      "Selected book, notebook, original note block and reading section remain unchanged.",
+      "Existing width bounds, narrow-window fit and hide/reopen detail identity pass."
+    ],
+    "test_sha256": "6afe378a2f7b98ccde53700b7725154babe8172e74d327dbe1aa19516d80e54f",
+    "comparison_receipt_sha256": "814c2d70c65d153037f1ee949520416a8370f574e914f218d0f812a496efdb49",
+    "test_method": "Never-shown native NSWindow, actual RootView, synthetic local library, accessibility frames and native scrolling; query each nested sidebar hosting ancestor.",
+    "invalidated_attempts": "Earlier root-only accessibility enumeration could not see virtualized sidebar controls and remains inconclusive.",
+    "fixture_library_scope": "Previously built ABI-identical native bridge used only for UI fixture execution; this is not release or dependency remediation qualification."
+  },
+  "goodreads": {
+    "test": "tests/GoodreadsBrowserAcceptance.swift",
+    "test_sha256": "b579a02bebff9ba33f6b9b8084ba6cf9afdaa75fd6d7accac21fcbf13fb9df1d",
+    "result": "PASS_OFFLINE_NATIVE_WEBKIT",
+    "available_display_points": [
+      [
+        1440,
+        900
+      ],
+      [
+        620,
+        420
+      ]
+    ],
+    "measured_sheet_points": [
+      [
+        1040,
+        680
+      ],
+      [
+        556,
+        356
+      ]
+    ],
+    "web_viewport_and_document_points": [
+      [
+        1040,
+        1040
+      ],
+      [
+        556,
+        900
+      ]
+    ],
+    "assertions": [
+      "A 900-point fixture fits without horizontal clipping on a normal display.",
+      "A constrained display keeps Done reachable and permits legitimate website horizontal scrolling.",
+      "Website navigation, unsafe URL rejection, generic errors and persistent-cookie isolation remain verified."
+    ],
+    "live_account_sign_in_qualified": false
+  },
+  "scope_limits": [
+    "Exact-source hosted builds and received release archives are required separately.",
+    "Actual Mac walkthrough is pending the new packaged app.",
+    "Physical iPad and Pencil, hardware keyboard/IME, VoiceOver and endurance are not established by these bounded fixtures."
+  ]
+}
