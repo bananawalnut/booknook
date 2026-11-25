@@ -1,0 +1,34 @@
+{
+  "schema": "booknook.dependency-remediation-evidence.v1",
+  "observed_on": "2026-11-25",
+  "result": "PASS_LOCAL_LOCKS_LICENSES_AND_BENIGN_CONSUMERS",
+  "advisory": "RUSTSEC-2026-0592",
+  "official_advisory": "https://rustsec.org/advisories/RUSTSEC-2026-0592.html",
+  "rejected_source": "02e33a26057cf6f7dba59fbe222275ba8051b599",
+  "versions": {
+    "url": "2.5.9",
+    "form_urlencoded": "1.2.3"
+  },
+  "locks": {
+    "root_sha256": "db440c55cdea1547f4da126c7dab57e2c00ad97170e3ae3617da17f979d1bba9",
+    "relay_probe_sha256": "7a0645c69ef07390169f92e2f5f4d393f87df6725925c7acd46d3bbc0fb6a80d"
+  },
+  "licenses": {
+    "packages": 375,
+    "inventory_sha256": "04ca9121647ca51a805b5a295b8468c1d714a6c80f01f003b46904281aa1e577",
+    "matching_package_mirrors": 6,
+    "missing_licenses": 0
+  },
+  "official_rustsec_database": "b9b8a3c2cb1f2a3c76ab17a551193568c9f8b7a4",
+  "strict_audit_receipt_sha256": "046ae216a7b3cda446ae02387dbd4ec85c38458b27b8e60c3f31938fb482a47e",
+  "original_failure_receipt_sha256": "3d17d1cc2163b546b0c815eef9a7cd167626248858eb3cef195171404bb284aa",
+  "benign_consumer_assertions": 5,
+  "benign_consumer_receipt_sha256": "7416379c2166961eca7396029b47cfc59626c836519e15ac594a443b9d2f69b6",
+  "extracted_rust_bootstrap_receipt_sha256": "592215d5d37b7636aa972be1ed79e6f284729cd9923f0d12009f4a9733b676b0",
+  "scope": [
+    "Both lockfiles and all packaged license mirrors are corrected; advisory suppressions are unchanged.",
+    "This is dependency matching and synthetic consumer evidence, not a claim of exploit reachability.",
+    "Hosted source qualification, rebuilt public archives and receiving-consumer qualification are separate release gates.",
+    "Earlier public previews retain their original dated evidence and predate this remediation."
+  ]
+}
