@@ -35,6 +35,33 @@ struct SocialSnapshot: Decodable {
     let bindings: [SocialBinding]
     let pending: Int
 
+    /// Match the scorer's latest rating per friend and book. Only contributing
+    /// ratings can supply the title and author shown beside a recommendation.
+    var recommendedBookReferences: [String: SocialBook] {
+        let blocked = Set(state.blocked)
+        guard !actor.isEmpty, !blocked.contains(actor) else { return [:] }
+        let retracted = Set(state.retracted)
+        let newestFirst = state.publications.values.map(\.event).sorted { ($0.at, $0.id) > ($1.at, $1.id) }
+        var seenByFriend: [String: Set<String>] = [:]
+        var books: [String: SocialBook] = [:]
+        for event in newestFirst {
+            guard !blocked.contains(event.actor), !retracted.contains(event.id),
+                  state.friendshipIntents["\(actor):\(event.actor)"]?.requested == true,
+                  state.friendshipIntents["\(event.actor):\(actor)"]?.requested == true,
+                  event.delivery.object?["kind"] as? String == "public",
+                  let action = event.action.object, action["op"] as? String == "publish",
+                  action["group_id"] == nil || action["group_id"] is NSNull,
+                  let post = action["post"] as? [String: Any], let stars = post["stars"] as? NSNumber,
+                  let book = post["book"] as? [String: Any], let id = book["id"] as? String,
+                  let title = book["title"] as? String, let author = book["author"] as? String,
+                  seenByFriend[event.actor, default: []].insert(id).inserted else { continue }
+            if (4...5).contains(stars.intValue), books[id] == nil {
+                books[id] = SocialBook(id: id, title: title, author: author)
+            }
+        }
+        return books
+    }
+
     func discussion(in group: SocialGroup) -> [SocialFeedItem] {
         guard !group.closed, !group.banned.contains(actor) else { return [] }
         if group.members.contains(actor) {
@@ -501,14 +528,9 @@ extension DeskRepository {
                                        "subjects": Array(subjects.prefix(100))]
                 display[book.id] = SocialBook(id: book.id, title: book.title, author: book.authors.joined(separator: ", "))
             }
-            for record in snapshot?.state.publications.values ?? Dictionary<String, SocialPublication>().values {
-                guard record.event.delivery.object?["kind"] as? String == "public", snapshot?.state.retracted.contains(record.event.id) != true, snapshot?.state.blocked.contains(record.event.actor) != true else { continue }
-                guard let post = record.event.action.object?["post"] as? [String: Any],
-                      let book = post["book"] as? [String: Any],
-                      let id = book["id"] as? String, candidates[id] == nil else { continue }
-                let title = book["title"] as? String ?? id
-                candidates[id] = ["book_id": id, "title": recommendationRequestText(title, byteLimit: 4_000) ?? "Untitled book", "subjects": []]
-                display[id] = SocialBook(id: id, title: title, author: book["author"] as? String ?? "")
+            for (id, book) in snapshot?.recommendedBookReferences ?? [:] where candidates[id] == nil {
+                candidates[id] = ["book_id": id, "title": recommendationRequestText(book.title, byteLimit: 4_000) ?? "Untitled book", "subjects": []]
+                display[id] = book
             }
             catalog = display
             recommendations = try await model.repository.socialRecommendations(candidates: JSONSerialization.data(withJSONObject: Array(candidates.values)), excluded: JSONSerialization.data(withJSONObject: model.books.filter { $0.shelf == "read" }.map(\.id)))

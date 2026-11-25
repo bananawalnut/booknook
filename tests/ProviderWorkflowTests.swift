@@ -54,6 +54,7 @@ import WebKit
     precondition(social.recommendations[0].reasons == ["Matches your interest in nature"])
     let originalTitles = Set([multiline, oversized, controlOnly, expected])
     precondition(Set(social.catalog.values.map(\.title)) == originalTitles)
+    try await checkSocialReferenceSelection(model: model, localBook: match)
     let reopened = DeskRepository(directory: root.appendingPathComponent("desk"))
     let (state, _) = try await reopened.open()
     precondition(Set(state.books.values.map(\.title)) == originalTitles)
@@ -75,6 +76,52 @@ import WebKit
     precondition(Set(model.state!.books[match.id]!.subjects) == Set(subjects))
     print("Goodreads metadata projection preserves original titles and subjects and restores unrelated offline recommendations with reasons.")
     print("Goodreads named shelves reopen and follow supplied membership while preserving personal subjects.")
+}
+
+@MainActor private func checkSocialReferenceSelection(model: DeskModel, localBook: LibraryBook) async throws {
+    // Synthetic, already-decoded display input. The actual offline provider
+    // still reads its own desk for authority and scoring.
+    func publication(_ id: String, _ who: String, _ at: UInt64, _ stars: UInt64?,
+                     book: String = "remote", group: Bool = false, publicPost: Bool = true) -> SocialPublication {
+        let reference = JSONValue.object(["id": .string(book), "title": .string("Title \(id)"), "author": .string("Author \(id)")])
+        let post = JSONValue.object(["book": reference, "stars": stars.map(JSONValue.unsigned) ?? .null])
+        let event = SocialEventModel(schema: "booknook.social-event.v1", id: id, actor: who, at: at, resourceVersion: 1,
+            action: .object(["op": .string("publish"), "group_id": group ? .string("group") : .null, "post": post]),
+            delivery: .object(["kind": .string(publicPost ? "public" : "private")]))
+        return SocialPublication(event: event, approvedAt: at)
+    }
+    let records = [
+        publication("old-five", "a", 10, 5), publication("later-one", "a", 20, 1),
+        publication("tie-a", "b", 15, 4), publication("tie-z", "c", 15, 4),
+        publication("one-way", "pending", 30, 5), publication("stranger", "stranger", 31, 5),
+        publication("group", "b", 32, 5, group: true), publication("private", "c", 33, 5, publicPost: false),
+        publication("unrated", "b", 34, nil), publication("blocked", "blocked", 35, 5),
+        publication("retracted", "c", 36, 5), publication("local-title", "c", 37, 5, book: localBook.id),
+        publication("unrated-only", "b", 10, nil, book: "unrated-only"),
+        publication("revoked-high", "a", 10, 5, book: "low-only"), publication("low", "a", 11, 2, book: "low-only")
+    ]
+    let consent = SocialFriendIntent(requested: true, version: 1)
+    var intents = ["viewer:pending": consent]
+    for friend in ["a", "b", "c", "blocked"] {
+        intents["viewer:\(friend)"] = consent
+        intents["\(friend):viewer"] = consent
+    }
+    let controller = SocialController()
+    for order in [records, Array(records.reversed())] {
+        for viewerBlocked in [false, true] {
+            let state = SocialStateModel(revision: 1, drafts: [:], outbox: [:],
+                publications: Dictionary(uniqueKeysWithValues: order.map { ($0.event.id, $0) }),
+                friendshipIntents: intents, lists: [:], groups: [:], invitations: [:], joinRequests: [:],
+                blocked: viewerBlocked ? ["blocked", "viewer"] : ["blocked"], retracted: ["retracted"], preferredSubjects: [])
+            controller.snapshot = SocialSnapshot(state: state, actor: "viewer", feed: [], publicGroupPreviews: nil, bindings: [], pending: 0)
+            await controller.recommend(model)
+            let expected = viewerBlocked ? nil : SocialBook(id: "remote", title: "Title tie-z", author: "Author tie-z")
+            precondition(controller.catalog["remote"] == expected && controller.catalog["unrated-only"] == nil &&
+                         controller.catalog["low-only"] == nil, "Remote title must come from a contributing mutual-friend rating")
+            precondition(controller.catalog[localBook.id]?.title == localBook.title && controller.recommendationError == nil)
+        }
+    }
+    print("Recommendation display follows contributing friend ratings, deterministic ties and local catalog precedence.")
 }
 
 @MainActor func testPublicProviderRepositoryWorkflow() async throws {

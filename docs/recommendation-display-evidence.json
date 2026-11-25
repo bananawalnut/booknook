@@ -1,0 +1,40 @@
+{
+  "schema": "booknook.recommendation-display-source-evidence.v1",
+  "date": "2026-11-25",
+  "candidate_app_build": "2026112502",
+  "result": "PASS_BOUNDED_APP_CONTROLLER_REGRESSION",
+  "previous_app_source": "c5f97eacb6a6c163e9c566d6c9b636646cf5c4a7",
+  "problem": "Nonlocal recommendation metadata came from the first public reference in an unordered collection, even if that post did not contribute to the recommendation.",
+  "behavior": "Select the latest public nongroup rating per mutual friend and book, then choose the latest contributing 4\u20135 star reference by time and event ID. Local library metadata takes precedence.",
+  "checks": [
+    "Previous production source compiles, then fails the new title-eligibility assertion.",
+    "Repaired production source compiles and passes the same actual controller test.",
+    "Forward and reversed record insertion orders select the same reference.",
+    "A newer low rating suppresses the same friend\u2019s earlier positive rating.",
+    "Timestamp ties resolve by event ID.",
+    "One-way friendships, strangers, group posts, private posts, unrated, blocked and retracted records do not supply remote recommendation titles.",
+    "Blocking the viewer suppresses friend references.",
+    "Local library metadata, provider text normalization, original Unicode titles, private subject choices and Goodreads import regression remain intact."
+  ],
+  "sources": {
+    "apps/apple/BookNook/SocialModels.swift": "0d0d54911175d4cc415524e664ae6ef496b6f158b0eb505dc74d6d1d92fa7d50",
+    "tests/ProviderWorkflowTests.swift": "d36fe0baee667ae925068ad254cbe04c1e926273a68c0e0eb29ffbfc25df6bf9"
+  },
+  "logs": {
+    "red-build.log": "612732460b563c887606bab2aca64162c78287549c8347b31c8b340c45a9535e",
+    "red-test.log": "0ea2f7c7d2b2502b2051dff7f103c0b0b90f2102db5d3a9f9dca67ee229801c7",
+    "green-build.log": "612732460b563c887606bab2aca64162c78287549c8347b31c8b340c45a9535e",
+    "green-test.log": "6cd651e8e929864d22e0c6eb004f5b08a2d44c454247ca396536dadbd2c6f3b5"
+  },
+  "test_scope": "Actual SocialController with synthetic decoded display input and the real offline provider. The provider reads its own desk; these synthetic social references do not establish authority or live social scoring.",
+  "fixture_library_scope": "Previously built ABI-identical native bridge used only for app/controller regression; fresh hosted release qualification is separate.",
+  "unchanged": [
+    "Rust recommendation scoring and minimized provider contract",
+    "SDK APIs, schemas, ontology and authority contracts"
+  ],
+  "remaining": [
+    "Exact-source hosted compilation and packaged app receiving",
+    "Actual Mac walkthrough",
+    "Live issuer/accounts, remote exchange and physical input acceptance"
+  ]
+}
