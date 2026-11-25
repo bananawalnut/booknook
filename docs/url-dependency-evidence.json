@@ -30,5 +30,22 @@
     "This is dependency matching and synthetic consumer evidence, not a claim of exploit reachability.",
     "Hosted source qualification, rebuilt public archives and receiving-consumer qualification are separate release gates.",
     "Earlier public previews retain their original dated evidence and predate this remediation."
-  ]
+  ],
+  "cold_crate_packaging": {
+    "baseline_source": "16db970d4c0010311f5046fb8d8e4a392537da05",
+    "initial_hosted_sdk_run": 45691592490,
+    "initial_portable_job": 139478161125,
+    "initial_result": "FAILED_OFFLINE_NORMALIZATION_MISSING_REGISTRY_RECORD",
+    "repair": "Pass the existing fixed vendored dependency as an explicit Cargo override during archive normalization.",
+    "isolated_missing_registry_record_baseline": "failed",
+    "isolated_fixed_offline_packaging": "pass",
+    "independently_extracted_crates": 4,
+    "tests_passed": 373,
+    "optional_ignored": 6,
+    "failed": 0,
+    "canonical_lock_sha256": "db440c55cdea1547f4da126c7dab57e2c00ad97170e3ae3617da17f979d1bba9",
+    "qualification_receipt_sha256": "302991f78a92c73a722dbee449b89bc264ce7cc31db18801147e729325841a62",
+    "routing_cases_passed": 12,
+    "scope": "Actual offline packaging and extracted consumers; corrected hosted producer remains a separate gate."
+  }
 }

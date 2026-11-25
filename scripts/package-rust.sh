@@ -7,7 +7,10 @@ target_directory="$(python3 scripts/cargo_paths.py)"
 python3 scripts/sync-package-resources.py --check
 # Cargo 1.96's workspace temporary registry can fail verification with "no hash listed".
 # Verify the actual archives below, using local patches only for these unpublished siblings.
-cargo package --workspace --allow-dirty --offline --no-verify
+# Cargo normalizes archives in a temporary workspace; pass the vendored patch
+# there too so a fresh offline runner can resolve the dependency.
+cargo package --workspace --allow-dirty --offline --no-verify \
+  --config 'patch.crates-io.faster-hex.path="vendor/faster-hex"'
 python3 scripts/bundle-rust-sdk-patch.py "$target_directory"
 python3 - "$target_directory" <<'PY'
 from pathlib import Path

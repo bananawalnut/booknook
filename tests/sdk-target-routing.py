@@ -65,6 +65,11 @@ if name == "cargo":
             sys.exit(int(os.environ["FIXTURE_METADATA_EXIT"]))
         print(os.environ.get("FIXTURE_METADATA_JSON", json.dumps({"target_directory": str(target)})))
     elif args[0] == "package":
+        assert "--offline" in args
+        overrides = tomllib.loads(argument("--config"))
+        vendor = Path.cwd() / overrides["patch"]["crates-io"]["faster-hex"]["path"]
+        assert vendor.resolve() == root / "vendor/faster-hex"
+        assert tomllib.loads((vendor / "Cargo.toml").read_text())["package"]["name"] == "faster-hex"
         for crate in ["booknook-core", "booknook-connectors", "booknook-native", "booknook-wasm"]:
             archive = target / f"package/{crate}-1.2.3.crate"
             archive.parent.mkdir(parents=True, exist_ok=True)
