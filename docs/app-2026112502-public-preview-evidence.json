@@ -1,0 +1,172 @@
+{
+  "app": {
+    "build": "2026112502",
+    "published_at": "2026-11-25T21:55:25Z",
+    "release_id": 458691829,
+    "release_url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261125.02",
+    "source_commit": "2a413609323d774b9106c8fe4786b914c999c05f",
+    "tag": "v0.2.1-app-preview.20261125.02",
+    "version": "0.2.1"
+  },
+  "archives": {
+    "ipad-device": {
+      "architecture": "arm64",
+      "archive": "booknook-ipad-device-arm64-development-0.2.1.tar.gz",
+      "archive_bytes": 11786382,
+      "archive_sha256": "e811d25306c038e313e40729466852df29f4b58e489549e7e8c2470e9d2b23ab",
+      "bundle_id": "org.booknook.ipad",
+      "executable_sha256": "fd4d055fdd89cb33e1fe52ecd803ce5ffe673a8e8deefd8b838cdef364e66748",
+      "manifest_files": 108,
+      "minimum_os": "17.0",
+      "ontology_files": 100,
+      "platform": "IOS",
+      "signature": "unsigned"
+    },
+    "ipad-sim": {
+      "architecture": "arm64",
+      "archive": "booknook-ipad-sim-arm64-development-0.2.1.tar.gz",
+      "archive_bytes": 12013600,
+      "archive_sha256": "d7f96d9b00576d4948f2fb49806977ea4df38fe2c11617627b752d00d058b415",
+      "bundle_id": "org.booknook.ipad",
+      "executable_sha256": "3bf31e6dbf3dc814b0e08f30effb317f89bbf1f07d2726f14e360fa0c736897f",
+      "manifest_files": 109,
+      "minimum_os": "17.0",
+      "ontology_files": 100,
+      "platform": "IOSSIMULATOR",
+      "signature": "bundle-ad-hoc"
+    },
+    "mac": {
+      "architecture": "arm64",
+      "archive": "booknook-mac-arm64-development-0.2.1.tar.gz",
+      "archive_bytes": 15565476,
+      "archive_sha256": "a2df7f7a78ffaef0da6c4e166f8de172d22f9e0fcc80e2d109cd3cb96973bcc6",
+      "bundle_id": "org.booknook.desktop",
+      "executable_sha256": "6ee338c1485aa4ef0bb30b94844639d4d00503d7b2a7a17710c0e3fcf5b8a24e",
+      "manifest_files": 108,
+      "minimum_os": "14.0",
+      "ontology_files": 100,
+      "platform": "MACOS",
+      "signature": "linker-ad-hoc"
+    }
+  },
+  "build_provenance": {
+    "app_source_tree": "4745394e419d60e43238be887d0b16b263628b08",
+    "archive_job_id": 139502507353,
+    "archive_run": 45698613462,
+    "archive_run_attempt": 1,
+    "archive_runner": "macos-15",
+    "archive_url": "https://github.com/bananawalnut/booknook/actions/runs/45698613462",
+    "artifact_bytes": 39573542,
+    "artifact_id": 15063842101,
+    "artifact_sha256": "22e44b61ff67915925ef8c36d91f7f1acea8872ca1c001f858593d04b06f892e",
+    "configuration": "Release",
+    "contract_jobs": {
+      "apple": {
+        "conclusion": "success",
+        "id": 139502161212
+      },
+      "portable": {
+        "conclusion": "success",
+        "id": 139502161610
+      }
+    },
+    "contract_run": 45698516911,
+    "contract_run_attempt": 1,
+    "contract_url": "https://github.com/bananawalnut/booknook/actions/runs/45698516911",
+    "method": "hosted-github-actions",
+    "receiving_receipt_sha256": "d435233737078385e368af6bc5dc09a123b927e4c59ed24f20bc39e749ecaaab"
+  },
+  "public_downloads": {
+    "anonymous_https": true,
+    "assets": {
+      "BUILD-PROVENANCE.json": {
+        "bytes": 59243,
+        "id": 793290502,
+        "sha256": "bb03445eb147567cf0d5925f2695ef0089c8558eccad5af090efb176843660cd"
+      },
+      "README.md": {
+        "bytes": 3636,
+        "id": 793290447,
+        "sha256": "949b1a625db29aa3d2194ddfb9a118667373860557c01a584ada83ecc64c3d16"
+      },
+      "RELEASE-MANIFEST.json": {
+        "bytes": 1623,
+        "id": 793290365,
+        "sha256": "c4b82bf33db114621e8c72796405544a85701e92f0cb7a64183da00360af86d6"
+      },
+      "SHA256SUMS": {
+        "bytes": 503,
+        "id": 793290311,
+        "sha256": "2aa624e58dcb011340c03027931afafeb248170bdf5dcaef5be4e6e619828640"
+      },
+      "VERIFICATION.json": {
+        "bytes": 143638,
+        "id": 793290555,
+        "sha256": "55c82f3664667c12fa7366c144aac8d7eb547cc5f7fdb3d79f49e18209b1fcfc"
+      },
+      "booknook-ipad-device-arm64-development-0.2.1.tar.gz": {
+        "bytes": 11786382,
+        "id": 793290629,
+        "sha256": "e811d25306c038e313e40729466852df29f4b58e489549e7e8c2470e9d2b23ab"
+      },
+      "booknook-ipad-sim-arm64-development-0.2.1.tar.gz": {
+        "bytes": 12013600,
+        "id": 793290796,
+        "sha256": "d7f96d9b00576d4948f2fb49806977ea4df38fe2c11617627b752d00d058b415"
+      },
+      "booknook-mac-arm64-development-0.2.1.tar.gz": {
+        "bytes": 15565476,
+        "id": 793290977,
+        "sha256": "a2df7f7a78ffaef0da6c4e166f8de172d22f9e0fcc80e2d109cd3cb96973bcc6"
+      }
+    },
+    "bytes": 39574101,
+    "count": 8,
+    "prior_releases_preserved": 46,
+    "receipt_sha256": "2cab7b2fae003ee3c85d4085295d9c62bf5c7d409f52445d63e4cf7e809cb39a",
+    "same_draft_and_public_asset_ids": true
+  },
+  "result": "PASS_PUBLIC_ARCHIVES",
+  "schema": "booknook.hosted-native-preview-evidence.v1",
+  "scope": "Hosted Release archives and actual anonymous download integrity, plus separately recorded bounded Mac workflows. Binary deployment metadata does not qualify minimum-runtime behavior. Physical input, live account/issuer consent, remote device exchange and accessibility/endurance remain open.",
+  "mac": {
+    "result": "PASS_BOUNDED_NATIVE_WORKFLOWS_AND_NORMAL_INSTALL",
+    "evidence": "macos-2502-workflow-evidence.json",
+    "personal_library_and_reading_preferences_preserved": true
+  },
+  "physical_ipad": {
+    "result": "DEFERRED",
+    "last_verified_installed_build": "2026111802",
+    "availability": "Unavailable by the latest user reply on November25.",
+    "signing": "Manual Xcode lookup found no current matching provisioning profile; no device action or automatic registration.",
+    "current_build_installed": false
+  },
+  "minimum_runtimes": {
+    "evidence": "minimum-runtime-2502-evidence.json",
+    "macOS14": "UNQUALIFIED",
+    "iPadOS17": "UNVERIFIED_INSTALL_NO_LAUNCH"
+  },
+  "public_ontology": {
+    "result": "PASS",
+    "source_commit": "2a413609323d774b9106c8fe4786b914c999c05f",
+    "url": "https://bananawalnut.github.io/booknook/ontology/discovery.json",
+    "verified_at_utc": "2026-11-25T22:09:26.587684+00:00",
+    "files_verified": 100,
+    "total_bytes": 1786662,
+    "authenticated": false,
+    "direct_https": true,
+    "proxy_used": false,
+    "redirects_followed": false,
+    "current_version": "0.5.0",
+    "manifests": 11,
+    "receipt_sha256": "24eb07f51244a980a7a0be9704ea3037591c6f7de9c032826e605f5b1c4793a6",
+    "scope": "Fresh read-only hosting observation; no ontology publication or contract change."
+  },
+  "simulator": {
+    "result": "PASS_SDK_RESTORE_STOCK_APP_REOPEN_AND_CAPTURE",
+    "runtime": "iPadOS18.6 (22G86)",
+    "evidence": "ipados-2502-runtime-evidence.json",
+    "physical_input_qualified": false,
+    "minimum_ipados17_qualified": false
+  }
+}

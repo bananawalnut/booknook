@@ -1,0 +1,88 @@
+{
+  "schema": "booknook.devgraph-checkpoint-evidence.v1",
+  "checked_on": "2026-11-25",
+  "result": "PASS_EIGHT_SIGNED_DESCRIPTION_UPDATES_AND_INDEPENDENT_READBACK",
+  "project": "Project/booknook",
+  "records": [
+    {
+      "resource": "Project/booknook",
+      "before_version": 47,
+      "after_version": 48,
+      "description_sha256": "f5254655bc0accd198301c69ca26b36b322b76134a11776f6daee6830f802534",
+      "other_fields_unchanged": true
+    },
+    {
+      "resource": "Issue/booknook-hands-on-workflows",
+      "before_version": 15,
+      "after_version": 16,
+      "description_sha256": "fd2663e61ba4415978f4dbeda7d8eabe6a765313b1e9817c1d7738cffd9d831c",
+      "other_fields_unchanged": true
+    },
+    {
+      "resource": "Issue/booknook-ci-evidence",
+      "before_version": 20,
+      "after_version": 21,
+      "description_sha256": "554f4b93b479a14d94a55a91bff5d074a35cb8a91b0b8dd77907db68f9419ddc",
+      "other_fields_unchanged": true
+    },
+    {
+      "resource": "Issue/booknook-current-packages",
+      "before_version": 17,
+      "after_version": 18,
+      "description_sha256": "76ac1836478a62378a8e9c16315da2c800e9003f32811b230451b7507832e6db",
+      "other_fields_unchanged": true
+    },
+    {
+      "resource": "Issue/booknook-sdk-publication",
+      "before_version": 7,
+      "after_version": 8,
+      "description_sha256": "c5b0ed0ca1550f7c770936c91c2986042961b2a99d8cdacaabf71d5baa5a9f83",
+      "other_fields_unchanged": true
+    },
+    {
+      "resource": "Issue/booknook-castalia-live",
+      "before_version": 5,
+      "after_version": 6,
+      "description_sha256": "f6702e85e6487da33778e0ca04e08847b5d30e0de912455c872277bd12404d05",
+      "other_fields_unchanged": true
+    },
+    {
+      "resource": "Issue/booknook-negentropy-security",
+      "before_version": 10,
+      "after_version": 11,
+      "description_sha256": "b82c6680e1467ef857764d6ef78fcd5bfb2aa9527072010feccd56e24f50a1b3",
+      "other_fields_unchanged": true
+    },
+    {
+      "resource": "Issue/booknook-local-install-renewal",
+      "before_version": 5,
+      "after_version": 6,
+      "description_sha256": "c98c11cb2cc440359da63dc126ed2c7618e5126771693da7929d61104e46ffd7",
+      "other_fields_unchanged": true
+    }
+  ],
+  "record_count": 8,
+  "prior_descriptions_preserved_verbatim": true,
+  "titles_priorities_lifecycle_unchanged": true,
+  "project_child_count": 24,
+  "project_children_and_parentage_preserved": true,
+  "effective_arena": "Arena/castalia",
+  "effective_memberships_checked": 25,
+  "existing_delivery_container_reused": true,
+  "authority": {
+    "native_signing_verified": true,
+    "temporary_task_grants_revoked": true,
+    "preexisting_standing_permissions_preserved": true,
+    "signing_key_and_expiry_unchanged": true,
+    "receiver_pins_verified": true
+  },
+  "operational_receipts": {
+    "count": 8,
+    "receipt_status": "pending",
+    "unsigned_operational_records": true,
+    "local_commits_verified": true,
+    "external_delivery_verified": false
+  },
+  "independent_receipt_sha256": "15bbbff26d1c2a8986149e9325d23bc764079e0e39442c3156ae975ca4e3ab5f",
+  "scope": "Local DevGraph tracking only. This does not qualify Book Nook app issuer/holder consent, physical hardware, minimum OS runtime, remote social exchange or production MVP acceptance."
+}

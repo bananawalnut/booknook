@@ -4,6 +4,12 @@ The portable document and social contracts live in Rust. The reference apps use 
 
 ## Development preview and Rust compatibility
 
+SDK **0.4.0** is available as a GitHub prerelease. It adds archive v5 ISBN history for Goodreads imports. Hosts can review competing ISBN values, restore an earlier observation, and preserve those decisions through export and synchronization. All 16 public files matched the qualified package and support-file hashes. [Download SDK 0.4.0](https://github.com/bananawalnut/booknook/releases/tag/v0.4.0-sdk-preview.20261125) · [Release evidence and checksums](sdk-040-public-preview-evidence.json) · [ISBN history guide](ISBN-HISTORY.md)
+
+The extracted Core passed 30 contract and ISBN-history tests. The installed npm package passed its CommonJS and ESM consumers, and Chrome ran 14 checks against the released web WASM bytes. The extracted Swift package passed provider reimport and ISBN review, reassertion, cold reopen and archive checks on arm64 macOS. The iPad device and Simulator slices passed static inspection. Minimum-OS runtime and live account or physical input checks remain open. [Hosted packaging and consumer checks](https://github.com/bananawalnut/booknook/actions/runs/45693280979)
+
+The 0.3.6 SDK preview introduced corrections to authors and ISBNs on catalog reimport. [SDK 0.3.6 release evidence](sdk-036-public-preview-evidence.json)
+
 The 0.3.5 SDK preview verifies active pairing and Castalia trust before publishing approved encrypted files. The exact Swift consumer ran the failed-write, retry, receive and duplicate checks on macOS and iPadOS Simulator. [SDK preview](https://github.com/bananawalnut/booknook/releases/tag/v0.3.5-sdk-preview.20261117) · [SDK evidence](sdk-035-public-preview-evidence.json)
 
 The 0.3.4 SDK preview adds exact saved-action refresh and binds native approvals to the Castalia authority used during verification. Extracted Swift consumers passed signed membership tests on macOS and iPadOS Simulator. Rust and the installed TypeScript/WASM package passed independent checks. [SDK preview](https://github.com/bananawalnut/booknook/releases/tag/v0.3.4-sdk-preview.20261117) · [SDK evidence](sdk-034-public-preview-evidence.json) · [Simulator evidence](sdk-034-ipados-simulator-evidence.json)
@@ -32,11 +38,11 @@ The maintained Nostr SDK **0.45.6** removes the unmaintained relay pool and perm
 
 The receiving-lock audit JSON preserves its 17:22 UTC audit-only observation: its consumer-execution field says pending because execution had not yet begun. That historical status is superseded by the completed six-command receiving result in [final public-preview evidence](security-020-public-preview-evidence.json); the original audit evidence remains unchanged.
 
-The examples describe the current source, which builds SDK 0.4.0 archives. Local package scripts build/test archives without publishing remotely. GitHub prerelease assets are separate from registry publication, which is not claimed.
+The examples use the published SDK 0.4.0 archives. Local package scripts build and test the same package formats. The GitHub prerelease provides the download and installation artifacts.
 
 ## Rust notebook storage
 
-The source SDK 0.4.0 packages include a faster-hex dependency backport selecting heapless 0.9.4. Cargo applies patches from the consuming workspace. After extracting all four matching `.crate` archives into one directory, initialize their verified workspace with:
+The published SDK 0.4.0 packages include a faster-hex dependency backport selecting heapless 0.9.4. Cargo applies patches from the consuming workspace. After extracting all four matching `.crate` archives into one directory, initialize their verified workspace with:
 
 ```sh
 cp booknook-core-0.4.0/sdk-workspace.toml Cargo.toml
@@ -44,7 +50,7 @@ cp booknook-core-0.4.0/Cargo.lock Cargo.lock
 cargo test --locked --workspace --all-targets
 ```
 
-The manifest points to the patched source bundled inside the core archive. An existing application workspace must copy the matching `[patch.crates-io]` entries into its own root manifest and adjust the paths. The package script verifies this independent resolution and rejects a registry fallback or heapless 0.8. The source and both lockfiles retain the strict advisory policy; no advisory IDs are ignored. New SDK 0.4.0 release archives remain separately qualified before publication.
+The manifest points to the patched source bundled inside the core archive. An existing application workspace must copy the matching `[patch.crates-io]` entries into its own root manifest and adjust the paths. The package script verifies this independent resolution and rejects a registry fallback or heapless 0.8. The source and both lockfiles retain the strict advisory policy; no advisory IDs are ignored. All four published crate archives contain the audited source lock with url 2.5.9 and form_urlencoded 1.2.3. The hosted producer built and exercised their extracted workspace on a fresh runner. [Dependency remediation and offline packaging evidence](url-dependency-evidence.json)
 
 The native SQLite adapter and a custom host adapter share `NotebookStorage`:
 
@@ -194,11 +200,11 @@ Hosts must persist `Notebook.order` alongside its projected `blocks`. Rust code 
 
 ### Goodreads ISBN changes (ontology 0.5.0)
 
-The SDK 0.4.0 source candidate adds portable ISBN history for Goodreads catalog editions. Query `isbn_history::pending_reviews` in Rust, `BookNookNotebook.isbnReviewsJSON()` in Swift or `isbnReviews(core, state)` in TypeScript. Use the complete returned heads to choose an alternative with `review_isbn` or restore a superseded observation with `reassert_isbn`. Local review needs no signature. [ISBN history guide](ISBN-HISTORY.md)
+SDK 0.4.0 adds portable ISBN history for Goodreads catalog editions. Query `isbn_history::pending_reviews` in Rust, `BookNookNotebook.isbnReviewsJSON()` in Swift or `isbnReviews(core, state)` in TypeScript. Use the complete returned heads to choose an alternative with `review_isbn` or restore a superseded observation with `reassert_isbn`. Local review needs no signature. [ISBN history guide](ISBN-HISTORY.md)
 
 ## Complete portable exports
 
-The native export envelope is the public Rust `booknook_core::portable_archive::PortableArchive` contract. Its wire version remains `booknook.portable-export.v1`. The candidate accepts domain state versions v1 through v5. The `assets` map stores original base64 bytes by asset ID. Optional `social` retains social state, transport binding and history proofs, and pending relay events. Portable protocol manifest v4 adds v5 ISBN history alongside v4 notebook order. Earlier published contracts remain available. [Current portable manifest](../ontology/portable/v4/manifest.json) · [Notebook order edition](../ontology/portable/v3/manifest.json) · [First portable edition](../ontology/portable/v1/manifest.json)
+The native export envelope is the public Rust `booknook_core::portable_archive::PortableArchive` contract. Its wire version remains `booknook.portable-export.v1`. SDK 0.4.0 accepts domain state versions v1 through v5. The `assets` map stores original base64 bytes by asset ID. Optional `social` retains social state, transport binding and history proofs, and pending relay events. Portable protocol manifest v4 adds v5 ISBN history alongside v4 notebook order. Earlier published contracts remain available. [Current portable manifest](../ontology/portable/v4/manifest.json) · [Notebook order edition](../ontology/portable/v3/manifest.json) · [First portable edition](../ontology/portable/v1/manifest.json)
 
 Rust `portable_archive::parse` and `roundtrip`, native/Swift `validate_portable_archive` / `validatePortableArchive`, and WASM `validate_portable_archive` consume the **original JSON**. They reject duplicate and unknown fields, unsupported versions, missing/corrupt referenced assets, invalid social structures and forged pending relay signatures under the existing 128 MiB envelope bound. Original asset encodings and embedded signed request, presentation and event strings are retained. Outer JSON whitespace, property order, and ordinary domain defaults may normalize; never sign the normalized envelope as if it were the original bytes. Legacy omitted `social` and omitted social `binding_history` remain accepted. Unreferenced v1 asset entries remain retained without being interpreted, preserving the previous envelope contract.
 

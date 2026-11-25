@@ -1,0 +1,70 @@
+{
+  "schema": "booknook.hosted-ipados-runtime-evidence.v1",
+  "result": "PASS_SDK_RESTORE_STOCK_APP_REOPEN_AND_CAPTURE",
+  "checked_on": "2026-11-25",
+  "app_build": "2026112502",
+  "source_commit": "2a413609323d774b9106c8fe4786b914c999c05f",
+  "executable_sha256": "3bf31e6dbf3dc814b0e08f30effb317f89bbf1f07d2726f14e360fa0c736897f",
+  "run": 45710088114,
+  "job": 139541958349,
+  "run_attempt": 1,
+  "run_url": "https://github.com/bananawalnut/booknook/actions/runs/45710088114",
+  "probe_source": "8e3ef229acc09b5a687c2211ea764f8187ddb627",
+  "runtime": {
+    "id": "com.apple.CoreSimulator.SimRuntime.iOS-18-6",
+    "version": "18.6",
+    "build": "22G86"
+  },
+  "model": "iPad Air 13-inch (M2)",
+  "host": "macOS15.8.2 / Xcode26.3 (17C529)",
+  "checks": {
+    "sdk_archive_sha256": "38478bd49c1dc1aebaea136a10fa355d2df1eab46f96686f4035409ebf59c509",
+    "fixture_sha256": "00ca179844303cc303d3e01734d53735f579dec9fc2d8d3d531314c7e5056873",
+    "sdk_roundtrip_equal": true,
+    "character_card_versions": 3,
+    "fresh_desk_revisions": [
+      1,
+      3,
+      5
+    ],
+    "reading_observation_before_reopen": 1795644575,
+    "reading_observation_after_reopen": 1795644583,
+    "visible_epub_body_phrases": 8,
+    "visible_epub_phrases": 9
+  },
+  "capture": {
+    "image": "screenshots/ipad-current.png",
+    "sha256": "6c782d3b8a0667fa38687124468c238638eff8f261444e8ed322f335cba551e8",
+    "bytes": 480575,
+    "width": 2048,
+    "height": 2732,
+    "processing": "Original simctl framebuffer bytes.",
+    "root_visual_review": "PASS: warm reading desk, Unicode note, three-version Mara card, visible EPUB prose and current navigation."
+  },
+  "cleanup": {
+    "owned_simulator_removed": true,
+    "temporary_branch_absent": true,
+    "receipt_sha256": "0466d237b64b20868cf26da574712c0df7acb447e56cc0d48bc7c7ed92e292d5"
+  },
+  "receipts": {
+    "terminal_sha256": "642e5293c925f4c75f1f00cdf1a406c58b58b4301e69b02a82cbc905da3bfda6",
+    "runtime_sha256": "431e4323e771b4dbe2819233ff4c63381ebe0d1ea086fbc09497f4475424e9cc",
+    "artifact_id": 15067731403,
+    "artifact_bytes": 397448,
+    "artifact_sha256": "6377d2d28254a21a4a3eaa7e9f4aacc0afe27655b36650c167dc6ca08dbc2c51"
+  },
+  "previous_attempt": {
+    "run": 45707949233,
+    "job": 139534646153,
+    "result": "FAIL_SCREENSHOT_OCR_JSON_PARSE",
+    "scope": "Exact install, SDK restore and native reading observations across reopen succeeded; screenshot qualification failed parsing process output.",
+    "raw_output_and_framebuffer_retained": false,
+    "cause": "Retained evidence does not establish what was in the merged process output.",
+    "correction": "Vision writes counts atomically to a fresh file; Python validates a bounded regular file, exact fields and integer counts. Original visual-content thresholds and PASS-only promotion remain.",
+    "focused_regression_cases_passed": 4,
+    "terminal_receipt_sha256": "c5bd386b6a8cc0b02739a1722eba52e24427f19899f24a040680b1772c532d01",
+    "temporary_branch_absent": true
+  },
+  "scope": "Current stock Release app and synthetic desk only. This does not qualify physical iPad input, Pencil, live accounts, remote peers or the iPadOS17 minimum.",
+  "fixture_setup": "Published Swift SDK0.4.0 restored the fixture into a new Simulator app container before the stock app launched. This check did not exercise the app restore UI."
+}

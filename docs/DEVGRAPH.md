@@ -2,7 +2,28 @@
 
 Initial registration was independently read back on **2026-11-13** against Book Nook source `abd2cb1928518be66eda247bea473c98413bb1a2`; the November 14 continuation below records later source and qualification checkpoints. DevGraph is the work tracker; this document is a navigation snapshot, not a replacement tracker or acceptance result.
 
-## Current tracking checkpoint — 2026-11-20
+## Current tracking checkpoint — 2026-11-25
+
+Eight description-only changes were signed through the configured native integration and independently read back. Each preserves its complete prior description; titles, priorities and lifecycle are unchanged. Project/booknook retains the same 24 children and existing delivery parent. All 25 checked records retain inherited membership in Arena/castalia.
+
+| Record | Verified version |
+|---|---:|
+| Project/booknook | 48 |
+| Issue/booknook-hands-on-workflows | 16 |
+| Issue/booknook-ci-evidence | 21 |
+| Issue/booknook-current-packages | 18 |
+| Issue/booknook-sdk-publication | 8 |
+| Issue/booknook-castalia-live | 6 |
+| Issue/booknook-negentropy-security | 11 |
+| Issue/booknook-local-install-renewal | 6 |
+
+The checkpoint records public [SDK 0.4.0](sdk-040-public-preview-evidence.json), [app 2502](app-2026112502-public-preview-evidence.json), the [bounded Mac walkthrough](macos-2502-workflow-evidence.json), [SDK fixture restoration and stock iPadOS 18.6 reopen/capture](ipados-2502-runtime-evidence.json), and the fresh 100-file public ontology readback. Interim 2501 and final 2502 Mac checks are separated. The first OCR capture failure remains recorded alongside the corrected successful run.
+
+Physical iPad installation/profile renewal, Pencil and hardware-keyboard/IME checks, live accounts and genuine Book Nook issuer/holder consent, remote Nostr and device exchange, accessibility/endurance and [minimum-OS runtime acceptance](minimum-runtime-2502-evidence.json) remain open in the existing backlog. The separately installed Wallet/Transfer custody adapter is an explicit shared-platform dependency; app-local CastaliaSession integration does not establish live consent.
+
+All eight unsigned EventReceipts report pending: the local mutations committed; external delivery is unverified. Temporary task permissions were revoked after readback, preserving the existing signing key, expiry and standing permissions. This tracker result does not qualify Book Nook’s separate operational authority or close the production MVP. [Checkpoint evidence](devgraph-20261125-evidence.json)
+
+## Tracking checkpoint — 2026-11-20
 
 Eight description-only updates were signed through the configured native integration and read back from DevGraph. Each prior description remains verbatim as history. Titles, priorities and lifecycle are unchanged. The existing Project and backlog are reused.
 

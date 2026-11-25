@@ -1,0 +1,65 @@
+{
+  "schema": "booknook.native-mac-workflow-evidence.v1",
+  "result": "PASS_BOUNDED_MAC_WORKFLOWS_AND_NORMAL_INSTALL",
+  "app": {
+    "version": "0.2.1",
+    "build": "2026112502",
+    "source_commit": "2a413609323d774b9106c8fe4786b914c999c05f",
+    "executable_sha256": "6ee338c1485aa4ef0bb30b94844639d4d00503d7b2a7a17710c0e3fcf5b8a24e",
+    "release_url": "https://github.com/bananawalnut/booknook/releases/tag/v0.2.1-app-preview.20261125.02"
+  },
+  "captured_on": "2026-11-25",
+  "scope": "Actual native Release app controls and isolated synthetic data. Interim2501 and final2502 observations are recorded separately; no physical iPad or account sign-in qualification.",
+  "interim_build_2501": {
+    "source_commit": "c5f97eacb6a6c163e9c566d6c9b636646cf5c4a7",
+    "checks": [
+      "Manual book without content; Goodreads CSV and original EPUB file pickers; three distinct books.",
+      "ASCII native typing plus Unicode paste; Cmd-Z removes paste and Shift-Cmd-Z restores exact text.",
+      "One character with initial empty and two independent developed versions; actual history text and reading position visible.",
+      "Margin side swap, accessible resizing50to45percent, per-note Scribble/text preservation, reader font19to21.",
+      "Actual Goodreads public home to Fiction and Back with visible Done and full viewport; no account login.",
+      "ISBN correction, historical restore and repeat of same corrected import preserve reader choice and three-book count.",
+      "Native export review and Save dialog produce portable-v1/archive-v5 with exact state, original EPUB and all three card versions."
+    ]
+  },
+  "final_build_2502": {
+    "checks": [
+      "Final received executable reopened the interim desk and retained Unicode text, three-version character history, EPUB and pane preferences.",
+      "Actual final-build ASCII append, Cmd-Z and Shift-Cmd-Z verified exact before/after text.",
+      "Restored original19pointfont,leftMargin,50percentwidth through native controls.",
+      "Final note, card versions and ISBN choice durable in SQLite; normal quit and original QA store closed at revision33.",
+      "One normal final application process reopened without the QA override, using the unchanged personal library."
+    ],
+    "qa_store_closed_at_revision": 33,
+    "personal_library_unchanged": true,
+    "reading_preferences_restored": true,
+    "normal_app_instances": 1
+  },
+  "portable_export": {
+    "format": "booknook.portable-export.v1 / archive.v5",
+    "bytes": 20882,
+    "sha256": "c2c2f0900aa620de4d8c4d3b867c9c2caa8987514cf31a95782efe5f0fed5cf8",
+    "checks": [
+      "All three books, original EPUB and three character-card versions equal the saved state.",
+      "Public SDK0.4.0 restored and reopened the original export; all domain and asset data survived reexport.",
+      "The original export is private because source provenance includes workstation paths."
+    ]
+  },
+  "capture": {
+    "image": "screenshots/macos-current.jpg",
+    "sha256": "c49119b8895cb13ed59f12308e8d48cca00c374f975ea10fa99f83c3fe46b463",
+    "width": 2640,
+    "height": 1720,
+    "visually_inspected": true,
+    "image_processing": "EXIF and Photoshop metadata removed without changing JPEG coding/scan bytes; ICC profile and full window retained."
+  },
+  "private_receipt_sha256": "a48641b714f844b0992834a64dacbfe2e855a508774f8dc4dfa91808d05e0e33",
+  "unqualified": [
+    "Hardware keyboard and IME; the Mac check used native ASCII typing and Unicode paste.",
+    "Physical iPad, Apple Pencil, palm rejection and drawing feel.",
+    "VoiceOver and long-document endurance.",
+    "Live Goodreads/Kindle/Audible accounts and genuine Castalia issuer/holder consent.",
+    "Actual remote social exchange and multi-device synchronization.",
+    "Declared minimum macOS14 and iPadOS17 runtime execution."
+  ]
+}

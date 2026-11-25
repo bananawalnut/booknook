@@ -1,0 +1,45 @@
+{
+  "schema": "booknook.minimum-runtime-evidence.v1",
+  "checked_on": "2026-11-25",
+  "app_build": "2026112502",
+  "source_commit": "2a413609323d774b9106c8fe4786b914c999c05f",
+  "production_mvp_qualified": false,
+  "ipados17": {
+    "result": "UNVERIFIED_INSTALL; NO_APP_LAUNCH",
+    "run": 45703192225,
+    "job": 139518335221,
+    "run_url": "https://github.com/bananawalnut/booknook/actions/runs/45703192225",
+    "runtime": "iPadOS17.0 (21A328)",
+    "host": "macOS26.7.2 / Xcode26.4.1",
+    "checks": [
+      "Exact runtime and disposable iPad Simulator reached Booted.",
+      "App installation exceeded the170-second deadline.",
+      "Follow-up did not establish that the expected executable was installed; no app launch, reader or reopen was attempted.",
+      "Disposable Simulator removed and exact validation branch deleted."
+    ],
+    "interpretation": "This is an unresolved installation boundary, not evidence of an app crash or runtime incompatibility.",
+    "terminal_receipt_sha256": "649a86d923180e4fb9f1a3536633b84ffc1a255773d00ed27cdb1b5e7b2422a8"
+  },
+  "macos14": {
+    "result": "NO_ACCESSIBLE_RUNTIME",
+    "constraints": [
+      "Hosted macOS14 runner retired; no suitable self-hosted runner is configured.",
+      "Available local storage is insufficient for a Sonoma virtual machine."
+    ],
+    "scope": "Deployment metadata and builds on newer systems do not qualify runtime behavior at the declared minimum.",
+    "sources": [
+      "https://github.com/actions/runner-images/issues/15226",
+      "https://docs.github.com/en/actions/reference/runners/github-hosted-runners"
+    ]
+  },
+  "local_ipados18_6": {
+    "result": "STOPPED_AT_DISK_RESERVE_BEFORE_INSTALL",
+    "checks": [
+      "Only the task-owned Simulator was booted and shut down.",
+      "Original installed app, library and preferences remained unchanged.",
+      "No new app installation, launch or screenshot; no retry."
+    ],
+    "receipt_sha256": "400b5a82b00499199b28bd6f0c6cae3164cc3a20fdfe8668e0c80c2dfdad7e3d"
+  },
+  "scope": "Current iPadOS18.6 capture evidence, when available, is separate from minimum17 qualification. No physical device actions were performed in this pass."
+}
