@@ -13,12 +13,34 @@
     "host": "macOS26.7.2 / Xcode26.4.1",
     "checks": [
       "Exact runtime and disposable iPad Simulator reached Booted.",
-      "App installation exceeded the170-second deadline.",
+      "App installation exceeded the 170-second deadline.",
       "Follow-up did not establish that the expected executable was installed; no app launch, reader or reopen was attempted.",
       "Disposable Simulator removed and exact validation branch deleted."
     ],
     "interpretation": "This is an unresolved installation boundary, not evidence of an app crash or runtime incompatibility.",
-    "terminal_receipt_sha256": "649a86d923180e4fb9f1a3536633b84ffc1a255773d00ed27cdb1b5e7b2422a8"
+    "terminal_receipt_sha256": "649a86d923180e4fb9f1a3536633b84ffc1a255773d00ed27cdb1b5e7b2422a8",
+    "macos15_follow_up": {
+      "result": "HOST_SIMULATOR_NOT_BOOTED; NO_APP_INSTALL",
+      "run": 45716566671,
+      "job": 139564018646,
+      "run_url": "https://github.com/bananawalnut/booknook/actions/runs/45716566671",
+      "probe_source": "f4142483e6dd73c4eb75949d31a0729cf3e4a156",
+      "host": "macOS15.8.2 / Xcode26.3 (17C529)",
+      "runtime": "iPadOS17.0 (21A328)",
+      "app_build": "2026112502",
+      "executable_sha256": "3bf31e6dbf3dc814b0e08f30effb317f89bbf1f07d2726f14e360fa0c736897f",
+      "checks": [
+        "Apple's exact runtime downloaded and registered.",
+        "The owned iPad10 simulator accepted the boot command but did not report Booted within190 seconds.",
+        "No app installation, app launch, SDK fixture restore or screenshot was attempted.",
+        "Minimum free host storage was36,712,861,696 bytes; the disk reserve did not cause the stop.",
+        "Only the owned simulator and exact temporary branch were deleted; absence was verified."
+      ],
+      "interpretation": "This failed before the app could be installed. It provides no evidence of an app crash or runtime incompatibility.",
+      "next_prerequisite": "An accessible iPadOS17.0 host that reaches healthy boot/install, or an actual device on17.0. Do not repeat the exhausted host configuration unchanged.",
+      "terminal_receipt_sha256": "28a0e2703b872d55d77d6835fa0784b0fc7adc4686932c45f65d889b2277665c",
+      "cleanup_receipt_sha256": "eaa1c02eaa3ef3718032ec7eebbcc8a3447501135562e05baf461130d78d218e"
+    }
   },
   "macos14": {
     "result": "NO_ACCESSIBLE_RUNTIME",
@@ -41,5 +63,5 @@
     ],
     "receipt_sha256": "400b5a82b00499199b28bd6f0c6cae3164cc3a20fdfe8668e0c80c2dfdad7e3d"
   },
-  "scope": "Current iPadOS18.6 capture evidence, when available, is separate from minimum17 qualification. No physical device actions were performed in this pass."
+  "scope": "Current iPadOS18.6 stock-app capture has separate evidence. Both17.0 attempts remain unqualified at their recorded host/install boundaries. No physical device actions were performed."
 }

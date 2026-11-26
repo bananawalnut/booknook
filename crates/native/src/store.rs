@@ -73,6 +73,7 @@ impl Store {
             connection,
             root: root.to_owned(),
         };
+        crate::restore::recover(&mut store)?;
         store.load()?;
         crate::edit_journal::recover(&mut store)?;
         Ok(store)

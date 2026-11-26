@@ -219,6 +219,29 @@ fn legacy_mobi_import_and_restore_keep_original_bytes_and_stable_reader_resource
     std::fs::create_dir_all(previous_rendered.parent().unwrap()).unwrap();
     std::fs::write(previous.join("original.mobi"), original).unwrap();
     std::fs::write(&previous_rendered, b"stale derived data").unwrap();
+    // An unsuccessful commit must put the actual preexisting derivative back.
+    let db = rusqlite::Connection::open(receiver.0.join("booknook.sqlite")).unwrap();
+    db.execute_batch("CREATE TABLE rollback_parent(id INTEGER PRIMARY KEY);
+        CREATE TABLE rollback_child(parent REFERENCES rollback_parent(id) DEFERRABLE INITIALLY DEFERRED);
+        CREATE TRIGGER rollback_restore AFTER UPDATE ON desk BEGIN INSERT INTO rollback_child VALUES(1); END;").unwrap();
+    let before = snapshot(&restored);
+    let error = restored
+        .restore_archive(archive.to_string_lossy().into_owned())
+        .unwrap_err();
+    assert!(
+        error.to_string().contains("FOREIGN KEY constraint failed"),
+        "{error}"
+    );
+    assert_eq!(snapshot(&restored), before);
+    assert_eq!(
+        std::fs::read(previous.join("original.mobi")).unwrap(),
+        original.as_slice()
+    );
+    assert_eq!(
+        std::fs::read(&previous_rendered).unwrap(),
+        b"stale derived data"
+    );
+    db.execute_batch("DROP TRIGGER rollback_restore").unwrap();
     restored
         .restore_archive(archive.to_string_lossy().into_owned())
         .unwrap();

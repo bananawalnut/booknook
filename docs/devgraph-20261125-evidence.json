@@ -84,5 +84,24 @@
     "external_delivery_verified": false
   },
   "independent_receipt_sha256": "15bbbff26d1c2a8986149e9325d23bc764079e0e39442c3156ae975ca4e3ab5f",
+  "subsequent_ci_followup": {
+    "resource": "Issue/booknook-ci-evidence",
+    "before_version": 21,
+    "after_version": 22,
+    "project_version": 48,
+    "description_sha256": "7685594f02bf03bbe1f02cef3ee5c342abb57639692fc500d9c1791bc24e1ca0",
+    "other_fields_unchanged": true,
+    "native_probe_run": 45716566671,
+    "native_probe_reached_booted": false,
+    "app_install_or_launch_attempted": false,
+    "minimum_os_qualified": false,
+    "operational_receipt_status": "pending",
+    "external_delivery_verified": false,
+    "sole_temporary_grant_revoked": true,
+    "prior_312_ordered_rules_preserved": true,
+    "receiver_pins_verified": true,
+    "key_and_deadline_unchanged": true,
+    "independent_receipt_sha256": "1ec4e6351f12e772a85e66797fbcfdcff1c24887036ef30ee228df90730f520c"
+  },
   "scope": "Local DevGraph tracking only. This does not qualify Book Nook app issuer/holder consent, physical hardware, minimum OS runtime, remote social exchange or production MVP acceptance."
 }

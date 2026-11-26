@@ -1,0 +1,41 @@
+{
+  "source_status": "candidate",
+  "base_commit": "2aa1129a8a8cc8828c413d68f97cb44f04d50f31",
+  "component": "booknook-native",
+  "platform": "macOS",
+  "red": {
+    "test": "refused_socially_occupied_restore_keeps_asset_tree_and_both_domains",
+    "result": "FAIL",
+    "setup": "Valid native portable export containing an EPUB. Destination had zero books and one saved local social draft.",
+    "observed": "Restore refused the occupied social desk. Reopened library and social snapshots matched their originals. Eight new entries remained in the previously empty asset tree."
+  },
+  "green": {
+    "result": "PASS",
+    "integration_tests_passed": 19,
+    "library_tests_passed": 96,
+    "library_tests_ignored": 1,
+    "assertions": {
+      "refused_socially_occupied_restore_keeps_asset_tree_and_both_domains": "After refusal and reopen, the library snapshot, social snapshot and complete asset tree match their pre-restore values.",
+      "deferred_commit_failure_undoes_new_assets_and_retains_existing_shared_files": "A deferred foreign key rejected SQLite COMMIT after file promotion. Both snapshots and all prior files matched. Retry restored the EPUB and both edition references to the shared PDF, retaining the unrelated file.",
+      "restore::tests::partial_promotion_error_reconciles_only_owned_assets": "A regular file at the second destination caused a real rename error. Recovery removed the first promoted directory and preserved the obstruction bytes.",
+      "legacy_mobi_import_and_restore_keep_original_bytes_and_stable_reader_resource": "Failed COMMIT retained original MOBI and stale reader bytes. A successful retry repaired the derivative and preserved original bytes.",
+      "restore::tests::process_death_at_restore_commit_boundary": "Separate subprocesses received SIGKILL immediately before and after SQLite COMMIT. On reopen the first case removed the new asset and retained an empty library. The second retained the book and asset. Both cleared the restore journal."
+    }
+  },
+  "limits": [
+    "Process interruption and recovery were exercised on macOS. Abrupt hardware power loss and Windows runtime behavior have not been qualified."
+  ],
+  "fixture_sha256": "f1f54598f34360d2df0bcd38342d2466e83cd568a6b52585947d6f94d59907b4",
+  "sha256_by_repository_path": {
+    "crates/native/src/content.rs": "cff87983d1688947d2f812cfca848674b5f0eb7af46b31ac687b6447d5916fdc",
+    "crates/native/src/lib.rs": "3b3721fa1ea0a8615512671dda4d5f3d15769753b6855a3ee492426598077234",
+    "crates/native/src/provider_bridge.rs": "78e7e2124d297969650cecbb854b1341fd8f0079ea5fd18759fc716e7bf6b1d9",
+    "crates/native/src/restore.rs": "57c1548b7cf3a821e0dd7c774296689069a289913d766ea595ac8d2837ffbfb5",
+    "crates/native/src/restore_tests.rs": "2d465e1a275a39c846ca1709c5a0b7ff7936de0e37a93d9e0e751978f5d72162",
+    "crates/native/src/store.rs": "fdfda35bc41b2b683cbe356e7884c1807ec0221a8b80b412380638a542de9ec7",
+    "crates/native/src/sync_bridge.rs": "3cc1ae178424adf3892d512146def84c920f5f8bcd621d5bd1244460d39a940f",
+    "crates/native/tests/durability.rs": "f0a293371488367723dabf5166fa7d258521aca86a03cbae7b431114a19e21ea",
+    "crates/native/tests/fixtures/restore-sample.epub": "f1f54598f34360d2df0bcd38342d2466e83cd568a6b52585947d6f94d59907b4",
+    "crates/native/tests/portable_reading.rs": "98947809f299fe1de3b24f60df59bac39f94314e832a415f9f5b5b0baaa4bd6b"
+  }
+}

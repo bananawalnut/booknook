@@ -10,7 +10,7 @@ Eight description-only changes were signed through the configured native integra
 |---|---:|
 | Project/booknook | 48 |
 | Issue/booknook-hands-on-workflows | 16 |
-| Issue/booknook-ci-evidence | 21 |
+| Issue/booknook-ci-evidence | 22 (21 after the original eight updates) |
 | Issue/booknook-current-packages | 18 |
 | Issue/booknook-sdk-publication | 8 |
 | Issue/booknook-castalia-live | 6 |
@@ -22,6 +22,8 @@ The checkpoint records public [SDK 0.4.0](sdk-040-public-preview-evidence.json),
 Physical iPad installation/profile renewal, Pencil and hardware-keyboard/IME checks, live accounts and genuine Book Nook issuer/holder consent, remote Nostr and device exchange, accessibility/endurance and [minimum-OS runtime acceptance](minimum-runtime-2502-evidence.json) remain open in the existing backlog. The separately installed Wallet/Transfer custody adapter is an explicit shared-platform dependency; app-local CastaliaSession integration does not establish live consent.
 
 All eight unsigned EventReceipts report pending: the local mutations committed; external delivery is unverified. Temporary task permissions were revoked after readback, preserving the existing signing key, expiry and standing permissions. This tracker result does not qualify Book Nook’s separate operational authority or close the production MVP. [Checkpoint evidence](devgraph-20261125-evidence.json)
+
+A subsequent description-only update advanced the CI evidence issue from version 21 to 22. Project/booknook remained at version 48. On macOS 15 with Xcode 26.3, the iPadOS 17.0 runtime (21A328) registered, but the simulator failed to reach Booted within 190 seconds. Installation and launch were never attempted. Minimum-OS acceptance remains open. Independent readback verified the issue and the revocation of the one additional grant. Its unsigned operational receipt reports pending. [Hosted probe](https://github.com/bananawalnut/booknook/actions/runs/45716566671) · [Follow-up evidence](devgraph-20261125-evidence.json)
 
 ## Tracking checkpoint — 2026-11-20
 

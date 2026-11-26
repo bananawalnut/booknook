@@ -308,6 +308,7 @@ impl Desk {
             return Err(Error::Invalid("Expected content result".into()).into());
         };
         let mut store = self.lock()?;
+        crate::restore::recover(&mut store)?;
         let settings = crate::connection_bridge::load(&store.connection)?;
         runtime.check_read(
             &execution,

@@ -10,7 +10,7 @@ use std::{
 const MAX: u64 = 128 * 1024 * 1024;
 // Imported positions and annotations store this resource identifier. Keep it
 // stable for the v1 transformation, including when rehydrating old backups.
-const MOBI6_SPINE: &str = "mobi6-v1/book.xhtml";
+pub(crate) const MOBI6_SPINE: &str = "mobi6-v1/book.xhtml";
 
 #[derive(Clone, Copy)]
 pub(crate) enum ContentKind {
@@ -65,7 +65,7 @@ pub fn safe_relative(s: &str) -> Result<&Path> {
     Ok(path)
 }
 
-fn file_matches(path: &Path, expected: &[u8]) -> Result<bool> {
+pub(crate) fn file_matches(path: &Path, expected: &[u8]) -> Result<bool> {
     let metadata = match fs::symlink_metadata(path) {
         Ok(metadata) => metadata,
         Err(err) if err.kind() == ErrorKind::NotFound => return Ok(false),

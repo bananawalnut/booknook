@@ -637,6 +637,7 @@ impl Desk {
         let merged = reconcile::reconcile(base.as_ref(), &current, &c.state)?;
         let json = encoded(&merged.state)?;
         let response = receive_response(&merged.state, false, merged.conflicts.len())?;
+        crate::restore::recover_locked(root, &tx)?;
         import_assets(root, &c)?;
         let count = tx.execute(
             "UPDATE desk SET revision=?1,json=?2 WHERE singleton=1 AND revision=?3",

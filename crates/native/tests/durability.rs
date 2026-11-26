@@ -254,3 +254,150 @@ fn interrupted_command_input_preserves_previous_commit() {
     interrupted.wait().unwrap();
     assert_eq!(state(&d).books.len(), 1);
 }
+
+fn epub_backup() -> (Temp, String, String) {
+    let source = Temp::new();
+    let desk = source.desk();
+    add(&desk);
+    let book = state(&desk).books.keys().next().unwrap().clone();
+    let epub = source.0.join("fixture.epub");
+    std::fs::write(&epub, include_bytes!("fixtures/restore-sample.epub")).unwrap();
+    desk.import_content(book, epub.to_str().unwrap().into())
+        .unwrap();
+    let id = state(&desk)
+        .editions
+        .values()
+        .flat_map(|edition| &edition.assets)
+        .next()
+        .unwrap()
+        .id
+        .clone();
+    let backup = source.0.join("backup.json").to_str().unwrap().to_owned();
+    desk.export_archive(backup.clone()).unwrap();
+    (source, backup, id)
+}
+
+fn asset_tree(root: &std::path::Path) -> std::collections::BTreeMap<PathBuf, Option<String>> {
+    fn visit(
+        base: &std::path::Path,
+        dir: &std::path::Path,
+        tree: &mut std::collections::BTreeMap<PathBuf, Option<String>>,
+    ) {
+        for entry in std::fs::read_dir(dir).unwrap() {
+            let entry = entry.unwrap();
+            let path = entry.path();
+            let rel = path.strip_prefix(base).unwrap().to_owned();
+            if entry.file_type().unwrap().is_dir() {
+                tree.insert(rel, None);
+                visit(base, &path, tree);
+            } else {
+                tree.insert(
+                    rel,
+                    Some(booknook_core::digest(&std::fs::read(path).unwrap())),
+                );
+            }
+        }
+    }
+    let base = root.join("assets");
+    let mut tree = std::collections::BTreeMap::new();
+    visit(&base, &base, &mut tree);
+    tree
+}
+
+#[test]
+fn refused_socially_occupied_restore_keeps_asset_tree_and_both_domains() {
+    let (_source, backup, _) = epub_backup();
+    let target = Temp::new();
+    let desk = target.desk();
+    let event = serde_json::json!({"schema":"booknook.social-event.v1","id":"private-draft",
+        "actor":"ab".repeat(32),"at":1,"resource_version":0,"delivery":{"kind":"public"},
+        "action":{"op":"publish","group_id":null,"post":{"kind":"note","book":null,"body":"Private draft",
+        "stars":null,"reading_status":null,"spoiler":false,"reply_to":null}}});
+    desk.social_local(serde_json::json!({"op":"save_draft","event":event}).to_string())
+        .unwrap();
+    let before = (
+        desk.snapshot().unwrap(),
+        desk.social_snapshot(false).unwrap(),
+        asset_tree(&target.0),
+    );
+    let error = desk.restore_archive(backup).unwrap_err();
+    assert!(error.to_string().contains("empty social desk"), "{error}");
+    drop(desk);
+    let reopened = target.desk();
+    assert_eq!(reopened.snapshot().unwrap(), before.0);
+    assert_eq!(reopened.social_snapshot(false).unwrap(), before.1);
+    assert_eq!(asset_tree(&target.0), before.2);
+}
+
+#[test]
+fn deferred_commit_failure_undoes_new_assets_and_retains_existing_shared_files() {
+    let (source, backup, epub_id) = epub_backup();
+    let source_desk = source.desk();
+    let book = state(&source_desk).books.keys().next().unwrap().clone();
+    // An existing complete digest is shared by two editions. The destination
+    // also has a file unrelated to this backup; neither may be rolled back.
+    add(&source_desk);
+    let second = state(&source_desk)
+        .books
+        .keys()
+        .find(|key| **key != book)
+        .unwrap()
+        .clone();
+    let pdf = source.0.join("shared.pdf");
+    std::fs::write(&pdf, b"%PDF-1.7\nshared fixture\n%%EOF").unwrap();
+    for id in [book, second] {
+        source_desk
+            .import_content(id, pdf.to_str().unwrap().into())
+            .unwrap();
+    }
+    let pdf_id = booknook_core::digest(&std::fs::read(&pdf).unwrap());
+    source_desk.export_archive(backup.clone()).unwrap();
+
+    let target = Temp::new();
+    let desk = target.desk();
+    let shared = target.0.join("assets").join(&pdf_id);
+    std::fs::create_dir(&shared).unwrap();
+    std::fs::copy(pdf, shared.join("book.pdf")).unwrap();
+    std::fs::write(shared.join("unrelated.txt"), b"retain this file").unwrap();
+    let before = (
+        desk.snapshot().unwrap(),
+        desk.social_snapshot(false).unwrap(),
+        asset_tree(&target.0),
+    );
+    let db = rusqlite::Connection::open(target.0.join("booknook.sqlite")).unwrap();
+    // SQLite accepts the row update and all file promotions, then rejects COMMIT.
+    db.execute_batch("CREATE TABLE test_parent(id INTEGER PRIMARY KEY);
+        CREATE TABLE test_child(parent REFERENCES test_parent(id) DEFERRABLE INITIALLY DEFERRED);
+        CREATE TRIGGER test_deferred AFTER UPDATE ON desk BEGIN INSERT INTO test_child VALUES(1); END;").unwrap();
+    let failure = desk.restore_archive(backup.clone()).unwrap_err();
+    assert!(
+        failure
+            .to_string()
+            .contains("FOREIGN KEY constraint failed"),
+        "{failure}"
+    );
+    assert_eq!(before.0, desk.snapshot().unwrap());
+    assert_eq!(before.1, desk.social_snapshot(false).unwrap());
+    assert_eq!(before.2, asset_tree(&target.0));
+    assert!(!target.0.join("assets").join(&epub_id).exists());
+    db.execute_batch("DROP TRIGGER test_deferred").unwrap();
+    desk.restore_archive(backup).unwrap();
+    let restored = state(&target.desk());
+    assert_eq!(
+        restored
+            .editions
+            .values()
+            .flat_map(|e| &e.assets)
+            .filter(|a| a.id == pdf_id)
+            .count(),
+        2
+    );
+    assert_eq!(
+        std::fs::read(shared.join("unrelated.txt")).unwrap(),
+        b"retain this file"
+    );
+    assert_eq!(
+        std::fs::read(target.0.join("assets").join(epub_id).join("original.epub")).unwrap(),
+        include_bytes!("fixtures/restore-sample.epub")
+    );
+}

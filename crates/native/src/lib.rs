@@ -34,6 +34,7 @@ mod notebook_history;
 mod notebook_storage;
 pub use notebook_storage::{NotebookEngine, NotebookStorageHost};
 mod portable;
+mod restore;
 mod social_bridge;
 mod store;
 pub use store::Store as SqliteNotebookStorage;
@@ -210,6 +211,7 @@ impl Desk {
             .to_lowercase();
         let kind = content::ContentKind::from_extension(&kind)?;
         let mut store = self.lock()?;
+        restore::recover(&mut store)?;
         let mut state = store.load()?;
         let revision = state.revision;
         if !state.books.contains_key(&book_id) {
@@ -315,58 +317,7 @@ impl Desk {
         let archive =
             booknook_core::portable_archive::parse(&portable::read_bounded(Path::new(&path))?)?;
         let mut store = self.lock()?;
-        let current = store.load()?;
-        if current.revision != 0 || !current.books.is_empty() {
-            return Err(NativeError::Failure {
-                message: "Restore requires an empty desk to protect existing work".into(),
-            });
-        }
-        for asset in archive.state.editions.values().flat_map(|e| &e.assets) {
-            let encoded = archive
-                .assets
-                .get(&asset.id)
-                .ok_or_else(|| NativeError::Failure {
-                    message: "Export is missing an asset".into(),
-                })?;
-            let bytes = STANDARD.decode(encoded).map_err(|e| NativeError::Failure {
-                message: e.to_string(),
-            })?;
-            if booknook_core::digest(&bytes) != asset.sha256 {
-                return Err(NativeError::Failure {
-                    message: "Export asset checksum mismatch".into(),
-                });
-            }
-            let kind = content::ContentKind::from_media_type(&asset.media_type)?;
-            let actual = content::import(&store.root, &bytes, kind)?;
-            if &actual != asset {
-                return Err(NativeError::Failure {
-                    message: "Export asset metadata mismatch".into(),
-                });
-            }
-        }
-        let mut state = archive.state;
-        state.revision = current.revision + 1;
-        let json = serde_json::to_string(&state)?;
-        if json.len() > booknook_core::MAX_JSON_BYTES {
-            return Err(
-                booknook_core::Error::Invalid("Restored state exceeds 128 MiB".into()).into(),
-            );
-        }
-        let tx = store.connection.transaction()?;
-        if let Some(social) = &archive.social {
-            social_bridge::write_archive_bundle(&tx, social)?;
-        }
-        let changed = tx.execute(
-            "UPDATE desk SET revision=?1,json=?2 WHERE singleton=1 AND revision=0",
-            rusqlite::params![state.revision as i64, json],
-        )?;
-        if changed != 1 {
-            return Err(
-                booknook_core::Error::Conflict("Desk changed during restore".into()).into(),
-            );
-        }
-        tx.commit()?;
-        Ok(serde_json::to_string(&state)?)
+        restore::archive(&mut store, archive)
     }
 }
 impl Desk {
